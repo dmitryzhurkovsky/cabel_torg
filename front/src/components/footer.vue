@@ -1,5 +1,26 @@
 <template>
-  <div>Это ФУТЕР</div>
+  <footer class="footer">
+      <div class="footer__wrapper">
+          <div class="footer__content _container">
+              <div class="footer__body">
+                  <div class="footer__col">
+                      <div class="footer__item">
+
+
+                      </div>
+                      <div class="footer__item">
+
+                      </div>
+                      <div class="footer__item">
+
+                      </div>
+                  </div> <!--footer__col-->
+
+
+              </div>
+          </div>
+      </div>
+  </footer>
 </template>
 
 <script>
