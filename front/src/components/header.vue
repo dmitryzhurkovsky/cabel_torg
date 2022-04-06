@@ -1,4 +1,14 @@
-//====================================================================================================
+<template>
+  <div>Это ХЕДЕР</div>
+</template>
+
+<script>
+export default {
+  name: "header"
+}
+</script>
+
+<style scoped lang="scss">
 .header {
 
     &__wrapper {
@@ -59,7 +69,7 @@
         flex-wrap: wrap;
         padding: 5px 0;
         position: relative;
-        @include adaptiv-value("margin-right",35,5,1);
+        // @include adaptiv-value("margin-right",35,5,1);
         margin-right: 35px;
         &:last-child{
             margin-right: 0px;
@@ -71,7 +81,7 @@
     }
     &__link{
         color: $menuColor;
-        @include adaptiv-font(14, 11, 14);
+        // @include adaptiv-font(14, 11, 14);
         font-weight: 600;
         text-transform: uppercase;
         transition: color 0.3s ease 0s;
@@ -135,3 +145,6 @@
 //==============big_header======================================================================================
 
 //====================================================================================================
+
+
+</style>

@@ -29,4 +29,15 @@ axios.interceptors.request.use(function(config) {
   return config;
 });
 
-createApp(App).use(store).use(router).mount('#app')
+const app = createApp(App)
+
+app.config.warnHandler = function (msg, vm, trace) {
+  return null
+}
+
+app.use(store).use(router).mount('#app')
+// new Vue({
+//   router,
+//   store,
+//   render: h => h(App)
+// }).$mount("#app");
