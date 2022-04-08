@@ -1,9 +1,12 @@
+# Env files
 backend/.env*
 
-.DS_Store
-.idea/
-./my
 
+# Ide files
+.idea/
 __pycache__/
 backend/__pycache__/
 backend/src/__pycache__/
+
+# Other files
+.DS_Store
