@@ -2,3 +2,8 @@ backend/.env*
 
 .DS_Store
 .idea/
+./my
+
+__pycache__/
+backend/__pycache__/
+backend/src/__pycache__/
