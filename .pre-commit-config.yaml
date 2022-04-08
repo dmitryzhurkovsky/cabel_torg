@@ -1,0 +1,40 @@
+repos:
+  # Removes unused imports for modules that are part of the standard library
+  - repo: https://github.com/myint/autoflake
+    rev: v1.4
+    hooks:
+      - id: autoflake
+        exclude: .*/__init__.py
+        args:
+          - --in-place
+          - --remove-all-unused-imports
+          - --expand-star-imports
+          - --remove-duplicate-keys
+          - --remove-unused-variables
+  # isort your imports, so you don't have to.
+  - repo: https://github.com/pycqa/isort
+    rev: 5.5.2
+    hooks:
+      - id: isort
+  # checking your code base against coding style (PEP8), programming errors
+  # (like “library imported but unused” and “Undefined name”) and to check cyclomatic complexity.
+  - repo: local
+    hooks:
+      - id: flake8
+        name: flake8
+        entry: flake8
+        language: system
+        types: [ python ]
+  # Static type checker
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: mypy
+        language: system
+        types: [ python ]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.3.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer

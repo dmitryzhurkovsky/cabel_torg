@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres
+    ports:
+    - '5342:5342'
+    env_file:
+      - backend/.env
+  core:
+    build:
+      context: backend
+      dockerfile: ./build/Dockerfile
+    volumes:
+      - ./backend:/code
+    ports:
+      - '8000:8000'
+    env_file:
+      - backend/.env
+    depends_on:
+      - db
