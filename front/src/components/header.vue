@@ -5,21 +5,58 @@
               <div class="header__body">
 
                   <a href="/" class="header__logo">
-                      <img src="images/logo.svg" alt="">
+                      <img src="../assets/logo.svg" alt="CabelTorg">
                   </a>
-                  <div class="header__main">
-
-
-
+                  <div class="header__search search-wrapper">
+                    <form>
+                      <input type="text" name="focus" required class="search-box" placeholder="Поиск товаров" />
+                      <button class="close-icon" type="reset"></button>
+                    </form>
+                  </div>
+                  <div class="header__info info-header flex-center">
+                        <div class="info-header__item">
+                          <a href="tel:+375296889454">+375 29 688 94 54</a>
+                        </div>
+                        <div class="info-header__item">
+                          <a href="mail:info@cabeltorg.by">info@cabeltorg.by</a>
+                        </div>
+                        <div class="info-header__item">BYN</div>
                   </div> <!--     header__main-->
 
 
-                  <button id="burger" type="button" class="icon-menu">
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                  </button>
+
               </div>  <!--header__body -->
+            <div class="header__topmenu topmenu flex-center">
+              <div class="topmenu__left flex-center">
+                <div class="topmenu__item">
+                  <button id="burger" type="button" class="icon-menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </button>
+                </div>
+
+
+                <div class="topmenu__item">Каталог товаров</div>
+                <div class="topmenu__item">Покупателям</div>
+                <div class="topmenu__item">О нас</div>
+              </div>
+
+              <div class="topmenu__right flex-center">
+                <div class="topmenu__item">
+                  <img src="../assets/svg/favorite.svg" alt="favorite">
+                </div>
+                <div class="topmenu__item">
+                  <img src="../assets/svg/user.svg" alt="user">
+                </div>
+                <div class="topmenu__item topmenu__cart">
+                  <img src="../assets/svg/cart.svg" alt="cart">
+                </div>
+              </div>
+
+
+
+            </div>
           </div>
 
       </div>
@@ -36,6 +73,8 @@ export default {
 .header {
 
     &__wrapper {
+      padding: 24px 0;
+      background: #F8FAFF;
 
     }
 
@@ -43,18 +82,85 @@ export default {
     }
 
     &__body {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
+    }
+
+    &__search{
+      background: #FFFFFF;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
+      border-radius: 50px;
+      max-width: 384px;
+      height: 32px;
+      width: 100%;
+
+    }
+    &__info{
+     justify-content: space-between;
     }
 
     &__main {
 
 
     }
+  &__topmenu{
+    padding: 20px 0;
+    justify-content: space-between;
+  }
 
     &__logo {
 
 
     }
+}
+
+.topmenu{
+
+  &__item{
+    padding: 0 10px 0 10px;
+
+
+  }
+  &__left{
+    .topmenu__item{
+
+      &:nth-child(2){
+        font-weight: 500;
+        color: $secondColor;
+      }
+
+    }
+
+  }
+}
+
+.info-header{
+
+  &__item{
+    padding: 0 20px 0 20px;
+    &:nth-child(1){
+      a{
+        font-weight: 500;
+        font-size: 14px;
+        color: $mainColor;
+      }
+
+    }
+    &:nth-child(2){
+      a{
+        font-weight: 300;
+        text-decoration-line: underline;
+      }
+
+    }
+    &:nth-child(3){
+
+    }
+  }
+
+
 }
 .menu{
     flex: 0 1 540px;
@@ -96,7 +202,7 @@ export default {
         // @include adaptiv-value("margin-right",35,5,1);
         margin-right: 35px;
         &:last-child{
-            margin-right: 0px;
+            margin-right: 0;
         }
         @media (max-width:$md2+px) {
             margin-bottom: 20px;
@@ -104,13 +210,12 @@ export default {
 
     }
     &__link{
-        color: $menuColor;
+
         // @include adaptiv-font(14, 11, 14);
         font-weight: 600;
         text-transform: uppercase;
         transition: color 0.3s ease 0s;
         &:hover{
-            color: $menuColorActive;
             transition: color 300ms ease-in-out;
         }
 
@@ -121,27 +226,68 @@ export default {
 }
 
 
+//SEARCH
+.search-box,.close-icon,.search-wrapper {
+  position: relative;
+  padding: 10px;
+}
+.search-wrapper {
+
+}
+.search-box {
+  background: #FFFFFF;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
+  border-radius: 50px;
+  max-width: 384px;
+  height: 32px;
+  width: 100%;
+}
+.search-box:focus {
+  border: 2px solid #bebede;
+}
+.close-icon {
+  border:1px solid transparent;
+  background-color: transparent;
+  display: inline-block;
+  vertical-align: middle;
+  outline: 0;
+  cursor: pointer;
+}
+.close-icon:after {
+  content: "X";
+  display: block;
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  background-color: #FA9595;
+  z-index:1;
+  right: 35px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  padding: 2px;
+  border-radius: 50%;
+  text-align: center;
+  color: white;
+  font-weight: normal;
+  font-size: 12px;
+  box-shadow: 0 0 2px #E50F0F;
+  cursor: pointer;
+}
+.search-box:not(:valid) ~ .close-icon {
+  display: none;
+}
+
+
 //Burger
 .icon-menu {
-    display: none;
-    @media (max-width: $md2+px) {
-        display: block;
-        position: absolute;
-        top: 25px;
-        right: 17px;
-        width: 30px;
-        height: 30px;
-        cursor: pointer;
-        z-index: 5;
+    display: block;
         span {
             transition: all 0.3s ease 0s;
-            top: calc(50% - 1px);
-            left: 0px;
-            position: absolute;
             width: 100%;
             height: 3px;
             border-radius: 5%;
-            background-color: #4244E7;
+            background-color: $secondColor;
             &:first-child {
                 top: 0px;
             }
@@ -164,7 +310,7 @@ export default {
             }
         }
     }
-}
+
 
 //==============big_header======================================================================================
 

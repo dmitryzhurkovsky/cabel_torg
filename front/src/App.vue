@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    asdasdasdas
+
     <Header/>
     <router-view/>
     <Footer/>
@@ -131,6 +131,8 @@ h6 {
 
 //<ШРИФТЫ>===============================================================================================
 
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
+
 //<Подключаем шрифты>=======================================================================================
 //&display=swap&subset=cyrillic-ext
 // @import "fonts";
@@ -144,8 +146,9 @@ h6 {
 // @import "null";
 body {
     color: $mainColor;
-    font-weight: 500;
-
+    font-size: 16px ;
+    font-weight: 400;
+    font-family: 'Rubik', sans-serif;
     &._lock {
         overflow: hidden;
     }
@@ -169,7 +172,7 @@ body {
 ._container {
     max-width: $maxWidthContainer + px;
     margin: 0 auto;
-    //padding: 0 2%;
+    padding: 0 2%;
     @media (max-width: $md1+px) {
         max-width: 970px;
     }
@@ -219,6 +222,11 @@ body {
 }
 
 .btn {
+}
+
+.flex-center{
+  display: flex;
+  align-items: center;
 }
 
 .page__link{
