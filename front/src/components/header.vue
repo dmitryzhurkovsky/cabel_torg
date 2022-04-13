@@ -28,12 +28,10 @@
               </div>  <!--header__body -->
             <div class="header__topmenu topmenu flex-center">
               <div class="topmenu__left flex-center">
-                <div class="topmenu__item">
-                  <button id="burger" type="button" class="icon-menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </button>
+                <div class="burger-menu burger-menu--closed">
+                  <div class="bar"></div>
+                  <div class="bar"></div>
+                  <div class="bar"></div>
                 </div>
 
 
@@ -89,12 +87,12 @@ export default {
     }
 
     &__search{
-      background: #FFFFFF;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
-      border-radius: 50px;
-      max-width: 384px;
-      height: 32px;
-      width: 100%;
+      //background: #FFFFFF;
+      //box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
+      //border-radius: 50px;
+      //max-width: 384px;
+      //height: 32px;
+      //width: 100%;
 
     }
     &__info{
@@ -127,8 +125,14 @@ export default {
     .topmenu__item{
 
       &:nth-child(2){
+
         font-weight: 500;
         color: $secondColor;
+      }
+      &:nth-child(3){
+        border-left: 1px solid $mainColor;
+        border-right: 1px solid $mainColor;
+
       }
 
     }
@@ -149,9 +153,12 @@ export default {
 
     }
     &:nth-child(2){
+      border-left: 1px solid $mainColor;
+      border-right: 1px solid $mainColor;
       a{
         font-weight: 300;
         text-decoration-line: underline;
+
       }
 
     }
@@ -239,11 +246,14 @@ export default {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
   border-radius: 50px;
   max-width: 384px;
-  height: 32px;
   width: 100%;
+  font-size: 14px;
+  opacity: 0.5;
+  padding: 9px 16px;
+  min-width: 300px;
 }
 .search-box:focus {
-  border: 2px solid #bebede;
+  border: 1px solid #bebede;
 }
 .close-icon {
   border:1px solid transparent;
@@ -254,25 +264,7 @@ export default {
   cursor: pointer;
 }
 .close-icon:after {
-  content: "X";
-  display: block;
-  width: 15px;
-  height: 15px;
-  position: absolute;
-  background-color: #FA9595;
-  z-index:1;
-  right: 35px;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  padding: 2px;
-  border-radius: 50%;
-  text-align: center;
-  color: white;
-  font-weight: normal;
-  font-size: 12px;
-  box-shadow: 0 0 2px #E50F0F;
-  cursor: pointer;
+
 }
 .search-box:not(:valid) ~ .close-icon {
   display: none;
@@ -280,36 +272,65 @@ export default {
 
 
 //Burger
-.icon-menu {
+.burger-menu{
+  margin: 0 auto;
+  width: 24px;
+  display: block;
+  transition: all .3s;
+  cursor: pointer;
+  height: 24px;
+
+  .bar{
+    transition: all .3s;
+    height: 2px;
+    width: 100%;
     display: block;
-        span {
-            transition: all 0.3s ease 0s;
-            width: 100%;
-            height: 3px;
-            border-radius: 5%;
-            background-color: $secondColor;
-            &:first-child {
-                top: 0px;
-            }
-            &:last-child {
-                top: auto;
-                bottom: 0px;
-            }
-        }
-        &._active {
-            span {
-                transform: scale(0);
-                &:first-child {
-                    transform: rotate(-45deg);
-                    top: calc(50% - 1px);
-                }
-                &:last-child {
-                    transform: rotate(45deg);
-                    bottom: calc(50% - 1px);
-                }
-            }
-        }
+    background-color: $secondColor;
+    &:nth-of-type(2){
+      margin: 5px 0;
     }
+  }
+  &--closed{
+    transition-delay: .3s;
+    .bar:nth-of-type(2){
+      width: 75%;
+      transition-property: margin, height, width;
+      transition-delay: .3s, .3s, 0s;
+    }
+    .bar:nth-of-type(3) {
+      width: 50%;
+    }
+    &:hover{
+      .bar:nth-of-type(2){
+        width: 100%;
+      }
+      .bar:nth-of-type(3){
+        width: 100%;
+      }
+
+      }
+  &--opened{
+    padding-top: 12px;
+    .bar:nth-of-type(1){
+      transform: rotate(45deg);
+      transition-delay: .3s;
+      height: 2px;
+  }
+
+    .bar:nth-of-type(2){
+      opacity: 0;
+      height: 0;
+      margin: -3px;
+    }
+
+    .bar:nth-of-type(3){
+      transform: rotate(-45deg);
+      transition-delay: .3s;
+      height: 2px
+    }
+  }
+}
+}
 
 
 //==============big_header======================================================================================
