@@ -222,6 +222,11 @@ body {
 }
 
 .btn {
+  background: #4275D8;
+  border-radius: 6px;
+  color:#fff;
+  padding: 8px 24px;
+  min-width:180px;
 }
 
 .flex-center{
