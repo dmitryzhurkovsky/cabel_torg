@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-
     <Header/>
     <router-view/>
     <Footer/>
@@ -147,7 +146,7 @@ h6 {
 body {
     color: $mainColor;
     font-size: 16px ;
-    font-weight: 400;
+    font-weight: 300;
     font-family: 'Rubik', sans-serif;
     &._lock {
         overflow: hidden;
@@ -221,6 +220,14 @@ body {
     margin-right: 20px;
 }
 
+h3{
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 0.44px;
+  color: #423E48;
+}
+
 .btn {
   background: #4275D8;
   border-radius: 6px;
@@ -232,6 +239,13 @@ body {
 .flex-center{
   display: flex;
   align-items: center;
+}
+
+._title{
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #423E48;
 }
 
 .page__link{
