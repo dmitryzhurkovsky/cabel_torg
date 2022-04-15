@@ -35,20 +35,29 @@
                 </div>
 
 
-                <div class="topmenu__item">Каталог товаров</div>
-                <div class="topmenu__item">Покупателям</div>
-                <div class="topmenu__item">О нас</div>
+                <div class="topmenu__item"><a href="">Каталог товаров</a></div>
+                <div class="topmenu__item"><a href="">Покупателям</a></div>
+                <div class="topmenu__item"><a href="">О нас</a> </div>
               </div>
 
               <div class="topmenu__right flex-center">
                 <div class="topmenu__item">
-                  <img src="../assets/svg/favorite.svg" alt="favorite">
+                  <a href="">
+                    <img src="../assets/svg/favorite.svg" alt="favorite">
+                  </a>
+
                 </div>
                 <div class="topmenu__item">
-                  <img src="../assets/svg/user.svg" alt="user">
+                  <a href="">
+                    <img src="../assets/svg/user.svg" alt="user">
+                  </a>
+
                 </div>
                 <div class="topmenu__item topmenu__cart">
-                  <img src="../assets/svg/cart.svg" alt="cart">
+                  <a href="">
+                    <img src="../assets/svg/cart.svg" alt="cart">
+                  </a>
+
                 </div>
               </div>
 
@@ -120,14 +129,26 @@ export default {
     padding: 0 10px 0 10px;
 
 
+
   }
   &__left{
     .topmenu__item{
+      a{
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 19px;
+        display: flex;
+        align-items: center;
+        color: #423E48;
+      }
 
       &:nth-child(2){
+        a{
+          font-weight: 500;
+          color: $secondColor;
+        }
 
-        font-weight: 500;
-        color: $secondColor;
+
       }
       &:nth-child(3){
         border-left: 1px solid $mainColor;
@@ -138,6 +159,22 @@ export default {
     }
 
   }
+  &__cart{
+
+    &:after{
+        content:"3";
+        font-size:12px;
+        color: #fff;
+        background: red;
+        border-radius:50%;
+        padding: 0 4px;
+        position:relative;
+        left:-6px;
+        top: 8px;
+        opacity:0.9;
+      }
+    }
+
 }
 
 .info-header{

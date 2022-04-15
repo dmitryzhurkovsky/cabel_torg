@@ -77,10 +77,13 @@
 
           </div>
       </div>
-    <div class="footer__down">
-      <p>© cabeltorg.by - кабельная продукция. Все права защищены.</p>
-      <p>Копирование информации с сайта запрещено.</p>
-    </div>
+      <div class="footer__down">
+        <div class="_container">
+          <p>© cabeltorg.by - кабельная продукция. Все права защищены.</p>
+          <p>Копирование информации с сайта запрещено.</p>
+        </div>
+
+      </div>
   </footer>
 </template>
 
@@ -94,6 +97,17 @@ export default {
 .footer{
 
     &__wrapper{
+    }
+    &__down{
+      background: #423E48;
+      padding: 21px 0;
+      p{
+        font-weight: 300;
+        font-size: 12px;
+        line-height: 120%;
+        color: #FFFFFF;
+        opacity: 0.6;;
+      }
     }
     &__content{}
 
@@ -190,17 +204,6 @@ export default {
       padding: 20px 0 20px 0;
 
     &__link{
-    }
-    &__down{
-      background: #423E48;
-      p{
-        font-weight: 300;
-        font-size: 12px;
-        line-height: 120%;
-        color: #FFFFFF;
-        opacity: 0.6;;
-      }
-
     }
 
 
