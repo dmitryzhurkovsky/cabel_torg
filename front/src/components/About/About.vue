@@ -29,6 +29,7 @@
 .about {
 
   &__wrapper{
+    padding: 20px 0;
 
   }
   &__content{
@@ -41,6 +42,15 @@
     box-sizing: border-box;
     border-radius: 8px;
     padding: 28px 28px;
+    p{
+      font-size: 14px;
+      line-height: 130%;
+      color: #423E48;
+      opacity: 0.8;
+      &:nth-child(1){
+        margin: 10px 0 20px 0;
+      }
+    }
   }
 }
 
