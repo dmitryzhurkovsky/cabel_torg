@@ -288,4 +288,31 @@ h3{
 
 }
 
+.breadcrumb{
+  display: flex;
+  align-items: center;
+  padding: 20px 0 30px 0;
+
+  li{
+    a{
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 16px;
+      text-align: center;
+      color: #423E48;
+      margin-right: 10px;
+    }
+
+  }
+  .active{
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    opacity: 0.5;
+
+  }
+
+}
+
 </style>

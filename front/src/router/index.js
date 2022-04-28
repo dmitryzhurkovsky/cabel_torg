@@ -39,17 +39,23 @@ const routes = [
       import(/* webpackChunkName: "verify" */ "../views/Auth/Verify.vue")
   },
   {
+    path: "/offer",
+    name: "Offer",
+    component: () =>
+        import("../views/Offer.vue")
+  },
+  {
     path: '/',
     name: 'Main',
     component: () =>
       import("../views/Main.vue")
   },
-  // {
-  //   path: '/',
-  //   name: 'About',
-  //   component: () =>
-  //       import("../views/About.vue")
-  // },
+  {
+    path: '/about',
+    name: 'About',
+    component: () =>
+        import("../views/About.vue")
+  },
 ]
 
 const router = createRouter({

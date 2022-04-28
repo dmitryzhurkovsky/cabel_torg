@@ -97,6 +97,7 @@ export default {
 .footer{
 
     &__wrapper{
+      background-color:#F4F5F8;
     }
     &__down{
       background: #423E48;
