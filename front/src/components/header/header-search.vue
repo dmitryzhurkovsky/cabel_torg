@@ -1,26 +1,50 @@
 <template lang="html">
     <div class="header__search search-wrapper">
-      <form>
-        <input type="text" name="focus" required class="search-box" placeholder="Поиск товаров" />
-        <button class="close-icon" type="reset"></button>
-      </form>
+      <div>
+        <input type="text" name="focus" required class="search-box" placeholder="Поиск товаров"
+            @input="onInput"
+            v-model = "queryStringt"
+        />
+        <button class="close-icon" type="reset"
+            @click = "clearString"
+        ></button>
+      </div>
     </div>
 </template>
 
 <script>
+
 export default {
+  name: "HeaderSearch",
+
+  data: function() {
+    return {
+        queryStringt : '',
+      }
+  },
+  methods: {
+    onInput(){
+        if  (this.queryStringt.length > 2) {
+          console.log('Тут запуск поиска');
+        }
+    },
+    clearString(){
+        this.queryStringt = '';
+        console.log('Тут в store очищаем предыдущий поиск');
+    }
+  },
 }
 </script>
 
 <style lang="scss" scoped>
 .header{
     &__search{
-      //background: #FFFFFF;
-      //box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
-      //border-radius: 50px;
-      //max-width: 384px;
-      //height: 32px;
-      //width: 100%;
+      // background: #FFFFFF;
+      // box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
+      // border-radius: 50px;
+      // max-width: 384px;
+      // height: 32px;
+      // width: 100%;
     }
 }
 

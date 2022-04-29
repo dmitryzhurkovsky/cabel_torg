@@ -26,7 +26,7 @@
         </a>
 
       </div>
-      <div class="topmenu__item topmenu__cart">
+      <div  :class = "[ORDER_COUNT ? 'topmenu__item topmenu__cart' : 'topmenu__item']">
         <a href="">
           <img src="@/assets/svg/cart.svg" alt="cart">
         </a>
@@ -37,11 +37,19 @@
 </template>
 
 <script>
+
+import { mapGetters } from "vuex";
+
 export default {
+  name: "HeaderTopMenu",
+
+  computed: {
+    ...mapGetters("header", ["ORDER_COUNT"]),
+  },
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .header {
     &__topmenu{
       padding: 20px 0;
@@ -85,7 +93,7 @@ export default {
   &__cart{
 
     &:after{
-        content:"3";
+        content: "1";
         font-size:12px;
         color: #fff;
         background: red;
