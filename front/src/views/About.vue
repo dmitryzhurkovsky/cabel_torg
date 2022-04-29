@@ -14,15 +14,21 @@
               Телеком отрасли в решении задач по выбору и поставке оборудования.</p>
             <div class="about__block">
               <div class="about__block__item">
-                <div class="about__block__icon _icon-quality"></div>
+                <div class="about__block__icon">
+                  <img src="../assets/svg/1.svg" alt="">
+                </div>
                 <div class="about__block__text">Высокое качество товаров</div>
               </div>
               <div class="about__block__item">
-                <div class="about__block__icon _icon-quality"></div>
+                <div class="about__block__icon">
+                  <img src="../assets/svg/2.svg" alt="">
+                </div>
                 <div class="about__block__text">Быстрое реагирование и отличный сервис</div>
               </div>
               <div class="about__block__item">
-                <div class="about__block__icon _icon-quality"></div>
+                <div class="about__block__icon _icon-quality">
+                  <img src="../assets/svg/3.svg" alt="">
+                </div>
                 <div class="about__block__text">1000+ наименований в каталоге</div>
               </div>
             </div> <!--   about__block-->
@@ -135,7 +141,9 @@
     }
 
 
-    &__icon{}
+    &__icon{
+      margin-bottom: 22px;
+    }
 
 
     &__item{
