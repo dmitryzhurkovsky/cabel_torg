@@ -56,6 +56,12 @@ const routes = [
     component: () =>
         import("../views/About.vue")
   },
+  {
+    path: '/wholesale',
+    name: 'Wholesale',
+    component: () =>
+        import("../views/Wholesale.vue")
+  },,
 ]
 
 const router = createRouter({
