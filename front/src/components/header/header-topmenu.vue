@@ -26,7 +26,8 @@
         </a>
 
       </div>
-      <div  :class = "[ORDER_COUNT ? 'topmenu__item topmenu__cart' : 'topmenu__item']">
+      <div class="topmenu__item">
+        <div :class = "[ORDER_COUNT ? 'topmenu__cart' : 'topmenu__card closed']">{{ORDER_COUNT}}</div>
         <a href="">
           <img src="@/assets/svg/cart.svg" alt="cart">
         </a>
@@ -61,6 +62,7 @@ export default {
 
   &__item{
     padding: 0 10px 0 10px;
+    position: relative;
   }
   &__left{
     .topmenu__item{
@@ -91,20 +93,16 @@ export default {
 
   }
   &__cart{
-
-    &:after{
-        content: "1";
-        font-size:12px;
-        color: #fff;
-        background: red;
-        border-radius:50%;
-        padding: 0 4px;
-        position:relative;
-        left:-6px;
-        top: 8px;
-        opacity:0.9;
-      }
-    }
+      position: absolute;
+      font-size:12px;
+      color: #fff;
+      background: red;
+      border-radius:50%;
+      padding: 0 4px;
+      right: 6px;
+      top: 10px;
+      opacity:0.9;
+}
 
 }
 

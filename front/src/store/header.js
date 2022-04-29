@@ -5,7 +5,7 @@ export default {
 
   state: {
     likes: [],
-    orders: [15],
+    orders: [12,23],
   },
 
   getters: {
@@ -13,7 +13,11 @@ export default {
       return state.likes.length;
     },
     ORDER_COUNT(state){
-      return state.orders.length;
+      if (state.orders.length) {
+          return state.orders.length;
+      } else {
+          return null;
+      }
     },
 
   },
