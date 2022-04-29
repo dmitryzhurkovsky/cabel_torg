@@ -8,26 +8,26 @@
 
 <script>
 
-import Header from '@/components/header.vue'
-import Footer from "@/components/footer.vue";
+  import Header from '@/components/header.vue'
+  import Footer from "@/components/footer.vue";
 
-export default {
+  export default {
 
-  name: "App",
+    name: "App",
 
-  computed: {
-  },
+    computed: {
+    },
 
-  components:
-  {
-    Header, Footer,
-  },
+    components:
+    {
+      Header, Footer,
+    },
 
-  methods: {
-  },
+    methods: {
+    },
 
-  created() {
-  },
+    created() {
+    },
 
   };
 </script>
