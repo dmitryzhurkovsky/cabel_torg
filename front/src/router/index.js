@@ -61,7 +61,31 @@ const routes = [
     name: 'Wholesale',
     component: () =>
         import("../views/Wholesale.vue")
-  },,
+  },
+  {
+    path: '/404',
+    name: '404',
+    component: () =>
+        import("../views/404.vue")
+  },
+  {
+    path: '/how_to_work',
+    name: 'how_to_work',
+    component: () =>
+        import("../views/how_to_work.vue")
+  },
+  {
+    path: '/warranty',
+    name: 'warranty',
+    component: () =>
+        import("../views/warranty.vue")
+  },
+  {
+    path: '/shipping',
+    name: 'Shipping',
+    component: () =>
+        import("../views/Shipping.vue")
+  },
 ]
 
 const router = createRouter({
