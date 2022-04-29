@@ -127,13 +127,17 @@
       margin: 30px 0 40px 0;
       width:50%;
       text-align: left;
+      @media (max-width: $md3+px) {
+        width:100%;
+      }
+
     };
 
 
   }
   &__block{
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
     margin: 60px 0;
     @media (max-width: $md3+px) {
@@ -143,6 +147,9 @@
 
     &__icon{
       margin-bottom: 22px;
+      @media (max-width: $md3+px) {
+        margin-bottom: 0;
+      }
     }
 
 
@@ -154,8 +161,15 @@
       margin: 0 16px 8px 0;
       padding: 24px 24px;
       max-width: 272px;
+
+      &:last-child{
+        margin: 0 0px 8px 0;
+      }
       @media (max-width: $md3+px) {
         max-width: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
       }
 
 
@@ -164,6 +178,9 @@
       font-size: 18px;
       line-height: 24px;
       color: #423E48;
+      @media (max-width: $md2+px) {
+        padding-left: 20px;
+      }
     }
   }
   &__paragraph{
