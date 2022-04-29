@@ -52,6 +52,10 @@
 
 
   }
+  &__text{
+    width: 50%;
+    margin: 0 auto;
+  }
   &__block{
     text-align: center;
     padding: 20px 0 60px 0;

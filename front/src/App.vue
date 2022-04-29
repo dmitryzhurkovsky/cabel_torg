@@ -315,4 +315,36 @@ h3{
 
 }
 
+
+// Templates for structure
+.structure {
+
+  &__title{
+    margin: 30px 0;
+
+  }
+  &__block{
+    padding: 0px 0 60px 0;
+  }
+
+  &__list{
+    &__item{
+      line-height: 30px;
+      font-size: 18px;
+      &:last-child{
+        margin-bottom: 30px;
+      }
+    }
+  }
+
+  &__text{
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 140%;
+    color: #423E48;
+    margin-bottom: 20px;
+
+  }
+}
+
 </style>

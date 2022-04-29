@@ -10,9 +10,9 @@
                       </div>
                       <button class="btn">Заказать звонок</button>
                   </div>
+                  <div class="footer__row flex-center">
 
-                <div class="footer__row flex-center">
-                  <div class="footer__col">
+                  <div class="footer__col footer__subrow">
                     <div class="footer__logo">
                       <img cla src="../assets/logo.svg" alt="CabelTorg">
                     </div>
@@ -31,44 +31,48 @@
                     </div>
 
                   </div>
-                  <div class="footer__col">
-                    <div class="footer__item flex-center">
-                      <img  class="_icon" src="../assets/svg/phone.svg" alt="Phone">
-                      <a class="_title" href="tel:+375296889454">+375 29 688 94 54</a>
-                    </div>
-                    <div class="footer__item flex-center">
-                      <img class="_icon" src="../assets/svg/round-place.svg" alt="Address">
-                      <div>
-                        <div class="_title">Адрес склада в Бресте:</div>
-                        <div>225033, Брестская область,  а/г Большие Мотыкалы, ул. Центральная д.26А</div>
+                  <div class="footer__subrow">
+                    <div class="footer__col">
+                      <div class="footer__item flex-center">
+                        <img  class="_icon" src="../assets/svg/phone.svg" alt="Phone">
+                        <a class="_title" href="tel:+375296889454">+375 29 688 94 54</a>
                       </div>
-                    </div>
-                    <div class="footer__item flex-center">
-                      <img class="_icon" src="../assets/svg/round-place.svg" alt="Address">
-                      <div>
-                        <div class="_title">Адрес склада в Минске:</div>
-                        <div>Минск, Монтажников 3-й пер., 3</div>
+                      <div class="footer__item flex-center">
+                        <img class="_icon" src="../assets/svg/round-place.svg" alt="Address">
+                        <div>
+                          <div class="_title">Адрес склада в Бресте:</div>
+                          <div>225033, Брестская область,  а/г Большие Мотыкалы, ул. Центральная д.26А</div>
+                        </div>
+                      </div>
+                      <div class="footer__item flex-center">
+                        <img class="_icon" src="../assets/svg/round-place.svg" alt="Address">
+                        <div>
+                          <div class="_title">Адрес склада в Минске:</div>
+                          <div>Минск, Монтажников 3-й пер., 3</div>
+
+                        </div>
 
                       </div>
-
                     </div>
+                    <ul class="footer__col footer__menu">
+                      <li class="footer__menu_link">
+                        <a href="">О компании</a></li>
+                      <li class="footer__menu_link">
+                        <a href="">Контакты</a>
+                      </li>
+                      <li class="footer__menu_link">
+                        <a href="">Оплата и доставка</a>
+                      </li>
+                      <li class="footer__menu_link">
+                        <a href="">Оптовым покупателям</a>
+                      </li>
+                      <li class="footer__menu_link">
+                        <a href="">Скачать прайс-лист</a>
+                      </li>
+                    </ul>
                   </div>
-                  <ul class="footer__col footer__menu">
-                    <li class="footer__menu_link">
-                      <a href="">О компании</a></li>
-                    <li class="footer__menu_link">
-                      <a href="">Контакты</a>
-                    </li>
-                    <li class="footer__menu_link">
-                      <a href="">Оплата и доставка</a>
-                    </li>
-                    <li class="footer__menu_link">
-                      <a href="">Оптовым покупателям</a>
-                    </li>
-                    <li class="footer__menu_link">
-                      <a href="">Скачать прайс-лист</a>
-                    </li>
-                  </ul>
+
+
 
                   </div>
               </div>
@@ -125,7 +129,15 @@ export default {
     &:nth-child(1){
       justify-content: space-between;
       border-bottom: 1px solid rgba(66, 62, 72, 0.2);
+      //@include adaptiv-value("padding-top",28,20,28);
+      //@include adaptiv-value("padding-bottom",28,20,28);
       padding: 28px 0;
+
+      @media (max-width: $md2+px) {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px 0;
+      }
       h3{
         font-size: 16px;
         margin-bottom: 3px;
@@ -136,18 +148,34 @@ export default {
         font-size: 14px;
         line-height: 130%;
         color: #000000;
+        @media (max-width: $md2+px) {
+          margin-bottom: 20px;
+        }
       }
     }
     &:nth-child(2){
       justify-content: space-between;
-      padding: 28px 0;
+
+      @media (max-width: $md2+px) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
       .footer__col{
         &:nth-child(1){
           padding-right: 20px;
+
+          @media (max-width: $md2+px) {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding-right: 0;
+            //border-bottom: 1px solid rgba(66, 62, 72, 0.2);
+          }
         }
 
         &:nth-child(2){
-          padding: 0 10px 0 20px;
+          //padding: 0 10px 0 20px;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
@@ -165,6 +193,58 @@ export default {
     }
 
 
+  }
+
+  &__subrow{
+    &:nth-child(1){
+      @media (max-width: $md2+px) {
+        padding: 24px 0;
+        border-bottom: 1px solid rgba(66, 62, 72, 0.2);
+      }
+
+
+
+    }
+
+
+
+
+
+    &:nth-child(2){
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      .footer__col:nth-child(1){
+        flex-direction: column;
+        align-items: flex-start;
+        flex-basis: 50%;
+        @media (max-width: $md2+px) {
+
+
+        }
+        @media (max-width: $md3+px) {
+          border-bottom: 1px solid rgba(66, 62, 72, 0.2);
+          //border-top: 1px solid rgba(66, 62, 72, 0.2);
+          padding-bottom: 20px;
+          //padding: 20px 0;
+        }
+
+
+      }
+      .footer__col:nth-child(2){
+        @media (max-width: $md3+px) {
+          padding: 20px 0;
+        }
+        flex-basis: 50%;
+
+      }
+      @media (max-width: $md3+px) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+    }
   }
     &__item{
       padding: 5px 0;
@@ -197,12 +277,21 @@ export default {
 
       border-bottom: 1px solid rgba(66, 62, 72, 0.2);
       padding: 0 0 20px 0;
+      @media (max-width: $md2+px) {
+        border-bottom: none;
+        padding: 0 0 0 0;
+      }
+
 
     }
     &__social{
       display: flex;
       justify-content: space-between;
       padding: 20px 0 20px 0;
+      @media (max-width: $md2+px) {
+
+        padding: 0 0 0 0;
+      }
 
     &__link{
     }
@@ -213,6 +302,7 @@ export default {
 .social{
 
   &__item{
+    margin: 0 5px;
     &:last-child{
     }
   }

@@ -6,7 +6,7 @@
           <ul class="breadcrumb">
             <li><a href="#">Главная</a></li>
             <li><a href="#">Покупателям</a></li>
-            <li class="active">Оптовым покупателям</li>
+            <li class="active">Оптовикам</li>
           </ul>
           <div class="wholesale__block flex-center">
             <div class="wholesale__item _block">
