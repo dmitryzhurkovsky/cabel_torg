@@ -55,19 +55,20 @@
                       </div>
                     </div>
                     <ul class="footer__col footer__menu">
-                      <li class="footer__menu_link">
-                        <a href="">О компании</a></li>
-                      <li class="footer__menu_link">
-                        <a href="">Контакты</a>
+                      <li @click = "linkClick('About')" class="footer__menu_link">
+                        <span>О компании</span>
                       </li>
-                      <li class="footer__menu_link">
-                        <a href="">Оплата и доставка</a>
+                      <li @click = "linkClick('/contacts')" class="footer__menu_link">
+                        <span>Контакты</span>
                       </li>
-                      <li class="footer__menu_link">
-                        <a href="">Оптовым покупателям</a>
+                      <li @click = "linkClick('/shipping')" class="footer__menu_link">
+                        <span>Оплата и доставка</span>
                       </li>
-                      <li class="footer__menu_link">
-                        <a href="">Скачать прайс-лист</a>
+                      <li @click = "linkClick('/how_to_work')" class="footer__menu_link">
+                        <span>Оптовым покупателям</span>
+                      </li>
+                      <li @click = "linkClick('/')" class="footer__menu_link">
+                        <span >Скачать прайс-лист</span>
                       </li>
                     </ul>
                   </div>
@@ -93,7 +94,17 @@
 
 <script>
 export default {
-  name: "footer"
+  name: "footer",
+
+  methods: {
+    linkClick(URL){
+      console.log(URL);
+      if (this.$router.path != URL) {
+          this.$router.push({ name: URL});
+      }
+    },
+
+  }
 }
 </script>
 
@@ -261,11 +272,12 @@ export default {
     &_link{
       padding: 5px 0;
 
-      a{
+      span{
         font-weight: 300;
         font-size: 14px;
         line-height: 14px;
         color: #423E48;
+        cursor: pointer;
       }
 
     }

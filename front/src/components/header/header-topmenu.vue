@@ -94,11 +94,13 @@ export default {
   }
   &__cart{
       position: absolute;
+      width: 12px;
+      height: 12px;
       font-size:12px;
       color: #fff;
       background: red;
       border-radius:50%;
-      padding: 0 4px;
+      padding: 0 3px;
       right: 6px;
       top: 10px;
       opacity:0.9;
