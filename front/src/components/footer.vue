@@ -55,7 +55,7 @@
                       </div>
                     </div>
                     <ul class="footer__col footer__menu">
-                      <li @click = "linkClick('About')" class="footer__menu_link">
+                      <li @click = "linkClick('/about')" class="footer__menu_link">
                         <span>О компании</span>
                       </li>
                       <li @click = "linkClick('/contacts')" class="footer__menu_link">
@@ -100,7 +100,7 @@ export default {
     linkClick(URL){
       console.log(URL);
       if (this.$router.path != URL) {
-          this.$router.push({ name: URL});
+          this.$router.push(URL);
       }
     },
 
