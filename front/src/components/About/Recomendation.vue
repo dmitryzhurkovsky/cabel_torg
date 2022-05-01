@@ -12,24 +12,26 @@
           </div>
           <div class="recomendation__block">
             <!-- <CardItem/> -->
-              <swiper
-                :modules="modules"
-                :slides-per-view="2"
-                :space-between="50"
-                navigation
-                :pagination="{ clickable: true }"
-                :scrollbar="{ draggable: true }"
-                @swiper="onSwiper"
-                @slideChange="onSlideChange"              >
-                <swiper-slide><CardItem/></swiper-slide>
-                <swiper-slide><CardItem/></swiper-slide>
-                <swiper-slide><CardItem/></swiper-slide>
+              <swiper class="swaper"
+                  :slides-per-view="4"
+                  :slider-per-group="4"
+                  :space-between="30"
+                  :pagination="{ clickable: true }"
+                  @swiper="onSwiper"
+                  @slideChange="onSlideChange"
+              >
+                <swiper-slide :virtualIndex = "1"><CardItem/></swiper-slide>
+                <swiper-slide :virtualIndex = "2"><CardItem/></swiper-slide>
+                <swiper-slide :virtualIndex = "3"><CardItem/></swiper-slide>
+                <swiper-slide :virtualIndex = "4"><CardItem/></swiper-slide>
+                <swiper-slide :virtualIndex = "5"><CardItem/></swiper-slide>
+                <swiper-slide :virtualIndex = "6"><CardItem/></swiper-slide>
+                <swiper-slide :virtualIndex = "7"><CardItem/></swiper-slide>
               </swiper>
-
-
+              <div class="swiper-pagination"></div>
+              <div class="swiper-button-next" @click="nextSlide"></div>
+              <div class="swiper-button-prev" @click="prevSlide"></div>
           </div>
-
-
         </div>
       </div>
     </div>
@@ -39,12 +41,9 @@
 <script>
   import CardItem from '@/components/Goods/card_item.vue'
 
-  // Import Swiper Vue.js components
   import { Swiper, SwiperSlide } from 'swiper/vue';
-  import { Navigation, Pagination, Scrollbar, A11y } from 'swiper';
-  // // Import Swiper styles
+  // import { Navigation, Pagination} from 'swiper';
   import 'swiper/swiper-bundle.css';
-  // import 'swiper/css/swiper.css';
 
   export default {
     name: 'Recomendation',
@@ -55,25 +54,63 @@
        Swiper, SwiperSlide,
     },
 
-    setup() {
-      const onSwiper = (swiper) => {
-        console.log(swiper);
-      };
-      const onSlideChange = () => {
-        console.log('slide change');
-      };
-      return {
-        onSwiper,
-        onSlideChange,
-        modules: [Navigation, Pagination, Scrollbar, A11y],
-      };
+    data: function(){
+      return{
+        swiper : null,
+      }
+    },
+
+    methods:{
+      onSlideChange() {
+         console.log('slide change');
+      },
+
+      nextSlide(){
+          console.log('next');
+          this.swiper.slideNext();
+      },
+
+      prevSlide(){
+          console.log('next');
+          this.swiper.slidePrev();
+      },
+
+      onSwiper(swiper){
+        this.swiper = swiper;
+        this.swiper.pagination = {
+          el : '.swiper-pagination',
+          clickable: true,
+          dynamicBullets : true,
+          bulletActiveClass : '.swiper-pagination-bullet-active',
+          bulletClass : '.swiper-pagination-bullet',
+          type : 'bullets',
+        };
+        this.swiper.navigation = {
+          nextEl : '.swiper-button-next',
+          prevEl : '.swiper-button-prev',
+        };
+      },
+    },
+
+    mounted(){
+      console.log();
     },
 
   }
 </script>
 
 <style scoped lang="scss">
-
+.swiper-pagination{
+  width: 100%;
+  height: 40px;
+}
+.swiper-pagination-bullet{
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 14px;
+  background-color: #ABABAB;
+}
 
 .recomendation {
 
