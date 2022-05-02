@@ -132,6 +132,17 @@ h6 {
 
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
 
+@font-face {
+  font-family: 'icomoon';
+  src: url('../src/assets/icons/fonts/icomoon.ttf?4vw17d') format('truetype'),
+  url('../src/assets/icons/fonts/icomoon.woff?4vw17d') format('woff'),
+  url('../src/assets/icons/fonts/icomoon.svg?4vw17d#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+
 //<Подключаем шрифты>=======================================================================================
 //&display=swap&subset=cyrillic-ext
 // @import "fonts";
@@ -207,6 +218,8 @@ body {
     flex: 1 1 auto;
 }
 //===================================================================================================================================
+
+
 
 //</ОСНОВНОЙ БЛОК>====================================================================================================
 .mt-20{
@@ -300,7 +313,7 @@ h3{
       line-height: 16px;
       text-align: center;
       color: #423E48;
-      margin-right: 10px;
+      
     }
 
   }
@@ -311,6 +324,10 @@ h3{
     text-align: center;
     opacity: 0.5;
 
+  }
+  &__separater{
+    font-size: 8px;
+    margin: 0 12px;
   }
 
 }
