@@ -87,10 +87,22 @@ const routes = [
         import("../views/Shipping.vue")
   },
   {
+    path: '/card_product',
+    name: 'Card_product',
+    component: () =>
+        import("../views/Card_product.vue")
+  },
+  {
     path: '/contacts',
     name: 'Contacts',
     component: () =>
         import("../views/Contacts.vue")
+  },
+  {
+    path: '/news',
+    name: 'News',
+    component: () =>
+        import("../views/News.vue")
   },
 ]
 
