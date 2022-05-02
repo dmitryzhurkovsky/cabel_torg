@@ -3,15 +3,19 @@
     <div class="product__wrapper">
       <div class="product__content _container">
         <div class="product__body">
-          <ul class="breadcrumb">
-            <li><a href="#">Главная</a></li>
-            <li class="breadcrumb__separater icon-arrow-l"></li>
-            <li><a href="#">Раздел</a></li>
-            <li class="breadcrumb__separater icon-arrow-l"></li>
-            <li><a href="#">Подраздел</a></li>
-            <li class="breadcrumb__separater icon-arrow-l">-</li>
-            <li class="active">Название товара</li>
-          </ul>
+          <div class="product__status-row status-row">
+            <ul class="breadcrumb">
+              <li><a href="#">Главная</a></li>
+              <li class="breadcrumb__separater icon-arrow-l"></li>
+              <li><a href="#">Раздел</a></li>
+              <li class="breadcrumb__separater icon-arrow-l"></li>
+              <li><a href="#">Подраздел</a></li>
+              <li class="breadcrumb__separater icon-arrow-l"></li>
+              <li class="active">Название товара</li>
+            </ul>
+          </div>
+          <div class="status-row__link icon-share">Поделиться</div>
+
           <div class="product__block">
             <div class="_block">
               <div class="product__main-img">
@@ -27,7 +31,7 @@
               <div class="desc-product__article  _label">Артикул: <span>331003</span></div>
               <div class="desc-product__status icon-done-color _label">В наличии</div>
               <div class="desc-product__count">
-                <span _label>Количество</span>
+                <span class="_label">Количество</span>
                 <span class="icon-minus"></span>
                 <input class="desc-product__input" type="text">
                 <span class="icon-plus"></span>
@@ -43,24 +47,33 @@
                 <div class="price-product__block">
                   <div class="retail_price">
                     <span>Розничная цена: </span>
-                    <span>70</span>BYN
-                    <span>/шт</span>
+                    <div>
+                      <span>70</span>BYN
+                      <span>/шт</span>
+                    </div>
+
                   </div>
                   <div class="opt_price">
                     <span>Оптовая цена: </span>
-                    <span>70</span>BYN
-                    <span>/шт</span>
+                    <div>
+                      <span>70</span>BYN
+                      <span>/шт</span>
+                    </div>
+
                   </div>
                 </div>
 
 
               </div>
-              <div _footnote>* Все цены указаны с учетом НДС.</div>
-              <div class="product__btn btn">Заказать</div>
-              <div class="_label icon-favorite"></div>
+              <div class="_footnote">* Все цены указаны с учетом НДС.</div>
+              <div class="product__action flex-center">
+                <div class="product__btn btn">В корзину</div>
+                <div class="product__favorite icon-favorite"></div>
+              </div>
+
               <a class="product__link">Как оформить заказ ></a>
 
-            </div>
+           </div> <!-- desc-product-->
             
             
           </div>
@@ -143,7 +156,25 @@
 
 
   }
+  &__btn{
+    background: #423E48;
+    margin-right: 20px;
+    font-weight: 400;
+    padding: 13px 40px;
 
+
+  }
+  &__favorite{
+    cursor: pointer;
+
+  }
+  &__link{
+    font-size: 14px;
+    opacity: 0.7;
+  }
+  &__action{
+    margin:30px 0 20px 0;
+  }
 
 }
 .desc-product{
@@ -163,15 +194,23 @@
   &__status{
     line-height: 20px;
     padding: 18px 0 20px 0;
+    &:before{
+      margin-right: 10px;
+    }
   }
   &__count{
-
+    padding: 0 0 10px 0;
+      span{
+        &:nth-child(1){
+          margin-right: 10px;
+        }
+      }
 
   }
 
   &__input{
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     padding: 9px 8px;
     background: rgba(66, 62, 72, 0.07);
     border-radius: 2px;
@@ -185,21 +224,22 @@
     justify-content: space-between;
     background: #F9F9F9;
     padding: 22px 18px 20px 18px;
+    .retail_price{
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
   }
 
-  &__btn{
-    background: #423E48;
+
+  &__favorive{
+    cursor: pointer;
+    &:hover{
+      background: red;
+    }
   }
 
-  &__link{
-
-  }
-  ._footnote{
-    font-size: 10px;
-    line-height: 20px;
-    text-align: right;
-    opacity: 0.5;
-  }
   .current_price{
     font-weight: 500;
     font-size: 24px;
@@ -213,6 +253,11 @@
   }
 
 }
-
+._footnote{
+  font-size: 10px;
+  line-height: 20px;
+  text-align: right;
+  opacity: 0.5;
+}
 
 </style>
