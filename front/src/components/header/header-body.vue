@@ -1,109 +1,113 @@
 <template lang="html">
-  <div class="header__body">
-<!--  # BURGER Appears from tablet version-->
-      <div class="burger-menu burger-menu--closed">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-      </div>
-
-      <a href="/" class="header__logo">
-          <img src="@/assets/logo.svg" alt="CabelTorg">
-      </a>
-      <HeaderSearch/>
-      <div class="header__info info-header flex-center">
-            <div class="info-header__item">
-              <a href="tel:+375296889454">+375 29 688 94 54</a>
+  <div class="header__wrapper">
+    <div class="header__content _container">
+        <div class="header__body ">
+      <!--  # BURGER Appears from tablet version-->
+            <div class="burger-menu burger-menu--closed">
+              <div class="bar"></div>
+              <div class="bar"></div>
+              <div class="bar"></div>
             </div>
-            <div class="info-header__item">
-              <a href="mail:info@cabeltorg.by">info@cabeltorg.by</a>
-            </div>
-            <div class="info-header__item">BYN</div>
-      </div> <!--     header__info-->
-<!--  # CLIENT-BAR -  Appears from tablet version-->
-      <div class="topmenu__right client-bar flex-center">
-        <div class="topmenu__item">
-          <a class="icon-favorite" href=""></a>
-        </div>
-        <div class="topmenu__item popup-container">
 
-          <label class="icon-user" for="login-popup"></label>
-          <input type="checkbox" id="login-popup">
+            <a href="/" class="header__logo">
+                <img src="@/assets/logo.svg" alt="CabelTorg">
+            </a>
+            <HeaderSearch/>
+            <div class="header__info info-header flex-center">
+                  <div class="info-header__item">
+                    <a href="tel:+375296889454">+375 29 688 94 54</a>
+                  </div>
+                  <div class="info-header__item">
+                    <a href="mail:info@cabeltorg.by">info@cabeltorg.by</a>
+                  </div>
+                  <div class="info-header__item">BYN</div>
+            </div> <!--     header__info-->
+      <!--  # CLIENT-BAR -  Appears from tablet version-->
+            <div class="topmenu__right client-bar flex-center">
+              <div class="topmenu__item">
+                <a class="icon-favorite" href=""></a>
+              </div>
+              <div class="topmenu__item popup-container">
 
-          <div class="popup">
-            <label for="login-popup"></label>
-            <div class="inner">
-              <label class=" close-popup icon-plus"></label>
-              <div class="title">
-                <h6>Вход</h6>
+                <label class="icon-user" for="login-popup"></label>
+                <input type="checkbox" id="login-popup">
+
+                <div class="popup">
+                  <label for="login-popup"></label>
+                  <div class="inner">
+                    <label class=" close-popup icon-plus"></label>
+                    <div class="title">
+                      <h6>Вход</h6>
+
+                    </div>
+                    <div class="content">
+                      <ul>
+                        <li>
+                          <label class="label_input">Электронная почта</label>
+                          <input type="text" placeholder="">
+                        </li>
+                        <li>
+                          <label class="label_input">Пароль</label>
+                          <input type="password" placeholder="">
+                        </li>
+                        <li  class="center">
+                          <button type="submit" class="btn">Войти</button>
+                        </li>
+                        <li class="center">
+                          <a href="" class="label_input popu">Не помню пароль</a>
+                        </li>
+                        <li  class="center">
+                          <a href="" class="">Зарегистрироваться</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
 
               </div>
-              <div class="content">
-                <ul>
-                  <li>
-                    <label class="label_input">Электронная почта</label>
-                    <input type="text" placeholder="">
-                  </li>
-                  <li>
-                    <label class="label_input">Пароль</label>
-                    <input type="password" placeholder="">
-                  </li>
-                  <li  class="center">
-                    <button type="submit" class="btn">Войти</button>
-                  </li>
-                  <li class="center">
-                    <a href="" class="label_input popu">Не помню пароль</a>
-                  </li>
-                  <li  class="center">
-                    <a href="" class="">Зарегистрироваться</a>
-                  </li>
-                </ul>
+              <div class="topmenu__item popup-container">
+
+                <label class="icon-cart" for="login-popup"></label>
+                <input type="checkbox" id="login-popup">
+
+                <div class="popup">
+                  <label for="login-popup"></label>
+                  <div class="inner">
+                    <label class=" close-popup icon-plus"></label>
+                    <div class="title">
+                      <h6>Вход</h6>
+
+                    </div>
+                    <div class="content">
+                      <ul>
+                        <li>
+                          <label class="label_input">Электронная почта</label>
+                          <input type="text" placeholder="">
+                        </li>
+                        <li>
+                          <label class="label_input">Пароль</label>
+                          <input type="password" placeholder="">
+                        </li>
+                        <li  class="center">
+                          <button type="submit" class="btn">Войти</button>
+                        </li>
+                        <li class="center">
+                          <a href="" class="label_input popu">Не помню пароль</a>
+                        </li>
+                        <li  class="center">
+                          <a href="" class="">Зарегистрироваться</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
               </div>
-            </div>
-          </div>
+            </div><!--    client-bar-->
 
-        </div>
-        <div class="topmenu__item popup-container">
-
-          <label class="icon-cart" for="login-popup"></label>
-          <input type="checkbox" id="login-popup">
-
-          <div class="popup">
-            <label for="login-popup"></label>
-            <div class="inner">
-              <label class=" close-popup icon-plus"></label>
-              <div class="title">
-                <h6>Вход</h6>
-
-              </div>
-              <div class="content">
-                <ul>
-                  <li>
-                    <label class="label_input">Электронная почта</label>
-                    <input type="text" placeholder="">
-                  </li>
-                  <li>
-                    <label class="label_input">Пароль</label>
-                    <input type="password" placeholder="">
-                  </li>
-                  <li  class="center">
-                    <button type="submit" class="btn">Войти</button>
-                  </li>
-                  <li class="center">
-                    <a href="" class="label_input popu">Не помню пароль</a>
-                  </li>
-                  <li  class="center">
-                    <a href="" class="">Зарегистрироваться</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div><!--    client-bar-->
-
-  </div>  <!--header__body -->
+        </div>  <!--header__body -->
+    </div>
+  </div>
 
 </template>
 
@@ -122,6 +126,10 @@
 
 <style lang="scss" scoped>
 .header {
+  &__wrapper{
+    padding: 24px 0;
+    background: #F8FAFF;
+  }
     &__body {
       display: flex;
       align-items: center;

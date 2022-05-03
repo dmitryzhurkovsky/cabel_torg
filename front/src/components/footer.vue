@@ -17,15 +17,15 @@
                       <img cla src="../assets/logo.svg" alt="CabelTorg">
                     </div>
                     <div class="footer__social social">
-                      <a href="" class="social__item">
-                        <img src="../assets/svg/instagram.svg" alt="instagram">
+                      <a href="" class="social__item icon-instagram">
+<!--                        <img src="../assets/svg/instagram.svg" alt="instagram">-->
                       </a>
-                      <a href="" class="social__item">
-                        <img src="../assets/svg/vk.svg" alt="vkontakte">
+                      <a href="" class="social__item icon-vk">
+<!--                        <img src="../assets/svg/vk.svg" alt="vkontakte">-->
 
                       </a>
-                      <a href="" class="social__item">
-                        <img src="../assets/svg/facebook.svg" alt="facebook">
+                      <a href="" class="social__item icon-facebook">
+<!--                        <img src="../assets/svg/facebook.svg" alt="facebook">-->
 
                       </a>
                     </div>
@@ -33,19 +33,18 @@
                   </div>
                   <div class="footer__subrow">
                     <div class="footer__col">
-                      <div class="footer__item flex-center">
-                        <img  class="_icon" src="../assets/svg/phone.svg" alt="Phone">
+                      <div class="footer__item flex-center icon-phone">
+<!--                        <img  class="_icon" src="../assets/svg/phone.svg" alt="Phone">-->
                         <a class="_title" href="tel:+375296889454">+375 29 688 94 54</a>
                       </div>
-                      <div class="footer__item flex-center">
-                        <img class="_icon" src="../assets/svg/round-place.svg" alt="Address">
+                      <div class="footer__item flex-center icon-place">
+<!--                        <img class="_icon" src="../assets/svg/round-place.svg" alt="Address">-->
                         <div>
                           <div class="_title">Адрес склада в Бресте:</div>
                           <div>225033, Брестская область,  а/г Большие Мотыкалы, ул. Центральная д.26А</div>
                         </div>
                       </div>
-                      <div class="footer__item flex-center">
-                        <img class="_icon" src="../assets/svg/round-place.svg" alt="Address">
+                      <div class="footer__item flex-center icon-place">
                         <div>
                           <div class="_title">Адрес склада в Минске:</div>
                           <div>Минск, Монтажников 3-й пер., 3</div>
@@ -229,7 +228,7 @@ export default {
       .footer__col:nth-child(1){
         flex-direction: column;
         align-items: flex-start;
-        flex-basis: 50%;
+        flex-basis: 70%;
         @media (max-width: $md2+px) {
 
 
@@ -247,7 +246,7 @@ export default {
         @media (max-width: $md3+px) {
           padding: 20px 0;
         }
-        flex-basis: 50%;
+        flex-basis: 30%;
 
       }
       @media (max-width: $md3+px) {
@@ -260,8 +259,10 @@ export default {
     &__item{
       padding: 5px 0;
       align-items: flex-start;
-      ._icon{
-        padding-right: 10px;
+
+      &:before{
+        margin-right: 10px;
+        font-size: 20px;
       }
     }
     &__list{
@@ -314,7 +315,14 @@ export default {
 .social{
 
   &__item{
-    margin: 0 5px;
+    font-size: 30px;
+    color: #423E48;
+    opacity: 0.3;
+    &:hover{
+      color: #4275D8;
+      opacity: 1;
+    }
+    //margin: 0 5px;
     &:last-child{
     }
   }

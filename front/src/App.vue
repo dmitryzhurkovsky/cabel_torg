@@ -367,5 +367,45 @@ h3{
 
   }
 }
+.dropdown{
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  &:hover{
+    color:#4275D8;
+  }
+
+  &__content{
+    display: none;
+    position: absolute;
+    left: -15px;
+    top: 40px;
+    z-index: 1;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgb(0 0 0 / 8%);
+    border-radius: 10px;
+    padding: 16px 10px;
+    min-width: 350px;
+    width: 100%;
+    a{
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 24px;
+      color: #423E48;
+      padding: 10px 16px;
+      &:hover{
+        background: rgba(66, 117, 216, 0.1);
+        border-radius: 6px;
+        color: #4275D8;
+
+      }
+    }
+  }
+}
+
+.dropdown:hover .dropdown__content {
+  display: block;
+}
+
 
 </style>
