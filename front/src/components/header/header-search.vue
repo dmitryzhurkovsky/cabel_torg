@@ -45,6 +45,9 @@ export default {
       // max-width: 384px;
       // height: 32px;
       // width: 100%;
+      @media (max-width: $md2+px) {
+        display: none;
+      }
     }
 }
 

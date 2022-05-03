@@ -13,24 +13,84 @@
       <div class="topmenu__item"><a href="">О нас</a> </div>
     </div>
 
-    <div class="topmenu__right flex-center">
+    <div class="topmenu__right client-bar flex-center">
       <div class="topmenu__item">
-        <a href="">
-          <img src="@/assets/svg/favorite.svg" alt="favorite">
-        </a>
+        <a class="icon-favorite" href=""></a>
+      </div>
+      <div class="topmenu__item popup-container">
+
+        <label class="icon-user" for="login-popup"></label>
+        <input type="checkbox" id="login-popup">
+
+        <div class="popup">
+          <label for="login-popup"></label>
+          <div class="inner">
+            <label class=" close-popup icon-plus"></label>
+            <div class="title">
+              <h6>Вход</h6>
+
+            </div>
+            <div class="content">
+              <ul>
+                <li>
+                  <label class="label_input">Электронная почта</label>
+                  <input type="text" placeholder="">
+                </li>
+                <li>
+                  <label class="label_input">Пароль</label>
+                  <input type="password" placeholder="">
+                </li>
+                <li  class="center">
+                  <button type="submit" class="btn">Войти</button>
+                </li>
+                <li class="center">
+                  <a href="" class="label_input popu">Не помню пароль</a>
+                </li>
+                <li  class="center">
+                  <a href="" class="">Зарегистрироваться</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
       </div>
-      <div class="topmenu__item">
-        <a href="">
-          <img src="@/assets/svg/user.svg" alt="user">
-        </a>
+      <div class="topmenu__item popup-container">
 
-      </div>
-      <div class="topmenu__item">
-        <div :class = "[ORDER_COUNT ? 'topmenu__cart' : 'topmenu__card closed']">{{ORDER_COUNT}}</div>
-        <a href="">
-          <img src="@/assets/svg/cart.svg" alt="cart">
-        </a>
+        <label class="icon-cart" for="login-popup"></label>
+        <input type="checkbox" id="login-popup">
+
+        <div class="popup">
+          <label for="login-popup"></label>
+          <div class="inner">
+            <label class=" close-popup icon-plus"></label>
+            <div class="title">
+              <h6>Вход</h6>
+
+            </div>
+            <div class="content">
+              <ul>
+                <li>
+                  <label class="label_input">Электронная почта</label>
+                  <input type="text" placeholder="">
+                </li>
+                <li>
+                  <label class="label_input">Пароль</label>
+                  <input type="password" placeholder="">
+                </li>
+                <li  class="center">
+                  <button type="submit" class="btn">Войти</button>
+                </li>
+                <li class="center">
+                  <a href="" class="label_input popu">Не помню пароль</a>
+                </li>
+                <li  class="center">
+                  <a href="" class="">Зарегистрироваться</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>
@@ -55,6 +115,9 @@ export default {
     &__topmenu{
       padding: 20px 0;
       justify-content: space-between;
+      @media (max-width: $md2+px) {
+        display: none!important;
+      }
     }
 }
 
@@ -173,7 +236,7 @@ export default {
 
 //Burger
 .burger-menu{
-  margin: 0 auto;
+  //margin: 0 auto;
   width: 24px;
   display: block;
   transition: all .3s;
@@ -229,6 +292,148 @@ export default {
       height: 2px
     }
   }
+  }
+}
+
+.popup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center ;
+  //height: 100vh;
+
+  .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(#000,.5);
+    z-index: 10;
+    opacity: 0;
+    visibility: hidden;
+    transition: 400ms all;
+    >label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    .inner {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      padding: 38px 24px 40px 24px;
+      transform: translate(-50%, -50%);
+      background: #fff;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
+      border-radius: 16px;
+      min-width: 300px;
+      box-sizing: border-box;
+      transition: 400ms all;
+      z-index: 10;
+      max-height: 100%;
+      overflow: auto;
+      .close-popup{
+        position: absolute;
+        top: 10px;
+        right: 10px;
+      }
+      .title {
+        margin-bottom: 25px;
+        position: sticky;
+        top: 0;
+        background: #fff;
+        text-align: center;
+        h6 {
+          font-weight: 500;
+          font-size: 20px;
+          line-height: 140%;
+
+        }
+        label {
+          font-size: 14px;
+          color: #999;
+          cursor: pointer;
+          &:hover {
+            color: #222;
+          }
+        }
+      }
+      .content {
+        //padding: 5px 15px 15px;
+        ul {
+          li {
+            margin-bottom: 15px;
+            &:last-child {
+              margin-bottom: 0;
+            }
+            input {
+              width: 100%;
+              padding: 10px 16px;
+              font-size: 14px;
+              box-sizing: border-box;
+              background: #FFFFFF;
+              border: 1px solid rgba(66, 62, 72, 0.2);
+              border-radius: 8px;
+              &:focus {
+                outline: 0;
+                border-color: #272643;
+              }
+            }
+            button {
+              background: #423E48;
+              cursor: pointer;
+            }
+            .label_input{
+              font-weight: 300;
+              font-size: 12px;
+              line-height: 140%;
+              opacity: 0.6;
+            }
+          }
+        }
+        p {
+          font-size: 13px;
+          line-height: 130%;
+          margin-bottom: 15px;
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+        .close-btn {
+          margin-top: 15px;
+          padding-top: 15px;
+          border-top: 1px solid #ddd;
+          label {
+            background: rgba(#000, .05);
+            display: block;
+            line-height: 30px;
+            text-align: center;
+            font-size: 13px;
+            color: #444;
+            border-radius: 3px;
+            cursor: pointer;
+            &:hover {
+              background: rgba(#000,.1);
+            }
+          }
+        }
+      }
+    }
+  }
+  >input {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    &:checked + .popup {
+      opacity: 1;
+      visibility: visible;
+      .inner {
+        top: 50%;
+      }
+    }
   }
 }
 
