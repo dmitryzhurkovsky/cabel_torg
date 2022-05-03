@@ -232,6 +232,9 @@ body {
 .mr-20{
     margin-right: 20px;
 }
+.center{
+  text-align: center ;
+}
 
 h3{
   font-weight: 500;
@@ -246,7 +249,8 @@ h3{
   border-radius: 6px;
   color:#fff;
   padding: 8px 24px;
-  min-width:180px;
+  min-width:180px;text-align: center;
+  cursor: pointer;
 }
 
 .flex-center{

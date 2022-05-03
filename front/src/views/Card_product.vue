@@ -13,8 +13,9 @@
               <li class="breadcrumb__separater icon-arrow-l"></li>
               <li class="active">Название товара</li>
             </ul>
+            <div class="status-row__link icon-share"><span>Поделиться</span></div>
           </div>
-          <div class="status-row__link icon-share">Поделиться</div>
+
 
           <div class="product__block">
             <div class="_block">
@@ -113,13 +114,36 @@
 
 
   }
-  &__header{
+  &__status-row{
 
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    @media (max-width: $md3+px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
 
+    .status-row__link{
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 16px;
+
+      @media (max-width: $md3+px) {
+        text-align: right;
+        width: 100%;
+        span{
+          display: none;
+        }
+      }
+    }
   }
   &__block {
     display: flex;
     align-items: flex-start;
+    @media (max-width: $md3+px) {
+      flex-direction: column;
+    }
 
 
     ._block{
