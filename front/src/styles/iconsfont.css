@@ -23,7 +23,9 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+.icon-close:before {
+  content: "\e920";
+}
 .icon-done:before {
   content: "\e901";
 }
@@ -91,9 +93,13 @@
 .icon-search:before {
   content: "\e914";
 }
-.icon-share:before {
+/*.icon-share:before {*/
+/*  content: "\e915";*/
+/*}*/
+.icon-share:after {
   content: "\e915";
 }
+
 .icon-done-color:before {
   content: "\e916";
   color: #32a071;
