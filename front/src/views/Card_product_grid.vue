@@ -5,24 +5,24 @@
         <div class="product__body">
 
           <div class="grid ">
-            <div class="item" tabindex="1">
+            <div class="grid__item" tabindex="1">
               <div class="product__main-img">
                 <img src="../assets/catalog/card1.png" alt="">
               </div>
             </div>
-            <div class="item" tabindex="2">
+            <div class="grid__item" tabindex="2">
               <div class="product__add-img add-img">
                 <!--                <img class="add-img__item" src="../assets/catalog/card1.png" alt="">-->
                 <!--                <img class="add-img__item" src="../assets/catalog/card1.png" alt="">-->
               </div>
             </div>
-            <div class="item" tabindex="3">
+            <div class="grid__item" tabindex="3">
               <div class="desc-product__title">Вилка RJ-45 cat 6 UTP для витой пары 8P8C (100 шт)</div>
             </div>
-            <div class="item" tabindex="4">
+            <div class="grid__item" tabindex="4">
               <div class="desc-product__article  _label">Артикул: <span>331003</span></div>
             </div>
-            <div class="item" tabindex="5">
+            <div class="grid__item" tabindex="5">
               <ul class="breadcrumb">
                 <li><a href="#">Главная</a></li>
                 <li class="breadcrumb__separater icon-arrow-l"></li>
@@ -33,13 +33,13 @@
                 <li class="active">Название товара</li>
               </ul>
             </div>
-            <div class="item" tabindex="6">
+            <div class="grid__item" tabindex="6">
               <div class="status-row__link icon-share"><span>Поделиться</span></div>
             </div>
-            <div class="item" tabindex="7">
+            <div class="grid__item" tabindex="7">
               <div class="desc-product__status icon-done-color _label">В наличии</div>
             </div>
-            <div class="item" tabindex="8">
+            <div class="grid__item" tabindex="8">
               <div class="price-product__block">
                 <div class="_label">Ваша цена:</div>
                 <div class="current_price">
@@ -48,13 +48,13 @@
                 </div>
               </div>
             </div>
-            <div class="item" tabindex="9">
+            <div class="grid__item" tabindex="9">
               <div class="product__favorite icon-favorite"></div>
             </div>
-            <div class="item" tabindex="10">
+            <div class="grid__item" tabindex="10">
               <div class="price-product__block">
                 <div class="retail_price">
-                  <span>Розничная цена: </span>
+                  <div>Розничная цена: </div>
                   <div>
                     <span>70</span>BYN
                     <span>/шт</span>
@@ -62,7 +62,7 @@
 
                 </div>
                 <div class="opt_price">
-                  <span>Оптовая цена: </span>
+                  <div>Оптовая цена: </div>
                   <div>
                     <span>70</span>BYN
                     <span>/шт</span>
@@ -71,11 +71,11 @@
                 </div>
               </div>
             </div>
-            <div class="item" tabindex="11">
+            <div class="grid__item" tabindex="11">
               <div class="product__btn btn">В корзину</div>
             </div>
 
-            <div class="item" tabindex="12">
+            <div class="grid__item" tabindex="12">
               <div class="desc-product__count">
                 <span class="_label">Количество</span>
                 <span class="icon-minus"></span>
@@ -83,7 +83,7 @@
                 <span class="icon-plus"></span>
               </div>
             </div>
-            <div class="item" tabindex="13">
+            <div class="grid__item" tabindex="13">
               <a class="product__link">Как оформить заказ ></a>
             </div>
           </div>
@@ -188,14 +188,20 @@
 
 .grid {
   display: grid;
+  align-items: start;
+  justify-items: start;
   //grid-gap: 1.5vw;
   //min-height: 100vh;
   //padding: 1.5vw;
+  &__item{
+    padding: 5px 0;
+  }
 }
 
 .grid {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows:auto;
+
   grid-template-areas:
       "breadcrumb breadcrumb"
       "photo   photo"
@@ -215,6 +221,7 @@
   .grid {
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: auto;
+
     grid-template-areas:
         "breadcrumb breadcrumb breadcrumb breadcrumb breadcrumb "
         "title title  title title title"
@@ -246,19 +253,19 @@
   }
 }
 
-.grid .item:nth-child(1)  { grid-area: photo; }
-.grid .item:nth-child(2)  { grid-area: big1; }
-.grid .item:nth-child(3)  { grid-area: title; }
-.grid .item:nth-child(4)  { grid-area: arcticle; }
-.grid .item:nth-child(5)  { grid-area: breadcrumb; }
-.grid .item:nth-child(6)  { grid-area: share; }
-.grid .item:nth-child(7)  { grid-area: status; }
-.grid .item:nth-child(8)  { grid-area: price; }
-.grid .item:nth-child(9)  { grid-area: wishlist; }
-.grid .item:nth-child(10) { grid-area: add_price; }
-.grid .item:nth-child(11) { grid-area: cart_button; }
-.grid .item:nth-child(12) { grid-area: count; }
-.grid .item:nth-child(13) { grid-area: link; }
+.grid__item:nth-child(1)  { grid-area: photo; }
+.grid__item:nth-child(2)  { grid-area: big1; }
+.grid__item:nth-child(3)  { grid-area: title; }
+.grid__item:nth-child(4)  { grid-area: arcticle; }
+.grid__item:nth-child(5)  { grid-area: breadcrumb; }
+.grid__item:nth-child(6)  { grid-area: share; }
+.grid__item:nth-child(7)  { grid-area: status; }
+.grid__item:nth-child(8)  { grid-area: price; }
+.grid__item:nth-child(9)  { grid-area: wishlist; }
+.grid__item:nth-child(10) { grid-area: add_price; }
+.grid__item:nth-child(11) { grid-area: cart_button; }
+.grid__item:nth-child(12) { grid-area: count; }
+.grid__item:nth-child(13) { grid-area: link; }
 
 
 
@@ -372,7 +379,6 @@
     font-size: 20px;
     line-height: 28px;
     color: #423E48;
-    margin: 8px 0;
   }
 
   &__arcticle{
@@ -380,13 +386,11 @@
   }
   &__status{
     line-height: 20px;
-    padding: 18px 0 20px 0;
     &:before{
       margin-right: 10px;
     }
   }
   &__count{
-    padding: 0 0 10px 0;
       span{
         &:nth-child(1){
           margin-right: 10px;
@@ -412,10 +416,7 @@
     background: #F9F9F9;
     padding: 22px 18px 20px 18px;
     .retail_price{
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+
     }
   }
 
@@ -427,17 +428,7 @@
     }
   }
 
-  .current_price{
-    font-weight: 500;
-    font-size: 24px;
-    line-height: 36px;
-    span{
-      margin-right: 10px;
-      &:nth-child(2){
-        font-weight: 300;
-      }
-    }
-  }
+
 
 }
 ._footnote{
@@ -445,6 +436,28 @@
   line-height: 20px;
   text-align: right;
   opacity: 0.5;
+}
+.current_price{
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 36px;
+  span{
+    margin-right: 10px;
+    &:nth-child(2){
+      font-weight: 300;
+    }
+  }
+}
+
+.retail_price, .opt_price{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.opt_price{
+margin-top: 15px;
 }
 
 </style>
