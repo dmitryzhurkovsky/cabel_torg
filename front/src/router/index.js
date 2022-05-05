@@ -87,6 +87,12 @@ const routes = [
         import("../views/Shipping.vue")
   },
   {
+    path: '/card_product_grid',
+    name: 'Card_product_grid',
+    component: () =>
+        import("../views/Card_product_grid.vue")
+  },
+  {
     path: '/card_product',
     name: 'Card_product',
     component: () =>
