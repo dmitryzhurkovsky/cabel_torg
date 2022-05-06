@@ -89,88 +89,6 @@
           </div>
 
 
-          <div class="product__status-row status-row">
-            <ul class="breadcrumb">
-              <li><a href="#">Главная</a></li>
-              <li class="breadcrumb__separater icon-arrow-l"></li>
-              <li><a href="#">Раздел</a></li>
-              <li class="breadcrumb__separater icon-arrow-l"></li>
-              <li><a href="#">Подраздел</a></li>
-              <li class="breadcrumb__separater icon-arrow-l"></li>
-              <li class="active">Название товара</li>
-            </ul>
-            <div class="status-row__link icon-share"><span>Поделиться</span></div>
-          </div>
-
-
-          <div class="product__block">
-            <div class="_block">
-              <div class="product__main-img">
-                <img src="../assets/catalog/card1.png" alt="">
-              </div>
-              <div class="product__add-img add-img">
-<!--                <img class="add-img__item" src="../assets/catalog/card1.png" alt="">-->
-<!--                <img class="add-img__item" src="../assets/catalog/card1.png" alt="">-->
-              </div>
-            </div>
-            <div class="_block product__desc desc-product">
-              <div class="desc-product__title">Вилка RJ-45 cat 6 UTP для витой пары 8P8C (100 шт)</div>
-              <div class="desc-product__article  _label">Артикул: <span>331003</span></div>
-              <div class="desc-product__status icon-done-color _label">В наличии</div>
-              <div class="desc-product__count">
-                <span class="_label">Количество</span>
-                <span class="icon-minus"></span>
-                <input class="desc-product__input" type="text">
-                <span class="icon-plus"></span>
-              </div>
-              <div class="desc-product__price price-product">
-                <div class="price-product__block">
-                  <div class="_label">Ваша цена:</div>
-                  <div class="current_price">
-                    <span>70</span>BYN
-                    <span>/шт</span>
-                  </div>
-                </div>
-                <div class="price-product__block">
-                  <div class="retail_price">
-                    <span>Розничная цена: </span>
-                    <div>
-                      <span>70</span>BYN
-                      <span>/шт</span>
-                    </div>
-
-                  </div>
-                  <div class="opt_price">
-                    <span>Оптовая цена: </span>
-                    <div>
-                      <span>70</span>BYN
-                      <span>/шт</span>
-                    </div>
-
-                  </div>
-                </div>
-
-
-              </div>
-              <div class="_footnote">* Все цены указаны с учетом НДС.</div>
-              <div class="product__action flex-center">
-                <div class="product__btn btn">В корзину</div>
-                <div class="product__favorite icon-favorite"></div>
-              </div>
-
-              <a class="product__link">Как оформить заказ ></a>
-
-           </div> <!-- desc-product-->
-            
-            
-          </div>
-
-
-
-
-
-
-
         </div>
       </div>
     </div>
@@ -193,10 +111,12 @@
   //grid-gap: 1.5vw;
   //min-height: 100vh;
   //padding: 1.5vw;
+  transition: 2s;
   &__item{
     padding: 5px 0;
   }
 }
+
 
 .grid {
   grid-template-columns: repeat(2, 1fr);
@@ -248,7 +168,7 @@
       "photo photo photo status status status"
       "photo photo photo count count count"
       "photo photo photo price add_price add_price"
-      "big1 big1 big1 cart_button cart_button wishlist"
+      "big1 big1 big1 cart_button wishlist wishlist"
       "big1 big1 big1 link link link";
   }
 }
@@ -261,7 +181,13 @@
 .grid__item:nth-child(6)  { grid-area: share; }
 .grid__item:nth-child(7)  { grid-area: status; }
 .grid__item:nth-child(8)  { grid-area: price; }
-.grid__item:nth-child(9)  { grid-area: wishlist; }
+.grid__item:nth-child(9)  {
+  grid-area: wishlist;
+  align-self: center;
+  justify-content: start;
+  padding-left: 20px;
+;
+}
 .grid__item:nth-child(10) { grid-area: add_price; }
 .grid__item:nth-child(11) { grid-area: cart_button; }
 .grid__item:nth-child(12) { grid-area: count; }
@@ -352,7 +278,6 @@
   }
   &__btn{
     background: #423E48;
-    margin-right: 20px;
     font-weight: 400;
     padding: 13px 40px;
 
@@ -459,5 +384,21 @@
 .opt_price{
 margin-top: 15px;
 }
+
+
+.status-row__link{
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 16px;
+
+  @media (max-width: $md3+px) {
+    text-align: right;
+    width: 100%;
+    span{
+      display: none;
+    }
+  }
+}
+
 
 </style>

@@ -41,6 +41,7 @@
   content: "\e904";
   color: #4275d8;
 }
+
 .icon-go-cart:before {
   content: "\e905";
 }
@@ -98,6 +99,7 @@
 /*.icon-share:before {*/
 /*  content: "\e915";*/
 /*}*/
+
 .icon-share:after {
   content: "\e915";
 }
@@ -117,7 +119,7 @@
 }
 .icon-vk:before {
   content: "\e900";
-  color: #4275d8;
+
 }
 .icon-instagram:before {
   content: "\e91b";

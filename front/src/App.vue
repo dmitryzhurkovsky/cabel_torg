@@ -159,6 +159,7 @@ body {
     font-size: 16px ;
     font-weight: 300;
     font-family: 'Rubik', sans-serif;
+    background: linear-gradient(180deg, rgba(246, 247, 249, 0) 0%, #F6F7F9 50.31%, rgba(246, 247, 249, 0) 100%);
     &._lock {
         overflow: hidden;
     }
