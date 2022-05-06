@@ -10,27 +10,25 @@
             <div class="recomendation__nav__item">Новинки</div>
             <div class="recomendation__nav__item">Скидки</div>
           </div>
+          <!-- :navigation= "true" -->
           <div class="recomendation__block">
-            <!-- <CardItem/> -->
-              <swiper class="swaper"
+              <swiper class="pagination-slider"
                   :slides-per-view="4"
-                  :slider-per-group="4"
                   :space-between="30"
-                  :pagination="{ clickable: true }"
+                  :pagination= "{
+                    clickable: true,
+                    type: 'bullets',
+                  }"
                   @swiper="onSwiper"
                   @slideChange="onSlideChange"
               >
-                <swiper-slide :virtualIndex = "1"><CardItem/></swiper-slide>
-                <swiper-slide :virtualIndex = "2"><CardItem/></swiper-slide>
-                <swiper-slide :virtualIndex = "3"><CardItem/></swiper-slide>
-                <swiper-slide :virtualIndex = "4"><CardItem/></swiper-slide>
-                <swiper-slide :virtualIndex = "5"><CardItem/></swiper-slide>
-                <swiper-slide :virtualIndex = "6"><CardItem/></swiper-slide>
-                <swiper-slide :virtualIndex = "7"><CardItem/></swiper-slide>
+                <swiper-slide v-for="n in 10" :key="n"><CardItem/></swiper-slide>
+                <div class="swiper-navigation-container">
+                  <div class="swiper-pagination" @paginationUpdate="paginationShow"></div>
+                  <div class="swiper-button-next" @click="nextSlide"></div>
+                  <div class="swiper-button-prev" @click="prevSlide"></div>
+                </div>
               </swiper>
-              <div class="swiper-pagination"></div>
-              <div class="swiper-button-next" @click="nextSlide"></div>
-              <div class="swiper-button-prev" @click="prevSlide"></div>
           </div>
         </div>
       </div>
@@ -41,9 +39,14 @@
 <script>
   import CardItem from '@/components/Goods/card_item.vue'
 
-  import { Swiper, SwiperSlide } from 'swiper/vue';
-  // import { Navigation, Pagination} from 'swiper';
-  import 'swiper/swiper-bundle.css';
+  import { Swiper } from "swiper/vue/swiper";
+  import { SwiperSlide } from "swiper/vue/swiper-slide";
+  import SwiperCore, { Pagination, Navigation } from "swiper";
+  // Import Swiper styles
+  import "swiper/swiper.min.css";
+  import "swiper/modules/pagination/pagination.min.css";
+  import "swiper/modules/navigation/navigation.min.css";
+  SwiperCore.use([Navigation, Pagination]);
 
   export default {
     name: 'Recomendation',
@@ -52,7 +55,7 @@
     {
       CardItem,
        Swiper, SwiperSlide,
-    },
+   },
 
     data: function(){
       return{
@@ -64,54 +67,36 @@
       onSlideChange() {
          console.log('slide change');
       },
-
       nextSlide(){
-          console.log('next');
           this.swiper.slideNext();
       },
-
       prevSlide(){
-          console.log('next');
           this.swiper.slidePrev();
       },
-
       onSwiper(swiper){
-        this.swiper = swiper;
-        this.swiper.pagination = {
-          el : '.swiper-pagination',
-          clickable: true,
-          dynamicBullets : true,
-          bulletActiveClass : '.swiper-pagination-bullet-active',
-          bulletClass : '.swiper-pagination-bullet',
-          type : 'bullets',
-        };
-        this.swiper.navigation = {
-          nextEl : '.swiper-button-next',
-          prevEl : '.swiper-button-prev',
-        };
+          this.swiper = swiper;
       },
     },
-
-    mounted(){
-      console.log();
-    },
-
   }
 </script>
 
 <style scoped lang="scss">
-.swiper-pagination{
-  width: 100%;
-  height: 40px;
-}
-.swiper-pagination-bullet{
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
-  font-size: 14px;
-  background-color: #ABABAB;
+
+.pagination-slider .swiper-pagination {
+  position: unset;
+  margin-bottom: 3%;
 }
 
+.swiper-navigation-container{
+  position: relative;
+  margin: 0 auto;
+  width: 20%;
+  height: 50px;
+}
+.swiper-button-prev::after, .swiper-button-next::after{
+  color: #423E48;
+  font-size: 18px;
+}
 .recomendation {
 
   &__wrapper{
