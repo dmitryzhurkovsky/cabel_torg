@@ -6,6 +6,8 @@ export default {
   state: {
     likes: [],
     orders: [12,23],
+    isMenuOpen: false,
+    munuItemActive : 1,
   },
 
   getters: {
@@ -19,10 +21,19 @@ export default {
           return null;
       }
     },
+    IS_MENU_OPEN(state){
+      return state.isMenuOpen;
+    },
+    MENU_ITEM_ACTIVE(state){
+      return state.munuItemActive;
+    }
 
   },
 
   mutations: {
+    UPDATE_IS_MENU_OPEN (state, newstate){
+      state.isMenuOpen = newstate
+    },
   },
 
   actions: {

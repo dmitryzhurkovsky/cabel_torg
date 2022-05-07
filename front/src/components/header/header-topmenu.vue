@@ -1,9 +1,10 @@
 <template lang="html">
   <div class="header__wrapper">
+    <PopUpMenu v-if = "IS_MENU_OPEN"/>
     <div class="header__content _container">
         <div class="header__topmenu topmenu flex-center">
           <div class="topmenu__left flex-center">
-            <div class="burger-menu burger-menu--closed">
+            <div @click="toggleMenu()" class="burger-menu burger-menu--closed">
               <div class="bar"></div>
               <div class="bar"></div>
               <div class="bar"></div>
@@ -15,15 +16,16 @@
 
               </div>
             </div>
-            <div class="topmenu__item"><div class="dropdown">Покупателям
-              <div class="dropdown__content">
-                <a href="/how_to_order">Как оформить заказ</a>
-                <a href="/shipping">Оплата и доставка</a>
-                <a href="/about">Оптовым клиентам</a>
-                <a href="/warranty">Гарантийное обслуживание</a>
-                <a href="/puboffer">Публичная оферта</a>
-              </div>
-            </div>
+            <div class="topmenu__item">
+                  <div class="dropdown">Покупателям
+                      <div class="dropdown__content">
+                        <a href="/how_to_order">Как оформить заказ</a>
+                        <a href="/shipping">Оплата и доставка</a>
+                        <a href="/about">Оптовым клиентам</a>
+                        <a href="/warranty">Гарантийное обслуживание</a>
+                        <a href="/puboffer">Публичная оферта</a>
+                      </div>
+                  </div>
             </div>
             <div class="topmenu__item">
               <div class="dropdown">О нас
@@ -36,7 +38,6 @@
 
             </div>
           </div>
-
           <div class="topmenu__right client-bar flex-center">
             <div class="topmenu__item">
               <a class="icon-favorite" href=""></a>
@@ -125,14 +126,27 @@
 
 <script>
 
-import { mapGetters } from "vuex";
+import {mapActions, mapGetters} from 'vuex'
+import PopUpMenu from '@/components/header/pop-up-menu.vue'
 
 export default {
   name: "HeaderTopMenu",
 
-  computed: {
-    ...mapGetters("header", ["ORDER_COUNT"]),
+  components:
+  {
+    PopUpMenu,
   },
+
+  computed: {
+    ...mapGetters("header", ["ORDER_COUNT", "IS_MENU_OPEN", "MENU_ITEM_ACTIVE"]),
+  },
+
+  methods:{
+    toggleMenu() {
+      this.$store.commit('header/UPDATE_IS_MENU_OPEN', !this.IS_MENU_OPEN);
+      console.log(this.IS_MENU_OPEN);
+    },
+  }
 }
 </script>
 

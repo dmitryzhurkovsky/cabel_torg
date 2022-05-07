@@ -12,7 +12,7 @@
           </div>
           <!-- :navigation= "true" -->
           <div class="recomendation__block">
-              <swiper class="pagination-slider"
+              <swiper
                   :slides-per-view="4"
                   :space-between="30"
                   :pagination= "{
@@ -24,7 +24,6 @@
               >
                 <swiper-slide v-for="n in 10" :key="n"><CardItem/></swiper-slide>
                 <div class="swiper-navigation-container">
-                  <div class="swiper-pagination" @paginationUpdate="paginationShow"></div>
                   <div class="swiper-button-next" @click="nextSlide"></div>
                   <div class="swiper-button-prev" @click="prevSlide"></div>
                 </div>
@@ -82,7 +81,7 @@
 
 <style scoped lang="scss">
 
-.pagination-slider .swiper-pagination {
+.swiper-pagination {
   position: unset;
   margin-bottom: 3%;
 }

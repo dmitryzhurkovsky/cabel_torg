@@ -1,9 +1,10 @@
 <template lang="html">
   <div class="header__wrapper">
+    <PopUpMenu v-if = "IS_MENU_OPEN"/>
     <div class="header__content _container">
         <div class="header__body ">
       <!--  # BURGER Appears from tablet version-->
-            <div class="burger-menu burger-menu--closed">
+            <div  @click="toggleMenu()" class="burger-menu burger-menu--closed">
               <div class="bar"></div>
               <div class="bar"></div>
               <div class="bar"></div>
@@ -112,15 +113,29 @@
 </template>
 
 <script>
+  import {mapActions, mapGetters} from 'vuex'
   import HeaderSearch from '@/components/header/header-search.vue'
+  import PopUpMenu from '@/components/header/pop-up-menu.vue'
 
   export default {
     name: "HeaderBody",
 
     components:
     {
-      HeaderSearch,
+      HeaderSearch, PopUpMenu
     },
+
+    computed: {
+      ...mapGetters("header", ["IS_MENU_OPEN"]),
+    },
+
+    methods:{
+      toggleMenu() {
+        this.$store.commit('header/UPDATE_IS_MENU_OPEN', !this.IS_MENU_OPEN);
+        console.log(this.IS_MENU_OPEN);
+      },
+    }
+
   }
 </script>
 
