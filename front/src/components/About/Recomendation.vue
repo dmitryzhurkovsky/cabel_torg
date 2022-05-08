@@ -11,7 +11,7 @@
             <div class="recomendation__nav__item">Скидки</div>
           </div>
           <!-- :navigation= "true" -->
-          <div class="recomendation__block">
+          <div class="recomendation__block" v-if = "VIEW_TYPE === 1">
               <swiper
                   :slides-per-view="4"
                   :space-between="30"
@@ -36,7 +36,25 @@
                 </div>
 
               </swiper>
+
           </div>
+          // Сдесь надо 2 строки в 3 столбика
+          <div class="recomendation__block" v-if = "VIEW_TYPE === 2">
+            <CardItem/>
+            <CardItem/>
+            <CardItem/>
+            <CardItem/>
+            <CardItem/>
+            <CardItem/>
+          </div>
+          // Сдесь надо 2 строки в 2 столбика
+          <div class="recomendation__block" v-if = "VIEW_TYPE === 3">
+            <CardItem/>
+            <CardItem/>
+            <CardItem/>
+            <CardItem/>
+          </div>
+
         </div>
       </div>
     </div>
@@ -44,6 +62,7 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
   import CardItem from '@/components/Goods/card_item.vue'
 
   import { Swiper } from "swiper/vue/swiper";
@@ -60,9 +79,12 @@
 
     components:
     {
-      CardItem,
-       Swiper, SwiperSlide,
-   },
+      CardItem, Swiper, SwiperSlide,
+    },
+
+    computed: {
+      ...mapGetters("header", ["VIEW_TYPE"]),
+    },
 
     data: function(){
       return{

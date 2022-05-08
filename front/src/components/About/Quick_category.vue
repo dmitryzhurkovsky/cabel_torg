@@ -5,7 +5,11 @@
         <div class="quick-category__body">
           <h3>Каталог товаров</h3>
           <div class="quick-category__grid">
-            <div class="quick-category__item quick-category__big">
+            <div class="quick-category__item quick-category__big"
+            :style = "{
+                backgroundImage : 'url(' + getPath('cat1.png') + ')'
+            }"
+            >
               <ul class="quick-category__list">Сетевое оборудование
                 <li class="quick-category__link">
                   <a href="">Коммутаторы</a> </li>
@@ -41,6 +45,15 @@
 
   export default {
     name: 'Quick_category',
+
+    methods: {
+      getPath: function(item){
+        let path = process.env.BASE_URL + item;
+        // return path;
+        return item;
+      },
+
+    }
   }
 </script>
 
@@ -67,7 +80,7 @@ h3{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-image: url("/@/src/assets/category/cat1.png");
+  // background-image: url("../../assets/category/cat1.png");
 
 }
 .quick-category__big-row{

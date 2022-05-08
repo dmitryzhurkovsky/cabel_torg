@@ -10,6 +10,8 @@ export default {
     isCatalogOpen: false,
     munuItemActive : 1,
     catalogItemActive: 1,
+    windowWidth: 1280,
+    viewType: 1,
   },
 
   getters: {
@@ -34,17 +36,37 @@ export default {
     },
     CATALOG_ITEM_ACTIVE(state){
       return state.catalogItemActive;
+    },
+    VIEW_TYPE(state){
+      return state.viewType;
+    },
+    WINDOW_WIDTH(state){
+      return state.windowWidth;
     }
 
   },
 
   mutations: {
     UPDATE_IS_MENU_OPEN (state, newstate){
-      state.isMenuOpen = newstate
+      state.isMenuOpen = newstate;
     },
     UPDATE_IS_CATALOG_OPEN (state, newstate){
-      state.isCatalogOpen = newstate
+      state.isCatalogOpen = newstate;
     },
+    UPDATE_VIEW_PARAMETERS (state, newstate){
+      state.windowWidth = newstate;
+      // console.log(newstate);
+      if (newstate > 480) {
+        // XXXX - 480
+        state.viewType = 1;
+      } else if (newstate > 320) {
+        // 480 - 380
+        state.viewType = 2;
+      } else {
+        // 320 - 0
+        state.viewType = 3;
+      }
+    }
   },
 
   actions: {

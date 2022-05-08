@@ -24,9 +24,14 @@
     },
 
     methods: {
+      setViewParametrs(){
+        this.$store.commit('header/UPDATE_VIEW_PARAMETERS',window.outerWidth)
+      }
     },
 
     created() {
+      this.setViewParametrs();
+      window.addEventListener('resize', this.setViewParametrs);
     },
 
   };
@@ -318,7 +323,7 @@ h3{
       line-height: 16px;
       text-align: center;
       color: #423E48;
-      
+
     }
 
   }

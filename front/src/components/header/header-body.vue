@@ -1,6 +1,6 @@
 <template lang="html">
+  <BurgerMenu v-if = "IS_MENU_OPEN"/>
   <div class="header__wrapper">
-    <BurgerMenu v-if = "IS_MENU_OPEN"/>
     <div class="header__content _container">
         <div class="header__body ">
       <!--  # BURGER Appears from tablet version-->
