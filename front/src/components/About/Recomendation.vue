@@ -16,17 +16,25 @@
                   :slides-per-view="4"
                   :space-between="30"
                   :pagination= "{
+                    el: '.swiper-pagination',
                     clickable: true,
                     type: 'bullets',
+                    bulletClass: 'swiper-pagination-bullet',
+                    bulletElement: 'span'
                   }"
                   @swiper="onSwiper"
                   @slideChange="onSlideChange"
               >
+
                 <swiper-slide v-for="n in 10" :key="n"><CardItem/></swiper-slide>
+
+                <div class="swiper-pagination"></div>
+
                 <div class="swiper-navigation-container">
                   <div class="swiper-button-next" @click="nextSlide"></div>
                   <div class="swiper-button-prev" @click="prevSlide"></div>
                 </div>
+
               </swiper>
           </div>
         </div>
@@ -43,8 +51,8 @@
   import SwiperCore, { Pagination, Navigation } from "swiper";
   // Import Swiper styles
   import "swiper/swiper.min.css";
-  import "swiper/modules/pagination/pagination.min.css";
-  import "swiper/modules/navigation/navigation.min.css";
+  // import "swiper/modules/pagination/pagination.min.css";
+  // import "swiper/modules/navigation/navigation.min.css";
   SwiperCore.use([Navigation, Pagination]);
 
   export default {
@@ -81,10 +89,21 @@
 
 <style scoped lang="scss">
 
-.swiper-pagination {
-  position: unset;
-  margin-bottom: 3%;
+.swiper-pagination, .swiper-pagination-clickable, .swiper-pagination-bullets, .swiper-pagination-horizontal {
+  //position: unset;
+  //margin-bottom: 3%;
+  bottom: 17px;
+
+  span {
+    background: #7700AF;
+  }
 }
+.swiper-pagination-bullet, .swiper-pagination-bullet-active{
+  background: red;
+}
+
+
+
 
 .swiper-navigation-container{
   position: relative;
@@ -93,8 +112,13 @@
   height: 50px;
 }
 .swiper-button-prev::after, .swiper-button-next::after{
-  color: #423E48;
-  font-size: 18px;
+  content: "\e90e";
+  font-family: icomoon;
+  font-size: 12px;
+  color: #423E48;;
+}
+.swiper-button-prev::after{
+  transform: rotate(180deg);
 }
 .recomendation {
 
