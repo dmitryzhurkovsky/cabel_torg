@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="header__wrapper">
-    <PopUpMenu v-if = "IS_MENU_OPEN"/>
+    <BurgerMenu v-if = "IS_MENU_OPEN"/>
     <div class="header__content _container">
         <div class="header__body ">
       <!--  # BURGER Appears from tablet version-->
@@ -115,14 +115,14 @@
 <script>
   import {mapActions, mapGetters} from 'vuex'
   import HeaderSearch from '@/components/header/header-search.vue'
-  import PopUpMenu from '@/components/header/pop-up-menu.vue'
+  import BurgerMenu from '@/components/header/burger-menu.vue'
 
   export default {
     name: "HeaderBody",
 
     components:
     {
-      HeaderSearch, PopUpMenu
+      HeaderSearch, BurgerMenu
     },
 
     computed: {

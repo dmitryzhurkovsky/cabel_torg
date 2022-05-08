@@ -1,6 +1,5 @@
 <template lang="html">
   <div class="header__wrapper">
-    <PopUpMenu v-if = "IS_MENU_OPEN"/>
     <div class="header__content _container">
         <div class="header__topmenu topmenu flex-center">
           <div class="topmenu__left flex-center">
@@ -12,8 +11,8 @@
 
 
             <div class="topmenu__item">
-              <div class="dropdown">Каталог товаров
-
+              <div class="dropdown" @mouseover="openMenu()" @mouseleave="closeMenu()">Каталог товаров
+                <CatalogMenu v-if = "IS_CATALOG_OPEN"/>
               </div>
             </div>
             <div class="topmenu__item">
@@ -127,25 +126,33 @@
 <script>
 
 import {mapActions, mapGetters} from 'vuex'
-import PopUpMenu from '@/components/header/pop-up-menu.vue'
+import CatalogMenu from '@/components/header/catalog-menu.vue'
 
 export default {
   name: "HeaderTopMenu",
 
   components:
   {
-    PopUpMenu,
+    CatalogMenu,
   },
 
   computed: {
-    ...mapGetters("header", ["ORDER_COUNT", "IS_MENU_OPEN", "MENU_ITEM_ACTIVE"]),
+    ...mapGetters("header", ["ORDER_COUNT", "IS_CATALOG_OPEN"]),
   },
 
   methods:{
     toggleMenu() {
-      this.$store.commit('header/UPDATE_IS_MENU_OPEN', !this.IS_MENU_OPEN);
-      console.log(this.IS_MENU_OPEN);
+      this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', !this.IS_CATALOG_OPEN);
+      console.log(this.IS_CATALOG_OPEN);
     },
+    openMenu(){
+      this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', true);
+      console.log(this.IS_CATALOG_OPEN);
+    },
+    closeMenu(){
+      this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', false);
+      console.log(this.IS_CATALOG_OPEN);
+    }
   }
 }
 </script>

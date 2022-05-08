@@ -1,8 +1,8 @@
 <template lang="html">
-  <div class="pop__up__menu">
-    <div v-if = "MENU_ITEM_ACTIVE === 1">sdfsdfsfsdaf</div>
-    <div v-if = "MENU_ITEM_ACTIVE === 2">asdfdfsdfasdfasf</div>
-    <div v-if = "MENU_ITEM_ACTIVE === 3">sdfadfasdfasddf</div>
+  <div class="burger__menu__open">
+    <div v-if = "MENU_ITEM_ACTIVE === 1">first menu item</div>
+    <div v-if = "MENU_ITEM_ACTIVE === 2">second menu item</div>
+    <div v-if = "MENU_ITEM_ACTIVE === 3">third menu item</div>
     AAAAAAAAAAAAAAAAAAAAAAAA
   </div>
 </template>
@@ -12,7 +12,7 @@
 import {mapActions, mapGetters} from 'vuex'
 
 export default {
-  name: "PopUpMenu",
+  name: "BurgerMenu",
 
   computed: {
     ...mapGetters("header", ["MENU_ITEM_ACTIVE"]),
@@ -21,7 +21,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .pop__up__menu{
+    .burger__menu__open{
       position: absolute;
       top: 100px;
       width: 200px;
