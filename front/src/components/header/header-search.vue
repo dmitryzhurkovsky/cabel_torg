@@ -1,13 +1,16 @@
 <template lang="html">
     <div class="header__search search-wrapper">
-      <div>
-        <input type="text" name="focus" required class="search-box" placeholder="Поиск товаров"
-            @input="onInput"
-            v-model = "queryStringt"
-        />
-        <button class="close-icon" type="reset"
-            @click = "clearString"
-        ></button>
+      <div class="search__box">
+        <div class="search__field">
+          <input type="text" name="focus" required class="search-box" placeholder="Поиск товаров"
+                 @input="onInput"
+                 v-model = "queryStringt"
+          />
+          <button class="icon-search" type="reset"
+                  @click = "clearString"
+          ></button>
+        </div>
+
       </div>
     </div>
 </template>
@@ -59,34 +62,52 @@ export default {
 .search-wrapper {
 
 }
-.search-box {
-  background: #FFFFFF;
+.search__box {
+  //width: 500px;
+  background: #fff;
+  height: 32px;
+  display: flex;
+  padding: 6px 16px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
   border-radius: 50px;
-  max-width: 384px;
-  width: 100%;
-  font-size: 14px;
-  opacity: 0.5;
-  padding: 9px 16px;
-  min-width: 300px;
 }
-.search-box:focus {
-  border: 1px solid #bebede;
-}
-.close-icon {
-  border:1px solid transparent;
-  background-color: transparent;
-  display: inline-block;
-  vertical-align: middle;
-  outline: 0;
-  cursor: pointer;
-}
-.close-icon:after {
 
+.search__field{
+  width: 385px;
+  height: 100%;
+  position: relative;
+
+  input{
+    width: 100%;
+    height: 100%;
+    border: 0px;
+    padding-right: 38px;
+    font-weight: 300;
+    font-size: 14px;
+    opacity: 0.5;
+
+  }
+
+  button{
+    position: absolute;
+    top: 1px;
+    right: 0;
+    font-size: 20px;
+
+
+    cursor: pointer;
+  }
 }
-.search-box:not(:valid) ~ .close-icon {
-  display: none;
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #9fa3b1;
 }
+::-moz-placeholder { /* Firefox 19+ */
+  color: #9fa3b1;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #9fa3b1;
+}
+
 
 
 </style>

@@ -377,16 +377,20 @@ h3{
   position: relative;
   display: inline-block;
   cursor: pointer;
+  &__wrapper{
+    display: none;
+    position: absolute;
+    left: -12px;
+    top: 10px;
+    background: transparent;
+    padding: 20px 0;
+    z-index: 5;
+  }
   &:hover{
     color:#4275D8;
   }
 
   &__content{
-    display: none;
-    position: absolute;
-    left: -15px;
-    top: 40px;
-    z-index: 1;
     background: #FFFFFF;
     box-shadow: 0px 0px 10px rgb(0 0 0 / 8%);
     border-radius: 10px;
@@ -409,7 +413,7 @@ h3{
   }
 }
 
-.dropdown:hover .dropdown__content {
+.dropdown:hover .dropdown__wrapper {
   display: block;
 }
 
