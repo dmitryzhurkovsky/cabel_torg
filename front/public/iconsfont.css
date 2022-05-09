@@ -25,6 +25,13 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.icon-burger:before {
+  content: "\e913";
+}
+.icon-arrow-up:before {
+  content: "\e921";
+}
+
 .icon-close:before {
   content: "\e920";
 }
