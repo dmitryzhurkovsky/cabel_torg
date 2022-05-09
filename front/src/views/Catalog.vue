@@ -18,7 +18,7 @@
             <div class="catalog__sidebar filter">
               <div class="filter__block">
                 <div class="filter__box">
-                  <div class="filter__title icon-arrow-l">Тип оборудования</div>
+                  <div class="filter__title icon-arrow-up">Тип оборудования</div>
 
                   <div class="filter__checkbox-list">
                     <div class="filter__checkbox__item">
@@ -59,7 +59,7 @@
 
                 </div>
                 <div class="filter__box">
-                  <div class="filter__title icon-arrow-l">Категория</div>
+                  <div class="filter__title icon-arrow-up">Категория</div>
 
                   <div class="filter__checkbox-list">
                     <div class="filter__checkbox__item">
@@ -100,7 +100,7 @@
 
                 </div>
                 <div class="filter__box">
-                  <div class="filter__title icon-arrow-l">Показывать:</div>
+                  <div class="filter__title icon-arrow-up">Показывать:</div>
 
                   <div class="filter__checkbox-list">
                     <div class="filter__checkbox__item">
@@ -219,8 +219,10 @@
     margin: 12px 0;
     &:before{
       position: absolute;
+      top: 12px;
       right: 10px;
-      transform: rotate(-90deg);
+      font-size: 10px;
+      //transform: rotate(-90deg);
     }
   }
 

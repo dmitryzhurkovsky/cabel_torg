@@ -3,20 +3,14 @@
     <div class="header__content _container">
         <div class="header__topmenu topmenu flex-center">
           <div class="topmenu__left flex-center">
-            <div @click="toggleMenu()" class="burger-menu burger-menu--closed">
-              <div class="bar"></div>
-              <div class="bar"></div>
-              <div class="bar"></div>
-            </div>
-
-
             <div class="topmenu__item">
-              <div class="dropdown" @mouseover="openMenu()" @mouseleave="closeMenu()">Каталог товаров
+              <div class="dropdown icon-burger" @mouseover="openMenu()" @mouseleave="closeMenu()">Каталог товаров
                 <CatalogMenu v-if = "IS_CATALOG_OPEN"/>
               </div>
             </div>
             <div class="topmenu__item">
                   <div class="dropdown">Покупателям
+                    <div class="dropdown__wrapper">
                       <div class="dropdown__content">
                         <a href="/how_to_order">Как оформить заказ</a>
                         <a href="/shipping">Оплата и доставка</a>
@@ -24,14 +18,18 @@
                         <a href="/warranty">Гарантийное обслуживание</a>
                         <a href="/puboffer">Публичная оферта</a>
                       </div>
+                    </div>
+
                   </div>
             </div>
             <div class="topmenu__item">
               <div class="dropdown">О нас
-                <div class="dropdown__content">
-                  <a href="/how_to_order">О компании</a>
-                  <a href="/shipping">Контактная информация</a>
-                  <a href="/about">Новости</a>
+                <div class="dropdown__wrapper">
+                  <div class="dropdown__content">
+                    <a href="/how_to_order">О компании</a>
+                    <a href="/shipping">Контактная информация</a>
+                    <a href="/about">Новости</a>
+                  </div>
                 </div>
               </div>
 
@@ -168,6 +166,7 @@ export default {
       @media (max-width: $md2+px) {
         display: none!important;
       }
+
     }
 }
 
@@ -218,6 +217,12 @@ export default {
       top: 10px;
       opacity:0.9;
 }
+  .icon-burger{
+    &:before{
+      margin-right: 10px;
+    }
+
+  }
 
 }
 
