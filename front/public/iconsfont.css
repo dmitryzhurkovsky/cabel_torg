@@ -76,7 +76,7 @@
   content: "\e90c";
   color: #4275d8;
 }
-.icon-arrow-left:before {
+.icon-arrow-left:after {
   content: "\e90d";
 }
 .icon-arrow-l:before {
