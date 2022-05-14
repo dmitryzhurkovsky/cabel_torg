@@ -1,0 +1,78 @@
+<template>
+  <div class="banner">
+    <div class="banner__wrapper">
+      <div class="banner__content _container">
+        <div class="banner__body">
+          <h1>Распродажа сетевого оборудования!</h1>
+          <p>* Подробные условия и полный ассортимент товаров со скидками смотрите на странице распродажи</p>
+          <button class="btn"> К распродаже
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 12H20.5M20.5 12L16.5 8M20.5 12L16.5 16" stroke="white"/>
+            </svg>
+          </button>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+
+  export default {
+    name: 'Banner',
+  }
+</script>
+
+<style scoped lang="scss">
+
+.banner {
+
+  &__wrapper{
+    //background:url("@/assets/banner/1.png");
+  }
+  &__content{
+
+  }
+
+  &__body{
+    width: 427px;
+    padding: 60px 0;
+    h1{
+      margin-bottom: 20px;
+    }
+
+    p{
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 14px;
+      display: flex;
+      align-items: center;
+
+      color: #423E48;
+    }
+    button{
+      margin-top: 30px;
+      font-weight: 400;
+      font-size: 14px;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      svg{
+        margin-left: 10px;
+      }
+    }
+  }
+
+
+  &__item{
+
+  }
+  &__link{
+
+}
+
+}
+
+</style>

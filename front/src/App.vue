@@ -241,7 +241,13 @@ body {
 .center{
   text-align: center ;
 }
+h1{
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 43px;
 
+  color: #423E48;
+}
 h3{
   font-weight: 500;
   font-size: 20px;
@@ -249,6 +255,7 @@ h3{
   letter-spacing: 0.44px;
   color: #423E48;
 }
+
 
 .btn {
   background: #4275D8;
