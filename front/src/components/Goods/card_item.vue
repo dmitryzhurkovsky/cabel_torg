@@ -74,8 +74,8 @@ export default {
     position: absolute;
     font-weight: 400;
     font-size: 12px;
-    left:10px;
-    top:10px;
+    left:20px;
+    top:20px;
     color: #fff;
   }
   &__wishlist{
@@ -89,8 +89,8 @@ export default {
     //width: 18px;
     //height: 16px;
     position: absolute;
-    top: 18.5px;
-    right: 17.29px;
+    top: 20px;
+    right: 20px;
     z-index: 1;
     cursor: pointer;
     fill: none;

@@ -5,7 +5,7 @@
         <div class="recomendation__body">
 
           <h3>Рекомендации для вас</h3>
-          <div class="recomendation__nav flex-center">
+          <div class="recomendation__nav">
             <div class="recomendation__nav__item">Топ продаж</div>
             <div class="recomendation__nav__item">Новинки</div>
             <div class="recomendation__nav__item">Скидки</div>
@@ -162,8 +162,17 @@
 
   }
   &__nav{
-    padding: 10px 0;
-    justify-content: flex-start;
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(3, minmax(0, 185px));
+    /*
+    if we did this instead of the template it would be a problem:
+    grid-auto-flow: column;
+    */
+    text-align: center;
+    padding: 24px 20px 20px 0;
+    //padding: 10px 0;
+    //justify-content: flex-start;
     &__item{
 
       background: #FFFFFF;
@@ -180,6 +189,7 @@
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
         color:#4275D8;
         font-weight: 500;
+        opacity: 1;
       }
 
     }
