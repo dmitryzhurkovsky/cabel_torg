@@ -266,6 +266,11 @@ h3{
   cursor: pointer;
 }
 
+.black{
+  background: $mainColor;
+  padding: 12px 24px;
+}
+
 .flex-center{
   display: flex;
   align-items: center;

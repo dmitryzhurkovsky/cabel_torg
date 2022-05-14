@@ -25,7 +25,7 @@
             <div class="topmenu__item">
               <div class="dropdown">О нас
                 <div class="dropdown__wrapper">
-                  <div class="dropdown__content">
+                  <div class="dropdown__content ">
                     <a href="/how_to_order">О компании</a>
                     <a href="/shipping">Контактная информация</a>
                     <a href="/about">Новости</a>
@@ -36,48 +36,113 @@
             </div>
           </div>
           <div class="topmenu__right client-bar flex-center">
-            <div class="topmenu__item">
-              <a class="icon-favorite" href=""></a>
-            </div>
-            <div class="topmenu__item popup-container">
+            <div class="topmenu__item right-direction">
+              <div class="dropdown icon-favorite">
+                <div class="dropdown__wrapper">
+                  <div class="dropdown__content popup-cart">
+                    <h3 class="">Избранные товары</h3>
 
-              <label class="icon-user" for="login-popup"></label>
-              <input type="checkbox" id="login-popup">
+                    <div class="popup-cart__list">
+                      <div class="popup-cart__item row">
+                        <div class="popup-cart__img">
+                          <img src="../../assets/catalog/card1.png" alt="">
+                        </div>
+                        <div class="popup-cart__description">
+                          <div class="popup-cart__title">Коммуникационный кабель</div>
+                          <div class="popup-cart__uptitle">UTP cat.5e (патч-панель) 19″</div>
 
-              <div class="popup">
-                <label for="login-popup"></label>
-                <div class="inner">
-                  <label class=" close-popup icon-plus"></label>
-                  <div class="title">
-                    <h6>Вход</h6>
+                        </div>
+                        <div class="popup-cart__action">
+                          <div class="popup-cart__price">12.03 <span>BYN</span></div>
+                          <button class="icon-delete"></button>
+                        </div>
 
-                  </div>
-                  <div class="content">
-                    <ul>
-                      <li>
-                        <label class="label_input">Электронная почта</label>
-                        <input type="text" placeholder="">
-                      </li>
-                      <li>
-                        <label class="label_input">Пароль</label>
-                        <input type="password" placeholder="">
-                      </li>
-                      <li  class="center">
-                        <button type="submit" class="btn">Войти</button>
-                      </li>
-                      <li class="center">
-                        <a href="" class="label_input popu">Не помню пароль</a>
-                      </li>
-                      <li  class="center">
-                        <a href="" class="">Зарегистрироваться</a>
-                      </li>
-                    </ul>
+                      </div>
+                      <div class="popup-cart__item row">
+                        <div class="popup-cart__img">
+                          <img src="../../assets/catalog/card1.png" alt="">
+                        </div>
+                        <div class="popup-cart__description">
+                          <div class="popup-cart__title">Коммуникационный кабель</div>
+                          <div class="popup-cart__uptitle">UTP cat.5e (патч-панель) 19″</div>
+
+                        </div>
+                        <div class="popup-cart__action">
+                          <div class="popup-cart__price">12.03 <span>BYN</span></div>
+                          <button class="icon-delete"></button>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div>
+                      <a class="" href="">Перейти в корзину</a>
+                    </div>
                   </div>
                 </div>
+
               </div>
 
             </div>
-            <div class="topmenu__item">
+            <div class="topmenu__item right-direction">
+              <div class="dropdown icon-user">
+                <div class="dropdown__wrapper">
+                  <div class="dropdown__content popup-cart">
+                    <div class="avatar__box">
+                      <div class="avatar icon-user flex-center"></div>
+                    </div>
+
+                    <button class="btn black">Вход</button>
+                    <div class="popup__reset">
+                      <a  href="">Не помню пароль</a>
+                    </div>
+                    <div class="popup__reg">
+                      <a href="">Зарегистрироваться</a>
+                    </div>
+
+
+
+                  </div>
+                </div>
+
+              </div>
+
+<!--              <label class="icon-user" for="login-popup"></label>-->
+<!--              <input type="checkbox" id="login-popup">-->
+
+<!--              <div class="popup">-->
+<!--                <label for="login-popup"></label>-->
+<!--                <div class="inner">-->
+<!--                  <label class=" close-popup icon-plus"></label>-->
+<!--                  <div class="title">-->
+<!--                    <h6>Вход</h6>-->
+
+<!--                  </div>-->
+<!--                  <div class="content">-->
+<!--                    <ul>-->
+<!--                      <li>-->
+<!--                        <label class="label_input">Электронная почта</label>-->
+<!--                        <input type="text" placeholder="">-->
+<!--                      </li>-->
+<!--                      <li>-->
+<!--                        <label class="label_input">Пароль</label>-->
+<!--                        <input type="password" placeholder="">-->
+<!--                      </li>-->
+<!--                      <li  class="center">-->
+<!--                        <button type="submit" class="btn">Войти</button>-->
+<!--                      </li>-->
+<!--                      <li class="center">-->
+<!--                        <a href="" class="label_input popu">Не помню пароль</a>-->
+<!--                      </li>-->
+<!--                      <li  class="center">-->
+<!--                        <a href="" class="">Зарегистрироваться</a>-->
+<!--                      </li>-->
+<!--                    </ul>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+
+            </div>
+            <div class="topmenu__item right-direction">
               <div class="dropdown icon-cart">
                 <div class="dropdown__wrapper">
                   <div class="dropdown__content popup-cart">
@@ -370,7 +435,10 @@ export default {
   }
   }
 }
-
+.right-direction .dropdown__wrapper{
+  right: 0;
+  left: unset;
+}
 .popup-cart{
   text-align: center;
 
@@ -381,6 +449,24 @@ export default {
     text-align: center;
     margin-bottom: 16px;
   }
+
+  .avatar{
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(66, 117, 216, 0.07);
+    font-size: 30px;
+    color: #423E48;
+    font-weight: 500;
+  }
+  .avatar__box{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 24px 0;
+  }
+
 
 
 
@@ -423,6 +509,9 @@ export default {
     grid-template-columns: 1fr 2fr 1fr;
     gap:10px;
     align-items: self-start;
+    &:hover{
+      background: #F9F9F9;
+    }
 
   }
 
@@ -471,6 +560,44 @@ export default {
 
   button{
     margin-bottom: 20px;
+  }
+
+  a{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 130%;
+    color: #4275D8;
+  }
+
+
+}
+
+.popup__reg{
+  width: 100%;
+  padding: 30px 0 10px 0;
+  border-top: 1px solid #F0F0F1;
+  a{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 130%;
+    text-align: center;
+    color: #4275D8;
+
+
+  }
+
+
+}
+.popup__reset{
+  margin-bottom: 40px;
+  a{
+    font-size: 12px;
+    line-height: 140%;
+    text-align: center;
+    text-decoration-line: underline;
+    color: #423E48;
+    opacity: 0.6;
+
   }
 
 
