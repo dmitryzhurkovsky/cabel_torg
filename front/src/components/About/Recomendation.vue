@@ -14,7 +14,7 @@
           <div class="recomendation__block" v-if = "VIEW_TYPE === 1">
               <swiper
                   :slides-per-view="4"
-                  :space-between="30"
+                  :space-between="16"
                   :pagination= "{
                     el: '.swiper-pagination',
                     clickable: true,
