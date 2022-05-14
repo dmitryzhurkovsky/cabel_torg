@@ -1,6 +1,7 @@
 <template lang="html">
   <div class="recomendation__block__item item-card">
-    <div class="item-card__label">Хит</div>
+    <div class="item-card__tag">Хит</div>
+    <div class="item-card__wishlist icon-favorite"></div>
     <div class="item-card__img">
       <img class="" src="../../assets/image44.png" alt="">
     </div>
@@ -14,8 +15,7 @@
         <div class="current_price">56.5
           <span>BYN/шт.</span>
         </div>
-        <div class="item-card__block flex-center">
-          <img src="../../assets/svg/cart.svg" alt="Cart">
+        <div class="item-card__buy flex-center icon-cart">
         </div>
 
       </div>
@@ -35,6 +35,8 @@ export default {
   name: "CardItem",
 
 }
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -60,7 +62,7 @@ export default {
 
   }
 
-  &__label{
+  &__tag{
     background: #7700AF;
     border-radius: 2px;
     padding: 2px 11px;
@@ -70,6 +72,23 @@ export default {
     left:10px;
     top:10px;
     color: #fff;
+  }
+  &__wishlist{
+
+    &.added {
+      fill: #ff6f60;
+      path {
+        stroke: #ff6f60;
+      }
+    }
+    //width: 18px;
+    //height: 16px;
+    position: absolute;
+    top: 18.5px;
+    right: 17.29px;
+    z-index: 1;
+    cursor: pointer;
+    fill: none;
   }
 
   &__row {
@@ -82,26 +101,25 @@ export default {
     }
   }
 
-  &__block {
-    &:hover{
-      width: 20px;
-      height:20px;
+  &__buy {
+    &:before {
+      cursor: pointer;
       padding: 10px 10px;
+    }
+    &:hover{
       background: #4275D8;
       border-radius: 6px;
-      cursor: pointer;
+      color: #fff;
     }
-    img{
 
-    }
 
   }
 
   .notice{
     font-weight: 300;
     font-size: 10px;
-    line-height: 20px;
     opacity: 0.5;
+    text-align: right;
   }
 
   .old_price {
@@ -134,6 +152,9 @@ export default {
     line-height: 130%;
   }
 
+
+
 }
 
 </style>
+
