@@ -2,9 +2,9 @@
   <div class="recomendation__block__item item-card">
     <div class="item-card__tag">Хит</div>
     <div class="item-card__wishlist icon-favorite"></div>
-    <div class="item-card__img">
+    <a class="item-card__img" href="">
       <img class="" src="../../assets/image44.png" alt="">
-    </div>
+    </a>
     <div class="item-card__info">
       <div class="item-card__row flex-center">
         <div class="old_price">65.3</div>
@@ -19,9 +19,14 @@
         </div>
 
       </div>
+      <div class="item-card__title">
+        <a  href="">Коммуникационный кабель</a>
+      </div>
+      <div class="item-card__uptitle">
+        <a  href="">UTP cat.5e (патч-панель) 19″</a>
+      </div>
 
-        <div class="item-card__title">Коммуникационный кабель</div>
-        <div class="item-card__uptitle">UTP cat.5e (патч-панель) 19″</div>
+
 
 
     </div>
@@ -141,15 +146,24 @@ export default {
   }
 
   &__title {
-    font-weight: 500;
-    font-size: 15px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    a{
+      font-weight: 500;
+      font-size: 15px;
+
+      color: #423E48;
+    }
+
   }
 
   &__uptitle {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 130%;
+    a{
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 130%;
+      color: #423E48;
+    }
+
   }
 
 
