@@ -7,113 +7,28 @@
           <div class="menu__scroll">
             <div class="container row">
               <ul class="menu__mass">
-                <li class="menu__item active"
+                <li class="menu__item" :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"
                     v-for   = "item in TOP_CATEGORIES"
                     :key    = "item.id"
-                    :item_data = "item"
+                    @click  = "changeCategory(item.id)"
                 >
-                  <a class="menu__link" href="">
-                    {{item.name}}</a>
+                  <div class="menu__link">{{item.name}}</div>
                 </li>
               </ul>
               <div class="menusub row">
                 <div class="menusub__box">
-                  <div class="menusub__item">
-                    <a class="menu__rubric">Подгуппа 1</a>
-                    <ul>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 1.1</a>
-                      </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 1.2</a>
-                      </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 1.3</a>
-                      </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 1.4</a>
-                      </li><li>
-                      <a href="" class="menu__linksub">Подгруппа 1.5</a>
-                    </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 1.6</a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="menusub__item">
-                    <a class="menu__rubric">Подгуппа 2</a>
-                    <ul>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 2.1</a>
-                      </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 2.2</a>
-                      </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 2.3</a>
-                      </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 2.4</a>
-                      </li><li>
-                      <a href="" class="menu__linksub">Подгруппа 2.5</a>
-                    </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 2.2</a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="menusub__item">
-                    <a class="menu__rubric">Подгуппа 3</a>
-                    <ul>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 3.1</a>
-                      </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 3.2</a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="menusub__item">
-                    <a class="menu__rubric">Подгуппа 4</a>
-                    <ul>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 4.1</a>
-                      </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 4.2</a>
-                      </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 4.3</a>
-                      </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 4.4</a>
-                      </li><li>
-                      <a href="" class="menu__linksub">Подгруппа 4.5</a>
-                    </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 4.6</a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="menusub__item">
-                    <a class="menu__rubric">Подгуппа 5</a>
-                    <ul>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 5.1</a>
-                      </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 5.2</a>
-                      </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 5.3</a>
-                      </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 5.4</a>
-                      </li><li>
-                      <a href="" class="menu__linksub">Подгруппа 5.5</a>
-                    </li>
-                      <li>
-                        <a href="" class="menu__linksub">Подгруппа 5.6</a>
+                  <div class="menusub__item"
+                    v-for   = "sub in SUB_CATEGORIES"
+                    :key    = "sub.id"
+                    @click  = "subCategoryClick(sub.id, $event)"
+                  >
+                    <div v-if = "sub.id" class="menu__rubric">{{sub.name}}</div>
+                    <ul v-if = "sub.subItems.length > 0">
+                      <li
+                          v-for = "subItem in sub.subItems"
+                          :key  = "subItem.id"
+                      >
+                        <div @click = "subItemCategoryClick(subItem.id, $event)" class="menu__linksub">{{subItem.name}}</div>
                       </li>
                     </ul>
                   </div>
@@ -136,8 +51,22 @@ export default {
   name: "CatalogMenu",
 
   computed: {
-    ...mapGetters("header", ["CATALOG_ITEM_ACTIVE", "TOP_CATEGORIES"]),
+    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "TOP_CATEGORIES", "SUB_CATEGORIES"]),
   },
+
+  methods:{
+    changeCategory(newActive){
+        this.$store.commit('header/SET_CURRENT_TOP_CATEGORY', newActive);
+        // console.log(this.SUB_CATEGORIES);
+    },
+    subCategoryClick(id, event){
+      console.log('кликнули по подкатегории ', id);
+    },
+    subItemCategoryClick(id, event){
+      console.log('кликнули по итему подкатегории ', id, event);
+      event.stopImmediatePropagation();
+    },
+  }
 }
 </script>
 

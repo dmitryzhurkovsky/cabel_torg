@@ -9,7 +9,7 @@ export default {
     isMenuOpen: false,
     isCatalogOpen: false,
     munuItemActive : 1,
-    catalogItemActive: 1,
+    topCategoriesItemActive: null,
     windowWidth: 1280,
     viewType: 1,
     categories: [],
@@ -35,8 +35,8 @@ export default {
     MENU_ITEM_ACTIVE(state){
       return state.munuItemActive;
     },
-    CATALOG_ITEM_ACTIVE(state){
-      return state.catalogItemActive;
+    TOP_CATEGORIES_ITEM_ACTIVE(state){
+      return state.topCategoriesItemActive;
     },
     VIEW_TYPE(state){
       return state.viewType;
@@ -52,6 +52,27 @@ export default {
         }
       });
       return top;
+    },
+    SUB_CATEGORIES(state){
+      const sub = [];
+      state.categories.forEach(item => {
+        if (item.parent_category_id === state.topCategoriesItemActive){
+          sub.push({id : item.id, name: item.name, subItems : []});
+        }
+      });
+      for (let i = 0; i < sub.length; i++){
+        state.categories.forEach(item => {
+          if (item.parent_category_id == sub[i].id){
+            // console.log(item.parent_category_id, sub[i].id);
+            sub[i].subItems.push({id : item.id, name : item.name});
+          }
+        });
+      };
+      console.log(sub);
+      return sub;
+    },
+    ALL_CATEGORIES(state){
+      return state.categories;
     }
 
   },
@@ -60,9 +81,11 @@ export default {
     UPDATE_IS_MENU_OPEN (state, newstate){
       state.isMenuOpen = newstate;
     },
+
     UPDATE_IS_CATALOG_OPEN (state, newstate){
       state.isCatalogOpen = newstate;
     },
+
     UPDATE_VIEW_PARAMETERS (state, newstate){
       state.windowWidth = newstate;
       // console.log(newstate);
@@ -77,9 +100,19 @@ export default {
         state.viewType = 3;
       }
     },
+
+    SET_CURRENT_TOP_CATEGORY(state, newstate){
+      state.topCategoriesItemActive = newstate;
+    },
+
     UPDATE_CATEGORIES (state, newstate){
       state.categories = newstate;
-    }
+      if (state.categories.length > 0){
+        state.topCategoriesItemActive = state.categories[0].id
+      } else {
+        state.topCategoriesItemActive = null;
+      }
+    },
   },
 
   actions: {
