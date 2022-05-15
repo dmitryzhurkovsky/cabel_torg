@@ -12,6 +12,7 @@ export default {
     catalogItemActive: 1,
     windowWidth: 1280,
     viewType: 1,
+    categories: [],
   },
 
   getters: {
@@ -42,6 +43,15 @@ export default {
     },
     WINDOW_WIDTH(state){
       return state.windowWidth;
+    },
+    TOP_CATEGORIES(state){
+      const top = [];
+      state.categories.forEach((item, i) => {
+        if (item.parent_category_id === null) {
+          top.push(item);
+        }
+      });
+      return top;
     }
 
   },
@@ -66,9 +76,22 @@ export default {
         // 320 - 0
         state.viewType = 3;
       }
+    },
+    UPDATE_CATEGORIES (state, newstate){
+      state.categories = newstate;
     }
   },
 
   actions: {
+    async GET_CATEGORIES({ commit }, data){
+      commit("setErrors", {}, { root: true });
+      try {
+        const response = await axios.get(process.env.VUE_APP_API_URL + "categories/")
+          commit("UPDATE_CATEGORIES", response.data);
+      } catch (e) {
+        console.log(e);
+        commit("setErrors", e, { root: true });
+      }
+    }
   }
 };

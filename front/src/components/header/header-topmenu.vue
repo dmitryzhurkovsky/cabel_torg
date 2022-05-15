@@ -4,7 +4,7 @@
         <div class="header__topmenu topmenu flex-center">
           <div class="topmenu__left flex-center">
             <div class="topmenu__item">
-              <div class="dropdown icon-burger" @mouseover="openMenu()" @mouseleave="closeMenu()">Каталог товаров
+              <div class="dropdown icon-burger" @click="toggleMenu()">Каталог товаров
                 <CatalogMenu v-if = "IS_CATALOG_OPEN"/>
               </div>
             </div>
@@ -221,7 +221,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters("header", ["ORDER_COUNT", "IS_CATALOG_OPEN"]),
+    ...mapGetters("header", ["ORDER_COUNT", "IS_CATALOG_OPEN", "TOP_CATEGORIES"]),
   },
 
   methods:{
@@ -229,14 +229,14 @@ export default {
       this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', !this.IS_CATALOG_OPEN);
       console.log(this.IS_CATALOG_OPEN);
     },
-    openMenu(){
-      this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', true);
-      console.log(this.IS_CATALOG_OPEN);
-    },
-    closeMenu(){
-      this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', false);
-      console.log(this.IS_CATALOG_OPEN);
-    }
+    // openMenu(){
+    //   this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', true);
+    //   console.log(this.IS_CATALOG_OPEN);
+    // },
+    // closeMenu(){
+    //   this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', false);
+    //   console.log(this.IS_CATALOG_OPEN);
+    // }
   }
 }
 </script>

@@ -29,9 +29,10 @@
       }
     },
 
-    created() {
+    async mounted() {
       this.setViewParametrs();
       window.addEventListener('resize', this.setViewParametrs);
+      await this.$store.dispatch('header/GET_CATEGORIES');
     },
 
   };

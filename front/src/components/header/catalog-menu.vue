@@ -7,21 +7,13 @@
           <div class="menu__scroll">
             <div class="container row">
               <ul class="menu__mass">
-                <li class="menu__item active">
+                <li class="menu__item active"
+                    v-for   = "item in TOP_CATEGORIES"
+                    :key    = "item.id"
+                    :item_data = "item"
+                >
                   <a class="menu__link" href="">
-                    Сетевое оборудование</a>
-                </li>
-                <li class="menu__item ">
-                  <a class="menu__link" href="">
-                    Кабели и провода</a>
-                </li>
-                <li class="menu__item ">
-                  <a class="menu__link" href="">
-                    Группа 3</a>
-                </li>
-                <li class="menu__item">
-                  <a class="menu__link" href="">
-                    Группа 4</a>
+                    {{item.name}}</a>
                 </li>
               </ul>
               <div class="menusub row">
@@ -144,7 +136,7 @@ export default {
   name: "CatalogMenu",
 
   computed: {
-    ...mapGetters("header", ["CATALOG_ITEM_ACTIVE"]),
+    ...mapGetters("header", ["CATALOG_ITEM_ACTIVE", "TOP_CATEGORIES"]),
   },
 }
 </script>
