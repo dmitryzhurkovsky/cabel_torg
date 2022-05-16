@@ -142,6 +142,58 @@
                 </div>
               </div>
             </div>
+<!--        # CONTENT-->
+            <div class="content-block">
+              <div class="content-block__subcategory recomendation__nav">
+                  <div class="recomendation__nav__item">Для кабеля витая пара</div>
+                  <div class="recomendation__nav__item">Для коаксиального кабеля</div>
+                  <div class="recomendation__nav__item">Маршрутизаторы</div>
+              </div>
+              <div class="content-block__topfilter topfilter">
+                <div class="topfilter__share icon-change"> По популярности</div>
+                <div class="topfilter__page-result">Показывать по <span>10</span> </div>
+                <div class="topfilter__box-view icon-catalog-table"></div>
+                <div class="topfilter__row-view icon-catalog-row"></div>
+
+              </div>
+              <div class="content-block__list">
+                <div class="content-block__item product-row">
+                  <div class="product">
+                    <div class="product__tag">Хит</div>
+                    <div class="product__wishlist icon-favorite"></div>
+                    <a class="product__img" href="">
+                      <img class="" src="../assets/image44.png" alt="">
+                    </a>
+                    <div class="product__info">
+                      <div class="product__row flex-center">
+                        <div class="old_price">65.3</div>
+                        <div class="notice">* Цена указана с учетом НДС.</div>
+                      </div>
+
+                      <div class="product__row flex-center">
+                        <div class="current_price">56.5
+                          <span>BYN/шт.</span>
+                        </div>
+                        <div class="product__buy flex-center icon-cart">
+                        </div>
+
+                      </div>
+                      <div class="product__title">
+                        <a  href="">Коммуникационный кабель</a>
+                      </div>
+                      <div class="product__uptitle">
+                        <a  href="">UTP cat.5e (патч-панель) 19″</a>
+                      </div>
+
+
+
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
@@ -175,10 +227,15 @@
 
   }
   &__block{
+    display: flex;
+    align-items: flex-start;
 
 }
   &__sidebar{
     width: 270px;
+  }
+  .content-block{
+
   }
 
 
@@ -249,5 +306,170 @@
     height: 30px;
   }
 }
+
+.content-block{
+
+  &__subcategory{
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(3, minmax(0, 300px));
+    text-align: center;
+    //padding: 24px 20px 20px 0;
+
+    .recomendation__nav__item{
+      background: #FFFFFF;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-radius: 50px;
+      font-size: 14px;
+      line-height: 24px;
+      text-align: center;
+      opacity: 0.5;
+      margin-right: 10px;
+      padding: 6px 20px;
+      cursor: pointer;
+      &:hover{
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
+        color:#4275D8;
+        font-weight: 500;
+        opacity: 1;
+      }
+    }
+  }
+
+  &__topfilter{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 12px;
+  }
+
+}
+.topfilter{
+
+}
+
+.product{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: #FFFFFF;
+    border: 2px solid #EEEEEE;
+    box-sizing: border-box;
+    border-radius: 8px;
+    padding: 20px 22px 30px 22px;
+
+    &__img {
+      width: 100%;
+
+      img{
+        max-width: 100%;
+      }
+
+    }
+
+    &__tag{
+      background: #7700AF;
+      border-radius: 2px;
+      padding: 2px 11px;
+      position: absolute;
+      font-weight: 400;
+      font-size: 12px;
+      left:20px;
+      top:20px;
+      color: #fff;
+    }
+    &__wishlist{
+
+      &.added {
+        fill: #ff6f60;
+        path {
+          stroke: #ff6f60;
+        }
+      }
+      //width: 18px;
+      //height: 16px;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 1;
+      cursor: pointer;
+      fill: none;
+    }
+
+    &__row {
+      justify-content: space-between;
+      &:nth-child(1){
+        margin-bottom: 3px;
+      }
+      &:nth-child(2){
+        margin-bottom: 15px;
+      }
+    }
+
+    &__buy {
+      &:before {
+        cursor: pointer;
+        padding: 10px 10px;
+      }
+      &:hover{
+        background: #4275D8;
+        border-radius: 6px;
+        color: #fff;
+      }
+
+
+    }
+
+    .notice{
+      font-weight: 300;
+      font-size: 10px;
+      opacity: 0.5;
+      text-align: right;
+    }
+
+    .old_price {
+      font-size: 16px;
+      line-height: 24px;
+      text-decoration-line: line-through;
+      opacity: 0.4;
+
+    }
+
+    .current_price {
+      font-weight: 500;
+      font-size: 20px;
+      line-height: 24px;
+      span{
+        font-weight: 300;
+      }
+
+    }
+
+    &__title {
+      margin-bottom: 10px;
+      a{
+        font-weight: 500;
+        font-size: 15px;
+
+        color: #423E48;
+      }
+
+    }
+
+    &__uptitle {
+      a{
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 130%;
+        color: #423E48;
+      }
+
+    }
+
+
+
+}
+
 
 </style>
