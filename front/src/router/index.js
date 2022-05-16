@@ -39,10 +39,82 @@ const routes = [
       import(/* webpackChunkName: "verify" */ "../views/Auth/Verify.vue")
   },
   {
+    path: "/offer",
+    name: "Offer",
+    component: () =>
+        import("../views/Offer.vue")
+  },
+  {
     path: '/',
     name: 'Main',
-    component: () => 
+    component: () =>
       import("../views/Main.vue")
+  },
+  {
+    path: '/about',
+    name: 'About',
+    component: () =>
+        import("../views/About.vue")
+  },
+  {
+    path: '/catalog',
+    name: 'Catalog',
+    component: () =>
+        import("../views/Catalog.vue")
+  },
+  {
+    path: '/wholesale',
+    name: 'Wholesale',
+    component: () =>
+        import("../views/Wholesale.vue")
+  },
+  {
+    path: '/404',
+    name: '404',
+    component: () =>
+        import("../views/404.vue")
+  },
+  {
+    path: '/how_to_work',
+    name: 'how_to_work',
+    component: () =>
+        import("../views/how_to_work.vue")
+  },
+  {
+    path: '/warranty',
+    name: 'warranty',
+    component: () =>
+        import("../views/warranty.vue")
+  },
+  {
+    path: '/shipping',
+    name: 'Shipping',
+    component: () =>
+        import("../views/Shipping.vue")
+  },
+  {
+    path: '/card_product_grid',
+    name: 'Card_product_grid',
+    component: () =>
+        import("../views/Card_product_grid.vue")
+  },
+  {
+    path: '/card_product',
+    name: 'Card_product',
+    component: () =>
+        import("../views/Card_product.vue")
+  },
+  {
+    path: '/contacts',
+    name: 'Contacts',
+    component: () =>
+        import("../views/Contacts.vue")
+  },
+  {
+    path: '/news',
+    name: 'News',
+    component: () =>
+        import("../views/News.vue")
   },
 ]
 

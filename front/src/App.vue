@@ -1,34 +1,39 @@
 <template>
-  <div id="app">
-    asdasdasdas
+  <div id="app__component">
     <Header/>
-    <router-view/>
+    <router-view></router-view>
     <Footer/>
   </div>
 </template>
 
 <script>
 
-import Header from '@/components/header.vue'
-import Footer from "@/components/footer.vue";
+  import Header from '@/components/header.vue'
+  import Footer from "@/components/footer.vue";
 
-export default {
+  export default {
 
-  name: "App",
+    name: "App",
 
-  computed: {
-  },
+    computed: {
+    },
 
-  components:
-  {
-    Header, Footer,
-  },
+    components:
+    {
+      Header, Footer,
+    },
 
-  methods: {
-  },
+    methods: {
+      setViewParametrs(){
+        this.$store.commit('header/UPDATE_VIEW_PARAMETERS',window.outerWidth)
+      }
+    },
 
-  created() {
-  },
+    async mounted() {
+      this.setViewParametrs();
+      window.addEventListener('resize', this.setViewParametrs);
+      await this.$store.dispatch('header/GET_CATEGORIES');
+    },
 
   };
 </script>
@@ -131,6 +136,19 @@ h6 {
 
 //<ШРИФТЫ>===============================================================================================
 
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
+
+@font-face {
+  font-family: 'icomoon';
+  src: url('../src/assets/icons/fonts/icomoon.ttf?4vw17d') format('truetype'),
+  url('../src/assets/icons/fonts/icomoon.woff?4vw17d') format('woff'),
+  url('../src/assets/icons/fonts/icomoon.svg?4vw17d#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+
 //<Подключаем шрифты>=======================================================================================
 //&display=swap&subset=cyrillic-ext
 // @import "fonts";
@@ -144,8 +162,10 @@ h6 {
 // @import "null";
 body {
     color: $mainColor;
-    font-weight: 500;
-
+    font-size: 16px ;
+    font-weight: 300;
+    font-family: 'Rubik', sans-serif;
+    background: linear-gradient(180deg, rgba(246, 247, 249, 0) 0%, #F6F7F9 50.31%, rgba(246, 247, 249, 0) 100%);
     &._lock {
         overflow: hidden;
     }
@@ -169,7 +189,7 @@ body {
 ._container {
     max-width: $maxWidthContainer + px;
     margin: 0 auto;
-    //padding: 0 2%;
+    padding: 0 2%;
     @media (max-width: $md1+px) {
         max-width: 970px;
     }
@@ -206,6 +226,8 @@ body {
 }
 //===================================================================================================================================
 
+
+
 //</ОСНОВНОЙ БЛОК>====================================================================================================
 .mt-20{
     margin-top: 20px;
@@ -217,8 +239,49 @@ body {
 .mr-20{
     margin-right: 20px;
 }
+.center{
+  text-align: center ;
+}
+h1{
+  font-weight: 500;
+  font-size: 36px;
+  line-height: 43px;
+
+  color: #423E48;
+}
+h3{
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: 0.44px;
+  color: #423E48;
+}
+
 
 .btn {
+  background: #4275D8;
+  border-radius: 6px;
+  color:#fff;
+  padding: 8px 24px;
+  min-width:180px;text-align: center;
+  cursor: pointer;
+}
+
+.black{
+  background: $mainColor;
+  padding: 12px 24px;
+}
+
+.flex-center{
+  display: flex;
+  align-items: center;
+}
+
+._title{
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #423E48;
 }
 
 .page__link{
@@ -260,5 +323,112 @@ body {
     }
 
 }
+
+.breadcrumb{
+  display: flex;
+  align-items: center;
+  padding: 20px 0 30px 0;
+
+  li{
+    a{
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 16px;
+      text-align: center;
+      color: #423E48;
+
+    }
+
+  }
+  .active{
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    opacity: 0.5;
+
+  }
+  &__separater{
+    font-size: 8px;
+    margin: 0 12px;
+  }
+
+}
+
+
+// Templates for structure
+.structure {
+
+  &__title{
+    margin: 30px 0;
+
+  }
+  &__block{
+    padding: 0px 0 60px 0;
+  }
+
+  &__list{
+    &__item{
+      line-height: 30px;
+      font-size: 18px;
+      &:last-child{
+        margin-bottom: 30px;
+      }
+    }
+  }
+
+  &__text{
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 140%;
+    color: #423E48;
+    margin-bottom: 20px;
+
+  }
+}
+.dropdown{
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  &__wrapper{
+    display: none;
+    position: absolute;
+    left: -12px;
+    top: 10px;
+    background: transparent;
+    padding: 20px 0;
+    z-index: 5;
+  }
+  &:hover{
+    color:#4275D8;
+  }
+
+  &__content{
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgb(0 0 0 / 8%);
+    border-radius: 10px;
+    padding: 16px 10px;
+    min-width: 350px;
+    width: 100%;
+    a{
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 24px;
+      color: #423E48;
+      padding: 10px 16px;
+      &:hover{
+        background: rgba(66, 117, 216, 0.1);
+        border-radius: 6px;
+        color: #4275D8;
+
+      }
+    }
+  }
+}
+
+.dropdown:hover .dropdown__wrapper {
+  display: block;
+}
+
 
 </style>
