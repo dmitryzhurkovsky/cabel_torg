@@ -4,9 +4,10 @@ services:
   db:
     image: postgres
     ports:
-    - '5342:5342'
+    - '5433:5432'
     env_file:
-      - backend/.env
+      - backend/.env.dev
+
   core:
     build:
       context: backend
@@ -16,6 +17,6 @@ services:
     ports:
       - '8000:8000'
     env_file:
-      - backend/.env
+      - backend/.env.dev
     depends_on:
       - db
