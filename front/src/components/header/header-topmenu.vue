@@ -85,22 +85,7 @@
             <div class="topmenu__item right-direction">
               <div class="dropdown icon-user">
                 <div class="dropdown__wrapper">
-                  <div class="dropdown__content popup-cart">
-                    <div class="avatar__box">
-                      <div class="avatar icon-user flex-center"></div>
-                    </div>
-
-                    <button class="btn black">Вход</button>
-                    <div class="popup__reset">
-                      <a  href="">Не помню пароль</a>
-                    </div>
-                    <div class="popup__reg">
-                      <a href="">Зарегистрироваться</a>
-                    </div>
-
-
-
-                  </div>
+                  <HeaderUser/>
                 </div>
 
               </div>
@@ -168,14 +153,15 @@
 <script>
 
 import {mapActions, mapGetters} from 'vuex'
-import CatalogMenu from '@/components/header/catalog-menu.vue'
+import CatalogMenu  from '@/components/header/catalog-menu.vue'
+import HeaderUser   from '@/components/header/header-user.vue'
 
 export default {
   name: "HeaderTopMenu",
 
   components:
   {
-    CatalogMenu,
+    CatalogMenu, HeaderUser
   },
 
   computed: {
@@ -407,26 +393,6 @@ export default {
     text-align: center;
     margin-bottom: 16px;
   }
-
-  .avatar{
-    justify-content: center;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: rgba(66, 117, 216, 0.07);
-    font-size: 30px;
-    color: #423E48;
-    font-weight: 500;
-  }
-  .avatar__box{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 24px 0;
-  }
-
-
-
 
   &__summary{
     display: flex;
