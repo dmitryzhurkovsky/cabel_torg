@@ -165,7 +165,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters('header', ['ORDER_COUNT", "IS_CATALOG_OPEN", "TOP_CATEGORIES']),
+    ...mapGetters("header", ["ORDER_COUNT", "IS_CATALOG_OPEN", "TOP_CATEGORIES"]),
   },
 
   methods:{

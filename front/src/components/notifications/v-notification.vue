@@ -41,7 +41,7 @@
     },
 
     computed: {
-      ...mapGetters('notification', ['MESSAGES']),
+      ...mapGetters("notification", ["MESSAGES"]),
     },
 
     methods: {
@@ -49,13 +49,13 @@
         let vm = this;
         if (this.MESSAGES.length) {
           setTimeout(function () {
-            vm.$store.commit('notification/DELETE_MESSAGE', { root: true })
+            vm.$store.commit("notification/DELETE_MESSAGE");
           }, vm.timeout)
         }
       },
 
       closeNotification(){
-          this.$store.commit('notification/DELETE_MESSAGE', { root: true })
+          this.$store.commit("notification/DELETE_MESSAGE");
       },
     },
 
