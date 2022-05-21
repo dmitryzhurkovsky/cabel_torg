@@ -68,7 +68,7 @@ export default {
           }
         });
       };
-      console.log(sub);
+      // console.log(sub);
       return sub;
     },
     ALL_CATEGORIES(state){
@@ -117,13 +117,12 @@ export default {
 
   actions: {
     async GET_CATEGORIES({ commit }, data){
-      commit("setErrors", {}, { root: true });
       try {
-        const response = await axios.get(process.env.VUE_APP_API_URL + "categories/")
-          commit("UPDATE_CATEGORIES", response.data);
+        const response = await axios.get(process.env.VUE_APP_API_URL + 'categories/');
+        commit('UPDATE_CATEGORIES', response.data);
       } catch (e) {
         console.log(e);
-        commit("setErrors", e, { root: true });
+        commit('notification/ADD_MESSAGE', {name: 'Не возможно обновить каталог товаров', icon: 'error', id: '1'}, {root: true})
       }
     }
   }
