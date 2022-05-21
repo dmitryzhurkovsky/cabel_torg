@@ -26,7 +26,11 @@
                   @slideChange="onSlideChange"
               >
 
-                <swiper-slide v-for="n in 10" :key="n"><CardItem/></swiper-slide>
+                <swiper-slide v-for="n in 1" :key="n">
+                  <CardItem
+                      :card_id = "n + 5"
+                  />
+                </swiper-slide>
 
                 <div class="swiper-pagination"></div>
 
