@@ -157,7 +157,7 @@ import CatalogMenu  from '@/components/header/catalog-menu.vue'
 import HeaderUser   from '@/components/header/header-user.vue'
 
 export default {
-  name: "HeaderTopMenu",
+  name: 'HeaderTopMenu',
 
   components:
   {
@@ -165,7 +165,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters("header", ["ORDER_COUNT", "IS_CATALOG_OPEN", "TOP_CATEGORIES"]),
+    ...mapGetters('header', ['ORDER_COUNT", "IS_CATALOG_OPEN", "TOP_CATEGORIES']),
   },
 
   methods:{

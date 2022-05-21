@@ -1,5 +1,6 @@
 <template>
   <div id="app__component">
+    <v-notification/>
     <Header/>
     <router-view></router-view>
     <Footer/>
@@ -8,8 +9,9 @@
 
 <script>
 
-  import Header from '@/components/header.vue'
+  import Header from '@/components/header.vue';
   import Footer from "@/components/footer.vue";
+  import vNotification from '@/components/notifications/v-notification';
 
   export default {
 
@@ -20,7 +22,7 @@
 
     components:
     {
-      Header, Footer,
+      Header, Footer, vNotification,
     },
 
     methods: {
