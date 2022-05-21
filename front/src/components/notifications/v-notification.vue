@@ -12,8 +12,6 @@
       >
         <div class="content__text">
           <div class="content-message">{{message.name}}</div>
-          <!-- <div class="material-icons">
-          </div> -->
         </div>
         <div class="content_buttons">
           <button v-if="rightButton.length">{{rightButton}}</button>
@@ -38,18 +36,17 @@
       timeout:      { type: Number,  default: 300}
     },
 
-    // data() {
-    //   return {}
-    // },
-    //
+    data() {
+      return {}
+    },
+
     computed: {
-      ...mapGetters('notification', ['MESSAGES'], { root: true }),
+      ...mapGetters('notification', ['MESSAGES']),
     },
 
     methods: {
       hideNotification() {
         let vm = this;
-        console.log(vm);
         if (this.MESSAGES.length) {
           setTimeout(function () {
             vm.$store.commit('notification/DELETE_MESSAGE', { root: true })
