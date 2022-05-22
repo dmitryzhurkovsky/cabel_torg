@@ -12,6 +12,7 @@
         </div>
 
       </div>
+      <div v-if ="queryStringt.length > 0">Тут попам с карточками</div>
     </div>
 </template>
 

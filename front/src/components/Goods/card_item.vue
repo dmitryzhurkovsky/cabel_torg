@@ -35,9 +35,52 @@
 </template>
 
 <script>
+import axios from "axios";
 
 export default {
   name: "CardItem",
+
+  props: {
+    card_id:  null,
+  },
+
+  data: function(){
+    return{
+      id          : "string",
+      vendor_code : "string",
+      name        : "string",
+      base_unit   : "string",
+      category    : {
+        id                  : "string",
+        name                : "string",
+        parent_category_id  : 0
+      },
+      image       : "string",
+      manufacturer: {
+        id                  : "string",
+        name                : "string"
+      },
+      tax         : 0,
+      description : "string"
+    }
+  },
+
+  methods: {
+  },
+
+  async mounted() {
+      console.log('Try to get card ' + this.$props.card_id + ' information from backend');
+      try {
+        const response = await axios.get(process.env.VUE_APP_API_URL + 'products/' + this.$props.card_id);
+        console.log(response.data);
+        // commit("UPDATE_CATEGORIES", response.data);
+      } catch (e) {
+        console.log(e);
+        this.$store.commit("notification/ADD_MESSAGE", {name: "Не возможно получить продукт " + this.$props.card_id, icon: "error", id: '1'}, {root: true})
+      }
+
+  }
+
 
 }
 
@@ -171,4 +214,3 @@ export default {
 }
 
 </style>
-

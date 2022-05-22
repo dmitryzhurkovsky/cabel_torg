@@ -21,7 +21,7 @@ class RetrieveMixin(BaseMixin):
         """Get list of objects"""
         key = [*kwargs][0]
 
-        options = [selectinload(field) for field in prefetch_fields] if prefetch_fields else tuple
+        options = [selectinload(field) for field in prefetch_fields] if prefetch_fields else []
 
         result = await session.execute(
             select(cls.table).

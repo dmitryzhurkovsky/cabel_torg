@@ -37,6 +37,7 @@ export default {
   methods: {
     changeScreen(id){
         this.currentScreen = id;
+        // this.$store.commit('notification/ADD_MESSAGE', {name: 'Сменили экран на ' + id, icon: 'check_circle', id: '10'})
     },
 
   }

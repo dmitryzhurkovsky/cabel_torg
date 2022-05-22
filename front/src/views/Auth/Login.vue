@@ -55,7 +55,7 @@ export default {
   },
 
   mounted() {
-    this.$store.commit("setErrors", {});
+    this.$store.commit("notification/ADD_MESSAGE", {});
   },
 
   methods: {

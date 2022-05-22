@@ -56,10 +56,11 @@ export default {
     SUB_CATEGORIES(state){
       const sub = [];
       state.categories.forEach(item => {
-        if (item.parent_category_id === state.topCategoriesItemActive){
+        if (item.parent_category_id == state.topCategoriesItemActive){
           sub.push({id : item.id, name: item.name, subItems : []});
         }
       });
+      console.log(sub);
       for (let i = 0; i < sub.length; i++){
         state.categories.forEach(item => {
           if (item.parent_category_id == sub[i].id){
@@ -119,10 +120,10 @@ export default {
     async GET_CATEGORIES({ commit }, data){
       try {
         const response = await axios.get(process.env.VUE_APP_API_URL + 'categories/');
-        commit('UPDATE_CATEGORIES', response.data);
+        commit("UPDATE_CATEGORIES", response.data);
       } catch (e) {
         console.log(e);
-        commit('notification/ADD_MESSAGE', {name: 'Не возможно обновить каталог товаров', icon: 'error', id: '1'}, {root: true})
+        commit("notification/ADD_MESSAGE", {name: "Не возможно обновить каталог товаров", icon: "error", id: '1'}, {root: true})
       }
     }
   }
