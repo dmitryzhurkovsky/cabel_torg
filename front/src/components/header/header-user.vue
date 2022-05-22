@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="dropdown__content popup-cart">
-      <div class="avatar__box">
+      <div v-if = "currentScreen === 0" class="avatar__box">
         <div class="avatar icon-user flex-center"></div>
       </div>
 
@@ -11,12 +11,12 @@
       <div v-if = "currentScreen === 0" @click = "changeScreen(2)" class="foot-lnk">
           Не помню пароль
       </div>
-     <hr class="hr">
+      <hr  v-if = "currentScreen === 0" class="hr">
       <div v-if = "currentScreen === 0" @click = "changeScreen(3)" class="foot-reg">
         Зарегистрироваться
       </div>
 
-    <div v-if = "currentScreen === 1" class="popup__reg">
+      <div v-if = "currentScreen === 1" class="popup__reg">
         <h3>Вход</h3>
         <div class="sign-in-htm">
           <div class="group">

@@ -13,17 +13,17 @@
 
       <div class="item-card__row flex-center">
         <div class="current_price">56.5
-          <span>BYN/шт.</span>
+          <span>BYN/{{base_unit}}</span>
         </div>
         <div class="item-card__buy flex-center icon-cart">
         </div>
 
       </div>
       <div class="item-card__title">
-        <a  href="">Коммуникационный кабель</a>
+        <div>{{name}}</div>
       </div>
       <div class="item-card__uptitle">
-        <a  href="">UTP cat.5e (патч-панель) 19″</a>
+        <div>UTP cat.5e (патч-панель) 19″</div>
       </div>
 
 
@@ -46,22 +46,22 @@ export default {
 
   data: function(){
     return{
-      id          : "string",
-      vendor_code : "string",
-      name        : "string",
-      base_unit   : "string",
+      id          : '',
+      vendor_code : '',
+      name        : '',
+      base_unit   : '',
       category    : {
-        id                  : "string",
-        name                : "string",
+        id                  : '',
+        name                : '',
         parent_category_id  : 0
       },
-      image       : "string",
+      image       : '',
       manufacturer: {
-        id                  : "string",
-        name                : "string"
+        id                  : '',
+        name                : ''
       },
       tax         : 0,
-      description : "string"
+      description : ''
     }
   },
 
@@ -73,6 +73,8 @@ export default {
       try {
         const response = await axios.get(process.env.VUE_APP_API_URL + 'products/' + this.$props.card_id);
         console.log(response.data);
+        this.name = response.data.name;
+        this.base_unit = response.data.base_unit;
         // commit("UPDATE_CATEGORIES", response.data);
       } catch (e) {
         console.log(e);

@@ -5,8 +5,8 @@
     <Quick_category/>
     <News/>
     <Partners/>
-    <About/>
-    <Offer/>
+    <!-- <About/>
+    <Offer/> -->
 
 
 

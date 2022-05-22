@@ -26,9 +26,9 @@
                   @slideChange="onSlideChange"
               >
 
-                <swiper-slide v-for="n in 1" :key="n">
+                <swiper-slide v-for="n in 7" :key="n">
                   <CardItem
-                      :card_id = "n + 5"
+                      :card_id = "n"
                   />
                 </swiper-slide>
 
