@@ -12,7 +12,7 @@
         </div>
 
       </div>
-      <div v-if ="queryStringt.length > 0" class="search__result">Тут попам с карточками</div>
+      <div v-if ="queryStringt.length > 0" class="search__result">Ничего не найдено</div>
     </div>
 </template>
 
@@ -71,7 +71,9 @@ export default {
   display: flex;
   padding: 6px 16px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
-  border-radius: 50px;
+
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
 }
 
 .search__field{
@@ -103,8 +105,15 @@ export default {
 
 .search__result{
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 40px;
+  left: 10px;
+  width: 96%;
+  background: #fff;
+  min-height: 50px;
+  padding: 20px 20px;
+  border-bottom-left-radius:10px;
+  border-bottom-right-radius:10px;
+  border-top: 2px solid rgba(0, 0, 0, 0.05) ;
 
 
 }
