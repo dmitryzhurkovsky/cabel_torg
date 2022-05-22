@@ -26,8 +26,8 @@
                         <label class="checkbox__label">
                           <input type="checkbox" name="" class="" value="">
                           <div class="checkbox"></div>
-                          <div class="">
-                            <span class="jsx-1900692967">Кабели и провода</span>
+                          <div class="filter__text">
+                            <span class="">Кабели и провода</span>
                           </div>
                         </label>
                       </div>
@@ -37,8 +37,8 @@
                         <label class="checkbox__label">
                           <input type="checkbox" name="" class="" value="">
                           <div class="checkbox"></div>
-                          <div class="">
-                            <span class="jsx-1900692967">Сетевое оборудование</span>
+                          <div class="filter__text">
+                            <span class="">Сетевое оборудование</span>
                           </div>
                         </label>
                       </div>
@@ -48,8 +48,8 @@
                         <label class="checkbox__label">
                           <input type="checkbox" name="" class="" value="">
                           <div class="checkbox"></div>
-                          <div class="">
-                            <span class="jsx-1900692967">Группа 3</span>
+                          <div class="filter__text">
+                            <span class="">Группа 3</span>
                           </div>
                         </label>
                       </div>
@@ -67,8 +67,8 @@
                         <label class="checkbox__label">
                           <input type="checkbox" name="" class="" value="">
                           <div class="checkbox"></div>
-                          <div class="">
-                            <span class="jsx-1900692967">Плинты размыкаетмые</span>
+                          <div class="filter__text">
+                            <span class="">Плинты размыкаетмые</span>
                           </div>
                         </label>
                       </div>
@@ -78,8 +78,8 @@
                         <label class="checkbox__label">
                           <input type="checkbox" name="" class="" value="">
                           <div class="checkbox"></div>
-                          <div class="">
-                            <span class="jsx-1900692967">Коннекторы, разъемы, соединители</span>
+                          <div class="filter__text">
+                            <span class="">Коннекторы, разъемы, соединители</span>
                           </div>
                         </label>
                       </div>
@@ -89,8 +89,8 @@
                         <label class="checkbox__label">
                           <input type="checkbox" name="" class="" value="">
                           <div class="checkbox"></div>
-                          <div class="">
-                            <span class="jsx-1900692967">Категория 3</span>
+                          <div class="filter__text">
+                            <span class="">Категория 3</span>
                           </div>
                         </label>
                       </div>
@@ -108,8 +108,8 @@
                         <label class="checkbox__label">
                           <input type="checkbox" name="" class="" value="">
                           <div class="checkbox"></div>
-                          <div class="">
-                            <span class="jsx-1900692967">Все товары</span>
+                          <div class="filter__text">
+                            <span class="">Все товары</span>
                           </div>
                         </label>
                       </div>
@@ -119,8 +119,8 @@
                         <label class="checkbox__label">
                           <input type="checkbox" name="" class="" value="">
                           <div class="checkbox"></div>
-                          <div class="">
-                            <span class="jsx-1900692967">Только товары со скидкой</span>
+                          <div class="filter__text">
+                            <span class="">Только товары со скидкой</span>
                           </div>
                         </label>
                       </div>
@@ -130,8 +130,8 @@
                         <label class="checkbox__label">
                           <input type="checkbox" name="" class="" value="">
                           <div class="checkbox"></div>
-                          <div class="">
-                            <span class="jsx-1900692967">Только “В наличии”</span>
+                          <div class="filter__text">
+                            <span class="">Только “В наличии”</span>
                           </div>
                         </label>
                       </div>
@@ -151,42 +151,91 @@
               </div>
               <div class="content-block__topfilter topfilter">
                 <div class="topfilter__share icon-change"> По популярности</div>
-                <div class="topfilter__page-result">Показывать по <span>10</span> </div>
-                <div class="topfilter__box-view icon-catalog-table"></div>
-                <div class="topfilter__row-view icon-catalog-row"></div>
+                <div class="topfilter__right flex-center">
+                  <div class="topfilter__page-result">Показывать по <span>10</span> </div>
+                  <div class="topfilter__box-view icon-catalog-table"></div>
+                  <div class="topfilter__row-view icon-catalog-row active"></div>
+                </div>
+
 
               </div>
               <div class="content-block__list">
                 <div class="content-block__item product-row">
                   <div class="product">
                     <div class="product__tag">Хит</div>
-                    <div class="product__wishlist icon-favorite"></div>
                     <a class="product__img" href="">
                       <img class="" src="../assets/image44.png" alt="">
                     </a>
                     <div class="product__info">
-                      <div class="product__row flex-center">
-                        <div class="old_price">65.3</div>
-                        <div class="notice">* Цена указана с учетом НДС.</div>
-                      </div>
-
-                      <div class="product__row flex-center">
-                        <div class="current_price">56.5
-                          <span>BYN/шт.</span>
-                        </div>
-                        <div class="product__buy flex-center icon-cart">
-                        </div>
-
-                      </div>
+                      <div class="product__status icon-done-color _label mb-20">В наличии</div>
                       <div class="product__title">
                         <a  href="">Коммуникационный кабель</a>
                       </div>
                       <div class="product__uptitle">
                         <a  href="">UTP cat.5e (патч-панель) 19″</a>
                       </div>
+                      <div class="product__count flex-center">
+                        <span class="_label">Количество:</span>
+                        <span class="icon-minus"></span>
+                        <input class="product__input" type="text">
+                        <span class="icon-plus"></span>
+                      </div>
 
 
 
+
+                    </div>
+                    <div class="product__action">
+                      <div class="product__article  _label mb-20">Артикул: <span>331003</span></div>
+                      <div class="product__price">
+                        <span>70</span>BYN
+                        <span>/шт</span>
+                      </div>
+                      <div class="notice">* Цена указана с учетом НДС.</div>
+                      <div class="product__btn flex-center">
+                        <div class="product__wishlist icon-favorite"></div>
+                        <div class="btn black">В корзину</div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="content-block__item product-row">
+                  <div class="product">
+                    <div class="product__tag">Хит</div>
+                    <a class="product__img" href="">
+                      <img class="" src="../assets/image44.png" alt="">
+                    </a>
+                    <div class="product__info">
+                      <div class="product__status icon-done-color _label mb-20">В наличии</div>
+                      <div class="product__title">
+                        <a  href="">Коммуникационный кабель</a>
+                      </div>
+                      <div class="product__uptitle">
+                        <a  href="">UTP cat.5e (патч-панель) 19″</a>
+                      </div>
+                      <div class="product__count flex-center">
+                        <span class="_label">Количество:</span>
+                        <span class="icon-minus"></span>
+                        <input class="product__input" type="text">
+                        <span class="icon-plus"></span>
+                      </div>
+
+
+
+
+                    </div>
+                    <div class="product__action">
+                      <div class="product__article  _label mb-20">Артикул: <span>331003</span></div>
+                      <div class="product__price">
+                        <span>70</span>BYN
+                        <span>/шт</span>
+                      </div>
+                      <div class="notice">* Цена указана с учетом НДС.</div>
+                      <div class="product__btn flex-center">
+                        <div class="product__wishlist icon-favorite"></div>
+                        <div class="btn black">В корзину</div>
+                      </div>
 
                     </div>
                   </div>
@@ -223,7 +272,9 @@
   }
 
 
+
   &__item{
+
 
   }
   &__block{
@@ -250,7 +301,7 @@
 
     &__item{
       margin: 0px 15px 10px 0px;
-      height: 18px;
+      //height: 18px;
       input{
         position: absolute;
         opacity: 0;
@@ -282,6 +333,14 @@
       //transform: rotate(-90deg);
     }
   }
+  &__text{
+    span{
+      font-weight: 400;
+      font-size: 14px;
+      color: #423E48;
+    }
+
+  }
 
 }
 .checkbox{
@@ -301,7 +360,7 @@
 
   &__label{
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
     height: 30px;
   }
@@ -335,6 +394,9 @@
       }
     }
   }
+  &__item{
+    margin-bottom: 16px;
+  }
 
   &__topfilter{
     display: flex;
@@ -347,26 +409,57 @@
 }
 .topfilter{
 
+  &__right{
+
+  }
+  &__page-result{
+    margin-right: 15px;
+  }
+  &__box-view{
+    margin-right: 15px;
+    font-size: 20px;
+  }
+  &__row-view{
+    font-size: 20px;
+
+  }
+  .active{
+    opacity: 0.5;
+  }
+
 }
 
 .product{
     display: flex;
-    flex-direction: column;
     position: relative;
     background: #FFFFFF;
     border: 2px solid #EEEEEE;
     box-sizing: border-box;
     border-radius: 8px;
-    padding: 20px 22px 30px 22px;
+    padding: 20px 22px 20px 22px;
+
+  ._label{
+    font-size: 12px;
+    line-height: 20px;
+  }
 
     &__img {
       width: 100%;
-
+      flex-basis: 30%;
       img{
         max-width: 100%;
       }
-
     }
+  &__info{
+    flex-basis: 45%;
+    padding: 0 10px;
+
+  }
+
+  &__action{
+    flex-basis: 25%;
+    padding: 0 10px;
+  }
 
     &__tag{
       background: #7700AF;
@@ -387,15 +480,21 @@
           stroke: #ff6f60;
         }
       }
-      //width: 18px;
-      //height: 16px;
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      z-index: 1;
+
       cursor: pointer;
       fill: none;
+      margin-right: 10px;
     }
+  &__price{
+    font-size: 20px;
+    margin-bottom: 10px;
+    text-align: right;
+    span:nth-child(1){
+      font-weight: 500;
+      margin-right: 5px;
+    }
+  }
+
 
     &__row {
       justify-content: space-between;
@@ -428,13 +527,7 @@
       text-align: right;
     }
 
-    .old_price {
-      font-size: 16px;
-      line-height: 24px;
-      text-decoration-line: line-through;
-      opacity: 0.4;
 
-    }
 
     .current_price {
       font-weight: 500;
@@ -466,6 +559,41 @@
       }
 
     }
+  &__status{
+    &:before{
+      margin-right: 10px;
+    }
+  }
+  &__article{
+    text-align: right;
+  }
+
+  &__count{
+    margin: 24px 0;
+    span:nth-child(1){
+      margin-right: 10px;
+    }
+
+    .icon-plus, .icon-minus{
+      cursor: pointer;
+    }
+  }
+
+  &__input{
+    width: 40px;
+    height: 40px;
+    padding: 9px 8px;
+    background: rgba(66, 62, 72, 0.07);
+    border-radius: 2px;
+    border: none;
+    margin: 0 10px;
+  }
+
+  &__btn{
+    margin: 24px 0 ;
+
+
+  }
 
 
 
