@@ -3,7 +3,7 @@
 <!--      <div v-if = "CATALOG_ITEM_ACTIVE === 2">second category item</div>-->
 <!--      <div v-if = "CATALOG_ITEM_ACTIVE === 3">third category item</div>-->
       <div class="catalog__menu menu__container">
-        <div class="menu active">
+        <div class="menu active _container">
           <div class="menu__scroll">
             <div class="container row">
               <ul class="menu__mass">
@@ -73,10 +73,10 @@ export default {
 <style scoped lang="scss">
     .catalog__menu{
       position: absolute;
-      top: 10px;
-      left: 20px;
+      top: 50px;
+      left: 0;
       padding: 38px 0;
-      width: 1130px;
+      width: 100%;
       height: 420px;
       background: #FFFFFF;
       box-shadow: 0px 4px 20px rgba(66, 62, 72, 0.05);
@@ -93,12 +93,12 @@ export default {
   &__item{
     //margin: 20px 0;
     width: 100%;
-    padding: 10px 0;
+    padding: 10px 15px;
     &:hover{
       color:#4275D8;
       background: rgba(66, 117, 216, 0.1);
       border-radius: 6px;
-      padding: 10px 0;
+      padding: 10px 15px;
 
     }
   }

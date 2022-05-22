@@ -89,6 +89,9 @@ button,
 textarea {
     font-family: $fontFamily;
     font-size: inherit;
+  &:focus{
+    outline: none!important;
+  }
 }
 input::-ms-clear {
     display: none;
@@ -315,9 +318,10 @@ h3{
         // @include adaptiv-value( 'line-height', 50, 30, 1);
     }
     &__input{
-
+      border:0;
+      outline:0;
         &:focus{
-
+          outline: none!important;
         }
         ._error{
 
