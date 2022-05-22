@@ -5,6 +5,7 @@ from src.rest.schemas.base_schema import BaseSchema
 
 class CategoryWithNestedCategoriesSchema(BaseSchema):
     name: str
+    parent_category_id: int | None
     subcategories: List['CategoryWithNestedCategoriesSchema']
 
     class Config:
@@ -13,6 +14,7 @@ class CategoryWithNestedCategoriesSchema(BaseSchema):
 
 class CategorySchema(BaseSchema):
     name: str
+    parent_category_id: int | None
 
     class Config:
         orm_mode = True
