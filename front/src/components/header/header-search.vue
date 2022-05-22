@@ -12,6 +12,7 @@
         </div>
 
       </div>
+      <div v-if ="queryStringt.length > 0">Тут попам с карточками</div>
     </div>
 </template>
 
@@ -27,7 +28,7 @@ export default {
   },
   methods: {
     onInput(){
-        if  (this.queryStringt.length > 2) {
+        if  (this.queryStringt.length > 0) {
           console.log('Тут запуск поиска');
         }
     },
