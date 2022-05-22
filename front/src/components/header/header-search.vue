@@ -12,7 +12,7 @@
         </div>
 
       </div>
-      <div v-if ="queryStringt.length > 0">Тут попам с карточками</div>
+      <div v-if ="queryStringt.length > 0" class="search__result">Тут попам с карточками</div>
     </div>
 </template>
 
@@ -43,6 +43,7 @@ export default {
 <style lang="scss" scoped>
 .header{
     &__search{
+      position: relative;
       // background: #FFFFFF;
       // box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
       // border-radius: 50px;
@@ -98,6 +99,14 @@ export default {
 
     cursor: pointer;
   }
+}
+
+.search__result{
+  position: absolute;
+  top: 0;
+  left: 0;
+
+
 }
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: #9fa3b1;

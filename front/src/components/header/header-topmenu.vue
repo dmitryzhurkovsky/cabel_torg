@@ -4,7 +4,7 @@
         <div class="header__topmenu topmenu flex-center">
           <div class="topmenu__left flex-center">
             <div class="topmenu__item">
-              <div class="dropdown icon-burger" @click="toggleMenu()">Каталог товаров</div>
+              <div class="dropdown icon-burger catalog__btn" @click="toggleMenu()">Каталог товаров</div>
               <CatalogMenu v-if = "IS_CATALOG_OPEN"/>
             </div>
             <div class="topmenu__item">
@@ -74,7 +74,11 @@
                       </div>
                     </div>
                     <div>
-                      <a class="" href="">Перейти в корзину</a>
+                      <a class="" href="">Перейти в Избранное
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3 12H20.5M20.5 12L16.5 8M20.5 12L16.5 16" stroke="white"/>
+                        </svg>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -134,7 +138,11 @@
                     </div>
                     <button class="btn">Оформить заказ</button>
                     <div>
-                      <a class="" href="">Перейти в корзину</a>
+                      <a class="" href="">Перейти в корзину
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M3 12H20.5M20.5 12L16.5 8M20.5 12L16.5 16" stroke="white"/>
+                        </svg>
+                      </a>
                     </div>
 
 
@@ -188,6 +196,7 @@ export default {
 <style scoped lang="scss">
 .header {
     &__wrapper{
+      position: relative;
 
     }
     &__topmenu{
@@ -204,7 +213,7 @@ export default {
 
   &__item{
     padding: 0 10px 0 10px;
-    position: relative;
+    //position: relative;
   }
   &__left{
     .topmenu__item{
@@ -219,8 +228,7 @@ export default {
 
       &:nth-child(2){
         a{
-          font-weight: 500;
-          color: $secondColor;
+          color: $mainColor;
         }
 
 
@@ -229,6 +237,11 @@ export default {
         border-left: 1px solid #F0F0F1;
         border-right: 1px solid #F0F0F1;
 
+      }
+
+      .catalog__btn{
+        font-weight: 500;
+        color: #4275D8;
       }
 
     }
