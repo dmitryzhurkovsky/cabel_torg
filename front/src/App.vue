@@ -273,6 +273,12 @@ h3{
   background: $mainColor;
   padding: 12px 24px;
 }
+.empty{
+  background: #fff;
+  padding: 12px 24px;
+  color: $mainColor;
+  border: 1px solid #423E48;
+}
 
 .flex-center{
   display: flex;
