@@ -60,7 +60,7 @@ export default {
           sub.push({id : item.id, name: item.name, subItems : []});
         }
       });
-      console.log(sub);
+      // console.log(sub);
       for (let i = 0; i < sub.length; i++){
         state.categories.forEach(item => {
           if (item.parent_category_id == sub[i].id){

@@ -11,11 +11,11 @@
                   <div class="dropdown">Покупателям
                     <div class="dropdown__wrapper">
                       <div class="dropdown__content">
-                        <a href="/how_to_order">Как оформить заказ</a>
-                        <a href="/shipping">Оплата и доставка</a>
-                        <a href="/about">Оптовым клиентам</a>
-                        <a href="/warranty">Гарантийное обслуживание</a>
-                        <a href="/puboffer">Публичная оферта</a>
+                        <a @click="openPage('/how_to_work')">Как оформить заказ</a>
+                        <a @click="openPage('/shipping')">Оплата и доставка</a>
+                        <a @click="openPage('/about')">Оптовым клиентам</a>
+                        <a @click="openPage('/warranty')">Гарантийное обслуживание</a>
+                        <a @click="openPage('/offer')">Публичная оферта</a>
                       </div>
                     </div>
 
@@ -25,9 +25,9 @@
               <div class="dropdown">О нас
                 <div class="dropdown__wrapper">
                   <div class="dropdown__content ">
-                    <a href="/how_to_order">О компании</a>
-                    <a href="/shipping">Контактная информация</a>
-                    <a href="/about">Новости</a>
+                    <a @click="openPage('/about')">О компании</a>
+                    <a @click="openPage('/contacts')">Контактная информация</a>
+                    <a @click="openPage('/news')">Новости</a>
                   </div>
                 </div>
               </div>
@@ -181,6 +181,10 @@ export default {
       this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', !this.IS_CATALOG_OPEN);
       console.log(this.IS_CATALOG_OPEN);
     },
+    openPage(page) {
+      console.log(page);
+      this.$router.push(page);
+    }
     // openMenu(){
     //   this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', true);
     //   console.log(this.IS_CATALOG_OPEN);

@@ -132,7 +132,7 @@
     methods:{
       toggleMenu() {
         this.$store.commit('header/UPDATE_IS_MENU_OPEN', !this.IS_MENU_OPEN);
-        console.log(this.IS_MENU_OPEN);
+        // console.log(this.IS_MENU_OPEN);
       },
     }
 

@@ -42,21 +42,19 @@
               </swiper>
 
           </div>
-          // Сдесь надо 2 строки в 3 столбика
           <div class="recomendation__block" v-if = "VIEW_TYPE === 2">
-            <CardItem/>
-            <CardItem/>
-            <CardItem/>
-            <CardItem/>
-            <CardItem/>
-            <CardItem/>
+            // Сдесь надо 2 строки в 3 столбика
+            <CardItem v-for="n in 6"
+              :key="n"
+              :card_id = "n"
+            />
           </div>
-          // Сдесь надо 2 строки в 2 столбика
           <div class="recomendation__block" v-if = "VIEW_TYPE === 3">
-            <CardItem/>
-            <CardItem/>
-            <CardItem/>
-            <CardItem/>
+            // Сдесь надо 2 строки в 2 столбика
+            <CardItem v-for="n in 4"
+              :key="n"
+              :card_id = "n"
+            />
           </div>
 
         </div>
@@ -72,10 +70,7 @@
   import { Swiper } from "swiper/vue/swiper";
   import { SwiperSlide } from "swiper/vue/swiper-slide";
   import SwiperCore, { Pagination, Navigation } from "swiper";
-  // Import Swiper styles
   import "swiper/swiper.min.css";
-  // import "swiper/modules/pagination/pagination.min.css";
-  // import "swiper/modules/navigation/navigation.min.css";
   SwiperCore.use([Navigation, Pagination]);
 
   export default {

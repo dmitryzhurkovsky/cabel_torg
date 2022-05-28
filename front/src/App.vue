@@ -27,7 +27,8 @@
 
     methods: {
       setViewParametrs(){
-        this.$store.commit('header/UPDATE_VIEW_PARAMETERS',window.outerWidth)
+        console.log(window.innerWidth);
+        this.$store.commit('header/UPDATE_VIEW_PARAMETERS',window.innerWidth)
       }
     },
 

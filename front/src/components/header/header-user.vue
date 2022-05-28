@@ -32,10 +32,10 @@
             <button type="submit" class="btn black">Войти</button>
           </div>
 
-          <div class="foot-lnk">
+          <div @click = "changeScreen(2)" class="foot-lnk">
            Не помню пароль
           </div>
-          <div class="foot-lnk">
+          <div @click = "changeScreen(3)" class="foot-lnk">
             Зарегистрироваться
           </div>
         </div>
@@ -48,17 +48,18 @@
             <input id="user" type="text" class="input">
           </div>
           <div class="group">
-            <button type="submit" class="btn black">Восстановить</button>
+            <button @click = "changeScreen(4)" type="submit" class="btn black">Восстановить</button>
           </div>
         </div>
-        <br>
+      </div>
+      <div v-if = "currentScreen === 4" class="popup__reg">
         <h3>Проверьте ваш email</h3>
         <div class="reset-pass">
           <div class="group">
             <p>Мы отправили ссылку для <b>восстановления пароля</b> к вашей учетной записи.</p>
           </div>
           <div class="group">
-            <button type="submit" class="btn empty">Вернуться на сайт</button>
+            <button @click = "changeScreen(0)" type="submit" class="btn empty">Вернуться на сайт</button>
           </div>
         </div>
       </div>

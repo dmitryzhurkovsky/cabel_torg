@@ -69,15 +69,15 @@ export default {
   },
 
   async mounted() {
-      console.log('Try to get card ' + this.$props.card_id + ' information from backend');
+      // console.log('Try to get card ' + this.$props.card_id + ' information from backend');
       try {
         const response = await axios.get(process.env.VUE_APP_API_URL + 'products/' + this.$props.card_id);
-        console.log(response.data);
+        // console.log(response.data);
         this.name = response.data.name;
         this.base_unit = response.data.base_unit;
         // commit("UPDATE_CATEGORIES", response.data);
       } catch (e) {
-        console.log(e);
+        // console.log(e);
         this.$store.commit("notification/ADD_MESSAGE", {name: "Не возможно получить продукт " + this.$props.card_id, icon: "error", id: '1'}, {root: true})
       }
 
