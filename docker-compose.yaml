@@ -7,6 +7,8 @@ services:
     - '5433:5432'
     env_file:
       - backend/.env.dev
+    networks:
+      - backend
 
   core:
     build:
@@ -20,3 +22,10 @@ services:
       - backend/.env.dev
     depends_on:
       - db
+      - redis
+    networks:
+      - backend
+
+networks:
+  backend:
+  frontend:

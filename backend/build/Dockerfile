@@ -1,25 +1,12 @@
-# Initailization
-FROM python:3.10.2-slim-buster as requirements-stage
-
-ENV PYTHONUNBUFFERED 1
-ENV PYTHONDONTWRITEBYTECODE 1
-
-WORKDIR /tmp
-
-RUN pip install poetry
-
-COPY ./pyproject.toml ./poetry.lock* /tmp/
-
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
-
 # build application
 FROM python:3.10.2-slim-buster
 
 WORKDIR /code
 
-COPY --from=requirements-stage /tmp/requirements.txt /code/requirements.txt
+COPY ../Pipfile ../Pipfile.lock /code/
 
-RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+RUN pip install pipenv
+RUN pipenv install --system --deploy --ignore-pipfile
 
 COPY . /code/
 

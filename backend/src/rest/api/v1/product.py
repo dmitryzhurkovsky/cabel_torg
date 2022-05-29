@@ -9,7 +9,7 @@ from src.rest.schemas.product_schema import ProductSchema
 product_router = APIRouter(tags=['products'])
 
 
-@product_router.get('/products/', response_model=list[ProductSchema])
+@product_router.get('/products', response_model=list[ProductSchema])
 async def get_products(
         request: Request,
         category_id: int | None = Query(None, description=(
