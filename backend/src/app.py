@@ -1,12 +1,12 @@
 import asyncio
 
 import uvicorn
+from build.xml_bookkeeping_parser import XMLParser
 from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.middleware.cors import CORSMiddleware
 
-from build.xml_bookkeeping_parser import XMLParser
-from src.core.db.db import init_db, engine
+from src.core.db.db import engine
 from src.rest.api.router import base_router
 
 app = FastAPI()
@@ -23,8 +23,6 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup():
-    await init_db()
-
     event_loop = asyncio.get_running_loop()
 
     async with AsyncSession(engine) as db:

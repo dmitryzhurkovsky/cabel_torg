@@ -1,4 +1,3 @@
-
 from functools import lru_cache
 
 from pydantic import BaseSettings
@@ -15,7 +14,7 @@ class Settings(BaseSettings):
     XML_BOOKKEEPING_FILE_PATH: str = '/test_1.xml'
 
     @property
-    def database_url(self):
+    def DATABASE_URL(self):
         return f'postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}'
 
     class Config:

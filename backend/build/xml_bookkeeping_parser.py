@@ -27,7 +27,7 @@ class XMLParser:
 
     @property
     def is_execute_parsing_of_goods(self) -> bool:
-        return 'goods' == inspect.stack()[-13].function.split('_')[-1]
+        return 'parse_goods' in [el.function for el in inspect.stack()]
 
     @staticmethod
     def category_has_subcategories(category: Element) -> bool:
@@ -53,7 +53,7 @@ class XMLParser:
             case 'Описание':
                 return 'description', raw_field.text
             case 'Картинка':
-                return 'image', raw_field.text  # todo path to picture
+                return 'image_path', raw_field.text  # todo path to picture
             case 'Изготовитель':
                 manufacturer, _ = await database_services.get_or_create(
                     db=self.db, model=Manufacturer, fields={
