@@ -5,11 +5,8 @@
         <div class="quick-category__body">
           <h3>Каталог товаров</h3>
           <div class="quick-category__grid">
-            <div class="quick-category__item quick-category__big"
-            :style = "{
-                backgroundImage : 'url(' + getPath('cat1.png') + ')'
-            }"
-            >
+            <div class="quick-category__item quick-category__big">
+            <!-- <div class="quick-category__item quick-category__big" :style = "{backgroundImage : 'url(' + getPath('cat1.png') + ')'}"> -->
               <ul class="quick-category__list">Сетевое оборудование
                 <li class="quick-category__link">
                   <a href="">Коммутаторы</a> </li>
@@ -48,7 +45,9 @@
 
     methods: {
       getPath: function(item){
-        let path = process.env.BASE_URL + item;
+        console.log(process.env.BASE_URL);
+        console.log(process.env.VUE_APP_IMAGES);
+        let path = process.env.VUE_APP_IMAGES + item;
         // return path;
         return item;
       },
@@ -75,18 +74,6 @@ h3{
 
   gap:10px;
 }
-.quick-category__big{
-  grid-row: span 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  // background-image: url("../../assets/category/cat1.png");
-
-}
-.quick-category__big-row{
-  grid-column: span 2;
-
-}
 .quick-category__item{
   padding: 28px 24px;
   border: 2px solid #EEEEEE;
@@ -94,7 +81,18 @@ h3{
   background: #fff;
 
 }
+.quick-category__big{
+  grid-row: span 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-image: url("../../assets/category/cat1.png");
 
+}
+.quick-category__big-row{
+  grid-column: span 2;
+
+}
 .quick-category__list{
   font-weight: 500;
   font-size: 20px;
