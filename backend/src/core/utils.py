@@ -24,4 +24,8 @@ def convert_filter_fields(filtered_fields: QueryParams) -> list:
     if category_id:
         converted_filter_fields.append(Product.category_id == int(category_id))
 
+    search_letters = filtered_fields.get('q')
+    if search_letters:
+        converted_filter_fields.append(Product.name.like('%'+search_letters+'%'))
+
     return converted_filter_fields

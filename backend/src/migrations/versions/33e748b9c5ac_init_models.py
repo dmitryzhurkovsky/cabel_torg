@@ -1,15 +1,16 @@
-"""Add base models
+"""Init models
 
-Revision ID: f8f73c62f691
-Revises:
-Create Date: 2022-05-29 23:32:32.436754
+Revision ID: 33e748b9c5ac
+Revises: 
+Create Date: 2022-05-30 23:29:32.168450
 
 """
-import sqlalchemy as sa
 from alembic import op
+import sqlalchemy as sa
+
 
 # revision identifiers, used by Alembic.
-revision = 'f8f73c62f691'
+revision = '33e748b9c5ac'
 down_revision = None
 branch_labels = None
 depends_on = None

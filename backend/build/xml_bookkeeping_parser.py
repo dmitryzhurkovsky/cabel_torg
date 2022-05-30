@@ -16,7 +16,7 @@ class XMLParser:
 
     def __init__(self, db: AsyncSession):
         # self.xml_file = settings.XML_BOOKKEEPING_FILE_PATH
-        self.file = 'test_1.xml'
+        self.file = 'build/test_1.xml'
         self.namespaces = {'urn': 'urn:1C.ru:commerceml_2'}
         self.root = ElementTree.parse(self.file).getroot()
         self.db = db
@@ -48,7 +48,11 @@ class XMLParser:
                     category = await database_services.get(
                         db=self.db, model=Category, fields={'bookkeeping_id': raw_field[0].text}
                     )
-                    return 'category_id', category.id
+
+                    if category:
+                        return 'category_id', category.id
+
+                    print(f'Skipped record {raw_field[0].text}')
                 return None, None
             case 'Описание':
                 return 'description', raw_field.text
