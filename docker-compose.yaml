@@ -22,7 +22,6 @@ services:
       - backend/.env.dev
     depends_on:
       - db
-      - redis
     networks:
       - backend
 
