@@ -1,30 +1,15 @@
-from functools import lru_cache
+import os
+from dotenv import load_dotenv
 
-from pydantic import BaseSettings
+load_dotenv('.env.dev')
 
+DEBUG = int(os.getenv('DEBUG', 0))
 
-class Settings(BaseSettings):
-    DEBUG: bool = True
-    DB_NAME: str = 'cabel_torg_dev'
-    DB_USER: str = 'postgres'
-    DB_PASSWORD: str = 'postgres'
-    DB_HOST: str = 'localhost'
-    DB_PORT: str = '5432'
+DB_NAME = os.getenv('DATABASE_NAME')
+DB_USER = os.getenv('DATABASE_USER')
+DB_PASSWORD = os.getenv('DATABASE_PASSWORD')
+DB_HOST = os.getenv('DATABASE_HOST')
+DB_PORT = os.getenv('DATABASE_PORT')
+DATABASE_URL = f'postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
-    XML_BOOKKEEPING_FILE_PATH: str = '/test_1.xml'
-
-    @property
-    def DATABASE_URL(self):
-        return f'postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}'
-
-    class Config:
-        # env_file = '../.env.prod'
-        env_file = '.env.dev'
-
-
-@lru_cache()
-def get_settings():
-    return Settings()
-
-
-settings = get_settings()
+XML_BOOKKEEPING_FILE_PATH = os.getenv('XML_BOOKKEEPING_FILE_PATH')

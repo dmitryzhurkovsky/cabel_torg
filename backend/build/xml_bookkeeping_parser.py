@@ -1,4 +1,4 @@
-# from src.settings import settings
+from src.core import settings
 from xml.etree import ElementTree
 
 from _elementtree import Element
@@ -15,8 +15,7 @@ class XMLParser:
     __slots__ = ('file', 'namespaces', 'root', 'db')
 
     def __init__(self, db: AsyncSession):
-        # self.xml_file = settings.XML_BOOKKEEPING_FILE_PATH
-        self.file = 'build/test_1.xml'
+        self.file = settings.XML_BOOKKEEPING_FILE_PATH
         self.namespaces = {'urn': 'urn:1C.ru:commerceml_2'}
         self.root = ElementTree.parse(self.file).getroot()
         self.db = db
