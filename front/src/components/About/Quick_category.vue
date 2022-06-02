@@ -75,10 +75,27 @@ h3{
   gap:10px;
 }
 .quick-category__item{
-  padding: 28px 24px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 21px 24px;
   border: 2px solid #EEEEEE;
   border-radius: 8px;
   background: #fff;
+  background-position: right;
+  background-repeat: no-repeat;
+
+
+  &:nth-child(2){
+    background-image: url("../../assets/category/cat2.png");
+  }
+  &:nth-child(3){
+    background-image: url("../../assets/category/cat3.png");
+  }
+  &:nth-child(4){
+    background-image: url("../../assets/category/cat4.png");
+  }
 
 }
 .quick-category__big{
@@ -87,6 +104,8 @@ h3{
   flex-direction: column;
   justify-content: space-between;
   background-image: url("../../assets/category/cat1.png");
+  background-position: right;
+  background-repeat: no-repeat;
 
 }
 .quick-category__big-row{
