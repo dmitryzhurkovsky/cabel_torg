@@ -302,7 +302,7 @@ export default {
       justify-content: space-between;
       padding: 20px 0 20px 0;
       @media (max-width: $md2+px) {
-
+        gap:10px;
         padding: 0 0 0 0;
       }
 
