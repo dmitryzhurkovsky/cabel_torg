@@ -22,6 +22,16 @@
 
   export default {
     name: 'Banner',
+    methods: {
+      getPath: function(item){
+        console.log(process.env.BASE_URL);
+        console.log(process.env.VUE_APP_IMAGES);
+        let path = process.env.VUE_APP_IMAGES + item;
+        // return path;
+        return item;
+      },
+
+    }
   }
 </script>
 
@@ -30,7 +40,9 @@
 .banner {
 
   &__wrapper{
-    //background:url("@/assets/banner/1.png");
+    background-image:url("../../assets/banner/1.png");
+    background-repeat: no-repeat;
+    background-position: center;
   }
   &__content{
 
@@ -41,6 +53,7 @@
     padding: 60px 0;
     h1{
       margin-bottom: 20px;
+      @include adaptiv-font(36, 18, 36);
     }
 
     p{
