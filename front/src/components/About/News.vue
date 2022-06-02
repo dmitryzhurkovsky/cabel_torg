@@ -64,9 +64,14 @@
   }
 
   &__block{
-    display: inline-flex;
-    gap:12px;
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows:auto;
+    gap: 12px;
     width: 100%;
+    @media (max-width: $md2+px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
 
   }
 
