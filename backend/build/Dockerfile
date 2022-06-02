@@ -1,16 +1,15 @@
-# build application
 FROM python:3.10.2-slim-buster
 
-WORKDIR /code
+WORKDIR /backend
 
 RUN apt-get update && apt-get install -y netcat
 
-COPY ../Pipfile ../Pipfile.lock /code/
+COPY ../Pipfile ../Pipfile.lock /backend/
 RUN pip install pipenv
 RUN pipenv install --system --deploy --ignore-pipfile
 
-COPY . /code/
+COPY . /backend/
 
-RUN chmod +x /code/build/entrypoint.sh
+RUN chmod +x /backend/build/entrypoint.sh
 
-ENTRYPOINT ["sh", "/code/build/entrypoint.sh"]
+ENTRYPOINT ["sh", "/backend/build/entrypoint.sh"]

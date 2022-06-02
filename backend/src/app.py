@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.middleware.cors import CORSMiddleware
 
+from src.core import settings
 from src.core.db.db import engine
 from src.rest.api.router import base_router
 
@@ -14,10 +15,10 @@ app.include_router(base_router)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=settings.ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"],
+    allow_headers=settings.CORS_ALLOWED_HEADERS,
 )
 
 
