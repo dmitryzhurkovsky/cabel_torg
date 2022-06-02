@@ -41,6 +41,7 @@
     padding: 60px 0;
     h1{
       margin-bottom: 20px;
+      //@include adaptiv-font(36, 18, 36);
     }
 
     p{
