@@ -170,8 +170,10 @@
     */
     text-align: center;
     padding: 24px 20px 20px 0;
-    //padding: 10px 0;
-    //justify-content: flex-start;
+    @media (max-width: $md2+px) {
+      gap: 8px;
+    }
+
     &__item{
 
       background: #FFFFFF;
@@ -181,9 +183,14 @@
       line-height: 24px;
       text-align: center;
       opacity: 0.5;
-      margin-right: 10px;
-      padding: 6px 40px;
+      padding: 6px 20px;
       cursor: pointer;
+      @media (max-width: $md2+px) {
+        font-size: 10px;
+        line-height: 12px;
+        padding: 6px 15px;
+      }
+
       &:hover{
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
         color:#4275D8;
