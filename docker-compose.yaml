@@ -8,9 +8,7 @@ services:
     expose:
       - 5432
     env_file:
-      - backend/.env.dev
-    networks:
-      - backend
+      - backend/.env.prod
 
   backend:
     build:
@@ -18,28 +16,16 @@ services:
       dockerfile: ./build/Dockerfile
     volumes:
       - ./backend:/backend
-    ports:
-      - '8000:8000'
+    expose:
+      - 8000
     depends_on:
       - db
-    networks:
-      - backend
-      - frontend
 
-  frontend:
+  nginx:  # Copy static files during building this container
     build:
-      context: front
-      dockerfile: ./build/Dockerfile
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    restart: unless-stopped
     ports:
-      - '8080:80'
-    depends_on:
-      - backend
-    networks:
-      - frontend
-
-networks:
-  backend:
-  frontend:
-
-volumes:
-  db:
+      - '80:80'
+      - '443:443'  # for https
