@@ -3,19 +3,13 @@ import base64
 from sqlalchemy import Column, Float, ForeignKey, Integer, String
 from sqlalchemy.orm import backref, relationship
 
-from src.core.db.db import Base
+from src.models.abstract_model import Base1CModel
 
 
-class BaseModel(Base):
-    __abstract__ = True
-
-    bookkeeping_id = Column(String(128), unique=True)  # id from 1C
-
-
-class Category(BaseModel):
+class Category(Base1CModel):
     __tablename__ = 'categories'
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, index=True, primary_key=True)
 
     name = Column(String)
 
@@ -25,20 +19,16 @@ class Category(BaseModel):
     subcategories = relationship('Category', backref=backref('parent_category', remote_side=[id]))
 
 
-class Manufacturer(BaseModel):
+class Manufacturer(Base1CModel):
     __tablename__ = 'manufacturers'
-
-    id = Column(Integer, primary_key=True, index=True)
 
     name = Column(String)
 
     products = relationship('Product', back_populates='manufacturer')
 
 
-class Product(BaseModel):
+class Product(Base1CModel):
     __tablename__ = 'products'
-
-    id = Column(Integer, primary_key=True, index=True)
 
     vendor_code = Column(String, nullable=True)
     name = Column(String)
