@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.middleware.cors import CORSMiddleware
 
 from src.core import settings
+from src.core.db.db import engine
 from src.rest.api.router import base_router
 
 app = FastAPI()

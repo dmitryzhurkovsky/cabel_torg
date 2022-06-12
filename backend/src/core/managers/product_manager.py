@@ -1,7 +1,6 @@
 from fastapi import Request
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
 from src.core.db.mixins.list_mixin import ListMixin
 from src.core.db.mixins.retrieve_mixin import RetrieveMixin
