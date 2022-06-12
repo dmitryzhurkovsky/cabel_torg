@@ -1,3 +1,4 @@
+import bcrypt
 from starlette.datastructures import QueryParams
 
 from src.core.enums import TypeOfProduct
@@ -29,3 +30,11 @@ def convert_filter_fields(filtered_fields: QueryParams) -> list:
         converted_filter_fields.append(Product.name.like('%'+search_letters+'%'))
 
     return converted_filter_fields
+
+
+def check_password(password: str, password_hash: str):
+    return bcrypt.checkpw(password.encode(), password_hash.encode())
+
+
+def hash_password(password: str):
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()

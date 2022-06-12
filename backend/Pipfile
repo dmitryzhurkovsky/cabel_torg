@@ -7,11 +7,15 @@ name = "pypi"
 fastapi = "*"
 gunicorn = "*"
 asyncpg = "*"
-pydantic = "*"
+pydantic = {extras = ["email"], version = "*"}
 python-dotenv = "*"
 sqlalchemy = "*"
 alembic = "*"
 uvicorn = "*"
+pyjwt = "*"
+bcrypt = "*"
+python-multipart = "*"
+aioredis = "*"
 
 [dev-packages]
 

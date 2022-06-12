@@ -4,7 +4,6 @@ from typing import Any
 from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
 from src.core.db.db import get_session
 from src.core.db.mixins.base_mixin import BaseMixin, TableType
@@ -18,17 +17,18 @@ class RetrieveMixin(BaseMixin):
             prefetch_fields: tuple = None,
             **kwargs: Any
     ) -> TableType | HTTPException:
-        """Get list of objects"""
-        key = [*kwargs][0]
+        """Get object by primary key or by another fields"""
 
-        options = [selectinload(field) for field in prefetch_fields] if prefetch_fields else []
+        options = cls.init_prefetch_related_fields(prefetch_fields=prefetch_fields)
+        filtered_fields = cls.init_filtered_fields(filter_fields=kwargs)
 
-        result = await session.execute(
+        query = await session.execute(
             select(cls.table).
-            filter(getattr(cls.table, key) == kwargs.get(key)).
+            filter(*filtered_fields).
             options(*options)
         )
-        obj = result.scalar_one_or_none()
-        await session.refresh(obj)
+        obj = query.scalar_one_or_none()
+        cls._check_object(obj=obj)
 
+        await session.refresh(obj)
         return obj

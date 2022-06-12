@@ -23,8 +23,7 @@ class ProductManager(ListMixin, RetrieveMixin):
             limit: int = 12
     ) -> list:
         """Get list of objects"""
-        options = [selectinload(field) for field in prefetch_fields] if prefetch_fields else []
-
+        options = cls.init_prefetch_related_fields(prefetch_fields=prefetch_fields)
         filter_fields = convert_filter_fields(filtered_fields=request.query_params)
 
         objects = await session.execute(

@@ -20,6 +20,7 @@ services:
       - '8000:8000'
     depends_on:
       - db
+      - redis
 
   nginx:  # Copy static files during building this container
     build:
@@ -29,3 +30,9 @@ services:
     ports:
       - '80:80'
       - '443:443'  # for https
+        
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'
+
