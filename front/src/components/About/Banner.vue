@@ -43,16 +43,18 @@
     background-image:url("../../assets/banner/1.png");
     background-repeat: no-repeat;
     background-position: center;
+    background-size: cover;
   }
   &__content{
 
   }
 
   &__body{
-    width: 427px;
+    max-width: 427px;
     padding: 60px 0;
     h1{
       margin-bottom: 20px;
+      @include adaptiv-value("line-height",43,20,43);
       @include adaptiv-font(36, 18, 36);
     }
 

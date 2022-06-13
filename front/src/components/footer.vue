@@ -127,13 +127,9 @@ export default {
     &__content{}
 
 
-    &__col{
-      //padding: 20px 20px 20px 0;
+    &__col{}
 
-    }
-    &__body{
-
-    }
+    &__body{}
 
   &__row{
     &:nth-child(1){
@@ -257,7 +253,7 @@ export default {
     }
   }
     &__item{
-      padding: 5px 0;
+      padding: 5px 0 5px 5px;
       align-items: flex-start;
 
       &:before{

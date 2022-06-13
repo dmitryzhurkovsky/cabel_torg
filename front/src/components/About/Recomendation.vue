@@ -43,14 +43,14 @@
 
           </div>
           <div class="recomendation__block" v-if = "VIEW_TYPE === 2">
-            // Сдесь надо 2 строки в 3 столбика
+
             <CardItem v-for="n in 6"
               :key="n"
               :card_id = "n"
             />
           </div>
           <div class="recomendation__block" v-if = "VIEW_TYPE === 3">
-            // Сдесь надо 2 строки в 2 столбика
+
             <CardItem v-for="n in 4"
               :key="n"
               :card_id = "n"

@@ -171,6 +171,7 @@
     display: None;
     @media (max-width: $md2+px) {
       display: flex;
+      gap: 16px;
     }
 
   }

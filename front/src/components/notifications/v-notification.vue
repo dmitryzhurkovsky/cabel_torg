@@ -5,19 +5,20 @@
         class="messages_list"
     >
       <div
-          class="v-notification__content"
+          class="v-notification__body"
           v-for="message in MESSAGES"
           :key="message.id"
           :class="message.icon"
       >
         <div class="content__text">
-          <div class="content-message">{{message.name}}</div>
+          <div class="content__message">{{message.name}}</div>
         </div>
-        <div class="content_buttons">
+
+        <div class="content__buttons">
           <button v-if="rightButton.length">{{rightButton}}</button>
           <button v-if="leftButton.length">{{leftButton}}</button>
-          <div class="close-popup btn-close-popup" @click="closeNotification"></div>
         </div>
+        <div class="close-popup btn-close-popup" @click="closeNotification"></div>
       </div>
     </transition-group>
   </div>
@@ -72,25 +73,28 @@
 </script>
 
 <style lang='scss' scoped>
-  .v-notification {
+
+.v-notification {
     position: fixed;
     top: 80px;
     right: 16px;
-    width: 30%;
+    //width: 30%;
+    @include adaptiv-value("width",30%,50%,50%);
     z-index: 99;
     &__messages_list {
       display: flex;
       flex-direction: column-reverse;
     }
-    &__content {
-      padding: 16px;
-      border-radius: 4px;
+    &__body {
+      position: relative;
+      padding: 12px 8px;
+      @include adaptiv-font(16, 12, 20);
+      border-radius: 8px;
       color: #ffffff;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      height: 50px;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
       background: green;
       &.error {
         background: red;
@@ -104,16 +108,10 @@
     }
     .content {
       &__text {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+          padding-right: 25px;
       }
     }
-    // .material-icons {
-    //   // margin-left: 16px;
-    //   position: relative;
-    //   cursor: pointer;
-    // }
+
   }
   .v-transition-animate {
     &-enter {
@@ -146,22 +144,22 @@
   /* Кнопка закрытия */
   .btn-close-popup{
     position: absolute;
-    top: 15px;
-    right: 17px;
-    width: 23px;
-    height: 23px;
-    cursor: pointer;
+    top: 10px;
+    right: 10px;
+    width: 19px;
+    height: 19px;
     border: 1px solid #fff;
     border-radius: 50%;
     z-index: 1000;
+    cursor: pointer;
   }
 
   .btn-close-popup:before,
   .btn-close-popup:after {
     content: "";
     position: absolute;
-      top: 10px;
-      left: 6px;
+      top: 8px;
+      left: 4px;
       width: 10px;
       height: 1px;
     background: #fff;
