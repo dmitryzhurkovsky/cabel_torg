@@ -82,7 +82,7 @@ export default {
 }
 
 .search__field{
-  width: 385px;
+  max-width: 385px;
   height: 100%;
   position: relative;
 
@@ -99,9 +99,10 @@ export default {
 
   button{
     position: absolute;
-    top: 1px;
+    top: 4px;
     right: 0;
-    font-size: 20px;
+    font-size: 16px;
+    color: #423E48;
 
 
     cursor: pointer;
