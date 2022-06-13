@@ -21,7 +21,7 @@
                   <div class="info-header__item">
                     <a href="mail:info@cabeltorg.by">info@cabeltorg.by</a>
                   </div>
-                  <div class="info-header__item">BYN</div>
+<!--                  <div class="info-header__item">BYN</div>-->
             </div> <!--     header__info-->
       <!--  # CLIENT-BAR -  Appears from tablet version-->
             <div class="topmenu__right client-bar flex-center">
@@ -180,6 +180,7 @@
     &__item{
     padding: 0 20px 0 20px;
     &:nth-child(1){
+      width: 170px;
       a{
         font-weight: 500;
         font-size: 14px;
