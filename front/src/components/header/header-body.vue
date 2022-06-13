@@ -190,7 +190,7 @@
     }
     &:nth-child(2){
       border-left: 1px solid $mainColor;
-      border-right: 1px solid $mainColor;
+      //border-right: 1px solid $mainColor;
       a{
         font-weight: 300;
         text-decoration-line: underline;

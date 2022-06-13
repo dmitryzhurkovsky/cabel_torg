@@ -271,11 +271,18 @@ h3{
   padding: 8px 24px;
   min-width:180px;text-align: center;
   cursor: pointer;
+  &:hover{
+    background: #6291ED;
+  }
 }
 
 .black{
   background: $mainColor;
   padding: 12px 24px;
+  &:hover{
+    background: #5A5A5A;
+  }
+
 }
 .empty{
   background: #fff;
