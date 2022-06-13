@@ -63,6 +63,12 @@ const routes = [
         import("../views/Catalog.vue")
   },
   {
+    path: '/user-cab',
+    name: 'user-cab',
+    component: () =>
+        import("../views/Personal/user_cab.vue")
+  },
+  {
     path: '/wholesale',
     name: 'Wholesale',
     component: () =>
