@@ -25,6 +25,15 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.icon-order:before {
+  content: "\e922";
+}
+.icon-pen:before {
+  content: "\e923";
+}
+.icon-visible:before {
+  content: "\e924";
+}
 .icon-burger:before {
   content: "\e913";
 }
