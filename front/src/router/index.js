@@ -68,6 +68,12 @@ const routes = [
     component: () =>
         import("../views/Personal/user_cab.vue")
   },
+  {
+    path: '/cart',
+    name: 'cart',
+    component: () =>
+        import("../views/Personal/cart.vue")
+  },
 
   {
     path: '/user-cab-set',
