@@ -356,12 +356,7 @@
 
 
 }
-._footnote{
-  font-size: 10px;
-  line-height: 20px;
-  text-align: right;
-  opacity: 0.5;
-}
+
 .current_price{
   font-weight: 500;
   font-size: 24px;

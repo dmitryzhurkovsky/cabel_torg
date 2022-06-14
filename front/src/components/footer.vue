@@ -253,7 +253,7 @@ export default {
     }
   }
     &__item{
-      padding: 5px 0 5px 5px;
+      padding: 5px 5px 5px 0;
       align-items: flex-start;
 
       &:before{

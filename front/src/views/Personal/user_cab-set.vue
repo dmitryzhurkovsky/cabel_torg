@@ -320,53 +320,14 @@
     margin-bottom: 24px;
   }
 
-  .group__row{
-    width: 100%;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  .group{
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-bottom: 15px;
-    text-align: center;
-    justify-content: center;
-  }
-  label{
-    text-align: left;
-    font-size: 12px;
-    line-height: 140%;
-    color: #423E48;
-    opacity: 0.6;
-  }
+
   p{
     font-size: 14px;
     line-height: 140%;
     text-align: center;
     color: #423E48;
   }
-  .input__box{
-    width: 100%;
-    position: relative;
-  }
 
-  .input__icon{
-    position: absolute;
-    top: 14px;
-    right: 10px;
-    color: rgba(66, 62, 72, 0.2);
-    font-size: 14px;
-  }
-  input{
-    width: 100%;
-    background: #FFFFFF;
-    border: 1px solid rgba(66, 62, 72, 0.2);
-    border-radius: 8px;
-    padding: 10px 30px 10px 16px;
-    font-weight: 300;
-  }
   button{
     text-align: center;
   }
