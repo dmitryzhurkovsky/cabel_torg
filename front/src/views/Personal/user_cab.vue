@@ -12,25 +12,25 @@
                   <div class="filter__title icon-arrow-up">Личный кабинет</div>
 
                   <ul class="filter__list">
-                     <li class="filter__item icon-cart">Мои заказы</li>
-                     <li class="filter__item icon-favorite-choosed">Избранные товары</li>
-                     <li class="filter__item icon-setting">Настройки аккаунта</li>
+                     <li class="filter__item icon-cart" @click="changeScreen(0)">Мои заказы</li>
+                     <li class="filter__item icon-favorite-choosed" @click="changeScreen(1)">Избранные товары</li>
+                     <li class="filter__item icon-setting" @click="changeScreen(2)">Настройки аккаунта</li>
                   </ul>
-                  <hr class="hr">
+                  <hr class="hr"/>
                   <div class="icon-exit filter__item">Выйти из аккаунта</div>
                 </div>
 
               </div>
             </div>
 <!--        # CONTENT-->
-            <div class="user-acc__content-block content-block">
+            <div v-if = "screen === 0" class="user-acc__content-block content-block" >
                 <OrderList/>
             </div>
-            <div class="user-acc__content-block content-block">
+            <div v-if = "screen === 1" class="user-acc__content-block content-block" >
                 <FavoriteList/>
             </div>
-            <div class="user-acc__content-block content-block">
-                <!-- <OrderList/> -->
+            <div v-if = "screen === 2" class="user-acc__content-block content-block" >
+                <Profile/>
             </div>
 
           </div>
@@ -48,16 +48,27 @@
 
   import OrderList from '@/components/personal/order-list.vue';
   import FavoriteList from '@/components/personal/favorite-list.vue';
+  import Profile from '@/components/personal/profile.vue';
 
   export default {
     name: "personal",
 
+    data() {
+      return {
+        screen       : 0,
+      };
+    },
+
     components:
     {
-      OrderList, FavoriteList,
+      OrderList, FavoriteList, Profile
     },
 
     methods: {
+      changeScreen(screenId){
+        console.log(screenId);
+          this.screen = screenId;
+      }
     },
   }
 </script>
