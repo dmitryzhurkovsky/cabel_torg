@@ -2,6 +2,7 @@
   <div id="app__component">
     <v-notification/>
     <Header/>
+    <Breadcrumb/>
     <router-view></router-view>
     <Footer/>
   </div>
@@ -10,6 +11,7 @@
 <script>
 
   import Header from '@/components/header.vue';
+  import Breadcrumb from '@/components/breadcrumb.vue';
   import Footer from "@/components/footer.vue";
   import vNotification from '@/components/notifications/v-notification';
 
@@ -22,7 +24,7 @@
 
     components:
     {
-      Header, Footer, vNotification,
+      Header, Breadcrumb, Footer, vNotification,
     },
 
     methods: {
@@ -296,13 +298,6 @@ h3{
   align-items: center;
 }
 
-._footnote{
-  font-size: 10px;
-  line-height: 20px;
-  text-align: right;
-  opacity: 0.5;
-}
-
 ._title{
   font-weight: 500;
   font-size: 14px;
@@ -310,121 +305,13 @@ h3{
   color: #423E48;
 }
 
-._link{
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 130%;
-  color: #4275D8;
+.page__link{
+
 }
 .table3x{
-    flex-basis: 33.333%;
+
     @media (max-width: $md3+px){
     }
-}
-
-
-//INPUT
-.group__row{
-  width: 100%;
-  justify-content: space-between;
-  gap: 10px;
-}
-.group{
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 15px;
-  //text-align: center;
-  justify-content: center;
-}
-label{
-  text-align: left;
-  font-size: 12px;
-  line-height: 140%;
-  color: #423E48;
-  opacity: 0.6;
-}
-
-.input__box{
-  width: 100%;
-  position: relative;
-}
-
-.input__icon{
-  position: absolute;
-  top: 14px;
-  right: 10px;
-  color: rgba(66, 62, 72, 0.2);
-  font-size: 14px;
-}
-input{
-  width: 100%;
-  background: #FFFFFF;
-  border: 1px solid rgba(66, 62, 72, 0.2);
-  border-radius: 8px;
-  padding: 10px 30px 10px 16px;
-  font-weight: 300;
-}
-
-//RADIO
-
-.radio {
-  margin: 10px 10px 10px 0;
-  input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-    + .radio-label {
-      &:before {
-        content: '';
-        background: #fff;
-        border-radius: 100%;
-        border: 1px solid darken(#fff, 25%);
-        display: inline-block;
-        width: 1.4em;
-        height: 1.4em;
-        position: relative;
-        top: -0.2em;
-        margin-right: 1em;
-        vertical-align: top;
-        cursor: pointer;
-        text-align: center;
-        transition: all 250ms ease;
-      }
-    }
-    &:checked {
-      + .radio-label {
-        &:before {
-          background-color: #3197EE;
-          box-shadow: inset 0 0 0 4px #f4f4f4;
-        }
-      }
-    }
-    &:focus {
-      + .radio-label {
-        &:before {
-          outline: none;
-          border-color: #3197EE;
-        }
-      }
-    }
-    &:disabled {
-      + .radio-label {
-        &:before {
-          box-shadow: inset 0 0 0 4px #f4f4f4;
-          border-color: darken(#f4f4f4, 25%);
-          background: darken(#f4f4f4, 25%);
-        }
-      }
-    }
-    + .radio-label {
-      &:empty {
-        &:before {
-          margin-right: 0;
-        }
-      }
-    }
-  }
 }
 
 .form{
@@ -458,48 +345,6 @@ input{
     }
 
 }
-
-.breadcrumb{
-  display: flex;
-  align-items: center;
-  padding: 20px 0 30px 0;
-
-  li{
-    &:last-child{
-      a{
-        opacity: 0.6;
-        cursor: auto;
-      }
-
-    }
-
-    a{
-      font-weight: 300;
-      font-size: 12px;
-      line-height: 16px;
-      text-align: center;
-      color: #423E48;
-
-    }
-
-
-
-  }
-  .active{
-    font-weight: 300;
-    font-size: 12px;
-    line-height: 16px;
-    text-align: center;
-    opacity: 0.5;
-
-  }
-  &__separater{
-    font-size: 8px;
-    margin: 0 12px;
-  }
-
-}
-
 
 // Templates for structure
 .structure {

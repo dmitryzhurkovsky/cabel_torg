@@ -3,11 +3,6 @@
     <div class="news__wrapper">
       <div class="news__content _container">
         <div class="news__body">
-          <ul class="breadcrumb">
-            <li><a href="#">Главная</a></li>
-            <li><a href="#">Покупателям</a></li>
-            <li class="active">Новости</li>
-          </ul>
           <div class="news__block">
             <a class="news__item">
               <div class="_block">

@@ -23,15 +23,6 @@
               <div class="desc-product__article  _label">Артикул: <span>331003</span></div>
             </div>
             <div class="grid__item" tabindex="5">
-              <ul class="breadcrumb">
-                <li><a href="#">Главная</a></li>
-                <li class="breadcrumb__separater icon-arrow-l"></li>
-                <li><a href="#">Раздел</a></li>
-                <li class="breadcrumb__separater icon-arrow-l"></li>
-                <li><a href="#">Подраздел</a></li>
-                <li class="breadcrumb__separater icon-arrow-l"></li>
-                <li class="active">Название товара</li>
-              </ul>
             </div>
             <div class="grid__item" tabindex="6">
               <div class="status-row__link icon-share"><span>Поделиться</span></div>
@@ -123,7 +114,6 @@
   grid-template-rows:auto;
 
   grid-template-areas:
-      "breadcrumb breadcrumb"
       "photo   photo"
       "status   status"
       "title   title"

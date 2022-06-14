@@ -3,11 +3,6 @@
     <div class="about__wrapper">
       <div class="about__content _container">
         <div class="about__body">
-          <ul class="breadcrumb">
-            <li><a href="#">Главная</a></li>
-            <li><a href="#">Покупателям</a></li>
-            <li class="active">О нас</li>
-          </ul>
           <div class="about__header">
             <h3>Информация о компании</h3>
             <p><b>Компания Cabel Torg</b> - это открытый и честный магазин, который помогает IT и

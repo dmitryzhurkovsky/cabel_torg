@@ -90,14 +90,14 @@ export default {
     UPDATE_VIEW_PARAMETERS (state, newstate){
       state.windowWidth = newstate;
       // console.log(newstate);
-      if (newstate > 480) {
-        // XXXX - 480
+      if (newstate > 767.98) {
+        // XXXX - 768
         state.viewType = 1;
-      } else if (newstate > 320) {
-        // 480 - 380
+      } else if (newstate > 479.98) {
+        // 768 - 480
         state.viewType = 2;
       } else {
-        // 320 - 0
+        // 480 - 0
         state.viewType = 3;
       }
     },

@@ -54,19 +54,19 @@
                       </div>
                     </div>
                     <ul class="footer__col footer__menu">
-                      <li @click = "linkClick('/about')" class="footer__menu_link">
+                      <li @click = "linkClick('/about', 'О компании')" class="footer__menu_link">
                         <span>О компании</span>
                       </li>
-                      <li @click = "linkClick('/contacts')" class="footer__menu_link">
+                      <li @click = "linkClick('/contacts', 'Контакты')" class="footer__menu_link">
                         <span>Контакты</span>
                       </li>
-                      <li @click = "linkClick('/shipping')" class="footer__menu_link">
+                      <li @click = "linkClick('/shipping', 'Оплата и доставка')" class="footer__menu_link">
                         <span>Оплата и доставка</span>
                       </li>
-                      <li @click = "linkClick('/how_to_work')" class="footer__menu_link">
+                      <li @click = "linkClick('/how_to_work', 'Оптовым покупателям')" class="footer__menu_link">
                         <span>Оптовым покупателям</span>
                       </li>
-                      <li @click = "linkClick('/')" class="footer__menu_link">
+                      <li @click = "linkClick('/', 'Скачать прайс-лист')" class="footer__menu_link">
                         <span >Скачать прайс-лист</span>
                       </li>
                     </ul>
@@ -96,9 +96,10 @@ export default {
   name: "footer",
 
   methods: {
-    linkClick(URL){
-      console.log(URL);
+    linkClick(URL, name){
       if (this.$router.path != URL) {
+          this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
+          this.$store.commit('breadcrumb/ADD_BREADCRUMB', {name: name, path: URL, type: "global", class: ""});
           this.$router.push(URL);
       }
     },

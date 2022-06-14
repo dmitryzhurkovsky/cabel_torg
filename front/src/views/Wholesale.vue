@@ -3,11 +3,6 @@
     <div class="wholesale__wrapper">
       <div class="wholesale__content _container">
         <div class="wholesale__body">
-          <ul class="breadcrumb">
-            <li><a href="#">Главная</a></li>
-            <li><a href="#">Покупателям</a></li>
-            <li class="active">Оптовикам</li>
-          </ul>
           <div class="wholesale__block flex-center">
             <div class="wholesale__item _block">
               <h3>Информация для оптовых клиентов</h3>

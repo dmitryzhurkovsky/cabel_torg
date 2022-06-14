@@ -3,11 +3,6 @@
     <div class="structure__wrapper">
       <div class="structure__content _container">
         <div class="structure__body">
-          <ul class="breadcrumb">
-            <li><a href="#">Главная</a></li>
-            <li><a href="#">Покупателям</a></li>
-            <li class="active">Оптовым покупателям</li>
-          </ul>
         </div>
         <div class="structure__block">
           <h3 class="structure__title">Что-то пошло не так...</h3>
