@@ -4,12 +4,6 @@
       <div class="puboffer__content _container">
         <div class="puboffer__body">
 
-          <ul class="breadcrumb">
-            <li><a href="#">Главная</a></li>
-            <li><a href="#">Покупателям</a></li>
-            <li class="active">Публичная оферта</li>
-          </ul>
-
           <h3>Договор публичной оферты</h3>
           <h4>на оформление заказа товаров через сайт <a href="/front/public">cabeltorg.by</a></h4>
 

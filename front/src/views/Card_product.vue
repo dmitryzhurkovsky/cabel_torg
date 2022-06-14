@@ -4,15 +4,6 @@
       <div class="product__content _container">
         <div class="product__body">
           <div class="product__status-row status-row">
-            <ul class="breadcrumb">
-              <li><a href="#">Главная</a></li>
-              <li class="breadcrumb__separater icon-arrow-l"></li>
-              <li><a href="#">Раздел</a></li>
-              <li class="breadcrumb__separater icon-arrow-l"></li>
-              <li><a href="#">Подраздел</a></li>
-              <li class="breadcrumb__separater icon-arrow-l"></li>
-              <li class="active">Название товара</li>
-            </ul>
             <div class="status-row__link icon-share"><span>Поделиться</span></div>
           </div>
 
@@ -75,8 +66,8 @@
               <a class="product__link">Как оформить заказ ></a>
 
            </div> <!-- desc-product-->
-            
-            
+
+
           </div>
 
 

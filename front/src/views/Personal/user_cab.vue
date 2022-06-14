@@ -3,13 +3,6 @@
     <div class="user-acc__wrapper">
       <div class="user-acc__content _container">
         <div class="user-acc__body">
-          <ul class="breadcrumb">
-            <li><a href="#">Главная</a></li>
-            <li class="breadcrumb__separater icon-arrow-l"></li>
-            <li><a href="#">Личный кабинет</a></li>
-            <li class="breadcrumb__separater icon-arrow-l"></li>
-            <li><a href="#">История покупок</a></li>
-          </ul>
 
           <div class="user-acc__block">
 <!--        # SIDEBAR-->
@@ -31,48 +24,13 @@
             </div>
 <!--        # CONTENT-->
             <div class="user-acc__content-block content-block">
-              <div class="content-block__title">История покупок</div>
-               <div class="order__list">
-                 <div class="order__item">
-                   <div class="order__num">Заказ #  <span>65854</span></div>
-                   <div class="order__date">10 июня 2022</div>
-                   <div class="order__delivery">Тип доставки</div>
-                   <div class="order__status _status-color">Отправлен</div>
-                   <div class="order__price">58.40 <span>BYN</span></div>
-                 </div>
-
-                 <div class="order__item">
-                   <div class="order__num">Заказ #  <span>65854</span></div>
-                   <div class="order__date">10 июня 2022</div>
-                   <div class="order__delivery">Тип доставки</div>
-                   <div class="order__status _status-color">Отправлен</div>
-                   <div class="order__price">58.40 <span>BYN</span></div>
-                 </div>
-
-                 <div class="order__item">
-                   <div class="order__num">Заказ #  <span>65854</span></div>
-                   <div class="order__date">10 июня 2022</div>
-                   <div class="order__delivery">Тип доставки</div>
-                   <div class="order__status _status-color">Отправлен</div>
-                   <div class="order__price">58.40 <span>BYN</span></div>
-                 </div>
-
-                 <div class="order__item">
-                   <div class="order__num">Заказ #  <span>65854</span></div>
-                   <div class="order__date">10 июня 2022</div>
-                   <div class="order__delivery">Тип доставки</div>
-                   <div class="order__status _status-color">Отправлен</div>
-                   <div class="order__price">58.40 <span>BYN</span></div>
-                 </div>
-
-                 <div class="order__item">
-                   <div class="order__num">Заказ #  <span>65854</span></div>
-                   <div class="order__date">10 июня 2022</div>
-                   <div class="order__delivery">Тип доставки</div>
-                   <div class="order__status _status-color">Отправлен</div>
-                   <div class="order__price">58.40 <span>BYN</span></div>
-                 </div>
-               </div>
+                <OrderList/>
+            </div>
+            <div class="user-acc__content-block content-block">
+                <FavoriteList/>
+            </div>
+            <div class="user-acc__content-block content-block">
+                <!-- <OrderList/> -->
             </div>
 
           </div>
@@ -88,8 +46,19 @@
 
 <script>
 
+  import OrderList from '@/components/personal/order-list.vue';
+  import FavoriteList from '@/components/personal/favorite-list.vue';
+
   export default {
-    name: 'user-cab',
+    name: "personal",
+
+    components:
+    {
+      OrderList, FavoriteList,
+    },
+
+    methods: {
+    },
   }
 </script>
 
@@ -99,10 +68,6 @@
 
   &__wrapper{
 
-  }
-  &__content-block{
-    width: 100%;
-    padding: 0 16px;
   }
 
   &__body{
@@ -188,65 +153,4 @@
 }
 
 
-.content-block{
-  &__title{
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 24px;
-    color: #423E48;
-    margin-bottom: 40px;
-  }
-}
-.order{
-
-  &__list{
-
-  }
-  &__item{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 30px 18px 30px 28px;
-    background: #FFFFFF;
-    border: 2px solid #EEEEEE;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    ._status-color{
-      color: #32A071;
-      font-weight: 500;
-    }
-  }
-  &__num{
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 24px;
-    text-decoration-line: underline;
-    color: #423E48;
-    z-index: 4;
-    &:hover{
-      color: #4275D8;
-      cursor: pointer;
-    }
-  }
-  &__date{
-
-  }
-
-  &__delivery{
-
-  }
-
-  &__status{
-
-  }
-
-
-
-  &__price{
-    font-weight: 500;
-    span{
-      font-weight: 400;
-    }
-  }
-}
 </style>

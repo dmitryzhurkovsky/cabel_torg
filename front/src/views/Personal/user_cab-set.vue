@@ -3,13 +3,6 @@
     <div class="user-acc__wrapper">
       <div class="user-acc__content _container">
         <div class="user-acc__body">
-          <ul class="breadcrumb">
-            <li><a href="#">Главная</a></li>
-            <li class="breadcrumb__separater icon-arrow-l"></li>
-            <li><a href="#">Личный кабинет</a></li>
-            <li class="breadcrumb__separater icon-arrow-l"></li>
-            <li><a href="#">История покупок</a></li>
-          </ul>
 
           <div class="user-acc__block">
 <!--        # SIDEBAR-->

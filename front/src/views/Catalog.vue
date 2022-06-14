@@ -4,14 +4,6 @@
       <div class="catalog__content _container">
         <div class="catalog__body">
 
-          <ul class="breadcrumb">
-            <li><a href="#">Главная</a></li>
-            <li class="breadcrumb__separater icon-arrow-l"></li>
-            <li><a href="#">Каталог</a></li>
-            <li class="breadcrumb__separater icon-arrow-l"></li>
-            <li><a href="#">Подраздел каталога</a></li>
-
-          </ul>
           <div class="catalog__block">
 
 <!--        # SIDEBAR-->

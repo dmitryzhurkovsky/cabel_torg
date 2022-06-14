@@ -3,11 +3,6 @@
     <div class="structure__wrapper">
       <div class="structure__content _container">
         <div class="structure__body">
-          <ul class="breadcrumb">
-            <li><a href="#">Главная</a></li>
-            <li><a href="#">Покупателям</a></li>
-            <li class="active">Оплата и доставка</li>
-          </ul>
           <div class="structure__block">
             <h3 class="structure__title">Доставка</h3>
             <p class="structure__text">Для оптовых покупателей из РБ мы предлагаем несколько различных способов получения заказа:</p>

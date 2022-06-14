@@ -2,6 +2,7 @@
   <div id="app__component">
     <v-notification/>
     <Header/>
+    <Breadcrumb/>
     <router-view></router-view>
     <Footer/>
   </div>
@@ -10,6 +11,7 @@
 <script>
 
   import Header from '@/components/header.vue';
+  import Breadcrumb from '@/components/breadcrumb.vue';
   import Footer from "@/components/footer.vue";
   import vNotification from '@/components/notifications/v-notification';
 
@@ -22,7 +24,7 @@
 
     components:
     {
-      Header, Footer, vNotification,
+      Header, Breadcrumb, Footer, vNotification,
     },
 
     methods: {
@@ -343,38 +345,6 @@ h3{
     }
 
 }
-
-.breadcrumb{
-  display: flex;
-  align-items: center;
-  padding: 20px 0 30px 0;
-
-  li{
-    a{
-      font-weight: 300;
-      font-size: 12px;
-      line-height: 16px;
-      text-align: center;
-      color: #423E48;
-
-    }
-
-  }
-  .active{
-    font-weight: 300;
-    font-size: 12px;
-    line-height: 16px;
-    text-align: center;
-    opacity: 0.5;
-
-  }
-  &__separater{
-    font-size: 8px;
-    margin: 0 12px;
-  }
-
-}
-
 
 // Templates for structure
 .structure {
