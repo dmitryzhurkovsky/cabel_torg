@@ -1,17 +1,19 @@
 <template lang="html">
-  <ul class="breadcrumb">
-    <li
-        class="v-notification__body"
-        v-for="element in ELEMENTS"
-        :key="element.id"
-        :class="element.class"
-    >
-      <div
-          v-if="element.type !=='service'"
-          @click="changePage(element)"
-      >{{element.name}}</div>
-    </li>
-  </ul>
+  <div class="breadcrumb__wrapper _container">
+    <ul class="breadcrumb">
+      <li
+          class="v-notification__body"
+          v-for="element in ELEMENTS"
+          :key="element.id"
+          :class="element.class"
+      >
+        <div
+            v-if="element.type !=='service'"
+            @click="changePage(element)"
+        >{{element.name}}</div>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -54,12 +56,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+
 .breadcrumb{
   display: flex;
   align-items: center;
   padding: 20px 0 30px 0;
 
   li{
+    &:last-child{
+      a{
+        opacity: 0.6;
+        cursor: auto;
+      }
+
+    }
     div{
       font-weight: 300;
       font-size: 12px;
