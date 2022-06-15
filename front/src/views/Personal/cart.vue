@@ -3,12 +3,7 @@
     <div class="cart__wrapper">
       <div class="cart__content _container">
         <div class="cart__body">
-          <ul class="breadcrumb">
-            <li><a href="#">Главная</a></li>
-            <li class="breadcrumb__separater icon-arrow-l"></li>
-            <li><a href="#">Корзина</a></li>
 
-          </ul>
 
           <div class="cart__block">
             <h3>Корзина <span>(4)</span></h3>
