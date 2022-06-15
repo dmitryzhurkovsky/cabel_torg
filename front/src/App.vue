@@ -22,8 +22,7 @@
     computed: {
     },
 
-    components:
-    {
+    components:{
       Header, Breadcrumb, Footer, vNotification,
     },
 

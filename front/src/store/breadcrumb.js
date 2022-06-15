@@ -9,12 +9,6 @@ export default {
           type: 'global',
           class: '',
       },
-      // {
-      //     name: 'История покупок',
-      //     path: '/user_cab',
-      //     type: 'global',
-      //     class: '',
-      // },
     ],
   },
 
@@ -31,6 +25,12 @@ export default {
 
     DELETE_BREADCRUMB(state, newstate) {
       state.stack.splice(state.stack.length - 1, 1);
+    },
+
+    RENAME_LAST_BREADCRUMB(state, newstate){
+      if (state.stack.length - 1){
+        state.stack[state.stack.length - 1].name = newstate;
+      }
     }
 },
 

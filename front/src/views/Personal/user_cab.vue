@@ -23,14 +23,10 @@
               </div>
             </div>
 <!--        # CONTENT-->
-            <div v-if = "screen === 0" class="user-acc__content-block content-block" >
-                <OrderList/>
-            </div>
-            <div v-if = "screen === 1" class="user-acc__content-block content-block" >
-                <FavoriteList/>
-            </div>
-            <div v-if = "screen === 2" class="user-acc__content-block content-block" >
-                <Profile/>
+            <div class="user-acc__content-block content-block" >
+                <OrderList v-if = "SCREEN === 0"/>
+                <FavoriteList v-if = "SCREEN === 1"/>
+                <Profile v-if = "SCREEN === 2"/>
             </div>
 
           </div>
@@ -46,12 +42,18 @@
 
 <script>
 
+  import { mapGetters } from "vuex";
+
   import OrderList from '@/components/personal/order-list.vue';
   import FavoriteList from '@/components/personal/favorite-list.vue';
   import Profile from '@/components/personal/profile.vue';
 
   export default {
     name: "personal",
+
+    computed: {
+      ...mapGetters("profile", ["SCREEN", "BREADCRUMB"]),
+    },
 
     data() {
       return {
@@ -66,8 +68,9 @@
 
     methods: {
       changeScreen(screenId){
-        console.log(screenId);
-          this.screen = screenId;
+        // console.log(screenId);
+        this.$store.commit("profile/CHANGE_SCREEN", screenId);
+        this.$store.commit("breadcrumb/RENAME_LAST_BREADCRUMB", this.BREADCRUMB[screenId]);
       }
     },
 
@@ -79,6 +82,7 @@
         type: "global",
         class: ""
       });
+      this.$store.commit("breadcrumb/RENAME_LAST_BREADCRUMB", this.BREADCRUMB[this.SCREEN]);
     }
   }
 </script>
