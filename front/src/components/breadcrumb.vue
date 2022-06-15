@@ -2,7 +2,6 @@
   <div class="breadcrumb__wrapper _container">
     <ul class="breadcrumb">
       <li
-          class="v-notification__body"
           v-for="element in ELEMENTS"
           :key="element.id"
           :class="element.class"
@@ -37,7 +36,9 @@ export default {
           menuItem.class = item.class;
           menuItem.index = i;
           result.push(menuItem);
-          result.push({name: '', type: 'service', class: 'breadcrumb__separater icon-arrow-l'})
+          if (i !== this.STACK.length - 1){
+            result.push({name: '', type: 'service', class: 'breadcrumb__separater icon-arrow-l'})
+          }
         });
         return result;
       } else {

@@ -9,12 +9,12 @@ export default {
           type: 'global',
           class: '',
       },
-      {
-          name: 'История покупок',
-          path: '/user_cab',
-          type: 'global',
-          class: '',
-      },
+      // {
+      //     name: 'История покупок',
+      //     path: '/user_cab',
+      //     type: 'global',
+      //     class: '',
+      // },
     ],
   },
 

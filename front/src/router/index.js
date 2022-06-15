@@ -41,6 +41,7 @@ const routes = [
   {
     path: "/offer",
     name: "Offer",
+    meta: {name: 'Публичная оферта'},
     component: () =>
         import("../views/Offer.vue")
   },
@@ -53,6 +54,7 @@ const routes = [
   {
     path: '/about',
     name: 'About',
+    meta: {name: 'О компании'},
     component: () =>
         import("../views/About.vue")
   },
@@ -65,6 +67,7 @@ const routes = [
   {
     path: '/user-cab',
     name: 'user-cab',
+    meta: {name: 'Личный кабинет'},
     component: () =>
         import("../views/Personal/user_cab.vue")
   },
@@ -84,6 +87,7 @@ const routes = [
   {
     path: '/wholesale',
     name: 'Wholesale',
+    meta: {name: 'Оптовым клиентам'},
     component: () =>
         import("../views/Wholesale.vue")
   },
@@ -96,18 +100,21 @@ const routes = [
   {
     path: '/how_to_work',
     name: 'how_to_work',
+    meta: {name: 'Как оформить заказ'},
     component: () =>
-        import("../views/how_to_work.vue")
+        import("../views/How_to_work.vue")
   },
   {
     path: '/warranty',
     name: 'warranty',
+    meta: {name: 'Гарантийное обслуживание'},
     component: () =>
-        import("../views/warranty.vue")
+        import("../views/Warranty.vue")
   },
   {
     path: '/shipping',
     name: 'shipping',
+    meta: {name: 'Оплата и доставка'},
     component: () =>
         import("../views/Shipping.vue")
   },
@@ -125,6 +132,7 @@ const routes = [
   },
   {
     path: '/contacts',
+    meta: {name: 'Контактная информация'},
     name: 'Contacts',
     component: () =>
         import("../views/Contacts.vue")
@@ -132,6 +140,7 @@ const routes = [
   {
     path: '/news',
     name: 'News',
+    meta: {name: 'Новости'},
     component: () =>
         import("../views/News.vue")
   },

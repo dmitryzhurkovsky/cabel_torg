@@ -35,5 +35,9 @@ export default {
       // Offer
 
     },
+
+    mounted(){
+      this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
+    }
   }
 </script>

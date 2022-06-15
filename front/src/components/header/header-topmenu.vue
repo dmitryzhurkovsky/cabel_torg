@@ -11,11 +11,11 @@
                   <div class="dropdown">Покупателям
                     <div class="dropdown__wrapper">
                       <div class="dropdown__content">
-                        <a @click="openPage('/how_to_work', 'Как оформить заказ')">Как оформить заказ</a>
-                        <a @click="openPage('/shipping', 'Оплата и доставка')">Оплата и доставка</a>
-                        <a @click="openPage('/about', 'Оптовым клиентам')">Оптовым клиентам</a>
-                        <a @click="openPage('/warranty', 'Гарантийное обслуживание')">Гарантийное обслуживание</a>
-                        <a @click="openPage('/offer', 'Публичная оферта')">Публичная оферта</a>
+                        <a @click="openPage('/how_to_work')">Как оформить заказ</a>
+                        <a @click="openPage('/shipping')">Оплата и доставка</a>
+                        <a @click="openPage('/wholesale')">Оптовым клиентам</a>
+                        <a @click="openPage('/warranty')">Гарантийное обслуживание</a>
+                        <a @click="openPage('/offer')">Публичная оферта</a>
                       </div>
                     </div>
 
@@ -25,9 +25,9 @@
               <div class="dropdown">О нас
                 <div class="dropdown__wrapper">
                   <div class="dropdown__content ">
-                    <a @click="openPage('/about', 'О компании')">О компании</a>
-                    <a @click="openPage('/contacts', 'Контактная информация')">Контактная информация</a>
-                    <a @click="openPage('/news', 'Новости')">Новости</a>
+                    <a @click="openPage('/about')">О компании</a>
+                    <a @click="openPage('/contacts')">Контактная информация</a>
+                    <a @click="openPage('/news')">Новости</a>
                   </div>
                 </div>
               </div>
@@ -181,10 +181,8 @@ export default {
       this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', !this.IS_CATALOG_OPEN);
       console.log(this.IS_CATALOG_OPEN);
     },
-    openPage(page, name) {
+    openPage(page) {
       if (this.$router.path != page) {
-          this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
-          this.$store.commit('breadcrumb/ADD_BREADCRUMB', {name: name, path: page, type: "global", class: ""});
           this.$router.push(page);
       }
     }

@@ -70,6 +70,16 @@
           this.screen = screenId;
       }
     },
+
+    mounted(){
+      this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
+      this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
+        name: this.$router.currentRoute.value.meta.name,
+        path: this.$router.currentRoute.value.path,
+        type: "global",
+        class: ""
+      });
+    }
   }
 </script>
 
