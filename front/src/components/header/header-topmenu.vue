@@ -173,7 +173,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters("header", ["ORDER_COUNT", "IS_CATALOG_OPEN", "TOP_CATEGORIES"]),
+    ...mapGetters("header", ["IS_CATALOG_OPEN", "TOP_CATEGORIES"]),
+    ...mapGetters("order", ["ORDER_COUNT"]),
   },
 
   methods:{

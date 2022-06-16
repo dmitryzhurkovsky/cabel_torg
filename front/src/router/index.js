@@ -102,14 +102,14 @@ const routes = [
     name: 'how_to_work',
     meta: {name: 'Как оформить заказ'},
     component: () =>
-        import("../views/how_to_work.vue")
+        import("../views/How_to_work.vue")
   },
   {
     path: '/warranty',
     name: 'warranty',
     meta: {name: 'Гарантийное обслуживание'},
     component: () =>
-        import("../views/warranty.vue")
+        import("../views/Warranty.vue")
   },
   {
     path: '/shipping',

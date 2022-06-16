@@ -70,7 +70,7 @@
 
 <script>
 export default {
-  name: "HeaderSearch",
+  name: "HeaderUser",
 
   data: function() {
     return {

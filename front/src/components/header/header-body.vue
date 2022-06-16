@@ -26,7 +26,7 @@
       <!--  # CLIENT-BAR -  Appears from tablet version-->
             <div class="topmenu__right client-bar flex-center">
               <div class="topmenu__item">
-                <a class="icon-favorite" href=""></a>
+                <a class="icon-favorite"></a>
               </div>
               <div class="topmenu__item popup-container">
 

@@ -5,7 +5,7 @@ export default {
 
   state: {
     likes: [],
-    orders: [12,23],
+    // orders: [12,23],
     isMenuOpen: false,
     isCatalogOpen: false,
     munuItemActive : 1,
@@ -19,13 +19,13 @@ export default {
     LIKES_COUNT(state){
       return state.likes.length;
     },
-    ORDER_COUNT(state){
-      if (state.orders.length) {
-          return state.orders.length;
-      } else {
-          return null;
-      }
-    },
+    // ORDER_COUNT(state){
+    //   if (state.orders.length) {
+    //       return state.orders.length;
+    //   } else {
+    //       return null;
+    //   }
+    // },
     IS_MENU_OPEN(state){
       return state.isMenuOpen;
     },
