@@ -80,7 +80,7 @@ export default {
       height: 420px;
       background: #FFFFFF;
       box-shadow: 0px 4px 20px rgba(66, 62, 72, 0.05);
-      z-index: 3;
+      z-index: 5;
     }
 .menu{
 
@@ -126,8 +126,8 @@ export default {
 
   &__rubric{
     font-weight: 400;
-    font-size: 16px;
-    line-height: 28px;
+    font-size: 14px;
+    line-height: 20px;
     text-decoration-line: underline;
     color: #423E48;
 
@@ -136,10 +136,11 @@ export default {
   &__linksub{
     font-weight: 300;
     font-size: 14px;
-    line-height: 24px;
     color: #423E48;
+    margin-top: 8px;
+    opacity: 0.5;
     &:hover{
-      opacity: 0.6;
+      opacity: 0.7;
     }
   }
 }
@@ -155,14 +156,14 @@ export default {
   width: 600px;
 
   &__box{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    gap: 12px;
   }
 
   &__item{
-    margin-bottom: 40px;
-    margin-right: 44px;
+
   }
 
 

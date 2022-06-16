@@ -107,12 +107,10 @@
   }
 
 
-  &__item{
-
+  &__content-block{
+    width: 100%;
+    padding-left: 20px;
   }
-  &__link{
-
-}
 
 }
 .filter{
