@@ -25,4 +25,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Rebuild conainers
-        run: docker-compose up --build -d
+        run: docker-compose -f docker-compose.dev.yaml up --build -d
