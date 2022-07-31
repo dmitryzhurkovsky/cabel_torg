@@ -1,12 +1,11 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, String, Boolean
+from sqlalchemy.orm import relationship
 
 from src.models.abstract_model import BaseModel
 
 
 class User(BaseModel):
     __tablename__ = 'users'
-
-    id = Column(Integer, primary_key=True, index=True)
 
     email = Column(String, unique=True, nullable=False)
     password = Column(String(128), nullable=False)

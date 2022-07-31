@@ -6,7 +6,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db import database_services
 
-from src.models.product_models import Category, Manufacturer, Product
+from src.models.product_models import Product
+from src.models.category_model import Category
+from src.models.manufacturer_model import Manufacturer
 
 import inspect
 

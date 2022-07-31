@@ -4,6 +4,8 @@ backend/.env*
 # Static files
 backend/src/static/
 
+/data
+
 
 # Ide files
 .idea/

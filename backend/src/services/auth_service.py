@@ -51,10 +51,12 @@ class AuthService:
         return token
 
     @classmethod
-    async def authenticate_user(cls, email: str, password: str, session: AsyncSession) -> User | HTTPException:
+    async def authenticate_user(cls, user_data: dict, session: AsyncSession) -> User | HTTPException:
+        password = user_data.pop('password')
+
         user = await UserManager.retrieve(
             session=session,
-            email=email,
+            **user_data
         )
         if check_password(password_hash=user.password, password=password):
             return user
@@ -64,9 +66,13 @@ class AuthService:
     @classmethod
     async def generate_access_and_refresh_token(
             cls, session: AsyncSession,
-            user_data: OAuth2PasswordRequestForm
+            user_form: OAuth2PasswordRequestForm
     ) -> AuthenticationResponseSchema | HTTPException:
-        user = await cls.authenticate_user(email=user_data.username, password=user_data.password, session=session)
+        user_data = {
+            'username': user_form.username,
+            'password': user_form.password,
+        }
+        user = await cls.authenticate_user(user_data=user_data, session=session)
 
         return AuthenticationResponseSchema(
             access_token=await cls.create_token(user_id=user.id, token_type='access'),
@@ -74,7 +80,7 @@ class AuthService:
         )
 
     @classmethod
-    async def validate_refresh_token(cls, refresh_token: str, user_id: int) -> bool:
+    async def validate_refresh_token(cls, refresh_token: str, user_id: int):
         refresh_token_is_kept_by_redis = await redis.get(name=user_id)
         if refresh_token_is_kept_by_redis != refresh_token:
             raise InvalidTokenError()

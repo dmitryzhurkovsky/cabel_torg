@@ -1,30 +1,9 @@
 import base64
 
 from sqlalchemy import Column, Float, ForeignKey, Integer, String
-from sqlalchemy.orm import backref, relationship
+from sqlalchemy.orm import relationship
 
 from src.models.abstract_model import Base1CModel
-
-
-class Category(Base1CModel):
-    __tablename__ = 'categories'
-
-    id = Column(Integer, index=True, primary_key=True)
-
-    name = Column(String)
-
-    products = relationship('Product', back_populates='category')
-
-    parent_category_id = Column(Integer, ForeignKey('categories.id'))
-    subcategories = relationship('Category', backref=backref('parent_category', remote_side=[id]))
-
-
-class Manufacturer(Base1CModel):
-    __tablename__ = 'manufacturers'
-
-    name = Column(String)
-
-    products = relationship('Product', back_populates='manufacturer')
 
 
 class Product(Base1CModel):
