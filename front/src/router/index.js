@@ -1,9 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const guest = (to, from, next) => {
+  // console.log('TO', to , 'From', from, 'Next', next);
   if (!localStorage.getItem("authToken")) {
+    // console.log('asasdasd');
     return next();
   } else {
+    // console.log('//////');
     return next("/");
   }
 };
@@ -21,14 +24,14 @@ const routes = [
     name: "Login",
     beforeEnter: guest,
     component: () =>
-      import(/* webpackChunkName: "login" */ "../views/Auth/Login.vue")
+      import("../views/Auth/Login.vue")
   },
   {
     path: "/register",
     name: "Register",
     beforeEnter: guest,
     component: () =>
-      import(/* webpackChunkName: "register" */ "../views/Auth/Register.vue")
+      import("../views/Auth/Register.vue")
   },
   {
     path: "/verify/:hash",
@@ -36,7 +39,7 @@ const routes = [
     beforeEnter: auth,
     props: true,
     component: () =>
-      import(/* webpackChunkName: "verify" */ "../views/Auth/Verify.vue")
+      import("../views/Auth/Verify.vue")
   },
   {
     path: "/offer",

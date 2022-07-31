@@ -69,21 +69,28 @@
 </template>
 
 <script>
+
 export default {
   name: "HeaderUser",
 
   data: function() {
     return {
         currentScreen : 0,
+
       }
   },
 
   methods: {
     changeScreen(id){
+      console.log('меняем скрин ',id);
+        if (id === 3 ) {
+          this.$router.push({ name: "Register" });
+        }
         this.currentScreen = id;
-        // this.$store.commit('notification/ADD_MESSAGE', {name: 'Сменили экран на ' + id, icon: 'check_circle', id: '10'})
     },
-
+    closePopup(){
+      console.log('sdsds');
+    }
   }
 
 }

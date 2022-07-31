@@ -4,18 +4,25 @@ export default {
   namespaced: true,
 
   state: {
-    userData: 0
+    userData: 0,
+    errors: []
   },
 
   getters: {
     USER(state){
       return state.userData;
+    },
+    ERRORS(state) {
+      return state.errors
     }
   },
 
   mutations: {
     SET_USER_DATA(state, user) {
       state.userData = user;
+    },
+    SET_ERRORS(state, errors) {
+      state.errors = errors;
     }
   },
 
@@ -40,13 +47,14 @@ export default {
         });
     },
 
-    sendRegisterRequest({ commit }, data) {
+    SEND_REGISTER_REQUEST({ commit }, data) {
       // commit("setErrors", [], { root: true });
       return axios
-        .post(process.env.VUE_APP_API_URL + "register", data)
+        .post(process.env.VUE_APP_API_URL + "users", data)
         .then(response => {
+          console.log(response);
           commit("SET_USER_DATA", response.data.user);
-          localStorage.setItem("authToken", response.data.token);
+          // localStorage.setItem("authToken", response.data.token);
         });
     },
 
