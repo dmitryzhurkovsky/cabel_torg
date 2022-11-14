@@ -37,7 +37,7 @@ export default {
       };
     },
 
-    sendLoginRequest({ commit }, data) {
+    SEND_LOGIN_REQUEST({ commit }, data) {
       // commit("setErrors", [], { root: true });
       return axios
         .post(process.env.VUE_APP_API_URL + "login", data)

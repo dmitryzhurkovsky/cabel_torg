@@ -65,7 +65,7 @@
 
 <script>
   import {mapGetters} from 'vuex'
-  import CardItem from '@/components/Goods/card_item.vue'
+  import CardItem from '@/components/goods/card_item.vue'
 
   import { Swiper } from "swiper/vue/swiper";
   import { SwiperSlide } from "swiper/vue/swiper-slide";

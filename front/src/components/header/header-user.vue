@@ -21,15 +21,27 @@
         <div class="sign-in-htm">
           <div class="group">
             <label for="user" class="label">Электронная почта</label>
-            <input id="user" type="text" class="input">
+            <input
+              type="email"
+              class="input"
+              :class="{ 'is-invalid': ERRORS.email }"
+              id="email"
+              v-model="details.email"
+            >
           </div>
           <div class="group">
             <label for="pass" class="label">Пароль</label>
-            <input id="pass" type="password" class="input" data-type="password">
+            <input
+              type="password"
+              class="input"
+              :class="{ 'is-invalid': ERRORS.password }"
+              id="password"
+              v-model="details.password"
+            >
           </div>
 
           <div class="group">
-            <button type="submit" class="btn black">Войти</button>
+            <button @click = "userLogin" type="submit" class="btn black">Войти</button>
           </div>
 
           <div @click = "changeScreen(2)" class="foot-lnk">
@@ -69,6 +81,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "HeaderUser",
@@ -76,20 +89,31 @@ export default {
   data: function() {
     return {
         currentScreen : 0,
-
+        details: {
+          email     : null,
+          password  : null,
+        }
       }
   },
 
+  computed: {
+    ...mapGetters("auth",["ERRORS"]),
+  },
+
   methods: {
+    ...mapActions("auth", ["SEND_LOGIN_REQUEST"]),
+
     changeScreen(id){
-      console.log('меняем скрин ',id);
         if (id === 3 ) {
           this.$router.push({ name: "Register" });
         }
         this.currentScreen = id;
     },
-    closePopup(){
-      console.log('sdsds');
+    userLogin(){
+      this.SEND_LOGIN_REQUEST(this.details).then(() => {
+        // this.$router.push({ name: "Main" });
+      });
+
     }
   }
 
