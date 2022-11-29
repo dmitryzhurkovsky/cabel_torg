@@ -30,3 +30,10 @@ class Product(Base1CModel):
 
     manufacturer_id = Column(Integer, ForeignKey('manufacturers.id'))
     manufacturer = relationship('Manufacturer', back_populates='products')
+
+    added_to_cart_for = relationship('Cart', back_populates='products')
+
+    added_to_watchlist_for = relationship('WatchList', back_populates='products')
+
+    def __str__(self):
+        return self.name

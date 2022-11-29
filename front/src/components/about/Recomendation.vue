@@ -67,8 +67,8 @@
   import {mapGetters} from 'vuex'
   import CardItem from '@/components/goods/card_item.vue'
 
-  import { Swiper } from "swiper/vue/swiper";
-  import { SwiperSlide } from "swiper/vue/swiper-slide";
+  import { Swiper } from "swiper/vue";
+  import { SwiperSlide } from "swiper/vue";
   import SwiperCore, { Pagination, Navigation } from "swiper";
   import "swiper/swiper.min.css";
   SwiperCore.use([Navigation, Pagination]);

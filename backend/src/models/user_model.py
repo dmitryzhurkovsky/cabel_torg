@@ -23,3 +23,9 @@ class User(BaseModel):
     # service fields
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
+
+    products_in_cart = relationship('Cart', back_populates='user')
+    products_in_watchlist = relationship('WatchList', back_populates='user')
+
+    def __str__(self):
+        return self.email

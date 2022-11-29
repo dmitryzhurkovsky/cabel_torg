@@ -1,12 +1,9 @@
 from pydantic import BaseModel
 
 
-class RefreshTokenBaseSchema(BaseModel):
-    refresh_token: str
-
-
-class AccessTokenBaseSchema(BaseModel):
-    access_token: str
+auth_schema = OAuth2PasswordBearer(
+    tokenUrl='token',
+)
 
 
 class AuthenticationResponseSchema(BaseModel):
@@ -17,6 +14,3 @@ class AuthenticationResponseSchema(BaseModel):
 class RefreshTokenCreateSchema(BaseModel):
     owner_id: int
     refresh_token: str
-
-
-
