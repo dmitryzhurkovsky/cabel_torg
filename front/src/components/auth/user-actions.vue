@@ -62,6 +62,54 @@
           <div class="group">
             <button @click = "changeScreen(4)" type="submit" class="btn black">Восстановить</button>
           </div>
+          <div @click = "changeScreen(1)" class="foot-lnk">
+            Войти
+          </div>
+          <div @click = "changeScreen(3)" class="foot-lnk">
+            Зарегистрироваться
+          </div>
+        </div>
+      </div>
+      <div v-if = "currentScreen === 3" class="popup__reg">
+        <h3>Регистрация для юрлица</h3>
+        <div class="register">
+          <div class="group">
+            <label for="email" class="label">Электронная почта</label>
+            <input id="email" type="email" class="input">
+          </div>
+          <div class="group">
+            <label for="password" class="label">Пароль</label>
+            <input id="password" type="password" class="input">
+          </div>
+          <div class="group">
+            <label for="confirm_password" class="label">Подтверждение пароля</label>
+            <input id="confirm_password" type="password" class="input">
+          </div>
+          <div class="group">
+            <label for="user_name" class="label">Имя</label>
+            <input id="user_name" type="text" class="input">
+          </div>
+          <div class="group">
+            <label for="phone" class="label">Телефон</label>
+            <input id="phone" type="phone" class="input">
+          </div>
+          <div class="group">
+            <label for="company_name" class="label">Компания</label>
+            <input id="company_name" type="text" class="input">
+          </div>
+          <div class="group">
+            <label for="unp" class="label">УНП</label>
+            <input id="unp" type="number" class="input">
+          </div>
+          <div class="group">
+            <button @click = "changeScreen(4)" type="submit" class="btn black">Регистрация</button>
+          </div>
+          <div @click = "changeScreen(1)" class="foot-lnk">
+            Войти
+          </div>
+          <div @click = "changeScreen(2)" class="foot-lnk">
+            Не помню пароль
+          </div>
         </div>
       </div>
       <div v-if = "currentScreen === 4" class="popup__reg">
@@ -104,9 +152,6 @@ export default {
     ...mapActions("auth", ["SEND_LOGIN_REQUEST"]),
 
     changeScreen(id){
-        if (id === 3 ) {
-          this.$router.push({ name: "Register" });
-        }
         this.currentScreen = id;
     },
     userLogin(){
