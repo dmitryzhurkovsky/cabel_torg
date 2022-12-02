@@ -47,7 +47,7 @@
             <div class="topmenu__item right-direction">
               <div class="dropdown icon-user">
                 <div class="dropdown__wrapper">
-                  <HeaderUser/>
+                  <UserActions/>
                 </div>
 
               </div>
@@ -70,7 +70,7 @@
 
 import {mapActions, mapGetters} from 'vuex'
 import CatalogMenu  from '@/components/header/catalog-menu.vue'
-import HeaderUser   from '@/components/header/header-user.vue'
+import UserActions   from '@/components/auth/user-actions.vue'
 import HeaderCart   from '@/components/header/header-cart.vue'
 import HeaderFavorite   from '@/components/header/header-favorite.vue'
 
@@ -79,7 +79,7 @@ export default {
 
   components:
   {
-    CatalogMenu, HeaderUser, HeaderCart, HeaderFavorite,
+    CatalogMenu, HeaderCart, HeaderFavorite, UserActions
   },
 
   computed: {
