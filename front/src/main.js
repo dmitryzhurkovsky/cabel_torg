@@ -7,6 +7,7 @@ import axios from "axios";
 axios.interceptors.response.use(
   response => response,
   error => {
+    console.log(error.response);
     if (error.response.status === 422) {
       store.commit("notification/ADD_MESSAGE", error.response.data.errors);
     } else if (error.response.status === 401) {

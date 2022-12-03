@@ -5,7 +5,7 @@ export default {
 
   state: {
     userData: 0,
-    errors: []
+    errors: {}
   },
 
   getters: {
@@ -37,24 +37,27 @@ export default {
       };
     },
 
-    SEND_LOGIN_REQUEST({ commit }, data) {
-      // commit("setErrors", [], { root: true });
-      return axios
-        .post(process.env.VUE_APP_API_URL + "login", data)
-        .then(response => {
-          commit("SET_USER_DATA", response.data.user);
-          localStorage.setItem("authToken", response.data.token);
-        });
+    async SEND_LOGIN_REQUEST({ commit }, data) {
+      commit("SET_ERRORS", {});
+      try {
+        console.log(data);
+        const response = await axios.post(process.env.VUE_APP_API_URL + "v1/token", data);
+        commit("SET_USER_DATA", response.data.user);
+        localStorage.setItem("authToken", response.data.token);
+      }
+      catch (e) {
+          console.log(e);
+      };
     },
 
     SEND_REGISTER_REQUEST({ commit }, data) {
-      // commit("setErrors", [], { root: true });
+      commit("SET_ERRORS", {});
       return axios
         .post(process.env.VUE_APP_API_URL + "users", data)
         .then(response => {
           console.log(response);
           commit("SET_USER_DATA", response.data.user);
-          // localStorage.setItem("authToken", response.data.token);
+          localStorage.setItem("authToken", response.data.token);
         });
     },
 
