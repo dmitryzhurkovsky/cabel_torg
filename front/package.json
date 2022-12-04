@@ -10,16 +10,16 @@
     "axios": "^0.26.1",
     "core-js": "^3.6.5",
     "sass": "^1.51.0",
-    "swiper": "^8.1.4",
+    "swiper": "^6.8.4",
     "vue": "^3.0.0",
     "vue-router": "^4.0.14",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "~4.5.17",
-    "@vue/cli-plugin-router": "~4.5.17",
-    "@vue/cli-plugin-vuex": "~4.5.17",
-    "@vue/cli-service": "~4.5.17",
+    "@vue/cli-plugin-babel": "^5.0.8",
+    "@vue/cli-plugin-router": "^5.0.8",
+    "@vue/cli-plugin-vuex": "^5.0.8",
+    "@vue/cli-service": "^5.0.8",
     "@vue/compiler-sfc": "^3.2.33",
     "sass-loader": "^8.0.2"
   },

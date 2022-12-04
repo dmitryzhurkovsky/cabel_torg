@@ -1,12 +1,11 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, String, Boolean
+from sqlalchemy.orm import relationship
 
 from src.models.abstract_model import BaseModel
 
 
 class User(BaseModel):
     __tablename__ = 'users'
-
-    id = Column(Integer, primary_key=True, index=True)
 
     email = Column(String, unique=True, nullable=False)
     password = Column(String(128), nullable=False)
@@ -24,3 +23,9 @@ class User(BaseModel):
     # service fields
     is_active = Column(Boolean, default=True)
     is_admin = Column(Boolean, default=False)
+
+    products_in_cart = relationship('Cart', back_populates='user')
+    products_in_watchlist = relationship('WatchList', back_populates='user')
+
+    def __str__(self):
+        return self.email

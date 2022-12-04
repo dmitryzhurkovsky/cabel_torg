@@ -30,10 +30,16 @@ async def get_products(
         offset: int = 0, limit: int = Query(default=12, lte=100),
         session: AsyncSession = Depends(get_session)
 ):
-    products = await ProductManager.filter_list(request=request, session=session, prefetch_fields=(
-        ProductManager.table.manufacturer,
-        ProductManager.table.category
-    ), offset=offset, limit=limit)
+    products = await ProductManager.filter_list(
+        request=request,
+        session=session,
+        prefetch_fields=(
+            ProductManager.table.manufacturer,
+            ProductManager.table.category
+        ),
+        offset=offset,
+        limit=limit
+    )
 
     return products
 

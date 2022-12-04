@@ -32,9 +32,11 @@ def convert_filter_fields(filtered_fields: QueryParams) -> list:
     return converted_filter_fields
 
 
-def check_password(password: str, password_hash: str):
+def password_is_valid(password: str, password_hash: str) -> bool:
+    """Check whether a password is valid."""
     return bcrypt.checkpw(password.encode(), password_hash.encode())
 
 
-def hash_password(password: str):
+def hash_password(password: str) -> str:
+    """Hash a password by bcrypt."""
     return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()

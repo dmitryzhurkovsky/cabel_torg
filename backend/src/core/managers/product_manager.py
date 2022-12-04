@@ -2,13 +2,14 @@ from fastapi import Request
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.core.db.mixins.delete_mixin import DeleteMixin
 from src.core.db.mixins.list_mixin import ListMixin
 from src.core.db.mixins.retrieve_mixin import RetrieveMixin
 from src.core.utils import convert_filter_fields
 from src.models.product_models import Product
 
 
-class ProductManager(ListMixin, RetrieveMixin):
+class ProductManager(ListMixin, RetrieveMixin, DeleteMixin):
 
     table = Product
 

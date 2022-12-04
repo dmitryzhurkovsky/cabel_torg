@@ -6,11 +6,12 @@ services:
     volumes:
       - ./data/postgres:/var/lib/postgresql/data/
     ports:
-      - '5433:5432'
+      - '5434:5432'
     env_file:
       - backend/.env.dev
 
   backend:
+    container_name: 'backend-test'
     build:
       context: backend
       dockerfile: ./build/Dockerfile

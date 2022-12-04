@@ -16,8 +16,14 @@ pyjwt = "*"
 bcrypt = "*"
 python-multipart = "*"
 aioredis = "*"
+sqladmin = "*"
+requests = "*"
 
 [dev-packages]
+pytest = "*"
+pytest-asyncio = "*"
+faker = "*"
+httpx = "*"
 
 [requires]
 python_version = "3.10"

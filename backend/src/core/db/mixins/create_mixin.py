@@ -11,7 +11,7 @@ class CreateMixin(BaseMixin):
             session: AsyncSession,
     ) -> TableType:
         """Create model"""
-        obj = cls.table(
+        obj = cls.table(  # noqa
             **(input_data if isinstance(input_data, dict) else input_data.__dict__)
         )
         session.add(obj)

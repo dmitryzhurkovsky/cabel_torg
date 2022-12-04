@@ -1,15 +1,33 @@
 # Env files
-backend/.env*
+*.env*
 
 # Static files
 backend/src/static/
 
+/data
+
 
 # Ide files
-.idea/
-__pycache__/
-backend/__pycache__/
-backend/src/__pycache__/
+*.idea*
+*__pycache__*
 
 # Other files
-.DS_Store
+*.DS_Store*
+
+front/node_modules
+front/dist
+
+# Log files
+front/npm-debug.log*
+front/yarn-debug.log*
+front/yarn-error.log*
+front/pnpm-debug.log*
+
+# Editor directories and files
+front/.idea
+front/.vscode
+front/*.suo
+front/*.ntvs*
+front/*.njsproj
+front/*.sln
+front/*.sw?
