@@ -5,7 +5,9 @@ export default {
 
   state: {
     userData: 0,
-    errors: {}
+    errors: {},
+    type: 1,
+    isOpen: true,
   },
 
   getters: {
@@ -13,7 +15,13 @@ export default {
       return state.userData;
     },
     ERRORS(state) {
-      return state.errors
+      return state.errors;
+    },
+    AUTH_TYPE(state) {
+      return state.type;
+    },
+    IS_OPEN_MAIN_LOGIN(state){
+      return state.isOpen;
     }
   },
 
@@ -23,6 +31,12 @@ export default {
     },
     SET_ERRORS(state, errors) {
       state.errors = errors;
+    },
+    SET_TYPE(state, type) {
+      state.type = type;
+    },
+    SET_IS_OPEN_MAIN_LOGIN(state, status) {
+      state.isOpen = status;
     }
   },
 

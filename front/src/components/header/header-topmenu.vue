@@ -34,33 +34,7 @@
 
             </div>
           </div>
-          <div class="topmenu__right client-bar flex-center">
-            <div class="topmenu__item right-direction">
-              <div class="dropdown icon-favorite">
-                <div class="dropdown__wrapper">
-                  <HeaderFavorite/>
-                </div>
-
-              </div>
-
-            </div>
-            <div class="topmenu__item right-direction">
-              <div class="dropdown icon-user">
-                <div class="dropdown__wrapper">
-                  <UserActions/>
-                </div>
-
-              </div>
-
-            </div>
-            <div class="topmenu__item right-direction">
-              <div class="dropdown icon-cart">
-                <div class="dropdown__wrapper">
-                  <HeaderCart/>
-                </div>
-              </div>
-            </div>
-          </div>
+          <TopMenuActions />
         </div>
     </div>
   </div>
@@ -70,16 +44,14 @@
 
 import {mapActions, mapGetters} from 'vuex'
 import CatalogMenu  from '@/components/header/catalog-menu.vue'
-import UserActions   from '@/components/auth/user-actions.vue'
-import HeaderCart   from '@/components/header/header-cart.vue'
-import HeaderFavorite   from '@/components/header/header-favorite.vue'
+import TopMenuActions  from '@/components/header/header-actions.vue'
 
 export default {
   name: 'HeaderTopMenu',
 
   components:
   {
-    CatalogMenu, HeaderCart, HeaderFavorite, UserActions
+    CatalogMenu, TopMenuActions
   },
 
   computed: {
@@ -307,10 +279,6 @@ export default {
     }
   }
   }
-}
-.right-direction .dropdown__wrapper{
-  right: 0;
-  left: unset;
 }
 
 </style>

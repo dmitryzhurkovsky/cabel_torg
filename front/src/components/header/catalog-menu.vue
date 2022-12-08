@@ -45,7 +45,7 @@
 
 <script>
 
-import {mapActions, mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 
 export default {
   name: "CatalogMenu",
@@ -55,9 +55,9 @@ export default {
   },
 
   methods:{
+    ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY"]),
     changeCategory(newActive){
-        this.$store.commit('header/SET_CURRENT_TOP_CATEGORY', newActive);
-        // console.log(this.SUB_CATEGORIES);
+        this.SET_CURRENT_TOP_CATEGORY(newActive);
     },
     subCategoryClick(id, event){
       console.log('кликнули по подкатегории ', id);
