@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <Banner/>
-    <Recomendation/>
+    <!-- <Recomendation/> -->
     <Quick_category/>
     <News/>
     <Partners/>

@@ -1,12 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const guest = (to, from, next) => {
-  // console.log('TO', to , 'From', from, 'Next', next);
   if (!localStorage.getItem("authToken")) {
-    // console.log('asasdasd');
     return next();
   } else {
-    // console.log('//////');
     return next("/");
   }
 };
@@ -26,21 +23,28 @@ const routes = [
     component: () =>
       import("../views/Auth/Login.vue")
   },
-  {
-    path: "/register",
-    name: "Register",
-    beforeEnter: guest,
-    component: () =>
-      import("../views/Auth/Register.vue")
-  },
-  {
-    path: "/verify/:hash",
-    name: "Verify",
-    beforeEnter: auth,
-    props: true,
-    component: () =>
-      import("../views/Auth/Verify.vue")
-  },
+  // {
+  //   path: "/register",
+  //   name: "Register",
+  //   beforeEnter: guest,
+  //   component: () =>
+  //     import("../views/Auth/Register.vue")
+  // },
+  // {
+  //   path: "/restore",
+  //   name: "Restore",
+  //   beforeEnter: guest,
+  //   component: () =>
+  //     import("../views/Auth/Restore.vue")
+  // },
+  // {
+  //   path: "/verify/:hash",
+  //   name: "Verify",
+  //   beforeEnter: auth,
+  //   props: true,
+  //   component: () =>
+  //     import("../views/Auth/Verify.vue")
+  // },
   {
     path: "/offer",
     name: "Offer",
