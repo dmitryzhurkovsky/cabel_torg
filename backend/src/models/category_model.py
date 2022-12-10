@@ -5,6 +5,7 @@ from src.models.abstract_model import Base1CModel
 
 
 class Category(Base1CModel):
+    """It's a group in a 1C dump"""
     __tablename__ = 'categories'
 
     id = Column(Integer, index=True, primary_key=True)

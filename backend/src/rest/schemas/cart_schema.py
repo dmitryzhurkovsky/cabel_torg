@@ -1,8 +1,13 @@
 from pydantic import BaseModel
 
 
+class ProductInCartInputSchema(BaseModel):
+    product_id: int
+    amount: int
+
+
 class ProductInCartSchema(BaseModel):
-    user_id: int | None = None  # We don't validate user_id because we rewrite it by user_id from request
+    user_id: int
     product_id: int
     amount: int
 

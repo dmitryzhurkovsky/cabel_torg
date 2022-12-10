@@ -1,3 +1,5 @@
+import re
+
 import bcrypt
 from starlette.datastructures import QueryParams
 
@@ -30,6 +32,22 @@ def convert_filter_fields(filtered_fields: QueryParams) -> list:
         converted_filter_fields.append(Product.name.like('%'+search_letters+'%'))
 
     return converted_filter_fields
+
+
+def prepare_fields(fields: dict) -> dict:
+    """Delete None elements from dict"""
+    prepared_fields = dict()
+    for key, value in fields.items():
+        if value:
+            prepared_fields[key] = value
+
+    return prepared_fields
+
+
+def clean_string_from_spaces_and_redundant_symbols(dirty_string: str) -> str | None:
+    if len(dirty_string) == 1 and dirty_string == '.':
+        return None
+    return re.findall(pattern='[А-Яа-яЁёa-zA-Z0-9].+[А-Яа-яЁёa-zA-Z.0-9)"]', string=dirty_string)[0]
 
 
 def password_is_valid(password: str, password_hash: str) -> bool:

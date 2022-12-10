@@ -1,8 +1,12 @@
 from pydantic import BaseModel
 
 
+class ProductInWatchListInputSchema(BaseModel):
+    product_id: int
+
+
 class ProductInWatchListSchema(BaseModel):
-    user_id: int | None = None  # We don't validate user_id because we rewrite it by user_id from request
+    user_id: int
     product_id: int
 
     class Config:

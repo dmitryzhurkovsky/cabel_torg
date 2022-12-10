@@ -5,3 +5,6 @@ from src.models.category_model import Category
 from src.models.watchlist_model import WatchList
 from src.models.cart_model import Cart
 from src.models.user_model import User
+from src.models.product_attribute_model import ProductAttribute
+from src.models.base_unit_model import BaseUnit
+from src.models.attribute_model import Attribute

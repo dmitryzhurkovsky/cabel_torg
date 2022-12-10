@@ -1,6 +1,9 @@
 import asyncio
+import logging
 
 import uvicorn
+from sqladmin import Admin
+
 from build.xml_bookkeeping_parser import XMLParser
 from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -34,6 +37,7 @@ async def startup():
         await asyncio.wait([event_loop.create_task(parser.parse_categories())])
 
         await event_loop.create_task(parser.parse_goods())
+        logger.info("Parsing a file with products has been finished.")
 
 
 if __name__ == "__main__":

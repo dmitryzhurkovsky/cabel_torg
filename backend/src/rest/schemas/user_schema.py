@@ -20,6 +20,7 @@ class UserCreateSchema(UserBaseSchema):
 
 class UserUpdateSchema(UserBaseSchema):
     password: str | None
+    # todo
 
 
 class UserInDBBaseSchema(UserBaseSchema):
