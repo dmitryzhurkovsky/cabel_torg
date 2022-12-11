@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
-from src.core.enums import TypeOfProduct
+from src.core.enums import ProductTypeFilter
 from src.core.managers.product_manager import ProductManager
 from src.rest.schemas.product_schema import ProductSchema
 
@@ -22,8 +22,8 @@ async def get_products(
         )),
         price_gte: int | None = Query(default=None, description='Start value in range of price'),
         price_lte: int | None = Query(default=None, description='End value in range of price'),
-        type_of_product: TypeOfProduct = Query(
-            default=TypeOfProduct.ALL.value,
+        type_of_product: ProductTypeFilter = Query(
+            default=ProductTypeFilter.ALL.value,
             description='The last parameter in the lef column/This parameter set that products will be downloaded'
         ),
         q: str | None = Query(default=None, description='Search by name of products'),

@@ -16,18 +16,16 @@ async def obtain_pair_of_tokens_by_email_and_password(
         response: Response,
         user_form: OAuth2PasswordRequestForm = Depends(),
         session: AsyncSession = Depends(get_session),
-):
-    auth_credentials = await AuthService.get_access_and_refresh_tokens_by_email_and_password(
+) -> AuthenticationResponseSchema:
+    access_token, refresh_token = await AuthService.get_access_and_refresh_tokens_by_email_and_password(
         session=session, user_form=user_form
     )
-    response.set_cookie(key='refresh_token', value=auth_credentials.refresh_token, httponly=True)
+    response.set_cookie(key='refresh_token', value=refresh_token, httponly=True)
 
-    return auth_credentials
+    return AuthenticationResponseSchema(access_token=access_token)
 
 
-@auth_router.post('/refresh', response_model=AuthenticationResponseSchema, status_code=status.HTTP_201_CREATED)
+@auth_router.post('/refresh', status_code=status.HTTP_201_CREATED)
 async def obtain_pair_of_tokens_by_refresh_token(refresh_token: str = Cookie(None)):
-    auth_credentials = await AuthService.get_new_access_and_refresh_tokens_using_old_refresh_token(
+    await AuthService.get_new_access_and_refresh_tokens_using_old_refresh_token(
         old_refresh_token=refresh_token)
-
-    return auth_credentials

@@ -1,6 +1,8 @@
 from sqlalchemy import Column, Float, ForeignKey, Integer, String
+from sqlalchemy.dialects.postgresql import ENUM as pgEnum
 from sqlalchemy.orm import relationship
 
+from src.core.enums import ProductType
 from src.models.abstract_model import Base1CModel
 
 
@@ -13,6 +15,7 @@ class Product(Base1CModel):
     tax = Column(Integer, nullable=True)
     description = Column(String, nullable=True)
     price = Column(Float, nullable=True)
+    type = Column('type', pgEnum(ProductType.values(), name='type'))
 
     attributes = relationship('Attribute', secondary='product_attribute', back_populates='products')  # m2m
 

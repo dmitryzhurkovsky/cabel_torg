@@ -30,6 +30,17 @@ class BaseMixin:
         return initiated_filter_fields
 
     @classmethod
+    def init_m2m_filtered_fields(cls, filter_fields: dict) -> list:
+        """Initiate filter fields for query"""
+        initiated_filter_fields = []
+
+        for name, value in filter_fields.items():
+            if 'id' in name:
+                initiated_filter_fields.append(getattr(cls.table, name) == value)
+
+        return initiated_filter_fields
+
+    @classmethod
     def init_prefetch_related_fields(cls, prefetch_fields: tuple) -> tuple:
         """Initiate fields that will be loaded in query to database for related fields"""
         return (selectinload(field) for field in prefetch_fields) if prefetch_fields else tuple()

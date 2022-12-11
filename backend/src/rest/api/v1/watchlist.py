@@ -15,8 +15,7 @@ watchlist_router = APIRouter(tags=['watch_lists'])
 @watchlist_router.post(
     '/watch_lists/mine/products',
     response_model=ProductInWatchListSchema,
-    status_code=status.HTTP_201_CREATED
-)
+    status_code=status.HTTP_201_CREATED)
 async def add_product_to_watchlist(
         product_info: ProductInWatchListInputSchema,
         user=Depends(AuthService.get_current_user),
@@ -32,7 +31,9 @@ async def add_product_to_watchlist(
     return operation_info
 
 
-@watchlist_router.delete('/watch_lists/mine/products/{product_id}', status_code=status.HTTP_204_NO_CONTENT)
+@watchlist_router.delete(
+    '/watch_lists/mine/products/{product_id}',
+    status_code=status.HTTP_204_NO_CONTENT)
 async def delete_product_from_watchlist(
         product_id: int,
         user=Depends(AuthService.get_current_user),

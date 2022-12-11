@@ -1,8 +1,10 @@
 from pydantic import BaseModel, EmailStr
+from src.rest.schemas.base_schema import BaseSchema
 
 
 class UserBaseSchema(BaseModel):
     email: EmailStr | None
+    password: str | None
     full_name: str | None
     phone_number: str | None
     company_name: str | None
@@ -14,17 +16,14 @@ class UserBaseSchema(BaseModel):
 
 
 class UserCreateSchema(UserBaseSchema):
-    email: str
+    email: EmailStr
     password: str
+    full_name: str
+    phone_number: str
+    company_name: str
+    unp: str
 
 
-class UserUpdateSchema(UserBaseSchema):
-    password: str | None
-    # todo
-
-
-class UserInDBBaseSchema(UserBaseSchema):
-    id: int | None
-
+class UserSchema(UserBaseSchema, BaseSchema):
     class Config:
         orm_mode = True

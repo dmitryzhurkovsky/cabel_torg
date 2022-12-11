@@ -3,17 +3,13 @@ import re
 import bcrypt
 from starlette.datastructures import QueryParams
 
-from src.core.enums import TypeOfProduct
+from src.core.enums import ProductTypeFilter
 from src.models.product_models import Product
 
 
 def convert_filter_fields(filtered_fields: QueryParams) -> list:
     """Convert filter values to SQLALCHEMY filter expressions"""
     converted_filter_fields = []
-
-    type_of_product = filtered_fields.get('type_of_product')
-    if type_of_product != TypeOfProduct.ALL.value:
-        converted_filter_fields.append(Product.type_of_products == type_of_product)
 
     price_gte = filtered_fields.get('price_gte')
     if price_gte:

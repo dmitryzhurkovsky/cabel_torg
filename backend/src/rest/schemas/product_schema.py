@@ -8,12 +8,12 @@ from src.rest.schemas.manufacturer_schema import ManufacturerSchema
 class ProductSchema(BaseSchema):
     vendor_code: str | None
     name: str
-    base_unit: str
     category: Optional[CategorySchema]
     image: str | None
     manufacturer: Optional[ManufacturerSchema]
     tax: int | None
     description: str | None
+    type: str | None
 
     class Config:
         orm_mode = True

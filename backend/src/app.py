@@ -13,7 +13,7 @@ from src.core import settings
 from src.core.db.db import engine
 from src.rest.api.router import base_router
 
-logger = logging.Logger(name="app", level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 app.include_router(base_router)
@@ -44,4 +44,4 @@ async def startup():
 
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="localhost", port=8001, log_level="debug", reload=True)
+    uvicorn.run("app:app", host="localhost", port=8000, log_level="debug", reload=True)
