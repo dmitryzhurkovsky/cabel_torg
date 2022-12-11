@@ -7,16 +7,19 @@ export default {
 
   getters: {
     MESSAGES(state) {
-      return state.messages
+      return state.messages;
     },
+    LENGTH(state) {
+      return state.messages.length;
+    }
   },
 
   mutations: {
-    ADD_MESSAGE(state, newstate) {
-      state.messages.unshift(newstate);
+    ADD_MESSAGE(state, payload) {
+      state.messages.unshift(payload);
     },
-    DELETE_MESSAGE(state, newstate) {
-      state.messages.splice(state.messages.length - 1, 1);
+    DELETE_MESSAGE(state) {
+      state.messages.pop();
     }
   },
 

@@ -151,6 +151,10 @@ const routes = [
     component: () =>
         import("../views/News.vue")
   },
+  {
+    path: "/:catch(.*)",
+    redirect: '/404',
+  },
 ]
 
 const router = createRouter({

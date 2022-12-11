@@ -11,7 +11,7 @@
     </div>
     <div class="topmenu__item right-direction">
       <div class="dropdown icon-user">
-        <div v-if = "IS_OPEN_MAIN_LOGIN" class="dropdown__wrapper">
+        <div v-if = "IS_OPEN_MAIN_LOGIN && !USER" class="dropdown__wrapper">
           <div class="dropdown__content popup-cart">
             <div class="avatar__box">
               <div class="avatar icon-user flex-center"></div>
@@ -60,7 +60,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters("auth", ["AUTH_TYPE", "IS_OPEN_MAIN_LOGIN"]),
+    ...mapGetters("auth", ["AUTH_TYPE", "IS_OPEN_MAIN_LOGIN", "USER"]),
 },
 
   methods: {
