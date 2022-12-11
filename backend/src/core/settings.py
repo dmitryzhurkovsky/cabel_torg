@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 load_dotenv('.env.dev')
 
 DEBUG = int(os.getenv('DEBUG', 0))
+BOOKKEEPING_SHOULD_BE_PARSED = int(os.getenv('DEBUG', 0))
 
 DB_NAME = os.getenv('DATABASE_NAME')
 DB_USER = os.getenv('DATABASE_USER')

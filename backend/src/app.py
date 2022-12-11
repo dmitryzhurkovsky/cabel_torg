@@ -13,6 +13,8 @@ from src.core import settings
 from src.core.db.db import engine
 from src.rest.api.router import base_router
 
+logger = logging.Logger(name="app", level=logging.INFO)
+
 app = FastAPI()
 app.include_router(base_router)
 app.add_middleware(
@@ -29,15 +31,16 @@ from src.core.error_handlers import *  # noqa
 
 @app.on_event("startup")
 async def startup():
-    event_loop = asyncio.get_running_loop()
+    if settings.BOOKKEEPING_SHOULD_BE_PARSED:
+        event_loop = asyncio.get_running_loop()
 
-    async with AsyncSession(engine) as db:
-        parser = XMLParser(db=db)
+        async with AsyncSession(engine) as db:
+            parser = XMLParser(db=db)
 
-        await asyncio.wait([event_loop.create_task(parser.parse_categories())])
+            await asyncio.wait([event_loop.create_task(parser.parse_categories())])
 
-        await event_loop.create_task(parser.parse_goods())
-        logger.info("Parsing a file with products has been finished.")
+            await event_loop.create_task(parser.parse_goods())
+            logger.info("Parsing a file with products has been finished.")
 
 
 if __name__ == "__main__":
