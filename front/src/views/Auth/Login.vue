@@ -239,6 +239,7 @@ export default {
       data.append('username', this.email);
       data.append('password', this.password);
       await this.SEND_LOGIN_REQUEST(data);
+      this.$router.push({name: "user-cab"});
     },
 
     async userRegister() {
@@ -278,9 +279,7 @@ export default {
           password: this.password
         };
         await this.SEND_REGISTER_REQUEST(data);
-        // if (!this.ERRORS) {
-        //   await this.SEND_LOGIN_REQUEST(data);
-        // }
+        this.$router.push({name: "user-cab"});
       }
     },
   }

@@ -31,6 +31,19 @@
           </div>
           <!-- <UserActions/> -->
         </div>
+        <div v-if = "IS_OPEN_MAIN_LOGIN && USER" class="dropdown__wrapper">
+          <div class="dropdown__content popup-cart">
+            <div class="avatar__box">
+              <div class="avatar icon-user flex-center"></div>
+            </div>
+
+            <button @click="handleClick('/user-cab-set', 1)" class="btn black">
+              Профиль
+            </button>
+
+          </div>
+          <!-- <UserActions/> -->
+        </div>
 
       </div>
 

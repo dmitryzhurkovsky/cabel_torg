@@ -14,6 +14,7 @@
   import Breadcrumb from '@/components/breadcrumb.vue';
   import Footer from "@/components/footer.vue";
   import vNotification from '@/components/notifications/v-notification';
+  import { mapActions } from "vuex";
 
   export default {
 
@@ -27,16 +28,21 @@
     },
 
     methods: {
+      ...mapActions("header", ["UPDATE_VIEW_PARAMETERS", "GET_CATEGORIES"]),
+      ...mapActions("auth", ["GET_USER_DATA"]),
       setViewParametrs(){
         // console.log(window.innerWidth);
-        this.$store.commit('header/UPDATE_VIEW_PARAMETERS',window.innerWidth)
+        this.UPDATE_VIEW_PARAMETERS(window.innerWidth);
       }
     },
 
     async mounted() {
       this.setViewParametrs();
       window.addEventListener('resize', this.setViewParametrs);
-      await this.$store.dispatch('header/GET_CATEGORIES');
+      await this.GET_CATEGORIES();
+      if (localStorage.getItem("authToken")) {
+        this.GET_USER_DATA();
+      }
     },
 
   };
