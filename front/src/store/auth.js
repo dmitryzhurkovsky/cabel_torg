@@ -54,45 +54,49 @@ export default {
     async SEND_LOGIN_REQUEST({ commit }, data) {
       commit("SET_ERRORS", {});
       try {
-        console.log(data);
-        const response = await axios.post(process.env.VUE_APP_API_URL + "v1/token", data);
+        const response = await axios.post(process.env.VUE_APP_API_URL + "token", data);
         commit("SET_USER_DATA", response.data.user);
-        localStorage.setItem("authToken", response.data.token);
+        localStorage.setItem("authToken", response.data.access_token);
+        localStorage.setItem("refreshToken", response.data.refresh_token);
+        this.$router.push({name: "user-cab"});
       }
       catch (e) {
           console.log(e);
       };
     },
 
-    SEND_REGISTER_REQUEST({ commit }, data) {
+    async SEND_REGISTER_REQUEST({ commit }, data) {
       commit("SET_ERRORS", {});
-      return axios
-        .post(process.env.VUE_APP_API_URL + "users", data)
-        .then(response => {
-          console.log(response);
-          commit("SET_USER_DATA", response.data.user);
-          localStorage.setItem("authToken", response.data.token);
-        });
+      try {
+        const response = await axios.post(process.env.VUE_APP_API_URL + "users", data);
+        const loginData = new FormData();
+        data.append('username', response.email);
+        data.append('password', response.this.password);
+        await dispatch("SEND_LOGIN_REQUEST", loginData)
+      }
+      catch (e) {
+          console.log(e);
+      };
     },
 
-    sendLogoutRequest({ commit }) {
-      axios.post(process.env.VUE_APP_API_URL + "logout").then(() => {
-        commit("SET_USER_DATA", null);
-        localStorage.removeItem("authToken");
-      });
-    },
-
-    sendVerifyResendRequest() {
-      return axios.get(process.env.VUE_APP_API_URL + "email/resend");
-    },
-
-    sendVerifyRequest({ dispatch }, hash) {
-      return axios
-        .get(process.env.VUE_APP_API_URL + "email/verify/" + hash)
-        .then(() => {
-          dispatch("GET_USER_DATA");
-        });
-    },
+    // sendLogoutRequest({ commit }) {
+    //   axios.post(process.env.VUE_APP_API_URL + "logout").then(() => {
+    //     commit("SET_USER_DATA", null);
+    //     localStorage.removeItem("authToken");
+    //   });
+    // },
+    //
+    // sendVerifyResendRequest() {
+    //   return axios.get(process.env.VUE_APP_API_URL + "email/resend");
+    // },
+    //
+    // sendVerifyRequest({ dispatch }, hash) {
+    //   return axios
+    //     .get(process.env.VUE_APP_API_URL + "email/verify/" + hash)
+    //     .then(() => {
+    //       dispatch("GET_USER_DATA");
+    //     });
+    // },
 
   }
 };

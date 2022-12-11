@@ -228,7 +228,16 @@ export default {
     },
 
     async userLogin() {
-      const data = {username: this.email, password: this.email};
+      const errorsInData = {};
+      if (!this.email || !this.isValidEmail(this.email)) {
+        errorsInData.email = 'Укажите валидный адрес эл. почты'
+      }
+      if (!this.password || this.password.length < 8) {
+        errorsInData.password = 'Пароль должен быть больше 8 символов'
+      }
+      const data = new FormData();
+      data.append('username', this.email);
+      data.append('password', this.password);
       await this.SEND_LOGIN_REQUEST(data);
     },
 
@@ -252,8 +261,9 @@ export default {
       if (!this.company) {
         errorsInData.company = 'Укажите имя'
       }
-      if (!this.unp || this.unp.length !== 9) {
+      if (!this.unp || this.unp.toString().length !== 9) {
         errorsInData.unp = 'Укажите валидное УНП'
+        console.log(this.unp);
       }
       console.log(errorsInData, Object.keys(errorsInData).length, Boolean(errorsInData));
       if (Object.keys(errorsInData).length) {
@@ -268,6 +278,9 @@ export default {
           password: this.password
         };
         await this.SEND_REGISTER_REQUEST(data);
+        // if (!this.ERRORS) {
+        //   await this.SEND_LOGIN_REQUEST(data);
+        // }
       }
     },
   }
