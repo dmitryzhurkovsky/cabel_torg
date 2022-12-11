@@ -43,7 +43,7 @@ export default {
   actions: {
     async GET_USER_DATA({ commit }) {
     try {
-          const response = await axios.get(process.env.VUE_APP_API_URL + "user");
+          const response = await axios.get(process.env.VUE_APP_API_URL + "users/mine");
           commit("SET_USER_DATA", response.data);
       }
       catch (e) {
@@ -51,21 +51,20 @@ export default {
       };
     },
 
-    async SEND_LOGIN_REQUEST({ commit }, data) {
+    async SEND_LOGIN_REQUEST({ dispatch, commit }, data) {
       commit("SET_ERRORS", {});
       try {
         const response = await axios.post(process.env.VUE_APP_API_URL + "token", data);
-        commit("SET_USER_DATA", response.data.user);
         localStorage.setItem("authToken", response.data.access_token);
         localStorage.setItem("refreshToken", response.data.refresh_token);
-        this.$router.push({name: "user-cab"});
+        await dispatch("GET_USER_DATA");
       }
       catch (e) {
           console.log(e);
       };
     },
 
-    async SEND_REGISTER_REQUEST({ commit }, data) {
+    async SEND_REGISTER_REQUEST({ dispatch, commit }, data) {
       commit("SET_ERRORS", {});
       try {
         const response = await axios.post(process.env.VUE_APP_API_URL + "users", data);
