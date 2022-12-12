@@ -27,3 +27,5 @@ class UserCreateSchema(UserBaseSchema):
 class UserSchema(UserBaseSchema, BaseSchema):
     class Config:
         orm_mode = True
+
+        fields = {'password': {'exclude': True}}
