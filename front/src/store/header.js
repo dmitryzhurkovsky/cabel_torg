@@ -79,21 +79,20 @@ export default {
   },
 
   mutations: {
-    UPDATE_IS_MENU_OPEN (state, newstate){
-      state.isMenuOpen = newstate;
+    UPDATE_IS_MENU_OPEN (state, payload){
+      state.isMenuOpen = payload;
     },
 
-    UPDATE_IS_CATALOG_OPEN (state, newstate){
-      state.isCatalogOpen = newstate;
+    UPDATE_IS_CATALOG_OPEN (state, payload){
+      state.isCatalogOpen = payload;
     },
 
-    UPDATE_VIEW_PARAMETERS (state, newstate){
-      state.windowWidth = newstate;
-      // console.log(newstate);
-      if (newstate > 767.98) {
+    UPDATE_VIEW_PARAMETERS (state, payload){
+      state.windowWidth = payload;
+      if (payload > 767.98) {
         // XXXX - 768
         state.viewType = 1;
-      } else if (newstate > 479.98) {
+      } else if (payload > 479.98) {
         // 768 - 480
         state.viewType = 2;
       } else {
@@ -102,12 +101,12 @@ export default {
       }
     },
 
-    SET_CURRENT_TOP_CATEGORY(state, newstate){
-      state.topCategoriesItemActive = newstate;
+    SET_CURRENT_TOP_CATEGORY(state, payload){
+      state.topCategoriesItemActive = payload;
     },
 
-    UPDATE_CATEGORIES (state, newstate){
-      state.categories = newstate;
+    UPDATE_CATEGORIES (state, payload){
+      state.categories = payload;
       if (state.categories.length > 0){
         state.topCategoriesItemActive = state.categories[0].id
       } else {

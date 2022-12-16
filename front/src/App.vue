@@ -1,5 +1,6 @@
 <template>
   <div id="app__component">
+    <MenuWrapper/>
     <v-notification/>
     <Header/>
     <Breadcrumb/>
@@ -13,8 +14,10 @@
   import Header from '@/components/header.vue';
   import Breadcrumb from '@/components/breadcrumb.vue';
   import Footer from "@/components/footer.vue";
-  import vNotification from '@/components/notifications/v-notification';
-  import { mapActions } from "vuex";
+  import vNotification from '@/components/notifications/v-notification.vue';
+  import MenuWrapper from '@/components/header/menu-wrapper.vue';
+
+  import { mapActions, mapMutations } from "vuex";
 
   export default {
 
@@ -24,14 +27,18 @@
     },
 
     components:{
-      Header, Breadcrumb, Footer, vNotification,
+      Header, Breadcrumb, Footer, vNotification, MenuWrapper
     },
 
+    // computed: {
+    // },
+
     methods: {
-      ...mapActions("header", ["UPDATE_VIEW_PARAMETERS", "GET_CATEGORIES"]),
+      ...mapMutations("header", ["UPDATE_VIEW_PARAMETERS"]),
+      ...mapActions("header", ["GET_CATEGORIES"]),
       ...mapActions("auth", ["GET_USER_DATA"]),
+
       setViewParametrs(){
-        // console.log(window.innerWidth);
         this.UPDATE_VIEW_PARAMETERS(window.innerWidth);
       }
     },
@@ -61,7 +68,7 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
-:focus,
+:focus, 
 :active {
     // outline: none;
 }
