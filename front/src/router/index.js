@@ -55,6 +55,7 @@ const routes = [
   {
     path: '/',
     name: 'Main',
+    meta: {name: 'Кабельторг'},
     component: () =>
       import("../views/Main.vue")
   },
@@ -74,6 +75,7 @@ const routes = [
   {
     path: '/user-cab',
     name: 'user-cab',
+    beforeEnter: auth,
     meta: {name: 'Личный кабинет'},
     component: () =>
         import("../views/Personal/user_cab.vue")
@@ -85,12 +87,12 @@ const routes = [
         import("../views/Personal/cart.vue")
   },
 
-  {
-    path: '/user-cab-set',
-    name: 'user-cab-set',
-    component: () =>
-        import("../views/Personal/user_cab-set.vue")
-  },
+  // {
+  //   path: '/user-cab-set',
+  //   name: 'user-cab-set',
+  //   component: () =>
+  //       import("../views/Personal/user_cab-set.vue")
+  // },
   {
     path: '/wholesale',
     name: 'Wholesale',

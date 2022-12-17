@@ -17,7 +17,7 @@
                      <li class="filter__item icon-setting" @click="changeScreen(2)">Настройки аккаунта</li>
                   </ul>
                   <hr class="hr"/>
-                  <div class="icon-exit filter__item">Выйти из аккаунта</div>
+                  <div class="icon-exit filter__item" @click="userLogout">Выйти из аккаунта</div>
                 </div>
 
               </div>
@@ -42,7 +42,8 @@
 
 <script>
 
-  import { mapGetters } from "vuex";
+  import { mapGetters, mapActions, mapMutations } from "vuex";
+  // import { mapGetters,  } from "vuex";
 
   import OrderList from '@/components/personal/order-list.vue';
   import FavoriteList from '@/components/personal/favorite-list.vue';
@@ -67,22 +68,32 @@
     },
 
     methods: {
+      ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
+      ...mapMutations("auth", ["SET_USER_DATA"]),
+      ...mapMutations("profile", ["CHANGE_SCREEN"]),
+      ...mapMutations("breadcrumb", ["RENAME_LAST_BREADCRUMB", "ADD_BREADCRUMB"]),
+
       changeScreen(screenId){
-        // console.log(screenId);
-        this.$store.commit("profile/CHANGE_SCREEN", screenId);
-        this.$store.commit("breadcrumb/RENAME_LAST_BREADCRUMB", this.BREADCRUMB[screenId]);
+        this.CHANGE_SCREEN(screenId);
+        this.RENAME_LAST_BREADCRUMB(this.BREADCRUMB[screenId]);
+      },
+
+      userLogout(){
+        this.SET_USER_DATA(null);
+        localStorage.removeItem("authToken");
+        this.$router.push({name: "Main"});
       }
     },
 
     mounted(){
-      this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
-      this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
+      this.CHANGE_BREADCRUMB(0);
+      this.ADD_BREADCRUMB({
         name: this.$router.currentRoute.value.meta.name,
         path: this.$router.currentRoute.value.path,
         type: "global",
         class: ""
       });
-      this.$store.commit("breadcrumb/RENAME_LAST_BREADCRUMB", this.BREADCRUMB[this.SCREEN]);
+      this.RENAME_LAST_BREADCRUMB(this.BREADCRUMB[this.SCREEN]);
     }
   }
 </script>

@@ -4,7 +4,7 @@ export default {
   namespaced: true,
 
   state: {
-    userData: 0,
+    userData: null,
     errors: {},
     type: 1,
     isOpen: true,
@@ -76,6 +76,10 @@ export default {
       catch (e) {
           console.log(e);
       };
+    },
+
+    async UPDATE_USER_REQUEST() {
+      console.log('Under construction');
     },
 
     // sendLogoutRequest({ commit }) {

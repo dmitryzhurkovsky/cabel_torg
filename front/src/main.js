@@ -7,13 +7,21 @@ import axios from "axios";
 axios.interceptors.response.use(
   response => response,
   error => {
-    console.log(error.response);
-    if (error.response.status === 422) {
+    if (typeof error.response === 'undefined') {
+      console.log('QQQQ');
+      store.commit("notification/ADD_MESSAGE", {id: 'Err500', icon: 'error', name: 'Ошибка авторизации. Сервер не отвечает'});
+      store.commit("auth/SET_USER_DATA", null);
+      localStorage.removeItem("authToken");
+      return Promise.reject(error);
+    } else if (error.response.status === 422 || error.response.status === 500) {
       store.commit("notification/ADD_MESSAGE", error.response.data.errors);
+      store.commit("auth/SET_USER_DATA", null);
+      localStorage.removeItem("authToken");
+      return Promise.reject(error);
     } else if (error.response.status === 401) {
       store.commit("auth/SET_USER_DATA", null);
       localStorage.removeItem("authToken");
-      router.push({ name: "Login" });
+      return Promise.reject(error);
     } else {
       return Promise.reject(error);
     }

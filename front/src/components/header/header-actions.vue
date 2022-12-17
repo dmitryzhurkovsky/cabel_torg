@@ -37,7 +37,7 @@
               <div class="avatar icon-user flex-center"></div>
             </div>
 
-            <button @click="handleClick('/user-cab-set', 1)" class="btn black">
+            <button @click="handleClick('/user-cab', 1)" class="btn black">
               Профиль
             </button>
 

@@ -6,35 +6,21 @@
           <div class="sign-in-htm">
             <div class="group">
               <label for="user" class="label">Электронная почта</label>
-              <input
-                type="email"
-                class="input"
-                :class="{ 'is-invalid': ERRORS.email }"
-                id="email"
-                v-model="email"
-              >
+              <input type="email" class="input" :class="{ 'is-invalid': ERRORS.email }" id="email" v-model="email">
+              <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>
             </div>
             <div class="group">
               <label for="pass" class="label">Пароль</label>
-              <input
-                type="password"
-                class="input"
-                :class="{ 'is-invalid': ERRORS.password }"
-                id="password"
-                v-model="password"
-              >
+              <input type="password" class="input" :class="{ 'is-invalid': ERRORS.password }" id="password" v-model="password">
+              <div class="error-message" v-if="ERRORS.password"> {{ ERRORS.password }} </div>
             </div>
 
             <div class="group">
               <button @click = "userLogin" type="submit" class="btn black">Войти</button>
             </div>
 
-            <div @click = "changeScreen(2)" class="foot-lnk">
-             Не помню пароль
-            </div>
-            <div @click = "changeScreen(3)" class="foot-lnk">
-              Зарегистрироваться
-            </div>
+            <div @click = "changeScreen(2)" class="foot-lnk">Не помню пароль</div>
+            <div @click = "changeScreen(3)" class="foot-lnk">Зарегистрироваться</div>
           </div>
         </div>
         <div v-if = "AUTH_TYPE === 2" class="popup__reg">
@@ -60,111 +46,44 @@
           <div class="register">
             <div class="group">
               <label for="email" class="label">Электронная почта</label>
-              <input
-                id="email"
-                type="email"
-                class="input"
-                :class="{ 'is-invalid': ERRORS.email }"
-                v-model="email"
-                autocomplete=off
-              >
-              <div class="error-message" v-if="ERRORS.email">
-                {{ ERRORS.email }}
-              </div>
+              <input id="email" type="email" class="input" :class="{ 'is-invalid': ERRORS.email }" v-model="email" autocomplete=off>
+              <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>
             </div>
             <div class="group">
               <label for="password" class="label">Пароль</label>
-              <input
-                id="password"
-                type="password"
-                class="input"
-                :class="{ 'is-invalid': ERRORS.password }"
-                v-model="password"
-                autocomplete=off
-              >
-              <div class="error-message" v-if="ERRORS.password">
-                {{ ERRORS.password }}
-              </div>
+              <input id="password" type="password" class="input" :class="{ 'is-invalid': ERRORS.password }" v-model="password" autocomplete=off>
+              <div class="error-message" v-if="ERRORS.password"> {{ ERRORS.password }} </div>
             </div>
             <div class="group">
               <label for="confirm" class="label">Подтверждение пароля</label>
-              <input
-                id="confirm"
-                type="password"
-                class="input"
-                :class="{ 'is-invalid': ERRORS.confirm }"
-                v-model="confirm"
-                autocomplete=off
-              >
-              <div class="error-message" v-if="ERRORS.confirm">
-                {{ ERRORS.confirm }}
-              </div>
+              <input id="confirm" type="password" class="input" :class="{ 'is-invalid': ERRORS.confirm }" v-model="confirm" autocomplete=off>
+              <div class="error-message" v-if="ERRORS.confirm"> {{ ERRORS.confirm }} </div>
             </div>
             <div class="group">
               <label for="username" class="label">Имя</label>
-              <input
-                id="username"
-                type="text"
-                class="input"
-                :class="{ 'is-invalid': ERRORS.username }"
-                v-model="username"
-                autocomplete=off
-              >
-              <div class="error-message" v-if="ERRORS.username">
-                {{ ERRORS.username }}
-              </div>
+              <input id="username" type="text" class="input" :class="{ 'is-invalid': ERRORS.username }" v-model="username" autocomplete=off>
+              <div class="error-message" v-if="ERRORS.username"> {{ ERRORS.username }} </div>
             </div>
             <div class="group">
               <label for="phone" class="label">Телефон</label>
-              <input
-                id="phone"
-                type="tel"
-                class="input"
-                :class="{ 'is-invalid': ERRORS.phone }"
-                v-model="phone"
-                autocomplete=off
-              >
-              <div class="error-message" v-if="ERRORS.phone">
-                {{ ERRORS.phone }}
-              </div>
+              <input id="phone" type="tel" class="input" :class="{ 'is-invalid': ERRORS.phone }" v-model="phone" autocomplete=off>
+              <div class="error-message" v-if="ERRORS.phone"> {{ ERRORS.phone }} </div>
             </div>
             <div class="group">
               <label for="company" class="label">Компания</label>
-              <input
-                id="company"
-                type="text"
-                class="input"
-                :class="{ 'is-invalid': ERRORS.company }"
-                v-model="company"
-                autocomplete=off
-              >
-              <div class="error-message" v-if="ERRORS.company">
-                {{ ERRORS.company }}
-              </div>
+              <input id="company" type="text" class="input" :class="{ 'is-invalid': ERRORS.company }" v-model="company" autocomplete=off>
+              <div class="error-message" v-if="ERRORS.company"> {{ ERRORS.company }} </div>
             </div>
             <div class="group">
               <label for="unp" class="label">УНП</label>
-              <input
-                id="unp"
-                type="number"
-                class="input"
-                :class="{ 'is-invalid': ERRORS.unp }"
-                v-model="unp"
-                autocomplete=off
-              >
-              <div class="error-message" v-if="ERRORS.unp">
-                {{ ERRORS.unp }}
-              </div>
+              <input id="unp" type="number" class="input" :class="{ 'is-invalid': ERRORS.unp }" v-model="unp" autocomplete=off>
+              <div class="error-message" v-if="ERRORS.unp"> {{ ERRORS.unp }} </div>
             </div>
             <div class="group">
               <button @click = "userRegister" type="submit" class="btn black">Регистрация</button>
             </div>
-            <div @click = "changeScreen(1)" class="foot-lnk">
-              Войти
-            </div>
-            <div @click = "changeScreen(2)" class="foot-lnk">
-              Не помню пароль
-            </div>
+            <div @click = "changeScreen(1)" class="foot-lnk">Войти</div>
+            <div @click = "changeScreen(2)" class="foot-lnk">Не помню пароль</div>
           </div>
         </div>
         <div v-if = "AUTH_TYPE === 4" class="popup__reg">
@@ -206,12 +125,12 @@ export default {
   },
 
   async mounted() {
-    await this.SET_IS_OPEN_MAIN_LOGIN(false);
+    this.SET_IS_OPEN_MAIN_LOGIN(false);
   },
 
   async beforeUnmount() {
-    await this.SET_ERRORS({});
-    await this.SET_IS_OPEN_MAIN_LOGIN(true);
+    this.SET_ERRORS({});
+    this.SET_IS_OPEN_MAIN_LOGIN(true);
   },
 
   methods: {
@@ -268,7 +187,7 @@ export default {
       }
       console.log(errorsInData, Object.keys(errorsInData).length, Boolean(errorsInData));
       if (Object.keys(errorsInData).length) {
-        await this.SET_ERRORS(errorsInData);
+        this.SET_ERRORS(errorsInData);
       } else {
         const data = {
           email: this.email,
