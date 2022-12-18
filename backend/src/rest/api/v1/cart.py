@@ -7,7 +7,7 @@ from src.core.managers.cart_manager import CartManager
 from src.rest.schemas.cart_schema import (
     ProductInCartSchema,
     ProductInCartCreateSchema,
-    ProductInCartUpdateInputSchema
+    ProductInCartUpdateSchema
 )
 from src.services.auth_service import AuthService
 
@@ -55,16 +55,15 @@ async def delete_product_from_cart(
     status_code=status.HTTP_200_OK)
 async def update_product_amount_in_cart(
         product_id: int,
-        product_info: ProductInCartUpdateInputSchema,
+        product_info: ProductInCartUpdateSchema,
         user=Depends(AuthService.get_current_user),
         session: AsyncSession = Depends(get_session)
 ) -> ProductInCartSchema:
     operation_info = await CartManager.update_m2m(
-        input_data=ProductInCartSchema(
-            product_id=product_id,
-            amount=product_info.amount,
-            user_id=user.id,
-        ),
+        input_data={
+            "product_id": product_id,
+            "amount": product_info.amount,
+            "user_id": user.id},
         session=session,
     )
     return operation_info

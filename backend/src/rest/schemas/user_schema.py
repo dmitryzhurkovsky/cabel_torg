@@ -10,6 +10,7 @@ class UserBaseSchema(BaseModel):
     company_name: str | None
     unp: str | None
     legal_address: str | None
+    delivery_address: str | None
     IBAN: str | None
     BIC: str | None
     serving_bank: str | None
@@ -22,6 +23,10 @@ class UserCreateSchema(UserBaseSchema):
     phone_number: str
     company_name: str
     unp: str
+
+
+class UserUpdateSchema(UserBaseSchema):
+    pass
 
 
 class UserSchema(UserBaseSchema, BaseSchema):

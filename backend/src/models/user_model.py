@@ -15,6 +15,7 @@ class User(BaseModel):
     # requisites
     company_name = Column(String)
     unp = Column(String)  # Payer's Account Number
+    delivery_address = Column(String)
     legal_address = Column(String)
     IBAN = Column(String)
     BIC = Column(String)  # Belarusian Central Bank Identification Code
