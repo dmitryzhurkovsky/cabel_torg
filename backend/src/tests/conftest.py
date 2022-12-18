@@ -83,7 +83,7 @@ def fake_product_data() -> dict:
         "vendor_code": faker.zipcode(),
         "name": faker.name(),
         "base_unit": faker.pystr(),
-        "image_path": faker.file_path(),
+        "images": faker.file_path(),
         "tax": faker.pyint(),
         "description": faker.text(),
         "price": faker.pyfloat(),

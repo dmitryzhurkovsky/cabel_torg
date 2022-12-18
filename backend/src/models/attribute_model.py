@@ -5,7 +5,7 @@ from src.models.abstract_model import Base1CModel
 
 
 class Attribute(Base1CModel):
-    __tablename__ = "attributes"
+    __tablename__ = 'attributes'
 
     value = Column(String(255), nullable=False, unique=True)
 

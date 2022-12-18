@@ -9,7 +9,7 @@ class User(BaseModel):
 
     email = Column(String, unique=True, nullable=False)
     password = Column(String(128), nullable=False)
-    full_name = Column(String, unique=True)
+    full_name = Column(String)
     phone_number = Column(String, unique=True)
 
     # requisites

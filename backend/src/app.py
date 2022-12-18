@@ -37,9 +37,10 @@ async def startup():
         async with AsyncSession(engine) as db:
             parser = XMLParser(db=db)
 
-            await asyncio.wait([event_loop.create_task(parser.parse_categories())])
+            # await asyncio.wait([event_loop.create_task(parser.parse_categories())])
+            await asyncio.wait([event_loop.create_task(parser.parse_attributes())])
 
-            await event_loop.create_task(parser.parse_goods())
+            # await event_loop.create_task(parser.parse_products())
             logger.info("Parsing a file with products has been finished.")
 
 
