@@ -29,10 +29,11 @@
         </div>
       </div>
       <div class="group">
-        <label for="address" class="label">Адрес для доставки заказа</label>
+        <label for="deliveryAddress" class="label">Адрес для доставки заказа</label>
         <div class="input__box">
-          <input id="WarehouseAdress" type="text" class="input">
+          <input id="deliveryAddress" type="text" class="input" :class="{ 'is-invalid': ERRORS.userDeliveryAdress }" v-model = "userDeliveryAdress" autocomplete=off>
           <i class="icon-pen input__icon"></i>
+          <div class="error-message" v-if="ERRORS.userDeliveryAdress"> {{ ERRORS.userDeliveryAdress }} </div>
         </div>
       </div>
 
@@ -118,7 +119,6 @@ export default {
 
   data: function() {
     return {
-      // userNameActive: false,
       userName: null,
       userEmail: null,
       userPhone: null,
@@ -126,6 +126,7 @@ export default {
       userUNP: null,
       userIBAN: null,
       userCompanyAdress: null,
+      userDeliveryAdress: null,
       userBIC: null,
       userBank: null,
     }
@@ -143,6 +144,7 @@ export default {
     this.userUNP = this.USER.unp;
     this.userIBAN = this.USER.IBAN;
     this.userCompanyAdress = this.USER.legal_address;
+    this.userDeliveryAdress = this.USER.delivery_address;
     this.userBIC = this.USER.BIC;
     this.userBank = this.USER.serving_bank;
   },
@@ -186,6 +188,9 @@ export default {
       if (!this.userCompanyAdress) {
         errorsInData.userCompanyAdress = 'Укажите юридический адрес';
       }
+      if (!this.userDeliveryAdress) {
+        errorsInData.userDeliveryAdress = 'Укажите адрес доставки';
+      }
       
       console.log(errorsInData, Object.keys(errorsInData).length, Boolean(errorsInData));
       if (Object.keys(errorsInData).length) {
@@ -197,11 +202,11 @@ export default {
           phone_number: this.userPhone,
           company_name: this.userCompanyName,
           unp: this.userUNP,
-          IBAN: this.userIBAN,
           legal_address: this.userCompanyAdress,
-          serving_bank: this.userBank,
+          delivery_address: this.userDeliveryAdress,
+          IBAN: this.userIBAN,
           BIC: this.userBIC,
-          id: this.USER.id,
+          serving_bank: this.userBank,
         };
         await this.UPDATE_USER_REQUEST(data);
         this.$router.push({name: "user-cab"});

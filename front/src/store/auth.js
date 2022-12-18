@@ -78,8 +78,15 @@ export default {
       };
     },
 
-    async UPDATE_USER_REQUEST() {
-      console.log('Under construction');
+    async UPDATE_USER_REQUEST({ dispatch, commit }, data) {
+      commit("SET_ERRORS", {});
+      try {
+        const response = await axios.patch(process.env.VUE_APP_API_URL + "users/mine", data);
+        commit("SET_USER_DATA", response.data);
+      }
+      catch (e) {
+          console.log(e);
+      };
     },
 
     // sendLogoutRequest({ commit }) {
