@@ -7,6 +7,7 @@ const guest = (to, from, next) => {
     return next("/");
   }
 };
+
 const auth = (to, from, next) => {
   if (localStorage.getItem("authToken")) {
     return next();

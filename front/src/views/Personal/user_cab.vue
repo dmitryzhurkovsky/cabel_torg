@@ -15,6 +15,7 @@
                      <li class="filter__item icon-cart" @click="changeScreen(0)">Мои заказы</li>
                      <li class="filter__item icon-favorite-choosed" @click="changeScreen(1)">Избранные товары</li>
                      <li class="filter__item icon-setting" @click="changeScreen(2)">Настройки аккаунта</li>
+                     <li class="filter__item icon-setting" @click="changeScreen(3)">Сменить пароль</li>
                   </ul>
                   <hr class="hr"/>
                   <div class="icon-exit filter__item" @click="userLogout">Выйти из аккаунта</div>
@@ -27,12 +28,10 @@
                 <OrderList v-if = "SCREEN === 0"/>
                 <FavoriteList v-if = "SCREEN === 1"/>
                 <Profile v-if = "SCREEN === 2"/>
+                <ChangePassword v-if = "SCREEN === 3"/>
             </div>
 
           </div>
-
-
-
 
         </div>
       </div>
@@ -48,6 +47,7 @@
   import OrderList from '@/components/personal/order-list.vue';
   import FavoriteList from '@/components/personal/favorite-list.vue';
   import Profile from '@/components/personal/profile.vue';
+  import ChangePassword from '@/components/personal/password.vue';
 
   export default {
     name: "personal",
@@ -64,7 +64,7 @@
 
     components:
     {
-      OrderList, FavoriteList, Profile
+      OrderList, FavoriteList, Profile, ChangePassword
     },
 
     methods: {

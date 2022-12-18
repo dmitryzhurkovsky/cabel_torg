@@ -5,7 +5,7 @@
       <div class="group">
         <label for="user" class="label">Имя</label>
         <div class="input__box">
-          <input id="user" type="text" class="input" :class="{ 'is-invalid': ERRORS.userName }" v-model="userName" autocomplete=off>
+          <input id="name" type="text" class="input" :class="{ 'is-invalid': ERRORS.userName }" v-model="userName" autocomplete=off>
           <i class="icon-pen input__icon"></i>
           <div class="error-message" v-if="ERRORS.userName"> {{ ERRORS.userName }} </div>
         </div>
@@ -31,12 +31,12 @@
       <div class="group">
         <label for="address" class="label">Адрес для доставки заказа</label>
         <div class="input__box">
-          <input id="address" type="text" class="input">
+          <input id="WarehouseAdress" type="text" class="input">
           <i class="icon-pen input__icon"></i>
         </div>
       </div>
 
-      <div class="group__row flex-center">
+      <!-- <div class="group__row flex-center">
         <div class="group">
           <label for="pass" class="label">Пароль</label>
           <div class="input__box">
@@ -45,12 +45,12 @@
           </div>
         </div>
         <div class="popup__link foot-lnk">Изменить пароль</div>
-      </div>
+      </div> -->
 
       <div class="group">
         <label for="user" class="label">Название компании</label>
         <div class="input__box">
-          <input id="address" type="text" class="input"  :class="{ 'is-invalid': ERRORS.userCompanyName }" v-model="userCompanyName" autocomplete=off>
+          <input id="companyName" type="text" class="input"  :class="{ 'is-invalid': ERRORS.userCompanyName }" v-model="userCompanyName" autocomplete=off>
           <i class="icon-pen input__icon"></i>
           <div class="error-message" v-if="ERRORS.userCompanyName"> {{ ERRORS.userCompanyName }} </div>
         </div>
@@ -59,7 +59,7 @@
       <div class="group">
         <label for="user" class="label">УНП</label>
         <div class="input__box">
-          <input id="address" type="text" class="input"  :class="{ 'is-invalid': ERRORS.userUNP }" v-model = "userUNP" autocomplete=off>
+          <input id="UNP" type="text" class="input"  :class="{ 'is-invalid': ERRORS.userUNP }" v-model = "userUNP" autocomplete=off>
           <i class="icon-pen input__icon"></i>
           <div class="error-message" v-if="ERRORS.userUNP"> {{ ERRORS.userUNP }} </div>
         </div>
@@ -68,7 +68,7 @@
       <div class="group">
         <label for="user" class="label">Расчетный счет IBAN</label>
         <div class="input__box">
-          <input id="address" type="text" class="input" :class="{ 'is-invalid': ERRORS.userIBAN }" v-model = "userIBAN" autocomplete=off>
+          <input id="IBAN" type="text" class="input" :class="{ 'is-invalid': ERRORS.userIBAN }" v-model = "userIBAN" autocomplete=off>
           <i class="icon-pen input__icon"></i>
           <div class="error-message" v-if="ERRORS.userIBAN"> {{ ERRORS.userIBAN }} </div>
         </div>
@@ -77,7 +77,7 @@
       <div class="group">
         <label for="user" class="label">Юридический адрес</label>
         <div class="input__box">
-          <input id="address" type="text" class="input" :class="{ 'is-invalid': ERRORS.userCompanyAdress }" v-model = "userCompanyAdress" autocomplete=off>
+          <input id="companyAdress" type="text" class="input" :class="{ 'is-invalid': ERRORS.userCompanyAdress }" v-model = "userCompanyAdress" autocomplete=off>
           <i class="icon-pen input__icon"></i>
           <div class="error-message" v-if="ERRORS.userCompanyAdress"> {{ ERRORS.userCompanyAdress }} </div>
         </div>
@@ -86,7 +86,7 @@
       <div class="group">
         <label for="user" class="label">БИК></label>
         <div class="input__box">
-          <input id="address" type="text" class="input" :class="{ 'is-invalid': ERRORS.userBIC }" v-model = "userBIC" autocomplete=off>
+          <input id="BIC" type="text" class="input" :class="{ 'is-invalid': ERRORS.userBIC }" v-model = "userBIC" autocomplete=off>
           <i class="icon-pen input__icon"></i>
           <div class="error-message" v-if="ERRORS.userBIC"> {{ ERRORS.userBIC }} </div>
         </div>
@@ -95,7 +95,7 @@
       <div class="group">
         <label for="user" class="label">Обслуживающий банк</label>
         <div class="input__box">
-          <input id="address" type="text" class="input" :class="{ 'is-invalid': ERRORS.userBank }" v-model = "userBank"  autocomplete=off>
+          <input id="bank" type="text" class="input" :class="{ 'is-invalid': ERRORS.userBank }" v-model = "userBank"  autocomplete=off>
           <i class="icon-pen input__icon"></i>
           <div class="error-message" v-if="ERRORS.userBank"> {{ ERRORS.userBank }} </div>
         </div>
@@ -114,6 +114,8 @@
 import { mapGetters, mapActions, mapMutations } from "vuex";
 
 export default {
+  name: "profile",
+
   data: function() {
     return {
       // userNameActive: false,
