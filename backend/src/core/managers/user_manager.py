@@ -29,6 +29,6 @@ class UserManager(CRUDManager):
             pk: int,
             input_data: UserUpdateSchema
     ) -> TableType | HTTPException:
-        if input_data.password:  # todo make it better
+        if input_data.get('password'):  # todo make it better
             input_data.password = hash_password(password=input_data.password)
         return await super().update(session, pk, input_data)
