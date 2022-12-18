@@ -15,7 +15,7 @@ class UserManager(CRUDManager):
     update_scheme = UserUpdateSchema
 
     @classmethod
-    def create(
+    async def create(
             cls,
             input_data: UserCreateSchema,
             session: AsyncSession,
@@ -24,7 +24,7 @@ class UserManager(CRUDManager):
         return await super().create(input_data, session)
 
     @classmethod
-    def update(
+    async def update(
             cls, session: AsyncSession,
             pk: int,
             input_data: UserUpdateSchema
