@@ -9,7 +9,6 @@ from src.rest.schemas.user_schema import UserCreateSchema, UserUpdateSchema
 
 
 class UserManager(CRUDManager):
-
     table = User
     create_scheme = UserCreateSchema
     update_scheme = UserUpdateSchema
@@ -27,8 +26,9 @@ class UserManager(CRUDManager):
     async def update(
             cls, session: AsyncSession,
             pk: int,
-            input_data: UserUpdateSchema
+            input_data: UserUpdateSchema,
+            partial: bool = False
     ) -> TableType | HTTPException:
-        if input_data.get('password'):  # todo make it better
+        if input_data.password:  # todo make it better
             input_data.password = hash_password(password=input_data.password)
-        return await super().update(session, pk, input_data)
+        return await super().update(session, pk, input_data, partial)

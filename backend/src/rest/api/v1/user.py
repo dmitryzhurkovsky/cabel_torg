@@ -50,6 +50,9 @@ async def update_info_about_current_user(
         session: AsyncSession = Depends(get_session)
 ):
     user = await UserManager.update(
-        session=session, pk=user.id, input_data=user_info.dict(exclude_unset=True)
+        session=session,
+        pk=user.id,
+        input_data=user_info,
+        partial=True
     )
     return user

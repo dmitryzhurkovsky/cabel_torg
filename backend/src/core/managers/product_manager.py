@@ -10,7 +10,6 @@ from src.models.product_models import Product
 
 
 class ProductManager(ListMixin, RetrieveMixin, DeleteMixin):
-
     table = Product
 
     @classmethod

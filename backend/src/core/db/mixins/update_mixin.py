@@ -11,13 +11,14 @@ class UpdateMixin(BaseMixin):
     async def update(
             cls, session: AsyncSession,
             pk: int,
-            input_data: UpdateBaseSchema
+            input_data: UpdateBaseSchema,
+            partial: bool = False
     ) -> TableType | HTTPException:
-        """Update object by primary keys"""
+        """Update an object by primary keys."""
         await session.execute(
             update(cls.table).
             where(cls.table.id == pk).
-            values(**input_data.__dict__)
+            values(**input_data.dict(exclude_unset=True if partial else False))
         )
         await session.commit()
 
@@ -29,14 +30,14 @@ class UpdateMixin(BaseMixin):
         return result.scalars().first()
 
     @classmethod
-    async def update_m2m(cls, session: AsyncSession, input_data: BaseSchema | dict) -> TableType | HTTPException:
-        """Update m2m object"""
+    async def update_m2m(cls, session: AsyncSession, input_data: UpdateBaseSchema) -> TableType | HTTPException:
+        """Update an m2m object."""
         filter_fields = cls.init_m2m_filtered_fields(
-            filter_fields=input_data if isinstance(input_data, dict) else input_data.__dict__
+            filter_fields=input_data.__dict__
         )
         await session.execute(
             update(cls.table).
-            values(**(input_data if isinstance(input_data, dict) else input_data.__dict__)).
+            values(**input_data.__dict__).
             filter(*filter_fields)
         )
         await session.commit()

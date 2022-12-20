@@ -60,10 +60,10 @@ async def update_product_amount_in_cart(
         session: AsyncSession = Depends(get_session)
 ) -> ProductInCartSchema:
     operation_info = await CartManager.update_m2m(
-        input_data={
-            "product_id": product_id,
-            "amount": product_info.amount,
-            "user_id": user.id},
+        input_data=ProductInCartSchema(
+            product_id=product_id,
+            amount=product_info.amount,
+            user_id=user.id),
         session=session,
     )
     return operation_info
