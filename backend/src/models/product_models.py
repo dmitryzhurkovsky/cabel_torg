@@ -11,7 +11,7 @@ class Product(Base1CModel):
 
     vendor_code = Column(String, nullable=True)
     name = Column(String)
-    image_path = Column(String, nullable=True)
+    images = Column(String, nullable=True)  # pictures paths in the following format: picture_1,picture_2,picture_3...
     tax = Column(Integer, nullable=True)
     description = Column(String, nullable=True)
     price = Column(Float, nullable=True)
