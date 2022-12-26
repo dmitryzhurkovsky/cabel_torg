@@ -1,15 +1,20 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
+from src.core.db.mixins.base_mixin import BaseMixin
 
-async def get_or_create(db: AsyncSession, model, fields: dict):
+
+async def get_or_create(db: AsyncSession, model, fields: dict, prefetch_fields: tuple = None):
     """
     Return an instance with the first argument,
     and whether instance was created or not in the second argument.
     """
+    options = BaseMixin.init_prefetch_related_fields(prefetch_fields=prefetch_fields)
+
     result = await db.execute(
         select(model).
-        filter_by(**fields)
+        filter_by(**fields).
+        options(*options)
     )
     instance = result.scalar_one_or_none()
 
@@ -25,7 +30,8 @@ async def get_or_create(db: AsyncSession, model, fields: dict):
         await db.rollback()
         result = await db.execute(
             select(model).
-            filter_by(**fields)
+            filter_by(**fields).
+            options(*options)
         )
         instance = result.first()
         return instance, False

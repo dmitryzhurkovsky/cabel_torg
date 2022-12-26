@@ -19,10 +19,6 @@ class BaseMixin:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def clean_fields(self, raw_field: Element) -> tuple[str, str] | tuple[None, None]:
-        """A method that clean fields required models. Should be implemented for each mixin independently."""
-        raise NotImplementedError
-
     @staticmethod
     def clean_common_field(raw_field: Element) -> tuple[str, str] | tuple[None, None]:
         """Parse an element of a xml tree and transform fields are common for all instances or at least 2."""
@@ -35,9 +31,17 @@ class BaseMixin:
             case _:
                 return None, None
 
+    async def parse_instance(self):
+        """Parse `instance` node and then write them to a database."""
+        raise NotImplementedError
+
     async def clean_element(self, element: Element) -> dict:
         """
         Clean an input elements group or an input element of a xml tree
         and transform its fields to "ready to write to a database" state.
         """
+        raise NotImplementedError
+
+    async def clean_fields(self, raw_field: Element) -> tuple[str, str] | tuple[None, None]:
+        """A method that clean fields required models. Should be implemented for each parser independently."""
         raise NotImplementedError

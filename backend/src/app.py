@@ -4,7 +4,7 @@ import logging
 import uvicorn
 from sqladmin import Admin
 
-from build.xml_bookkeeping_parser import XMLParser
+from src.parser.xml_bookkeeping_parser import XMLParser
 from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.middleware.cors import CORSMiddleware
@@ -37,10 +37,10 @@ async def startup():
         async with AsyncSession(engine) as db:
             parser = XMLParser(db=db)
 
-            # await asyncio.wait([event_loop.create_task(parser.parse_categories())])
+            await asyncio.wait([event_loop.create_task(parser.parse_categories())])
             await asyncio.wait([event_loop.create_task(parser.parse_attributes())])
 
-            # await event_loop.create_task(parser.parse_products())
+            await event_loop.create_task(parser.parse_products())
             logger.info("Parsing a file with products has been finished.")
 
 
