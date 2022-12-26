@@ -16,7 +16,7 @@ export default {
 
   mutations: {
     ADD_MESSAGE(state, payload) {
-      console.log(payload);
+      // console.log(payload);
       state.messages.unshift(payload);
     },
     DELETE_MESSAGE(state) {

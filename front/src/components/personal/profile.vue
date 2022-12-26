@@ -85,7 +85,7 @@
       </div>
 
       <div class="group">
-        <label for="user" class="label">БИК></label>
+        <label for="user" class="label">БИК</label>
         <div class="input__box">
           <input id="BIC" type="text" class="input" :class="{ 'is-invalid': ERRORS.userBIC }" v-model = "userBIC" autocomplete=off>
           <i class="icon-pen input__icon"></i>
@@ -129,6 +129,7 @@ export default {
       userDeliveryAdress: null,
       userBIC: null,
       userBank: null,
+      isLoading: false,
     }
   },
 
@@ -151,9 +152,13 @@ export default {
 
   methods: {
     ...mapMutations("auth", ["SET_ERRORS"]),
+    // ...mapMutations("notification", ["ADD_MESSAGE"]),
     ...mapActions("auth", ["UPDATE_USER_REQUEST"]),
 
     async updateUser() {
+      if (this.isLoading) return;
+
+      this.isLoading = true;
       const errorsInData = {};
       if (!this.userEmail || !this.isValidEmail(this.userEmail)) {
         errorsInData.userEmail = 'Укажите валидный адрес эл. почты'
@@ -192,7 +197,7 @@ export default {
         errorsInData.userDeliveryAdress = 'Укажите адрес доставки';
       }
       
-      console.log(errorsInData, Object.keys(errorsInData).length, Boolean(errorsInData));
+      // console.log(errorsInData, Object.keys(errorsInData).length, Boolean(errorsInData));
       if (Object.keys(errorsInData).length) {
         this.SET_ERRORS(errorsInData);
       } else {
@@ -209,8 +214,11 @@ export default {
           serving_bank: this.userBank,
         };
         await this.UPDATE_USER_REQUEST(data);
-        this.$router.push({name: "user-cab"});
+        this.isLoading = false;
+        // this.$router.push({name: "user-cab"});
       }
+      this.isLoading = false;
+
     },
 
     isValidEmail: function (email) {

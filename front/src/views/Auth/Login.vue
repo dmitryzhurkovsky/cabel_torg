@@ -109,7 +109,6 @@ export default {
 
   data: function() {
     return {
-        // currentScreen : 1,
         email     : '',
         password  : '',
         confirm: '',
@@ -117,6 +116,7 @@ export default {
         phone: '',
         company: '',
         unp: null,
+        isLoading: false,
       }
   },
 
@@ -147,6 +147,9 @@ export default {
     },
 
     async userLogin() {
+      if (this.isLoading) return;
+
+      this.isLoading = true;
       const errorsInData = {};
       if (!this.email || !this.isValidEmail(this.email)) {
         errorsInData.email = 'Укажите валидный адрес эл. почты'
@@ -158,10 +161,16 @@ export default {
       data.append('username', this.email);
       data.append('password', this.password);
       await this.SEND_LOGIN_REQUEST(data);
+
+      this.isLoading = false;
       this.$router.push({name: "user-cab"});
     },
 
     async userRegister() {
+      
+      if (this.isLoading) return;
+
+      this.isLoading = true;
       const errorsInData = {};
       if (!this.email || !this.isValidEmail(this.email)) {
         errorsInData.email = 'Укажите валидный адрес эл. почты'
@@ -185,7 +194,6 @@ export default {
         errorsInData.unp = 'Укажите валидное УНП'
         console.log(this.unp);
       }
-      console.log(errorsInData, Object.keys(errorsInData).length, Boolean(errorsInData));
       if (Object.keys(errorsInData).length) {
         this.SET_ERRORS(errorsInData);
       } else {
@@ -198,8 +206,9 @@ export default {
           password: this.password
         };
         await this.SEND_REGISTER_REQUEST(data);
-        this.$router.push({name: "user-cab"});
+        // this.$router.push({name: "user-cab"});
       }
+      this.isLoading = false;
     },
   }
 

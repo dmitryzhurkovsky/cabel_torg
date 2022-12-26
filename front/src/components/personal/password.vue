@@ -6,7 +6,7 @@
       <div class="group">
         <label for="user" class="label">Новый пароль</label>
         <div class="input__box">
-          <input id="user" type="text" class="input" :class="{ 'is-invalid': ERRORS.password }" v-model="password" autocomplete=off>
+          <input id="user" type="password" class="input" :class="{ 'is-invalid': ERRORS.password }" v-model="password" autocomplete=off>
           <i class="icon-pen input__icon"></i>
           <div class="error-message" v-if="ERRORS.password"> {{ ERRORS.password }} </div>
         </div>
@@ -15,7 +15,7 @@
       <div class="group">
         <label for="email" class="label">Подтверждение пароля</label>
         <div class="input__box">
-          <input id="email" type="email" class="input" :class="{ 'is-invalid': ERRORS.confirm }" v-model="confirm" autocomplete=off>
+          <input id="email" type="password" class="input" :class="{ 'is-invalid': ERRORS.confirm }" v-model="confirm" autocomplete=off>
           <i class="icon-pen input__icon"></i>
           <div class="error-message" v-if="ERRORS.confirm"> {{ ERRORS.confirm }} </div>
         </div>
@@ -68,13 +68,8 @@ export default {
           password: this.password,
         };
         await this.UPDATE_USER_REQUEST(data);
-        this.$router.push({name: "user-cab"});
+        // this.$router.push({name: "user-cab"});
       }
-    },
-
-    isValidEmail: function (email) {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
     },
 
   }

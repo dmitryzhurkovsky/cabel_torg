@@ -78,11 +78,12 @@ export default {
       };
     },
 
-    async UPDATE_USER_REQUEST({ dispatch, commit }, data) {
+    async UPDATE_USER_REQUEST({ commit }, data) {
       commit("SET_ERRORS", {});
       try {
         const response = await axios.patch(process.env.VUE_APP_API_URL + "users/mine", data);
         commit("SET_USER_DATA", response.data);
+        commit('notification/ADD_MESSAGE', {id: 'upd', name: 'Данные профиля обновлены'}, {root: true});
       }
       catch (e) {
           console.log(e);
