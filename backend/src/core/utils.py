@@ -1,9 +1,9 @@
 import re
+from xml.etree.ElementTree import Element
 
 import bcrypt
 from starlette.datastructures import QueryParams
 
-from src.core.enums import ProductTypeFilter
 from src.models.product_models import Product
 
 
@@ -30,7 +30,17 @@ def convert_filter_fields(filtered_fields: QueryParams) -> list:
     return converted_filter_fields
 
 
-def prepare_fields(fields: dict) -> dict:
+def password_is_valid(password: str, password_hash: str) -> bool:
+    """Check whether a password is valid."""
+    return bcrypt.checkpw(password.encode(), password_hash.encode())
+
+
+def hash_password(password: str) -> str:
+    """Hash a password by bcrypt."""
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
+
+def clean_fields(fields: dict) -> dict:
     """Delete None elements from dict"""
     prepared_fields = dict()
     for key, value in fields.items():
@@ -41,16 +51,11 @@ def prepare_fields(fields: dict) -> dict:
 
 
 def clean_string_from_spaces_and_redundant_symbols(dirty_string: str) -> str | None:
+    """Clean an input element from any redundant symbols and spaces."""
     if len(dirty_string) == 1 and dirty_string == '.':
         return None
     return re.findall(pattern='[А-Яа-яЁёa-zA-Z0-9].+[А-Яа-яЁёa-zA-Z.0-9)"]', string=dirty_string)[0]
 
 
-def password_is_valid(password: str, password_hash: str) -> bool:
-    """Check whether a password is valid."""
-    return bcrypt.checkpw(password.encode(), password_hash.encode())
-
-
-def hash_password(password: str) -> str:
-    """Hash a password by bcrypt."""
-    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+def get_tag_name(raw_field: Element) -> str:
+    return raw_field.tag.split('}')[-1]

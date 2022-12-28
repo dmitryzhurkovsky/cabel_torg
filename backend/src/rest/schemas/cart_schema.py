@@ -6,7 +6,7 @@ class ProductInCartCreateSchema(BaseModel):
     amount: int
 
 
-class ProductInCartUpdateInputSchema(BaseModel):
+class ProductInCartUpdateSchema(BaseModel):
     amount: int
 
 
