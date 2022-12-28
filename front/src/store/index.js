@@ -5,6 +5,7 @@ import notification from "./notification.js";
 import breadcrumb from "./breadcrumb.js";
 import profile from "./profile.js";
 import order from "./order.js";
+import query from "./query.js";
 
 export default createStore({
 
@@ -15,5 +16,6 @@ export default createStore({
     breadcrumb    : breadcrumb,
     profile       : profile,
     order         : order,
+    query         : query,
   }
 })

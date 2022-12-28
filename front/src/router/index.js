@@ -70,6 +70,8 @@ const routes = [
   {
     path: '/catalog',
     name: 'Catalog',
+    meta: {name: 'Каталог'}, 
+    // props: (route) => ({ query: route.query }),
     component: () =>
         import("../views/Catalog.vue")
   },

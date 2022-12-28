@@ -40,6 +40,7 @@ export default {
     return {
       password: null,
       confirm: null,
+      isLoading: false,
     }
   },
 
@@ -52,6 +53,9 @@ export default {
     ...mapActions("auth", ["UPDATE_USER_REQUEST"]),
 
     async updateUser() {
+      if (this.isLoading) return;
+
+      this.isLoading = true;
       const errorsInData = {};
       if (!this.password || this.password.length < 8) {
         errorsInData.password = 'Пароль должен быть больше 8 символов'
@@ -60,7 +64,7 @@ export default {
         errorsInData.confirm = 'Пароли не совпадают'
       }
       
-      console.log(errorsInData, Object.keys(errorsInData).length, Boolean(errorsInData));
+      // console.log(errorsInData, Object.keys(errorsInData).length, Boolean(errorsInData));
       if (Object.keys(errorsInData).length) {
         this.SET_ERRORS(errorsInData);
       } else {
@@ -68,8 +72,10 @@ export default {
           password: this.password,
         };
         await this.UPDATE_USER_REQUEST(data);
+        this.isLoading = false;
         // this.$router.push({name: "user-cab"});
       }
+      this.isLoading = false;
     },
 
   }
