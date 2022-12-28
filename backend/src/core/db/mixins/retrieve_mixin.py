@@ -14,6 +14,7 @@ class RetrieveMixin(BaseMixin):
     async def retrieve(
             cls,
             session: AsyncSession = Depends(get_session),
+            additional_selected_fields: tuple = tuple(),
             prefetch_fields: tuple = None,
             **kwargs: Any
     ) -> TableType | HTTPException:
@@ -23,7 +24,7 @@ class RetrieveMixin(BaseMixin):
         filtered_fields = cls.init_filtered_fields(filter_fields=kwargs)
 
         query = await session.execute(
-            select(cls.table).
+            select(cls.table, *additional_selected_fields).
             filter(*filtered_fields).
             options(*options)
         )

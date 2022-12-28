@@ -10,7 +10,6 @@ from src.models.product_models import Product
 
 
 class ProductManager(ListMixin, RetrieveMixin, DeleteMixin):
-
     table = Product
 
     @classmethod
@@ -19,6 +18,7 @@ class ProductManager(ListMixin, RetrieveMixin, DeleteMixin):
             request: Request,
             session: AsyncSession,
             prefetch_fields: tuple = None,
+            additional_selected_fields: tuple = tuple(),
             offset: int = 0,
             limit: int = 12
     ) -> list:
@@ -27,7 +27,7 @@ class ProductManager(ListMixin, RetrieveMixin, DeleteMixin):
         filter_fields = convert_filter_fields(filtered_fields=request.query_params)
 
         objects = await session.execute(
-            select(cls.table).
+            select(cls.table, *additional_selected_fields).
             filter(*filter_fields).
             options(*options).
             limit(limit).
