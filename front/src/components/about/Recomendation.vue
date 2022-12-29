@@ -14,7 +14,7 @@
           <div class="recomendation__block" v-if = "VIEW_TYPE === 1">
               <swiper
                   :slides-per-view="4"
-                  :space-between="16"
+                  :space-between="15"
                   :pagination= "{
                     el: '.swiper-pagination',
                     clickable: true,
@@ -44,10 +44,38 @@
           </div>
           <div class="recomendation__block" v-if = "VIEW_TYPE === 2">
 
-            <CardItem v-for="n in 6"
-              :key="n"
-              :card_id = "n"
-            />
+<!--            <CardItem v-for="n in 6"-->
+<!--              :key="n"-->
+<!--              :card_id = "n"-->
+<!--            />-->
+            <swiper
+                :slides-per-view="3"
+                :space-between="15"
+                :pagination= "{
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    type: 'bullets',
+                    bulletClass: 'swiper-pagination-bullet',
+                    bulletElement: 'span'
+                  }"
+                @swiper="onSwiper"
+                @slideChange="onSlideChange"
+            >
+
+              <swiper-slide v-for="n in 6" :key="n">
+                <CardItem
+                    :card_id = "n"
+                />
+              </swiper-slide>
+
+              <div class="swiper-pagination"></div>
+
+              <div class="swiper-navigation-container">
+                <div class="swiper-button-next" @click="nextSlide"></div>
+                <div class="swiper-button-prev" @click="prevSlide"></div>
+              </div>
+
+            </swiper>
           </div>
           <div class="recomendation__block" v-if = "VIEW_TYPE === 3">
 
@@ -113,7 +141,11 @@
 .swiper-pagination, .swiper-pagination-clickable, .swiper-pagination-bullets, .swiper-pagination-horizontal {
   //position: unset;
   //margin-bottom: 3%;
-  bottom: 17px;
+  display: flex;
+  position: inherit;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 
   span {
     background: #7700AF;
@@ -131,6 +163,10 @@
   margin: 0 auto;
   width: 20%;
   height: 50px;
+}
+.swiper-button-next, .swiper-button-prev{
+  top: -3px;
+
 }
 .swiper-button-prev::after, .swiper-button-next::after{
   content: "\e90e";
@@ -157,6 +193,12 @@
     &__item{
       width: 100%;
       max-width: 272px;
+    }
+    @media (max-width: $md3+px) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
     }
 
   }
