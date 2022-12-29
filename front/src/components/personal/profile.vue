@@ -173,7 +173,7 @@ export default {
         errorsInData.userName = 'Укажите имя';
       }
       if (!this.userPhone) {
-        errorsInData.userPhone = 'Укажите имя';
+        errorsInData.userPhone = 'Укажите телефон';
       }
       if (!this.userBank) {
         errorsInData.userBank = 'Укажите название банка';

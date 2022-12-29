@@ -1,7 +1,7 @@
 <template lang="html">
     <div>
-      <div class="dropdown__content">
-        <div v-if = "AUTH_TYPE === 1" class="popup__reg">
+      <div class="_container">
+        <div v-if = "AUTH_TYPE === 1" class="popup__reg full-open">
           <h3>Вход</h3>
           <div class="sign-in-htm">
             <div class="group">
@@ -15,33 +15,33 @@
               <div class="error-message" v-if="ERRORS.password"> {{ ERRORS.password }} </div>
             </div>
 
-            <div class="group">
+            <div class="center-text">
               <button @click = "userLogin" type="submit" class="btn black">Войти</button>
             </div>
 
-            <div @click = "changeScreen(2)" class="foot-lnk">Не помню пароль</div>
-            <div @click = "changeScreen(3)" class="foot-lnk">Зарегистрироваться</div>
+            <div @click = "changeScreen(2)" class="foot-lnk mt-20">Не помню пароль</div>
+            <div @click = "changeScreen(3)" class="bottom-link mt-20">Зарегистрироваться</div>
           </div>
         </div>
-        <div v-if = "AUTH_TYPE === 2" class="popup__reg">
+        <div v-if = "AUTH_TYPE === 2" class="popup__reg full-open">
           <h3>Восстановление пароля</h3>
           <div class="reset-pass">
             <div class="group">
               <label for="user" class="label">Электронная почта</label>
               <input id="user" type="text" class="input">
             </div>
-            <div class="group">
+            <div class="center-text">
               <button @click = "changeScreen(4)" type="submit" class="btn black">Восстановить</button>
             </div>
-            <div @click = "changeScreen(1)" class="foot-lnk">
+            <div @click = "changeScreen(1)" class="foot-lnk mt-20">
               Войти
             </div>
-            <div @click = "changeScreen(3)" class="foot-lnk">
+            <div @click = "changeScreen(3)" class="bottom-link mt-20">
               Зарегистрироваться
             </div>
           </div>
         </div>
-        <div v-if = "AUTH_TYPE === 3" class="popup__reg">
+        <div v-if = "AUTH_TYPE === 3" class="popup__reg full-open">
           <h3>Регистрация для юрлица</h3>
           <div class="register">
             <div class="group">
@@ -79,20 +79,20 @@
               <input id="unp" type="number" class="input" :class="{ 'is-invalid': ERRORS.unp }" v-model="unp" autocomplete=off>
               <div class="error-message" v-if="ERRORS.unp"> {{ ERRORS.unp }} </div>
             </div>
-            <div class="group">
+            <div class="">
               <button @click = "userRegister" type="submit" class="btn black">Регистрация</button>
             </div>
-            <div @click = "changeScreen(1)" class="foot-lnk">Войти</div>
-            <div @click = "changeScreen(2)" class="foot-lnk">Не помню пароль</div>
+            <div @click = "changeScreen(1)" class="foot-lnk mb-20 mt-20">Войти</div>
+<!--            <div @click = "changeScreen(2)" class="foot-lnk mt-20">Не помню пароль</div>-->
           </div>
         </div>
-        <div v-if = "AUTH_TYPE === 4" class="popup__reg">
+        <div v-if = "AUTH_TYPE === 4" class="popup__reg full-open">
           <h3>Проверьте ваш email</h3>
           <div class="reset-pass">
             <div class="group">
               <p>Мы отправили ссылку для <b>восстановления пароля</b> к вашей учетной записи.</p>
             </div>
-            <div class="group">
+            <div class="">
               <button @click = "changeScreen(0)" type="submit" class="btn empty">Вернуться на сайт</button>
             </div>
           </div>
@@ -185,10 +185,10 @@ export default {
         errorsInData.username = 'Укажите имя'
       }
       if (!this.phone) {
-        errorsInData.phone = 'Укажите имя'
+        errorsInData.phone = 'Укажите номер телефона'
       }
       if (!this.company) {
-        errorsInData.company = 'Укажите имя'
+        errorsInData.company = 'Укажите название компании'
       }
       if (!this.unp || this.unp.toString().length !== 9) {
         errorsInData.unp = 'Укажите валидное УНП'
@@ -217,16 +217,20 @@ export default {
 
 <style lang="scss" scoped>
 .popup__reg{
+  po
+
   .sign-in-htm{
     text-align: center;
     margin: 0 auto;
   }
+
 
   h3{
     margin-bottom: 24px;
   }
   .group{
     //width: 100%;
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -256,10 +260,17 @@ export default {
     padding: 10px 16px;
   }
   .is-invalid{
-    border: 1px solid rgba(255, 99, 71, 0.9);
+    border: 1px solid #E30044;
   }
   .error-message {
-    color: rgba(255, 99, 71, 0.9);
+    position: absolute;
+    left: 15px;
+    bottom: -4px;
+    padding: 0 8px 0 8px;
+    font-size: 12px;
+    background-color: #fff;
+    color: #E30044;
+
   }
   button{
     text-align: center;
@@ -269,9 +280,26 @@ export default {
       text-align: center;
       text-decoration-line: underline;
       opacity: 0.6;
+      cursor: pointer;
     &:nth-child(2){
         opacity: 1;
     }
   }
+  .bottom-link{
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 130%;
+    color: #4275D8;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+.full-open{
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+.center-text{
+  text-align: center;
 }
 </style>
