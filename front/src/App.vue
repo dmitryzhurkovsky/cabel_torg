@@ -286,7 +286,7 @@ h3{
   min-width:180px;text-align: center;
   cursor: pointer;
   &:hover{
-    background: #6291ED;
+    background: #F8FAFF;
   }
 }
 
@@ -346,15 +346,15 @@ h3{
   justify-content: space-between;
   gap: 10px;
 }
-.group{
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 15px;
-  //text-align: center;
-  justify-content: center;
-}
+//.group{
+//  width: 100%;
+//  display: flex;
+//  flex-direction: column;
+//  align-items: flex-start;
+//  margin-bottom: 15px;
+//  //text-align: center;
+//  justify-content: center;
+//}
 label{
   text-align: left;
   font-size: 12px;
