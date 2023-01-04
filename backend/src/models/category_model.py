@@ -9,6 +9,11 @@ class Category(Base1CModel):
     __tablename__ = 'categories'
 
     id = Column(Integer, index=True, primary_key=True)
+    order = Column(Integer, nullable=True, unique=False)
+    # An idea of ordering is:
+    # an oder attribute of parent categories is 1000, 2000, 3000;
+    # an oder attribute of subcategories is 1100, 1200, 1300
+    # an oder attribute of subcategories' subcategories is 1101, 1102, 1103
 
     name = Column(String)
 

@@ -4,7 +4,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.db.db import get_session
 from src.core.enums import ProductTypeFilter
 from src.core.managers.product_manager import ProductManager
-from src.models import Attribute
 from src.rest.schemas.product_schema import ProductSchema
 
 product_router = APIRouter(tags=['products'])
@@ -53,7 +52,5 @@ async def get_product(product_id: int, session: AsyncSession = Depends(get_sessi
             ProductManager.table.manufacturer,
             ProductManager.table.category,
             ProductManager.table.attributes,
-            Attribute.value,
-            Attribute.name
         )
     )

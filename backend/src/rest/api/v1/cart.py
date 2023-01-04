@@ -4,7 +4,6 @@ from starlette import status
 
 from src.core.db.db import get_session
 from src.core.managers.cart_manager import CartManager
-from src.models import Product, Cart
 from src.rest.schemas.cart_schema import (
     CartSchema,
     CartCreateSchema,
@@ -25,9 +24,10 @@ async def get_product(
         session=session,
         filter_fields={'user_id': user.id},
         prefetch_fields=(
-            Cart.product,
+            CartManager.table.product,
         )
     )
+
 
 @cart_router.post(
     '/carts/mine/products',
