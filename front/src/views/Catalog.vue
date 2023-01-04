@@ -94,17 +94,6 @@
 <!--            # PRICE SLIDER-->
                 <div class="filter__box">
                   <div class="filter__title icon-arrow-up">Диапазон цен:</div>
-                  <div class="price-input">
-                    <div class="field">
-                      <span>Min</span>
-                      <input type="number" class="input-min" value="2500">
-                    </div>
-                    <div class="separator">-</div>
-                    <div class="field">
-                      <span>Max</span>
-                      <input type="number" class="input-max" value="7500">
-                    </div>
-                  </div>
                   <div class="slider">
                     <div class="progress"></div>
                   </div>
@@ -112,6 +101,18 @@
                     <input type="range" class="range-min" min="0" max="10000" value="2500" step="100">
                     <input type="range" class="range-max" min="0" max="10000" value="7500" step="100">
                   </div>
+                  <div class="price-input ">
+                    <div class="field price-input__block">
+                      <span>от:</span>
+                      <input type="number" class="input-min" value="2500">
+                    </div>
+
+                    <div class="field price-input__block">
+                      <span>до:</span>
+                      <input type="number" class="input-max" value="7500">
+                    </div>
+                  </div>
+
                 </div>
 
                 <div class="filter__box">
@@ -165,11 +166,41 @@
                   <div class="recomendation__nav__item">Маршрутизаторы</div>
               </div>
               <div class="content-block__topfilter topfilter">
-                <div class="topfilter__share icon-change"> По популярности</div>
+                <ul class="tools-sort icon-change">
+                  <li class="tools-sort_item">
+                    <a href="" class="tools-sort_link">по дате добавления</a>
+                  </li>
+                  <li class="tools-sort__item">
+                    <a href="" class="tools-sort__link active">цене</a>
+                  </li>
+                  <li class="tools-sort__item">
+                    <a href="" class="tools-sort__link">скидке</a>
+                  </li>
+                </ul>
                 <div class="topfilter__right flex-center">
-                  <div class="topfilter__page-result">Показывать по <span>10</span> </div>
-                  <div class="topfilter__box-view icon-catalog-table"></div>
-                  <div class="topfilter__row-view icon-catalog-row active"></div>
+
+                  <div class="topfilter__page-result">Показывать по: </div>
+                  <ul class="tools-pages">
+                    <li class="tools-pages__item">
+                      <a href="" class="tools-pages__link">10</a>
+                    </li>
+                    <li class="tools-pages__item">
+                      <a href="" class="tools-pages__link active">30</a>
+                    </li>
+                    <li class="tools-pages__item">
+                      <a href="" class="tools-pages__link">60</a>
+                    </li>
+                  </ul>
+
+                  <ul class="tools-view">
+
+                    <li class="tools-view__item">
+                      <a href="catalog/?view=grid" class="tools-view__link icon-catalog-table"></a>
+                    </li>
+                    <li class="tools-view__item">
+                      <a href="catalog/?view=list" class="tools-view__link icon-catalog-row active"></a>
+                    </li>
+                  </ul>
                 </div>
 
 
@@ -256,7 +287,14 @@
                   </div>
                 </div>
               </div>
-
+              <div class="content-block__pagination">
+                  <a rel="prev" href="" class="icon-arrow-left"></a>
+                  <a  href="" class="pagination_link active">1</a>
+                  <a  href="" class="pagination_link">2</a>
+                  <a  href="" class="pagination_link">...</a>
+                  <a  href="" class="pagination_link">5</a>
+                  <a rel="next" href="" class="icon-arrow-right"></a>
+              </div>
             </div>
           </div>
         </div>
@@ -298,7 +336,9 @@
 
 }
   &__sidebar{
-    width: 270px;
+    min-width: 260px;
+    width: 272px;
+    padding-right: 10px;
   }
   .content-block{
 
@@ -400,6 +440,12 @@
       opacity: 0.5;
       margin-right: 10px;
       padding: 6px 20px;
+      //max-width: 25%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: all 0.5s ease;
+
       cursor: pointer;
       &:hover{
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
@@ -407,6 +453,32 @@
         font-weight: 500;
         opacity: 1;
       }
+    }
+
+  }
+  &__pagination{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px 0;
+    .pagination_link{
+      width: 40px;
+      height: 40px;
+      background: rgba(66, 62, 72, 0.07);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #423E48;
+      transition: all 0.3s ease;
+      &:hover{
+        border: 1.2px solid #4275D8;
+      }
+    }
+    .active{
+      background: #4275D8;
+      color: #fff;
     }
   }
   &__item{
@@ -420,6 +492,55 @@
     padding: 10px 0;
     font-size: 12px;
   }
+
+}
+
+.tools-sort{
+
+}
+.tools-pages, .tools-sort{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 20px;
+  &__item{
+    .active{
+      color: #423E48;
+      font-weight: 500;
+    }
+
+  }
+  a{
+    font-size: 12px;
+    color:#000;
+    opacity: 0.8;
+    transition: all ease 1ms;
+    &:hover{
+      color: #423E48;
+      opacity: 0.8;
+    }
+  }
+}
+.tools-view{
+  float: right;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  &__item{
+    .active{
+      color: #423E48;
+    }
+  }
+  a{
+    font-size: 20px;
+    color: #ddd;
+    transition: all 0.3s ease;
+    &:hover{
+      color: #423E48;
+      opacity: 0.8;
+    }
+  }
+
 
 }
 .topfilter{
@@ -438,10 +559,6 @@
     font-size: 20px;
 
   }
-  .active{
-    opacity: 0.5;
-  }
-
 }
 
 .product{
@@ -614,21 +731,35 @@
   width: 100%;
   display: flex;
   margin: 30px 0 35px;
+  gap: 10px;
 }
 .price-input .field{
   display: flex;
   width: 100%;
   height: 45px;
-  align-items: center;
+}
+.price-input__block{
+  flex-direction: column;
+  align-items: flex-start;
+  input{
+    margin-left: 0;
+    padding: 0;
+
+  }
+  span{
+    margin: 0 0 5px 5px;
+  }
+
 }
 .field input{
   width: 100%;
   height: 100%;
   outline: none;
-  font-size: 19px;
-  margin-left: 12px;
+  font-size: 14px;
+  padding: 5px 5px;
+
   border-radius: 5px;
-  text-align: center;
+  text-align: left;
   border: 1px solid #999;
   -moz-appearance: textfield;
 }
@@ -636,15 +767,9 @@ input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
-.price-input .separator{
-  width: 130px;
-  display: flex;
-  font-size: 19px;
-  align-items: center;
-  justify-content: center;
-}
+
 .slider{
-  height: 5px;
+  height: 4px;
   position: relative;
   background: #ddd;
   border-radius: 5px;
@@ -655,7 +780,7 @@ input[type="number"]::-webkit-inner-spin-button {
   right: 25%;
   position: absolute;
   border-radius: 5px;
-  background: #17A2B8;
+  background: #4275D8;
 }
 .range-input{
   position: relative;
@@ -663,10 +788,11 @@ input[type="number"]::-webkit-inner-spin-button {
 .range-input input{
   position: absolute;
   width: 100%;
-  height: 5px;
-  top: -5px;
+  height: 4px;
+  top: -13px;
   background: none;
   pointer-events: none;
+  border: none;
   -webkit-appearance: none;
   -moz-appearance: none;
 }
@@ -674,7 +800,7 @@ input[type="range"]::-webkit-slider-thumb{
   height: 17px;
   width: 17px;
   border-radius: 50%;
-  background: #17A2B8;
+  background: #4275D8;
   pointer-events: auto;
   -webkit-appearance: none;
   box-shadow: 0 0 6px rgba(0,0,0,0.05);
@@ -684,7 +810,7 @@ input[type="range"]::-moz-range-thumb{
   width: 17px;
   border: none;
   border-radius: 50%;
-  background: #17A2B8;
+  background: #4275D8;
   pointer-events: auto;
   -moz-appearance: none;
   box-shadow: 0 0 6px rgba(0,0,0,0.05);
