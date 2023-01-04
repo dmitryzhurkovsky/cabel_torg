@@ -263,7 +263,6 @@
     background: #FFFFFF;
     border: 2px solid #EEEEEE;
     border-radius: 8px;
-    margin-bottom: 16px;
     ._status-color{
       color: #32A071;
       font-weight: 500;

@@ -45,26 +45,32 @@
 
 <script>
 
-import {mapGetters, mapMutations} from 'vuex'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 export default {
   name: "CatalogMenu",
 
   computed: {
-    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "TOP_CATEGORIES", "SUB_CATEGORIES"]),
+    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "TOP_CATEGORIES", "SUB_CATEGORIES", "IS_CATALOG_OPEN"]),
   },
 
   methods:{
-    ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY"]),
+    ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "UPDATE_IS_CATALOG_OPEN"]),
+    ...mapActions("catalog", ["GET_CATALOG_ITEMS"]),
     changeCategory(newActive){
         this.SET_CURRENT_TOP_CATEGORY(newActive);
     },
     subCategoryClick(id, event){
-      console.log('кликнули по подкатегории ', id);
+      this.SET_CURRENT_SUB_CATEGORY(id);
     },
     subItemCategoryClick(id, event){
-      console.log('кликнули по итему подкатегории ', id, event);
+      // console.log('кликнули по итему подкатегории ', id, event);
       event.stopImmediatePropagation();
+      this.GET_CATALOG_ITEMS(id);
+      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
+      if (this.$router.path != '/catalog') {
+          this.$router.push('/catalog');
+      }
     },
   }
 }

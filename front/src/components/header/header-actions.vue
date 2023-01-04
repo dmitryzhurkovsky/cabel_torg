@@ -11,7 +11,7 @@
     </div>
     <div class="topmenu__item right-direction">
       <div class="dropdown icon-user">
-        <div v-if = "IS_OPEN_MAIN_LOGIN && !USER" class="dropdown__wrapper">
+        <div v-if = "IS_OPEN_MAIN_LOGIN && !USER" class="dropdown__wrapper qq">
           <div class="dropdown__content popup-cart">
             <div class="avatar__box">
               <div class="avatar icon-user flex-center"></div>
@@ -32,14 +32,20 @@
           <!-- <UserActions/> -->
         </div>
         <div v-if = "IS_OPEN_MAIN_LOGIN && USER" class="dropdown__wrapper">
+
           <div class="dropdown__content popup-cart">
             <div class="avatar__box">
               <div class="avatar icon-user flex-center"></div>
             </div>
+            <div>
+              <div @click="handleClick('/user-cab', 1)" class="">
+                Профиль
+              </div>
+              <div @click="" class="">
+                Выйти
+              </div>
+            </div>
 
-            <button @click="handleClick('/user-cab', 1)" class="btn black">
-              Профиль
-            </button>
 
           </div>
           <!-- <UserActions/> -->
@@ -149,6 +155,11 @@ button{
   text-decoration-line: underline;
   opacity: 0.6;
   color: #423E48;
+}
+
+.topmenu__right{
+  gap:20px;
+
 }
 
 

@@ -10,6 +10,7 @@ export default {
     isCatalogOpen: false,
     munuItemActive : 1,
     topCategoriesItemActive: null,
+    subCategoriesItemActive: null,
     windowWidth: 1280,
     viewType: 1,
     categories: [],
@@ -38,6 +39,9 @@ export default {
     TOP_CATEGORIES_ITEM_ACTIVE(state){
       return state.topCategoriesItemActive;
     },
+    SUB_CATEGORIES_ITEM_ACTIVE(state){
+      return state.subCategoriesItemActive;
+    },
     VIEW_TYPE(state){
       return state.viewType;
     },
@@ -60,11 +64,9 @@ export default {
           sub.push({id : item.id, name: item.name, subItems : []});
         }
       });
-      // console.log(sub);
       for (let i = 0; i < sub.length; i++){
         state.categories.forEach(item => {
           if (item.parent_category_id == sub[i].id){
-            // console.log(item.parent_category_id, sub[i].id);
             sub[i].subItems.push({id : item.id, name : item.name});
           }
         });
@@ -103,6 +105,10 @@ export default {
 
     SET_CURRENT_TOP_CATEGORY(state, payload){
       state.topCategoriesItemActive = payload;
+    },
+
+    SET_CURRENT_SUB_CATEGORY(state, payload){
+      state.subCategoriesItemActive = payload;
     },
 
     UPDATE_CATEGORIES (state, payload){

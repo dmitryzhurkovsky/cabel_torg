@@ -42,7 +42,7 @@
 
 <script>
 
-import {mapActions, mapGetters} from 'vuex'
+import {mapMutations, mapGetters} from 'vuex'
 import CatalogMenu  from '@/components/header/catalog-menu.vue'
 import TopMenuActions  from '@/components/header/header-actions.vue'
 
@@ -60,8 +60,9 @@ export default {
   },
 
   methods:{
+    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
     toggleMenu() {
-      this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', !this.IS_CATALOG_OPEN);
+      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
       console.log(this.IS_CATALOG_OPEN);
     },
     openPage(page) {
@@ -69,14 +70,6 @@ export default {
           this.$router.push(page);
       }
     }
-    // openMenu(){
-    //   this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', true);
-    //   console.log(this.IS_CATALOG_OPEN);
-    // },
-    // closeMenu(){
-    //   this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', false);
-    //   console.log(this.IS_CATALOG_OPEN);
-    // }
   }
 }
 </script>
@@ -220,65 +213,5 @@ export default {
     }
 }
 
-//Burger
-.burger-menu{
-  //margin: 0 auto;
-  width: 24px;
-  display: block;
-  transition: all .3s;
-  cursor: pointer;
-  height: 24px;
-
-  .bar{
-    transition: all .3s;
-    height: 2px;
-    width: 100%;
-    display: block;
-    background-color: $secondColor;
-    &:nth-of-type(2){
-      margin: 5px 0;
-    }
-  }
-  &--closed{
-    transition-delay: .3s;
-    .bar:nth-of-type(2){
-      width: 75%;
-      transition-property: margin, height, width;
-      transition-delay: .3s, .3s, 0s;
-    }
-    .bar:nth-of-type(3) {
-      width: 50%;
-    }
-    &:hover{
-      .bar:nth-of-type(2){
-        width: 100%;
-      }
-      .bar:nth-of-type(3){
-        width: 100%;
-      }
-
-    }
-    &--opened{
-    padding-top: 12px;
-    .bar:nth-of-type(1){
-      transform: rotate(45deg);
-      transition-delay: .3s;
-      height: 2px;
-    }
-
-    .bar:nth-of-type(2){
-      opacity: 0;
-      height: 0;
-      margin: -3px;
-    }
-
-    .bar:nth-of-type(3){
-      transform: rotate(-45deg);
-      transition-delay: .3s;
-      height: 2px
-    }
-  }
-  }
-}
 
 </style>

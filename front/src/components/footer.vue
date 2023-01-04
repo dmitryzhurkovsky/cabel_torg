@@ -270,12 +270,17 @@ export default {
     &_link{
       padding: 5px 0;
 
+
       span{
         font-weight: 300;
         font-size: 14px;
         line-height: 14px;
         color: #423E48;
         cursor: pointer;
+        transition: all 0.3s ease;
+        &:hover{
+          color:#4275D8;
+        }
       }
 
     }
@@ -315,6 +320,7 @@ export default {
     font-size: 30px;
     color: #423E48;
     opacity: 0.3;
+    transition: all 0.3s ease;
     &:hover{
       color: #4275D8;
       opacity: 1;

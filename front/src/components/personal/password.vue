@@ -95,10 +95,11 @@ export default {
   }
 }
 .is-invalid{
-    border: 1px solid rgba(255, 99, 71, 0.9);
+    border: 1px solid #E30044;
   }
   .error-message {
-    color: rgba(255, 99, 71, 0.9);
+    color: #E30044;
+
   }
 
 .content-settings{
