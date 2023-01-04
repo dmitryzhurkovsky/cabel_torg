@@ -57,9 +57,7 @@
 
 <style scoped lang="scss">
 .content-block{
-  &__item{
-    margin-bottom: 16px;
-  }
+
 }
 
 .product{

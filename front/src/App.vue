@@ -285,8 +285,9 @@ h3{
   padding: 8px 24px;
   min-width:180px;text-align: center;
   cursor: pointer;
+  transition: all 0.3s ease;
   &:hover{
-    background: #F8FAFF;
+    background: #6291ED;
   }
 }
 
@@ -526,12 +527,14 @@ input{
     padding: 16px 10px;
     min-width: 350px;
     width: 100%;
+
     a{
       font-weight: 500;
       font-size: 16px;
       line-height: 24px;
       color: #423E48;
       padding: 10px 16px;
+      transition: all 0.3s ease;
       &:hover{
         background: rgba(66, 117, 216, 0.1);
         border-radius: 6px;
