@@ -12,6 +12,4 @@ category_router = APIRouter(tags=['categories'])
 async def get_categories(
         session: AsyncSession = Depends(get_session)
 ):
-    categories = await CategoryManager.list(session=session)
-
-    return categories
+    return await CategoryManager.list(session=session)

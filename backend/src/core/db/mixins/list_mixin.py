@@ -10,7 +10,7 @@ class ListMixin(BaseMixin):
             cls,
             session: AsyncSession,
             prefetch_fields: tuple = None,
-            additional_selected_fields: tuple = tuple(),
+            filter_fields: dict = {},
             offset: int = 0,
             limit: int = 100
     ) -> list:
@@ -18,7 +18,8 @@ class ListMixin(BaseMixin):
         options = cls.init_prefetch_related_fields(prefetch_fields=prefetch_fields)
 
         objects = await session.execute(
-            select(cls.table, *additional_selected_fields).
+            select(cls.table).
+            filter_by(**filter_fields).
             options(*options).
             limit(limit).
             offset(offset)

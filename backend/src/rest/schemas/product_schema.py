@@ -19,3 +19,19 @@ class ProductSchema(BaseSchema):
 
     class Config:
         orm_mode = True
+
+
+class ProductInCartSchema(BaseSchema):
+    vendor_code: str | None
+    name: str
+
+    class Config:
+        orm_mode = True
+
+
+class ProductInWatchListSchema(BaseSchema):
+    vendor_code: str | None
+    name: str
+
+    class Config:
+        orm_mode = True

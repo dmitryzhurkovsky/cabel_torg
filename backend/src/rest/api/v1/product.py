@@ -31,8 +31,8 @@ async def get_products(
         offset: int = 0, limit: int = Query(default=12, lte=100),
         session: AsyncSession = Depends(get_session)
 ):
-    products = await ProductManager.filter_list(
-        request=request,
+    return await ProductManager.filter_list(
+        filter_fields=request.query_params,
         session=session,
         prefetch_fields=(
             ProductManager.table.manufacturer,
@@ -43,15 +43,12 @@ async def get_products(
         limit=limit
     )
 
-    return products
-
 
 @product_router.get('/products/{product_id}', response_model=ProductSchema)
 async def get_product(product_id: int, session: AsyncSession = Depends(get_session)):
-    product = await ProductManager.retrieve(
+    return await ProductManager.retrieve(
         id=product_id,
         session=session,
-        additional_selected_fields=(Attribute,),
         prefetch_fields=(
             ProductManager.table.manufacturer,
             ProductManager.table.category,
@@ -60,5 +57,3 @@ async def get_product(product_id: int, session: AsyncSession = Depends(get_sessi
             Attribute.name
         )
     )
-
-    return product

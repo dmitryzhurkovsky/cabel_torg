@@ -14,8 +14,7 @@ user_router = APIRouter(tags=['users'])
 async def get_user(
         user_id: int, session: AsyncSession = Depends(get_session)
 ) -> UserSchema:
-    user = await UserManager.retrieve(id=user_id, session=session)
-    return user
+    return await UserManager.retrieve(id=user_id, session=session)
 
 
 @user_router.get('/users/mine', response_model=UserSchema)
@@ -23,8 +22,7 @@ async def get_current_user(
         user=Depends(AuthService.get_current_user),
         session: AsyncSession = Depends(get_session)
 ) -> UserSchema:
-    user = await UserManager.retrieve(id=user.id, session=session)
-    return user
+    return await UserManager.retrieve(id=user.id, session=session)
 
 
 @user_router.post('/users/', response_model=UserSchema, status_code=status.HTTP_201_CREATED)
@@ -38,9 +36,7 @@ async def create_user(
             raise BadRequestError(detail='User with such email exists')
 
     except ObjectNotFoundError:
-        user = await UserManager.create(input_data=user, session=session)
-
-        return user
+        return await UserManager.create(input_data=user, session=session)
 
 
 @user_router.patch('/users/mine', response_model=UserSchema)
@@ -49,7 +45,6 @@ async def update_info_about_current_user(
         user=Depends(AuthService.get_current_user),
         session: AsyncSession = Depends(get_session)
 ):
-    user = await UserManager.update(
+    return await UserManager.update(
         session=session, pk=user.id, input_data=user_info.dict(exclude_unset=True)
     )
-    return user
