@@ -11,12 +11,12 @@ class Attribute(Base):
     id = Column(Integer, index=True, primary_key=True)
 
     value_id = Column(Integer, ForeignKey('attribute_values.id'))
-    value = relationship('AttributeValue', back_populates='attribute')
+    value = relationship('AttributeValue', back_populates='attribute', lazy='joined')
 
     name_id = Column(Integer, ForeignKey('attribute_names.id'))
-    name = relationship('AttributeName', back_populates='attribute')
+    name = relationship('AttributeName', back_populates='attribute', lazy='joined')
 
-    products = relationship('Product', secondary='product_attribute', back_populates='attributes')
+    products = relationship('Product', secondary='product_attribute', back_populates='attributes', lazy='noload')
 
     def __str__(self):
         return self.value
@@ -27,7 +27,7 @@ class AttributeValue(Base1CModel):
 
     payload = Column(String(255), nullable=False, unique=False)
 
-    attribute = relationship('Attribute', back_populates='value')
+    attribute = relationship('Attribute', back_populates='value', lazy='noload')
 
 
 class AttributeName(Base1CModel):
@@ -35,4 +35,4 @@ class AttributeName(Base1CModel):
 
     payload = Column(String(255), nullable=False, unique=False)
 
-    attribute = relationship('Attribute', back_populates='name')
+    attribute = relationship('Attribute', back_populates='name', lazy='noload')

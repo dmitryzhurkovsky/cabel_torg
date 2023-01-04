@@ -34,13 +34,10 @@ async def get_products(
     products = await ProductManager.filter_list(
         request=request,
         session=session,
-        additional_selected_fields=(Attribute,),
         prefetch_fields=(
             ProductManager.table.manufacturer,
             ProductManager.table.category,
             ProductManager.table.attributes,
-            Attribute.value,
-            Attribute.name
         ),
         offset=offset,
         limit=limit
