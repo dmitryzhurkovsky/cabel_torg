@@ -60,6 +60,14 @@
               <div class="content-block__list">
                 <CatalogItem />
               </div>
+              <div class="content-block__pagination">
+                <a class="pagination_link active">1</a>
+                <a class="pagination_link">2</a>
+                <a class="pagination_link">3</a>
+                <a class="pagination_link">...</a>
+                <a class="pagination_link">5</a>
+                <a class="pagination_link">6</a>
+              </div>
 
             </div>
           </div>
