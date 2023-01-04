@@ -41,6 +41,8 @@
 
   import FilterPanel from '@/components/catalog/filter-panel.vue';
   import CatalogItem from '@/components/catalog/catalog-item.vue';
+  import {mapGetters, mapActions} from 'vuex'
+
 
   export default {
     name: 'Catalog',
@@ -50,6 +52,22 @@
       FilterPanel, CatalogItem
     },
 
+    computed: {
+        ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE"]),
+    },
+
+    methods: {
+      ...mapActions("catalog", ["GET_CATALOG_ITEMS", "GET_ALL_CATALOG_ITEMS"]),
+
+    },
+
+    mounted() {
+      if (this.TOP_CATEGORIES_ITEM_ACTIVE && this.SUB_CATEGORIES_ITEM_ACTIVE) {
+        this.GET_CATALOG_ITEMS(this.SUB_CATEGORIES_ITEM_ACTIVE||this.TOP_CATEGORIES_ITEM_ACTIVE);
+      } else {
+        this.GET_ALL_CATALOG_ITEMS();
+      }
+    }    
   }
 </script>
 
@@ -86,29 +104,6 @@
   }
 
 
-}
-
-.checkbox{
-  margin-right: 12px;
-
-
-
-  &:before{
-    content: "";
-    width: 18px;
-    height: 18px;
-    display: inline-block;
-    background: rgb(249, 249, 249);
-    border: 1px solid rgb(163, 163, 163);
-  }
-
-
-  &__label{
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    height: 30px;
-  }
 }
 
 .content-block{

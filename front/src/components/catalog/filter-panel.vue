@@ -91,10 +91,6 @@ export default {
         ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "TOP_CATEGORIES", "SUB_CATEGORIES"]),
     },
 
-    watch: {
-
-    },
-
     methods:{
         ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY"]),
         changeCategory(newActive, event){
@@ -127,53 +123,75 @@ export default {
 <style scoped lang="scss">
 .filter{
 
-&__block{
+    &__block{
 
-}
-&__checkbox{
-
-  &__item{
-    margin: 0px 15px 10px 0px;
-    //height: 18px;
-    input{
-      position: absolute;
-      opacity: 0;
-      z-index: -1;
     }
-  }
+    &__checkbox{
 
+    &__item{
+        margin: 0px 15px 10px 0px;
+        //height: 18px;
+        input{
+            position: absolute;
+            opacity: 0;
+            z-index: -1;
+        }
+    }
+
+
+    }
+    &__box{
+        font-weight: 400;
+        position: relative;
+    }
+
+    &__title{
+        background: #F8FAFF;
+        padding: 6px 8px;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 24px;
+        color: #423E48;
+        margin: 12px 0;
+        &:before{
+            position: absolute;
+            top: 12px;
+            right: 10px;
+            font-size: 10px;
+            //transform: rotate(-90deg);
+        }
+    }
+    &__text{
+        span{
+            font-weight: 400;
+            font-size: 14px;
+            color: #423E48;
+        }
+    }
 
 }
-&__box{
-  font-weight: 400;
-  position: relative;
+.checkbox{
+  margin-right: 12px;
 
-}
 
-&__title{
-  background: #F8FAFF;
-  padding: 6px 8px;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 24px;
-  color: #423E48;
-  margin: 12px 0;
+
   &:before{
-    position: absolute;
-    top: 12px;
-    right: 10px;
-    font-size: 10px;
-    //transform: rotate(-90deg);
-  }
-}
-&__text{
-  span{
-    font-weight: 400;
-    font-size: 14px;
-    color: #423E48;
+    content: "";
+    width: 18px;
+    height: 18px;
+    display: inline-block;
+    background: rgb(249, 249, 249);
+    border: 1px solid rgb(163, 163, 163);
   }
 
+
+  &__label{
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    height: 30px;
+  }
 }
 
-}
+
 </style>
