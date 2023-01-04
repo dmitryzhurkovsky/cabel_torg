@@ -42,7 +42,7 @@
 
 <script>
 
-import {mapActions, mapGetters} from 'vuex'
+import {mapMutations, mapGetters} from 'vuex'
 import CatalogMenu  from '@/components/header/catalog-menu.vue'
 import TopMenuActions  from '@/components/header/header-actions.vue'
 
@@ -60,8 +60,9 @@ export default {
   },
 
   methods:{
+    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
     toggleMenu() {
-      this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', !this.IS_CATALOG_OPEN);
+      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
       console.log(this.IS_CATALOG_OPEN);
     },
     openPage(page) {
@@ -69,14 +70,6 @@ export default {
           this.$router.push(page);
       }
     }
-    // openMenu(){
-    //   this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', true);
-    //   console.log(this.IS_CATALOG_OPEN);
-    // },
-    // closeMenu(){
-    //   this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', false);
-    //   console.log(this.IS_CATALOG_OPEN);
-    // }
   }
 }
 </script>

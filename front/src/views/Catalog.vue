@@ -8,155 +8,7 @@
 
 <!--        # SIDEBAR-->
             <div class="catalog__sidebar filter">
-              <div class="filter__block">
-                <div class="filter__box">
-                  <div class="filter__title icon-arrow-up">Тип оборудования</div>
-
-                  <div class="filter__checkbox-list">
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Кабели и провода</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Сетевое оборудование</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Группа 3</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
-                <div class="filter__box">
-                  <div class="filter__title icon-arrow-up">Категория</div>
-
-                  <div class="filter__checkbox-list">
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Плинты размыкаетмые</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Коннекторы, разъемы, соединители</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Категория 3</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
-<!--            # PRICE SLIDER-->
-                <div class="filter__box">
-                  <div class="filter__title icon-arrow-up">Диапазон цен:</div>
-                  <div class="slider">
-                    <div class="progress"></div>
-                  </div>
-                  <div class="range-input">
-                    <input type="range" class="range-min" min="0" max="10000" value="2500" step="100">
-                    <input type="range" class="range-max" min="0" max="10000" value="7500" step="100">
-                  </div>
-                  <div class="price-input ">
-                    <div class="field price-input__block">
-                      <span>от:</span>
-                      <input type="number" class="input-min" value="2500">
-                    </div>
-
-                    <div class="field price-input__block">
-                      <span>до:</span>
-                      <input type="number" class="input-max" value="7500">
-                    </div>
-                  </div>
-
-                </div>
-
-                <div class="filter__box">
-                  <div class="filter__title icon-arrow-up">Показывать:</div>
-
-                  <div class="filter__checkbox-list">
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Все товары</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Только товары со скидкой</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Только “В наличии”</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
-              </div>
+              <FilterPanel />
             </div>
 <!--        # CONTENT-->
             <div class="content-block">
@@ -206,95 +58,9 @@
 
               </div>
               <div class="content-block__list">
-                <div class="content-block__item product-row">
-                  <div class="product">
-                    <div class="product__tag">Хит</div>
-                    <a class="product__img" href="">
-                      <img class="" src="../assets/image44.png" alt="">
-                    </a>
-                    <div class="product__info">
-                      <div class="product__status icon-done-color _label mb-20">В наличии</div>
-                      <div class="product__title">
-                        <a  href="">Коммуникационный кабель</a>
-                      </div>
-                      <div class="product__uptitle">
-                        <a  href="">UTP cat.5e (патч-панель) 19″</a>
-                      </div>
-                      <div class="product__count flex-center">
-                        <span class="_label">Количество:</span>
-                        <span class="icon-minus"></span>
-                        <input class="product__input" type="text">
-                        <span class="icon-plus"></span>
-                      </div>
-
-
-
-
-                    </div>
-                    <div class="product__action">
-                      <div class="product__article  _label mb-20">Артикул: <span>331003</span></div>
-                      <div class="product__price">
-                        <span>70</span>BYN
-                        <span>/шт</span>
-                      </div>
-                      <div class="notice">* Цена указана с учетом НДС.</div>
-                      <div class="product__btn flex-center">
-                        <div class="product__wishlist icon-favorite"></div>
-                        <div class="btn black">В корзину</div>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-                <div class="content-block__item product-row">
-                  <div class="product">
-                    <div class="product__tag">Хит</div>
-                    <a class="product__img" href="">
-                      <img class="" src="../assets/image44.png" alt="">
-                    </a>
-                    <div class="product__info">
-                      <div class="product__status icon-done-color _label mb-20">В наличии</div>
-                      <div class="product__title">
-                        <a  href="">Коммуникационный кабель</a>
-                      </div>
-                      <div class="product__uptitle">
-                        <a  href="">UTP cat.5e (патч-панель) 19″</a>
-                      </div>
-                      <div class="product__count flex-center">
-                        <span class="_label">Количество:</span>
-                        <span class="icon-minus"></span>
-                        <input class="product__input" type="text">
-                        <span class="icon-plus"></span>
-                      </div>
-
-
-
-
-                    </div>
-                    <div class="product__action">
-                      <div class="product__article  _label mb-20">Артикул: <span>331003</span></div>
-                      <div class="product__price">
-                        <span>70</span>BYN
-                        <span>/шт</span>
-                      </div>
-                      <div class="notice">* Цена указана с учетом НДС.</div>
-                      <div class="product__btn flex-center">
-                        <div class="product__wishlist icon-favorite"></div>
-                        <div class="btn black">В корзину</div>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
+                <CatalogItem />
               </div>
-              <div class="content-block__pagination">
-                  <a rel="prev" href="" class="icon-arrow-left"></a>
-                  <a  href="" class="pagination_link active">1</a>
-                  <a  href="" class="pagination_link">2</a>
-                  <a  href="" class="pagination_link">...</a>
-                  <a  href="" class="pagination_link">5</a>
-                  <a rel="next" href="" class="icon-arrow-right"></a>
-              </div>
+
             </div>
           </div>
         </div>
@@ -305,8 +71,17 @@
 
 <script>
 
+  import FilterPanel from '@/components/catalog/filter-panel.vue';
+  import CatalogItem from '@/components/catalog/catalog-item.vue';
+
   export default {
     name: 'Catalog',
+
+    components:
+    {
+      FilterPanel, CatalogItem
+    },
+
   }
 </script>
 
@@ -347,57 +122,6 @@
 
 }
 
-.filter{
-
-  &__block{
-
-  }
-  &__checkbox{
-
-    &__item{
-      margin: 0px 15px 10px 0px;
-      //height: 18px;
-      input{
-        position: absolute;
-        opacity: 0;
-        z-index: -1;
-      }
-    }
-
-
-  }
-  &__box{
-    font-weight: 400;
-    position: relative;
-
-  }
-
-  &__title{
-    background: #F8FAFF;
-    padding: 6px 8px;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 24px;
-    color: #423E48;
-    margin: 12px 0;
-    &:before{
-      position: absolute;
-      top: 12px;
-      right: 10px;
-      font-size: 10px;
-      //transform: rotate(-90deg);
-    }
-  }
-  &__text{
-    span{
-      font-weight: 400;
-      font-size: 14px;
-      color: #423E48;
-    }
-
-  }
-
-}
 .checkbox{
   margin-right: 12px;
 
@@ -559,6 +283,10 @@
     font-size: 20px;
 
   }
+  .active{
+    opacity: 0.5;
+  }
+
 }
 
 .product{
@@ -731,35 +459,21 @@
   width: 100%;
   display: flex;
   margin: 30px 0 35px;
-  gap: 10px;
 }
 .price-input .field{
   display: flex;
   width: 100%;
   height: 45px;
-}
-.price-input__block{
-  flex-direction: column;
-  align-items: flex-start;
-  input{
-    margin-left: 0;
-    padding: 0;
-
-  }
-  span{
-    margin: 0 0 5px 5px;
-  }
-
+  align-items: center;
 }
 .field input{
   width: 100%;
   height: 100%;
   outline: none;
-  font-size: 14px;
-  padding: 5px 5px;
-
+  font-size: 19px;
+  margin-left: 12px;
   border-radius: 5px;
-  text-align: left;
+  text-align: center;
   border: 1px solid #999;
   -moz-appearance: textfield;
 }
@@ -767,9 +481,15 @@ input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
-
+.price-input .separator{
+  width: 130px;
+  display: flex;
+  font-size: 19px;
+  align-items: center;
+  justify-content: center;
+}
 .slider{
-  height: 4px;
+  height: 5px;
   position: relative;
   background: #ddd;
   border-radius: 5px;
@@ -780,7 +500,7 @@ input[type="number"]::-webkit-inner-spin-button {
   right: 25%;
   position: absolute;
   border-radius: 5px;
-  background: #4275D8;
+  background: #17A2B8;
 }
 .range-input{
   position: relative;
@@ -788,11 +508,10 @@ input[type="number"]::-webkit-inner-spin-button {
 .range-input input{
   position: absolute;
   width: 100%;
-  height: 4px;
-  top: -13px;
+  height: 5px;
+  top: -5px;
   background: none;
   pointer-events: none;
-  border: none;
   -webkit-appearance: none;
   -moz-appearance: none;
 }
@@ -800,7 +519,7 @@ input[type="range"]::-webkit-slider-thumb{
   height: 17px;
   width: 17px;
   border-radius: 50%;
-  background: #4275D8;
+  background: #17A2B8;
   pointer-events: auto;
   -webkit-appearance: none;
   box-shadow: 0 0 6px rgba(0,0,0,0.05);
@@ -810,7 +529,7 @@ input[type="range"]::-moz-range-thumb{
   width: 17px;
   border: none;
   border-radius: 50%;
-  background: #4275D8;
+  background: #17A2B8;
   pointer-events: auto;
   -moz-appearance: none;
   box-shadow: 0 0 6px rgba(0,0,0,0.05);

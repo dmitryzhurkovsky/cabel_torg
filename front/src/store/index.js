@@ -6,6 +6,7 @@ import breadcrumb from "./breadcrumb.js";
 import profile from "./profile.js";
 import order from "./order.js";
 import query from "./query.js";
+import catalog from "./catalog";
 
 export default createStore({
 
@@ -17,5 +18,6 @@ export default createStore({
     profile       : profile,
     order         : order,
     query         : query,
+    catalog       : catalog,
   }
 })
