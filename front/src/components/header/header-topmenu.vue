@@ -123,6 +123,9 @@ export default {
       .catalog__btn{
         font-weight: 500;
         color: #4275D8;
+        &:hover{
+          opacity: 0.8;
+        }
       }
 
     }
