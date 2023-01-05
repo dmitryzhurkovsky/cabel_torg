@@ -1,6 +1,6 @@
 from typing import TypeVar, Type
 
-from fastapi import HTTPException, status
+from fastapi import HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import selectinload
 

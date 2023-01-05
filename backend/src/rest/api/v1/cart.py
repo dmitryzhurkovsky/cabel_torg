@@ -5,33 +5,47 @@ from starlette import status
 from src.core.db.db import get_session
 from src.core.managers.cart_manager import CartManager
 from src.rest.schemas.cart_schema import (
-    ProductInCartSchema,
-    ProductInCartCreateSchema,
-    ProductInCartUpdateSchema
+    CartSchema,
+    CartCreateSchema,
+    CartUpdateSchema,
+    CartWithProductSchema
 )
 from src.services.auth_service import AuthService
 
 cart_router = APIRouter(tags=['carts'])
 
 
+@cart_router.get('/carts/mine/products', response_model=list[CartWithProductSchema])
+async def get_product(
+        session: AsyncSession = Depends(get_session),
+        user=Depends(AuthService.get_current_user)
+):
+    return await CartManager.list(
+        session=session,
+        filter_fields={'user_id': user.id},
+        prefetch_fields=(
+            CartManager.table.product,
+        )
+    )
+
+
 @cart_router.post(
     '/carts/mine/products',
-    response_model=ProductInCartSchema,
+    response_model=CartSchema,
     status_code=status.HTTP_201_CREATED)
 async def add_product_to_cart(
-        product_info: ProductInCartCreateSchema,
+        product_info: CartCreateSchema,
         user=Depends(AuthService.get_current_user),
         session: AsyncSession = Depends(get_session)
-) -> ProductInCartSchema:
-    operation_info = await CartManager.create(
-        input_data=ProductInCartSchema(
+) -> CartSchema:
+    return await CartManager.create(
+        input_data=CartSchema(
             user_id=user.id,
             product_id=product_info.product_id,
             amount=product_info.amount
         ),
         session=session
     )
-    return operation_info
 
 
 @cart_router.delete(
@@ -51,19 +65,18 @@ async def delete_product_from_cart(
 
 @cart_router.patch(
     '/carts/mine/products/{product_id}',
-    response_model=ProductInCartSchema,
+    response_model=CartSchema,
     status_code=status.HTTP_200_OK)
 async def update_product_amount_in_cart(
         product_id: int,
-        product_info: ProductInCartUpdateSchema,
+        product_info: CartUpdateSchema,
         user=Depends(AuthService.get_current_user),
         session: AsyncSession = Depends(get_session)
-) -> ProductInCartSchema:
-    operation_info = await CartManager.update_m2m(
+) -> CartSchema:
+    return await CartManager.update_m2m(
         input_data={
             "product_id": product_id,
             "amount": product_info.amount,
             "user_id": user.id},
         session=session,
     )
-    return operation_info

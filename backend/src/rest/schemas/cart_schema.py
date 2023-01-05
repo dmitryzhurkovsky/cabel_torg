@@ -1,19 +1,29 @@
 from pydantic import BaseModel
 
+from src.rest.schemas.product_schema import ProductInCartSchema
 
-class ProductInCartCreateSchema(BaseModel):
+
+class CartCreateSchema(BaseModel):
     product_id: int
     amount: int
 
 
-class ProductInCartUpdateSchema(BaseModel):
+class CartUpdateSchema(BaseModel):
     amount: int
 
 
-class ProductInCartSchema(BaseModel):
+class CartSchema(BaseModel):
     user_id: int
     product_id: int
     amount: int
+
+    class Config:
+        orm_mode = True
+
+
+class CartWithProductSchema(BaseModel):
+    amount: int
+    product: ProductInCartSchema
 
     class Config:
         orm_mode = True

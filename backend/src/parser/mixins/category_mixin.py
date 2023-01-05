@@ -34,7 +34,7 @@ class CategoryMixin(BaseMixin):
                 clean_category |= {'parent_category_id': parent_category_id}
 
             db_category, _ = await database_services.get_or_create(
-                db=self.db, model=Category, fields=clean_category  # noqa
+                db=self.db, refresh=False, model=Category, fields=clean_category
             )
 
             if self.category_has_subcategories(category=raw_category):

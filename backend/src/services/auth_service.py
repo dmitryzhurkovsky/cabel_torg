@@ -13,7 +13,6 @@ from src.core.managers.user_manager import UserManager
 from src.core.utils import password_is_valid
 from src.models.user_model import User
 from src.rest.schemas.auth_schema import (
-    AuthenticationResponseSchema,
     auth_schema,
 )
 

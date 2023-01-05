@@ -17,20 +17,25 @@ class Product(Base1CModel):
     price = Column(Float, nullable=True)
     type = Column('type', pgEnum(ProductType.values(), name='type'))
 
-    attributes = relationship('Attribute', secondary='product_attribute', back_populates='products')  # m2m
+    attributes = relationship(
+        'Attribute',
+        secondary='product_attribute',
+        back_populates='products',
+        lazy='joined'
+    )  # m2m
 
     base_unit_id = Column(Integer, ForeignKey('base_units.id'))  # o2m
-    base_unit = relationship('BaseUnit', back_populates='products')
+    base_unit = relationship('BaseUnit', back_populates='products', lazy='noload')
 
     category_id = Column(Integer, ForeignKey('categories.id'))  # o2m
-    category = relationship('Category', back_populates='products')
+    category = relationship('Category', back_populates='products', lazy='noload')
 
     manufacturer_id = Column(Integer, ForeignKey('manufacturers.id'))  # o2m
-    manufacturer = relationship('Manufacturer', back_populates='products')
+    manufacturer = relationship('Manufacturer', back_populates='products', lazy='noload')
 
-    added_to_carts = relationship('Cart', back_populates='product')  # m2m
+    added_to_carts = relationship('Cart', back_populates='product', lazy='noload')  # m2m
 
-    added_to_watchlist_for = relationship('WatchList', back_populates='product')
+    added_to_watchlist_for = relationship('WatchList', back_populates='product', lazy='noload')
 
     def __str__(self):
         return self.name

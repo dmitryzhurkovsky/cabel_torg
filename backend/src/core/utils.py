@@ -7,23 +7,23 @@ from starlette.datastructures import QueryParams
 from src.models.product_models import Product
 
 
-def convert_filter_fields(filtered_fields: QueryParams) -> list:
+def convert_filter_fields(filter_fields: QueryParams) -> list:
     """Convert filter values to SQLALCHEMY filter expressions"""
     converted_filter_fields = []
 
-    price_gte = filtered_fields.get('price_gte')
+    price_gte = filter_fields.get('price_gte')
     if price_gte:
         converted_filter_fields.append(Product.price >= int(price_gte))
 
-    price_lte = filtered_fields.get('price_lte')
+    price_lte = filter_fields.get('price_lte')
     if price_gte:
         converted_filter_fields.append(Product.price <= int(price_lte))
 
-    category_id = filtered_fields.get('category_id')
+    category_id = filter_fields.get('category_id')
     if category_id:
         converted_filter_fields.append(Product.category_id == int(category_id))
 
-    search_letters = filtered_fields.get('q')
+    search_letters = filter_fields.get('q')
     if search_letters:
         converted_filter_fields.append(Product.name.like('%'+search_letters+'%'))
 
