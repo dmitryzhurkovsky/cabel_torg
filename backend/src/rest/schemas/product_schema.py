@@ -15,7 +15,7 @@ class ProductSchema(BaseSchema):
     tax: int | None
     description: str | None
     type: str | None
-    attributes: List['AttributeSchema'] | None
+    attributes: List['AttributeSchema'] | list
 
     class Config:
         orm_mode = True
