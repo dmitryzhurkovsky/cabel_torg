@@ -507,6 +507,7 @@ input{
   position: relative;
   display: inline-block;
   cursor: pointer;
+  font-weight: 400;
   &__wrapper{
     display: none;
     position: absolute;
