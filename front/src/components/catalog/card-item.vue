@@ -1,9 +1,9 @@
 <template lang="html">
-  <div class="recomendation__block__item item-card">
+  <div class="recomendation__block__item item-card" v-if = "card">
     <div class="item-card__tag">Хит</div>
     <div class="item-card__wishlist icon-favorite"></div>
     <a class="item-card__img" href="">
-      <img class="" src="../../assets/image44.png" alt="">
+      <img class="" :src=getImagePath(card.images) alt="">
     </a>
     <div class="item-card__info">
       <div class="item-card__row flex-center">
@@ -13,14 +13,14 @@
 
       <div class="item-card__row flex-center">
         <div class="current_price">56.5
-          <span>BYN/{{base_unit}}</span>
+          <span>BYN/</span>
         </div>
         <div class="item-card__buy flex-center icon-cart">
         </div>
 
       </div>
       <div class="item-card__title">
-        <div>{{name}}</div>
+        <div>{{card.name}}</div>
       </div>
       <div class="item-card__uptitle">
         <div>UTP cat.5e (патч-панель) 19″</div>
@@ -35,54 +35,22 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 
 export default {
   name: "CardItem",
 
   props: {
-    card_id:  null,
-  },
-
-  data: function(){
-    return{
-      id          : '',
-      vendor_code : '',
-      name        : '',
-      base_unit   : '',
-      category    : {
-        id                  : '',
-        name                : '',
-        parent_category_id  : 0
-      },
-      image       : '',
-      manufacturer: {
-        id                  : '',
-        name                : ''
-      },
-      tax         : 0,
-      description : ''
-    }
+    card:  null,
   },
 
   methods: {
+    getImagePath(item) {
+        const allPath = item.split(',');
+        const path = process.env.VUE_APP_IMAGES + allPath[0];
+        return path;
+    }
   },
-
-  async mounted() {
-      // console.log('Try to get card ' + this.$props.card_id + ' information from backend');
-      try {
-        const response = await axios.get(process.env.VUE_APP_API_URL + 'products/' + this.$props.card_id);
-        // console.log(response.data);
-        this.name = response.data.name;
-        this.base_unit = response.data.base_unit;
-        // commit("UPDATE_CATEGORIES", response.data);
-      } catch (e) {
-        // console.log(e);
-        this.$store.commit("notification/ADD_MESSAGE", {name: "Не возможно получить продукт " + this.$props.card_id, icon: "error", id: '1'}, {root: true})
-      }
-
-  }
-
 
 }
 

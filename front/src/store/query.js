@@ -5,7 +5,7 @@ export default {
 
   state: {
     categoryId: 1,
-    typeOfProduct: 'all',
+    typeOfProduct: {name : 'Все товары', type: 'all'},
     offset: 0,
     limit: 10,
     sort: {name: 'По дате добавления', type: 'date'},
@@ -48,6 +48,10 @@ export default {
 
       SET_VIEW_TYPE(state, newViewType) {
         state.view = newViewType;
+      },
+
+      SET_TYPE_OF_PRODUCT(state, newTypeOfProduct) {
+        state.typeOfProduct = newTypeOfProduct;
       },
     },
 

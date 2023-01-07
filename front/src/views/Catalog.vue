@@ -12,10 +12,15 @@
             </div>
 <!--        # CONTENT-->
             <div class="content-block">
-              <div class="content-block__subcategory recomendation__nav">
-                  <div class="recomendation__nav__item">Для кабеля витая пара</div>
-                  <div class="recomendation__nav__item">Для коаксиального кабеля</div>
-                  <div class="recomendation__nav__item">Маршрутизаторы</div>
+              <div class="content-block__subcategory recomendation__nav" v-if = "LastCategory.length">
+                  <div 
+                    class="recomendation__nav__item"
+                    v-for = "category in LastCategory[0].subItems"
+                    :key = "category.id"
+                    @click = setActiveCategory(category.id)
+                  >
+                    {{ category.name }}
+                  </div>
               </div>
               <div class="content-block__topfilter topfilter">
                 <SortPanel />
@@ -25,7 +30,20 @@
                 </div>
               </div>
               <div class="content-block__list">
-                <CatalogItem v-if = "ITEMS_LIST"/>
+                <div class="content-block__item product-row" v-if = "ITEMS_LIST.length !== 0 && VIEW_TYPE === 'row'">
+                  <ListItem 
+                    v-for   = "item in ITEMS_LIST"
+                    :key    = "item.id"
+                    :card   = item
+                  />
+                </div>  
+                <div class="content-block__item product-table" v-if = "ITEMS_LIST.length !== 0 && VIEW_TYPE === 'table'">
+                  <CardItem 
+                    v-for   = "item in ITEMS_LIST"
+                    :key    = "item.id"
+                    :card   = item
+                  />
+                </div>  
               </div>
               <PaginationPanel class="content-block__pagination" />
 
@@ -40,36 +58,52 @@
 <script>
 
   import FilterPanel from '@/components/catalog/filter-panel.vue';
-  import CatalogItem from '@/components/catalog/catalog-item.vue';
+  import CardItem from '@/components/catalog/card-item.vue';
+  import ListItem from '@/components/catalog/list-item.vue';
   import LimitPanel from '@/components/catalog/limit-panel.vue';
   import ViewPanel from '@/components/catalog/view-panel.vue';
   import PaginationPanel from '@/components/catalog/pagination-panel.vue';
   import SortPanel from '@/components/catalog/sort-panel.vue';
 
-  import {mapGetters, mapActions} from 'vuex'
+  import { mapGetters, mapActions, mapMutations } from 'vuex'
 
   export default {
     name: 'Catalog',
 
     components:
     {
-      FilterPanel, CatalogItem, LimitPanel, ViewPanel, PaginationPanel, SortPanel,
+      FilterPanel, ListItem, CardItem, LimitPanel, ViewPanel, PaginationPanel, SortPanel,
     },
 
     watch: {
       LIMIT: function() {
         this.getData();
+      },
+      TYPE_OF_PRODUCT: function() {
+        this.getData();
+      },
+      CATEGORY_ID: async function() {
+        await this.GET_CATALOG_ITEMS(this.CATEGORY_ID);
       }
     },
 
     computed: {
-        ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE"]),
+        ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES"]),
         ...mapGetters("catalog", ["ITEMS_LIST"]),
-        ...mapGetters("query", ["LIMIT"]),
+        ...mapGetters("query", ["LIMIT", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID"]),
+
+        LastCategory(){
+            let result = [];
+            if (this.SUB_CATEGORIES_ITEM_ACTIVE && this.SUB_CATEGORIES) {
+                result = this.SUB_CATEGORIES.filter(item => item.id === this.SUB_CATEGORIES_ITEM_ACTIVE);
+            }
+            return result;
+        },
     },
 
     methods: {
       ...mapActions("catalog", ["GET_CATALOG_ITEMS", "GET_ALL_CATALOG_ITEMS"]),
+      ...mapMutations("query", ["SET_CATEGORY_ID"]),
 
       async getData() {
         if (this.TOP_CATEGORIES_ITEM_ACTIVE && this.SUB_CATEGORIES_ITEM_ACTIVE) {
@@ -77,7 +111,12 @@
         } else {
           await this.GET_ALL_CATALOG_ITEMS();
         }
+      },
+
+      setActiveCategory(id){
+        this.SET_CATEGORY_ID(id);
       }
+
     },
 
     mounted() {

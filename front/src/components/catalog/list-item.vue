@@ -1,63 +1,53 @@
 <template>
-    <div class="content-block__item product-row" v-if = "ITEMS_LIST.length !== 0">
-        <div class="product"
-            v-for   = "item in ITEMS_LIST"
-            :key    = "item.id"
-        >
-            <div class="product__tag">Хит</div>
-            <a class="product__img" href="">
-                <!-- <img class="" src="@/assets/image44.png" alt=""> -->
-                <img class="" :src=getImagePath(item.images) alt="">
-            </a>
-            <div class="product__info">
-                <div class="product__status icon-done-color _label mb-20">В наличии</div>
-                <div class="product__title">
-                    <a  href="" v-if ="item.category">{{ item.category.name }}</a>
-                </div>
-                <div class="product__uptitle">
-                    <a  href="">{{ item.name }}</a>
-                </div>
-                <div class="product__count flex-center">
-                    <span class="_label">Количество:</span>
-                   <span class="icon-minus"></span>
-                    <input class="product__input" type="text">
-                    <span class="icon-plus"></span>
-                </div>
+    <div class="product">
+        <div class="product__tag">Хит</div>
+        <a class="product__img" href="">
+            <img class="" :src=getImagePath(card.images) alt="">
+        </a>
+        <div class="product__info">
+            <div class="product__status icon-done-color _label mb-20">В наличии</div>
+            <div class="product__title">
+                <a  href="" v-if ="card.category">{{ card.category.name }}</a>
             </div>
-            <div class="product__action">
-                <div class="product__article  _label mb-20">Артикул: <span>{{ item.vendor_code }}</span></div>
-                <div class="product__price">
-                    <span>70</span>BYN
-                    <span>/шт</span>
-                </div>
-                <div class="notice">* Цена указана с учетом НДС.</div>
-                <div class="product__btn flex-center">
-                   <div class="product__wishlist icon-favorite"></div>
-                   <div class="btn black">В корзину</div>
-                </div>
+            <div class="product__uptitle">
+                <a  href="">{{ card.name }}</a>
+            </div>
+            <div class="product__count flex-center">
+                <span class="_label">Количество:</span>
+                <span class="icon-minus"></span>
+                <input class="product__input" type="text">
+                <span class="icon-plus"></span>
+            </div>
+        </div>
+        <div class="product__action">
+            <div class="product__article  _label mb-20">Артикул: <span>{{ card.vendor_code }}</span></div>
+            <div class="product__price">
+                <span>70</span>BYN
+                <span>/шт</span>
+            </div>
+            <div class="notice">* Цена указана с учетом НДС.</div>
+            <div class="product__btn flex-center">
+                <div class="product__wishlist icon-favorite"></div>
+                <div class="btn black">В корзину</div>
             </div>
         </div>
     </div>
-
 </template>
 
 
 <script>
 
-  import {mapGetters} from 'vuex'
-
   export default {
-    name: 'CatalogItem',
-
-    computed: {
-        ...mapGetters("catalog", ["ITEMS_LIST"]),
+    props: {
+        card:  null,
     },
+
+    name: 'ListItem',
 
     methods: {
         getImagePath(item) {
             const allPath = item.split(',');
             const path = process.env.VUE_APP_IMAGES + allPath[0];
-            console.log(path);
             return path;
         }
     }
@@ -66,12 +56,6 @@
 </script>
 
 <style scoped lang="scss">
-.content-block{
-  &__item{
-    margin-bottom: 16px;
-  }
-}
-
 .product{
     display: flex;
     position: relative;

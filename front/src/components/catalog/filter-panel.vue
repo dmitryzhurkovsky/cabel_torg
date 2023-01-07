@@ -39,39 +39,23 @@
             <div class="filter__title icon-arrow-up">Показывать:</div>
 
             <div class="filter__checkbox-list">
-            <div class="filter__checkbox__item">
-                <div class="checkbox-default">
-                <label class="checkbox__label">
-                    <input type="checkbox" name="" class="" value="">
-                    <div class="checkbox"></div>
-                    <div class="filter__text">
-                    <span class="">Все товары</span>
+                <div class="filter__checkbox__item"
+                    v-for = "category in categories"
+                    :key = "category"
+                >
+                    <div 
+                        class = "checkbox-default"
+                        @click="changeFilterCategory($event, category)"
+                    >
+                        <label class="checkbox__label">
+                            <input type="checkbox" name="" class="" value="">
+                            <div class="checkbox"></div>
+                            <div class="filter__text">
+                            <span :class="[category.type === TYPE_OF_PRODUCT.type ? 'active' : '']">{{ category.name }}</span>
+                            </div>
+                        </label>
                     </div>
-                </label>
                 </div>
-            </div>
-            <div class="filter__checkbox__item">
-                <div class="checkbox-default">
-                <label class="checkbox__label">
-                    <input type="checkbox" name="" class="" value="">
-                    <div class="checkbox"></div>
-                    <div class="filter__text">
-                    <span class="">Только товары со скидкой</span>
-                    </div>
-                </label>
-                </div>
-            </div>
-            <div class="filter__checkbox__item">
-                <div class="checkbox-default">
-                <label class="checkbox__label">
-                    <input type="checkbox" name="" class="" value="">
-                    <div class="checkbox"></div>
-                    <div class="filter__text">
-                    <span class="">Только “В наличии”</span>
-                    </div>
-                </label>
-                </div>
-            </div>
             </div>
 
 
@@ -87,12 +71,26 @@ import {mapMutations, mapGetters} from 'vuex'
 export default {
     name: 'FilterPanel',
 
+    data(){
+        return {
+            categories: [
+                {name : 'Все товары', type: 'all'},
+                {name : 'Только товары со скидкой', type: 'with_discount'} , 
+                {name : 'В наличии', type: 'available'},
+            ],
+        }
+    },
+
     computed: {
         ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "TOP_CATEGORIES", "SUB_CATEGORIES"]),
+        ...mapGetters("query", ["TYPE_OF_PRODUCT"]),
+
     },
 
     methods:{
         ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY"]),
+        ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID"]),
+
         changeCategory(newActive, event){
             if (this.TOP_CATEGORIES_ITEM_ACTIVE === newActive) {
                 this.SET_CURRENT_TOP_CATEGORY(null);
@@ -103,7 +101,6 @@ export default {
         subCategoryClick(id, event){
             event.stopImmediatePropagation();
             event.preventDefault();
-            console.log('SUB', id);
             if (this.SUB_CATEGORIES_ITEM_ACTIVE === id) {
                 this.SET_CURRENT_SUB_CATEGORY(null);
             } else {
@@ -114,8 +111,13 @@ export default {
             event.stopImmediatePropagation();
             event.preventDefault();
             console.log('кликнули по итему подкатегории ', id, event);
+            this.SET_CATEGORY_ID(id);
         },
-
+        changeFilterCategory(event, category){
+            event.stopImmediatePropagation();
+            event.preventDefault();
+            this.SET_TYPE_OF_PRODUCT(category);
+        }
     },
 }
 </script>
@@ -167,6 +169,10 @@ export default {
             font-size: 14px;
             color: #423E48;
         }
+        .active{
+            color: #423E48;
+            font-weight: 500;
+            }
     }
 
 }
@@ -192,6 +198,5 @@ export default {
     height: 30px;
   }
 }
-
 
 </style>
