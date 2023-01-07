@@ -2,30 +2,40 @@ import re
 from xml.etree.ElementTree import Element
 
 import bcrypt
+from sqlalchemy import or_, select
+from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.datastructures import QueryParams
 
+from src.models import Category
 from src.models.product_models import Product
 
 
-def convert_filter_fields(filter_fields: QueryParams) -> list:
+async def convert_filter_fields(filter_fields: QueryParams, session: AsyncSession = None) -> list:
     """Convert filter values to SQLALCHEMY filter expressions"""
     converted_filter_fields = []
 
-    price_gte = filter_fields.get('price_gte')
-    if price_gte:
+    if price_gte := filter_fields.get('price_gte'):
         converted_filter_fields.append(Product.price >= int(price_gte))
 
-    price_lte = filter_fields.get('price_lte')
-    if price_gte:
+    if price_lte := filter_fields.get('price_lte'):
         converted_filter_fields.append(Product.price <= int(price_lte))
 
-    category_id = filter_fields.get('category_id')
-    if category_id:
+    if category_id := filter_fields.get('category_id'):
         converted_filter_fields.append(Product.category_id == int(category_id))
 
-    search_letters = filter_fields.get('q')
-    if search_letters:
-        converted_filter_fields.append(Product.name.like('%'+search_letters+'%'))
+    if search_letters := filter_fields.get('q'):
+        category_ids_query = await session.execute(
+            select(Category.id).
+            filter(Category.name.like('%'+search_letters+'%'))
+        )
+        category_ids = category_ids_query.scalars().all()
+
+        converted_filter_fields.append(or_(
+            Product.name.like('%'+search_letters+'%'),
+            Product.vendor_code.like('%'+search_letters+'%'),
+            Product.description.like('%'+search_letters+'%'),
+            Product.category_id.in_(category_ids),
+        ))
 
     return converted_filter_fields
 

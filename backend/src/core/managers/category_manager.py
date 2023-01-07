@@ -5,5 +5,4 @@ from src.models.category_model import Category
 
 
 class CategoryManager(ListMixin, RetrieveMixin, DeleteMixin):
-
     table = Category

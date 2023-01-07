@@ -28,7 +28,7 @@ class ProductManager(
     ) -> list:
         """Get filtered list of objects with pagination."""
         options = cls.init_prefetch_related_fields(prefetch_fields=prefetch_fields)
-        filter_fields = convert_filter_fields(filter_fields)
+        filter_fields = await convert_filter_fields(filter_fields, session=session)
 
         objects = await session.execute(
             select(cls.table).

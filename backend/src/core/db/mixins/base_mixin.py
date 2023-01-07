@@ -21,7 +21,7 @@ class BaseMixin:
 
     @classmethod
     def init_filtered_fields(cls, filter_fields: dict) -> list:
-        """Initiate filter fields for query"""
+        """Initiate filter fields for a query."""
         initiated_filter_fields = []
 
         for name, value in filter_fields.items():
@@ -31,7 +31,7 @@ class BaseMixin:
 
     @classmethod
     def init_m2m_filtered_fields(cls, filter_fields: dict) -> list:
-        """Initiate filter fields for query"""
+        """Initiate filter fields for a query."""
         initiated_filter_fields = []
 
         for name, value in filter_fields.items():
@@ -42,8 +42,13 @@ class BaseMixin:
 
     @classmethod
     def init_prefetch_related_fields(cls, prefetch_fields: tuple) -> tuple:
-        """Initiate fields that will be loaded in query to database for related fields"""
+        """Initiate fields that will be preloaded in a query to database for related fields"""
         return (selectinload(field) for field in prefetch_fields) if prefetch_fields else tuple()
+
+    @classmethod
+    def init_selected_fields(cls, selected_fields: tuple) -> tuple:
+        """Initiate fields that will be selected in a query to database for related fields"""
+        return selected_fields if selected_fields else (cls.table,)
 
     @classmethod
     def _check_object(cls, obj: TableType) -> None | Type[HTTPException]:

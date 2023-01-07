@@ -26,7 +26,10 @@ async def get_products(
             default=ProductTypeFilter.ALL.value,
             description='The last parameter in the lef column/This parameter set that products will be downloaded'
         ),
-        q: str | None = Query(default=None, description='Search by name of products'),
+        q: str | None = Query(
+            default=None,
+            description='Search by product\'s name, description, vendor code or category\'s name of products'
+        ),
         offset: int = 0, limit: int = Query(default=12, lte=100),
         session: AsyncSession = Depends(get_session)
 ):
