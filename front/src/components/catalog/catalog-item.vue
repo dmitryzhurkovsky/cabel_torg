@@ -1,17 +1,18 @@
 <template>
-    <div class="content-block__item product-row" v-if = "ITEMS_LIST">
+    <div class="content-block__item product-row" v-if = "ITEMS_LIST.length !== 0">
         <div class="product"
             v-for   = "item in ITEMS_LIST"
             :key    = "item.id"
         >
             <div class="product__tag">Хит</div>
             <a class="product__img" href="">
-                <img class="" src="@/assets/image44.png" alt="">
+                <!-- <img class="" src="@/assets/image44.png" alt=""> -->
+                <img class="" :src=getImagePath(item.images) alt="">
             </a>
             <div class="product__info">
                 <div class="product__status icon-done-color _label mb-20">В наличии</div>
                 <div class="product__title">
-                    <a  href="">{{ item.category.name }}</a>
+                    <a  href="" v-if ="item.category">{{ item.category.name }}</a>
                 </div>
                 <div class="product__uptitle">
                     <a  href="">{{ item.name }}</a>
@@ -51,6 +52,15 @@
     computed: {
         ...mapGetters("catalog", ["ITEMS_LIST"]),
     },
+
+    methods: {
+        getImagePath(item) {
+            const allPath = item.split(',');
+            const path = process.env.VUE_APP_IMAGES + allPath[0];
+            console.log(path);
+            return path;
+        }
+    }
 
   }
 </script>

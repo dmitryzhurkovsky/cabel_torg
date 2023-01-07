@@ -24,10 +24,13 @@ export default {
     },
 
     actions: {
-      async GET_CATALOG_ITEMS({ commit }, data) {
+      async GET_CATALOG_ITEMS({ commit, rootGetters }, data) {
         try {
-            // ?category_id=12&type_of_product=all&offset=0&limit=12
-            const response = await axios.get(process.env.VUE_APP_API_URL + 'products?category_id=' + data + '&type_of_product=all&offset=0&limit=12');
+            const response = await axios.get(process.env.VUE_APP_API_URL + 
+                'products?category_id=' + data + 
+                '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'] + 
+                '&offset=' + rootGetters['query/OFFSET'] + 
+                '&limit=' + rootGetters['query/LIMIT']);
             commit("SET_CATALOG_ITEMS", response.data);
         } catch (e) {
             console.log(e);
@@ -35,10 +38,12 @@ export default {
         }
       },
 
-      async GET_ALL_CATALOG_ITEMS({ commit }) {
+      async GET_ALL_CATALOG_ITEMS({ commit, rootGetters }) {
         try {
-            // ?category_id=12&type_of_product=all&offset=0&limit=12
-            const response = await axios.get(process.env.VUE_APP_API_URL + 'products?type_of_product=all&offset=0&limit=12');
+            const response = await axios.get(process.env.VUE_APP_API_URL + 
+                'products?type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'] + 
+                '&offset=' + rootGetters['query/OFFSET'] + 
+                '&limit=' + rootGetters['query/LIMIT']);
             commit("SET_CATALOG_ITEMS", response.data);
         } catch (e) {
             console.log(e);
