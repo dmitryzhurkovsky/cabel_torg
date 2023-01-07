@@ -155,10 +155,6 @@
     width: 272px;
     padding-right: 10px;
   }
-  .content-block{
-
-  }
-
 
 }
 
@@ -205,7 +201,9 @@
     padding: 20px 0;
   }
   &__item{
-    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap:16px;
   }
 
   &__topfilter{

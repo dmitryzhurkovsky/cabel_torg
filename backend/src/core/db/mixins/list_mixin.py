@@ -10,15 +10,19 @@ class ListMixin(BaseMixin):
             cls,
             session: AsyncSession,
             prefetch_fields: tuple = None,
+            filter_fields: dict = {}, # noqa
+            order_fields: tuple = (),
             offset: int = 0,
-            limit: int = 100
+            limit: int = 100,
     ) -> list:
         """Get list of objects"""
         options = cls.init_prefetch_related_fields(prefetch_fields=prefetch_fields)
 
         objects = await session.execute(
             select(cls.table).
+            filter_by(**filter_fields).
             options(*options).
+            order_by(*order_fields).
             limit(limit).
             offset(offset)
         )

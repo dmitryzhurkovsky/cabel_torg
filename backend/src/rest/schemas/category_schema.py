@@ -15,6 +15,7 @@ class CategoryWithNestedCategoriesSchema(BaseSchema):
 class CategorySchema(BaseSchema):
     name: str
     parent_category_id: int | None
+    order: int | None
 
     class Config:
         orm_mode = True

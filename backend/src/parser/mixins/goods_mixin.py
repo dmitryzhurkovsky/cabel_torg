@@ -31,21 +31,15 @@ class GoodsMixin(BaseMixin):
         goods = self.ROOT_ELEMENT[1][4]  # noqa
 
         for product in goods:
-            attributes = None
-
             clean_product = await self.clean_product(element=product)
-            if clean_product.get('attributes'):
-                attributes = clean_product.pop('attributes')
+            attributes = clean_product.pop('attributes', None)
 
             product_db, _ = await database_services.get_or_create(
-                db=self.db, model=Product, fields=clean_product, prefetch_fields=('attributes',)
+                db=self.db, model=Product, fields=clean_product, prefetch_fields=(Product.attributes,)
             )
-
-            if attributes:  # todo maybe there is better way to do it?
-                for attribute in attributes:
-                    if attribute not in product_db.attributes:
-                        product_db.attributes.append(attribute)
-            await self.db.commit()
+            if attributes:
+                product_db.attributes = attributes
+                await self.db.commit()
 
     async def clean_product(self, element: Element) -> dict:
         """
@@ -95,7 +89,7 @@ class GoodsMixin(BaseMixin):
             case 'Описание':
                 field_name, field_value = 'description', raw_field.text
             case 'Картинка':
-                field_name, field_value = 'image_path', raw_field.text
+                field_name, field_value = 'image_path', raw_field.text[12:]
             case _:
                 return None, None
 
@@ -121,7 +115,6 @@ class GoodsMixin(BaseMixin):
         base_unit, _ = await database_services.get_or_create(
             db=self.db, model=BaseUnit, fields=fields
         )
-        await self.db.refresh(base_unit)
 
         if base_unit:
             return 'base_unit_id', base_unit.id
@@ -136,7 +129,6 @@ class GoodsMixin(BaseMixin):
                 'bookkeeping_id': raw_field[0].text,
                 'name': raw_field[1].text
             })
-        await self.db.refresh(manufacturer)
 
         return 'manufacturer_id', manufacturer.id
 
@@ -170,7 +162,6 @@ class GoodsMixin(BaseMixin):
                     'name_id': name_id_db,
                     'value_id': value_id_db,
                 })
-            await self.db.refresh(db_attribute)
 
             attributes.append(db_attribute)
 
@@ -194,7 +185,6 @@ class GoodsMixin(BaseMixin):
                     'bookkeeping_id': bookkeeping_id,
                     'payload': payload
                 })
-            await self.db.refresh(db_attribute_name)
 
             self.names_cache[bookkeeping_id] = db_attribute_name.id
 
@@ -216,6 +206,5 @@ class GoodsMixin(BaseMixin):
                     'bookkeeping_id': bookkeeping_id,
                     'payload': payload
                 })
-            await self.db.refresh(db_attribute_value)
 
             self.values_cache[bookkeeping_id] = db_attribute_value.id

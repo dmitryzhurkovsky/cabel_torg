@@ -5,28 +5,25 @@
             :key    = "item.id"
             @click  = "changeCategory(item.id, $event)"
         >
-            <div class="filter__title icon-arrow-up">{{item.name}}</div>
+            <div class="filter__title icon-arrow-l">{{item.name}}</div>
             <div class="filter__block"  v-if = "item.id === TOP_CATEGORIES_ITEM_ACTIVE">
                 <div class="filter__box" 
                     v-for   = "sub in SUB_CATEGORIES"
                     :key    = "sub.id"
                     @click  = "subCategoryClick(sub.id, $event)"
                 >
-                    <div class="filter__title icon-arrow-up">{{sub.name}}</div>
-                    <div class="filter__checkbox-list"  v-if = "sub.id === SUB_CATEGORIES_ITEM_ACTIVE">
-                        <div class="filter__checkbox__item"
+                    <div class="filter__subtitle">{{sub.name}}</div>
+                    <div class="filter__checkbox-list filter__subtitle-child"  v-if = "sub.id === SUB_CATEGORIES_ITEM_ACTIVE">
+                        <div class="filter__subtitle-child"
                             v-for = "subItem in sub.subItems"
                             :key  = "subItem.id"
                             @click = "subItemCategoryClick(subItem.id, $event)"
                         >
                             <div class="checkbox-default">
-                                <label class="checkbox__label">
-                                    <input type="checkbox" name="" class="" value="">
-                                    <div class="checkbox"></div>
-                                    <div class="filter__text">
-                                        <span class="">{{subItem.name}}</span>
-                                    </div>
-                                </label>
+                              <div class="filter__text filter__subtitle-child">
+                                {{subItem.name}}
+                              </div>
+
                             </div>
                         </div>
                     </div>
@@ -162,6 +159,17 @@ export default {
             font-size: 10px;
             //transform: rotate(-90deg);
         }
+    }
+    &__subtitle{
+      font-size: 13px;
+      padding: 5px 0 5px 20px;
+      cursor: pointer;
+      &-child{
+        color: red;
+        font-size: 12px;
+        padding: 0px 0 0px 10px;
+        cursor: pointer;
+      }
     }
     &__text{
         span{
