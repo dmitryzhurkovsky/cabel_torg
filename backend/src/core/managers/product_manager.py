@@ -1,5 +1,6 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.sql.functions import count
 from starlette.datastructures import QueryParams
 
 from src.core.db.mixins.delete_mixin import DeleteMixin
@@ -38,3 +39,21 @@ class ProductManager(
         )
 
         return objects.scalars().all()
+
+    @classmethod
+    async def get_count_of_products(
+            cls,
+            filter_fields: QueryParams,
+            session: AsyncSession,
+    ) -> int:
+        filter_fields = await convert_filter_fields(filter_fields, session=session)
+
+        result = await session.execute(
+            select(count()).
+            select_from(
+                select(cls.table.id).
+                filter(*filter_fields).
+                subquery()
+            )
+        )
+        return result.scalar()

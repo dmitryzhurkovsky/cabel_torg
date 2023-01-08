@@ -4,12 +4,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.db.db import get_session
 from src.core.enums import ProductTypeFilter
 from src.core.managers.product_manager import ProductManager
-from src.rest.schemas.product_schema import ProductSchema
+from src.rest.schemas.product_schema import ProductSchema, PaginatedProductSchema
 
 product_router = APIRouter(tags=['products'])
 
 
-@product_router.get('/products', response_model=list[ProductSchema])
+@product_router.get('/products', response_model=PaginatedProductSchema)
 async def get_products(
         request: Request,
         category_id: int | None = Query(None, description=(
@@ -32,8 +32,8 @@ async def get_products(
         ),
         offset: int = 0, limit: int = Query(default=12, lte=100),
         session: AsyncSession = Depends(get_session)
-):
-    return await ProductManager.filter_list(
+) -> PaginatedProductSchema:
+    products = await ProductManager.filter_list(
         filter_fields=request.query_params,
         session=session,
         prefetch_fields=(
@@ -44,6 +44,17 @@ async def get_products(
         offset=offset,
         limit=limit
     )
+    count_of_products = await ProductManager.get_count_of_products(
+        filter_fields=request.query_params,
+        session=session
+    )
+
+    return PaginatedProductSchema(
+        data=products,
+        limit=limit,
+        offset=offset,
+        total=count_of_products
+    )  # todo it better
 
 
 @product_router.get('/products/{product_id}', response_model=ProductSchema)

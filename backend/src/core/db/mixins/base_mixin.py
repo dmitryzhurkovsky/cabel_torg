@@ -46,12 +46,7 @@ class BaseMixin:
         return (selectinload(field) for field in prefetch_fields) if prefetch_fields else tuple()
 
     @classmethod
-    def init_selected_fields(cls, selected_fields: tuple) -> tuple:
-        """Initiate fields that will be selected in a query to database for related fields"""
-        return selected_fields if selected_fields else (cls.table,)
-
-    @classmethod
-    def _check_object(cls, obj: TableType) -> None | Type[HTTPException]:
+    def _check_object(cls, obj: TableType) -> Type[HTTPException]:  # noqa
         """Check if object exist"""
         if not obj:
             raise ObjectNotFoundError()

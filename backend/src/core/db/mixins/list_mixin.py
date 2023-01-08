@@ -10,7 +10,6 @@ class ListMixin(BaseMixin):
             cls,
             session: AsyncSession,
             prefetch_fields: tuple = None,
-            selected_fields: tuple = (),
             filter_fields: dict = {},  # noqa
             search_fields: tuple = (),
             order_fields: tuple = (),
@@ -19,10 +18,9 @@ class ListMixin(BaseMixin):
     ) -> list:
         """Get list of objects"""
         options = cls.init_prefetch_related_fields(prefetch_fields=prefetch_fields)
-        selected_columns = cls.init_selected_fields(selected_fields=selected_fields)
 
         objects = await session.execute(
-            select(*selected_columns).
+            select(cls.table).
             filter_by(**filter_fields).
             filter(*search_fields).
             options(*options).
@@ -31,4 +29,4 @@ class ListMixin(BaseMixin):
             offset(offset)
         )
 
-        return objects.scalars().all() if not selected_fields else objects.all()
+        return objects.scalars().all()

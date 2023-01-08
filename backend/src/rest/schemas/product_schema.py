@@ -1,5 +1,7 @@
 from typing import List
 
+from pydantic import BaseModel
+
 from src.rest.schemas.attribute_schema import AttributeSchema
 from src.rest.schemas.base_schema import BaseSchema
 from src.rest.schemas.category_schema import CategorySchema
@@ -35,3 +37,11 @@ class ProductInWatchListSchema(BaseSchema):
 
     class Config:
         orm_mode = True
+
+
+class PaginatedProductSchema(BaseModel):
+    limit: int
+    offset: int
+    total: int
+
+    data: List['ProductSchema']
