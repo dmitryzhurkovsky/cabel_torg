@@ -89,7 +89,7 @@ class GoodsMixin(BaseMixin, ABC):
             case 'Описание':
                 field_name, field_value = 'description', raw_field.text
             case 'Картинка':
-                field_name, field_value = 'image_path', raw_field.text
+                field_name, field_value = 'image_path', raw_field.text[12:]
             case _:
                 return None, None
 

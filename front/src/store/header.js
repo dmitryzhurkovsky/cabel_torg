@@ -11,6 +11,7 @@ export default {
     munuItemActive : 1,
     topCategoriesItemActive: null,
     subCategoriesItemActive: null,
+    lastCategoriesItemActive: null,
     windowWidth: 1280,
     viewType: 1,
     categories: [],
@@ -20,13 +21,6 @@ export default {
     LIKES_COUNT(state){
       return state.likes.length;
     },
-    // ORDER_COUNT(state){
-    //   if (state.orders.length) {
-    //       return state.orders.length;
-    //   } else {
-    //       return null;
-    //   }
-    // },
     IS_MENU_OPEN(state){
       return state.isMenuOpen;
     },

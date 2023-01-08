@@ -30,7 +30,10 @@ services:
     restart: unless-stopped
     ports:
       - '80:80'
+      - '81:81'  # for images
       - '443:443'  # for https
+    volumes:
+      - /root/images:/usr/share/nginx/images/
         
   redis:
     image: redis:latest
