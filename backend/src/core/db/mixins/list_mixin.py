@@ -19,7 +19,7 @@ class ListMixin(BaseMixin):
     ) -> list:
         """Get list of objects"""
         options = cls.init_prefetch_related_fields(prefetch_fields=prefetch_fields)
-        selected_columns = await cls.init_selected_fields(selected_fields=selected_fields, session=session)
+        selected_columns = cls.init_selected_fields(selected_fields=selected_fields)
 
         objects = await session.execute(
             select(*selected_columns).
