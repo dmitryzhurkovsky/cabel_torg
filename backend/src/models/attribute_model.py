@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 
-from src.models.abstract_model import Base1CModel
 from src.core.db.db import Base
+from src.models.abstract_model import Base1CModel
 
 
 class Attribute(Base):

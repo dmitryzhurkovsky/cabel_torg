@@ -1,10 +1,10 @@
 from fastapi import APIRouter
 
+from src.rest.api.v1.auth import auth_router
+from src.rest.api.v1.cart import cart_router
 from src.rest.api.v1.category import category_router
 from src.rest.api.v1.product import product_router
-from src.rest.api.v1.auth import auth_router
 from src.rest.api.v1.user import user_router
-from src.rest.api.v1.cart import cart_router
 from src.rest.api.v1.watchlist import watchlist_router
 
 api_v1 = APIRouter(prefix='/v1')

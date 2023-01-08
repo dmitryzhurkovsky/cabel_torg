@@ -9,7 +9,6 @@ from src.rest.schemas.user_schema import UserCreateSchema, UserUpdateSchema
 
 
 class UserManager(CRUDManager):
-
     table = User
     create_scheme = UserCreateSchema
     update_scheme = UserUpdateSchema

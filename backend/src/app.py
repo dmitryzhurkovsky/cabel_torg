@@ -2,15 +2,13 @@ import asyncio
 import logging
 
 import uvicorn
-from sqladmin import Admin
-
-from src.parser.xml_bookkeeping_parser import XMLParser
 from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.middleware.cors import CORSMiddleware
 
 from src.core import settings
 from src.core.db.db import engine
+from src.parser.xml_bookkeeping_parser import XMLParser
 from src.rest.api.router import base_router
 
 logger = logging.getLogger(__name__)
@@ -24,7 +22,6 @@ app.add_middleware(
     allow_methods=("*",),
     allow_headers=settings.CORS_ALLOWED_HEADERS,
 )
-
 
 from src.core.error_handlers import *  # noqa
 

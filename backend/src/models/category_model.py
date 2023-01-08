@@ -1,4 +1,9 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import (
+    Column,
+    ForeignKey,
+    Integer,
+    String
+)
 from sqlalchemy.orm import backref, relationship
 
 from src.models.abstract_model import Base1CModel
@@ -17,10 +22,14 @@ class Category(Base1CModel):
 
     name = Column(String)
 
-    products = relationship('Product', back_populates='category')
+    products = relationship('Product', back_populates='category', lazy='noload')
 
     parent_category_id = Column(Integer, ForeignKey('categories.id'))
-    subcategories = relationship('Category', backref=backref('parent_category', remote_side=[id]))
+    subcategories = relationship(
+        'Category',
+        backref=backref('parent_category', remote_side=[id]),
+        viewonly=True,
+    )
 
     def __str__(self):
         return self.name

@@ -28,4 +28,3 @@ class ProductType(str, Enum):
     @classmethod
     def values(cls) -> tuple:
         return tuple(el.value for el in cls)
-

@@ -21,4 +21,3 @@ class DeleteMixin(BaseMixin):
         await session.commit()
 
         return {'status': SessionStatusEnum.SUCCESS.value}
-

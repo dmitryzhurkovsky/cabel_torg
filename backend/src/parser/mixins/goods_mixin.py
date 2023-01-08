@@ -1,7 +1,6 @@
 from _elementtree import Element
+from abc import ABC
 
-from src.models.attribute_model import AttributeValue, AttributeName
-from src.parser.mixins.base_mixin import BaseMixin
 from src.core.db import database_services
 from src.core.utils import (
     clean_string_from_spaces_and_redundant_symbols,
@@ -9,11 +8,12 @@ from src.core.utils import (
     get_tag_name
 )
 from src.models import Manufacturer, BaseUnit, Category, Attribute
-
+from src.models.attribute_model import AttributeValue, AttributeName
 from src.models.product_models import Product
+from src.parser.mixins.base_mixin import BaseMixin
 
 
-class GoodsMixin(BaseMixin):
+class GoodsMixin(BaseMixin, ABC):
     @property
     def names_cache(self) -> dict:
         if not self.CACHE.get('names'):

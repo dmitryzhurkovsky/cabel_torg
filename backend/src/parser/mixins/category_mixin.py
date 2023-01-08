@@ -1,12 +1,12 @@
 from _elementtree import Element
+from abc import ABC
 
-from src.parser.mixins.base_mixin import BaseMixin
 from src.core.db import database_services
-
 from src.models.category_model import Category
+from src.parser.mixins.base_mixin import BaseMixin
 
 
-class CategoryMixin(BaseMixin):
+class CategoryMixin(BaseMixin, ABC):
     async def parse_categories(self):
         """Parse "Категории" node and write then to a database."""
         main_categories = self.ROOT_ELEMENT[0][3]  # noqa

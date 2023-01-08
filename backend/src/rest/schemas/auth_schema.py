@@ -1,7 +1,6 @@
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import BaseModel
 
-
 auth_schema = OAuth2PasswordBearer(
     tokenUrl='token',
 )

@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+
 from src.rest.schemas.base_schema import BaseSchema
 
 
