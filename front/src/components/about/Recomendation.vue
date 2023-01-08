@@ -26,9 +26,9 @@
                   @slideChange="onSlideChange"
               >
 
-                <swiper-slide v-for="n in 7" :key="n">
+                <swiper-slide v-for="item in RECOMENDED_ITEMS" :key="item.id">
                   <CardItem
-                      :card_id = "n"
+                      :card = "item"
                   />
                 </swiper-slide>
 
@@ -44,10 +44,6 @@
           </div>
           <div class="recomendation__block" v-if = "VIEW_TYPE === 2">
 
-<!--            <CardItem v-for="n in 6"-->
-<!--              :key="n"-->
-<!--              :card_id = "n"-->
-<!--            />-->
             <swiper
                 :slides-per-view="3"
                 :space-between="15"
@@ -62,9 +58,9 @@
                 @slideChange="onSlideChange"
             >
 
-              <swiper-slide v-for="n in 6" :key="n">
+              <swiper-slide v-for="item in RECOMENDED_ITEMS" :key="item.id">
                 <CardItem
-                    :card_id = "n"
+                    :card = "item"
                 />
               </swiper-slide>
 
@@ -79,9 +75,8 @@
           </div>
           <div class="recomendation__block" v-if = "VIEW_TYPE === 3">
 
-            <CardItem v-for="n in 4"
-              :key="n"
-              :card_id = "n"
+            <CardItem v-for="item in RECOMENDED_ITEMS" :key="item.id"
+              :card = "item"
             />
           </div>
 
@@ -92,8 +87,8 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
-  import CardItem from '@/components/goods/card_item.vue'
+  import { mapGetters, mapActions } from 'vuex'
+  import CardItem from '@/components/catalog/card-item.vue'
 
   import { Swiper } from "swiper/vue";
   import { SwiperSlide } from "swiper/vue";
@@ -111,6 +106,7 @@
 
     computed: {
       ...mapGetters("header", ["VIEW_TYPE"]),
+      ...mapGetters("catalog", ["RECOMENDED_ITEMS"]),
     },
 
     data: function(){
@@ -120,6 +116,7 @@
     },
 
     methods:{
+      ...mapActions("catalog", ["GET_RECOMENDED_ITEMS"]),
       onSlideChange() {
          console.log('slide change');
       },
@@ -133,6 +130,10 @@
           this.swiper = swiper;
       },
     },
+
+    async mounted(){
+      await this.GET_RECOMENDED_ITEMS();
+    }
   }
 </script>
 

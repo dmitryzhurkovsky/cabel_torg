@@ -62,6 +62,11 @@ export default {
     },
     subCategoryClick(id, event){
       this.SET_CURRENT_SUB_CATEGORY(id);
+      this.GET_CATALOG_ITEMS(id);
+      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
+      if (this.$router.path != '/catalog') {
+          this.$router.push('/catalog');
+      }
     },
     subItemCategoryClick(id, event){
       // console.log('кликнули по итему подкатегории ', id, event);
