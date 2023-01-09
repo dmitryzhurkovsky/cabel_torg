@@ -31,6 +31,7 @@
     transition: all 0.3s ease;
     &:hover{
       border: 1.2px solid #4275D8;
+      cursor: pointer;
     }
   }
   .active{

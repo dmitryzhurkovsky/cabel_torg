@@ -236,6 +236,20 @@
 
 }
 
+.product-table{
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  gap: 10px;
+  @media (max-width: $md2+px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .item-card{
+    min-width: 270px;
+  }
+}
+
 </style>
 
 <!--<script>-->

@@ -141,6 +141,10 @@ export default {
     line-height: 20px;
     text-decoration-line: underline;
     color: #423E48;
+    &:hover{
+      color:#4275D8;
+      opacity: 0.8;
+    }
 
   }
 

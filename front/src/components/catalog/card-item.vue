@@ -120,9 +120,11 @@ export default {
   }
 
   &__buy {
+
     &:before {
       cursor: pointer;
       padding: 10px 10px;
+      transition: all 0.2s ease;
     }
     &:hover{
       background: #4275D8;
@@ -160,6 +162,10 @@ export default {
 
   &__title {
     margin-bottom: 10px;
+    height: 40px;
+    overflow: hidden;
+    line-height: 1.26;
+    font-weight: 400;
     a{
       font-weight: 500;
       font-size: 15px;
@@ -169,7 +175,8 @@ export default {
 
   }
 
-  &__uptitle {
+  &__uptitle{
+    font-size: 14px;
     a{
       font-weight: 400;
       font-size: 14px;

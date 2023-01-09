@@ -13,7 +13,7 @@
                     @click  = "subCategoryClick(sub.id, $event)"
                 >
                     <div class="filter__subtitle">{{sub.name}}</div>
-                    <div class="filter__checkbox-list filter__subtitle-child"  v-if = "sub.id === SUB_CATEGORIES_ITEM_ACTIVE">
+                    <div class="filter__checkbox-list filter__subtitle-child "  v-if = "sub.id === SUB_CATEGORIES_ITEM_ACTIVE">
                         <div class="filter__subtitle-child"
                             v-for = "subItem in sub.subItems"
                             :key  = "subItem.id"
@@ -142,6 +142,10 @@ export default {
     &__box{
         font-weight: 400;
         position: relative;
+      .icon-arrow-l:before{
+        transform: rotate(90deg);
+        cursor: pointer;
+      }
     }
 
     &__title{

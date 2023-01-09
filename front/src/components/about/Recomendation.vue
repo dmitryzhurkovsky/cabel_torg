@@ -147,6 +147,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
+  margin-top: 20px;
 
   span {
     background: #7700AF;
