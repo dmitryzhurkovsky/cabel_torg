@@ -119,8 +119,9 @@
 
     },
 
-    mounted() {
-      this.getData();
+    async mounted() {
+      await this.getData();
+      console.log(this.ITEMS_LIST);
     }    
   }
 </script>

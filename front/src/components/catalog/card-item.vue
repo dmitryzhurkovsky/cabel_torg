@@ -46,9 +46,9 @@ export default {
 
   methods: {
     getImagePath(item) {
-        const allPath = item.split(',');
-        const path = process.env.VUE_APP_IMAGES + allPath[0];
-        return path;
+      const allPath = item.split(',');
+      const path = process.env.VUE_APP_IMAGES + allPath[0];
+      return path;
     }
   },
 

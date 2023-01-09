@@ -39,7 +39,7 @@ export default {
                 '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type + 
                 '&offset=' + rootGetters['query/OFFSET'] + 
                 '&limit=' + rootGetters['query/LIMIT']);
-            commit("SET_CATALOG_ITEMS", response.data);
+            commit("SET_CATALOG_ITEMS", response.data.data);
         } catch (e) {
             console.log(e);
             commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить каталог ", icon: "error", id: '1'}, {root: true})
@@ -52,7 +52,7 @@ export default {
                 'products?type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type + 
                 '&offset=' + rootGetters['query/OFFSET'] + 
                 '&limit=' + rootGetters['query/LIMIT']);
-            commit("SET_CATALOG_ITEMS", response.data);
+            commit("SET_CATALOG_ITEMS", response.data.data);
         } catch (e) {
             console.log(e);
             commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить каталог ", icon: "error", id: '1'}, {root: true})
@@ -65,7 +65,7 @@ export default {
                 'products?type_of_product=all' + 
                 '&offset=0' +  
                 '&limit=10');
-            commit("SET_RECOMENDED_ITEMS", response.data);
+            commit("SET_RECOMENDED_ITEMS", response.data.data);
         } catch (e) {
             console.log(e);
             commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить каталог ", icon: "error", id: '1'}, {root: true})
