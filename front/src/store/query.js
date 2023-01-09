@@ -35,10 +35,12 @@ export default {
 
     mutations: {
       SET_CATEGORY_ID(state, category) {
+        state.offset = 0;
         state.categoryId = category;
       },
 
       SET_TYPE_OF_PRODUCT(state, newTypeOfProduct) {
+        state.offset = 0;
         state.typeOfProduct = newTypeOfProduct;
       },
 

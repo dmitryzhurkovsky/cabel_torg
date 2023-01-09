@@ -106,7 +106,7 @@
 
     methods: {
       ...mapActions("catalog", ["GET_CATALOG_ITEMS", "GET_ALL_CATALOG_ITEMS"]),
-      ...mapMutations("query", ["SET_CATEGORY_ID"]),
+      ...mapMutations("query", ["SET_CATEGORY_ID", "SET_OFFSET"]),
 
       async getData() {
         if (this.TOP_CATEGORIES_ITEM_ACTIVE && this.SUB_CATEGORIES_ITEM_ACTIVE) {
