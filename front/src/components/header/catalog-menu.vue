@@ -6,15 +6,19 @@
         <div class="menu active _container">
           <div class="menu__scroll">
             <div class="container row">
-              <ul class="menu__mass">
-                <li class="menu__item" :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"
-                    v-for   = "item in TOP_CATEGORIES"
-                    :key    = "item.id"
-                    @click  = "changeCategory(item.id)"
-                >
-                  <div class="menu__link">{{item.name}}</div>
-                </li>
-              </ul>
+              <div class="colunm">
+                <ul class="menu__mass">
+                  <li class="menu__item" :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"
+                      v-for   = "item in TOP_CATEGORIES"
+                      :key    = "item.id"
+                      @click  = "changeCategory(item.id)"
+                  >
+                    <div class="menu__link">{{item.name}}</div>
+                  </li>
+                </ul>
+                <a href="/catalog" class="menu__mass-lnk">Перейти в каталог</a>
+              </div>
+
               <div class="menusub row">
                 <div class="menusub__box">
                   <div class="menusub__item"
@@ -99,12 +103,23 @@ export default {
     min-width: 250px;
     max-height: 100%;
     position: static;
+    &-lnk{
+      padding-left: 15px;
+      font-size: 12px;
+      margin: 20px 0;
+      color: #423E48;
+      transition: all 0.3s ease;
+      &:hover{
+        color: #4275D8;
+      }
+    }
   }
 
   &__item{
     //margin: 20px 0;
     width: 100%;
     padding: 10px 15px;
+    transition: all 0.2s ease;
     &:hover{
       color:#4275D8;
       background: rgba(66, 117, 216, 0.1);
@@ -134,6 +149,12 @@ export default {
     align-items: flex-start;
 
   }
+  .colunm{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
 
   &__rubric{
     font-weight: 400;
@@ -141,6 +162,7 @@ export default {
     line-height: 20px;
     text-decoration-line: underline;
     color: #423E48;
+    transition: all 0.2s ease;
     &:hover{
       color:#4275D8;
       opacity: 0.8;
