@@ -57,26 +57,25 @@
 
 
         </div>
+      <!--            # PRICE SLIDER-->
       <div class="filter__box">
-        <div class="filter__title icon-arrow-up">Показывать:</div>
+        <div class="filter__title">Диапазон цен:</div>
+        <div class="filter__slider">
+          <div class="filter__progress"></div>
+        </div>
+        <div class="range-input">
+          <input type="range" class="range-min" min="0" max="10000" value="2500" step="100">
+          <input type="range" class="range-max" min="0" max="10000" value="7500" step="100">
+        </div>
+        <div class="price-input">
+          <div class="filter__field">
+            <span>от</span>
+            <input type="number" class="input-min" value="2500">
+          </div>
 
-        <div class="filter__checkbox-list">
-          <div class="filter__checkbox__item"
-               v-for = "category in categories"
-               :key = "category"
-          >
-            <div
-                class = "checkbox-default"
-                @click="changeFilterCategory($event, category)"
-            >
-              <label class="checkbox__label">
-                <input type="checkbox" name="" class="" value="">
-                <div class="checkbox"></div>
-                <div class="filter__text">
-                  <span :class="[category.type === TYPE_OF_PRODUCT.type ? 'active' : '']">{{ category.name }}</span>
-                </div>
-              </label>
-            </div>
+          <div class="filter__field">
+            <span>до</span>
+            <input type="number" class="input-max" value="7500">
           </div>
         </div>
 
@@ -201,6 +200,36 @@ export default {
         cursor: pointer;
       }
     }
+    &__field{
+      flex-direction: column;
+      align-items: flex-start;
+        input{
+          width: 100%;
+          height: 100%;
+          outline: none;
+          font-size: 16px;
+          border-radius: 5px;
+          padding: 5px 10px;
+          text-align: left;
+          border: 1px solid #999;
+          -moz-appearance: textfield;
+      }
+    }
+    &__slider {
+      height: 4px;
+      position: relative;
+      background: #ddd;
+      border-radius: 5px;
+    }
+    &__progress{
+      height: 100%;
+      left: 25%;
+      right: 25%;
+      position: absolute;
+      border-radius: 5px;
+      background: #4275D8;
+
+    }
     &__text{
         span{
             font-weight: 400;
@@ -235,6 +264,63 @@ export default {
     justify-content: flex-start;
     height: 30px;
   }
+}
+//PRICE SLIDER
+.price-input{
+  width: 100%;
+  display: flex;
+  margin: 30px 0 35px;
+  gap: 10px;
+}
+.price-input .filter__field{
+  display: flex;
+  width: 100%;
+  height: 45px;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+
+.range-input{
+  position: relative;
+}
+.range-input input{
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  top: -5px;
+  background: none;
+  border: none;
+  padding: 0;
+  pointer-events: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+input[type="range"]::-webkit-slider-thumb{
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  border: 2px solid #4275D8;
+
+  background: #fff;
+  pointer-events: auto;
+  -webkit-appearance: none;
+  box-shadow: 0 0 6px rgba(0,0,0,0.05);
+}
+input[type="range"]::-moz-range-thumb{
+  height: 20px;
+  width: 20px;
+  border: 2px solid #4275D8;
+  border-radius: 50%;
+  background: #fff;
+  pointer-events: auto;
+  -moz-appearance: none;
+  box-shadow: 0 0 6px rgba(0,0,0,0.05);
 }
 
 </style>
