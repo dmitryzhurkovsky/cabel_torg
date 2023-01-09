@@ -9,7 +9,7 @@ export default {
     offset: 0,
     limit: 10,
     sort: {name: 'По дате добавления', type: 'date'},
-    view: 'row',
+    view: 'table',
   },
 
     getters: {
@@ -38,6 +38,14 @@ export default {
         state.categoryId = category;
       },
 
+      SET_TYPE_OF_PRODUCT(state, newTypeOfProduct) {
+        state.typeOfProduct = newTypeOfProduct;
+      },
+
+      SET_OFFSET(state, newOffset) {
+        state.offset = newOffset;
+      },
+
       SET_LIMIT(state, newlimit) {
         state.limit = newlimit;
       },
@@ -48,10 +56,6 @@ export default {
 
       SET_VIEW_TYPE(state, newViewType) {
         state.view = newViewType;
-      },
-
-      SET_TYPE_OF_PRODUCT(state, newTypeOfProduct) {
-        state.typeOfProduct = newTypeOfProduct;
       },
     },
 

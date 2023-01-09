@@ -79,6 +79,9 @@
       LIMIT: function() {
         this.getData();
       },
+      OFFSET: function() {
+        this.getData();
+      },
       TYPE_OF_PRODUCT: function() {
         this.getData();
       },
@@ -90,7 +93,7 @@
     computed: {
         ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES"]),
         ...mapGetters("catalog", ["ITEMS_LIST"]),
-        ...mapGetters("query", ["LIMIT", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID"]),
+        ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID"]),
 
         LastCategory(){
             let result = [];
@@ -121,7 +124,6 @@
 
     async mounted() {
       await this.getData();
-      console.log(this.ITEMS_LIST);
     }    
   }
 </script>

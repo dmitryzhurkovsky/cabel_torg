@@ -1,20 +1,91 @@
 <template>
-    <div class="content-block__pagination">
-        <a class="pagination_link active">1</a>
-        <a class="pagination_link">2</a>
-        <a class="pagination_link">3</a>
-        <a class="pagination_link">...</a>
-        <a class="pagination_link">5</a>
-        <a class="pagination_link">6</a>
+    <div v-if = "Pages" class="content-block__pagination">
+      <a 
+          :class="[item.pageNumber === ACTIVE_PAGE ? 'pagination_link active' : 'pagination_link']"
+          v-for = "item in Pages"
+          :key = "item.name"
+          @click="onChangePage(item)"
+      >
+        {{ item.name }}
+      </a>
     </div>   
 </template>
 
 <script>
 
-  import {mapGetters} from 'vuex'
+  import { mapGetters, mapMutations } from 'vuex'
 
   export default {
     name: 'PaginationPanel',
+
+    computed: {
+      ...mapGetters("catalog", ["TOTAL_PAGES", "ACTIVE_PAGE"]),
+      ...mapGetters("query", ["LIMIT", "OFFSET"]),
+
+      Pages() {
+        let result = []
+        const firstLink = { name: '<', pageNumber: this.ACTIVE_PAGE - 1, isAvailable: this.ACTIVE_PAGE !== 1 };
+        result.push(firstLink);
+        
+        if (this.TOTAL_PAGES >= 5){
+          if (this.TOTAL_PAGES - this.ACTIVE_PAGE < 5){
+            for (let i = 4; i >= 0; i--) {
+              const curLink = {
+                name: this.TOTAL_PAGES - i,
+                pageNumber: this.TOTAL_PAGES - i,
+                isAvailable: this.ACTIVE_PAGE !== i
+              }
+              result.push(curLink);
+            }
+          } else {
+            for (let i = 0; i < 3; i++) {
+              const curLink = {
+                name: this.ACTIVE_PAGE + i,
+                pageNumber: this.ACTIVE_PAGE + i,
+                isAvailable: this.ACTIVE_PAGE + i !== this.ACTIVE_PAGE
+              };
+              result.push(curLink);
+            }
+            const dots = {
+              name: '...',
+              pageNumber: null,
+              isAvailable: false
+            }
+            result.push(dots);
+            const afterDots = {
+              name: this.TOTAL_PAGES,
+              pageNumber: this.TOTAL_PAGES,
+              isAvailable: this.TOTAL_PAGES !== this.ACTIVE_PAGE
+            }
+            result.push(afterDots);
+          }
+        } else {
+          for (let i = 1; i < 3; i++) {
+            const curLink = {
+              name: i,
+              pageNumber: i,
+              isAvailable: this.ACTIVE_PAGE !== i
+            }
+            result.push(curLink);
+          }
+        }
+        const lastLink = { name: '>', pageNumber: this.ACTIVE_PAGE + 1, isAvailable: this.ACTIVE_PAGE !== this.TOTAL_PAGES };
+        result.push(lastLink);
+        return result;
+      }
+    },
+
+    methods: {
+      ...mapMutations("query", ["SET_OFFSET"]),
+
+      onChangePage(data) {
+        console.log(data);
+        if (data.pageNumber) {
+          const newOffset = (data.pageNumber - 1) * this.LIMIT;
+          this.SET_OFFSET(newOffset);
+        }
+      }
+    }
   }
 </script>
 
