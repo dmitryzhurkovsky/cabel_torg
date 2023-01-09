@@ -7,7 +7,7 @@
         >
             <div class="filter__title icon-arrow-l">{{item.name}}</div>
             <div class="filter__block"  v-if = "item.id === TOP_CATEGORIES_ITEM_ACTIVE">
-                <div class="filter__box" 
+                <div class=""
                     v-for   = "sub in SUB_CATEGORIES"
                     :key    = "sub.id"
                     @click  = "subCategoryClick(sub.id, $event)"
@@ -57,6 +57,32 @@
 
 
         </div>
+      <div class="filter__box">
+        <div class="filter__title icon-arrow-up">Показывать:</div>
+
+        <div class="filter__checkbox-list">
+          <div class="filter__checkbox__item"
+               v-for = "category in categories"
+               :key = "category"
+          >
+            <div
+                class = "checkbox-default"
+                @click="changeFilterCategory($event, category)"
+            >
+              <label class="checkbox__label">
+                <input type="checkbox" name="" class="" value="">
+                <div class="checkbox"></div>
+                <div class="filter__text">
+                  <span :class="[category.type === TYPE_OF_PRODUCT.type ? 'active' : '']">{{ category.name }}</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
     </div>
 
 </template>

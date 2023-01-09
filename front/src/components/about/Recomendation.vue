@@ -150,13 +150,20 @@
   margin-top: 20px;
 
   span {
-    background: #7700AF;
+    //background: #7700AF;
+    background:red;
   }
 }
 .swiper-pagination-bullet, .swiper-pagination-bullet-active{
-  background: red;
-}
+  background: black!important
 
+}
+.swiper-pagination-bullet-active{
+  background: red!important;
+}
+:root {
+  --swiper-theme-color: red!important;
+}
 
 
 
