@@ -2,7 +2,8 @@
     <div class="product">
         <div class="product__tag">Хит</div>
         <a class="product__img" href="">
-            <img class="" :src=getImagePath(card.images) alt="">
+            <img v-if = "card.images" class="" :src=getImagePath(card.images) alt="">
+            <img v-if = "!card.images" class="" src="../../assets/no_image.jpg" alt="">
         </a>
         <div class="product__info">
             <div class="product__status icon-done-color _label mb-20">В наличии</div>
@@ -45,11 +46,14 @@
     name: 'ListItem',
 
     methods: {
-        getImagePath(item) {
+      getImagePath(item) {
+        let path = null;
+        if (item) {
           const allPath = item.split(',');
-          const path = process.env.VUE_APP_IMAGES + allPath[0];
-          return path;
+          path = process.env.VUE_APP_IMAGES + allPath[0];
         }
+        return path;
+       }
     }
 
   }

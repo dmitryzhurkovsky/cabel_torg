@@ -3,7 +3,8 @@
     <div class="item-card__tag">Хит</div>
     <div class="item-card__wishlist icon-favorite"></div>
     <a class="item-card__img" href="">
-      <img class="" :src=getImagePath(card.images) alt="">
+      <img v-if = "card.images" class="" :src=getImagePath(card.images) alt="">
+      <img v-if = "!card.images" class="" src="../../assets/no_image.jpg" alt="">
     </a>
     <div class="item-card__info">
       <div class="item-card__row flex-center">
@@ -46,8 +47,11 @@ export default {
 
   methods: {
     getImagePath(item) {
-      const allPath = item.split(',');
-      const path = process.env.VUE_APP_IMAGES + allPath[0];
+      let path = null;
+      if (item) {
+        const allPath = item.split(',');
+        path = process.env.VUE_APP_IMAGES + allPath[0];
+      }
       return path;
     }
   },
