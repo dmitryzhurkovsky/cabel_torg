@@ -60,7 +60,7 @@
             result.push(afterDots);
           }
         } else {
-          for (let i = 1; i < 3; i++) {
+          for (let i = 1; i <= this.TOTAL_PAGES; i++) {
             const curLink = {
               name: i,
               pageNumber: i,
@@ -80,7 +80,7 @@
 
       onChangePage(data) {
         console.log(data);
-        if (data.pageNumber) {
+        if (data.pageNumber && data.isAvailable) {
           const newOffset = (data.pageNumber - 1) * this.LIMIT;
           this.SET_OFFSET(newOffset);
         }

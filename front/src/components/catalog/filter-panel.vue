@@ -107,7 +107,7 @@ export default {
         subItemCategoryClick(id, event){
             event.stopImmediatePropagation();
             event.preventDefault();
-            console.log('кликнули по итему подкатегории ', id, event);
+            // console.log('кликнули по итему подкатегории ', id, event);
             this.SET_CATEGORY_ID(id);
         },
         changeFilterCategory(event, category){
