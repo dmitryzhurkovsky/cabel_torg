@@ -1,5 +1,6 @@
 <template lang="html">
-  <BurgerMenu v-if = "IS_MENU_OPEN"/>
+  <!-- <BurgerMenu v-if = "IS_MENU_OPEN"/> -->
+  <CatalogMenu v-if = "IS_CATALOG_OPEN"/>
   <div class="header__wrapper">
     <div class="header__content _container">
         <div class="header__body ">
@@ -33,9 +34,10 @@
 </template>
 
 <script>
-  import {mapActions, mapGetters} from 'vuex'
+  import {mapMutations, mapGetters} from 'vuex'
   import HeaderSearch from '@/components/header/header-search.vue'
-  import BurgerMenu from '@/components/header/burger-menu.vue'
+  import CatalogMenu  from '@/components/header/catalog-menu.vue'
+  // import BurgerMenu from '@/components/header/burger-menu.vue'
   // import UserActionsMobile from '@/components/auth/user-actions-mobile.vue'
   import TopMenuActions  from '@/components/header/header-actions.vue'
 
@@ -44,18 +46,26 @@
 
     components:
     {
-      HeaderSearch, BurgerMenu, TopMenuActions
+      // HeaderSearch, BurgerMenu, TopMenuActions
+      HeaderSearch, CatalogMenu, TopMenuActions
     },
 
     computed: {
-      ...mapGetters("header", ["IS_MENU_OPEN"]),
+      ...mapGetters("header", ["IS_CATALOG_OPEN", "TOP_CATEGORIES"]),
+      // ...mapGetters("header", ["IS_MENU_OPEN"]),
     },
 
     methods:{
+      ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
+
       toggleMenu() {
-        this.$store.commit('header/UPDATE_IS_MENU_OPEN', !this.IS_MENU_OPEN);
-        // console.log(this.IS_MENU_OPEN);
+        this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
+        console.log(this.IS_CATALOG_OPEN);
       },
+      // toggleMenu() {
+        // this.$store.commit('header/UPDATE_IS_MENU_OPEN', !this.IS_MENU_OPEN);
+        // console.log(this.IS_MENU_OPEN);
+      // },
     }
 
   }

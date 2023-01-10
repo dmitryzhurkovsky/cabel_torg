@@ -6,7 +6,7 @@ export default {
   state: {
     likes: [],
     // orders: [12,23],
-    isMenuOpen: false,
+    // isMenuOpen: false,
     isCatalogOpen: false,
     munuItemActive : 1,
     topCategoriesItemActive: null,
@@ -21,9 +21,9 @@ export default {
     LIKES_COUNT(state){
       return state.likes.length;
     },
-    IS_MENU_OPEN(state){
-      return state.isMenuOpen;
-    },
+    // IS_MENU_OPEN(state){
+    //   return state.isMenuOpen;
+    // },
     IS_CATALOG_OPEN(state){
       return state.isCatalogOpen;
     },
@@ -75,9 +75,9 @@ export default {
   },
 
   mutations: {
-    UPDATE_IS_MENU_OPEN (state, payload){
-      state.isMenuOpen = payload;
-    },
+    // UPDATE_IS_MENU_OPEN (state, payload){
+    //   state.isMenuOpen = payload;
+    // },
 
     UPDATE_IS_CATALOG_OPEN (state, payload){
       state.isCatalogOpen = payload;

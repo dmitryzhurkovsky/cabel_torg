@@ -46,7 +46,6 @@ export default {
           console.log('Active page',state.activePage);
         }
         state.tatalPages =  data.back.total % data.limit === 0 ? data.back.total / data.limit: Math.floor(data.back.total / data.limit) + 1;
-        console.log('SET_PAGE_DATA', state);
       }
     },
 
