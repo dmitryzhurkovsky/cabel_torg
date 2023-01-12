@@ -5,7 +5,9 @@
             :key    = "item.id"
             @click  = "changeCategory(item.id, $event)"
         >
-            <div class="filter__title icon-arrow-l">{{item.name}}</div>
+            <div 
+              :class="[ item.id === TOP_CATEGORIES_ITEM_ACTIVE ? 'filter__title icon-arrow-r' : 'filter__title icon-arrow-l']"
+            >{{item.name}}</div>
             <div class="filter__block"  v-if = "item.id === TOP_CATEGORIES_ITEM_ACTIVE">
                 <div class=""
                     v-for   = "sub in SUB_CATEGORIES"
@@ -152,6 +154,10 @@ export default {
         position: relative;
       .icon-arrow-l:before{
         transform: rotate(90deg);
+        cursor: pointer;
+      }
+      .icon-arrow-r:before{
+        transform: rotate(-90deg);
         cursor: pointer;
       }
     }

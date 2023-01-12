@@ -91,6 +91,9 @@
 .icon-arrow-l:before {
   content: "\e90e";
 }
+.icon-arrow-r:before {
+  content: "\e90e";
+}
 .icon-catalog-row:before {
   content: "\e90f";
 }

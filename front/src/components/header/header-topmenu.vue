@@ -8,18 +8,17 @@
               <CatalogMenu v-if = "IS_CATALOG_OPEN"/>
             </div>
             <div class="topmenu__item">
-                  <div class="dropdown">Покупателям
-                    <div class="dropdown__wrapper">
-                      <div class="dropdown__content">
-                        <a @click="openPage('/how_to_work')">Как оформить заказ</a>
-                        <a @click="openPage('/shipping')">Оплата и доставка</a>
-                        <a @click="openPage('/wholesale')">Оптовым клиентам</a>
-                        <a @click="openPage('/warranty')">Гарантийное обслуживание</a>
-                        <a @click="openPage('/offer')">Публичная оферта</a>
-                      </div>
-                    </div>
-
+              <div class="dropdown">Покупателям
+                <div class="dropdown__wrapper">
+                  <div class="dropdown__content">
+                    <a @click="openPage('/how_to_work')">Как оформить заказ</a>
+                    <a @click="openPage('/shipping')">Оплата и доставка</a>
+                    <a @click="openPage('/wholesale')">Оптовым клиентам</a>
+                    <a @click="openPage('/warranty')">Гарантийное обслуживание</a>
+                    <a @click="openPage('/offer')">Публичная оферта</a>
                   </div>
+                </div>
+              </div>
             </div>
             <div class="topmenu__item">
               <div class="dropdown">О нас
@@ -31,7 +30,6 @@
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
           <TopMenuActions />

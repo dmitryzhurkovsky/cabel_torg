@@ -10,6 +10,8 @@ export default {
     limit: 10,
     sort: {name: 'По дате добавления', type: 'date'},
     view: 'table',
+    minPrice: 0,
+    maxPrice: 10000,
   },
 
     getters: {
@@ -30,7 +32,13 @@ export default {
       },
       VIEW_TYPE(state){
         return state.view;
-      }
+      },
+      MIN_PRICE(state){
+        return state.minPrice;
+      },
+      MAX_PRICE(state){
+        return state.maxPrice;
+      },
     },
 
     mutations: {
@@ -58,6 +66,14 @@ export default {
 
       SET_VIEW_TYPE(state, newViewType) {
         state.view = newViewType;
+      },
+
+      SET_MIN_PRICE(state, price) {
+        state.minPrice = price;
+      },
+
+      SET_MAX_PRICE(state, price) {
+        state.maxPrice = price;
       },
     },
 

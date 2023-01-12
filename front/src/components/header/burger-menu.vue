@@ -1,79 +1,51 @@
 <template lang="html">
   <div class="burger__menu__open">
-<!--    <div v-if = "MENU_ITEM_ACTIVE === 1">first menu item</div>-->
-<!--    <div v-if = "MENU_ITEM_ACTIVE === 2">second menu item</div>-->
-<!--    <div v-if = "MENU_ITEM_ACTIVE === 3">third menu item</div>-->
     <ul class="cd-accordion-menu animated">
-      <li class="has-children">
-        <input type="checkbox" name="group-1" id="group-1" checked>
-        <label for="group-1">Сетевое оборудование</label>
-        <ul>
-          <li class="has-children">
-            <input type="checkbox" name="sub-group-1" id="sub-group-1">
-            <label for="sub-group-1">Маршрутизаторы</label>
-            <ul>
-              <li><a href="#0">Для корпоративных клиентов</a></li>
-              <li><a href="#0">Для провайдеров услуг связи</a></li>
-              <li><a href="#0">Аксессуары для маршрутизаторов</a></li>
-            </ul>
-          </li>
-          <li class="has-children">
-            <input type="checkbox" name="sub-group-2" id="sub-group-2">
-            <label for="sub-group-2">Коммутаторы</label>
-            <ul>
-              <li class="has-children">
-                <input type="checkbox" name="sub-group-level-3" id="sub-group-level-3">
-                <label for="sub-group-level-3">Фиксированные коммутаторы</label>
-                <ul>
-                  <li><a href="#0">Фиксированные комутаторы</a></li>
-                  <li><a href="#0">Модульные комутаторы</a></li>
-                  <li><a href="#0">Коммутаторы Fibre Channel </a></li>
-                  <li><a href="#0">Аксессуары для коммутаторов</a></li>
-                </ul>
+      <li 
+        :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"  
+        v-for   = "item in TOP_CATEGORIES"
+        :key    = "item.id"
+        @click  = "changeCategory(item.id)"
+      >
+        <label 
+          :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"  
+        >{{ item.name }}</label>
+        <ul v-if = "item.id === TOP_CATEGORIES_ITEM_ACTIVE">
+          <li 
+            v-for   = "sub in SUB_CATEGORIES"
+            :key    = "sub.id"
+            @click  = "subCategoryClick(sub.id, $event)"
+          >
+            <label 
+              :class = "{'active' : sub.id === SUB_CATEGORIES_ITEM_ACTIVE}"  
+            >{{ sub.name }}</label>
+            <ul v-if = " sub.id === SUB_CATEGORIES_ITEM_ACTIVE && sub.subItems.length > 0">
+              <li 
+                class="has-children"
+                v-for = "subItem in sub.subItems"
+                :key  = "subItem.id"
+              >
+                <label 
+                  for="sub-group-level-3"
+                  @click = "subItemCategoryClick(subItem.id, $event)"
+                >{{ subItem.name }}</label>
               </li>
-              <li><a href="#0">Сервисные шлюзы</a></li>
             </ul>
           </li>
-          <li><a href="#0">Сервисные шлюзы</a></li>
-          <li><a href="#0">Сервисные шлюзы</a></li>
-        </ul>
-      </li>
-      <li class="has-children">
-        <input type="checkbox" name="group-2" id="group-2">
-        <label for="group-2">Group 2</label>
-        <ul>
-          <li><a href="#0">Image</a></li>
-          <li><a href="#0">Image</a></li>
-        </ul>
-      </li>
-      <li class="has-children">
-        <input type="checkbox" name="group-3" id="group-3">
-        <label for="group-3">Group 3</label>
-        <ul>
-          <li><a href="#0">Image</a></li>
-          <li><a href="#0">Image</a></li>
-        </ul>
-      </li>
-      <li class="has-children">
-        <input type="checkbox" name="group-4" id="group-4">
-        <label for="group-4">Group 4</label>
-        <ul>
-          <li class="has-children">
-            <input type="checkbox" name="sub-group-3" id="sub-group-3">
-            <label for="sub-group-3">Sub Group 3</label>
-            <ul>
-              <li><a href="#0">Image</a></li>
-              <li><a href="#0">Image</a></li>
-            </ul>
-          </li>
-          <li><a href="#0">Image</a></li>
-          <li><a href="#0">Image</a></li>
         </ul>
       </li>
     </ul>
     <div class="burger__menu__block flex-center">
-      <a href="" class="burger__menu__item mb-20">Покупателям</a>
-      <a href="" class="burger__menu__item">О нас </a>
+      <!-- <a href="" class="burger__menu__item mb-20">Покупателям</a>
+      <a href="" class="burger__menu__item">О нас </a> -->
+      <a class="burger__menu__item" @click="openPage('/how_to_work')">Как оформить заказ</a>
+      <a class="burger__menu__item" @click="openPage('/shipping')">Оплата и доставка</a>
+      <a class="burger__menu__item" @click="openPage('/wholesale')">Оптовым клиентам</a>
+      <a class="burger__menu__item" @click="openPage('/warranty')">Гарантийное обслуживание</a>
+      <a class="burger__menu__item" @click="openPage('/offer')">Публичная оферта</a>
+      <a class="burger__menu__item" @click="openPage('/about')">О компании</a>
+      <a class="burger__menu__item" @click="openPage('/contacts')">Контактная информация</a>
+      <a class="burger__menu__item" @click="openPage('/news')">Новости</a>
     </div>
     <div class="burger__menu__block">
       <a href="tel:+375296889454" class="icon-phone burger__menu__item">+375 29 688 94 54</a>
@@ -84,14 +56,53 @@
 
 <script>
 
-import {mapActions, mapGetters} from 'vuex'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 export default {
   name: "BurgerMenu",
 
   computed: {
-    ...mapGetters("header", ["MENU_ITEM_ACTIVE"]),
+    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "TOP_CATEGORIES", "SUB_CATEGORIES", "IS_CATALOG_OPEN"]),
   },
+
+  methods:{
+    ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "UPDATE_IS_CATALOG_OPEN"]),
+    ...mapActions("catalog", ["GET_CATALOG_ITEMS"]),
+    changeCategory(newActive){
+      if (newActive === this.TOP_CATEGORIES_ITEM_ACTIVE) {
+        this.SET_CURRENT_TOP_CATEGORY(null);
+      } else {
+        this.SET_CURRENT_TOP_CATEGORY(newActive);
+      }
+    },
+    subCategoryClick(id, event){
+      if (id === this.SUB_CATEGORIES_ITEM_ACTIVE) {
+        this.SET_CURRENT_SUB_CATEGORY(null);
+      } else {
+        this.SET_CURRENT_SUB_CATEGORY(id);
+      }
+      // this.GET_CATALOG_ITEMS(id);
+      // this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
+      // if (this.$router.path != '/catalog') {
+      //     this.$router.push('/catalog');
+      // }
+    },
+    subItemCategoryClick(id, event){
+      // console.log('кликнули по итему подкатегории ', id, event);
+      event.stopImmediatePropagation();
+      this.GET_CATALOG_ITEMS(id);
+      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
+      if (this.$router.path != '/catalog') {
+          this.$router.push('/catalog');
+      }
+    },
+    openPage(page) {
+      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
+      if (this.$router.path != page) {
+          this.$router.push(page);
+      }
+    },
+  }
 }
 </script>
 
@@ -124,7 +135,7 @@ input {
 
 .cd-accordion-menu ul {
   /* by default hide all sub menus */
-  display: none;
+  // display: none;
   height:0px;
   transition:all 0.5s ease-in-out
 }

@@ -23,15 +23,18 @@
 </template>
 
 <script>
+
+import {mapMutations, mapGetters} from 'vuex'
+
 export default {
     name: 'SortSlider',
 
     data(){
         return {
-            minValueRange: 2500,
-            maxValueRange: 7500,
-            minValuePrice: 2500,
-            maxValuePrice: 7500,
+            minValueRange: 0,
+            maxValueRange: 10000,
+            minValuePrice: 0,
+            maxValuePrice: 10000,
             RangeMin: 0,
             RangeMax: 10000,
             priceGap: 1000,
@@ -43,9 +46,16 @@ export default {
     mounted(){
         this.onChangeMinPrice();
         this.onChangeMaxPrice();
+        this.updateStore();
+    },
+
+    computed: {
+        ...mapGetters("query", ["MIN_PRICE", "MAX_PRICE"]),
     },
 
     methods: {
+        ...mapMutations("query", ["SET_MIN_PRICE", "SET_MAX_PRICE"]),
+
         onChangeMinPrice() {
             if (this.minValuePrice <= this.RangeMin) this.minValuePrice = this.RangeMin;
             if (this.minValuePrice >= this.maxValuePrice - this.priceGap) this.minValuePrice = this.maxValuePrice - this.priceGap;
@@ -55,6 +65,7 @@ export default {
                 this.minValueRange = minPrice;
                 this.Left = ((minPrice / this.RangeMax) * 100) + '%';
             }
+            this.updateStore();
         },
         onChangeMaxPrice() {
             if (this.maxValuePrice >= this.RangeMax) this.maxValuePrice = this.RangeMax;
@@ -64,7 +75,8 @@ export default {
             if ((maxPrice - minPrice >= this.priceGap)) {
                 this.maxValueRange = maxPrice;
                 this.Right = 100 - ((maxPrice / this.RangeMax) * 100) + '%';
-            } 
+            }
+            this.updateStore();
         },
         onChangeRange(type) {
             let minValue = this.minValueRange;
@@ -87,58 +99,15 @@ export default {
                 this.Left = ((minValue / this.RangeMax) * 100) + '%';
                 this.Right = 100 - ((maxValue / this.RangeMax) * 100) + '%';
             }
+            this.updateStore();
         },
+        updateStore(){
+            if (this.MIN_PRICE !== this.minValuePrice) this.SET_MIN_PRICE(this.minValuePrice);
+            if (this.MAX_PRICE !== this.maxValuePrice) this.SET_MAX_PRICE(this.maxValuePrice);
+        }
     }
 }
 </script>
-
-<!--<script>-->
-<!--  const rangeInput = document.querySelectorAll(".range-input input"),-->
-<!--  priceInput = document.querySelectorAll(".price-input input"),-->
-<!--  range = document.querySelector(".slider .progress");-->
-<!--  let priceGap = 1000;-->
-
-<!--  priceInput.forEach(input =>{-->
-<!--    input.addEventListener("input", e =>{-->
-<!--          let minPrice = parseInt(priceInput[0].value),-->
-<!--          maxPrice = parseInt(priceInput[1].value);-->
-
-<!--          if((maxPrice - minPrice >= priceGap) && maxPrice <= rangeInput[1].max){-->
-<!--            if(e.target.className === "input-min"){-->
-<!--                  rangeInput[0].value = minPrice;-->
-<!--                  range.style.left = ((minPrice / rangeInput[0].max) * 100) + "%";-->
-<!--            }else{-->
-<!--                  rangeInput[1].value = maxPrice;-->
-<!--                  range.style.right = 100 - (maxPrice / rangeInput[1].max) * 100 + "%";-->
-<!--            }-->
-<!--          }-->
-<!--    });-->
-<!--  });-->
-
-<!--  rangeInput.forEach(input =>{-->
-<!--    input.addEventListener("input", e =>{-->
-<!--          let minVal = parseInt(rangeInput[0].value),-->
-<!--          maxVal = parseInt(rangeInput[1].value);-->
-
-<!--          if((maxVal - minVal) < priceGap){-->
-<!--            if(e.target.className === "range-min"){-->
-<!--                rangeInput[0].value = maxVal - priceGap-->
-<!--            }else{-->
-<!--                rangeInput[1].value = minVal + priceGap;-->
-<!--            }-->
-<!--          }else{-->
-<!--            priceInput[0].value = minVal;-->
-<!--            priceInput[1].value = maxVal;-->
-<!--            range.style.left = ((minVal / rangeInput[0].max) * 100) + "%";-->
-<!--            range.style.right = 100 - (maxVal / rangeInput[1].max) * 100 + "%";-->
-<!--      }-->
-<!--    });-->
-<!--  });-->
-
-<!--</script>-->
-
-
-
 
 <style lang="scss" scoped>
 .filter {
@@ -174,7 +143,6 @@ export default {
     }
 }
 
-//PRICE SLIDER
 .price-input{
   width: 100%;
   display: flex;

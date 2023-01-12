@@ -56,7 +56,11 @@ export default {
                 'products?category_id=' + data + 
                 '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type + 
                 '&offset=' + rootGetters['query/OFFSET'] + 
-                '&limit=' + rootGetters['query/LIMIT']);
+                '&limit=' + rootGetters['query/LIMIT'] 
+                // + 
+                // '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
+                // '&price_lte=' + rootGetters['query/MAX_PRICE']
+            );
             commit("SET_CATALOG_ITEMS", response.data);
             commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
         } catch (e) {
@@ -70,7 +74,11 @@ export default {
             const response = await axios.get(process.env.VUE_APP_API_URL + 
                 'products?type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type + 
                 '&offset=' + rootGetters['query/OFFSET'] + 
-                '&limit=' + rootGetters['query/LIMIT']);
+                '&limit=' + rootGetters['query/LIMIT']
+                //  + 
+                // '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
+                // '&price_lte=' + rootGetters['query/MAX_PRICE']
+            );
             commit("SET_CATALOG_ITEMS", response.data);
             commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
         } catch (e) {

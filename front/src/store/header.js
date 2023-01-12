@@ -8,7 +8,7 @@ export default {
     // orders: [12,23],
     // isMenuOpen: false,
     isCatalogOpen: false,
-    munuItemActive : 1,
+    // munuItemActive : 1,
     topCategoriesItemActive: null,
     subCategoriesItemActive: null,
     lastCategoriesItemActive: null,
@@ -27,9 +27,9 @@ export default {
     IS_CATALOG_OPEN(state){
       return state.isCatalogOpen;
     },
-    MENU_ITEM_ACTIVE(state){
-      return state.munuItemActive;
-    },
+    // MENU_ITEM_ACTIVE(state){
+    //   return state.munuItemActive;
+    // },
     TOP_CATEGORIES_ITEM_ACTIVE(state){
       return state.topCategoriesItemActive;
     },

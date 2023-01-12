@@ -8,7 +8,9 @@
             <div class="container row">
               <div class="colunm">
                 <ul class="menu__mass">
-                  <li class="menu__item" :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"
+                  <li 
+                      class="menu__item" 
+                      :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"
                       v-for   = "item in TOP_CATEGORIES"
                       :key    = "item.id"
                       @click  = "changeCategory(item.id)"
