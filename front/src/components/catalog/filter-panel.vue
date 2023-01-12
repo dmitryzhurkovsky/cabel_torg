@@ -138,7 +138,7 @@ export default {
     &__checkbox{
 
     &__item{
-        margin: 0px 15px 10px 0px;
+        margin: 0 15px 10px 15px;
         //height: 18px;
         input{
             position: absolute;

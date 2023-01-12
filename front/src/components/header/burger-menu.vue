@@ -10,7 +10,7 @@
         <label 
           :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"  
         >{{ item.name }}</label>
-        <ul v-if = "item.id === TOP_CATEGORIES_ITEM_ACTIVE">
+        <ul class="second" v-if = "item.id === TOP_CATEGORIES_ITEM_ACTIVE">
           <li 
             v-for   = "sub in SUB_CATEGORIES"
             :key    = "sub.id"
@@ -19,7 +19,7 @@
             <label 
               :class = "{'active' : sub.id === SUB_CATEGORIES_ITEM_ACTIVE}"  
             >{{ sub.name }}</label>
-            <ul v-if = " sub.id === SUB_CATEGORIES_ITEM_ACTIVE && sub.subItems.length > 0">
+            <ul class="third" v-if = " sub.id === SUB_CATEGORIES_ITEM_ACTIVE && sub.subItems.length > 0">
               <li 
                 class="has-children"
                 v-for = "subItem in sub.subItems"
@@ -35,21 +35,21 @@
         </ul>
       </li>
     </ul>
-    <div class="burger__menu__block flex-center">
-      <!-- <a href="" class="burger__menu__item mb-20">Покупателям</a>
-      <a href="" class="burger__menu__item">О нас </a> -->
-      <a class="burger__menu__item" @click="openPage('/how_to_work')">Как оформить заказ</a>
-      <a class="burger__menu__item" @click="openPage('/shipping')">Оплата и доставка</a>
-      <a class="burger__menu__item" @click="openPage('/wholesale')">Оптовым клиентам</a>
-      <a class="burger__menu__item" @click="openPage('/warranty')">Гарантийное обслуживание</a>
-      <a class="burger__menu__item" @click="openPage('/offer')">Публичная оферта</a>
-      <a class="burger__menu__item" @click="openPage('/about')">О компании</a>
-      <a class="burger__menu__item" @click="openPage('/contacts')">Контактная информация</a>
-      <a class="burger__menu__item" @click="openPage('/news')">Новости</a>
-    </div>
-    <div class="burger__menu__block">
-      <a href="tel:+375296889454" class="icon-phone burger__menu__item">+375 29 688 94 54</a>
-    </div>
+<!--    <div class="burger__menu__block flex-center">-->
+<!--      &lt;!&ndash; <a href="" class="burger__menu__item mb-20">Покупателям</a>-->
+<!--      <a href="" class="burger__menu__item">О нас </a> &ndash;&gt;-->
+<!--      <a class="burger__menu__item" @click="openPage('/how_to_work')">Как оформить заказ</a>-->
+<!--      <a class="burger__menu__item" @click="openPage('/shipping')">Оплата и доставка</a>-->
+<!--      <a class="burger__menu__item" @click="openPage('/wholesale')">Оптовым клиентам</a>-->
+<!--      <a class="burger__menu__item" @click="openPage('/warranty')">Гарантийное обслуживание</a>-->
+<!--      <a class="burger__menu__item" @click="openPage('/offer')">Публичная оферта</a>-->
+<!--      <a class="burger__menu__item" @click="openPage('/about')">О компании</a>-->
+<!--      <a class="burger__menu__item" @click="openPage('/contacts')">Контактная информация</a>-->
+<!--      <a class="burger__menu__item" @click="openPage('/news')">Новости</a>-->
+<!--    </div>-->
+<!--    <div class="burger__menu__block">-->
+<!--      <a href="tel:+375296889454" class="icon-phone burger__menu__item">+375 29 688 94 54</a>-->
+<!--    </div>-->
 
   </div>
 </template>
@@ -136,7 +136,7 @@ input {
 .cd-accordion-menu ul {
   /* by default hide all sub menus */
   // display: none;
-  height:0px;
+  //height:0px;
   transition:all 0.5s ease-in-out
 }
 
