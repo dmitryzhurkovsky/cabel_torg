@@ -9,7 +9,7 @@ from src.parser.mixins.base_mixin import BaseMixin
 class CategoryMixin(BaseMixin, ABC):
     async def parse_categories(self):
         """Parse "Категории" node and write then to a database."""
-        main_categories = self.ROOT_ELEMENT[0][3]  # noqa
+        main_categories = self.root_element[0][3]  # noqa
         await self.clean_category_and_subcategories(raw_categories=main_categories)
 
     @staticmethod

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Float, ForeignKey, Integer, String
+from sqlalchemy import Column, ForeignKey, Integer, String, DECIMAL
 from sqlalchemy.dialects.postgresql import ENUM as pgEnum
 from sqlalchemy.orm import relationship
 
@@ -14,7 +14,7 @@ class Product(Base1CModel):
     images = Column(String, nullable=True)  # pictures paths in the following format: picture_1,picture_2,picture_3...
     tax = Column(Integer, nullable=True)
     description = Column(String, nullable=True)
-    price = Column(Float, nullable=True)
+    price = Column(DECIMAL, nullable=True)
     type = Column('type', pgEnum(ProductType.values(), name='type'))
 
     attributes = relationship(
@@ -25,13 +25,13 @@ class Product(Base1CModel):
     )  # m2m
 
     base_unit_id = Column(Integer, ForeignKey('base_units.id'))  # o2m
-    base_unit = relationship('BaseUnit', back_populates='products', lazy='noload')
+    base_unit = relationship('BaseUnit', back_populates='products', lazy='joined')
 
     category_id = Column(Integer, ForeignKey('categories.id'))  # o2m
-    category = relationship('Category', back_populates='products', lazy='noload')
+    category = relationship('Category', back_populates='products', lazy='joined')
 
     manufacturer_id = Column(Integer, ForeignKey('manufacturers.id'))  # o2m
-    manufacturer = relationship('Manufacturer', back_populates='products', lazy='noload')
+    manufacturer = relationship('Manufacturer', back_populates='products', lazy='joined')
 
     added_to_carts = relationship('Cart', back_populates='product', lazy='noload')  # m2m
 

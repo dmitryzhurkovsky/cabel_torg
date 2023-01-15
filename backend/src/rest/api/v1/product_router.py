@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -20,8 +22,8 @@ async def get_products(
                 'Explanation: If user choose "Category" and them "Subcategory" endpoint expects '
                 'to get a "subcategory" instead of a category'
         )),
-        price_gte: int | None = Query(default=None, description='Start value in range of price'),
-        price_lte: int | None = Query(default=None, description='End value in range of price'),
+        price_gte: Decimal | None = Query(default=None, description='Start value in range of price'),
+        price_lte: Decimal | None = Query(default=None, description='End value in range of price'),
         type_of_product: ProductTypeFilter = Query(
             default=ProductTypeFilter.ALL.value,
             description='The last parameter in the lef column/This parameter set that products will be downloaded'
