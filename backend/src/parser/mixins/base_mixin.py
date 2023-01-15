@@ -3,21 +3,24 @@ from xml.etree import ElementTree
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core import settings
 from src.core.utils import clean_string_from_spaces_and_redundant_symbols
 
 
 class BaseMixin:
     """A base mixin that implements functionality are required in all mixins."""
-    XML_FILE = settings.XML_BOOKKEEPING_FILE_PATH
     NAMESPACES = {'urn': 'urn:1C.ru:commerceml_2'}
-    ROOT_ELEMENT = ElementTree.parse(XML_FILE).getroot()
     CACHE = dict()  # todo use a cache library here
 
     __slots__ = ('db',)
 
     def __init__(self, db: AsyncSession):
         self.db = db
+
+    @property
+    def root_element(cls):  # noqa
+        if getattr(cls, 'XML_FILE'):
+            return ElementTree.parse(cls.XML_FILE).getroot()  # noqa
+        raise AttributeError('The XML_FILE variable should be declared.')
 
     @staticmethod
     def clean_common_field(raw_field: Element) -> tuple[str, str] | tuple[None, None]:

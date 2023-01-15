@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   db:
-    image: postgres
+    image: postgres:14.6
     volumes:
       - ./data/postgres:/var/lib/postgresql/data/
     ports:
@@ -23,7 +23,7 @@ services:
       - db
       - redis
 
-  nginx:  # Copy static files during building this container
+  nginx: # Copy static files during building this container
     build:
       context: .
       dockerfile: ./nginx/Dockerfile
@@ -32,9 +32,9 @@ services:
       - '80:80'
       - '81:81'  # for images
       - '443:443'  # for https
-    volumes:
-      - /root/images:/usr/share/nginx/images/
-        
+#    volumes:
+#      - /root/images:/usr/share/nginx/images/
+
   redis:
     image: redis:latest
     ports:

@@ -28,7 +28,7 @@ class GoodsMixin(BaseMixin, ABC):
 
     async def parse_products(self):
         """Parse "Товары" node and then write them to a database."""
-        goods = self.ROOT_ELEMENT[1][4]  # noqa
+        goods = self.root_element[1][4]  # noqa
 
         for product in goods:
             clean_product = await self.clean_product(element=product)
@@ -173,7 +173,7 @@ class GoodsMixin(BaseMixin, ABC):
         transform its fields to "ready to write to a database" state.
         We write them to names_cache to escape redundant queries to a database.
         """
-        attributes = self.ROOT_ELEMENT[0][4]
+        attributes = self.root_element[0][4]
 
         for attribute in attributes:
             bookkeeping_id = attribute[0].text

@@ -1,4 +1,5 @@
 import re
+from decimal import Decimal
 from xml.etree.ElementTree import Element
 
 import bcrypt
@@ -16,10 +17,10 @@ async def convert_filter_fields(filter_fields: QueryParams, session: AsyncSessio
     converted_filter_fields = []
 
     if price_gte := filter_fields.get('price_gte'):
-        converted_filter_fields.append(Product.price >= int(price_gte))
+        converted_filter_fields.append(Product.price >= Decimal(price_gte))
 
     if price_lte := filter_fields.get('price_lte'):
-        converted_filter_fields.append(Product.price <= int(price_lte))
+        converted_filter_fields.append(Product.price <= Decimal(price_lte))
 
     if category_id := filter_fields.get('category_id'):
         categories_ids = await CategoryManager.get_categories_ids(
@@ -66,9 +67,13 @@ def clean_fields(fields: dict) -> dict:
 
 def clean_string_from_spaces_and_redundant_symbols(dirty_string: str) -> str | None:
     """Clean an input element from any redundant symbols and spaces."""
-    if len(dirty_string) == 1 and dirty_string == '.':
+    if dirty_string == '.' or not dirty_string.strip():
         return None
-    return re.findall(pattern='[А-Яа-яЁёa-zA-Z0-9].+[А-Яа-яЁёa-zA-Z.0-9)"]', string=dirty_string)[0]
+    try:
+        clean_string = re.findall(pattern='[А-Яа-яЁёa-zA-Z0-9].+[А-Яа-яЁёa-zA-Z.0-9)"]', string=dirty_string)[0]
+        return clean_string
+    except Exception:  # todo add to logger
+        return None
 
 
 def get_tag_name(raw_field: Element) -> str:

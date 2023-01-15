@@ -50,9 +50,12 @@ async def get_or_create(
         return instance, True
 
 
-async def get(db: AsyncSession, model, fields: dict):
+async def get(db: AsyncSession, model, fields: dict, prefetch_fields: tuple = None):
+    options = BaseMixin.init_prefetch_related_fields(prefetch_fields=prefetch_fields)
+
     result = await db.execute(
         select(model).
-        filter_by(**fields)
+        filter_by(**fields).
+        options(*options)
     )
     return result.scalar_one_or_none()
