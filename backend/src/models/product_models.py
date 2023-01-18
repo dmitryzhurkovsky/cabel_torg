@@ -37,5 +37,4 @@ class Product(Base1CModel):
 
     added_to_watchlist_for = relationship('WatchList', back_populates='product', lazy='noload')
 
-    def __str__(self):
-        return self.name
+    added_to_orders = relationship('Order', back_populates='product', lazy='noload')

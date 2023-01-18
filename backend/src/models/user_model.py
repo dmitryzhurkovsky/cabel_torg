@@ -27,6 +27,7 @@ class User(BaseModel):
 
     products_in_cart = relationship('Cart', back_populates='user')
     products_in_watchlist = relationship('WatchList', back_populates='user')
+    orders = relationship('Order', back_populates='user')
 
     def __str__(self):
         return self.email
