@@ -3,6 +3,10 @@ from datetime import timedelta, datetime
 import jwt
 from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm, SecurityScopes
+from jwt import (
+    InvalidTokenError as JWTInvalidTokenError,
+    DecodeError,
+    ExpiredSignatureError)
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core import settings
@@ -45,6 +49,19 @@ class AuthService:
         }
 
         return jwt.encode(headers=default_header, payload=payload, key=settings.JWT_SECRET_KEY)
+
+    @staticmethod
+    def decode_token(token: str) -> int:
+        """Decode a token and return user_id took from payload."""
+        try:
+            payload = jwt.decode(
+                jwt=token.encode(), key=settings.JWT_SECRET_KEY, algorithms='HS256'
+            )
+            user_id = payload.get('sub')
+        except (JWTInvalidTokenError, DecodeError, ExpiredSignatureError, KeyError):
+            raise InvalidTokenError
+
+        return user_id
 
     @classmethod
     async def authenticate_user(cls, user_data: dict, session: AsyncSession) -> User | HTTPException:
@@ -99,11 +116,7 @@ class AuthService:
             cls, old_refresh_token: str
     ) -> tuple:
         """Generate new access and refresh tokens by a refresh_token if the refresh_token is valid."""
-        payload = jwt.decode(
-            jwt=old_refresh_token.encode(), key=settings.JWT_SECRET_KEY, algorithms='HS256'
-        )
-        user_id = payload.get('sub')
-
+        user_id = cls.decode_token(token=old_refresh_token)
         await cls.validate_refresh_token(user_id=user_id, refresh_token=old_refresh_token)
 
         access_token, refresh_token = await cls.generate_access_and_refresh_tokens(user_id=user_id)
@@ -121,12 +134,7 @@ class AuthService:
         if security_scopes.scopes:
             pass
 
-        # todo add try/except blocks
-        payload = jwt.decode(
-            jwt=access_token.encode(), key=settings.JWT_SECRET_KEY, algorithms='HS256'
-        )
-        user_id = payload.get('sub')
+        user_id = cls.decode_token(token=access_token)
 
         user = await UserManager.retrieve(session=session, id=user_id)
-
         return user
