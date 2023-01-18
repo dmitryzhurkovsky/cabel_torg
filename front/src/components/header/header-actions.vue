@@ -7,7 +7,11 @@
         </div>
 
       </div>
-
+      <IconQuantity 
+        :quantity = 0 
+        :left = '12'
+        :top = '12'
+      />
     </div>
     <div class="topmenu__item right-direction">
       <div class="dropdown icon-user">
@@ -60,6 +64,11 @@
           <HeaderCart/>
         </div>
       </div>
+      <IconQuantity 
+        :quantity = ORDERS.length 
+        :left = '12'
+        :top = '12'
+      />
     </div>
   </div>
 </template>
@@ -68,22 +77,35 @@
 
 import HeaderCart   from '@/components/header/header-cart.vue'
 import HeaderFavorite   from '@/components/header/header-favorite.vue'
-import {mapGetters, mapMutations} from 'vuex'
+import IconQuantity from '@/components/catalog/icon-quantity.vue'
+
+import {mapActions, mapGetters, mapMutations} from 'vuex'
 
 export default {
   name: 'TopMenuActions',
 
   components:
   {
-    HeaderCart, HeaderFavorite
+    HeaderCart, HeaderFavorite, IconQuantity
   },
 
   computed: {
     ...mapGetters("auth", ["AUTH_TYPE", "IS_OPEN_MAIN_LOGIN", "USER"]),
-},
+    ...mapGetters("order", ["ORDERS"]),
+  },
+
+  mounted() {
+    if (this.USER) {
+      this.GET_USER_ORDER();
+    } else {
+      this.SET_ORDERS([]);
+    }
+  },
 
   methods: {
     ...mapMutations("auth", ["SET_TYPE"]),
+    ...mapMutations("order", ["SET_ORDERS"]),
+    ...mapActions("order", ["GET_USER_ORDER"]),
 
     handleClick (URL, auth_type) {
       if (this.$route.path != URL) {
@@ -99,7 +121,7 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 
 .right-direction .dropdown__wrapper{
   right: 0;
@@ -108,8 +130,8 @@ export default {
 
 .topmenu{
   &__item{
-    padding: 0 10px 0 10px;
-    //position: relative;
+    // padding: 0 10px 0 10px;
+    position: relative;
   }
 }
 
@@ -162,6 +184,21 @@ button{
 
 }
 
-
+// .icon-quantity{
+//   display: flex;
+//   position: absolute;
+//   top: 12px;
+//   left: 12px;
+//   width: 20px;
+//   height: 20px;
+//   border-radius: 50%;
+//   justify-content: center;
+//   align-items: center;
+//   background-color: #E30044;
+//   &__info {
+//     color: #FFFFFF;
+//     font-size: 10px;
+//   }
+// }
 
 </style>

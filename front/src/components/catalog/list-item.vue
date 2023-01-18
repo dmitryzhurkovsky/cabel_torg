@@ -15,16 +15,16 @@
             </div>
             <div class="product__count flex-center">
                 <span class="_label">Количество:</span>
-                <span class="icon-minus"></span>
-                <input class="product__input" type="text">
-                <span class="icon-plus"></span>
+                <span class="icon-minus" @click="removeItemFromCart(card)"></span>
+                <span class="product__input">{{ quantity }}</span>
+                <span class="icon-plus" @click="addItemToCart(card)"></span>
             </div>
         </div>
         <div class="product__action">
             <div class="product__article  _label mb-20">Артикул: <span>{{ card.vendor_code }}</span></div>
             <div class="product__price">
-                <span>70</span>BYN
-                <span>/шт</span>
+                <span>{{ card.price }}</span>BYN
+                <span> / {{ card.base_unit.full_name }}</span>
             </div>
             <div class="notice">* Цена указана с учетом НДС.</div>
             <div class="product__btn flex-center">
@@ -37,15 +37,43 @@
 
 
 <script>
+  import { mapGetters, mapMutations } from 'vuex'
 
   export default {
+    name: 'ListItem',
+
     props: {
         card:  null,
     },
 
-    name: 'ListItem',
+    data(){
+      return {
+          quantity: 0,
+      }
+    },
 
+    computed: {
+      ...mapGetters("order", ["ORDERS"]),
+
+      ChangeParameters(){
+        return JSON.stringify(this.ORDERS);
+      },
+    },
+
+    watch: {
+      ChangeParameters: async function() {
+        this.countQuantity();
+      },
+    },
+
+    mounted(){
+      this.countQuantity();
+    },
+
+    
     methods: {
+      ...mapMutations("order", ["ADD_ITEM_TO_CART", "REMOVE_ITEM_FROM_CART"]),
+
       getImagePath(item) {
         let path = null;
         if (item) {
@@ -53,7 +81,48 @@
           path = process.env.VUE_APP_IMAGES + allPath[0];
         }
         return path;
-       }
+      },
+
+      addItemToCart(card){
+        const itemToAdd = {
+          amount: 1,
+          product: {
+            id: card.id,
+            vendor_code: card.vendor_code,
+            name: card.name,
+          },
+        }
+        this.ADD_ITEM_TO_CART(itemToAdd);
+        this.quantity++;
+      },
+
+      removeItemFromCart(card) {
+        const itemToAdd = {
+            amount: -1,
+            product: {
+              id: card.id,
+              vendor_code: card.vendor_code,
+              name: card.name,
+            },
+        }
+        if (this.quantity > 1) {
+          this.ADD_ITEM_TO_CART(itemToAdd);
+          this.quantity--;
+        } else if (this.quantity === 1) {
+          this.REMOVE_ITEM_FROM_CART(itemToAdd);
+          this.quantity--;
+        }
+      },
+
+      countQuantity(){
+        if (this.ORDERS.length) {
+          const filtered = this.ORDERS.filter(item => item.product.id === this.card.id);
+          this.quantity =  filtered.length ? filtered[0].amount : 0;
+        } else {
+          this.quantity = 0;
+        }
+      },
+
     }
 
   }

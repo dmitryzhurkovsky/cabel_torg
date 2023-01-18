@@ -57,9 +57,9 @@ export default {
                 '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type + 
                 '&offset=' + rootGetters['query/OFFSET'] + 
                 '&limit=' + rootGetters['query/LIMIT'] 
-                // + 
-                // '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
-                // '&price_lte=' + rootGetters['query/MAX_PRICE']
+                + 
+                '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
+                '&price_lte=' + rootGetters['query/MAX_PRICE']
             );
             commit("SET_CATALOG_ITEMS", response.data);
             commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
@@ -75,9 +75,9 @@ export default {
                 'products?type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type + 
                 '&offset=' + rootGetters['query/OFFSET'] + 
                 '&limit=' + rootGetters['query/LIMIT']
-                //  + 
-                // '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
-                // '&price_lte=' + rootGetters['query/MAX_PRICE']
+                 + 
+                '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
+                '&price_lte=' + rootGetters['query/MAX_PRICE']
             );
             commit("SET_CATALOG_ITEMS", response.data);
             commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});

@@ -75,10 +75,6 @@ export default {
   },
 
   mutations: {
-    // UPDATE_IS_MENU_OPEN (state, payload){
-    //   state.isMenuOpen = payload;
-    // },
-
     UPDATE_IS_CATALOG_OPEN (state, payload){
       state.isCatalogOpen = payload;
     },

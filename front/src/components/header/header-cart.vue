@@ -2,40 +2,16 @@
   <div class="dropdown__content popup-cart">
     <h3 class="">Корзина</h3>
     <div class="popup-cart__summary">
-      <div class="div">Товары в корзине: <span>12</span></div>
-      <div>на сумму <span>123.89</span><span>BYN</span></div>
+      <div class="div">Товары в корзине: <span>{{ totalInCart }}</span></div>
+      <div>на сумму <span>{{ TOTAL_ORDER_COST }}</span><span>BYN</span></div>
     </div>
-    <div class="popup-cart__list">
-      <div class="popup-cart__item row">
-        <div class="popup-cart__img">
-          <img src="../../assets/catalog/card1.png" alt="">
-        </div>
-        <div class="popup-cart__description">
-          <div class="popup-cart__title">Коммуникационный кабель</div>
-          <div class="popup-cart__uptitle">UTP cat.5e (патч-панель) 19″</div>
-
-        </div>
-        <div class="popup-cart__action">
-          <div class="popup-cart__price">12.03 <span>BYN</span></div>
-          <button class="icon-delete"></button>
-        </div>
-
-      </div>
-      <div class="popup-cart__item row">
-        <div class="popup-cart__img">
-          <img src="../../assets/catalog/card1.png" alt="">
-        </div>
-        <div class="popup-cart__description">
-          <div class="popup-cart__title">Коммуникационный кабель</div>
-          <div class="popup-cart__uptitle">UTP cat.5e (патч-панель) 19″</div>
-
-        </div>
-        <div class="popup-cart__action">
-          <div class="popup-cart__price">12.03 <span>BYN</span></div>
-          <button class="icon-delete"></button>
-        </div>
-
-      </div>
+    <div class="popup-cart__list" v-if = "ORDERS.length">
+      <HeaderCartItem 
+          class="row" 
+          v-for = "cartItem in ORDERS"
+          :key = "cartItem.product.id"
+          :cartItem = cartItem
+      />
     </div>
     <button class="btn">Оформить заказ</button>
     <div>
@@ -45,16 +21,34 @@
         </svg>
       </a>
     </div>
-
-
-
   </div>
 
 </template>
 
 <script>
+
+import { mapGetters } from 'vuex'
+
+import HeaderCartItem from '@/components/header/header-cart-item.vue'
+
 export default {
   name: "HeaderCart",
+
+  components: {
+    HeaderCartItem,
+  },
+
+  computed: {
+    ...mapGetters("order", ["ORDERS", "TOTAL_ORDER_COST"]),
+
+    totalInCart(){
+      let total = 0;
+      this.ORDERS.forEach(item => {
+        total = total + item.amount
+      });
+      return total;
+    },
+  },
 }
 </script>
 
@@ -102,60 +96,6 @@ export default {
 
   &__list{
     margin: 30px 0;
-  }
-
-  &__item{
-    display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    gap:10px;
-    align-items: self-start;
-    &:hover{
-      background: #F9F9F9;
-    }
-
-  }
-
-  &__img{
-    max-width: 100%;
-    img{
-      width: 100%;
-    }
-
-  }
-
-  &__description{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    font-size: 12px;
-    line-height: 140%;
-    color: #423E48;
-    text-align: left;
-  }
-  &__title{
-    font-weight: 500;
-
-  }
-  &_action{
-    align-items: stretch;
-
-  }
-
-
-
-  &__price{
-    font-size: 12px;
-    line-height: 140%;
-
-    color: #423E48;
-    margin-bottom: 20px;
-  }
-
-  .icon-delete{
-    text-align: right;
-    &:hover{
-      color:#4275D8;
-    }
   }
 
   button{

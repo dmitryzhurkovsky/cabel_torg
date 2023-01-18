@@ -8,35 +8,39 @@
     </a>
     <div class="item-card__info">
       <div class="item-card__row flex-center">
-        <div class="old_price">65.3</div>
+        <div class="old_price">65.3???</div>
         <div class="notice">* Цена указана с учетом НДС.</div>
       </div>
 
       <div class="item-card__row flex-center">
-        <div class="current_price">56.5
-          <span>BYN/</span>
+        <div class="current_price">{{ card.price }}
+          <span>BYN / {{ card.base_unit.full_name }}</span>
         </div>
-        <div class="item-card__buy flex-center icon-cart">
+        <div class="item-card__buy flex-center icon-cart" @click="addItemToCart(card)">
+          <IconQuantity 
+            v-if = "quantity"
+            :quantity = quantity 
+            :left = '18'
+            :top = '18'
+          />
         </div>
 
       </div>
       <div class="item-card__title">
-        <div>{{card.name}}</div>
+        <div>{{ card.name }}</div>
       </div>
       <div class="item-card__uptitle">
-        <div>UTP cat.5e (патч-панель) 19″</div>
+        <div>UTP cat.5e (патч-панель) 19″?????</div>
       </div>
-
-
-
-
     </div>
   </div>
 
 </template>
 
 <script>
-// import axios from "axios";
+import { mapGetters, mapMutations } from 'vuex'
+
+import IconQuantity from '@/components/catalog/icon-quantity.vue'
 
 export default {
   name: "CardItem",
@@ -45,7 +49,39 @@ export default {
     card:  null,
   },
 
+  data(){
+    return {
+      quantity: 0,
+    }
+  },
+
+  components:
+  {
+    IconQuantity,
+  },
+
+  computed: {
+    ...mapGetters("order", ["ORDERS"]),
+
+    ChangeParameters(){
+      return JSON.stringify(this.ORDERS);
+    },
+  },
+
+  watch: {
+    ChangeParameters: async function() {
+      this.countQuantity();
+    },
+  },
+
+  mounted(){
+    this.countQuantity();
+  },
+
+
   methods: {
+    ...mapMutations("order", ["ADD_ITEM_TO_CART"]),
+
     getImagePath(item) {
       let path = null;
       if (item) {
@@ -53,7 +89,30 @@ export default {
         path = process.env.VUE_APP_IMAGES + allPath[0];
       }
       return path;
-    }
+    },
+
+    addItemToCart(card){
+      const itemToAdd = {
+        amount: 1,
+        product: {
+          id: card.id,
+          vendor_code: card.vendor_code,
+          name: card.name,
+        },
+      }
+      this.ADD_ITEM_TO_CART(itemToAdd);
+      this.quantity++;
+    },
+
+    countQuantity(){
+      if (this.ORDERS.length) {
+        const filtered = this.ORDERS.filter(item => item.product.id === this.card.id);
+        this.quantity =  filtered.length ? filtered[0].amount : 0;
+      } else {
+        this.quantity = 0;
+      }
+    },
+
   },
 
 }
@@ -124,6 +183,7 @@ export default {
   }
 
   &__buy {
+    position: relative;
 
     &:before {
       cursor: pointer;
