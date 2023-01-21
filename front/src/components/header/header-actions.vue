@@ -45,7 +45,7 @@
               <div @click="handleClick('/user-cab', 1)" class="">
                 Профиль
               </div>
-              <div @click="" class="">
+              <div @click="userLogout()" class="">
                 Выйти
               </div>
             </div>
@@ -84,36 +84,40 @@ import {mapActions, mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'TopMenuActions',
 
-  components:
-  {
-    HeaderCart, HeaderFavorite, IconQuantity
+  data: function() {
+      return {
+          isLoading: false,
+      }
+  },
+
+  components: {
+      HeaderCart, HeaderFavorite, IconQuantity
   },
 
   computed: {
-    ...mapGetters("auth", ["AUTH_TYPE", "IS_OPEN_MAIN_LOGIN", "USER"]),
-    ...mapGetters("order", ["ORDERS"]),
-  },
-
-  mounted() {
-    if (this.USER) {
-      this.GET_USER_ORDER();
-    } else {
-      this.SET_ORDERS([]);
-    }
+      ...mapGetters("auth", ["AUTH_TYPE", "IS_OPEN_MAIN_LOGIN", "USER"]),
+      ...mapGetters("order", ["ORDERS"]),
   },
 
   methods: {
     ...mapMutations("auth", ["SET_TYPE"]),
-    ...mapMutations("order", ["SET_ORDERS"]),
-    ...mapActions("order", ["GET_USER_ORDER"]),
-
+    ...mapActions("auth", ["SEND_LOGOUT_REQUEST"]),
+    
     handleClick (URL, auth_type) {
-      if (this.$route.path != URL) {
-        this.SET_TYPE(auth_type);
-        this.$router.push(URL);
-      } else {
-        this.SET_TYPE(auth_type);
-      }
+        if (this.$route.path != URL) {
+            this.SET_TYPE(auth_type);
+            this.$router.push(URL);
+        } else {
+            this.SET_TYPE(auth_type);
+        }
+    },
+
+    async userLogout() {
+        if (this.isLoading) return;
+        this.isLoading = true;
+        await this.SEND_LOGOUT_REQUEST();
+        this.isLoading = false;
+        this.$router.push('/');
     },
 
   },

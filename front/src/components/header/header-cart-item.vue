@@ -20,7 +20,7 @@
 
 <script>
 import axios from "axios";
-import {mapMutations } from 'vuex'
+import {mapMutations, mapActions } from 'vuex'
 
 export default {
   name: 'HeaderCartItem',
@@ -47,7 +47,7 @@ export default {
 
   methods:{
     ...mapMutations("notification", ["ADD_MESSAGE"]),
-    ...mapMutations("order", ["REMOVE_ITEM_FROM_CART"]),
+    ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
 
     getImagePath(item) {
       let path = null;
@@ -58,9 +58,8 @@ export default {
       return path;
     },
 
-    onRemoveItemFromCart(item){
-        console.log(item);
-        this.REMOVE_ITEM_FROM_CART(item);
+    onRemoveItemFromCart(itemData){
+        this.UPDATE_ITEMS_IN_CART({ itemData, type: 'remove' });
     }
 }
 

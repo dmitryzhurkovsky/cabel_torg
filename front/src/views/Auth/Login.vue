@@ -16,7 +16,7 @@
             </div>
 
             <div class="center-text">
-              <button @click = "userLogin" type="submit" class="btn black">Войти</button>
+              <button @click = "userLogin()" type="submit" class="btn black">Войти</button>
             </div>
 
             <div @click = "changeScreen(2)" class="foot-lnk mt-20">Не помню пароль</div>
@@ -108,108 +108,115 @@ export default {
   name: "UserActions",
 
   data: function() {
-    return {
-        email     : '',
-        password  : '',
-        confirm: '',
-        username: '',
-        phone: '',
-        company: '',
-        unp: null,
-        isLoading: false,
+      return {
+          email     : '',
+          password  : '',
+          confirm: '',
+          username: '',
+          phone: '',
+          company: '',
+          unp: null,
+          isLoading: false,
       }
   },
 
   computed: {
-    ...mapGetters("auth",["ERRORS", "AUTH_TYPE", "IS_OPEN_MAIN_LOGIN"]),
+     ...mapGetters("auth",["ERRORS", "AUTH_TYPE", "IS_OPEN_MAIN_LOGIN", "USER", "REDIRECT_AFTER_LOGIN"]),
   },
 
   async mounted() {
-    this.SET_IS_OPEN_MAIN_LOGIN(false);
+      this.SET_IS_OPEN_MAIN_LOGIN(false);
   },
 
   async beforeUnmount() {
-    this.SET_ERRORS({});
-    this.SET_IS_OPEN_MAIN_LOGIN(true);
+      this.SET_ERRORS({});
+      this.SET_IS_OPEN_MAIN_LOGIN(true);
   },
 
   methods: {
-    ...mapActions("auth", ["SEND_LOGIN_REQUEST", "SEND_REGISTER_REQUEST"]),
+    ...mapActions("auth", ["SEND_LOGIN_REQUEST", "SEND_REGISTER_REQUEST", "SEND_LOGOUT_REQUEST"]),
     ...mapMutations("auth", ["SET_ERRORS", "SET_TYPE", "SET_IS_OPEN_MAIN_LOGIN"]),
 
     changeScreen(auth_type) {
-      this.SET_TYPE(auth_type);
+        this.SET_TYPE(auth_type);
     },
 
     isValidEmail: function (email) {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(email);
     },
 
     async userLogin() {
-      if (this.isLoading) return;
+        if (this.isLoading) return;
 
-      this.isLoading = true;
-      const errorsInData = {};
-      if (!this.email || !this.isValidEmail(this.email)) {
-        errorsInData.email = 'Укажите валидный адрес эл. почты'
-      }
-      if (!this.password || this.password.length < 8) {
-        errorsInData.password = 'Пароль должен быть больше 8 символов'
-      }
-      const data = new FormData();
-      data.append('username', this.email);
-      data.append('password', this.password);
-      await this.SEND_LOGIN_REQUEST(data);
+        this.isLoading = true;
+        const errorsInData = {};
+        if (!this.email || !this.isValidEmail(this.email)) {
+            errorsInData.email = 'Укажите валидный адрес эл. почты'
+        }
+        if (!this.password || this.password.length < 8) {
+            errorsInData.password = 'Пароль должен быть больше 8 символов'
+        }
+        const data = new FormData();
+        data.append('username', this.email);
+        data.append('password', this.password);
+        await this.SEND_LOGIN_REQUEST(data);
 
-      this.isLoading = false;
-      this.$router.push({name: "user-cab"});
+        this.isLoading = false;
+        if (this.USER) {
+            if (this.REDIRECT_AFTER_LOGIN) {
+                this.$router.push(this.REDIRECT_AFTER_LOGIN);
+            } else {
+                this.$router.push({name: "user-cab"});
+            }
+        }
     },
 
     async userRegister() {
       
-      if (this.isLoading) return;
+        if (this.isLoading) return;
 
-      this.isLoading = true;
-      const errorsInData = {};
-      if (!this.email || !this.isValidEmail(this.email)) {
-        errorsInData.email = 'Укажите валидный адрес эл. почты'
-      }
-      if (!this.password || this.password.length < 8) {
-        errorsInData.password = 'Пароль должен быть больше 8 символов'
-      }
-      if (this.password !== this.confirm) {
-        errorsInData.confirm = 'Пароли не совпадают'
-      }
-      if (!this.username) {
-        errorsInData.username = 'Укажите имя'
-      }
-      if (!this.phone) {
-        errorsInData.phone = 'Укажите номер телефона'
-      }
-      if (!this.company) {
-        errorsInData.company = 'Укажите название компании'
-      }
-      if (!this.unp || this.unp.toString().length !== 9) {
-        errorsInData.unp = 'Укажите валидное УНП'
-        console.log(this.unp);
-      }
-      if (Object.keys(errorsInData).length) {
-        this.SET_ERRORS(errorsInData);
-      } else {
-        const data = {
-          email: this.email,
-          full_name: this.username,
-          phone_number: this.phone,
-          company_name: this.company,
-          unp: this.unp,
-          password: this.password
-        };
-        await this.SEND_REGISTER_REQUEST(data);
-        // this.$router.push({name: "user-cab"});
-      }
-      this.isLoading = false;
+        this.isLoading = true;
+        const errorsInData = {};
+        if (!this.email || !this.isValidEmail(this.email)) {
+            errorsInData.email = 'Укажите валидный адрес эл. почты'
+        }
+        if (!this.password || this.password.length < 8) {
+            errorsInData.password = 'Пароль должен быть больше 8 символов'
+        }
+        if (this.password !== this.confirm) {
+            errorsInData.confirm = 'Пароли не совпадают'
+        }
+        if (!this.username) { 
+            errorsInData.username = 'Укажите имя'
+        }
+        if (!this.phone) {
+            errorsInData.phone = 'Укажите номер телефона'
+        }
+        if (!this.company) {
+            errorsInData.company = 'Укажите название компании'
+        }
+        if (!this.unp || this.unp.toString().length !== 9) {
+            errorsInData.unp = 'Укажите валидное УНП'
+            console.log(this.unp);
+        }
+        if (Object.keys(errorsInData).length) {
+            this.SET_ERRORS(errorsInData);
+        } else {
+            const data = {
+                email: this.email,
+                full_name: this.username,
+                phone_number: this.phone,
+                company_name: this.company,
+                unp: this.unp,
+                password: this.password
+            };
+            await this.SEND_REGISTER_REQUEST(data);
+            // this.$router.push({name: "user-cab"});
+        }
+        this.isLoading = false;
     },
+
   }
 
 }

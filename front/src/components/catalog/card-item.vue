@@ -16,7 +16,10 @@
         <div class="current_price">{{ card.price }}
           <span>BYN / {{ card.base_unit.full_name }}</span>
         </div>
-        <div class="item-card__buy flex-center icon-cart" @click="addItemToCart(card)">
+        <div 
+          :class="[quantity === 0 ? 'item-card__buy flex-center icon-cart' : 'item-card__buy flex-center icon-cart active']"
+          @click="onOperationWithCartItem(card)"
+        >
           <IconQuantity 
             v-if = "quantity"
             :quantity = quantity 
@@ -38,7 +41,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 import IconQuantity from '@/components/catalog/icon-quantity.vue'
 
@@ -80,7 +83,7 @@ export default {
 
 
   methods: {
-    ...mapMutations("order", ["ADD_ITEM_TO_CART"]),
+    ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
 
     getImagePath(item) {
       let path = null;
@@ -91,17 +94,19 @@ export default {
       return path;
     },
 
-    addItemToCart(card){
-      const itemToAdd = {
+    async onOperationWithCartItem(card) {
+      const itemData = {
         amount: 1,
         product: {
           id: card.id,
           vendor_code: card.vendor_code,
           name: card.name,
+          price: card.price,
         },
       }
-      this.ADD_ITEM_TO_CART(itemToAdd);
-      this.quantity++;
+      const type = this.quantity === 0 ? 'increase' : 'remove';
+      this.quantity = this.quantity !==0 ? 0 : 1;
+      await this.UPDATE_ITEMS_IN_CART({itemData, type});
     },
 
     countQuantity(){
@@ -124,7 +129,11 @@ export default {
 
 //Карточка товара
 
-.item-card {
+.item-card .active {
+  // background-color: red;
+  // border: 2px solid red;
+}
+  .item-card {
   display: flex;
   flex-direction: column;
   position: relative;

@@ -26,9 +26,18 @@
         let result = []
         const firstLink = { name: '<', pageNumber: this.ACTIVE_PAGE - 1, isAvailable: this.ACTIVE_PAGE !== 1 };
         result.push(firstLink);
-        
-        if (this.TOTAL_PAGES >= 5){
-          if (this.TOTAL_PAGES - this.ACTIVE_PAGE < 5){
+        if (this.ACTIVE_PAGE !== 1 && this.TOTAL_PAGES >= 5) {
+          const goTopLink = { name: '1', pageNumber: 1, isAvailable: this.ACTIVE_PAGE !== 1 };
+          result.push(goTopLink);
+          const dots = {
+              name: '...',
+              pageNumber: null,
+              isAvailable: false
+            }
+            result.push(dots);
+        }
+        if (this.TOTAL_PAGES >= 5) {
+          if (this.TOTAL_PAGES - this.ACTIVE_PAGE < 5) {
             for (let i = 4; i >= 0; i--) {
               const curLink = {
                 name: this.TOTAL_PAGES - i,
@@ -79,7 +88,6 @@
       ...mapMutations("query", ["SET_OFFSET"]),
 
       onChangePage(data) {
-        console.log(data);
         if (data.pageNumber && data.isAvailable) {
           const newOffset = (data.pageNumber - 1) * this.LIMIT;
           this.SET_OFFSET(newOffset);

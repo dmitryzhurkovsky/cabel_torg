@@ -15,9 +15,9 @@
             </div>
             <div class="product__count flex-center">
                 <span class="_label">Количество:</span>
-                <span class="icon-minus" @click="removeItemFromCart(card)"></span>
-                <span class="product__input">{{ quantity }}</span>
-                <span class="icon-plus" @click="addItemToCart(card)"></span>
+                <span class="icon-minus" @click="onOperationWithCartItem(card, 'decrease')"></span>
+                <input class="product__input" type="text" v-model="quantity" @input="onOperationWithCartItem(card, 'set')"> 
+                <span class="icon-plus" @click="onOperationWithCartItem(card, 'increase')"></span>
             </div>
         </div>
         <div class="product__action">
@@ -29,7 +29,8 @@
             <div class="notice">* Цена указана с учетом НДС.</div>
             <div class="product__btn flex-center">
                 <div class="product__wishlist icon-favorite"></div>
-                <div class="btn black">В корзину</div>
+                <div v-if = "quantity !== 0" class="btn black" @click="onOperationWithCartItem(card, 'remove')">В корзине</div>
+                <div v-if = "quantity === 0" class="btn blue" @click="onOperationWithCartItem(card, 'increase')">В корзину</div>
             </div>
         </div>
     </div>
@@ -37,7 +38,7 @@
 
 
 <script>
-  import { mapGetters, mapMutations } from 'vuex'
+  import { mapGetters, mapMutations, mapActions } from 'vuex'
 
   export default {
     name: 'ListItem',
@@ -72,8 +73,8 @@
 
     
     methods: {
-      ...mapMutations("order", ["ADD_ITEM_TO_CART", "REMOVE_ITEM_FROM_CART"]),
-
+      ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
+      
       getImagePath(item) {
         let path = null;
         if (item) {
@@ -83,38 +84,24 @@
         return path;
       },
 
-      addItemToCart(card){
-        const itemToAdd = {
-          amount: 1,
+      async onOperationWithCartItem(card, type) {
+        const itemData = {
+          amount: 0,
           product: {
             id: card.id,
             vendor_code: card.vendor_code,
             name: card.name,
+            price: card.price,
           },
+        };
+        if (type === 'set') {
+          itemData.amount = Number(this.quantity);
         }
-        this.ADD_ITEM_TO_CART(itemToAdd);
-        this.quantity++;
+        
+        await this.UPDATE_ITEMS_IN_CART({itemData, type});
       },
 
-      removeItemFromCart(card) {
-        const itemToAdd = {
-            amount: -1,
-            product: {
-              id: card.id,
-              vendor_code: card.vendor_code,
-              name: card.name,
-            },
-        }
-        if (this.quantity > 1) {
-          this.ADD_ITEM_TO_CART(itemToAdd);
-          this.quantity--;
-        } else if (this.quantity === 1) {
-          this.REMOVE_ITEM_FROM_CART(itemToAdd);
-          this.quantity--;
-        }
-      },
-
-      countQuantity(){
+      countQuantity() {
         if (this.ORDERS.length) {
           const filtered = this.ORDERS.filter(item => item.product.id === this.card.id);
           this.quantity =  filtered.length ? filtered[0].amount : 0;

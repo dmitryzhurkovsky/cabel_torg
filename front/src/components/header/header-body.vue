@@ -11,7 +11,7 @@
               <div class="bar"></div>
             </div>
 
-            <a href="/" class="header__logo">
+            <a @click ="onOpenLink('/', $event)" href="/" class="header__logo">
                 <img src="@/assets/logo.svg" alt="CabelTorg">
             </a>
             <HeaderSearch/>
@@ -59,6 +59,15 @@
         this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
         console.log(this.IS_CATALOG_OPEN);
       },
+
+      onOpenLink(link, event) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        if (this.$router.path != link) {
+            this.$router.push(link);
+        }
+      },
+      
     }
 
   }

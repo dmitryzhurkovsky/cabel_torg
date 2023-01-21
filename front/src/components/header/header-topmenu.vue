@@ -11,11 +11,11 @@
               <div class="dropdown">Покупателям
                 <div class="dropdown__wrapper">
                   <div class="dropdown__content">
-                    <a @click="openPage('/how_to_work')">Как оформить заказ</a>
-                    <a @click="openPage('/shipping')">Оплата и доставка</a>
-                    <a @click="openPage('/wholesale')">Оптовым клиентам</a>
-                    <a @click="openPage('/warranty')">Гарантийное обслуживание</a>
-                    <a @click="openPage('/offer')">Публичная оферта</a>
+                    <a @click="openPage('/how_to_work', $event)">Как оформить заказ</a>
+                    <a @click="openPage('/shipping', $event)">Оплата и доставка</a>
+                    <a @click="openPage('/wholesale', $event)">Оптовым клиентам</a>
+                    <a @click="openPage('/warranty', $event)">Гарантийное обслуживание</a>
+                    <a @click="openPage('/offer', $event)">Публичная оферта</a>
                   </div>
                 </div>
               </div>
@@ -24,9 +24,9 @@
               <div class="dropdown">О нас
                 <div class="dropdown__wrapper">
                   <div class="dropdown__content ">
-                    <a @click="openPage('/about')">О компании</a>
-                    <a @click="openPage('/contacts')">Контактная информация</a>
-                    <a @click="openPage('/news')">Новости</a>
+                    <a @click="openPage('/about', $event)">О компании</a>
+                    <a @click="openPage('/contacts', $event)">Контактная информация</a>
+                    <a @click="openPage('/news', $event)">Новости</a>
                   </div>
                 </div>
               </div>
@@ -62,11 +62,13 @@ export default {
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
       console.log(this.IS_CATALOG_OPEN);
     },
-    openPage(page) {
+    openPage(page, event) {
+      event.stopImmediatePropagation();
+      event.preventDefault();
       if (this.$router.path != page) {
           this.$router.push(page);
       }
-    }
+    },
   }
 }
 </script>
