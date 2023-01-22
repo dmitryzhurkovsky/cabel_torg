@@ -285,7 +285,7 @@ h3{
   background: #4275D8;
   border-radius: 6px;
   color:#fff;
-  padding: 8px 24px;
+  padding: 12px 24px;
   min-width:180px;text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -300,6 +300,9 @@ h3{
   &:hover{
     background: #5A5A5A;
   }
+.blue{
+  padding: 12px 24px;
+}
 
 }
 .empty{

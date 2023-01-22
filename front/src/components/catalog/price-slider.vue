@@ -167,6 +167,7 @@ export default {
 }
 .price-input .filter__field{
   display: flex;
+  flex-direction: column;
   width: 100%;
   height: 45px;
   align-items: flex-start;

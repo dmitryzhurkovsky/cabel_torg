@@ -288,6 +288,8 @@
   }
   &__footer{
     align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
     padding: 40px 0;
 
     input{
@@ -357,15 +359,16 @@
   }
 }
 
-.about__paragraph{
+.about__paragraph {
   margin-bottom: 60px;
 
-  &__title{
+  &__title {
     position: relative;
     height: 20px;
     background: rgba(66, 117, 216, 0.1);
     border-radius: 4px;
-    span{
+
+    span {
 
       font-weight: 500;
       position: absolute;
@@ -378,20 +381,23 @@
 
 
   }
-  &__box{
+
+  &__box {
     padding: 24px 0 30px 0;
     align-items: flex-start;
   }
-  &__text{
 
-    p{
+  &__text {
+
+    p {
       margin: 10px 0;
       font-size: 18px;
       line-height: 140%;
     }
   }
-  .radio__list{
-    p{
+
+  .radio__list {
+    p {
       font-size: 14px;
       line-height: 16px;
       opacity: 0.4;
@@ -400,4 +406,22 @@
 }
 
 
+
+</style>
+<style lang="scss">
+.cart__item{
+  .icon__row .icon{
+    font-size: 15px;
+    white-space: nowrap;
+    &:before{
+      font-size: 18px;
+
+    }
+  }
+  .product__img{
+    min-width: 100px;
+    max-width: 10%;
+
+  }
+}
 </style>

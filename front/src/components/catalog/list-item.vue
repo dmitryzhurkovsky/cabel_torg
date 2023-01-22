@@ -132,7 +132,7 @@
 
     &__img {
       width: 100%;
-      flex-basis: 30%;
+      flex-basis: 25%;
       img{
         max-width: 100%;
       }
@@ -179,6 +179,9 @@
     span:nth-child(1){
       font-weight: 500;
       margin-right: 5px;
+    }
+    ._label{
+      text-align: right;
     }
   }
 
