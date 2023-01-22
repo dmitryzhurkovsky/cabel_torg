@@ -26,7 +26,7 @@ export default {
       },
       REDIRECT_AFTER_LOGIN(state) {
           return state.destination;
-      }
+      },
   },
 
   mutations: {
@@ -44,7 +44,7 @@ export default {
       },
       SET_DESTINATION(state, route) {
           state.destination = route;
-      }
+      },
   },
 
   actions: {

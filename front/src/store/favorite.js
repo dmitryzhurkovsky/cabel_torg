@@ -83,12 +83,12 @@ export default {
             if (type === 'set') {
               const isPresentFavoriteInStore = getters.FAVORITES.filter(item => item.product.id === product.id);
               if (!isPresentFavoriteInStore.length) {
-                  await dispatch("ADD_ITEM_TO_DB", { product } );
+                  await dispatch("ADD_FAVORITE_TO_DB", { product } );
               }
             } else if (type === 'remove') {
               const isPresentFavoriteInStore = getters.FAVORITES.filter(item => item.product.id === product.id);
               if (isPresentFavoriteInStore.length) {
-                  await dispatch("DELETE_ITEM_FROM_DB", { product } )
+                  await dispatch("DELETE_FAVORITE_FROM_DB", { product } )
               }    
             }
         } else {
@@ -116,7 +116,7 @@ export default {
     async MERGE_USER_FAVORITES_AND_LOCAL_STORAGE({ commit, dispatch, getters, rootGetters }) {
       if (rootGetters['auth/USER']) {
         try {
-            const response = await axios.get(process.env.VUE_APP_API_URL + 'carts/mine/products');
+            const response = await axios.get(process.env.VUE_APP_API_URL + 'watch_lists/mine/products');
             const itemsFromDB = response.data;
             const newItemsFromDB = [];
             itemsFromDB.forEach( dbItem => {
@@ -135,7 +135,7 @@ export default {
             const newItemsFromSite = JSON.parse(localStorage.getItem('favorites'));
             if (newItemsFromSite.length) {
                 newItemsFromSite.forEach( async newItem => {
-                    await dispatch("ADD_ITEM_TO_DB", newItem );
+                    await dispatch("ADD_FAVORITE_TO_DB", newItem );
                     const storage = JSON.parse(localStorage.getItem('favorites'));
                     const otherItemsInStor = storage.filter(item => item.product.id !== newItem.product.id);
                     localStorage.setItem('favorites', JSON.stringify([ ...otherItemsInStor ]));
@@ -148,7 +148,7 @@ export default {
       }
     },
 
-    async DELETE_ITEM_FROM_DB({ commit, rootGetters }, itemData ) {
+    async DELETE_FAVORITE_FROM_DB({ commit, rootGetters }, itemData ) {
       if (rootGetters['auth/USER']) {
           try {
               await axios.delete(process.env.VUE_APP_API_URL + 'watch_lists/mine/products/' + itemData.product.id);
@@ -160,7 +160,7 @@ export default {
       }
     },
 
-    async ADD_ITEM_TO_DB({ commit, rootGetters }, itemData ) {
+    async ADD_FAVORITE_TO_DB({ commit, rootGetters }, itemData ) {
       if (rootGetters['auth/USER']) {
           try {
               await axios.post(process.env.VUE_APP_API_URL + 'watch_lists/mine/products/', { product_id: itemData.product.id });

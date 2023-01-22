@@ -58,8 +58,8 @@ export default {
       return path;
     },
 
-    onRemoveItemFromFavorite(itemData){
-        this.UPDATE_IS_WISH_IN_CART({ itemData, type: 'remove' });
+    async onRemoveItemFromFavorite(itemData){
+        await this.UPDATE_IS_WISH_IN_CART({ itemData, type: 'remove' });
     }
   }
 

@@ -15,7 +15,7 @@
 
     </div>
     <div>
-      <a class="" @click="onOpenFavoritePage()">Перейти в Избранное
+      <a class="" @click="onOpenFavoritePage($event)">Перейти в Избранное
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M3 12H20.5M20.5 12L16.5 8M20.5 12L16.5 16" stroke="white"/>
         </svg>
@@ -44,10 +44,15 @@ export default {
   },
 
   methods: {
-    onOpenFavoritePage() {
+    ...mapMutations("auth", ["SET_DESTINATION"]),
+    ...mapMutations("profile", ["CHANGE_SCREEN"]),
+
+    onOpenFavoritePage(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.CHANGE_SCREEN(1);
       if (this.USER) {
             this.SET_DESTINATION('');
-            // this.SET_IS_APPLICATION_OPEN(true);
             if (this.$router.path != '/user-cab') {
                 this.$router.push('/user-cab');
             }
