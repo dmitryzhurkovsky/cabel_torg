@@ -7,7 +7,7 @@
         </a>
         <div class="product__info">
             <div class="product__article  _label mb-20">Артикул: <span>{{ cartItemData.vendor_code }}</span></div>
-            <a  class="product__title" href="">Вилка RJ-45 cat 5E FTP для витой пары 8P8C (100 шт) экранированная</a>
+            <a  class="product__title" href=""> {{ cartItemData.name }}</a>
             <div class="icon__row mt-20">
                 <span 
                     :class="[isWish === false ? 'icon icon-favorite' : 'icon icon-favorite-choosed']" 

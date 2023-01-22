@@ -20,15 +20,15 @@
           <span>BYN / {{ card.base_unit.full_name }}</span>
         </div>
         <div 
-          :class="[quantity === 0 ? 'item-card__buy flex-center icon-cart' : 'item-card__buy flex-center icon-cart active']"
+          :class="[quantity === 0 ? 'item-card__buy flex-center icon-cart' : 'item-card__buy flex-center icon-cart-chosen']"
           @click="onOperationWithCartItem(card)"
         >
-          <IconQuantity 
+          <!-- <IconQuantity 
             v-if = "quantity"
             :quantity = quantity 
             :left = '18'
             :top = '18'
-          />
+          /> -->
         </div>
 
       </div>
@@ -46,7 +46,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
-import IconQuantity from '@/components/catalog/icon-quantity.vue'
+// import IconQuantity from '@/components/catalog/icon-quantity.vue'
 
 export default {
   name: "CardItem",
@@ -62,10 +62,10 @@ export default {
     }
   },
 
-  components:
-  {
-    IconQuantity,
-  },
+  // components:
+  // {
+  //   IconQuantity,
+  // },
 
   computed: {
     ...mapGetters("order", ["ORDERS"]),
@@ -157,10 +157,10 @@ export default {
 
 //Карточка товара
 
-.icon-card .active {
-  // background-color: red;
-  border: 2px solid red;
-}
+// .icon-card .active {
+//   // background-color: red;
+//   border: 2px solid red;
+// }
 .item-card {
   display: flex;
   flex-direction: column;

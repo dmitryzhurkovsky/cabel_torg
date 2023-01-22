@@ -18,10 +18,11 @@ export default {
         return totalOrderCost;
       },
       TOTAL_ORDER_QUANTITY(state) {
-        const position = state.orders.length;
-        let totalGoods = 0;
-        state.orders.forEach(item => {totalGoods = totalGoods + item.amount});
-        return 'позиций - ' + position + ' (товаров ' + totalGoods + ')';
+        // const position = state.orders.length;
+        // let totalGoods = 0;
+        // state.orders.forEach(item => {totalGoods = totalGoods + item.amount});
+        // return 'позиций - ' + position + ' (товаров ' + totalGoods + ')';
+        return state.orders.length;
       },
       IS_APPLICATION_OPEN(state) {
           return state.isApplicationOpen;
