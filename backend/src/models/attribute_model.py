@@ -5,6 +5,13 @@ from src.core.db.db import Base
 from src.models.abstract_model import Base1CModel
 
 
+class ProductAttribute(Base):
+    __tablename__ = 'product_attribute'
+
+    attribute_id = Column(ForeignKey("attributes.id"), primary_key=True)
+    product_id = Column(ForeignKey("products.id"), primary_key=True)
+
+
 class Attribute(Base):
     __tablename__ = 'attributes'
 
