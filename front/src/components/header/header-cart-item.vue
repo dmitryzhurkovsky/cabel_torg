@@ -1,9 +1,9 @@
 <template>
-      <div class="popup-cart__item" v-it="cartItemData">
+      <div class="popup-cart__item" v-if="cartItemData">
         <div class="popup-cart__img">
             <!-- <img src="../../assets/catalog/card1.png" alt=""> -->
             <img v-if = "cartItemData.images" :src=getImagePath(cartItemData.images) alt="">
-            <img v-if = "!cartItemData.images" src="../../assets/no_image.jpg" alt="">
+            <img v-if = "!cartItemData.images" src="../../assets/no_image.svg" alt="">
         </div>
         <div class="popup-cart__description">
           <div class="popup-cart__title">{{ cartItemData.name }}</div>
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+
 import axios from "axios";
 import {mapMutations, mapActions } from 'vuex'
 
@@ -61,7 +62,7 @@ export default {
     onRemoveItemFromCart(itemData){
         this.UPDATE_ITEMS_IN_CART({ itemData, type: 'remove' });
     }
-}
+  }
 
 }
 </script>

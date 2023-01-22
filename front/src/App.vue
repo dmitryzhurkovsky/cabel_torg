@@ -38,6 +38,7 @@
         ...mapActions("header", ["GET_CATEGORIES"]),
         ...mapActions("auth", ["GET_USER_DATA", "USER"]),
         ...mapActions("order", ["GET_USER_ORDER"]),
+        ...mapActions("favorite", ["GET_USER_FAVORITE"]),
 
         setViewParametrs(){
             this.UPDATE_VIEW_PARAMETERS(window.innerWidth);
@@ -52,7 +53,8 @@
         if (localStorage.getItem("authToken")) {
             await this.GET_USER_DATA();
         }
-        this.GET_USER_ORDER();
+        await this.GET_USER_FAVORITE();
+        await this.GET_USER_ORDER();
     },
 
   };

@@ -66,9 +66,7 @@ export default {
             localStorage.setItem("refreshToken", response.data.refresh_token);
             await dispatch("GET_USER_DATA");
             await dispatch("order/MERGE_USER_OREDRS_AND_LOCAL_STORAGE", null, {root: true});
-            if (getters.REDIRECT_AFTER_LOGIN) {
-                commit("order/SET_IS_APPLICATION_OPEN", true, {root: true});
-            }  
+            await dispatch("favorite/MERGE_USER_FAVORITES_AND_LOCAL_STORAGE", null, {root: true});
         }
         catch (e) {
             console.log(e);
@@ -104,6 +102,7 @@ export default {
     async SEND_LOGOUT_REQUEST({ commit }) {
         commit("SET_USER_DATA", null);
         commit("order/SET_ORDERS", [], {root: true});
+        commit("favorite/SET_FAVORITES", [], {root: true});
         localStorage.removeItem("authToken");
         commit("order/SET_IS_APPLICATION_OPEN", false, {root: true});
         commit("SET_DESTINATION", '');

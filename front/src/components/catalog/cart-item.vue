@@ -2,13 +2,16 @@
     <div v-it="cartItemData && quantity !==0">
         <a class="product__img" href="">
             <img v-if = "cartItemData.images" :src=getImagePath(cartItemData.images) alt="">
-            <img v-if = "!cartItemData.images" src="../../assets/no_image.jpg" alt="">
+            <img v-if = "!cartItemData.images" src="../../assets/no_image.svg" alt="">
         </a>
         <div class="product__info">
             <div class="product__article  _label mb-20">Артикул: <span>{{ cartItemData.vendor_code }}</span></div>
             <a  class="product__title" href="">Вилка RJ-45 cat 5E FTP для витой пары 8P8C (100 шт) экранированная</a>
             <div class="icon__row mt-20">
-                <span class="icon icon-favorite">В избранное</span>
+                <span 
+                    :class="[isWish === false ? 'icon icon-favorite' : 'icon icon-favorite-choosed']" 
+                    @click="onWishClick(cartItemData)"
+                >В избранное</span>
                 <span class="icon icon-delete" @click="onOperationWithCartItem(cartItemData, 'remove')">Удалить</span>
             </div>
         </div>
@@ -37,7 +40,7 @@
 
 <script>
   import axios from "axios";
-  import {mapActions, mapMutations} from 'vuex'
+  import {mapGetters, mapActions, mapMutations} from 'vuex'
 
   export default {
     name: 'CartItem',
@@ -50,6 +53,7 @@
         return {
             cartItemData: {},
             quantity: 0,
+            isWish: false,
         }
     },
 
@@ -62,11 +66,27 @@
             console.log(e);
             this.ADD_MESSAGE({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
         }
+        this.checkIsWish();
+    },
+
+    computed: {
+        ...mapGetters("favorite", ["FAVORITES"]),
+
+        ChangeParameters(){
+            return JSON.stringify(this.FAVORITES);
+        },
+    },
+
+    watch: {
+        ChangeParameters: async function() {
+            this.checkIsWish();
+        },
     },
 
     methods:{
         ...mapMutations("notification", ["ADD_MESSAGE"]),
         ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
+        ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
 
         getImagePath(item) {
             let path = null;
@@ -100,6 +120,27 @@
             } else if (type === 'decrease') {
                 this.quantity--;
             } 
+        },
+
+        async onWishClick(card) {
+            const itemData = {
+                product: {
+                id: card.id,
+                vendor_code: card.vendor_code,
+                name: card.name,
+                },
+            }  
+            const type = this.isWish === false ? 'set' : 'remove';
+            await this.UPDATE_IS_WISH_IN_CART({ itemData, type });
+        },
+
+        checkIsWish() {
+            if (this.FAVORITES.length) {
+                const filtered = this.FAVORITES.filter(item => item.product.id === this.cartItemData.id);
+                this.isWish =  filtered.length ? true : false;
+            } else {
+                this.isWish = false;
+            }
         },
 
     }

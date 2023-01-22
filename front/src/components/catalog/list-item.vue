@@ -3,7 +3,7 @@
         <div class="product__tag">Хит</div>
         <a class="product__img" href="">
             <img v-if = "card.images" class="" :src=getImagePath(card.images) alt="">
-            <img v-if = "!card.images" class="" src="../../assets/no_image.jpg" alt="">
+            <img v-if = "!card.images" class="" src="../../assets/no_image.svg" alt="">
         </a>
         <div class="product__info">
             <div class="product__status icon-done-color _label mb-20">В наличии</div>
@@ -28,7 +28,10 @@
             </div>
             <div class="notice">* Цена указана с учетом НДС.</div>
             <div class="product__btn flex-center">
-                <div class="product__wishlist icon-favorite"></div>
+                <div 
+                    :class="[isWish === false ? 'product__wishlist icon-favorite' : 'product__wishlist icon-favorite-choosed']"
+                    @click="onWishClick(card)"
+                  ></div>
                 <div v-if = "quantity !== 0" class="btn black" @click="onOperationWithCartItem(card, 'remove')">В корзине</div>
                 <div v-if = "quantity === 0" class="btn blue" @click="onOperationWithCartItem(card, 'increase')">В корзину</div>
             </div>
@@ -38,9 +41,9 @@
 
 
 <script>
-  import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 
-  export default {
+export default {
     name: 'ListItem',
 
     props: {
@@ -50,30 +53,35 @@
     data(){
       return {
           quantity: 0,
+          isWish: false,
       }
     },
 
     computed: {
       ...mapGetters("order", ["ORDERS"]),
+      ...mapGetters("favorite", ["FAVORITES"]),
 
       ChangeParameters(){
-        return JSON.stringify(this.ORDERS);
+        return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES);
       },
     },
 
     watch: {
       ChangeParameters: async function() {
         this.countQuantity();
+        this.checkIsWish();
       },
     },
 
     mounted(){
       this.countQuantity();
+      this.checkIsWish();
     },
 
     
     methods: {
       ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
+      ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
       
       getImagePath(item) {
         let path = null;
@@ -101,6 +109,18 @@
         await this.UPDATE_ITEMS_IN_CART({itemData, type});
       },
 
+      async onWishClick(card) {
+        const itemData = {
+          product: {
+            id: card.id,
+            vendor_code: card.vendor_code,
+            name: card.name,
+          },
+        }  
+        const type = this.isWish === false ? 'set' : 'remove';
+        await this.UPDATE_IS_WISH_IN_CART({ itemData, type });
+      },
+
       countQuantity() {
         if (this.ORDERS.length) {
           const filtered = this.ORDERS.filter(item => item.product.id === this.card.id);
@@ -110,12 +130,22 @@
         }
       },
 
+      checkIsWish() {
+        if (this.FAVORITES.length) {
+          const filtered = this.FAVORITES.filter(item => item.product.id === this.card.id);
+          this.isWish =  filtered.length ? true : false;
+        } else {
+          this.isWish = false;
+        }
+      },
+
     }
 
-  }
+}
 </script>
 
 <style scoped lang="scss">
+
 .product{
     display: flex;
     position: relative;

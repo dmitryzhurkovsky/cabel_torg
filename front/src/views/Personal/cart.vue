@@ -229,6 +229,7 @@
 
     methods: {
       ...mapActions("order", ["GET_USER_ORDER"]),
+      ...mapMutations("order", ["SET_IS_APPLICATION_OPEN"]),
 
       openPage(page, event) {
           event.stopImmediatePropagation();
@@ -241,7 +242,7 @@
     },
 
     mounted() {
-
+      this.SET_IS_APPLICATION_OPEN(false);
     },
   }
 </script>

@@ -1,10 +1,13 @@
 <template lang="html">
   <div class="recomendation__block__item item-card" v-if = "card">
     <div class="item-card__tag">Хит</div>
-    <div class="item-card__wishlist icon-favorite"></div>
+    <div 
+        :class="[isWish === false ? 'item-card__wishlist icon-favorite' : 'item-card__wishlist icon-favorite-choosed']" 
+        @click="onWishClick(card)"
+    ></div>
     <a class="item-card__img" href="">
       <img v-if = "card.images" class="" :src=getImagePath(card.images) alt="">
-      <img v-if = "!card.images" class="" src="../../assets/no_image.jpg" alt="">
+      <img v-if = "!card.images" class="" src="../../assets/no_image.svg" alt="">
     </a>
     <div class="item-card__info">
       <div class="item-card__row flex-center">
@@ -55,6 +58,7 @@ export default {
   data(){
     return {
       quantity: 0,
+      isWish: false,
     }
   },
 
@@ -65,25 +69,29 @@ export default {
 
   computed: {
     ...mapGetters("order", ["ORDERS"]),
+    ...mapGetters("favorite", ["FAVORITES"]),
 
     ChangeParameters(){
-      return JSON.stringify(this.ORDERS);
+      return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES);
     },
   },
 
   watch: {
     ChangeParameters: async function() {
       this.countQuantity();
+      this.checkIsWish();
     },
   },
 
   mounted(){
     this.countQuantity();
+    this.checkIsWish();
   },
 
 
   methods: {
     ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
+    ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
 
     getImagePath(item) {
       let path = null;
@@ -109,7 +117,19 @@ export default {
       await this.UPDATE_ITEMS_IN_CART({itemData, type});
     },
 
-    countQuantity(){
+    async onWishClick(card) {
+      const itemData = {
+        product: {
+          id: card.id,
+          vendor_code: card.vendor_code,
+          name: card.name,
+        },
+      }  
+      const type = this.isWish === false ? 'set' : 'remove';
+      await this.UPDATE_IS_WISH_IN_CART({ itemData, type });
+    },
+
+    countQuantity() {
       if (this.ORDERS.length) {
         const filtered = this.ORDERS.filter(item => item.product.id === this.card.id);
         this.quantity =  filtered.length ? filtered[0].amount : 0;
@@ -118,6 +138,14 @@ export default {
       }
     },
 
+    checkIsWish() {
+      if (this.FAVORITES.length) {
+        const filtered = this.FAVORITES.filter(item => item.product.id === this.card.id);
+        this.isWish =  filtered.length ? true : false;
+      } else {
+        this.isWish = false;
+      }
+    }
   },
 
 }
@@ -129,11 +157,11 @@ export default {
 
 //Карточка товара
 
-.item-card .active {
+.icon-card .active {
   // background-color: red;
-  // border: 2px solid red;
+  border: 2px solid red;
 }
-  .item-card {
+.item-card {
   display: flex;
   flex-direction: column;
   position: relative;

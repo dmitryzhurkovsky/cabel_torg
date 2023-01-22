@@ -98,7 +98,6 @@ export default {
                 const isPresentCartInStore = getters.ORDERS.filter(item => item.product.id === product.id);
                 if (isPresentCartInStore.length) {
                     const updatedCart = isPresentCartInStore[0];
-                    console.log('карточка для обновления', updatedCart);
                     if (updatedCart.amount === 1) {
                         await dispatch("DELETE_ITEM_FROM_DB", { amount: updatedCart.amount, product: updatedCart.product } )
                     } else {
@@ -182,21 +181,19 @@ export default {
                   const response = await axios.get(process.env.VUE_APP_API_URL + 'carts/mine/products');
                   const itemsFromDB = response.data;
                   const newItemsFromDB = [];
-                  const commonItems = [];
-                  itemsFromDB.forEach( async dbItem => {
+                  itemsFromDB.forEach( dbItem => {
                       const isCommonItem = getters.ORDERS.filter( siteItem => siteItem.product.id === dbItem.product.id);
-                      if (commonItems.length) {
-                          const newAmount = Number((Number(isCommonItem.amount) + Number(dbItem.amount)).toFixed(2));
-                          await dispatch("UPDATE_ITEM_IN_DB", { amount: newAmount, product: isCommonItem.product } );
+                      if (isCommonItem.length) {
+                          const newAmount = isCommonItem[0].amount + dbItem.amount;
+                          dispatch("UPDATE_ITEM_IN_DB", { amount: newAmount, product: dbItem.product } );
                           const storage = JSON.parse(localStorage.getItem('carts'));
-                          const otherItemsInStor = storage.filter(item => item.product.id !== isCommonItem.product.id);
-                          localStorage.setItem(JSON.stringify([ ...otherItemsInStor ]));
+                          const otherItemsInStor = storage.filter(item => item.product.id !== isCommonItem[0].product.id);
+                          localStorage.setItem('carts', JSON.stringify(otherItemsInStor))
                       } else {
                           newItemsFromDB.push({ amount: dbItem.amount, product: dbItem.product});
                       }
                   });
                   newItemsFromDB.forEach( async newItem => {
-                      console.log('new ', newItem);
                       await commit("UPDATE_ITEM_IN_CART", { amount: newItem.amount , product: newItem.product } );
                   });
                   const newItemsFromSite = JSON.parse(localStorage.getItem('carts'));
@@ -205,7 +202,7 @@ export default {
                           await dispatch("ADD_ITEM_TO_DB", newItem );
                           const storage = JSON.parse(localStorage.getItem('carts'));
                           const otherItemsInStor = storage.filter(item => item.product.id !== newItem.product.id);
-                          localStorage.setItem(JSON.stringify([ ...otherItemsInStor ]));
+                          localStorage.setItem('carts', JSON.stringify([ ...otherItemsInStor ]));
                       })
                   }  
               } catch (e) {
@@ -230,10 +227,7 @@ export default {
       async UPDATE_ITEM_IN_DB({ commit, rootGetters }, itemData ) {
           if (rootGetters['auth/USER']) {
               try {
-                  const response = await axios.patch(process.env.VUE_APP_API_URL + 'carts/mine/products/' + itemData.product.id, 
-                    { amount : itemData.amount, product: itemData.product }
-                  );
-                  console.log('SSSS ', response);
+                  const response = await axios.patch(process.env.VUE_APP_API_URL + 'carts/mine/products/' + itemData.product.id, itemData);
                   commit("UPDATE_ITEM_IN_CART", {amount : response.data.amount, product: itemData.product});
               } catch (e) {
                   console.log(e);
