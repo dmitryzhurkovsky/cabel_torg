@@ -175,14 +175,12 @@
   &__price{
     font-size: 20px;
     margin-bottom: 10px;
-    text-align: right;
+    text-align: center;
     span:nth-child(1){
       font-weight: 500;
       margin-right: 5px;
     }
-    ._label{
-      text-align: right;
-    }
+
   }
 
 
@@ -277,6 +275,7 @@
     border-radius: 2px;
     border: none;
     margin: 0 10px;
+    text-align: center;
   }
 
   &__btn{

@@ -29,7 +29,7 @@
               />
             </div>
             <div class="cart__footer flex-center">
-              <div class="group cart-promo">
+              <div class="group cart__promo">
                 <label for="promo" class="label">Промокод</label>
                 <div class="input__box">
                   <input id="promo" type="text" class="input">
@@ -277,6 +277,7 @@
       font-weight: 300;
       font-size: 12px;
       line-height: 20px;
+
     }
 
   }
@@ -291,6 +292,10 @@
     justify-content: space-between;
     width: 100%;
     padding: 40px 0;
+    @media (max-width: $md2 + px){
+      flex-direction: column;
+      align-items: flex-end;
+    }
 
     input{
       width:241px;
@@ -342,6 +347,10 @@
 
 
     }
+
+  }
+
+  &__promo{
 
   }
 
@@ -410,6 +419,15 @@
 </style>
 <style lang="scss">
 .cart__item{
+  position: relative;
+  @media (max-width: $md2 + px){
+    flex-direction: column;
+  ._label{
+    @media (max-width: $md2 + px){
+      display: none;
+    }
+    }
+  }
   .icon__row .icon{
     font-size: 15px;
     white-space: nowrap;
