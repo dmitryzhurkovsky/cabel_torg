@@ -1,5 +1,6 @@
 <template>
     <div v-it="cartItemData && quantity !==0">
+      <div class="product__wrapper">
         <a class="product__img" href="">
             <img v-if = "cartItemData.images" :src=getImagePath(cartItemData.images) alt="">
             <img v-if = "!cartItemData.images" src="../../assets/no_image.svg" alt="">
@@ -15,25 +16,32 @@
                 <span class="icon icon-delete" @click="onOperationWithCartItem(cartItemData, 'remove')">Удалить</span>
             </div>
         </div>
-        <div class="product__count flex-center">
+      </div>
+
+        <div class="product__wrapper">
+          <div class="product__count flex-center">
             <div class="_label mb-20">Количество:</div>
             <div class="flex-center">
-                <span class="icon-minus" @click="onOperationWithCartItem(cartItemData, 'decrease')"></span>
-                <input class="product__input" type="text" v-model="quantity"  @input="onOperationWithCartItem(cartItemData, 'set')">
-                <span class="icon-plus" @click="onOperationWithCartItem(cartItemData, 'increase')"></span>
+              <span class="icon-minus" @click="onOperationWithCartItem(cartItemData, 'decrease')"></span>
+              <input class="product__input" type="text" v-model="quantity"  @input="onOperationWithCartItem(cartItemData, 'set')">
+              <span class="icon-plus" @click="onOperationWithCartItem(cartItemData, 'increase')"></span>
             </div>
-        </div>
-
-        <div class="product__price">
+          </div>
+          <div class="product__price">
             <div class="_label mb-20">Стоимость (с учетом НДС):</div>
             <div class="old_price">
-                <span>70</span>BYN
-                <span>/{{ cartItemData?.base_unit?.full_name }}</span>
+              <span>70</span>BYN
+              <span>/{{ cartItemData?.base_unit?.full_name }}</span>
             </div>
             <div class="current_price">
-                <span>{{ cartItemData.price }}</span> BYN
+              <span>{{ cartItemData.price }}</span> BYN
             </div>
+          </div>
+
         </div>
+
+
+
     </div>
     
 </template>
@@ -160,6 +168,7 @@
         }
     }
     &__info{
+      width: 100%;
 
     .icon{
         font-size: 10px;
@@ -177,6 +186,14 @@
         cursor: pointer;
         }
     }
+      .icon-delete{
+        @media (max-width: $md2 + px){
+          position: absolute;
+          top: 0;
+          right: 0;
+        }
+
+      }
     }
 
     &__article{
@@ -189,6 +206,21 @@
         color: #423E48;
     }
     &__status{
+
+    }
+
+    &__wrapper{
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      &:nth-child(2){
+        @media (max-width: $md2 + px){
+          padding-left: 100px;
+          margin-top: 20px;
+        }
+      }
+
 
     }
     &__count{
@@ -206,6 +238,7 @@
         border-radius: 2px;
         border: none;
         margin: 0 10px;
+        text-align: center;
     }
 
     &__price{
@@ -219,6 +252,7 @@
             text-decoration-line: line-through;
             opacity: 0.4;
             margin-bottom: 5px;
+            min-height: 20px;
         }
         .current_price{
             font-size: 20px;

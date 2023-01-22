@@ -14,8 +14,8 @@ export default {
 
   props: {
     quantity:  0,
-    top: 12,
-    left: 12,
+    top: 10,
+    left: 10,
   },
 
 }
@@ -28,8 +28,8 @@ export default {
   position: absolute;
   // top: 12px;
   // left: 12px;
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   justify-content: center;
   align-items: center;

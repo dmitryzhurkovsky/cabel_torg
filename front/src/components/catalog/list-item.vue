@@ -162,7 +162,7 @@ export default {
 
     &__img {
       width: 100%;
-      flex-basis: 30%;
+      flex-basis: 25%;
       img{
         max-width: 100%;
       }
@@ -205,11 +205,12 @@ export default {
   &__price{
     font-size: 20px;
     margin-bottom: 10px;
-    text-align: right;
+    text-align: center;
     span:nth-child(1){
       font-weight: 500;
       margin-right: 5px;
     }
+
   }
 
 
@@ -304,6 +305,7 @@ export default {
     border-radius: 2px;
     border: none;
     margin: 0 10px;
+    text-align: center;
   }
 
   &__btn{

@@ -29,7 +29,7 @@
               />
             </div>
             <div class="cart__footer flex-center">
-              <div class="group cart-promo">
+              <div class="group cart__promo">
                 <label for="promo" class="label">Промокод</label>
                 <div class="input__box">
                   <input id="promo" type="text" class="input">
@@ -278,6 +278,7 @@
       font-weight: 300;
       font-size: 12px;
       line-height: 20px;
+
     }
 
   }
@@ -289,7 +290,13 @@
   }
   &__footer{
     align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
     padding: 40px 0;
+    @media (max-width: $md2 + px){
+      flex-direction: column;
+      align-items: flex-end;
+    }
 
     input{
       width:241px;
@@ -344,6 +351,10 @@
 
   }
 
+  &__promo{
+
+  }
+
 }
 
 
@@ -358,15 +369,16 @@
   }
 }
 
-.about__paragraph{
+.about__paragraph {
   margin-bottom: 60px;
 
-  &__title{
+  &__title {
     position: relative;
     height: 20px;
     background: rgba(66, 117, 216, 0.1);
     border-radius: 4px;
-    span{
+
+    span {
 
       font-weight: 500;
       position: absolute;
@@ -379,20 +391,23 @@
 
 
   }
-  &__box{
+
+  &__box {
     padding: 24px 0 30px 0;
     align-items: flex-start;
   }
-  &__text{
 
-    p{
+  &__text {
+
+    p {
       margin: 10px 0;
       font-size: 18px;
       line-height: 140%;
     }
   }
-  .radio__list{
-    p{
+
+  .radio__list {
+    p {
       font-size: 14px;
       line-height: 16px;
       opacity: 0.4;
@@ -401,4 +416,31 @@
 }
 
 
+
+</style>
+<style lang="scss">
+.cart__item{
+  position: relative;
+  @media (max-width: $md2 + px){
+    flex-direction: column;
+  ._label{
+    @media (max-width: $md2 + px){
+      display: none;
+    }
+    }
+  }
+  .icon__row .icon{
+    font-size: 15px;
+    white-space: nowrap;
+    &:before{
+      font-size: 18px;
+
+    }
+  }
+  .product__img{
+    min-width: 100px;
+    max-width: 10%;
+
+  }
+}
 </style>
