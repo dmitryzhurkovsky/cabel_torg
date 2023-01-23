@@ -7,7 +7,7 @@ class CreateMixin(BaseMixin):
     @classmethod
     async def create(
             cls,
-            input_data: CreateBaseSchema,
+            input_data: CreateBaseSchema | dict,
             session: AsyncSession,
     ) -> TableType:
         """Create model"""

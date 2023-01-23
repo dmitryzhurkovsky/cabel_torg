@@ -30,6 +30,7 @@ class ProductSchema(BaseSchema):
 class ProductInCartSchema(BaseSchema):
     vendor_code: str | None
     name: str
+    price: Decimal | None
 
     class Config:
         orm_mode = True

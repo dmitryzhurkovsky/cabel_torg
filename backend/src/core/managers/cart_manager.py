@@ -4,7 +4,7 @@ from src.core.db.mixins.list_mixin import ListMixin
 from src.core.db.mixins.update_mixin import UpdateMixin
 from src.models.cart_model import Cart
 from src.rest.schemas.cart_schema import (
-    CartCreateSchema,
+    CartCreateInputSchema,
     CartSchema
 )
 
@@ -17,4 +17,4 @@ class CartManager(
 ):
     table = Cart
     update_scheme = CartSchema
-    create_scheme = CartCreateSchema
+    create_scheme = CartCreateInputSchema

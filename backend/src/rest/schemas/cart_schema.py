@@ -3,12 +3,12 @@ from pydantic import BaseModel
 from src.rest.schemas.product_schema import ProductInCartSchema
 
 
-class CartCreateSchema(BaseModel):
+class CartCreateInputSchema(BaseModel):
     product_id: int
     amount: int
 
 
-class CartUpdateSchema(BaseModel):
+class CartUpdateInputSchema(BaseModel):
     amount: int
 
 

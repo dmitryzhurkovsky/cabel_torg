@@ -7,4 +7,5 @@ from src.models.manufacturer_model import Manufacturer
 from src.models.product_models import Product
 from src.models.user_model import User
 from src.models.watchlist_model import WatchList
-from src.models.order_model import Order
+from src.models.order_model import Order, ProductOrder
+from src.models.services_models import Article, Partner, DeliveryType

@@ -26,7 +26,7 @@ class UserManager(CRUDManager):
     async def update(
             cls, session: AsyncSession,
             pk: int,
-            input_data: UserUpdateSchema
+            input_data: UserUpdateSchema | dict
     ) -> TableType | HTTPException:
         if input_data.get('password'):  # todo make it better
             input_data.password = hash_password(password=input_data.password)

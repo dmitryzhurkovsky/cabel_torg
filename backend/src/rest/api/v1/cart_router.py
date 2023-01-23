@@ -6,8 +6,8 @@ from src.core.db.db import get_session
 from src.core.managers.cart_manager import CartManager
 from src.rest.schemas.cart_schema import (
     CartSchema,
-    CartCreateSchema,
-    CartUpdateSchema,
+    CartCreateInputSchema,
+    CartUpdateInputSchema,
     CartWithProductSchema
 )
 from src.services.auth_service import AuthService
@@ -19,7 +19,7 @@ cart_router = APIRouter(tags=['carts'])
 async def get_product(
         session: AsyncSession = Depends(get_session),
         user=Depends(AuthService.get_current_user)
-):
+) -> list[CartWithProductSchema]:
     return await CartManager.list(
         session=session,
         filter_fields={'user_id': user.id},
@@ -34,7 +34,7 @@ async def get_product(
     response_model=CartSchema,
     status_code=status.HTTP_201_CREATED)
 async def add_product_to_cart(
-        product_info: CartCreateSchema,
+        product_info: CartCreateInputSchema,
         user=Depends(AuthService.get_current_user),
         session: AsyncSession = Depends(get_session)
 ) -> CartSchema:
@@ -69,14 +69,14 @@ async def delete_product_from_cart(
     status_code=status.HTTP_200_OK)
 async def update_product_amount_in_cart(
         product_id: int,
-        product_info: CartUpdateSchema,
+        product_info: CartUpdateInputSchema,
         user=Depends(AuthService.get_current_user),
         session: AsyncSession = Depends(get_session)
 ) -> CartSchema:
     return await CartManager.update_m2m(
-        input_data={
-            "product_id": product_id,
-            "amount": product_info.amount,
-            "user_id": user.id},
+        input_data=CartSchema(
+            product_id=product_id,
+            amount=product_info.amount,
+            user_id=user.id),
         session=session,
     )

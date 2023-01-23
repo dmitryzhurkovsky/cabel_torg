@@ -7,19 +7,19 @@ from src.models.abstract_model import BaseModel
 class User(BaseModel):
     __tablename__ = 'users'
 
-    email = Column(String, unique=True, nullable=False)
+    email = Column(String(128), unique=True, nullable=False)
     password = Column(String(128), nullable=False)
-    full_name = Column(String)
-    phone_number = Column(String, unique=True)
+    full_name = Column(String(50))
+    phone_number = Column(String(50), unique=True)
 
     # requisites
-    company_name = Column(String)
-    unp = Column(String)  # Payer's Account Number
-    delivery_address = Column(String)
-    legal_address = Column(String)
-    IBAN = Column(String)
-    BIC = Column(String)  # Belarusian Central Bank Identification Code
-    serving_bank = Column(String)
+    company_name = Column(String(50))
+    unp = Column(String(9))  # Payer's Account Number
+    delivery_address = Column(String(128))
+    legal_address = Column(String(128))
+    IBAN = Column(String(34))
+    BIC = Column(String(50))  # Belarusian Central Bank Identification Code
+    serving_bank = Column(String(128))
 
     # service fields
     is_active = Column(Boolean, default=True)
