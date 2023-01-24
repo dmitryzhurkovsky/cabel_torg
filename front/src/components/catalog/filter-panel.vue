@@ -1,29 +1,43 @@
 <template>
-    <div class="filter__block">
+    <div class="filter__block" v-if="CATALOG.length">
         <div class="filter__box" 
-            v-for   = "item in TOP_CATEGORIES"
-            :key    = "item.id"
-            @click  = "changeCategory(item.id, $event)"
+            v-for   = "mainItem in CATALOG"
+            :key    = "mainItem.id"
         >
-            <div 
-              :class="[ item.id === TOP_CATEGORIES_ITEM_ACTIVE ? 'filter__title icon-arrow-r' : 'filter__title icon-arrow-l']"
-            >{{item.name}}</div>
-            <div class="filter__block"  v-if = "item.id === TOP_CATEGORIES_ITEM_ACTIVE">
-                <div class=""
-                    v-for   = "sub in SUB_CATEGORIES"
-                    :key    = "sub.id"
-                    @click  = "subCategoryClick(sub.id, $event)"
+            <div
+                @click  = "openMainCategory(mainItem, $event)"
+            >
+                {{mainItem.name}}
+            </div>
+            <div v-if="mainItem.childrens.length"
+                :class="[ mainItem.filterPanel ? 'filter__title icon-arrow-r' : 'filter__title icon-arrow-l']"
+                @click="toggleCategory(mainItem, $event)"
+            >
+            </div>
+            <div class="filter__block"  v-if = "mainItem.childrens.length && mainItem.filterPanel">
+                <div class="filter__subtitle"
+                    v-for   = "middleItem in mainItem.childrens"
+                    :key    = "middleItem.id"
                 >
-                    <div class="filter__subtitle">{{sub.name}}</div>
-                    <div class="filter__checkbox-list filter__subtitle-child "  v-if = "sub.id === SUB_CATEGORIES_ITEM_ACTIVE">
+                    <div 
+                        @click  = "openMiddleCategory(middleItem, $event)"
+                    >
+                        {{middleItem.name}}
+                    </div>
+                    <div v-if="middleItem.childrens.length"
+                        :class="[ middleItem.filterPanel ? 'filter__subtitle icon-arrow-r' : 'filter__subtitle icon-arrow-l']"
+                        @click="toggleCategory(middleItem, $event)"
+                    >
+                    </div>
+                    <div class="filter__checkbox-list filter__subtitle-child "  v-if = "middleItem.childrens.length &&  middleItem.filterPanel">
                         <div class="filter__subtitle-child"
-                            v-for = "subItem in sub.subItems"
-                            :key  = "subItem.id"
-                            @click = "subItemCategoryClick(subItem.id, $event)"
+                            v-for = "lastItem in middleItem.childrens"
+                            :key  = "lastItem.id"
+                            @click = "openLastCategory(lastItem, $event)"
                         >
                             <div class="checkbox-default">
                               <div class="filter__text filter__subtitle-child">
-                                {{subItem.name}}
+                                {{lastItem.name}}
                               </div>
 
                             </div>
@@ -89,40 +103,50 @@ export default {
     },
 
     computed: {
-        ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "TOP_CATEGORIES", "SUB_CATEGORIES"]),
+        ...mapGetters("header", ["CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
         ...mapGetters("query", ["TYPE_OF_PRODUCT"]),
-
     },
 
     methods:{
-        ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY"]),
+        ...mapMutations("header", [, "SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY"]),
         ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID"]),
 
-        changeCategory(newActive, event){
-            if (this.TOP_CATEGORIES_ITEM_ACTIVE === newActive) {
+        toggleCategory(item, event) {
+            event.stopPropagation();
+            item.filterPanel = !item.filterPanel;
+        },
+
+        openMainCategory(category, event){
+            event.stopPropagation();
+            if (this.TOP_CATEGORIES_ITEM_ACTIVE === category.id) {
                 this.SET_CURRENT_TOP_CATEGORY(null);
             } else {
-                this.SET_CURRENT_TOP_CATEGORY(newActive);
+                this.SET_CURRENT_TOP_CATEGORY(category.id);
             }
         },
-        subCategoryClick(id, event){
-            event.stopImmediatePropagation();
-            event.preventDefault();
-            if (this.SUB_CATEGORIES_ITEM_ACTIVE === id) {
+
+        openMiddleCategory(category, event){
+            event.stopPropagation();
+            if (this.SUB_CATEGORIES_ITEM_ACTIVE === category.id) {
                 this.SET_CURRENT_SUB_CATEGORY(null);
             } else {
-                this.SET_CURRENT_SUB_CATEGORY(id);
+                this.SET_CURRENT_SUB_CATEGORY(category.id);
             }
         },
-        subItemCategoryClick(id, event){
-            event.stopImmediatePropagation();
-            event.preventDefault();
-            // console.log('кликнули по итему подкатегории ', id, event);
-            this.SET_CATEGORY_ID(id);
+
+        openLastCategory(category, event){
+            event.stopPropagation();
+            this.SET_CATEGORY_ID(category.id);
         },
+
         changeFilterCategory(event, category){
             event.stopImmediatePropagation();
             event.preventDefault();
+            if (this.SUB_CATEGORIES_ITEM_ACTIVE === category.id) {
+                this.SET_CURRENT_LAST_CATEGORY(null);
+            } else {
+                this.SET_CURRENT_LAST_CATEGORY(category.id);
+            }
             this.SET_TYPE_OF_PRODUCT(category);
         }
     },

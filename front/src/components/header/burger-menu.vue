@@ -1,55 +1,58 @@
 <template lang="html">
   <div class="burger__menu__open">
-    <ul class="cd-accordion-menu animated">
+    <ul class="cd-accordion-menu animated" v-if="CATALOG.length">
       <li 
-        :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"  
-        v-for   = "item in TOP_CATEGORIES"
-        :key    = "item.id"
-        @click  = "changeCategory(item.id)"
+        v-for   = "mainItem in CATALOG"
+        :key    = "mainItem.id"
       >
         <label 
-          :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"  
-        >{{ item.name }}</label>
-        <ul class="second" v-if = "item.id === TOP_CATEGORIES_ITEM_ACTIVE">
+          :class = "{'active' : mainItem.mobileMenu}"  
+          @click  = "changeMainCategory(mainItem, $event)"
+        >
+          {{ mainItem.name }}
+        </label>
+        <div 
+            :class = "{'active' : mainItem.mobileMenu}" 
+            @click  = "toggleCategory(mainItem, $event)"
+            v-if="mainItem.childrens.length"
+         >
+              +
+        </div>
+        <ul class="second" v-if = "mainItem.mobileMenu && mainItem.childrens.length">
           <li 
-            v-for   = "sub in SUB_CATEGORIES"
-            :key    = "sub.id"
-            @click  = "subCategoryClick(sub.id, $event)"
+            v-for   = "middleItem in mainItem.childrens"
+            :key    = "middleItem.id"
           >
             <label 
-              :class = "{'active' : sub.id === SUB_CATEGORIES_ITEM_ACTIVE}"  
-            >{{ sub.name }}</label>
-            <ul class="third" v-if = " sub.id === SUB_CATEGORIES_ITEM_ACTIVE && sub.subItems.length > 0">
+              :class = "{'active' : middleItem.mobileMenu}"  
+              @click  = "changeSubCategory(middleItem, $event)"
+            >
+              {{ middleItem.name }}
+            </label>
+            <div 
+              :class = "{'active' : middleItem.mobileMenu}" 
+              @click  = "toggleCategory(middleItem, $event)"
+              v-if="middleItem.childrens.length"
+            >
+              +
+            </div>
+            <ul class="third" v-if = "middleItem.mobileMenu && middleItem.childrens.length">
               <li 
                 class="has-children"
-                v-for = "subItem in sub.subItems"
-                :key  = "subItem.id"
+                v-for = "lastItem in middleItem.childrens"
+                :key  = "lastItem.id"
               >
-                <label 
-                  for="sub-group-level-3"
-                  @click = "subItemCategoryClick(subItem.id, $event)"
-                >{{ subItem.name }}</label>
+                <label for="sub-group-level-3"
+                  @click = "changeLastCategory(lastItem, $event)"
+                >
+                  {{ lastItem.name }}
+                </label>
               </li>
             </ul>
           </li>
         </ul>
       </li>
     </ul>
-<!--    <div class="burger__menu__block flex-center">-->
-<!--      &lt;!&ndash; <a href="" class="burger__menu__item mb-20">Покупателям</a>-->
-<!--      <a href="" class="burger__menu__item">О нас </a> &ndash;&gt;-->
-<!--      <a class="burger__menu__item" @click="openPage('/how_to_work')">Как оформить заказ</a>-->
-<!--      <a class="burger__menu__item" @click="openPage('/shipping')">Оплата и доставка</a>-->
-<!--      <a class="burger__menu__item" @click="openPage('/wholesale')">Оптовым клиентам</a>-->
-<!--      <a class="burger__menu__item" @click="openPage('/warranty')">Гарантийное обслуживание</a>-->
-<!--      <a class="burger__menu__item" @click="openPage('/offer')">Публичная оферта</a>-->
-<!--      <a class="burger__menu__item" @click="openPage('/about')">О компании</a>-->
-<!--      <a class="burger__menu__item" @click="openPage('/contacts')">Контактная информация</a>-->
-<!--      <a class="burger__menu__item" @click="openPage('/news')">Новости</a>-->
-<!--    </div>-->
-<!--    <div class="burger__menu__block">-->
-<!--      <a href="tel:+375296889454" class="icon-phone burger__menu__item">+375 29 688 94 54</a>-->
-<!--    </div>-->
 
   </div>
 </template>
@@ -62,44 +65,52 @@ export default {
   name: "BurgerMenu",
 
   computed: {
-    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "TOP_CATEGORIES", "SUB_CATEGORIES", "IS_CATALOG_OPEN"]),
+    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "CATALOG", "IS_CATALOG_OPEN"]),
   },
 
   methods:{
-    ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "UPDATE_IS_CATALOG_OPEN"]),
+    ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY", "UPDATE_IS_CATALOG_OPEN"]),
     ...mapActions("catalog", ["GET_CATALOG_ITEMS"]),
-    changeCategory(newActive){
-      if (newActive === this.TOP_CATEGORIES_ITEM_ACTIVE) {
+
+    toggleCategory(item, event) {
+      event.stopPropagation();
+      item.mobileMenu = !item.mobileMenu;
+    },
+    
+    changeMainCategory(category, event){
+      event.stopPropagation();
+      if (category.id === this.TOP_CATEGORIES_ITEM_ACTIVE) {
         this.SET_CURRENT_TOP_CATEGORY(null);
       } else {
-        this.SET_CURRENT_TOP_CATEGORY(newActive);
+        this.SET_CURRENT_TOP_CATEGORY(category.id);
       }
+      this.openPage();
     },
-    subCategoryClick(id, event){
-      if (id === this.SUB_CATEGORIES_ITEM_ACTIVE) {
+
+    changeSubCategory(category, event){
+      event.stopPropagation();
+      if (category.id === this.SUB_CATEGORIES_ITEM_ACTIVE) {
         this.SET_CURRENT_SUB_CATEGORY(null);
       } else {
-        this.SET_CURRENT_SUB_CATEGORY(id);
+        this.SET_CURRENT_SUB_CATEGORY(category.id);
       }
-      // this.GET_CATALOG_ITEMS(id);
-      // this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      // if (this.$router.path != '/catalog') {
-      //     this.$router.push('/catalog');
-      // }
+      this.openPage();
     },
-    subItemCategoryClick(id, event){
-      // console.log('кликнули по итему подкатегории ', id, event);
-      event.stopImmediatePropagation();
-      this.GET_CATALOG_ITEMS(id);
+
+    changeLastCategory(category, event){
+      event.stopPropagation();
+      if (category.id === this.LAST_CATEGORIES_ITEM_ACTIVE) {
+        this.SET_CURRENT_LAST_CATEGORY(null);
+      } else {
+        this.SET_CURRENT_LAST_CATEGORY(category.id);
+      }
+      this.openPage();
+    },
+
+    openPage() {
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
       if (this.$router.path != '/catalog') {
           this.$router.push('/catalog');
-      }
-    },
-    openPage(page) {
-      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      if (this.$router.path != page) {
-          this.$router.push(page);
       }
     },
   }

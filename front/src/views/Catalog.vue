@@ -82,11 +82,11 @@
 
       CATEGORY_ID: async function() {
         await this.GET_CATALOG_ITEMS(this.CATEGORY_ID);
-      }
+      },
     },
 
     computed: {
-        ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES"]),
+        ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES"]),
         ...mapGetters("catalog", ["ITEMS_LIST"]),
         ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE"]),
 
@@ -99,7 +99,8 @@
         },
 
         ChangeParameters(){
-          return String(this.LIMIT) + String(this.OFFSET) + JSON.stringify(this.TYPE_OF_PRODUCT) + String(this.MIN_PRICE) + String(this.MAX_PRICE)
+          return String(this.LIMIT) + String(this.OFFSET) + JSON.stringify(this.TYPE_OF_PRODUCT) + String(this.MIN_PRICE) + 
+                  String(this.MAX_PRICE) + String(this.TOP_CATEGORIES_ITEM_ACTIVE) + String(this.SUB_CATEGORIES_ITEM_ACTIVE) + String(this.LAST_CATEGORIES_ITEM_ACTIVE);
         }
     },
 

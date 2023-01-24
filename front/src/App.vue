@@ -50,11 +50,11 @@
         this.setViewParametrs();
         window.addEventListener('resize', this.setViewParametrs);
         await this.GET_CATEGORIES();
+        await this.GET_USER_FAVORITE();
+        await this.GET_USER_ORDER();
         if (localStorage.getItem("authToken")) {
             await this.GET_USER_DATA();
         }
-        await this.GET_USER_FAVORITE();
-        await this.GET_USER_ORDER();
     },
 
   };
