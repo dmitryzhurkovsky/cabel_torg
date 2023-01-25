@@ -13,6 +13,7 @@ export default {
     viewType: 1,
     categories: [],
     catalog: [],
+    isPopUpOpen: true,
   },
 
   getters: {
@@ -68,6 +69,9 @@ export default {
     },
     CATALOG(state) {
       return state.catalog;
+    },
+    IS_POP_UP_OPEN(state) {
+      return state.isPopUpOpen;
     }
 
   },
@@ -147,6 +151,10 @@ export default {
       });
       state.catalog = menuItems;
     },
+
+    SET_IS_POP_UP_OPEN(state, status) {
+      state.isPopUpOpen = status;
+    }
   },
 
   actions: {

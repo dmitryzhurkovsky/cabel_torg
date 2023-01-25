@@ -2,6 +2,7 @@
   <div id="app__component">
     <MenuWrapper/>
     <v-notification/>
+    <PopUp/>
     <Header/>
     <Breadcrumb/>
     <router-view></router-view>
@@ -16,6 +17,7 @@
   import Footer from "@/components/footer.vue";
   import vNotification from '@/components/notifications/v-notification.vue';
   import MenuWrapper from '@/components/header/menu-wrapper.vue';
+  import PopUp from '@/components/notifications/pop-up.vue';
 
   import { mapGetters, mapActions, mapMutations } from "vuex";
 
@@ -27,7 +29,7 @@
     },
 
     components:{
-      Header, Breadcrumb, Footer, vNotification, MenuWrapper
+      Header, Breadcrumb, Footer, vNotification, MenuWrapper, PopUp
     },
 
     // computed: {

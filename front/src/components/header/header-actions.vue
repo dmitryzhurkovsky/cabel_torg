@@ -14,7 +14,7 @@
       />
     </div>
     <div class="topmenu__item right-direction">
-      <div class="dropdown icon-user">
+      <div class="dropdown" :class="[!USER ? 'icon-user' : 'icon-user-login']">
         <div v-if = "IS_OPEN_MAIN_LOGIN && !USER" class="dropdown__wrapper qq">
           <div class="dropdown__content popup-cart">
             <div class="avatar__box">
@@ -39,7 +39,7 @@
 
           <div class="dropdown__content popup-cart">
             <div class="avatar__box">
-              <div class="avatar icon-user flex-center"></div>
+              <div class="avatar  flex-center" :class="[!USER ? 'icon-user' : 'icon-user-login']"></div>
             </div>
             <div>
               <div @click="handleClick('/user-cab', 1)" class="">

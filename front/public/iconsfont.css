@@ -158,6 +158,10 @@
 .icon-user:before {
   content: "\e91e";
 }
+.icon-user-login:before {
+  content: "\e91e";
+  color: red;
+}
 .icon-favorite:before {
   content: "\e91f";
 }
