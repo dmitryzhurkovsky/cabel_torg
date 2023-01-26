@@ -107,6 +107,12 @@ export default {
       state.lastCategoriesItemActive = payload;
     },
 
+    SET_ALL_CURRENT_CATEGORIES(state, payload){
+      if (payload.mainCategory) state.topCategoriesItemActive = payload.mainCategory;
+      if (payload.middleCategory) state.subCategoriesItemActive = payload.middleCategory;
+      if (payload.lastCategory) state.subCategoriesItemActive = payload.lastCategory;
+    },
+
     UPDATE_CATEGORIES(state, payload){
       state.categories = payload;
       if (state.categories.length > 0){

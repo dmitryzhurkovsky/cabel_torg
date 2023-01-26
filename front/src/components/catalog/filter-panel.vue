@@ -6,13 +6,13 @@
         >
             <div class="sidebar_menu__title">
               <div
-                  @click  = "openMainCategory(mainItem, $event)"
+                  @click.stop = "openMainCategory(mainItem, $event)"
               >
                 {{mainItem.name}}
               </div>
               <div v-if="mainItem.childrens.length"
                    :class="[ mainItem.filterPanel ? 'sidebar_menu__open  icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
-                   @click="toggleCategory(mainItem, $event)"
+                   @click.stop = "toggleCategory(mainItem, $event)"
               >
               </div>
             </div >
@@ -25,13 +25,13 @@
                     >
                       <div class="subtitle__row">
                         <div
-                            @click  = "openMiddleCategory(middleItem, $event)"
+                            @click.stop  = "openMiddleCategory(mainItem, middleItem, $event)"
                         >
                           {{middleItem.name}}
                         </div>
                         <div v-if="middleItem.childrens.length"
                              :class="[ middleItem.filterPanel ? 'sidebar_menu__open icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
-                             @click="toggleCategory(middleItem, $event)"
+                             @click.stop = "toggleCategory(middleItem, $event)"
                         >
                         </div>
                       </div>
@@ -41,7 +41,7 @@
                         <div class="sidebar_menu__subtitle-child"
                             v-for = "lastItem in middleItem.childrens"
                             :key  = "lastItem.id"
-                            @click = "openLastCategory(lastItem, $event)"
+                            @click.stop = "openLastCategory(mainItem, middleItem, lastItem, $event)"
                         >
                             <div class="">
                               <div class="">
@@ -66,7 +66,7 @@
                 >
                     <div 
                         class = "checkbox-default"
-                        @click="changeFilterCategory($event, category)"
+                        @click.stop = "changeFilterCategory($event, category)"
                     >
                         <label class="checkbox__label">
                             <input type="checkbox" name="" class="" value="">
@@ -112,43 +112,53 @@ export default {
 
     computed: {
         ...mapGetters("header", ["CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
-        ...mapGetters("query", ["TYPE_OF_PRODUCT"]),
+        ...mapGetters("query", ["TYPE_OF_PRODUCT", "CATEGORY_ID"]),
     },
 
     methods:{
-        ...mapMutations("header", [, "SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY"]),
+        ...mapMutations("header", [, "SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY", "SET_ALL_CURRENT_CATEGORIES"]),
         ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID"]),
 
-        toggleCategory(item, event) {
-            event.stopPropagation();
+        toggleCategory(item) {
             item.filterPanel = !item.filterPanel;
         },
 
-        openMainCategory(category, event){
-            event.stopPropagation();
+        openMainCategory(category){
             if (this.TOP_CATEGORIES_ITEM_ACTIVE === category.id) {
                 this.SET_CURRENT_TOP_CATEGORY(null);
             } else {
-                this.SET_CURRENT_TOP_CATEGORY(category.id);
+                this.SET_ALL_CURRENT_CATEGORIES({
+                  mainCategory: null,
+                  middleCategory: null,
+                  lastCategory: category.id
+                });
+                this.SET_CATEGORY_ID(category.id);
             }
         },
 
-        openMiddleCategory(category, event){
-            event.stopPropagation();
-            if (this.SUB_CATEGORIES_ITEM_ACTIVE === category.id) {
+        openMiddleCategory(mainCategory, middleCategory){
+            if (this.SUB_CATEGORIES_ITEM_ACTIVE === middleCategory.id) {
                 this.SET_CURRENT_SUB_CATEGORY(null);
             } else {
-                this.SET_CURRENT_SUB_CATEGORY(category.id);
+              this.SET_ALL_CURRENT_CATEGORIES({
+                  mainCategory: mainCategory.id,
+                  middleCategory: middleCategory.id,
+                  lastCategory: middleCategory.id
+              });
+              this.SET_CATEGORY_ID(middleCategory.id);
             }
         },
 
-        openLastCategory(category, event){
-            event.stopPropagation();
-            this.SET_CATEGORY_ID(category.id);
+        openLastCategory(mainCategory, middleCategory, lastCategory){
+            this.SET_ALL_CURRENT_CATEGORIES({
+                mainCategory: mainCategory.id,
+                middleCategory: middleCategory.id,
+                lastCategory: lastCategory.id
+            });
+            this.SET_CATEGORY_ID(lastCategory.id);
         },
 
         changeFilterCategory(event, category){
-            event.stopImmediatePropagation();
             event.preventDefault();
             if (this.SUB_CATEGORIES_ITEM_ACTIVE === category.id) {
                 this.SET_CURRENT_LAST_CATEGORY(null);
@@ -274,9 +284,15 @@ export default {
     align-items: center;
     justify-content: space-between;
     padding: 10px 10px 10px 0;
+    div:first-child {
+      cursor: pointer;
+    }
   }
   &__subtitle{
     .subtitle__row{
+      div:first-child {
+        cursor: pointer;
+      }
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -287,6 +303,7 @@ export default {
       padding-left: 10px;
     }
     &-child{
+      cursor: pointer;
       font-size: 13px;
       line-height: 1.2;
       padding: 5px 5px;
