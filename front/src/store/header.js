@@ -13,7 +13,7 @@ export default {
     viewType: 1,
     categories: [],
     catalog: [],
-    isPopUpOpen: true,
+    isPopUpOpen: false,
   },
 
   getters: {

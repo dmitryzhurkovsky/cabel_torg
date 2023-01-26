@@ -1,19 +1,19 @@
 <template>
-    <div v-it="cartItemData && quantity !==0">
+    <div v-if="cartItemData && quantity !==0">
       <div class="product__wrapper">
-        <a class="product__img" href="">
+        <a class="product__img" href="" @click.stop.prevent="openCardItem(cartItemData.id)">
             <img v-if = "cartItemData.images" :src=getImagePath(cartItemData.images) alt="">
             <img v-if = "!cartItemData.images" src="../../assets/no_image.svg" alt="">
         </a>
         <div class="product__info">
             <div class="product__article  _label mb-20">Артикул: <span>{{ cartItemData.vendor_code }}</span></div>
-            <a  class="product__title" href=""> {{ cartItemData.name }}</a>
+            <a  class="product__title" href="" @click.stop.prevent="openCardItem(cartItemData.id)"> {{ cartItemData.name }}</a>
             <div class="icon__row mt-20">
                 <span 
                     :class="[isWish === false ? 'icon icon-favorite' : 'icon icon-favorite-choosed']" 
-                    @click="onWishClick(cartItemData)"
+                    @click.stop="onWishClick(cartItemData)"
                 >В избранное</span>
-                <span class="icon icon-delete" @click="onOperationWithCartItem(cartItemData, 'remove')">Удалить</span>
+                <span class="icon icon-delete" @click.stop="onOperationWithCartItem(cartItemData, 'remove')">Удалить</span>
             </div>
         </div>
       </div>
@@ -22,9 +22,9 @@
           <div class="product__count flex-center">
             <div class="_label mb-20">Количество:</div>
             <div class="flex-center">
-              <span class="icon-minus" @click="onOperationWithCartItem(cartItemData, 'decrease')"></span>
-              <input class="product__input" type="text" v-model="quantity"  @input="onOperationWithCartItem(cartItemData, 'set')">
-              <span class="icon-plus" @click="onOperationWithCartItem(cartItemData, 'increase')"></span>
+              <span class="icon-minus" @click.stop="onOperationWithCartItem(cartItemData, 'decrease')"></span>
+              <input class="product__input" type="text" v-model="quantity"  @input="onOperationWithCartItem(cartItemData, 'set')" @click.stop="">
+              <span class="icon-plus" @click.stop="onOperationWithCartItem(cartItemData, 'increase')"></span>
             </div>
           </div>
           <div class="product__price">
@@ -150,6 +150,12 @@
                 this.isWish = false;
             }
         },
+
+        openCardItem(id) {
+            const URL = '/card_product/' + id;
+            this.$router.push(URL);
+        }
+
 
     }
 

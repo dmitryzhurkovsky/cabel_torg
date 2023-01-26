@@ -17,7 +17,7 @@
                     class="recomendation__nav__item"
                     v-for = "category in LastCategory[0].subItems"
                     :key = "category.id"
-                    @click = setActiveCategory(category.id)
+                    @click.stop = setActiveCategory(category.id)
                   >
                     {{ category.name }}
                   </div>
@@ -118,7 +118,7 @@
 
       setActiveCategory(id){
         this.SET_CATEGORY_ID(id);
-      }
+      },
 
     },
 

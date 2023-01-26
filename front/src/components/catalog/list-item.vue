@@ -1,23 +1,23 @@
 <template>
     <div class="product">
         <div class="product__tag">Хит</div>
-        <a class="product__img" href="">
+        <a class="product__img" @click.stop="openCardItem(card.id)">
             <img v-if = "card.images" class="" :src=getImagePath(card.images) alt="">
             <img v-if = "!card.images" class="" src="../../assets/no_image.svg" alt="">
         </a>
         <div class="product__info">
             <div class="product__status icon-done-color _label mb-20">В наличии</div>
             <div class="product__title">
-                <a  href="" v-if ="card.category">{{ card.category.name }}</a>
+                <a v-if ="card.category">{{ card.category.name }}</a>
             </div>
-            <div class="product__uptitle">
-                <a  href="">{{ card.name }}</a>
+            <div class="product__uptitle" @click.stop="openCardItem(card.id)">
+                <a >{{ card.name }}</a>
             </div>
             <div class="product__count flex-center">
                 <span class="_label">Количество:</span>
-                <span class="icon-minus" @click="onOperationWithCartItem(card, 'decrease')"></span>
-                <input class="product__input" type="text" v-model="quantity" @input="onOperationWithCartItem(card, 'set')"> 
-                <span class="icon-plus" @click="onOperationWithCartItem(card, 'increase')"></span>
+                <span class="icon-minus" @click.stop="onOperationWithCartItem(card, 'decrease')"></span>
+                <input class="product__input" type="text" v-model="quantity" @input="onOperationWithCartItem(card, 'set')" @click.stop=""> 
+                <span class="icon-plus" @click.stop="onOperationWithCartItem(card, 'increase')"></span>
             </div>
         </div>
         <div class="product__action">
@@ -30,10 +30,10 @@
             <div class="product__btn flex-center">
                 <div 
                     :class="[isWish === false ? 'product__wishlist icon-favorite' : 'product__wishlist icon-favorite-choosed']"
-                    @click="onWishClick(card)"
+                    @click.stop="onWishClick(card)"
                   ></div>
-                <div v-if = "quantity !== 0" class="btn black" @click="onOperationWithCartItem(card, 'remove')">В корзине</div>
-                <div v-if = "quantity === 0" class="btn blue" @click="onOperationWithCartItem(card, 'increase')">В корзину</div>
+                <div v-if = "quantity !== 0" class="btn black" @click.stop="onOperationWithCartItem(card, 'remove')">В корзине</div>
+                <div v-if = "quantity === 0" class="btn blue" @click.stop="onOperationWithCartItem(card, 'increase')">В корзину</div>
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
 
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     name: 'ListItem',
@@ -90,6 +90,11 @@ export default {
           path = process.env.VUE_APP_IMAGES + allPath[0];
         }
         return path;
+      },
+
+      openCardItem(id) {
+        const URL = '/card_product/' + id;
+        this.$router.push(URL);
       },
 
       async onOperationWithCartItem(card, type) {
@@ -163,6 +168,7 @@ export default {
     &__img {
       width: 100%;
       flex-basis: 25%;
+      cursor: pointer;
       img{
         max-width: 100%;
       }
@@ -259,6 +265,7 @@ export default {
 
     &__title {
       margin-bottom: 10px;
+
       a{
         font-weight: 500;
         font-size: 15px;
@@ -274,6 +281,7 @@ export default {
         font-size: 14px;
         line-height: 130%;
         color: #423E48;
+        cursor: pointer;
       }
 
     }

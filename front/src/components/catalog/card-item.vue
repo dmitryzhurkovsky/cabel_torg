@@ -3,9 +3,9 @@
     <div class="item-card__tag">Хит</div>
     <div 
         :class="[isWish === false ? 'item-card__wishlist icon-favorite' : 'item-card__wishlist icon-favorite-choosed']" 
-        @click="onWishClick(card)"
+        @click.stop="onWishClick(card)"
     ></div>
-    <a class="item-card__img" href="">
+    <a class="item-card__img" @click.stop="openCardItem(card.id)">
       <img v-if = "card.images" class="" :src=getImagePath(card.images) alt="">
       <img v-if = "!card.images" class="" src="../../assets/no_image.svg" alt="">
     </a>
@@ -21,7 +21,7 @@
         </div>
         <div 
           :class="[quantity === 0 ? 'item-card__buy flex-center icon-cart' : 'item-card__buy flex-center icon-cart-chosen']"
-          @click="onOperationWithCartItem(card)"
+          @click.stop="onOperationWithCartItem(card)"
         >
           <!-- <IconQuantity 
             v-if = "quantity"
@@ -32,7 +32,7 @@
         </div>
 
       </div>
-      <div class="item-card__title">
+      <div class="item-card__title" @click.stop="openCardItem(card.id)">
         <div>{{ card.name }}</div>
       </div>
       <div class="item-card__uptitle">
@@ -102,6 +102,11 @@ export default {
       return path;
     },
 
+    openCardItem(id) {
+      const URL = '/card_product/' + id;
+      this.$router.push(URL);
+    },
+
     async onOperationWithCartItem(card) {
       const itemData = {
         amount: 1,
@@ -145,7 +150,8 @@ export default {
       } else {
         this.isWish = false;
       }
-    }
+    },
+
   },
 
 }
@@ -173,6 +179,7 @@ export default {
 
   &__img {
     width: 100%;
+    cursor: pointer;
 
     img{
       max-width: 100%;
@@ -267,6 +274,7 @@ export default {
     overflow: hidden;
     line-height: 1.26;
     font-weight: 400;
+    cursor: pointer;
     a{
       font-weight: 500;
       font-size: 15px;
