@@ -3,40 +3,61 @@
       <div class="search__box">
         <div class="search__field">
           <input type="text" name="focus" required class="search-box" placeholder="Поиск товаров"
-                 @input="onInput"
-                 v-model = "queryStringt"
+            v-model = "queryString" @input="onInput()"
           />
-          <button class="icon-search" type="reset"
+          <button class="icon-close" type="reset" v-if ="queryString.length"
                   @click = "clearString"
           ></button>
         </div>
 
       </div>
-      <div v-if ="queryStringt.length > 0" class="search__result">Ничего не найдено</div>
+      <!-- <div v-if ="queryStringt.length > 0" class="search__result">Ничего не найдено</div> -->
     </div>
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: "HeaderSearch",
 
   data: function() {
     return {
-        queryStringt : '',
+        queryString : '',
       }
   },
-  methods: {
-    onInput(){
-        if  (this.queryStringt.length > 0) {
-          console.log('Тут запуск поиска');
-        }
-    },
-    clearString(){
-        this.queryStringt = '';
-        console.log('Тут в store очищаем предыдущий поиск');
+
+  computed:{
+    ...mapGetters("query", ["SEARCH_STRING"]),
+  },
+
+  watch: {
+    SEARCH_STRING: function(){
+      this.queryString = this.SEARCH_STRING;
     }
   },
+
+  methods: {
+    ...mapMutations("query", ["SET_SEARCH_STRING"]),
+
+    onInput(){
+      console.log('Change', this.queryString);  
+      this.SET_SEARCH_STRING(this.queryString);
+      if (this.$router.path != '/catalog') {
+          this.$router.push('/catalog');
+      }
+    },
+
+    clearString(){
+        console.log('Тут в store очищаем предыдущий поиск');
+        this.queryString = '';
+        this.SET_SEARCH_STRING('');
+    }
+  },
+
+  // async mounted() {
+  //   this.queryString = this.SEARCH_STRING;
+  // },
 }
 </script>
 

@@ -4,7 +4,7 @@ export default {
   namespaced: true,
 
   state: {
-    categoryId: 1,
+    categoryId: null,
     typeOfProduct: {name : 'Все товары', type: 'all'},
     offset: 0,
     limit: 10,
@@ -12,6 +12,7 @@ export default {
     view: 'table',
     minPrice: 0,
     maxPrice: 10000,
+    searchString: '',
   },
 
     getters: {
@@ -39,12 +40,16 @@ export default {
       MAX_PRICE(state){
         return state.maxPrice;
       },
+      SEARCH_STRING(state){
+        return state.searchString;
+      }
     },
 
     mutations: {
       SET_CATEGORY_ID(state, category) {
         state.offset = 0;
         state.categoryId = category;
+        state.searchString = '';
       },
 
       SET_TYPE_OF_PRODUCT(state, newTypeOfProduct) {
@@ -74,6 +79,11 @@ export default {
 
       SET_MAX_PRICE(state, price) {
         state.maxPrice = price;
+      },
+
+      SET_SEARCH_STRING(state, query) {
+        state.searchString = query;
+        state.categoryId = null;
       },
     },
 

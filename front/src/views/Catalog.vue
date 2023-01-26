@@ -80,15 +80,15 @@
         await this.getData();
       },
 
-      CATEGORY_ID: async function() {
-        await this.GET_CATALOG_ITEMS(this.CATEGORY_ID);
-      },
+      // CATEGORY_ID: async function() {
+      //   await this.GET_CATALOG_ITEMS(this.CATEGORY_ID);
+      // },
     },
 
     computed: {
         ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES"]),
         ...mapGetters("catalog", ["ITEMS_LIST"]),
-        ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE"]),
+        ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SEARCH_STRING"]),
 
         LastCategory(){
             let result = [];
@@ -100,7 +100,8 @@
 
         ChangeParameters(){
           return String(this.LIMIT) + String(this.OFFSET) + JSON.stringify(this.TYPE_OF_PRODUCT) + String(this.MIN_PRICE) + 
-                  String(this.MAX_PRICE) + String(this.TOP_CATEGORIES_ITEM_ACTIVE) + String(this.SUB_CATEGORIES_ITEM_ACTIVE) + String(this.LAST_CATEGORIES_ITEM_ACTIVE);
+                  String(this.MAX_PRICE) + String(this.TOP_CATEGORIES_ITEM_ACTIVE) + String(this.SUB_CATEGORIES_ITEM_ACTIVE) + 
+                  String(this.LAST_CATEGORIES_ITEM_ACTIVE) + this.SEARCH_STRING + String(this.CATEGORY_ID);
         }
     },
 
@@ -109,8 +110,11 @@
       ...mapMutations("query", ["SET_CATEGORY_ID", "SET_OFFSET"]),
 
       async getData() {
-        if (this.TOP_CATEGORIES_ITEM_ACTIVE && this.SUB_CATEGORIES_ITEM_ACTIVE) {
-          await this.GET_CATALOG_ITEMS(this.SUB_CATEGORIES_ITEM_ACTIVE||this.TOP_CATEGORIES_ITEM_ACTIVE);
+        console.log('Get_data');
+        // if (this.TOP_CATEGORIES_ITEM_ACTIVE && this.SUB_CATEGORIES_ITEM_ACTIVE) {
+        if (this.CATEGORY_ID) {  
+          // await this.GET_CATALOG_ITEMS(this.SUB_CATEGORIES_ITEM_ACTIVE||this.TOP_CATEGORIES_ITEM_ACTIVE);
+          await this.GET_CATALOG_ITEMS(this.CATEGORY_ID);
         } else {
           await this.GET_ALL_CATALOG_ITEMS();
         }

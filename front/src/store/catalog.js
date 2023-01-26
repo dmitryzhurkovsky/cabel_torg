@@ -52,14 +52,16 @@ export default {
     actions: {
       async GET_CATALOG_ITEMS({ commit, rootGetters }, data) {
         try {
-            const response = await axios.get(process.env.VUE_APP_API_URL + 
+          const query = rootGetters['query/SEARCH_STRING'] ? '&q=' + rootGetters['query/SEARCH_STRING'] : '';
+          const response = await axios.get(process.env.VUE_APP_API_URL + 
                 'products?category_id=' + data + 
                 '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type + 
                 '&offset=' + rootGetters['query/OFFSET'] + 
                 '&limit=' + rootGetters['query/LIMIT'] 
                 + 
                 '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
-                '&price_lte=' + rootGetters['query/MAX_PRICE']
+                '&price_lte=' + rootGetters['query/MAX_PRICE'] +
+                query
             );
             commit("SET_CATALOG_ITEMS", response.data);
             commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
@@ -71,13 +73,15 @@ export default {
 
       async GET_ALL_CATALOG_ITEMS({ commit, rootGetters }) {
         try {
+            const query = rootGetters['query/SEARCH_STRING'] ? '&q=' + rootGetters['query/SEARCH_STRING'] : '';
             const response = await axios.get(process.env.VUE_APP_API_URL + 
                 'products?type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type + 
                 '&offset=' + rootGetters['query/OFFSET'] + 
                 '&limit=' + rootGetters['query/LIMIT']
                  + 
                 '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
-                '&price_lte=' + rootGetters['query/MAX_PRICE']
+                '&price_lte=' + rootGetters['query/MAX_PRICE'] +
+                query
             );
             commit("SET_CATALOG_ITEMS", response.data);
             commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
