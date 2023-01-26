@@ -66,8 +66,8 @@
       </div>
       <IconQuantity 
         :quantity = ORDERS.length 
-        :left = '12'
-        :top = '12'
+        :left = '10'
+        :top = '10'
       />
     </div>
   </div>

@@ -4,39 +4,47 @@
             v-for   = "mainItem in CATALOG"
             :key    = "mainItem.id"
         >
-            <div
-                @click  = "openMainCategory(mainItem, $event)"
-            >
+            <div class="sidebar_menu__title">
+              <div
+                  @click  = "openMainCategory(mainItem, $event)"
+              >
                 {{mainItem.name}}
-            </div>
-            <div v-if="mainItem.childrens.length"
-                :class="[ mainItem.filterPanel ? 'filter__title icon-arrow-r' : 'filter__title icon-arrow-l']"
-                @click="toggleCategory(mainItem, $event)"
-            >
-            </div>
+              </div>
+              <div v-if="mainItem.childrens.length"
+                   :class="[ mainItem.filterPanel ? 'sidebar_menu__open  icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
+                   @click="toggleCategory(mainItem, $event)"
+              >
+              </div>
+            </div >
+
             <div class="filter__block"  v-if = "mainItem.childrens.length && mainItem.filterPanel">
-                <div class="filter__subtitle"
-                    v-for   = "middleItem in mainItem.childrens"
-                    :key    = "middleItem.id"
-                >
-                    <div 
-                        @click  = "openMiddleCategory(middleItem, $event)"
+
+                    <div class="sidebar_menu__subtitle"
+                        v-for   = "middleItem in mainItem.childrens"
+                        :key    = "middleItem.id"
                     >
-                        {{middleItem.name}}
-                    </div>
-                    <div v-if="middleItem.childrens.length"
-                        :class="[ middleItem.filterPanel ? 'filter__subtitle icon-arrow-r' : 'filter__subtitle icon-arrow-l']"
-                        @click="toggleCategory(middleItem, $event)"
-                    >
-                    </div>
-                    <div class="filter__checkbox-list filter__subtitle-child "  v-if = "middleItem.childrens.length &&  middleItem.filterPanel">
-                        <div class="filter__subtitle-child"
+                      <div class="subtitle__row">
+                        <div
+                            @click  = "openMiddleCategory(middleItem, $event)"
+                        >
+                          {{middleItem.name}}
+                        </div>
+                        <div v-if="middleItem.childrens.length"
+                             :class="[ middleItem.filterPanel ? 'sidebar_menu__open icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
+                             @click="toggleCategory(middleItem, $event)"
+                        >
+                        </div>
+                      </div>
+
+
+                    <div class="subtitle__list "  v-if = "middleItem.childrens.length &&  middleItem.filterPanel">
+                        <div class="sidebar_menu__subtitle-child"
                             v-for = "lastItem in middleItem.childrens"
                             :key  = "lastItem.id"
                             @click = "openLastCategory(lastItem, $event)"
                         >
-                            <div class="checkbox-default">
-                              <div class="filter__text filter__subtitle-child">
+                            <div class="">
+                              <div class="">
                                 {{lastItem.name}}
                               </div>
 
@@ -207,10 +215,6 @@ export default {
       padding: 5px 0 5px 20px;
       cursor: pointer;
       &-child{
-        color: red;
-        font-size: 12px;
-        padding: 0px 0 0px 10px;
-        cursor: pointer;
       }
     }
     &__field{
@@ -262,6 +266,48 @@ export default {
     justify-content: flex-start;
     height: 30px;
   }
+}
+
+.sidebar_menu{
+  &__title{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 10px 10px 0;
+  }
+  &__subtitle{
+    .subtitle__row{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 10px 10px 5px;
+      font-size: 14px;
+    }
+    .subtitle__list{
+      padding-left: 10px;
+    }
+    &-child{
+      font-size: 13px;
+      line-height: 1.2;
+      padding: 5px 5px;
+      opacity: 0.8;
+    }
+
+  }
+}
+.sidebar_menu {
+
+  transition: all 0.3s ease;
+  &__open {
+    font-size: 12px;
+    transform: rotate(-90deg);
+    color:#4275D8;
+  }
+  &__close {
+    font-size: 12px;
+    transform: rotate(90deg);
+  }
+
 }
 
 </style>
