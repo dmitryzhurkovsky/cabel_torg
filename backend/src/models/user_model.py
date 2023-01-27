@@ -9,12 +9,12 @@ class User(BaseModel):
 
     email = Column(String(128), unique=True, nullable=False)
     password = Column(String(128), nullable=False)
-    full_name = Column(String(50))
-    phone_number = Column(String(50), unique=True)
+    full_name = Column(String(50), nullable=False)
+    phone_number = Column(String(50), unique=True, nullable=False)
 
     # requisites
-    company_name = Column(String(50))
-    unp = Column(String(9))  # Payer's Account Number
+    company_name = Column(String(50), nullable=False)
+    unp = Column(String(9), nullable=False)  # Payer's Account Number
     delivery_address = Column(String(128))
     legal_address = Column(String(128))
     IBAN = Column(String(34))
