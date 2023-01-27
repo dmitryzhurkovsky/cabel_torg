@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from src.rest.schemas.product_schema import ProductInCartSchema
+from src.rest.schemas.product_schema import ProductSchema
 
 
 class CartCreateInputSchema(BaseModel):
@@ -23,7 +23,7 @@ class CartSchema(BaseModel):
 
 class CartWithProductSchema(BaseModel):
     amount: int
-    product: ProductInCartSchema
+    product: ProductSchema
 
     class Config:
         orm_mode = True

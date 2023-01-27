@@ -27,23 +27,6 @@ class ProductSchema(BaseSchema):
         orm_mode = True
 
 
-class ProductInCartSchema(BaseSchema):
-    vendor_code: str | None
-    name: str
-    price: Decimal | None
-
-    class Config:
-        orm_mode = True
-
-
-class ProductInWatchListSchema(BaseSchema):
-    vendor_code: str | None
-    name: str
-
-    class Config:
-        orm_mode = True
-
-
 class PaginatedProductSchema(BaseModel):
     limit: int
     offset: int

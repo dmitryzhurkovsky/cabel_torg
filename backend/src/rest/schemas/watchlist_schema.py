@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from src.rest.schemas.product_schema import ProductInWatchListSchema
+from src.rest.schemas.product_schema import ProductSchema
 
 
 class WatchListInputSchema(BaseModel):
@@ -16,7 +16,7 @@ class WatchListSchema(BaseModel):
 
 
 class WatchListWithProductSchema(BaseModel):
-    product: ProductInWatchListSchema
+    product: ProductSchema
 
     class Config:
         orm_mode = True
