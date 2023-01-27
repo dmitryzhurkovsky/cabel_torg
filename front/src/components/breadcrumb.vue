@@ -9,7 +9,9 @@
         <div
             v-if="element.type !=='service'"
             @click="changePage(element)"
-        >{{element.name}}</div>
+        >
+          {{ element.name }}
+        </div>
       </li>
     </ul>
   </div>
@@ -17,7 +19,7 @@
 
 <script>
 
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "breadcrumb",
@@ -48,8 +50,11 @@ export default {
   },
 
   methods: {
+    ...mapActions("breadcrumb", ["MOVE_TO_SELECT_PATH"]),
+    
     changePage(item){
-      this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", item.index);
+      this.MOVE_TO_SELECT_PATH(item.index);
+      // this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", item.index);
       this.$router.push(item.path);
     }
   }

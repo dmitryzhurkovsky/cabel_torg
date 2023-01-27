@@ -7,13 +7,13 @@
       >
         <label 
           :class = "{'active' : mainItem.mobileMenu}"  
-          @click  = "changeMainCategory(mainItem, $event)"
+          @click.stop  = "changeMainCategory(mainItem)"
         >
           {{ mainItem.name }}
         </label>
         <div 
             :class = "{'active' : mainItem.mobileMenu}" 
-            @click  = "toggleCategory(mainItem, $event)"
+            @click.stop  = "toggleCategory(mainItem)"
             v-if="mainItem.childrens.length"
          >
               +
@@ -25,13 +25,13 @@
           >
             <label 
               :class = "{'active' : middleItem.mobileMenu}"  
-              @click  = "changeSubCategory(middleItem, $event)"
+              @click.stop  = "changeSubCategory(mainItem, middleItem)"
             >
               {{ middleItem.name }}
             </label>
             <div 
               :class = "{'active' : middleItem.mobileMenu}" 
-              @click  = "toggleCategory(middleItem, $event)"
+              @click.stop  = "toggleCategory(middleItem)"
               v-if="middleItem.childrens.length"
             >
               +
@@ -43,7 +43,7 @@
                 :key  = "lastItem.id"
               >
                 <label for="sub-group-level-3"
-                  @click = "changeLastCategory(lastItem, $event)"
+                  @click.stop = "changeLastCategory(mainItem, middleItem, lastItem)"
                 >
                   {{ lastItem.name }}
                 </label>
@@ -69,41 +69,58 @@ export default {
   },
 
   methods:{
-    ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY", "UPDATE_IS_CATALOG_OPEN"]),
+    // ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY", "UPDATE_IS_CATALOG_OPEN"]),
+    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
+    ...mapMutations("query", ["SET_CATEGORY_ID"]),
+    ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
     ...mapActions("catalog", ["GET_CATALOG_ITEMS"]),
 
-    toggleCategory(item, event) {
-      event.stopPropagation();
+    toggleCategory(item) {
       item.mobileMenu = !item.mobileMenu;
     },
     
-    changeMainCategory(category, event){
-      event.stopPropagation();
-      if (category.id === this.TOP_CATEGORIES_ITEM_ACTIVE) {
-        this.SET_CURRENT_TOP_CATEGORY(null);
-      } else {
-        this.SET_CURRENT_TOP_CATEGORY(category.id);
-      }
+    changeMainCategory(category){
+      this.SET_ALL_CURRENT_CATEGORIES({
+        mainCategory: category.id,
+        middleCategory: null,
+        lastCategory: null,
+      });
+      this.SET_CATEGORY_ID(category.id);
+      // if (category.id === this.TOP_CATEGORIES_ITEM_ACTIVE) {
+      //   this.SET_CURRENT_TOP_CATEGORY(null);
+      // } else {
+      //   this.SET_CURRENT_TOP_CATEGORY(category.id);
+      // }
       this.openPage();
     },
 
-    changeSubCategory(category, event){
-      event.stopPropagation();
-      if (category.id === this.SUB_CATEGORIES_ITEM_ACTIVE) {
-        this.SET_CURRENT_SUB_CATEGORY(null);
-      } else {
-        this.SET_CURRENT_SUB_CATEGORY(category.id);
-      }
+    changeSubCategory(mainCategory, middleCategory){
+      this.SET_ALL_CURRENT_CATEGORIES({
+          mainCategory: mainCategory.id,
+          middleCategory: middleCategory.id,
+          lastCategory: null,
+      });
+      this.SET_CATEGORY_ID(middleCategory.id);
+      // if (category.id === this.SUB_CATEGORIES_ITEM_ACTIVE) {
+      //   this.SET_CURRENT_SUB_CATEGORY(null);
+      // } else {
+      //   this.SET_CURRENT_SUB_CATEGORY(category.id);
+      // }
       this.openPage();
     },
 
-    changeLastCategory(category, event){
-      event.stopPropagation();
-      if (category.id === this.LAST_CATEGORIES_ITEM_ACTIVE) {
-        this.SET_CURRENT_LAST_CATEGORY(null);
-      } else {
-        this.SET_CURRENT_LAST_CATEGORY(category.id);
-      }
+    changeLastCategory(mainCategory, middleCategory, lastCategory){
+      this.SET_ALL_CURRENT_CATEGORIES({
+          mainCategory: mainCategory.id,
+          middleCategory: middleCategory.id,
+          lastCategory: lastCategory.id,
+      });
+      this.SET_CATEGORY_ID(lastCategory.id);
+      // if (category.id === this.LAST_CATEGORIES_ITEM_ACTIVE) {
+      //   this.SET_CURRENT_LAST_CATEGORY(null);
+      // } else {
+      //   this.SET_CURRENT_LAST_CATEGORY(category.id);
+      // }
       this.openPage();
     },
 

@@ -7,7 +7,7 @@
           <h3>Наши партнеры</h3>
           <div class="partners__items flex-center">
             <swiper
-                :slides-per-view="5"
+                :slides-per-view=quantity
                 :space-between="15"
                 @swiper="onSwiper"
                 @slideChange="onSlideChange"
@@ -51,10 +51,10 @@
 
               <div class="swiper-pagination"></div>
 
-              <div class="swiper-navigation-container">
+              <!-- <div class="swiper-navigation-container">
                 <div class="swiper-button-next" @click="nextSlide"></div>
                 <div class="swiper-button-prev" @click="prevSlide"></div>
-              </div>
+              </div> -->
 
             </swiper>
 
@@ -72,26 +72,43 @@
   import { SwiperSlide } from "swiper/vue";
   import SwiperCore, { Pagination, Navigation } from "swiper";
   import "swiper/swiper.min.css";
+import { mapGetters } from 'vuex';
   SwiperCore.use([Navigation, Pagination]);
 
   export default {
     name: 'Partners',
+
+    data: function(){
+      return {
+        quantity: 5,
+      }
+    },
   
     components:
     {
       Swiper, SwiperSlide,
     },
 
+    computed: {
+      ...mapGetters("header", ["VIEW_TYPE"]),
+    },
+
+    watch: {
+      VIEW_TYPE: function() {
+        this.setQuantity();
+      },  
+    },
+
+    mounted(){
+      this.setQuantity();
+    },
+
     methods:{
-      nextSlide(){
-          this.swiper.slideNext();
-      },
-      prevSlide(){
-          this.swiper.slidePrev();
-      },
-      onSwiper(swiper){
-          this.swiper = swiper;
-      },
+      setQuantity(){
+        if (this.VIEW_TYPE===1) this.quantity = 5
+        if (this.VIEW_TYPE===2) this.quantity = 4
+        if (this.VIEW_TYPE===3) this.quantity = 3
+      }
     },
 }
 </script>

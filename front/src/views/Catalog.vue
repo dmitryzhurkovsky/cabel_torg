@@ -100,20 +100,18 @@
 
         ChangeParameters(){
           return String(this.LIMIT) + String(this.OFFSET) + JSON.stringify(this.TYPE_OF_PRODUCT) + String(this.MIN_PRICE) + 
-                  String(this.MAX_PRICE) + String(this.TOP_CATEGORIES_ITEM_ACTIVE) + String(this.SUB_CATEGORIES_ITEM_ACTIVE) + 
-                  String(this.LAST_CATEGORIES_ITEM_ACTIVE) + this.SEARCH_STRING + String(this.CATEGORY_ID);
+                  String(this.MAX_PRICE) + this.SEARCH_STRING + String(this.CATEGORY_ID);
+                  //  + String(this.SUB_CATEGORIES_ITEM_ACTIVE) + String(this.TOP_CATEGORIES_ITEM_ACTIVE) + String(this.LAST_CATEGORIES_ITEM_ACTIVE); 
         }
     },
 
     methods: {
       ...mapActions("catalog", ["GET_CATALOG_ITEMS", "GET_ALL_CATALOG_ITEMS"]),
+      ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
       ...mapMutations("query", ["SET_CATEGORY_ID", "SET_OFFSET"]),
 
       async getData() {
-        console.log('Get_data');
-        // if (this.TOP_CATEGORIES_ITEM_ACTIVE && this.SUB_CATEGORIES_ITEM_ACTIVE) {
         if (this.CATEGORY_ID) {  
-          // await this.GET_CATALOG_ITEMS(this.SUB_CATEGORIES_ITEM_ACTIVE||this.TOP_CATEGORIES_ITEM_ACTIVE);
           await this.GET_CATALOG_ITEMS(this.CATEGORY_ID);
         } else {
           await this.GET_ALL_CATALOG_ITEMS();
@@ -121,6 +119,11 @@
       },
 
       setActiveCategory(id){
+        this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: this.TOP_CATEGORIES_ITEM_ACTIVE,
+            middleCategory: this.SUB_CATEGORIES_ITEM_ACTIVE,
+            lastCategory: id,
+        });
         this.SET_CATEGORY_ID(id);
       },
 
@@ -128,6 +131,15 @@
 
     async mounted() {
       await this.getData();
+      if (!this.CATEGORY_ID) {
+        this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
+        this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
+          name: this.$router.currentRoute.value.meta.name,
+          path: this.$router.currentRoute.value.path,
+          type: "global",
+          class: ""
+        });
+      }
     }    
   }
 </script>

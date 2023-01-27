@@ -6,13 +6,13 @@
         >
             <div class="sidebar_menu__title">
               <div
-                  @click.stop = "openMainCategory(mainItem, $event)"
+                  @click.stop = "openMainCategory(mainItem)"
               >
                 {{mainItem.name}}
               </div>
               <div v-if="mainItem.childrens.length"
                    :class="[ mainItem.filterPanel ? 'sidebar_menu__open  icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
-                   @click.stop = "toggleCategory(mainItem, $event)"
+                   @click.stop = "toggleCategory(mainItem)"
               >
               </div>
             </div >
@@ -25,13 +25,13 @@
                     >
                       <div class="subtitle__row">
                         <div
-                            @click.stop  = "openMiddleCategory(mainItem, middleItem, $event)"
+                            @click.stop  = "openMiddleCategory(mainItem, middleItem)"
                         >
                           {{middleItem.name}}
                         </div>
                         <div v-if="middleItem.childrens.length"
                              :class="[ middleItem.filterPanel ? 'sidebar_menu__open icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
-                             @click.stop = "toggleCategory(middleItem, $event)"
+                             @click.stop = "toggleCategory(middleItem)"
                         >
                         </div>
                       </div>
@@ -41,7 +41,7 @@
                         <div class="sidebar_menu__subtitle-child"
                             v-for = "lastItem in middleItem.childrens"
                             :key  = "lastItem.id"
-                            @click.stop = "openLastCategory(mainItem, middleItem, lastItem, $event)"
+                            @click.stop = "openLastCategory(mainItem, middleItem, lastItem)"
                         >
                             <div class="">
                               <div class="">
@@ -90,7 +90,7 @@
 
 <script>
 
-import {mapMutations, mapGetters} from 'vuex'
+import {mapMutations, mapGetters, mapActions} from 'vuex'
 import PriceSlider from '@/components/catalog/price-slider.vue';
 
 export default {
@@ -116,46 +116,38 @@ export default {
     },
 
     methods:{
-        ...mapMutations("header", [, "SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY", "SET_ALL_CURRENT_CATEGORIES"]),
         ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID"]),
+        ...mapActions("header",["SET_ALL_CURRENT_CATEGORIES"]),
 
         toggleCategory(item) {
             item.filterPanel = !item.filterPanel;
         },
 
         openMainCategory(category){
-            if (this.TOP_CATEGORIES_ITEM_ACTIVE === category.id) {
-                this.SET_CURRENT_TOP_CATEGORY(null);
-            } else {
-                this.SET_ALL_CURRENT_CATEGORIES({
-                  mainCategory: null,
-                  middleCategory: null,
-                  lastCategory: category.id
-                });
-                this.SET_CATEGORY_ID(category.id);
-            }
+          this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: category.id,
+            middleCategory: null,
+            lastCategory: null,
+          });
+          this.SET_CATEGORY_ID(category.id);
         },
 
         openMiddleCategory(mainCategory, middleCategory){
-            if (this.SUB_CATEGORIES_ITEM_ACTIVE === middleCategory.id) {
-                this.SET_CURRENT_SUB_CATEGORY(null);
-            } else {
-              this.SET_ALL_CURRENT_CATEGORIES({
-                  mainCategory: mainCategory.id,
-                  middleCategory: middleCategory.id,
-                  lastCategory: middleCategory.id
-              });
-              this.SET_CATEGORY_ID(middleCategory.id);
-            }
+          this.SET_ALL_CURRENT_CATEGORIES({
+              mainCategory: mainCategory.id,
+              middleCategory: middleCategory.id,
+              lastCategory: null,
+          });
+          this.SET_CATEGORY_ID(middleCategory.id);
         },
 
         openLastCategory(mainCategory, middleCategory, lastCategory){
-            this.SET_ALL_CURRENT_CATEGORIES({
-                mainCategory: mainCategory.id,
-                middleCategory: middleCategory.id,
-                lastCategory: lastCategory.id
-            });
-            this.SET_CATEGORY_ID(lastCategory.id);
+          this.SET_ALL_CURRENT_CATEGORIES({
+              mainCategory: mainCategory.id,
+              middleCategory: middleCategory.id,
+              lastCategory: lastCategory.id,
+          });
+          this.SET_CATEGORY_ID(lastCategory.id);
         },
 
         changeFilterCategory(event, category){

@@ -19,7 +19,7 @@
   import MenuWrapper from '@/components/header/menu-wrapper.vue';
   import PopUp from '@/components/notifications/pop-up.vue';
 
-  import { mapGetters, mapActions, mapMutations } from "vuex";
+  import { mapActions, mapMutations } from "vuex";
 
   export default {
 

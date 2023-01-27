@@ -57,7 +57,6 @@
 
       toggleMenu() {
         this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-        console.log(this.IS_CATALOG_OPEN);
       },
 
       onOpenLink(link, event) {
