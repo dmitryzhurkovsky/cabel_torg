@@ -87,6 +87,13 @@
 
     mounted(){
       this.screen = this.SCREEN;
+      this.CHANGE_BREADCRUMB(0);
+      this.ADD_BREADCRUMB({
+        name: this.$router.currentRoute.value.meta.name,
+        path: this.$router.currentRoute.value.path,
+        type: "local",
+        class: ""
+      });
       this.ADD_BREADCRUMB({
         name: this.$router.currentRoute.value.meta.name,
         path: this.$router.currentRoute.value.path,
