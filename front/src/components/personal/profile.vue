@@ -102,7 +102,7 @@
         </div>
       </div>
 
-      <div class="group">
+      <div class="group mt-20">
         <button type="submit" class="btn black" @click = "updateUser">Сохранить изменения</button>
       </div>
 

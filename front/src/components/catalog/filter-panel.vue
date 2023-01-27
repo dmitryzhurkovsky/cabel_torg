@@ -311,6 +311,9 @@ export default {
     font-size: 12px;
     transform: rotate(-90deg);
     color:#4275D8;
+    > div{
+      color: red;
+    }
   }
   &__close {
     font-size: 12px;
