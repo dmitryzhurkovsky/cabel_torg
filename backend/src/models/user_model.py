@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Boolean
+from sqlalchemy import Column, String, Boolean, CheckConstraint
 from sqlalchemy.orm import relationship
 
 from src.models.abstract_model import BaseModel
@@ -28,6 +28,10 @@ class User(BaseModel):
     products_in_cart = relationship('Cart', back_populates='user')
     products_in_watchlist = relationship('WatchList', back_populates='user')
     orders = relationship('Order', back_populates='user')
+
+    __tableargs__ = (
+        CheckConstraint('char_length(unp) = 9', name='check_length_of_unp_is_nine_symbols')
+    )
 
     def __str__(self):
         return self.email
