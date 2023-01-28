@@ -1,13 +1,14 @@
 <template>
     <transition-group class="popup__animation">
       <div 
+        ref="popup" 
         :class="[IS_POP_UP_OPEN === true ? 'popup__wrapper': 'popup__wrapper disabled']"
       >
 
 
 
         <div class="popup__body">
-            <div class="icon-close popup__close" @click="closePopUp(false)"></div>
+            <div class="icon-close popup__close" @click.stop="closePopUp(false)"></div>
             <div class="popoup__content">
                 <div class="popup__message">Тут содежимое PopUp</div>
             </div>
@@ -30,6 +31,20 @@
         TopMenuActions,
     },
 
+    watch: {
+      IS_POP_UP_OPEN: function(){
+        if (this.IS_POP_UP_OPEN) {
+          // this.prevScrollState = window.pageYOffset;
+          this.$refs.popup.style.top = window.pageYOffset + 'px';
+          document.body.style.overflow = 'hidden';
+          document.body.style.paddingRight = '16px';
+        } else {
+          document.body.style.overflow = '';
+          document.body.style.paddingRight = '0';
+        }
+      }
+    },
+
     computed: {
         ...mapGetters("header", ["IS_POP_UP_OPEN"]),
     },
@@ -38,9 +53,7 @@
         ...mapMutations("header", ["SET_IS_POP_UP_OPEN"]),
 
         closePopUp(status) {
-            console.log(this.IS_POP_UP_OPEN);
             this.SET_IS_POP_UP_OPEN(status);
-            console.log(this.IS_POP_UP_OPEN);
         }
     }
 

@@ -26,7 +26,7 @@ export default {
       },
       RECOMENDED_ITEMS(state){
         return state.recomendedList;
-      }
+      },
     },
 
     mutations: {
@@ -46,13 +46,12 @@ export default {
           console.log('Active page',state.activePage);
         }
         state.tatalPages =  data.back.total % data.limit === 0 ? data.back.total / data.limit: Math.floor(data.back.total / data.limit) + 1;
-      }
+      },
     },
 
     actions: {
       async GET_CATALOG_ITEMS({ commit, rootGetters }, data) {
         try {
-          const query = rootGetters['query/SEARCH_STRING'] ? '&q=' + rootGetters['query/SEARCH_STRING'] : '';
           const response = await axios.get(process.env.VUE_APP_API_URL + 
                 'products?category_id=' + data + 
                 '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type + 
@@ -60,8 +59,7 @@ export default {
                 '&limit=' + rootGetters['query/LIMIT'] 
                 + 
                 '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
-                '&price_lte=' + rootGetters['query/MAX_PRICE'] +
-                query
+                '&price_lte=' + rootGetters['query/MAX_PRICE']
             );
             commit("SET_CATALOG_ITEMS", response.data);
             commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
@@ -73,15 +71,13 @@ export default {
 
       async GET_ALL_CATALOG_ITEMS({ commit, rootGetters }) {
         try {
-            const query = rootGetters['query/SEARCH_STRING'] ? '&q=' + rootGetters['query/SEARCH_STRING'] : '';
             const response = await axios.get(process.env.VUE_APP_API_URL + 
                 'products?type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type + 
                 '&offset=' + rootGetters['query/OFFSET'] + 
                 '&limit=' + rootGetters['query/LIMIT']
                  + 
                 '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
-                '&price_lte=' + rootGetters['query/MAX_PRICE'] +
-                query
+                '&price_lte=' + rootGetters['query/MAX_PRICE']
             );
             commit("SET_CATALOG_ITEMS", response.data);
             commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
@@ -103,6 +99,5 @@ export default {
             commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'}, {root: true})
         }
       },
-
     }
   };

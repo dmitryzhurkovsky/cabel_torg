@@ -11,12 +11,32 @@
         </div>
 
       </div>
-      <!-- <div v-if ="queryStringt.length > 0" class="search__result">Ничего не найдено</div> -->
+      
+      <div class="dropdown" v-if = "FINDED_ELEMENTS.length">
+        <div class="dropdown__wrapper">
+          <div class="dropdown__content popup-cart">
+              <h3 class="">Найденые товары</h3>
+
+                <div class="popup-cart__list">
+                  <HeaderSearchItem 
+                      class="row" 
+                      v-for = "item in FINDED_ELEMENTS"
+                      :key = "item.id"
+                      :item = item
+                      @click.stop = "openCardItem(item.id)"
+                  />
+                </div>
+
+            </div>
+        </div>
+      </div>
+
     </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
+import HeaderSearchItem from '@/components/header/header-search-item.vue';
 
 export default {
   name: "HeaderSearch",
@@ -26,42 +46,52 @@ export default {
         queryString : '',
       }
   },
+  components: {
+    HeaderSearchItem,
+  },
 
   computed:{
-    ...mapGetters("query", ["SEARCH_STRING"]),
+    ...mapGetters("query", ["SEARCH_STRING", "FINDED_ELEMENTS"]),
   },
 
   watch: {
-    SEARCH_STRING: function(){
+    SEARCH_STRING: async function(){
       this.queryString = this.SEARCH_STRING;
+      if (this.SEARCH_STRING) {
+        await this.FIND_ELEMENTS();
+      } else {
+        this.SET_FINDED_ELEMENTS({data: []});
+      }
     }
   },
 
   methods: {
-    ...mapMutations("query", ["SET_SEARCH_STRING"]),
+    ...mapMutations("query", ["SET_SEARCH_STRING", "SET_FINDED_ELEMENTS"]),
+    ...mapActions("query", ["FIND_ELEMENTS"]),
 
     onInput(){
-      console.log('Change', this.queryString);  
       this.SET_SEARCH_STRING(this.queryString);
-      if (this.$router.path != '/catalog') {
-          this.$router.push('/catalog');
-      }
+    },
+
+    openCardItem(id) {
+      this.clearString();
+      const URL = '/card_product/' + id;
+      this.$router.push(URL);
     },
 
     clearString(){
-        console.log('Тут в store очищаем предыдущий поиск');
         this.queryString = '';
         this.SET_SEARCH_STRING('');
-    }
-  },
+    },
 
-  // async mounted() {
-  //   this.queryString = this.SEARCH_STRING;
-  // },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
+.dropdown__wrapper{
+  display: block;
+}
 .header{
     &__search{
       position: relative;

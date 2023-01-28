@@ -100,7 +100,7 @@
 
         ChangeParameters(){
           return String(this.LIMIT) + String(this.OFFSET) + JSON.stringify(this.TYPE_OF_PRODUCT) + String(this.MIN_PRICE) + 
-                  String(this.MAX_PRICE) + this.SEARCH_STRING + String(this.CATEGORY_ID);
+                  String(this.MAX_PRICE) + String(this.CATEGORY_ID);
                   //  + String(this.SUB_CATEGORIES_ITEM_ACTIVE) + String(this.TOP_CATEGORIES_ITEM_ACTIVE) + String(this.LAST_CATEGORIES_ITEM_ACTIVE); 
         }
     },

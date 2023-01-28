@@ -229,7 +229,9 @@
 
     methods: {
       ...mapActions("order", ["GET_USER_ORDER"]),
+      ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
       ...mapMutations("order", ["SET_IS_APPLICATION_OPEN"]),
+      ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
 
       openPage(page, event) {
           event.stopImmediatePropagation();
@@ -243,6 +245,13 @@
 
     mounted() {
       this.SET_IS_APPLICATION_OPEN(false);
+      this.CHANGE_BREADCRUMB(0);
+      this.ADD_BREADCRUMB({
+        name: this.$router.currentRoute.value.meta.name,
+        path: this.$router.currentRoute.value.path,
+        type: "global",
+        class: ""
+      });
     },
   }
 </script>

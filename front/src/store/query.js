@@ -13,6 +13,7 @@ export default {
     minPrice: 0,
     maxPrice: 10000,
     searchString: '',
+    findedElements: [],
   },
 
     getters: {
@@ -42,6 +43,9 @@ export default {
       },
       SEARCH_STRING(state){
         return state.searchString;
+      },
+      FINDED_ELEMENTS(state){
+        return state.findedElements;
       }
     },
 
@@ -85,8 +89,28 @@ export default {
         state.searchString = query;
         state.categoryId = null;
       },
+
+      SET_FINDED_ELEMENTS(state, items) {
+        state.findedElements = items.data;
+      }
     },
 
     actions: {
+      async FIND_ELEMENTS({ commit, getters }) {
+        try {
+            const query = getters.SEARCH_STRING ? '&q=' + getters.SEARCH_STRING : '';
+            const response = await axios.get(process.env.VUE_APP_API_URL + 
+                'products?type_of_product=all' + 
+                '&offset=0' +  
+                '&limit=60' + 
+                query
+            );
+            console.log(response.data);
+            commit("SET_FINDED_ELEMENTS", response.data);
+        } catch (e) {
+            console.log(e);
+            commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить искомые товары ", icon: "error", id: '1'}, {root: true})
+        }
+      },
     }
   };
