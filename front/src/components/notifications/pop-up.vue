@@ -1,15 +1,13 @@
 <template>
     <transition-group class="popup__animation">
       <div 
+        @click.stop="closePopUp(false)"
         ref="popup" 
         :class="[IS_POP_UP_OPEN === true ? 'popup__wrapper': 'popup__wrapper disabled']"
       >
-
-
-
-        <div class="popup__body">
+        <div class="popup__body" @click.stop="">
             <div class="icon-close popup__close" @click.stop="closePopUp(false)"></div>
-            <div class="popoup__content">
+            <div class="popoup__content" >
                 <div class="popup__message">Тут содежимое PopUp</div>
             </div>
         </div>
@@ -34,7 +32,6 @@
     watch: {
       IS_POP_UP_OPEN: function(){
         if (this.IS_POP_UP_OPEN) {
-          // this.prevScrollState = window.pageYOffset;
           this.$refs.popup.style.top = window.pageYOffset + 'px';
           document.body.style.overflow = 'hidden';
           document.body.style.paddingRight = '16px';

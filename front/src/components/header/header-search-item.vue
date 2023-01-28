@@ -1,8 +1,7 @@
 <template>
     <div class="popup-cart__item row" v-if = "item">
         <div class="popup-cart__img">
-            <img v-if = "item.images" :src=getImagePath(item.images) alt="">
-            <img v-if = "!item.images" src="../../assets/no_image.svg" alt="">
+            <CardImage :images = item.images />
         </div>
         <div class="popup-cart__description">
             <div class="popup-cart__title">{{ item.name }}</div>
@@ -16,9 +15,7 @@
 </template>
 
 <script>
-
-// import axios from "axios";
-// import {mapMutations, mapActions } from 'vuex'
+import CardImage from '@/components/UI/card-image.vue'
 
 export default {
   name: 'HeaderSearchItem',
@@ -27,18 +24,9 @@ export default {
     item: null,
   },
 
-
-  methods:{
-
-    getImagePath(item) {
-      let path = null;
-      if (item) {
-        const allPath = item.split(',');
-        path = process.env.VUE_APP_IMAGES + allPath[0];
-      }
-      return path;
-    },
-  }
+  components: {
+    CardImage,
+  },
 
 }
 </script>

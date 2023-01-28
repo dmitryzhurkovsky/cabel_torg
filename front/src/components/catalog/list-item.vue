@@ -2,8 +2,7 @@
     <div class="product">
         <div class="product__tag">Хит</div>
         <a class="product__img" @click.stop="openCardItem(card.id)">
-            <img v-if = "card.images" class="" :src=getImagePath(card.images) alt="">
-            <img v-if = "!card.images" class="" src="../../assets/no_image.svg" alt="">
+            <CardImage :images=card.images />
         </a>
         <div class="product__info">
             <div class="product__status icon-done-color _label mb-20">В наличии</div>
@@ -42,6 +41,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import CardImage from '@/components/UI/card-image.vue'
 
 export default {
     name: 'ListItem',
@@ -55,6 +55,10 @@ export default {
           quantity: 0,
           isWish: false,
       }
+    },
+
+    components: {
+      CardImage,
     },
 
     computed: {
@@ -83,15 +87,6 @@ export default {
       ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
       ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
       
-      getImagePath(item) {
-        let path = null;
-        if (item) {
-          const allPath = item.split(',');
-          path = process.env.VUE_APP_IMAGES + allPath[0];
-        }
-        return path;
-      },
-
       openCardItem(id) {
         const URL = '/card_product/' + id;
         this.$router.push(URL);

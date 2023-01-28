@@ -103,6 +103,7 @@
 
 <script>
 import { mapGetters, mapActions, mapMutations } from "vuex";
+import { isValidEmail } from "../../common/validation";
 
 export default {
   name: "UserActions",
@@ -141,35 +142,36 @@ export default {
         this.SET_TYPE(auth_type);
     },
 
-    isValidEmail: function (email) {
-        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(email);
-    },
-
     async userLogin() {
         if (this.isLoading) return;
 
         this.isLoading = true;
         const errorsInData = {};
-        if (!this.email || !this.isValidEmail(this.email)) {
+        this.SET_ERRORS(errorsInData);
+
+        if (!isValidEmail(this.email)) {
             errorsInData.email = 'Укажите валидный адрес эл. почты'
         }
         if (!this.password || this.password.length < 8) {
             errorsInData.password = 'Пароль должен быть больше 8 символов'
         }
-        const data = new FormData();
-        data.append('username', this.email);
-        data.append('password', this.password);
-        await this.SEND_LOGIN_REQUEST(data);
+        if (Object.keys(errorsInData).length) {
+            this.SET_ERRORS(errorsInData);
+        } else {
+          const data = new FormData();
+          data.append('username', this.email);
+          data.append('password', this.password);
+          await this.SEND_LOGIN_REQUEST(data);
 
+          if (this.USER) {
+              if (this.REDIRECT_AFTER_LOGIN) {
+                  this.$router.push(this.REDIRECT_AFTER_LOGIN);
+              } else {
+                  this.$router.push({name: "user-cab"});
+              }
+          }
+        }  
         this.isLoading = false;
-        if (this.USER) {
-            if (this.REDIRECT_AFTER_LOGIN) {
-                this.$router.push(this.REDIRECT_AFTER_LOGIN);
-            } else {
-                this.$router.push({name: "user-cab"});
-            }
-        }
     },
 
     async userRegister() {
@@ -178,7 +180,9 @@ export default {
 
         this.isLoading = true;
         const errorsInData = {};
-        if (!this.email || !this.isValidEmail(this.email)) {
+        this.SET_ERRORS(errorsInData)
+
+        if (!isValidEmail(this.email)) {
             errorsInData.email = 'Укажите валидный адрес эл. почты'
         }
         if (!this.password || this.password.length < 8) {

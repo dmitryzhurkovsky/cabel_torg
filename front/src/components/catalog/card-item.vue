@@ -6,8 +6,7 @@
         @click.stop="onWishClick(card)"
     ></div>
     <a class="item-card__img" @click.stop="openCardItem(card.id)">
-      <img v-if = "card.images" class="" :src=getImagePath(card.images) alt="">
-      <img v-if = "!card.images" class="" src="../../assets/no_image.svg" alt="">
+      <CardImage :images=card.images />
     </a>
     <div class="item-card__info">
       <div class="item-card__row flex-center">
@@ -23,12 +22,6 @@
           :class="[quantity === 0 ? 'item-card__buy flex-center icon-cart' : 'item-card__buy flex-center icon-cart-chosen']"
           @click.stop="onOperationWithCartItem(card)"
         >
-          <!-- <IconQuantity 
-            v-if = "quantity"
-            :quantity = quantity 
-            :left = '18'
-            :top = '18'
-          /> -->
         </div>
 
       </div>
@@ -36,7 +29,7 @@
         <div>{{ card.name }}</div>
       </div>
       <div class="item-card__uptitle">
-        <div>UTP cat.5e (патч-панель) 19″?????</div>
+        <div>{{ card.category.name }}</div>
       </div>
     </div>
   </div>
@@ -45,8 +38,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-
-// import IconQuantity from '@/components/catalog/icon-quantity.vue'
+import CardImage from '@/components/UI/card-image.vue'
 
 export default {
   name: "CardItem",
@@ -62,10 +54,9 @@ export default {
     }
   },
 
-  // components:
-  // {
-  //   IconQuantity,
-  // },
+  components: {
+    CardImage,
+  },
 
   computed: {
     ...mapGetters("order", ["ORDERS"]),
@@ -92,15 +83,6 @@ export default {
   methods: {
     ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
     ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-
-    getImagePath(item) {
-      let path = null;
-      if (item) {
-        const allPath = item.split(',');
-        path = process.env.VUE_APP_IMAGES + allPath[0];
-      }
-      return path;
-    },
 
     openCardItem(id) {
       const URL = '/card_product/' + id;
@@ -180,11 +162,6 @@ export default {
   &__img {
     width: 100%;
     cursor: pointer;
-
-    img{
-      max-width: 100%;
-    }
-
   }
 
   &__tag{

@@ -7,8 +7,7 @@
           <div class="grid">
             <div class="grid__item" tabindex="1">
               <div class="product__main-img">
-                <img v-if = "cartItemData.images" :src=getImagePath(cartItemData.images) alt="">
-                <img v-if = "!cartItemData.images" src="../assets/no_image.svg" alt="">
+                <CardImage :images=cartItemData.images />
               </div>
             </div>
             <div class="grid__item" tabindex="2">
@@ -94,6 +93,7 @@
 <script>
   import axios from 'axios';
   import { mapGetters, mapMutations, mapActions } from 'vuex' 
+  import CardImage from '@/components/UI/card-image.vue'
 
   export default {
     name: 'CardProduct',
@@ -110,7 +110,11 @@
       }
     },
 
-    computed: {
+    components: {
+      CardImage,
+    },
+
+   computed: {
       ...mapGetters("order", ["ORDERS"]),
       ...mapGetters("favorite", ["FAVORITES"]),
 
@@ -131,15 +135,6 @@
       ...mapMutations("notification", ["ADD_MESSAGE"]),
       ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
       ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-
-      getImagePath(item) {
-        let path = null;
-        if (item) {
-          const allPath = item.split(',');
-          path = process.env.VUE_APP_IMAGES + allPath[0];
-        }
-        return path;
-      },
 
       async onOperationWithCartItem(card, type) {
         if (this.quantity == 0 && type === 'remove') {

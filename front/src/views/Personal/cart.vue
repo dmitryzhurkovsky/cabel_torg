@@ -11,7 +11,7 @@
 <!--            Если корзина пуста то это выводится, и сверху ноль возле Корзины-->
             <div v-if = "ORDERS.length === 0" class="cart__list">
               <div class="cart__empty__item">Ваша корзина пуста</div>
-              <a class="_link" @click="openPage('/catalog', $event)">
+              <a class="_link" @click.prevent = "openPage('/catalog')">
                 <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M15.5 3.99935H0.916666M0.916666 3.99935L4.25 0.666016M0.916666 3.99935L4.25 7.33268" stroke="#4275D8"/>
                 </svg>
@@ -44,7 +44,7 @@
                    BYN
                 </div>
                 <div class="">
-                  <button class="btn">Оформить заказ</button>
+                  <button @click.stop = "SET_IS_APPLICATION_OPEN(true)" class="btn">Оформить заказ</button>
                 </div>
               </div>
             </div>
@@ -233,9 +233,7 @@
       ...mapMutations("order", ["SET_IS_APPLICATION_OPEN"]),
       ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
 
-      openPage(page, event) {
-          event.stopImmediatePropagation();
-          event.preventDefault();
+      openPage(page) {
           if (this.$router.path != page) {
               this.$router.push(page);
           }

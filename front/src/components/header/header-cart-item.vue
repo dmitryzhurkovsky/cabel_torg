@@ -1,9 +1,7 @@
 <template>
       <div class="popup-cart__item" v-if="cartItemData">
         <div class="popup-cart__img">
-            <!-- <img src="../../assets/catalog/card1.png" alt=""> -->
-            <img v-if = "cartItemData.images" :src=getImagePath(cartItemData.images) alt="">
-            <img v-if = "!cartItemData.images" src="../../assets/no_image.svg" alt="">
+            <CardImage :images=cartItemData.images />
         </div>
         <div class="popup-cart__description">
           <div class="popup-cart__title">{{ cartItemData.name }}</div>
@@ -22,12 +20,17 @@
 
 import axios from "axios";
 import {mapMutations, mapActions } from 'vuex'
+import CardImage from '@/components/UI/card-image.vue'
 
 export default {
   name: 'HeaderCartItem',
 
   props: {
     cartItem: null,
+  },
+
+  components: {
+    CardImage,
   },
 
   data(){
@@ -49,15 +52,6 @@ export default {
   methods:{
     ...mapMutations("notification", ["ADD_MESSAGE"]),
     ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
-
-    getImagePath(item) {
-      let path = null;
-      if (item) {
-        const allPath = item.split(',');
-        path = process.env.VUE_APP_IMAGES + allPath[0];
-      }
-      return path;
-    },
 
     onRemoveItemFromCart(itemData){
         this.UPDATE_ITEMS_IN_CART({ itemData, type: 'remove' });

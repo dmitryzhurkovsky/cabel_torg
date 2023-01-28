@@ -2,8 +2,7 @@
     <div v-if="cartItemData && quantity !==0">
       <div class="product__wrapper">
         <a class="product__img" href="" @click.stop.prevent="openCardItem(cartItemData.id)">
-            <img v-if = "cartItemData.images" :src=getImagePath(cartItemData.images) alt="">
-            <img v-if = "!cartItemData.images" src="../../assets/no_image.svg" alt="">
+            <CardImage :images=cartItemData.images />
         </a>
         <div class="product__info">
             <div class="product__article  _label mb-20">Артикул: <span>{{ cartItemData.vendor_code }}</span></div>
@@ -49,6 +48,7 @@
 <script>
   import axios from "axios";
   import {mapGetters, mapActions, mapMutations} from 'vuex'
+  import CardImage from '@/components/UI/card-image.vue'
 
   export default {
     name: 'CartItem',
@@ -63,6 +63,10 @@
             quantity: 0,
             isWish: false,
         }
+    },
+
+    components: {
+        CardImage,
     },
 
     async mounted(){
@@ -95,15 +99,6 @@
         ...mapMutations("notification", ["ADD_MESSAGE"]),
         ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
         ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-
-        getImagePath(item) {
-            let path = null;
-            if (item) {
-                const allPath = item.split(',');
-                path = process.env.VUE_APP_IMAGES + allPath[0];
-            }
-            return path;
-        },
 
         async onOperationWithCartItem(card, type) {
             if (type === 'decrease' && this.quantity === 1) {

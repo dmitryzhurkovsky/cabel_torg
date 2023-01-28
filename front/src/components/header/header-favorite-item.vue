@@ -1,9 +1,7 @@
 <template>
     <div class="popup-cart__item row">
         <div class="popup-cart__img">
-            <!-- <img src="../../assets/catalog/card1.png" alt=""> -->
-            <img v-if = "favoriteItemData.images" :src=getImagePath(favoriteItemData.images) alt="">
-            <img v-if = "!favoriteItemData.images" src="../../assets/no_image.svg" alt="">
+            <CardImage :images=favoriteItemData.images />
         </div>
         <div class="popup-cart__description">
             <div class="popup-cart__title">{{ favoriteItemData.name }}</div>
@@ -21,12 +19,17 @@
 
 import axios from "axios";
 import {mapMutations, mapActions } from 'vuex'
+import CardImage from '@/components/UI/card-image.vue'
 
 export default {
   name: 'HeaderFavoriteItem',
 
   props: {
     favoriteItem: null,
+  },
+
+  components: {
+    CardImage,
   },
 
   data(){
@@ -48,15 +51,6 @@ export default {
   methods:{
     ...mapMutations("notification", ["ADD_MESSAGE"]),
     ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-
-    getImagePath(item) {
-      let path = null;
-      if (item) {
-        const allPath = item.split(',');
-        path = process.env.VUE_APP_IMAGES + allPath[0];
-      }
-      return path;
-    },
 
     async onRemoveItemFromFavorite(itemData){
         await this.UPDATE_IS_WISH_IN_CART({ itemData, type: 'remove' });

@@ -105,7 +105,6 @@ export default {
                 '&limit=60' + 
                 query
             );
-            console.log(response.data);
             commit("SET_FINDED_ELEMENTS", response.data);
         } catch (e) {
             console.log(e);
