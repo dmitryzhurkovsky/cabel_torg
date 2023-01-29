@@ -5,8 +5,8 @@
     <Quick_category/>
     <News/>
     <Partners/>
-    <!-- <About/>
-    <Offer/> -->
+    <About/>
+    <!--<Offer/> -->
 
 
 
@@ -15,7 +15,7 @@
 
 <script>
 import Banner from '@/components/about/Banner.vue'
-// import About from '@/views/About.vue'
+import About from '@/components/about/About_block_notuse.vue'
 import Quick_category from '@/components/about/Quick_category.vue'
 import Partners from "@/components/about/Partners.vue";
 import News from "@/components/about/News.vue";
@@ -29,7 +29,7 @@ export default {
       Banner,
       Recomendation,
       Partners,
-  		// About,
+  		About,
       Quick_category,
       News,
       // Offer

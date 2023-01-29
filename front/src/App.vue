@@ -192,7 +192,7 @@ body {
     font-size: 16px ;
     font-weight: 300;
     font-family: 'Rubik', sans-serif;
-    background: linear-gradient(180deg, rgba(246, 247, 249, 0) 0%, #F6F7F9 50.31%, rgba(246, 247, 249, 0) 100%);
+    background: #fff;
     &._lock {
         overflow: hidden;
     }
@@ -304,6 +304,15 @@ h3{
   &:hover{
     background: #5A5A5A;
   }
+
+.empty_black{
+  background: #F8FAFF;
+  border: 1.2px solid #423E48;
+  padding: 12px 24px;
+  &:hover {
+    background: #5A5A5A;
+  }
+}
 .blue{
   padding: 12px 24px;
 }
