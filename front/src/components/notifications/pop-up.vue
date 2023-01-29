@@ -8,7 +8,34 @@
         <div class="popup__body" @click.stop="">
             <div class="icon-close popup__close" @click.stop="closePopUp(false)"></div>
             <div class="popoup__content" >
-                <div class="popup__message">Тут содежимое PopUp</div>
+              <h3>Заказать звонок</h3>
+              <div class="">
+                <div class="group">
+                  <label class="label">Ваше имя</label>
+                  <input type="text" class="input">
+<!--                  <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>-->
+                </div>
+                <div class="group">
+                  <label class="label">Контактный телефон</label>
+                  <input type="text" class="input">
+<!--                  <div class="error-message" v-if="ERRORS.password"> {{ ERRORS.password }} </div>-->
+                </div>
+
+                <div class="group__row flex-center mt-20">
+                  <div class="center-text">
+                    <button @click = "userLogin()" type="submit" class="btn black">Отмена</button>
+                  </div>
+
+                  <div class="center-text">
+                    <button @click = "userLogin()" type="submit" class="btn black">Заказать звонок</button>
+                  </div>
+
+                </div>
+
+
+              </div>
+
+<!--                <div class="popup__message">Тут содежимое PopUp</div>-->
             </div>
         </div>
       </div>
@@ -81,14 +108,16 @@
       position: absolute;
       top:0;
       right: -30px;
+      cursor: pointer;
     }
     &__body {
         position: relative;
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 400px;
-        height: 300px;
+        //width: 400px;
+        //height: 300px;
+        padding: 2% 2% ;
         background: #fff;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
         border-radius: 16px;
