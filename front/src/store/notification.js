@@ -11,7 +11,7 @@ export default {
     },
     LENGTH(state) {
       return state.messages.length;
-    }
+    },
   },
 
   mutations: {
@@ -20,7 +20,7 @@ export default {
     },
     DELETE_MESSAGE(state) {
       state.messages.pop();
-    }
+    },
   },
 
   actions: {

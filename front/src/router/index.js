@@ -112,6 +112,7 @@ const routes = [
   {
     path: '/card_product/:id',
     name: 'Card_product',
+    meta: {name: 'Карточка товара'},
     props: true,
     component: () =>
         import("../views/Card_product_grid.vue")

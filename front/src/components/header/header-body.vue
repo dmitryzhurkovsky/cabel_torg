@@ -54,6 +54,7 @@
 
     methods:{
       ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
+      ...mapMutations("query", ["SET_SEARCH_STRING"]),
 
       toggleMenu() {
         this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
@@ -62,6 +63,7 @@
       onOpenLink(link, event) {
         event.stopImmediatePropagation();
         event.preventDefault();
+        this.SET_SEARCH_STRING('');
         if (this.$router.path != link) {
             this.$router.push(link);
         }

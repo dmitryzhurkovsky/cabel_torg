@@ -135,6 +135,9 @@
       ...mapMutations("notification", ["ADD_MESSAGE"]),
       ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
       ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
+      ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
+      ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
+      ...mapMutations("query", ["SET_SEARCH_STRING"]),
 
       async onOperationWithCartItem(card, type) {
         if (this.quantity == 0 && type === 'remove') {
@@ -195,6 +198,14 @@
     },
 
     async mounted(){
+        this.SET_SEARCH_STRING('');
+        this.CHANGE_BREADCRUMB(0);
+        this.ADD_BREADCRUMB({
+          name: this.$router.currentRoute.value.meta.name,
+          path: this.$router.currentRoute.value.path,
+          type: "global",
+          class: ""
+        });
         try {
             const response = await axios.get(process.env.VUE_APP_API_URL + 'products/' + this.id);
             this.cartItemData = response.data;

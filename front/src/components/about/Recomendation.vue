@@ -117,6 +117,7 @@
 
     methods:{
       ...mapActions("catalog", ["GET_RECOMENDED_ITEMS"]),
+      
       onSlideChange() {
          console.log('slide change');
       },

@@ -23,6 +23,8 @@ export default {
     categories: [],
     catalog: [],
     isPopUpOpen: false,
+    popUpAction: '',
+    popUpMessage: null,
   },
 
   getters: {
@@ -79,10 +81,15 @@ export default {
     CATALOG(state) {
       return state.catalog;
     },
-    IS_POP_UP_OPEN(state) {
+    IS_POPUP_OPEN(state) {
       return state.isPopUpOpen;
+    },
+    POPUP_ACTION(state) {
+      return state.popUpAction;
+    },
+    POPUP_MESSAGE(state) {
+      return state.popUpMessage;
     }
-
   },
 
   mutations: {
@@ -161,8 +168,14 @@ export default {
       state.catalog = menuItems;
     },
 
-    SET_IS_POP_UP_OPEN(state, status) {
+    SET_IS_POPUP_OPEN(state, status) {
       state.isPopUpOpen = status;
+    },
+    SET_POPUP_ACTION(state, action) {
+      state.popUpAction = action;
+    },
+    SET_POPUP_MESSAGE(state, msg) {
+      state.popUpMessage = {...msg};
     }
   },
 

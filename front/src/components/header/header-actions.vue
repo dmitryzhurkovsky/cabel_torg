@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="topmenu__right client-bar flex-center">
-    <div class="topmenu__item right-direction">
+    <div class="topmenu__item right-direction" @mouseenter="clearSearchString()">
       <div class="dropdown icon-favorite">
         <div class="dropdown__wrapper">
           <HeaderFavorite/>
@@ -13,7 +13,7 @@
         :top = '12'
       />
     </div>
-    <div class="topmenu__item right-direction">
+    <div class="topmenu__item right-direction" @mouseenter="clearSearchString()">
       <div class="dropdown" :class="[!USER ? 'icon-user' : 'icon-user-login']">
         <div v-if = "IS_OPEN_MAIN_LOGIN && !USER" class="dropdown__wrapper qq">
           <div class="dropdown__content popup-cart">
@@ -58,7 +58,7 @@
       </div>
 
     </div>
-    <div class="topmenu__item right-direction">
+    <div class="topmenu__item right-direction" @mouseenter="clearSearchString()">
       <div class="dropdown icon-cart">
         <div class="dropdown__wrapper">
           <HeaderCart/>
@@ -102,8 +102,10 @@ export default {
   methods: {
     ...mapMutations("auth", ["SET_TYPE"]),
     ...mapActions("auth", ["SEND_LOGOUT_REQUEST"]),
+    ...mapMutations("query", ["SET_SEARCH_STRING"]),
     
     handleClick (URL, auth_type) {
+        // this.clearSearchString();
         if (this.$route.path != URL) {
             this.SET_TYPE(auth_type);
             this.$router.push(URL);
@@ -114,10 +116,15 @@ export default {
 
     async userLogout() {
         if (this.isLoading) return;
+        // this.clearSearchString();
         this.isLoading = true;
         await this.SEND_LOGOUT_REQUEST();
         this.isLoading = false;
         this.$router.push('/');
+    },
+
+    clearSearchString(){
+      this.SET_SEARCH_STRING('');
     },
 
   },

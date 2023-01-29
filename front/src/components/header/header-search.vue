@@ -25,6 +25,9 @@
                       :item = item
                       @click.stop = "openCardItem(item.id)"
                   />
+                  <div @click = "openFindedElementInCatalg">
+                    Показать все
+                  </div>
                 </div>
 
             </div>
@@ -66,7 +69,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations("query", ["SET_SEARCH_STRING", "SET_FINDED_ELEMENTS"]),
+    ...mapMutations("query", ["SET_SEARCH_STRING", "SET_FINDED_ELEMENTS", "SET_CATEGORY_ID"]),
+    ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING"]),
     ...mapActions("query", ["FIND_ELEMENTS"]),
 
     onInput(){
@@ -82,7 +86,17 @@ export default {
     clearString(){
         this.queryString = '';
         this.SET_SEARCH_STRING('');
+        this.SET_CATALOG_SEARCH_STRING('');
     },
+
+    openFindedElementInCatalg(){
+      this.SET_CATALOG_SEARCH_STRING(this.SEARCH_STRING);
+      // this.SET_CATEGORY_ID(null);
+      this.SET_SEARCH_STRING('');
+      if (this.$router.path != '/catalog') {
+        this.$router.push('/catalog');
+      }
+    }
 
   },
 }

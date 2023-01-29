@@ -7,7 +7,7 @@
               <div class="dropdown icon-burger catalog__btn" @click="toggleMenu()">Каталог товаров</div>
               <CatalogMenu v-if = "IS_CATALOG_OPEN"/>
             </div>
-            <div class="topmenu__item">
+            <div class="topmenu__item" @mouseenter="clearSearchString()">
               <div class="dropdown">Покупателям
                 <div class="dropdown__wrapper">
                   <div class="dropdown__content">
@@ -20,7 +20,7 @@
                 </div>
               </div>
             </div>
-            <div class="topmenu__item">
+            <div class="topmenu__item"  @mouseenter="clearSearchString()">
               <div class="dropdown">О нас
                 <div class="dropdown__wrapper">
                   <div class="dropdown__content ">
@@ -58,17 +58,24 @@ export default {
 
   methods:{
     ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
+    ...mapMutations("query", ["SET_SEARCH_STRING"]),
+
     toggleMenu() {
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      console.log(this.IS_CATALOG_OPEN);
+      this.SET_SEARCH_STRING('');
+      // console.log(this.IS_CATALOG_OPEN);
     },
     openPage(page, event) {
       event.stopImmediatePropagation();
       event.preventDefault();
       if (this.$router.path != page) {
           this.$router.push(page);
+          this.clearSearchString();
       }
     },
+    clearSearchString(){
+      this.SET_SEARCH_STRING('');
+    }
   }
 }
 </script>

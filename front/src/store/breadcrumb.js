@@ -53,6 +53,7 @@ export default {
 
     MOVE_TO_SELECT_PATH({ commit, dispatch, getters }, element) {
       const elementData = getters.STACK[element];
+      // commit("query/SET_SEARCH_STRING", '', {root: true});
       if (elementData.type === 'global') {
         dispatch("CHANGE_BREADCRUMB", element);
       } else {

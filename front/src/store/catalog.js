@@ -5,18 +5,15 @@ export default {
 
   state: {
     itemsList: [],
-    activeItem: null,
     tatalPages: 0,
     activePage: 0,
     recomendedList: [],
+    searchString: '',
   },
 
     getters: {
       ITEMS_LIST(state){
         return state.itemsList;
-      },
-      ACTIVE_ITEM(state){
-        return state.activeItem;
       },
       TOTAL_PAGES(state){
         return state.tatalPages;
@@ -26,6 +23,9 @@ export default {
       },
       RECOMENDED_ITEMS(state){
         return state.recomendedList;
+      },
+      CATALOG_SEARCH_STRING(state){
+        return state.searchString;
       },
     },
 
@@ -47,6 +47,10 @@ export default {
         }
         state.tatalPages =  data.back.total % data.limit === 0 ? data.back.total / data.limit: Math.floor(data.back.total / data.limit) + 1;
       },
+
+      SET_CATALOG_SEARCH_STRING(state, searchStr) {
+        state.searchString = searchStr;
+      }
     },
 
     actions: {
@@ -59,7 +63,8 @@ export default {
                 '&limit=' + rootGetters['query/LIMIT'] 
                 + 
                 '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
-                '&price_lte=' + rootGetters['query/MAX_PRICE']
+                '&price_lte=' + rootGetters['query/MAX_PRICE'] +
+                '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING']
             );
             commit("SET_CATALOG_ITEMS", response.data);
             commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
@@ -77,7 +82,8 @@ export default {
                 '&limit=' + rootGetters['query/LIMIT']
                  + 
                 '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
-                '&price_lte=' + rootGetters['query/MAX_PRICE']
+                '&price_lte=' + rootGetters['query/MAX_PRICE'] +
+                '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING']
             );
             commit("SET_CATALOG_ITEMS", response.data);
             commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});

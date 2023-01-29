@@ -97,12 +97,8 @@ import { mapGetters, mapMutations } from 'vuex';
 export default {
   name: "footer",
 
-  computed: {
-    ...mapGetters("header", ["IS_POP_UP_OPEN"]),
-  },
-
   methods: {
-    ...mapMutations("header", ["SET_IS_POP_UP_OPEN"]),
+    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
 
     linkClick(URL, name){
       if (this.$router.path != URL) {
@@ -113,7 +109,8 @@ export default {
     },
 
     onMadeCall(status){
-      this.SET_IS_POP_UP_OPEN(status);
+      this.SET_IS_POPUP_OPEN(status);
+      this.SET_POPUP_ACTION('RequestCall');
     }
   }
 }

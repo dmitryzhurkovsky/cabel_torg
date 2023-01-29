@@ -216,6 +216,14 @@ export default {
                 password: this.password
             };
             await this.SEND_REGISTER_REQUEST(data);
+            this.SET_IS_POPUP_OPEN(true);
+            this.SET_POPUP_ACTION('ShowCompleteMsg');
+            const msg ={};
+                msg.main = 'Спасибо за регистрацию на CabelTorg.';
+                msg.bolt = '';
+                msg.sub = 'Желаем Вам приятных покупок!'
+            this.SET_POPUP_MESSAGE(msg);
+
             // this.$router.push({name: "user-cab"});
         }
         this.isLoading = false;

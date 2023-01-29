@@ -87,7 +87,7 @@ export default {
 
       SET_SEARCH_STRING(state, query) {
         state.searchString = query;
-        state.categoryId = null;
+        // state.categoryId = null;
       },
 
       SET_FINDED_ELEMENTS(state, items) {
@@ -102,7 +102,7 @@ export default {
             const response = await axios.get(process.env.VUE_APP_API_URL + 
                 'products?type_of_product=all' + 
                 '&offset=0' +  
-                '&limit=60' + 
+                '&limit=10' + 
                 query
             );
             commit("SET_FINDED_ELEMENTS", response.data);
