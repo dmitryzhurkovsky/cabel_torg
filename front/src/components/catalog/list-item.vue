@@ -206,7 +206,7 @@ export default {
   &__price{
     font-size: 20px;
     margin-bottom: 10px;
-    text-align: center;
+    text-align: right;
     span:nth-child(1){
       font-weight: 500;
       margin-right: 5px;

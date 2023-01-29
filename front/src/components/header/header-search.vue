@@ -95,6 +95,7 @@ export default {
 .header{
     &__search{
       position: relative;
+      width: 100%;
       // background: #FFFFFF;
       // box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
       // border-radius: 50px;
@@ -113,7 +114,15 @@ export default {
   padding: 10px;
 }
 .search-wrapper {
-
+  .dropdown{
+    width: 100%;
+  }
+  .dropdown__wrapper{
+    padding: 0 0 20px 0;
+    top: 0;
+    left: 0;
+    margin: 0 10%;
+  }
 }
 .search__box {
   //width: 500px;
@@ -121,6 +130,7 @@ export default {
   height: 32px;
   display: flex;
   padding: 6px 16px;
+  margin: 0 10%;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
@@ -133,7 +143,7 @@ export default {
 }
 
 .search__field{
-  max-width: 385px;
+  width: 100%;
   height: 100%;
   position: relative;
 
