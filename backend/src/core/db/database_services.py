@@ -15,7 +15,7 @@ async def get_or_create(
     Return an instance with the first argument,
     and whether instance was created or not in the second argument.
     """
-    options = BaseMixin.init_prefetch_related_fields(prefetch_fields=prefetch_fields)
+    options = BaseMixin.init_preloaded_fields(prefetch_fields=prefetch_fields)
 
     bookkeeping_id = fields.get('bookkeeping_id')
     filter_by_fields = {'bookkeeping_id': bookkeeping_id} if bookkeeping_id else fields
@@ -51,7 +51,7 @@ async def get_or_create(
 
 
 async def get(db: AsyncSession, model, fields: dict, prefetch_fields: tuple = None):
-    options = BaseMixin.init_prefetch_related_fields(prefetch_fields=prefetch_fields)
+    options = BaseMixin.init_preloaded_fields(prefetch_fields=prefetch_fields)
 
     result = await db.execute(
         select(model).

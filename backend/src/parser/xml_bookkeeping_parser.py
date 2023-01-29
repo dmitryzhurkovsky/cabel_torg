@@ -18,3 +18,4 @@ class PricesParser(PriceMixin, ABC):
     XML_FILE = settings.PATH_TO_XML_FILE_WITH_PRICES
 
     __slots__ = ('db',)
+    # todo add excluded categories

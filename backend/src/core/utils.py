@@ -18,6 +18,8 @@ async def convert_filter_fields(filter_fields: QueryParams, session: AsyncSessio
 
     if price_gte := filter_fields.get('price_gte'):
         converted_filter_fields.append(Product.price >= Decimal(price_gte))
+    else:
+        converted_filter_fields.append(Product.price >= Decimal(0))
 
     if price_lte := filter_fields.get('price_lte'):
         converted_filter_fields.append(Product.price <= Decimal(price_lte))
