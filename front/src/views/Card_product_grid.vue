@@ -68,7 +68,7 @@
             </div>
             <div class="grid__item" tabindex="11">
               <div v-if="quantity !== 0" class="btn black" @click.stop="onOperationWithCartItem(cartItemData, 'remove')">В корзине</div>
-              <div v-if="quantity === 0" class="btn blue" @click.stop="onOperationWithCartItem(cartItemData, 'increase')">В корзину</div>
+              <div v-if="quantity === 0" class="btn empty_black" @click.stop="onOperationWithCartItem(cartItemData, 'increase')">В корзину</div>
             </div>
             <div class="grid__item" tabindex="12">
               <div class="desc-product__count">
