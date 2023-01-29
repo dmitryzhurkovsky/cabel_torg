@@ -5,8 +5,22 @@
             <div class="filter__progress" :style = "{left: Left, right: Right}"></div>
         </div>
         <div class="range-input">
-            <input type="range" class="range-min" :min="RangeMin" :max="RangeMax" v-model="minValueRange" step="10" v-on:input="onChangeRange('min')">
-            <input type="range" class="range-max" :min="RangeMin" :max="RangeMax" v-model="maxValueRange" step="10" v-on:input="onChangeRange('max')">
+            <input type="range" class="range-min" 
+                :min="RangeMin" 
+                :max="RangeMax" 
+                v-model="minValueRange" 
+                step="10" 
+                v-on:input="onChangeRange('min')"
+                v-on:change="onSetChangeRange()"
+            >
+            <input type="range" class="range-max" 
+                :min="RangeMin" 
+                :max="RangeMax" 
+                v-model="maxValueRange" 
+                step="10" 
+                v-on:input="onChangeRange('max')"
+                v-on:change="onSetChangeRange()"
+            >
         </div>
         <div class="price-input">
             <div class="filter__field">
@@ -99,6 +113,8 @@ export default {
                 this.Left = ((minValue / this.RangeMax) * 100) + '%';
                 this.Right = 100 - ((maxValue / this.RangeMax) * 100) + '%';
             }
+        },
+        onSetChangeRange(){
             this.updateStore();
         },
         updateStore(){
@@ -151,6 +167,7 @@ export default {
 }
 .price-input .filter__field{
   display: flex;
+  flex-direction: column;
   width: 100%;
   height: 45px;
   align-items: flex-start;

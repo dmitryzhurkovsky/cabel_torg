@@ -1,6 +1,6 @@
 <template lang="html">
   <!-- <BurgerMenu v-if = "IS_MENU_OPEN"/> -->
-  <BurgerMenu v-if = "IS_CATALOG_OPEN"/>
+  <BurgerMenu v-if = "IS_CATALOG_OPEN&&VIEW_TYPE>1"/>
   <div class="header__wrapper">
     <div class="header__content _container">
         <div class="header__body ">
@@ -11,7 +11,7 @@
               <div class="bar"></div>
             </div>
 
-            <a href="/" class="header__logo">
+            <a @click ="onOpenLink('/', $event)" href="/" class="header__logo">
                 <img src="@/assets/logo.svg" alt="CabelTorg">
             </a>
             <HeaderSearch/>
@@ -49,16 +49,26 @@
     },
 
     computed: {
-      ...mapGetters("header", ["IS_CATALOG_OPEN", "TOP_CATEGORIES"]),
+      ...mapGetters("header", ["IS_CATALOG_OPEN", "TOP_CATEGORIES", "VIEW_TYPE"]),
     },
 
     methods:{
       ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
+      ...mapMutations("query", ["SET_SEARCH_STRING"]),
 
       toggleMenu() {
         this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-        console.log(this.IS_CATALOG_OPEN);
       },
+
+      onOpenLink(link, event) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        this.SET_SEARCH_STRING('');
+        if (this.$router.path != link) {
+            this.$router.push(link);
+        }
+      },
+      
     }
 
   }

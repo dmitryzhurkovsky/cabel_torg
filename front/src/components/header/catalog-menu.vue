@@ -13,7 +13,7 @@
                       :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"
                       v-for   = "item in TOP_CATEGORIES"
                       :key    = "item.id"
-                      @click  = "changeCategory(item.id)"
+                      @click.stop  = "changeCategory(item.id)"
                   >
                     <div class="menu__link">{{item.name}}</div>
                   </li>
@@ -26,7 +26,7 @@
                   <div class="menusub__item"
                     v-for   = "sub in SUB_CATEGORIES"
                     :key    = "sub.id"
-                    @click  = "subCategoryClick(sub.id, $event)"
+                    @click.stop  = "subCategoryClick(sub.id)"
                   >
                     <div v-if = "sub.id" class="menu__rubric">{{sub.name}}</div>
                     <ul v-if = "sub.subItems.length > 0">
@@ -34,7 +34,7 @@
                           v-for = "subItem in sub.subItems"
                           :key  = "subItem.id"
                       >
-                        <div @click = "subItemCategoryClick(subItem.id, $event)" class="menu__linksub">{{subItem.name}}</div>
+                        <div @click.stop = "subItemCategoryClick(subItem.id)" class="menu__linksub">{{subItem.name}}</div>
                       </li>
                     </ul>
                   </div>
@@ -57,27 +57,49 @@ export default {
   name: "CatalogMenu",
 
   computed: {
-    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "TOP_CATEGORIES", "SUB_CATEGORIES", "IS_CATALOG_OPEN"]),
+    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "ALL_CATEGORIES", "TOP_CATEGORIES", "SUB_CATEGORIES", "IS_CATALOG_OPEN"]),
   },
 
   methods:{
-    ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "UPDATE_IS_CATALOG_OPEN"]),
+    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
+    ...mapMutations("query", ["SET_CATEGORY_ID"]),
     ...mapActions("catalog", ["GET_CATALOG_ITEMS"]),
-    changeCategory(newActive){
-        this.SET_CURRENT_TOP_CATEGORY(newActive);
+    ...mapActions("header", ["UPDATE_TOP_CATEGORY", "UPDATE_SUB_CATEGORY", "UPDATE_LAST_CATEGORY", "SET_ALL_CURRENT_CATEGORIES"]),
+
+    changeCategory(id){
+      this.SET_ALL_CURRENT_CATEGORIES({
+          mainCategory: id,
+          middleCategory: null,
+          lastCategory: null,
+      });
+      this.SET_CATEGORY_ID(id);
+      if (this.$router.path != '/catalog') {
+        this.$router.push('/catalog');
+      }
     },
-    subCategoryClick(id, event){
-      this.SET_CURRENT_SUB_CATEGORY(id);
-      this.GET_CATALOG_ITEMS(id);
+
+    subCategoryClick(id){
+      this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: this.TOP_CATEGORIES_ITEM_ACTIVE,
+            middleCategory: id,
+            lastCategory: null,
+      });
+      this.SET_CATEGORY_ID(id);
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
       if (this.$router.path != '/catalog') {
           this.$router.push('/catalog');
       }
     },
-    subItemCategoryClick(id, event){
+
+    subItemCategoryClick(id){
       // console.log('кликнули по итему подкатегории ', id, event);
-      event.stopImmediatePropagation();
-      this.GET_CATALOG_ITEMS(id);
+      this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: this.TOP_CATEGORIES_ITEM_ACTIVE,
+            middleCategory: this.ALL_CATEGORIES.filter(item => item.id === id)[0].parent_category_id,
+            lastCategory: id,
+      });
+      // this.UPDATE_LAST_CATEGORY(id);
+      this.SET_CATEGORY_ID(id);
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
       if (this.$router.path != '/catalog') {
           this.$router.push('/catalog');

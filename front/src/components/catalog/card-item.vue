@@ -1,42 +1,44 @@
 <template lang="html">
   <div class="recomendation__block__item item-card" v-if = "card">
     <div class="item-card__tag">Хит</div>
-    <div class="item-card__wishlist icon-favorite"></div>
-    <a class="item-card__img" href="">
-      <img v-if = "card.images" class="" :src=getImagePath(card.images) alt="">
-      <img v-if = "!card.images" class="" src="../../assets/no_image.jpg" alt="">
+    <div 
+        :class="[isWish === false ? 'item-card__wishlist icon-favorite' : 'item-card__wishlist icon-favorite-choosed']" 
+        @click.stop="onWishClick(card)"
+    ></div>
+    <a class="item-card__img" @click.stop="openCardItem(card.id)">
+      <CardImage :images=card.images />
     </a>
     <div class="item-card__info">
       <div class="item-card__row flex-center">
-        <div class="old_price">65.3</div>
+        <div class="old_price">65.3???</div>
         <div class="notice">* Цена указана с учетом НДС.</div>
       </div>
 
       <div class="item-card__row flex-center">
-        <div class="current_price">56.5
-          <span>BYN/</span>
+        <div class="current_price">{{ card.price }}
+          <span>BYN / {{ card.base_unit.full_name }}</span>
         </div>
-        <div class="item-card__buy flex-center icon-cart">
+        <div 
+          :class="[quantity === 0 ? 'item-card__buy flex-center icon-cart' : 'item-card__buy flex-center icon-cart-chosen']"
+          @click.stop="onOperationWithCartItem(card)"
+        >
         </div>
 
       </div>
-      <div class="item-card__title">
-        <div>{{card.name}}</div>
+      <div class="item-card__title" @click.stop="openCardItem(card.id)">
+        <div>{{ card.name }}</div>
       </div>
       <div class="item-card__uptitle">
-        <div>UTP cat.5e (патч-панель) 19″</div>
+        <div>{{ card.category.name }}</div>
       </div>
-
-
-
-
     </div>
   </div>
 
 </template>
 
 <script>
-// import axios from "axios";
+import { mapActions, mapGetters } from 'vuex'
+import CardImage from '@/components/UI/card-image.vue'
 
 export default {
   name: "CardItem",
@@ -45,15 +47,93 @@ export default {
     card:  null,
   },
 
-  methods: {
-    getImagePath(item) {
-      let path = null;
-      if (item) {
-        const allPath = item.split(',');
-        path = process.env.VUE_APP_IMAGES + allPath[0];
-      }
-      return path;
+  data(){
+    return {
+      quantity: 0,
+      isWish: false,
     }
+  },
+
+  components: {
+    CardImage,
+  },
+
+  computed: {
+    ...mapGetters("order", ["ORDERS"]),
+    ...mapGetters("favorite", ["FAVORITES"]),
+
+    ChangeParameters(){
+      return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES);
+    },
+  },
+
+  watch: {
+    ChangeParameters: async function() {
+      this.countQuantity();
+      this.checkIsWish();
+    },
+  },
+
+  mounted(){
+    this.countQuantity();
+    this.checkIsWish();
+  },
+
+
+  methods: {
+    ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
+    ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
+
+    openCardItem(id) {
+      const URL = '/card_product/' + id;
+      this.$router.push(URL);
+    },
+
+    async onOperationWithCartItem(card) {
+      const itemData = {
+        amount: 1,
+        product: {
+          id: card.id,
+          vendor_code: card.vendor_code,
+          name: card.name,
+          price: card.price,
+        },
+      }
+      const type = this.quantity === 0 ? 'increase' : 'remove';
+      this.quantity = this.quantity !==0 ? 0 : 1;
+      await this.UPDATE_ITEMS_IN_CART({itemData, type});
+    },
+
+    async onWishClick(card) {
+      const itemData = {
+        product: {
+          id: card.id,
+          vendor_code: card.vendor_code,
+          name: card.name,
+        },
+      }  
+      const type = this.isWish === false ? 'set' : 'remove';
+      await this.UPDATE_IS_WISH_IN_CART({ itemData, type });
+    },
+
+    countQuantity() {
+      if (this.ORDERS.length) {
+        const filtered = this.ORDERS.filter(item => item.product.id === this.card.id);
+        this.quantity =  filtered.length ? filtered[0].amount : 0;
+      } else {
+        this.quantity = 0;
+      }
+    },
+
+    checkIsWish() {
+      if (this.FAVORITES.length) {
+        const filtered = this.FAVORITES.filter(item => item.product.id === this.card.id);
+        this.isWish =  filtered.length ? true : false;
+      } else {
+        this.isWish = false;
+      }
+    },
+
   },
 
 }
@@ -65,6 +145,10 @@ export default {
 
 //Карточка товара
 
+// .icon-card .active {
+//   // background-color: red;
+//   border: 2px solid red;
+// }
 .item-card {
   display: flex;
   flex-direction: column;
@@ -77,11 +161,7 @@ export default {
 
   &__img {
     width: 100%;
-
-    img{
-      max-width: 100%;
-    }
-
+    cursor: pointer;
   }
 
   &__tag{
@@ -124,6 +204,7 @@ export default {
   }
 
   &__buy {
+    position: relative;
 
     &:before {
       cursor: pointer;
@@ -170,6 +251,7 @@ export default {
     overflow: hidden;
     line-height: 1.26;
     font-weight: 400;
+    cursor: pointer;
     a{
       font-weight: 500;
       font-size: 15px;

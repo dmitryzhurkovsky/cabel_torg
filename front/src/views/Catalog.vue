@@ -1,5 +1,5 @@
 <template>
-  <div class="catalog">
+  <div class="catalog" @click.stop = "clearSearchString()">
     <div class="catalog__wrapper">
       <div class="catalog__content _container">
         <div class="catalog__body">
@@ -17,7 +17,7 @@
                     class="recomendation__nav__item"
                     v-for = "category in LastCategory[0].subItems"
                     :key = "category.id"
-                    @click = setActiveCategory(category.id)
+                    @click.stop = setActiveCategory(category.id)
                   >
                     {{ category.name }}
                   </div>
@@ -80,15 +80,15 @@
         await this.getData();
       },
 
-      CATEGORY_ID: async function() {
-        await this.GET_CATALOG_ITEMS(this.CATEGORY_ID);
-      }
+      CATEGORY_ID: function() {
+        this.SET_CATALOG_SEARCH_STRING('');
+      },
     },
 
     computed: {
-        ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES"]),
-        ...mapGetters("catalog", ["ITEMS_LIST"]),
-        ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE"]),
+        ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES"]),
+        ...mapGetters("catalog", ["ITEMS_LIST", "CATALOG_SEARCH_STRING"]),
+        ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SEARCH_STRING"]),
 
         LastCategory(){
             let result = [];
@@ -99,30 +99,58 @@
         },
 
         ChangeParameters(){
-          return String(this.LIMIT) + String(this.OFFSET) + JSON.stringify(this.TYPE_OF_PRODUCT) + String(this.MIN_PRICE) + String(this.MAX_PRICE)
+          return String(this.LIMIT) + String(this.OFFSET) + JSON.stringify(this.TYPE_OF_PRODUCT) + String(this.MIN_PRICE) + 
+                  String(this.MAX_PRICE) + String(this.CATEGORY_ID) + this.CATALOG_SEARCH_STRING;
+                  //  + String(this.SUB_CATEGORIES_ITEM_ACTIVE) + String(this.TOP_CATEGORIES_ITEM_ACTIVE) + String(this.LAST_CATEGORIES_ITEM_ACTIVE); 
         }
     },
 
     methods: {
       ...mapActions("catalog", ["GET_CATALOG_ITEMS", "GET_ALL_CATALOG_ITEMS"]),
+      ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
       ...mapMutations("query", ["SET_CATEGORY_ID", "SET_OFFSET"]),
+      ...mapMutations("query", ["SET_SEARCH_STRING"]),
+      ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING"]),
 
       async getData() {
-        if (this.TOP_CATEGORIES_ITEM_ACTIVE && this.SUB_CATEGORIES_ITEM_ACTIVE) {
-          await this.GET_CATALOG_ITEMS(this.SUB_CATEGORIES_ITEM_ACTIVE||this.TOP_CATEGORIES_ITEM_ACTIVE);
+        if (this.CATEGORY_ID) {
+          if (this.CATALOG_SEARCH_STRING) {
+            await this.GET_ALL_CATALOG_ITEMS();
+          } else {
+            await this.GET_CATALOG_ITEMS(this.CATEGORY_ID);
+          }
+          // await this.GET_CATALOG_ITEMS(this.CATEGORY_ID);
         } else {
           await this.GET_ALL_CATALOG_ITEMS();
         }
       },
 
       setActiveCategory(id){
+        this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: this.TOP_CATEGORIES_ITEM_ACTIVE,
+            middleCategory: this.SUB_CATEGORIES_ITEM_ACTIVE,
+            lastCategory: id,
+        });
         this.SET_CATEGORY_ID(id);
-      }
+      },
+
+      clearSearchString(){
+        this.SET_SEARCH_STRING('');
+      },
 
     },
 
     async mounted() {
       await this.getData();
+      if (!this.CATEGORY_ID) {
+        this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
+        this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
+          name: this.$router.currentRoute.value.meta.name,
+          path: this.$router.currentRoute.value.path,
+          type: "global",
+          class: ""
+        });
+      }
     }    
   }
 </script>

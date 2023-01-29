@@ -1,35 +1,38 @@
 <template>
     <div class="product">
         <div class="product__tag">Хит</div>
-        <a class="product__img" href="">
-            <img v-if = "card.images" class="" :src=getImagePath(card.images) alt="">
-            <img v-if = "!card.images" class="" src="../../assets/no_image.jpg" alt="">
+        <a class="product__img" @click.stop="openCardItem(card.id)">
+            <CardImage :images=card.images />
         </a>
         <div class="product__info">
             <div class="product__status icon-done-color _label mb-20">В наличии</div>
             <div class="product__title">
-                <a  href="" v-if ="card.category">{{ card.category.name }}</a>
+                <a v-if ="card.category">{{ card.category.name }}</a>
             </div>
-            <div class="product__uptitle">
-                <a  href="">{{ card.name }}</a>
+            <div class="product__uptitle" @click.stop="openCardItem(card.id)">
+                <a >{{ card.name }}</a>
             </div>
             <div class="product__count flex-center">
                 <span class="_label">Количество:</span>
-                <span class="icon-minus"></span>
-                <input class="product__input" type="text">
-                <span class="icon-plus"></span>
+                <span class="icon-minus" @click.stop="onOperationWithCartItem(card, 'decrease')"></span>
+                <input class="product__input" type="text" v-model="quantity" @input="onOperationWithCartItem(card, 'set')" @click.stop=""> 
+                <span class="icon-plus" @click.stop="onOperationWithCartItem(card, 'increase')"></span>
             </div>
         </div>
         <div class="product__action">
             <div class="product__article  _label mb-20">Артикул: <span>{{ card.vendor_code }}</span></div>
             <div class="product__price">
-                <span>70</span>BYN
-                <span>/шт</span>
+                <span>{{ card.price }}</span>BYN
+                <span> / {{ card.base_unit.full_name }}</span>
             </div>
             <div class="notice">* Цена указана с учетом НДС.</div>
             <div class="product__btn flex-center">
-                <div class="product__wishlist icon-favorite"></div>
-                <div class="btn black">В корзину</div>
+                <div 
+                    :class="[isWish === false ? 'product__wishlist icon-favorite' : 'product__wishlist icon-favorite-choosed']"
+                    @click.stop="onWishClick(card)"
+                  ></div>
+                <div v-if = "quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(card, 'remove')">В корзине</div>
+                <div v-if = "quantity === 0" class="btn black" @click.stop="onOperationWithCartItem(card, 'increase')">В корзину</div>
             </div>
         </div>
     </div>
@@ -37,29 +40,112 @@
 
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+import CardImage from '@/components/UI/card-image.vue'
 
-  export default {
+export default {
+    name: 'ListItem',
+
     props: {
         card:  null,
     },
 
-    name: 'ListItem',
+    data(){
+      return {
+          quantity: 0,
+          isWish: false,
+      }
+    },
 
+    components: {
+      CardImage,
+    },
+
+    computed: {
+      ...mapGetters("order", ["ORDERS"]),
+      ...mapGetters("favorite", ["FAVORITES"]),
+
+      ChangeParameters(){
+        return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES);
+      },
+    },
+
+    watch: {
+      ChangeParameters: async function() {
+        this.countQuantity();
+        this.checkIsWish();
+      },
+    },
+
+    mounted(){
+      this.countQuantity();
+      this.checkIsWish();
+    },
+
+    
     methods: {
-      getImagePath(item) {
-        let path = null;
-        if (item) {
-          const allPath = item.split(',');
-          path = process.env.VUE_APP_IMAGES + allPath[0];
+      ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
+      ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
+      
+      openCardItem(id) {
+        const URL = '/card_product/' + id;
+        this.$router.push(URL);
+      },
+
+      async onOperationWithCartItem(card, type) {
+        const itemData = {
+          amount: 0,
+          product: {
+            id: card.id,
+            vendor_code: card.vendor_code,
+            name: card.name,
+            price: card.price,
+          },
+        };
+        if (type === 'set') {
+          itemData.amount = Number(this.quantity);
         }
-        return path;
-       }
+        
+        await this.UPDATE_ITEMS_IN_CART({itemData, type});
+      },
+
+      async onWishClick(card) {
+        const itemData = {
+          product: {
+            id: card.id,
+            vendor_code: card.vendor_code,
+            name: card.name,
+          },
+        }  
+        const type = this.isWish === false ? 'set' : 'remove';
+        await this.UPDATE_IS_WISH_IN_CART({ itemData, type });
+      },
+
+      countQuantity() {
+        if (this.ORDERS.length) {
+          const filtered = this.ORDERS.filter(item => item.product.id === this.card.id);
+          this.quantity =  filtered.length ? filtered[0].amount : 0;
+        } else {
+          this.quantity = 0;
+        }
+      },
+
+      checkIsWish() {
+        if (this.FAVORITES.length) {
+          const filtered = this.FAVORITES.filter(item => item.product.id === this.card.id);
+          this.isWish =  filtered.length ? true : false;
+        } else {
+          this.isWish = false;
+        }
+      },
+
     }
 
-  }
+}
 </script>
 
 <style scoped lang="scss">
+
 .product{
     display: flex;
     position: relative;
@@ -76,7 +162,8 @@
 
     &__img {
       width: 100%;
-      flex-basis: 30%;
+      flex-basis: 25%;
+      cursor: pointer;
       img{
         max-width: 100%;
       }
@@ -124,6 +211,7 @@
       font-weight: 500;
       margin-right: 5px;
     }
+
   }
 
 
@@ -172,6 +260,7 @@
 
     &__title {
       margin-bottom: 10px;
+
       a{
         font-weight: 500;
         font-size: 15px;
@@ -187,6 +276,7 @@
         font-size: 14px;
         line-height: 130%;
         color: #423E48;
+        cursor: pointer;
       }
 
     }
@@ -218,6 +308,7 @@
     border-radius: 2px;
     border: none;
     margin: 0 10px;
+    text-align: center;
   }
 
   &__btn{

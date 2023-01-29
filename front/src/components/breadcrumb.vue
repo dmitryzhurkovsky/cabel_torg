@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="breadcrumb__wrapper _container">
+  <div class="breadcrumb__wrapper _container" v-if = "ELEMENTS.length">
     <ul class="breadcrumb">
       <li
           v-for="element in ELEMENTS"
@@ -9,7 +9,9 @@
         <div
             v-if="element.type !=='service'"
             @click="changePage(element)"
-        >{{element.name}}</div>
+        >
+          {{ element.name }}
+        </div>
       </li>
     </ul>
   </div>
@@ -17,7 +19,7 @@
 
 <script>
 
-import { mapGetters } from "vuex";
+import { mapActions, mapMutations, mapGetters } from "vuex";
 
 export default {
   name: "breadcrumb",
@@ -48,8 +50,13 @@ export default {
   },
 
   methods: {
+    ...mapActions("breadcrumb", ["MOVE_TO_SELECT_PATH"]),
+    ...mapMutations("query", ["SET_SEARCH_STRING"]),
+    
     changePage(item){
-      this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", item.index);
+      this.SET_SEARCH_STRING('');
+      this.MOVE_TO_SELECT_PATH(item.index);
+      // this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", item.index);
       this.$router.push(item.path);
     }
   }

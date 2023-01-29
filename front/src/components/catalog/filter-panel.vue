@@ -1,29 +1,51 @@
 <template>
-    <div class="filter__block">
+    <div class="filter__block" v-if="CATALOG.length">
         <div class="filter__box" 
-            v-for   = "item in TOP_CATEGORIES"
-            :key    = "item.id"
-            @click  = "changeCategory(item.id, $event)"
+            v-for   = "mainItem in CATALOG"
+            :key    = "mainItem.id"
         >
-            <div 
-              :class="[ item.id === TOP_CATEGORIES_ITEM_ACTIVE ? 'filter__title icon-arrow-r' : 'filter__title icon-arrow-l']"
-            >{{item.name}}</div>
-            <div class="filter__block"  v-if = "item.id === TOP_CATEGORIES_ITEM_ACTIVE">
-                <div class=""
-                    v-for   = "sub in SUB_CATEGORIES"
-                    :key    = "sub.id"
-                    @click  = "subCategoryClick(sub.id, $event)"
-                >
-                    <div class="filter__subtitle">{{sub.name}}</div>
-                    <div class="filter__checkbox-list filter__subtitle-child "  v-if = "sub.id === SUB_CATEGORIES_ITEM_ACTIVE">
-                        <div class="filter__subtitle-child"
-                            v-for = "subItem in sub.subItems"
-                            :key  = "subItem.id"
-                            @click = "subItemCategoryClick(subItem.id, $event)"
+            <div class="sidebar_menu__title">
+              <div
+                  @click.stop = "openMainCategory(mainItem)"
+              >
+                {{mainItem.name}}
+              </div>
+              <div v-if="mainItem.childrens.length"
+                   :class="[ mainItem.filterPanel ? 'sidebar_menu__open  icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
+                   @click.stop = "toggleCategory(mainItem)"
+              >
+              </div>
+            </div >
+
+            <div class="filter__block"  v-if = "mainItem.childrens.length && mainItem.filterPanel">
+
+                    <div class="sidebar_menu__subtitle"
+                        v-for   = "middleItem in mainItem.childrens"
+                        :key    = "middleItem.id"
+                    >
+                      <div class="subtitle__row">
+                        <div
+                            @click.stop  = "openMiddleCategory(mainItem, middleItem)"
                         >
-                            <div class="checkbox-default">
-                              <div class="filter__text filter__subtitle-child">
-                                {{subItem.name}}
+                          {{middleItem.name}}
+                        </div>
+                        <div v-if="middleItem.childrens.length"
+                             :class="[ middleItem.filterPanel ? 'sidebar_menu__open icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
+                             @click.stop = "toggleCategory(middleItem)"
+                        >
+                        </div>
+                      </div>
+
+
+                    <div class="subtitle__list "  v-if = "middleItem.childrens.length &&  middleItem.filterPanel">
+                        <div class="sidebar_menu__subtitle-child"
+                            v-for = "lastItem in middleItem.childrens"
+                            :key  = "lastItem.id"
+                            @click.stop = "openLastCategory(mainItem, middleItem, lastItem)"
+                        >
+                            <div class="">
+                              <div class="">
+                                {{lastItem.name}}
                               </div>
 
                             </div>
@@ -44,7 +66,7 @@
                 >
                     <div 
                         class = "checkbox-default"
-                        @click="changeFilterCategory($event, category)"
+                        @click.stop = "changeFilterCategory($event, category)"
                     >
                         <label class="checkbox__label">
                             <input type="checkbox" name="" class="" value="">
@@ -68,7 +90,7 @@
 
 <script>
 
-import {mapMutations, mapGetters} from 'vuex'
+import {mapMutations, mapGetters, mapActions} from 'vuex'
 import PriceSlider from '@/components/catalog/price-slider.vue';
 
 export default {
@@ -89,40 +111,52 @@ export default {
     },
 
     computed: {
-        ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "TOP_CATEGORIES", "SUB_CATEGORIES"]),
-        ...mapGetters("query", ["TYPE_OF_PRODUCT"]),
-
+        ...mapGetters("header", ["CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
+        ...mapGetters("query", ["TYPE_OF_PRODUCT", "CATEGORY_ID"]),
     },
 
     methods:{
-        ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY"]),
         ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID"]),
+        ...mapActions("header",["SET_ALL_CURRENT_CATEGORIES"]),
 
-        changeCategory(newActive, event){
-            if (this.TOP_CATEGORIES_ITEM_ACTIVE === newActive) {
-                this.SET_CURRENT_TOP_CATEGORY(null);
-            } else {
-                this.SET_CURRENT_TOP_CATEGORY(newActive);
-            }
+        toggleCategory(item) {
+            item.filterPanel = !item.filterPanel;
         },
-        subCategoryClick(id, event){
-            event.stopImmediatePropagation();
-            event.preventDefault();
-            if (this.SUB_CATEGORIES_ITEM_ACTIVE === id) {
-                this.SET_CURRENT_SUB_CATEGORY(null);
-            } else {
-                this.SET_CURRENT_SUB_CATEGORY(id);
-            }
+
+        openMainCategory(category){
+          this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: category.id,
+            middleCategory: null,
+            lastCategory: null,
+          });
+          this.SET_CATEGORY_ID(category.id);
         },
-        subItemCategoryClick(id, event){
-            event.stopImmediatePropagation();
-            event.preventDefault();
-            // console.log('кликнули по итему подкатегории ', id, event);
-            this.SET_CATEGORY_ID(id);
+
+        openMiddleCategory(mainCategory, middleCategory){
+          this.SET_ALL_CURRENT_CATEGORIES({
+              mainCategory: mainCategory.id,
+              middleCategory: middleCategory.id,
+              lastCategory: null,
+          });
+          this.SET_CATEGORY_ID(middleCategory.id);
         },
+
+        openLastCategory(mainCategory, middleCategory, lastCategory){
+          this.SET_ALL_CURRENT_CATEGORIES({
+              mainCategory: mainCategory.id,
+              middleCategory: middleCategory.id,
+              lastCategory: lastCategory.id,
+          });
+          this.SET_CATEGORY_ID(lastCategory.id);
+        },
+
         changeFilterCategory(event, category){
-            event.stopImmediatePropagation();
             event.preventDefault();
+            if (this.SUB_CATEGORIES_ITEM_ACTIVE === category.id) {
+                this.SET_CURRENT_LAST_CATEGORY(null);
+            } else {
+                this.SET_CURRENT_LAST_CATEGORY(category.id);
+            }
             this.SET_TYPE_OF_PRODUCT(category);
         }
     },
@@ -183,10 +217,6 @@ export default {
       padding: 5px 0 5px 20px;
       cursor: pointer;
       &-child{
-        color: red;
-        font-size: 12px;
-        padding: 0px 0 0px 10px;
-        cursor: pointer;
       }
     }
     &__field{
@@ -238,6 +268,58 @@ export default {
     justify-content: flex-start;
     height: 30px;
   }
+}
+
+.sidebar_menu{
+  &__title{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 10px 10px 0;
+    div:first-child {
+      cursor: pointer;
+    }
+  }
+  &__subtitle{
+    .subtitle__row{
+      div:first-child {
+        cursor: pointer;
+      }
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 10px 10px 5px;
+      font-size: 14px;
+    }
+    .subtitle__list{
+      padding-left: 10px;
+    }
+    &-child{
+      cursor: pointer;
+      font-size: 13px;
+      line-height: 1.2;
+      padding: 5px 5px;
+      opacity: 0.8;
+    }
+
+  }
+}
+.sidebar_menu {
+
+  transition: all 0.3s ease;
+  &__open {
+    font-size: 12px;
+    transform: rotate(-90deg);
+    color:#4275D8;
+    > div{
+      color: red;
+    }
+  }
+  &__close {
+    font-size: 12px;
+    transform: rotate(90deg);
+  }
+
 }
 
 </style>

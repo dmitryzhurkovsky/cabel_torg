@@ -24,28 +24,6 @@ const routes = [
     component: () =>
       import("../views/Auth/Login.vue")
   },
-  // {
-  //   path: "/register",
-  //   name: "Register",
-  //   beforeEnter: guest,
-  //   component: () =>
-  //     import("../views/Auth/Register.vue")
-  // },
-  // {
-  //   path: "/restore",
-  //   name: "Restore",
-  //   beforeEnter: guest,
-  //   component: () =>
-  //     import("../views/Auth/Restore.vue")
-  // },
-  // {
-  //   path: "/verify/:hash",
-  //   name: "Verify",
-  //   beforeEnter: auth,
-  //   props: true,
-  //   component: () =>
-  //     import("../views/Auth/Verify.vue")
-  // },
   {
     path: "/offer",
     name: "Offer",
@@ -86,6 +64,7 @@ const routes = [
   {
     path: '/cart',
     name: 'cart',
+    meta: {name: 'Корзина'},
     component: () =>
         import("../views/Personal/cart.vue")
   },
@@ -131,17 +110,19 @@ const routes = [
         import("../views/Shipping.vue")
   },
   {
-    path: '/card_product_grid',
-    name: 'Card_product_grid',
+    path: '/card_product/:id',
+    name: 'Card_product',
+    meta: {name: 'Карточка товара'},
+    props: true,
     component: () =>
         import("../views/Card_product_grid.vue")
   },
-  {
-    path: '/card_product',
-    name: 'Card_product',
-    component: () =>
-        import("../views/Card_product.vue")
-  },
+  // {
+  //   path: '/card_product',
+  //   name: 'Card_product',
+  //   component: () =>
+  //       import("../views/Card_product.vue")
+  // },
   {
     path: '/contacts',
     meta: {name: 'Контактная информация'},

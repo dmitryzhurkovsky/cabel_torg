@@ -2,6 +2,7 @@
   <div id="app__component">
     <MenuWrapper/>
     <v-notification/>
+    <PopUp/>
     <Header/>
     <Breadcrumb/>
     <router-view></router-view>
@@ -16,6 +17,7 @@
   import Footer from "@/components/footer.vue";
   import vNotification from '@/components/notifications/v-notification.vue';
   import MenuWrapper from '@/components/header/menu-wrapper.vue';
+  import PopUp from '@/components/notifications/pop-up.vue';
 
   import { mapActions, mapMutations } from "vuex";
 
@@ -27,29 +29,34 @@
     },
 
     components:{
-      Header, Breadcrumb, Footer, vNotification, MenuWrapper
+      Header, Breadcrumb, Footer, vNotification, MenuWrapper, PopUp
     },
 
     // computed: {
     // },
 
     methods: {
-      ...mapMutations("header", ["UPDATE_VIEW_PARAMETERS"]),
-      ...mapActions("header", ["GET_CATEGORIES"]),
-      ...mapActions("auth", ["GET_USER_DATA"]),
+        ...mapMutations("header", ["UPDATE_VIEW_PARAMETERS"]),
+        ...mapActions("header", ["GET_CATEGORIES"]),
+        ...mapActions("auth", ["GET_USER_DATA", "USER"]),
+        ...mapActions("order", ["GET_USER_ORDER"]),
+        ...mapActions("favorite", ["GET_USER_FAVORITE"]),
 
-      setViewParametrs(){
-        this.UPDATE_VIEW_PARAMETERS(window.innerWidth);
-      }
+        setViewParametrs(){
+            this.UPDATE_VIEW_PARAMETERS(window.innerWidth);
+        }
     },
 
     async mounted() {
-      this.setViewParametrs();
-      window.addEventListener('resize', this.setViewParametrs);
-      await this.GET_CATEGORIES();
-      if (localStorage.getItem("authToken")) {
-        this.GET_USER_DATA();
-      }
+        // console.log('App mount');
+        this.setViewParametrs();
+        window.addEventListener('resize', this.setViewParametrs);
+        await this.GET_CATEGORIES();
+        await this.GET_USER_FAVORITE();
+        await this.GET_USER_ORDER();
+        if (localStorage.getItem("authToken")) {
+            await this.GET_USER_DATA();
+        }
     },
 
   };
@@ -185,7 +192,7 @@ body {
     font-size: 16px ;
     font-weight: 300;
     font-family: 'Rubik', sans-serif;
-    background: linear-gradient(180deg, rgba(246, 247, 249, 0) 0%, #F6F7F9 50.31%, rgba(246, 247, 249, 0) 100%);
+    background: #fff;
     &._lock {
         overflow: hidden;
     }
@@ -282,7 +289,7 @@ h3{
   background: #4275D8;
   border-radius: 6px;
   color:#fff;
-  padding: 8px 24px;
+  padding: 12px 24px;
   min-width:180px;text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -297,6 +304,18 @@ h3{
   &:hover{
     background: #5A5A5A;
   }
+
+.empty_black{
+  background: #F8FAFF;
+  border: 1.2px solid #423E48;
+  padding: 12px 24px;
+  &:hover {
+    background: #5A5A5A;
+  }
+}
+.blue{
+  padding: 12px 24px;
+}
 
 }
 .empty{

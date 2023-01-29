@@ -11,17 +11,16 @@ export default {
     },
     LENGTH(state) {
       return state.messages.length;
-    }
+    },
   },
 
   mutations: {
     ADD_MESSAGE(state, payload) {
-      // console.log(payload);
       state.messages.unshift(payload);
     },
     DELETE_MESSAGE(state) {
       state.messages.pop();
-    }
+    },
   },
 
   actions: {
