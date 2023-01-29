@@ -146,5 +146,10 @@ import { mapGetters } from 'vuex';
 }
 
 }
-
+.swiper-container{
+  width: 100%;
+}
+.swiper-wrapper {
+  justify-content: space-between;
+}
 </style>
