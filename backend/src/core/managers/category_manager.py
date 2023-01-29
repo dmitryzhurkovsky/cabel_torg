@@ -22,7 +22,7 @@ class CategoryManager(ListMixin, RetrieveMixin, DeleteMixin):
 
         result = await session.execute(
             select(Category.id).
-            filter(Category.parent_category_id.in_(parent_category_ids))
+            where(Category.parent_category_id.in_(parent_category_ids))
         )
         subcategories_ids = result.scalars().all()
 

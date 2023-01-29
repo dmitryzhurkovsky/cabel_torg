@@ -31,7 +31,7 @@ async def convert_filter_fields(filter_fields: QueryParams, session: AsyncSessio
     if search_letters := filter_fields.get('q'):
         category_ids_query = await session.execute(
             select(Category.id).
-            filter(Category.name.ilike(f'%{search_letters}'))
+            where(Category.name.ilike(f'%{search_letters}'))
         )
         category_ids = category_ids_query.scalars().all()
 

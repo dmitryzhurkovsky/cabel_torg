@@ -27,12 +27,12 @@ class ProductManager(
             limit: int = 12
     ) -> list:
         """Get filtered list of objects with pagination."""
-        options = cls.init_prefetch_related_fields(prefetch_fields=prefetch_fields)
+        options = cls.init_preloaded_fields(prefetch_fields=prefetch_fields)
         filter_fields = await convert_filter_fields(filter_fields, session=session)
 
         objects = await session.execute(
             select(cls.table).
-            filter(*filter_fields).
+            where(*filter_fields).
             options(*options).
             limit(limit).
             offset(offset)
@@ -52,7 +52,7 @@ class ProductManager(
             select(count()).
             select_from(
                 select(cls.table.id).
-                filter(*filter_fields).
+                where(*filter_fields).
                 subquery()
             )
         )

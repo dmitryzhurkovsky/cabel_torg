@@ -8,7 +8,7 @@ from src.models.abstract_model import BaseModel
 class Order(BaseModel):
     __tablename__ = 'orders'
 
-    promo_code = Column(String(50), nullable=True)
+    promo_code = Column(String(50))
 
     # requisites
     company_name = Column(String(50))
@@ -23,7 +23,7 @@ class Order(BaseModel):
     phone_number = Column(String(50))
     email = Column(String(128))
 
-    # delivery
+    # delivery information
     city = Column(String(50))
     address = Column(String(128))
     house = Column(String(12))
@@ -32,19 +32,19 @@ class Order(BaseModel):
     delivery_type_id = Column(ForeignKey('delivery_types.id'))
 
     # relations
-    products = relationship('ProductOrder', back_populates='order')
+    products = relationship('ProductOrder', back_populates='order', lazy='joined')
 
-    user_id = Column(ForeignKey('users.id'))
+    user_id = Column(ForeignKey('users.id', ondelete='CASCADE'))
     user = relationship('User', back_populates='orders')
 
 
 class ProductOrder(Base):
     __tablename__ = 'product_orders'
 
-    product_id = Column(ForeignKey('products.id'), primary_key=True)
-    product = relationship('Product', back_populates='added_to_orders')
+    product_id = Column(ForeignKey('products.id', ondelete='CASCADE'), primary_key=True)
+    product = relationship('Product', back_populates='added_to_orders', lazy='joined')
 
-    order_id = Column(ForeignKey('orders.id'))
+    order_id = Column(ForeignKey('orders.id', ondelete='CASCADE'), primary_key=True)
     order = relationship('Order', back_populates='products')
 
     amount = Column(Integer)

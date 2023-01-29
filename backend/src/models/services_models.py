@@ -15,7 +15,7 @@ class Article(BaseModel):
 
     @property
     def preview_text(self) -> str:
-        return self.text[:settings.PREVIEW_TEXT_LENGTH] if self.text else ''
+        return self.text[:settings.PREVIEW_CONTENT_LENGTH] if self.text else ''
 
 
 class Partner(Base):
@@ -30,4 +30,4 @@ class DeliveryType(Base):
     id = Column(Integer, index=True, primary_key=True)
 
     payload = Column(String(50))
-    orders = relationship('Order', back_populates='delivery_type')
+    orders = relationship('Order', back_populates='delivery_type', lazy='noload')

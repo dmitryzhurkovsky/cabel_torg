@@ -9,7 +9,7 @@ DEBUG = int(os.getenv('DEBUG', 0))
 CORS_ALLOWED_HEADERS = os.environ.get('CORS_ALLOWED_HEADERS', '').split(',')
 ORIGINS = os.environ.get('ORIGINS', '').split(',')
 REDIS_URL = os.getenv('REDIS_URL')
-PREVIEW_TEXT_LENGTH = os.getenv('PREVIEW_TEXT_LENGTH', 150)
+PREVIEW_CONTENT_LENGTH = os.getenv('PREVIEW_CONTENT_LENGTH', 150)
 
 # Database's settings
 DB_NAME = os.getenv('DATABASE_NAME')

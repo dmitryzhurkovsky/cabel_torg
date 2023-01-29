@@ -22,7 +22,7 @@ class UpdateMixin(BaseMixin):
 
         result = await session.execute(
             select(cls.table).
-            filter(cls.table.id == pk)
+            where(cls.table.id == pk)
         )
 
         return result.scalars().first()
@@ -36,13 +36,13 @@ class UpdateMixin(BaseMixin):
         await session.execute(
             update(cls.table).
             values(**(input_data if isinstance(input_data, dict) else input_data.__dict__)).
-            filter(*filter_fields)
+            where(*filter_fields)
         )
         await session.commit()
 
         result = await session.execute(
             select(cls.table).
-            filter(*filter_fields)
+            where(*filter_fields)
         )
 
         return result.scalars().first()

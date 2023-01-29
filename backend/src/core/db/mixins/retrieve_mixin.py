@@ -19,12 +19,12 @@ class RetrieveMixin(BaseMixin):
     ) -> TableType | HTTPException:
         """Get object by primary key or by another fields"""
 
-        options = cls.init_prefetch_related_fields(prefetch_fields=prefetch_fields)
+        options = cls.init_preloaded_fields(prefetch_fields=prefetch_fields)
         filtered_fields = cls.init_filtered_fields(filter_fields=kwargs)
 
         query = await session.execute(
             select(cls.table).
-            filter(*filtered_fields).
+            where(*filtered_fields).
             options(*options)
         )
         obj = query.scalar_one_or_none()

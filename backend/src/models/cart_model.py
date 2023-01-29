@@ -12,11 +12,11 @@ class Cart(Base):
     """
     __tablename__ = 'carts'
 
-    product_id = Column(ForeignKey("products.id"), primary_key=True)
-    product = relationship("Product", back_populates="added_to_carts")
+    product_id = Column(ForeignKey('products.id', ondelete='CASCADE'), primary_key=True)
+    product = relationship('Product', back_populates='added_to_carts')
 
-    user_id = Column(ForeignKey("users.id"), primary_key=True)
-    user = relationship("User", back_populates="products_in_cart")
+    user_id = Column(ForeignKey('users.id', ondelete='CASCADE'), primary_key=True)
+    user = relationship('User', back_populates='products_in_cart')
 
     amount = Column(Integer)
 

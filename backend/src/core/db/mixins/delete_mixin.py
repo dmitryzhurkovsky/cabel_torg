@@ -16,7 +16,7 @@ class DeleteMixin(BaseMixin):
 
         await session.execute(
             delete(cls.table).
-            filter(and_(True, *filtered_fields))
+            where(and_(True, *filtered_fields))
         )
         await session.commit()
 

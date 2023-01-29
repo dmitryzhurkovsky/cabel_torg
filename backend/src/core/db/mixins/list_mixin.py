@@ -13,17 +13,19 @@ class ListMixin(BaseMixin):
             filter_fields: dict = {},  # noqa
             search_fields: tuple = (),
             order_fields: tuple = (),
+            custom_options: tuple = (),
             offset: int = 0,
             limit: int = 100,
     ) -> list:
         """Get list of objects"""
-        options = cls.init_prefetch_related_fields(prefetch_fields=prefetch_fields)
+        options = cls.init_preloaded_fields(prefetch_fields=prefetch_fields)
 
         objects = await session.execute(
             select(cls.table).
             filter_by(**filter_fields).
-            filter(*search_fields).
+            where(*search_fields).
             options(*options).
+            options(*custom_options).
             order_by(*order_fields).
             limit(limit).
             offset(offset)
