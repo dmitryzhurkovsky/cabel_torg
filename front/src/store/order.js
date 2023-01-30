@@ -18,10 +18,6 @@ export default {
         return totalOrderCost;
       },
       TOTAL_ORDER_QUANTITY(state) {
-        // const position = state.orders.length;
-        // let totalGoods = 0;
-        // state.orders.forEach(item => {totalGoods = totalGoods + item.amount});
-        // return 'позиций - ' + position + ' (товаров ' + totalGoods + ')';
         return state.orders.length;
       },
       IS_APPLICATION_OPEN(state) {
@@ -64,8 +60,8 @@ export default {
     },
 
     actions: {
-      async GET_USER_ORDER({ commit, rootGetters } ){
-          if (rootGetters['auth/USER']) {
+      async GET_USER_ORDER({ commit } ){
+          if (localStorage.getItem("authToken")) {
               try {
                 const response = await axios.get(process.env.VUE_APP_API_URL + 'carts/mine/products');
                 commit("SET_ORDERS", response.data);
