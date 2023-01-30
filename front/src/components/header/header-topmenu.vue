@@ -3,13 +3,16 @@
     <div class="header__content _container">
         <div class="header__topmenu topmenu flex-center">
           <div class="topmenu__left flex-center">
-            <div class="topmenu__item">
-              <div class="dropdown icon-burger catalog__btn" @click="toggleMenu()">Каталог товаров</div>
+            <div class="topmenu__item" @click="toggleMenu()">
+              <div class="dropdown icon-burger catalog__btn">Каталог товаров</div>
               <CatalogMenu v-if = "IS_CATALOG_OPEN"/>
             </div>
-            <div class="topmenu__item" @mouseenter="clearSearchString()">
+            <div class="topmenu__item" 
+                @mouseenter="onCustomerIconEnter()"
+                @mouseleave="onIconLeave()"
+            >
               <div class="dropdown">Покупателям
-                <div class="dropdown__wrapper">
+                <div :class="[!customerHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
                   <div class="dropdown__content">
                     <a @click="openPage('/how_to_work', $event)">Как оформить заказ</a>
                     <a @click="openPage('/shipping', $event)">Оплата и доставка</a>
@@ -20,9 +23,12 @@
                 </div>
               </div>
             </div>
-            <div class="topmenu__item"  @mouseenter="clearSearchString()">
+            <div class="topmenu__item"  
+                @mouseenter="onAboutIconEnter()"
+                @mouseleave="onIconLeave()"
+            >
               <div class="dropdown">О нас
-                <div class="dropdown__wrapper">
+                <div :class="[!aboutHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
                   <div class="dropdown__content ">
                     <a @click="openPage('/about', $event)">О компании</a>
                     <a @click="openPage('/contacts', $event)">Контактная информация</a>
@@ -52,6 +58,13 @@ export default {
     CatalogMenu, TopMenuActions
   },
 
+  data: function(){
+    return {
+      customerHover: false,
+      aboutHover: false,
+    }
+  },
+
   computed: {
     ...mapGetters("header", ["IS_CATALOG_OPEN", "TOP_CATEGORIES"]),
   },
@@ -68,14 +81,33 @@ export default {
     openPage(page, event) {
       event.stopImmediatePropagation();
       event.preventDefault();
+      this.customerHover = false;
+      this.aboutHover = false;
       if (this.$router.path != page) {
           this.$router.push(page);
           this.clearSearchString();
       }
     },
+    
     clearSearchString(){
       this.SET_SEARCH_STRING('');
-    }
+    },
+
+    onCustomerIconEnter() {
+      this.SET_SEARCH_STRING('');
+      this.customerHover = true;
+    },
+
+    onAboutIconEnter() {
+      this.SET_SEARCH_STRING('');
+      this.aboutHover = true;
+    },
+
+    onIconLeave() {
+      this.customerHover = false;
+      this.aboutHover = false;
+    },
+  
   }
 }
 </script>

@@ -4,8 +4,8 @@
         <div class="">
             <div class="group">
                 <label class="label">Ваше имя</label>
-                <input type="text" class="input" :class="{ 'is-invalid': ERRORS.email }" v-model="email">
-                <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>
+                <input type="text" class="input" :class="{ 'is-invalid': ERRORS.name }" v-model="name">
+                <div class="error-message" v-if="ERRORS.name"> {{ ERRORS.name }} </div>
             </div>
             <div class="group">
                 <label class="label">Контактный телефон</label>
@@ -28,17 +28,15 @@
 </template>
 
 <script>
-import { createElementBlock } from '@vue/runtime-core';
 
   import { mapGetters, mapMutations } from "vuex";
-  import { isValidEmail } from "../../common/validation";
 
   export default {
     name: "RequestCall",
 
     data: function() {
       return {
-          email     : '',
+          name     : '',
           phone: '',
           isLoading: false,
       }
@@ -70,8 +68,8 @@ import { createElementBlock } from '@vue/runtime-core';
             const errorsInData = {};
             this.SET_ERRORS(errorsInData);
 
-            if (!isValidEmail(this.email)) {
-                errorsInData.email = 'Укажите валидный адрес эл. почты'
+            if (!this.name) {
+                errorsInData.name = 'Укажите валидное имя'
             }
             if (!this.phone) {
                 errorsInData.phone = 'Укажите номер телефона'
@@ -80,7 +78,7 @@ import { createElementBlock } from '@vue/runtime-core';
                 this.SET_ERRORS(errorsInData);
             } else {
                 const data = {
-                    email: this.email,
+                    name: this.name,
                     phone_number: this.phone,
                 };
                 // Тут посылаем на бэк запрос и ждем ответа, по результатам фомируем окно с ответом

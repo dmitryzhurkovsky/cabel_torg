@@ -132,10 +132,10 @@ export default {
       }
     },
 
-    CREATE_MENU_ITEMS(state, categorie) {
+    CREATE_MENU_ITEMS(state, categories) {
       let menuItems = [];
-      const mainLevel = categorie.filter(item => item.parent_category_id === null);
-      let otherItems = categorie.filter(item => item.parent_category_id !== null);
+      const mainLevel = categories.filter(item => item.parent_category_id === null);
+      let otherItems = categories.filter(item => item.parent_category_id !== null);
       menuItems = [...mainLevel];
       menuItems.forEach(item => {
         item.selected = false;
@@ -171,9 +171,11 @@ export default {
     SET_IS_POPUP_OPEN(state, status) {
       state.isPopUpOpen = status;
     },
+
     SET_POPUP_ACTION(state, action) {
       state.popUpAction = action;
     },
+
     SET_POPUP_MESSAGE(state, msg) {
       state.popUpMessage = {...msg};
     }

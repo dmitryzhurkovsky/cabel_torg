@@ -46,8 +46,8 @@ export default {
   },
 
   actions: {
-    async GET_USER_FAVORITE({ commit, rootGetters } ) {
-        if (rootGetters['auth/USER']) {
+    async GET_USER_FAVORITE({ commit } ) {
+        if (localStorage.getItem("authToken")) {
             try {
               const response = await axios.get(process.env.VUE_APP_API_URL + 'watch_lists/mine/products');
               commit("SET_FAVORITES", response.data);

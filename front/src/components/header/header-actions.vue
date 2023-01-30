@@ -1,9 +1,12 @@
 <template lang="html">
   <div class="topmenu__right client-bar flex-center">
-    <div class="topmenu__item right-direction" @mouseenter="clearSearchString()">
+    <div class="topmenu__item right-direction"
+        @mouseenter="onFavoriteIconEnter()"
+        @mouseleave="onIconLeave()"
+    >
       <div class="dropdown icon-favorite">
-        <div class="dropdown__wrapper">
-          <HeaderFavorite/>
+        <div :class="[!favoriteHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
+          <HeaderFavorite @click.stop = "onIconLeave()"/>
         </div>
 
       </div>
@@ -13,9 +16,14 @@
         :top = '12'
       />
     </div>
-    <div class="topmenu__item right-direction" @mouseenter="clearSearchString()">
-      <div class="dropdown" :class="[!USER ? 'icon-user' : 'icon-user-login']">
-        <div v-if = "IS_OPEN_MAIN_LOGIN && !USER" class="dropdown__wrapper qq">
+    <div class="topmenu__item right-direction" 
+        @mouseenter="onUserIconEnter()"
+        @mouseleave="onIconLeave()"
+    >
+      <div class="dropdown" 
+          :class="[!USER ? 'icon-user' : 'icon-user-login']"
+      >
+        <div v-if = "IS_OPEN_MAIN_LOGIN && !USER" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
           <div class="dropdown__content popup-cart">
             <div class="avatar__box">
               <div class="avatar icon-user flex-center"></div>
@@ -35,7 +43,7 @@
           </div>
           <!-- <UserActions/> -->
         </div>
-        <div v-if = "IS_OPEN_MAIN_LOGIN && USER" class="dropdown__wrapper">
+        <div v-if = "IS_OPEN_MAIN_LOGIN && USER" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
 
           <div class="dropdown__content popup-cart">
             <div class="avatar__box">
@@ -58,10 +66,13 @@
       </div>
 
     </div>
-    <div class="topmenu__item right-direction" @mouseenter="clearSearchString()">
+    <div class="topmenu__item right-direction" 
+        @mouseenter="onCartIconEnter()"
+        @mouseleave="onIconLeave()"
+    >
       <div class="dropdown icon-cart">
-        <div class="dropdown__wrapper">
-          <HeaderCart/>
+        <div :class="[!cartHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
+          <HeaderCart @click.stop = "onIconLeave()" />
         </div>
       </div>
       <IconQuantity 
@@ -87,6 +98,9 @@ export default {
   data: function() {
       return {
           isLoading: false,
+          userHover: false,
+          cartHover: false,
+          favoriteHover: false,
       }
   },
 
@@ -106,6 +120,8 @@ export default {
     
     handleClick (URL, auth_type) {
         // this.clearSearchString();
+        this.cartHover = false;
+        this.userHover = false;
         if (this.$route.path != URL) {
             this.SET_TYPE(auth_type);
             this.$router.push(URL);
@@ -125,6 +141,27 @@ export default {
 
     clearSearchString(){
       this.SET_SEARCH_STRING('');
+    },
+
+    onUserIconEnter(){
+      this.SET_SEARCH_STRING('');
+      this.userHover = true;
+    },
+
+    onCartIconEnter(){
+      this.SET_SEARCH_STRING('');
+      this.cartHover = true;
+    },
+
+    onFavoriteIconEnter() {
+      this.SET_SEARCH_STRING('');
+      this.favoriteHover = true;
+    },
+
+    onIconLeave() {
+      this.userHover = false;
+      this.cartHover = false;
+      this.favoriteHover = false;
     },
 
   },

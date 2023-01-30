@@ -539,6 +539,9 @@ input{
   &:hover{
     color:#4275D8;
   }
+  .wrapper__show{
+    display: block;
+  }
 
   &__content{
     background: #FFFFFF;
@@ -565,7 +568,7 @@ input{
   }
 }
 
-.dropdown:hover .dropdown__wrapper {
+.dropdown.dropdown__wrapper {
   display: block;
 }
 
