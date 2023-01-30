@@ -1,6 +1,6 @@
 <template>
       <img v-if = "images" class="" :src=getImagePath(images) alt="">
-      <img v-if = "!images" class="" src="../../assets/no_image.svg" alt="">
+      <img v-if = "!images" class="" src="../../assets/no_image.png" alt="">
 </template>
 
 <script>
@@ -28,6 +28,7 @@ export default {
 <style lang="scss" scoped>
 img{
     max-width: 100%;
+    //max-height: 162px;
 }
 
 </style>

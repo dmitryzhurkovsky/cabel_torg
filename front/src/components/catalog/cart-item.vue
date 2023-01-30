@@ -163,6 +163,7 @@
     &__img {
         width: 100%;
         flex-basis: 20%;
+        text-align: center;
         img{
             max-width: 100%;
             object-fit: fill;

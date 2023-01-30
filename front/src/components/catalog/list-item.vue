@@ -164,6 +164,7 @@ export default {
       width: 100%;
       flex-basis: 25%;
       cursor: pointer;
+      text-align: center;
       img{
         max-width: 100%;
       }
