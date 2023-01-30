@@ -138,6 +138,7 @@ import { mapGetters } from 'vuex';
   justify-content: space-around;
   }
   &__item{
+    text-align: center;
 
 
   }

@@ -319,6 +319,7 @@ export default {
   text-align: center;
 }
 .center-text{
+  width: 100%;
   text-align: center;
 }
 </style>
