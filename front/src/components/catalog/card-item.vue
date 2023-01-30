@@ -162,6 +162,8 @@ export default {
   &__img {
     width: 100%;
     cursor: pointer;
+    text-align: center;
+
   }
 
   &__tag{
@@ -271,9 +273,12 @@ export default {
     }
 
   }
+}
 
-
-
+</style>
+<style lang="scss">
+.item-card__img img{
+  max-height: 162px;
 }
 
 </style>
