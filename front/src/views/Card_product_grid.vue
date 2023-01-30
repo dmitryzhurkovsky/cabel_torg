@@ -117,6 +117,7 @@
    computed: {
       ...mapGetters("order", ["ORDERS"]),
       ...mapGetters("favorite", ["FAVORITES"]),
+      ...mapGetters("header", ["ALL_CATEGORIES"]),
 
       ChangeParameters(){
         return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES) + String(this.isWish) + 
@@ -144,7 +145,6 @@
           return
         } else if (this.quantity < 0) return
 
-        console.log('QQQQ');
         const itemData = {
           amount: 1,
           product: {
@@ -200,12 +200,6 @@
     async mounted(){
         this.SET_SEARCH_STRING('');
         this.CHANGE_BREADCRUMB(0);
-        this.ADD_BREADCRUMB({
-          name: this.$router.currentRoute.value.meta.name,
-          path: this.$router.currentRoute.value.path,
-          type: "global",
-          class: ""
-        });
         try {
             const response = await axios.get(process.env.VUE_APP_API_URL + 'products/' + this.id);
             this.cartItemData = response.data;
@@ -213,6 +207,49 @@
             console.log(e);
             this.ADD_MESSAGE({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
         }
+
+        const mainBreadCrumb = {
+          name: 'Каталог',
+          path: '/catalog',
+          type: 'local',
+          class: '',
+          category: 1,
+          level: 'root',
+        }
+        this.ADD_BREADCRUMB(mainBreadCrumb);
+
+        const chein = [];
+        const category = this.cartItemData.category;
+        chein.push(category);
+        if (category.parent_category_id) {
+          const category1 = this.ALL_CATEGORIES.filter(item => item.id === category.parent_category_id)[0];
+          chein.push(category1);
+          if (category1.parent_category_id) {
+            const category2 = this.ALL_CATEGORIES.filter(item => item.id === category1.parent_category_id )[0];
+            chein.push(category2);
+          }
+        }
+
+        const level = ['last', 'sub', 'top'];
+
+        for (let i = 0; i < chein.length; i++) {
+          const currBreadCrumb  = {
+            name: chein[chein.length - 1 - i].name,
+            path: '/catalog',
+            type: 'local',
+            class: '',
+            category: chein[chein.length - 1 - i].id,
+            level: level[chein.length - 1 - i],
+          };
+          this.ADD_BREADCRUMB(currBreadCrumb);
+        }
+
+        this.ADD_BREADCRUMB({
+          name: this.cartItemData.name,
+          path: this.$router.currentRoute.value.path,
+          type: "global",
+          class: ""
+        });
     },
 
   }

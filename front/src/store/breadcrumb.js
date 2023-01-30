@@ -1,14 +1,16 @@
+const defaultRoute = {
+  name: 'Главная',
+  path: '/',
+  type: 'global',
+  class: '',
+}
+
 export default {
   namespaced: true,
 
   state: {
     stack : [
-      {
-          name: 'Главная',
-          path: '/',
-          type: 'global',
-          class: '',
-      },
+      defaultRoute,
     ],
   },
 
@@ -34,12 +36,7 @@ export default {
     },
 
     RESET_ALL_BREADCRUMBS(state, breadCrumbs) {
-      const main = {
-        name: 'Главная',
-        path: '/',
-        type: 'global',
-        class: '',
-      };
+      const main = defaultRoute;
       state.stack = [main, ...breadCrumbs];
     }
   },
@@ -70,7 +67,7 @@ export default {
             const data = { mainCategory: getters.STACK[element - 1].category, middleCategory: route.category, lastCategory: null};
             dispatch("header/SET_ALL_CURRENT_CATEGORIES", data, {root: true});
             commit("query/SET_CATEGORY_ID", route.category, {root: true});
-        } else if (route === 'last') {
+        } else if (route.level === 'last') {
             const data = { mainCategory: getters.STACK[element - 2].category, middleCategory: getters.STACK[element - 1].category, lastCategory: route.category};
             dispatch("header/SET_ALL_CURRENT_CATEGORIES", data, {root: true});
             commit("query/SET_CATEGORY_ID", route.category, {root: true});

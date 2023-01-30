@@ -1,7 +1,4 @@
 <template lang="html">
-<!--      <div v-if = "CATALOG_ITEM_ACTIVE === 1">first category item</div>-->
-<!--      <div v-if = "CATALOG_ITEM_ACTIVE === 2">second category item</div>-->
-<!--      <div v-if = "CATALOG_ITEM_ACTIVE === 3">third category item</div>-->
       <div class="catalog__menu menu__container">
         <div class="menu active _container">
           <div class="menu__scroll">
