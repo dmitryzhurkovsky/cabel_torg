@@ -16,7 +16,8 @@ async def convert_filter_fields(filter_fields: QueryParams, session: AsyncSessio
     """Convert filter values to SQLALCHEMY filter expressions"""
     converted_filter_fields = []
 
-    if price_gte := filter_fields.get('price_gte'):
+    price_gte = filter_fields.get('price_gte')
+    if price_gte:
         converted_filter_fields.append(Product.price >= Decimal(price_gte))
     else:
         converted_filter_fields.append(Product.price > Decimal(0))
