@@ -7,19 +7,21 @@ from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.datastructures import QueryParams
 
-from src.core.managers.category_manager import CategoryManager
 from src.models import Category
 from src.models.product_models import Product
 
 
 async def convert_filter_fields(filter_fields: QueryParams, session: AsyncSession = None) -> list:
     """Convert filter values to SQLALCHEMY filter expressions"""
+    from src.core.managers.category_manager import CategoryManager
+
     converted_filter_fields = []
 
-    if price_gte := filter_fields.get('price_gte'):
+    price_gte = filter_fields.get('price_gte')
+    if price_gte:
         converted_filter_fields.append(Product.price >= Decimal(price_gte))
     else:
-        converted_filter_fields.append(Product.price >= Decimal(0))
+        converted_filter_fields.append(Product.price > Decimal(0))
 
     if price_lte := filter_fields.get('price_lte'):
         converted_filter_fields.append(Product.price <= Decimal(price_lte))
@@ -80,3 +82,7 @@ def clean_string_from_spaces_and_redundant_symbols(dirty_string: str) -> str | N
 
 def get_tag_name(raw_field: Element) -> str:
     return raw_field.tag.split('}')[-1]
+
+
+def calculate_price_with_discount(product: Product, discount: int) -> Decimal:
+    return Decimal(product.price - (product.price * discount / 100))

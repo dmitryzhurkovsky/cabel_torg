@@ -27,4 +27,5 @@ async def obtain_pair_of_tokens_by_email_and_password(
 @auth_router.post('/refresh', status_code=status.HTTP_201_CREATED)
 async def obtain_pair_of_tokens_by_refresh_token(refresh_token: str = Cookie(None)):
     await AuthService.get_new_access_and_refresh_tokens_using_old_refresh_token(
-        old_refresh_token=refresh_token)
+        old_refresh_token=refresh_token
+    )

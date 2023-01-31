@@ -2,7 +2,8 @@ from sqlalchemy import (
     Column,
     ForeignKey,
     Integer,
-    String
+    String,
+    CheckConstraint
 )
 from sqlalchemy.orm import backref, relationship
 
@@ -29,6 +30,11 @@ class Category(Base1CModel):
         'Category',
         backref=backref('parent_category', remote_side=[id]),
         viewonly=True,
+    )
+    discount = Column(Integer)
+
+    __tableargs__ = (
+        CheckConstraint(discount < 100, name='check_discount_less_than_100'),
     )
 
     def __str__(self):

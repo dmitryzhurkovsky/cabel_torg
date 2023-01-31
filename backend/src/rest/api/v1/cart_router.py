@@ -23,9 +23,6 @@ async def get_product(
     return await CartManager.list(
         session=session,
         filter_fields={'user_id': user.id},
-        prefetch_fields=(
-            CartManager.table.product,
-        )
     )
 
 
