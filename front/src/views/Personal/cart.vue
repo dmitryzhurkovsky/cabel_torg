@@ -8,7 +8,6 @@
           <div class="cart__block">
             <h3>Товары в корзине: <span>{{ TOTAL_ORDER_QUANTITY }}</span></h3>
 
-<!--            Если корзина пуста то это выводится, и сверху ноль возле Корзины-->
             <div v-if = "ORDERS.length === 0" class="cart__list">
               <div class="cart__empty__item">Ваша корзина пуста</div>
               <a class="_link" @click.prevent = "openPage('/catalog')">
@@ -18,9 +17,8 @@
                 Вернуться к покупкам
               </a>
             </div>
-            <!-- Если в корзине есть товар, и сверху число товаров возле Корзины-->
 
-            <div  v-if = "ORDERS.length !== 0" class="cart__list">
+            <div v-if = "ORDERS.length !== 0" class="cart__list">
               <CartItem  
                 class="cart__item"
                 v-for = "cartItem in ORDERS"
@@ -28,19 +26,19 @@
                 :cartItem = cartItem
               />
             </div>
-            <div class="cart__footer flex-center">
+            <div v-if = "ORDERS.length !== 0" class="cart__footer flex-center">
               <div class="group cart__promo">
                 <label for="promo" class="label">Промокод</label>
                 <div class="input__box">
-                  <input id="promo" type="text" class="input">
-                  <button class="btn black">Применить</button>
+                  <input id="promo_code" type="text" v-model="promo_code" autocomplete=off>
+                  <button class="btn black" @click = "checkPromoCod()">Применить</button>
                 </div>
               </div>
               <div class="cart__summary">
                 <div class="_footnote">* Сумма указана с учетом НДС</div>
                 <div class="label flex-center ">
                   Общая стоимость:
-                  <span>{{  TOTAL_ORDER_COST }}</span>
+                  <span>{{ TOTAL_ORDER_COST }}</span>
                    BYN
                 </div>
                 <div class="">
@@ -61,26 +59,27 @@
               <div class="about__paragraph__box flex-center">
                 <div class="group table3x">
                   <label for="city" class="label">Город / населенный пункт</label>
-                  <input id="city" type="text" class="input">
+                  <input id="city" type="text" :class="{ 'is-invalid': ERRORS.city }" v-model="city" autocomplete=off>
+                  <div class="error-message" v-if="ERRORS.city"> {{ ERRORS.city }} </div>
                 </div>
                 <div class="radio__list table3x">
                   <div class="radio">
-                    <input id="radio-1" name="radio" type="radio" checked>
+                    <input id="radio-1" name="radio" type="radio" checked value="0">
                     <label for="radio-1" class="radio-label">Самовывоз со склада в г. Минск (9:00-18:00), <b>бесплатно</b></label>
                   </div>
 
                   <div class="radio">
-                    <input id="radio-2" name="radio" type="radio">
+                    <input id="radio-2" name="radio" type="radio" value="1">
                     <label  for="radio-2" class="radio-label">Самовывоз со склада в г. Брест (9:00-18:00), <b>бесплатно</b></label>
                   </div>
 
                   <div class="radio">
-                    <input id="radio-3" name="radio" type="radio">
+                    <input id="radio-3" name="radio" type="radio" value="2">
                     <label  for="radio-3" class="radio-label">Доставка по РБ при заказе от 500 рублей, <b>бесплатно</b></label>
                   </div>
 
                   <div class="radio">
-                    <input id="radio-4" name="radio" type="radio">
+                    <input id="radio-4" name="radio" type="radio" value="3">
                     <label  for="radio-4" class="radio-label">Платная доставка, стоимость обсуждается индивидуально</label>
                   </div>
 
@@ -88,12 +87,14 @@
 
                 <div class="table3x">
                   <div class="group">
-                    <label for="city" class="label">Улица</label>
-                    <input id="city" type="text" class="input">
+                    <label for="address" class="label">Улица</label>
+                    <input id="address" type="text" :class="{ 'is-invalid': ERRORS.address }" v-model="address" autocomplete=off>
+                    <div class="error-message" v-if="ERRORS.address"> {{ ERRORS.address }} </div>
                   </div>
                   <div class="group__row flex-center">
                     <div class="group">
-                      <input id="city" type="text" class="input">
+                      <input id="house" type="text" :class="{ 'is-invalid': ERRORS.house }" v-model="house" autocomplete=off>
+                      <div class="error-message" v-if="ERRORS.house"> {{ ERRORS.house }} </div>
                     </div>
                     <div class="group">
                       <input id="city" type="text" class="input">
@@ -109,16 +110,19 @@
               </div>
               <div class="about__paragraph__box flex-center group__row">
                 <div class="group ">
-                  <label for="" class="label">ФИО</label>
-                  <input id="" type="text" class="input">
+                  <label for="full_name" class="label">ФИО</label>
+                  <input id="full_name" type="text" :class="{ 'is-invalid': ERRORS.full_name }" v-model="full_name" autocomplete=off>
+                  <div class="error-message" v-if="ERRORS.full_name"> {{ ERRORS.full_name }} </div>
                 </div>
                 <div class="group ">
-                  <label for="" class="label">Номер телефона</label>
-                  <input id="" type="text" class="input">
+                  <label for="phone_number" class="label">Номер телефона</label>
+                  <input id="phone_number" type="text" :class="{ 'is-invalid': ERRORS.phone_number }" v-model="phone_number" autocomplete=off>
+                  <div class="error-message" v-if="ERRORS.phone_number"> {{ ERRORS.phone_number }} </div>
                 </div>
                 <div class="group ">
-                  <label for="" class="label">Email</label>
-                  <input id="" type="text" class="input">
+                  <label for="email" class="label">Email</label>
+                  <input id="email" type="text" :class="{ 'is-invalid': ERRORS.email }" v-model="email" autocomplete=off>
+                  <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>
                 </div>
 
 
@@ -132,44 +136,39 @@
 
                   <div class="group__row flex-center">
                     <div class="group">
-                      <label for="city" class="label">Наименование компании</label>
-                      <input id="city" type="text" class="input">
+                      <label for="company_name" class="label">Наименование компании</label>
+                      <input id="company_name" type="text" :class="{ 'is-invalid': ERRORS.company_name }" v-model="company_name" autocomplete=off>
+                      <div class="error-message" v-if="ERRORS.company_name"> {{ ERRORS.company_name }} </div>
                     </div>
                     <div class="group">
-                      <label for="city" class="label">Расчетный счет IBAN</label>
-                      <input id="city" type="text" class="input">
+                      <label for="IBAN" class="label">Расчетный счет IBAN</label>
+                      <input id="IBAN" type="text" :class="{ 'is-invalid': ERRORS.IBAN }" v-model="IBAN" autocomplete=off>
+                      <div class="error-message" v-if="ERRORS.IBAN"> {{ ERRORS.IBAN }} </div>
                     </div>
                   </div>
 
                 <div class="group__row flex-center">
                   <div class="group">
-                    <label for="city" class="label">Наименование компании</label>
-                    <input id="city" type="text" class="input">
+                    <label for="unp" class="label">УНП</label>
+                    <input id="unp" type="text" :class="{ 'is-invalid': ERRORS.unp }" v-model="unp" autocomplete=off>
+                    <div class="error-message" v-if="ERRORS.unp"> {{ ERRORS.unp }} </div>
                   </div>
                   <div class="group">
-                    <label for="city" class="label">Расчетный счет IBAN</label>
-                    <input id="city" type="text" class="input">
-                  </div>
-                </div>
-
-                <div class="group__row flex-center">
-                  <div class="group">
-                    <label for="city" class="label">УНП</label>
-                    <input id="city" type="text" class="input">
-                  </div>
-                  <div class="group">
-                    <label for="city" class="label">БИК</label>
-                    <input id="city" type="text" class="input">
+                    <label for="BIC" class="label">БИК</label>
+                    <input id="BIC" type="text" :class="{ 'is-invalid': ERRORS.BIC }" v-model="BIC" autocomplete=off>
+                    <div class="error-message" v-if="ERRORS.BIC"> {{ ERRORS.BIC }} </div>
                   </div>
                 </div>
                 <div class="group__row flex-center">
                   <div class="group">
-                    <label for="city" class="label">Юридический адрес</label>
-                    <input id="city" type="text" class="input">
+                    <label for="legal_address" class="label">Юридический адрес</label>
+                    <input id="legal_address" type="text" :class="{ 'is-invalid': ERRORS.legal_address }" v-model="legal_address" autocomplete=off>
+                    <div class="error-message" v-if="ERRORS.legal_address"> {{ ERRORS.legal_address }} </div>
                   </div>
                   <div class="group">
-                    <label for="city" class="label">Обслуживающий банк</label>
-                    <input id="city" type="text" class="input">
+                    <label for="serving_bank" class="label">Обслуживающий банк</label>
+                    <input id="serving_bank" type="text" :class="{ 'is-invalid': ERRORS.serving_bank }" v-model="serving_bank" autocomplete=off>
+                    <div class="error-message" v-if="ERRORS.serving_bank"> {{ ERRORS.serving_bank }} </div>
                   </div>
                 </div>
 
@@ -190,12 +189,12 @@
                     специалист свяжется с вами для подтверждения заказа.</p>
                 </div>
                 <div class="cart__summary">
-                  <div class="summary__item">Стоимость товаров: <span>192.90</span>BYN</div>
+                  <div class="summary__item">Стоимость товаров: <span>{{ TOTAL_ORDER_COST }}</span>BYN</div>
                   <div class="summary__item">Стоимость доставки: <span>0.0</span>BYN</div>
-                  <div class="summary__item">Скидка по промокоду: <span>2.0</span>BYN</div>
-                  <div class="summary__item">Итоговая стоимость: <span><b>192.90</b></span>BYN</div>
+                  <div class="summary__item">Скидка по промокоду: <span>{{ promo_price }}</span></div>
+                  <div class="summary__item">Итоговая стоимость: <span><b>{{ (TOTAL_ORDER_COST - promo_price).toFixed(2) }}</b></span>BYN</div>
                   <div class="_footnote">* Сумма указана с учетом НДС</div>
-                  <button class="btn">Оформить заказ</button>
+                  <button class="btn" @click="sendOrderRequest()">Оформить заказ</button>
 
                 </div>
 
@@ -214,6 +213,7 @@
 <script>
   import {mapActions, mapGetters, mapMutations} from 'vuex'
   import CartItem from '@/components/catalog/cart-item.vue';
+  import { isValidEmail } from "../../common/validation";
 
   export default {
     name: 'cart',
@@ -222,16 +222,39 @@
       CartItem
     },
 
+    data: function(){
+      return{
+        promo_code: "",
+        company_name: "",
+        unp: "",
+        legal_address: "",
+        IBAN: "",
+        BIC: "",
+        serving_bank: "",
+        full_name: "",
+        phone_number: "",
+        email: "",
+        city: "",
+        address: "",
+        house: "",
+        flat: "-",
+        delivery_type_id: 1,
+        promo_price: 0,
+        isLoading: false,
+      }
+    },
+
     computed: {
       ...mapGetters("order", ["ORDERS", "TOTAL_ORDER_QUANTITY", "TOTAL_ORDER_COST", "IS_APPLICATION_OPEN"]),
-
+      ...mapGetters("auth",["ERRORS", "USER"]),
     },
 
     methods: {
-      ...mapActions("order", ["GET_USER_ORDER"]),
+      ...mapActions("order", ["GET_USER_ORDER", "SEND_ORDER_REQUEST"]),
       ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
       ...mapMutations("order", ["SET_IS_APPLICATION_OPEN"]),
       ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
+      ...mapMutations("auth", ["SET_ERRORS"]),
 
       openPage(page) {
           if (this.$router.path != page) {
@@ -239,6 +262,84 @@
           }
       },
 
+      checkPromoCod(){
+        console.log('Is ' + this.promo_code + ': promo cod available');
+      },
+
+      async sendOrderRequest(){
+        const orderProducts = [];
+        this.ORDERS.forEach(item => orderProducts.push({amount: item.amount, id: item.product.id}));
+
+        if (this.isLoading) return;
+
+        this.isLoading = true;
+        const errorsInData = {};
+        this.SET_ERRORS(errorsInData);
+
+        if (!this.company_name) {
+            errorsInData.company_name = 'Укажите название организации'
+        }
+        if (!this.unp || this.unp.toString().length !== 9) {
+            errorsInData.unp = 'Укажите валидный УНП'
+        }
+        if (!this.legal_address) {
+            errorsInData.legal_address = 'Укажите адрес организации'
+        }
+        if (!this.IBAN || this.IBAN.toString().length !== 28) {
+            errorsInData.IBAN = 'Укажите валидный IBAN счет'
+        }
+        if (!this.BIC || this.BIC.toString().length < 6) {
+            errorsInData.BIC = 'Укажите валидный BIC банка'
+        }
+        if (!this.serving_bank) {
+            errorsInData.serving_bank = 'Укажите название банка'
+        }
+        if (!this.full_name) {
+            errorsInData.full_name = 'Укажите ФИО'
+        }
+        if (!this.phone_number) {
+            errorsInData.phone_number = 'Укажите номер телефона'
+        }
+        if (!this.city) {
+            errorsInData.city = 'Укажите название города для доставки'
+        }
+        if (!this.address) {
+            errorsInData.address = 'Укажите название улицы для доставки'
+        }
+        if (!this.house) {
+            errorsInData.house = 'Укажите номер дома доставки'
+        }
+        if (!isValidEmail(this.email)) {
+            errorsInData.email = 'Укажите валидный адрес эл. почты'
+        }
+        if (Object.keys(errorsInData).length) {
+          this.SET_ERRORS(errorsInData);
+          this.isLoading = false;
+        } else {
+          const orderData = {
+            promo_code: this.promo_code, 
+            company_name: this.company_name,
+            unp: this.unp,
+            legal_address: this.legal_address,
+            IBAN: this.IBAN,
+            BIC: this.BIC,
+            serving_bank: this.serving_bank,
+            full_name: this.full_name,
+            phone_number: this.phone_number,
+            email: this.email,
+            city: this.city,
+            address: this.address,
+            house: this.house,
+            flat: this.flat,
+            delivery_type_id: this.delivery_type_id,
+            user_id: this.USER.id,
+            products: orderProducts
+          };
+          await this.SEND_ORDER_REQUEST(orderData);
+          this.isLoading = false;
+          this.$router.push({name: "user-cab"});
+        }
+      },
     },
 
     mounted() {

@@ -10,7 +10,7 @@
         </div>
         <div class="popup-cart__action">
             <div class="popup-cart__price">{{ favoriteItemData.price }} <span>BYN</span></div>
-            <button class="icon-delete" @click="onRemoveItemFromFavorite(favoriteItem)"></button>
+            <button class="icon-delete" @click.stop="onRemoveItemFromFavorite(favoriteItem)"></button>
         </div>
     </div>
 </template>

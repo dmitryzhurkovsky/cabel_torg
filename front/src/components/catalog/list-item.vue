@@ -31,7 +31,7 @@
                     :class="[isWish === false ? 'product__wishlist icon-favorite' : 'product__wishlist icon-favorite-choosed']"
                     @click.stop="onWishClick(card)"
                   ></div>
-                <div v-if = "quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(card, 'remove')">В корзине</div>
+                <div v-if = "quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(card, 'remove')">В корзине {{ quantity }}</div>
                 <div v-if = "quantity === 0" class="btn black" @click.stop="onOperationWithCartItem(card, 'increase')">В корзину</div>
             </div>
         </div>

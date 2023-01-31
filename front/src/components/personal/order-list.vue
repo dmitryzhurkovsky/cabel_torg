@@ -1,9 +1,13 @@
 <template lang="html">
   <div class="content-block__title">История покупок</div>
-   <div class="order__list">
-     <OrderItem/>
-     <OrderItem/>
-     <OrderItem/>
+   <div class="order__list"
+      v-if = "ORDER_DOCUMENTS.length"
+   >
+     <OrderItem
+         v-for   = "item in ORDER_DOCUMENTS"
+        :key    = "item.id"
+        :card   = item
+     />
    </div>
 
 </template>
@@ -11,6 +15,7 @@
 <script>
 
 import OrderItem from '@/components/personal/order-item';
+import { mapGetters, mapActions, mapMutations } from 'vuex';
 
 export default {
   name: 'OrderList',
@@ -18,6 +23,29 @@ export default {
   components:{
     OrderItem,
   },
+
+  computed:{
+    ...mapGetters("order", ["ORDER_DOCUMENTS", "ORDER_DELIVERY_TYPES"]),
+
+  },
+
+  methods:{
+    ...mapMutations("order", ["CLEAR_ORDER_DOCUMENTS"]),
+    ...mapActions("order", ["GET_ORDER_DOCUMENTS", "GET_ORDER_DELIVERY_TYPES", ]),
+
+    async getData(){
+      this.GET_ORDER_DOCUMENTS();
+    }
+  },
+
+  async mounted() {
+    await this.getData();
+    this.GET_ORDER_DELIVERY_TYPES();
+  },
+
+  beforeUnmount() {
+    this.CLEAR_ORDER_DOCUMENTS();
+  }
 
 }
 </script>
