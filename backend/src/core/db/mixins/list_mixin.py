@@ -9,11 +9,9 @@ class ListMixin(BaseMixin):
     async def list(
             cls,
             session: AsyncSession,
-            prefetch_fields: tuple = None,
             filter_fields: dict = {},  # noqa
-            search_fields: tuple = (),
-            order_fields: tuple = (),
-            custom_options: tuple = (),
+            search_fields: tuple | list = (),
+            order_fields: tuple | list = (),
             offset: int = 0,
             limit: int = 100,
     ) -> list:

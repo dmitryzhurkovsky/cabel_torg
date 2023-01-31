@@ -6,7 +6,7 @@ from sqlalchemy.sql.functions import count
 from starlette.datastructures import QueryParams
 
 from src.core.managers.base_manager import CRUDManager
-from src.core.utils import convert_filter_fields
+from src.core.utils import convert_filter_fields, calculate_price_with_discount
 from src.models import Product
 from src.rest.schemas.product_schema import ProductUpdateSchema
 
@@ -28,17 +28,8 @@ class ProductManager(CRUDManager):
             limit: int = 12
     ) -> list:
         """Get filtered list of objects with pagination."""
-        filter_fields = await convert_filter_fields(filter_fields, session=session)
-
-        objects = await session.execute(
-            select(cls.table).
-            where(*filter_fields).
-            options(*cls.preloaded_fields).
-            limit(limit).
-            offset(offset)
-        )
-
-        return objects.scalars().all()
+        search_fields = await convert_filter_fields(filter_fields, session=session)
+        return await cls.list(search_fields=search_fields, offset=offset, limit=limit, session=session)
 
     @classmethod
     async def get_count_of_products(
@@ -64,15 +55,24 @@ class ProductManager(CRUDManager):
             pk: int,
             input_data: ProductUpdateSchema
     ) -> Product | HTTPException:
-        """Update object by primary keys"""
-        query_result = await session.execute(
-            select(cls.table).
-            options(*cls.preloaded_fields).
-            where(cls.table.id == pk)
-        )
-        product = query_result.scalars().first()
-
-        product.price_with_discount = product.price - (product.price * input_data.discount / 100)
-
+        product = await cls.retrieve(id=pk, session=session)
+        product.price_with_discount = calculate_price_with_discount(product=product, discount=input_data.discount)
         await session.commit()
         return product
+
+    @classmethod
+    async def bulk_update_discounts(
+            cls, session: AsyncSession,
+            categories_ids: tuple,
+            discount: int
+    ):
+        products = await cls.list(
+            session=session,
+            search_fields=(
+                Product.category_id.in_(categories_ids),
+                Product.discount.is_not(None)
+            )
+        )
+        for product in products:
+            product.price_with_discount = calculate_price_with_discount(product=product, discount=discount)
+        # we don't do commit here because we should also update a category
