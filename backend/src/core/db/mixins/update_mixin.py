@@ -22,6 +22,7 @@ class UpdateMixin(BaseMixin):
 
         result = await session.execute(
             select(cls.table).
+            options(*cls.preloaded_fields).
             where(cls.table.id == pk)
         )
 

@@ -1,3 +1,4 @@
+from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload, joinedload
@@ -7,6 +8,7 @@ from starlette.datastructures import QueryParams
 from src.core.managers.base_manager import CRUDManager
 from src.core.utils import convert_filter_fields
 from src.models import Product
+from src.rest.schemas.product_schema import ProductUpdateSchema
 
 
 class ProductManager(CRUDManager):
@@ -55,3 +57,22 @@ class ProductManager(CRUDManager):
             )
         )
         return result.scalar()
+
+    @classmethod
+    async def update_discount(
+            cls, session: AsyncSession,
+            pk: int,
+            input_data: ProductUpdateSchema
+    ) -> Product | HTTPException:
+        """Update object by primary keys"""
+        query_result = await session.execute(
+            select(cls.table).
+            options(*cls.preloaded_fields).
+            where(cls.table.id == pk)
+        )
+        product = query_result.scalars().first()
+
+        product.price_with_discount = product.price - (product.price * input_data.discount / 100)
+
+        await session.commit()
+        return product

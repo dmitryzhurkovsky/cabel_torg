@@ -72,7 +72,7 @@ async def update_product(
         product_info: ProductUpdateSchema,
         session: AsyncSession = Depends(get_session)
 ):
-    return await ProductManager.update(
+    return await ProductManager.update_discount(
         pk=product_id,
         session=session,
         input_data=product_info

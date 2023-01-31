@@ -23,13 +23,14 @@ class ProductSchema(BaseSchema):
     attributes: List['AttributeSchema'] | list
     price: Decimal | None
     discount: int | None
+    price_with_discount: Decimal | None
 
     class Config:
         orm_mode = True
 
 
 class ProductUpdateSchema(BaseModel):
-    discount: int | None
+    discount: int
 
 
 class PaginatedProductSchema(BaseModel):
