@@ -1,39 +1,37 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload, joinedload
 from sqlalchemy.sql.functions import count
 from starlette.datastructures import QueryParams
 
-from src.core.db.mixins.delete_mixin import DeleteMixin
-from src.core.db.mixins.list_mixin import ListMixin
-from src.core.db.mixins.retrieve_mixin import RetrieveMixin
+from src.core.managers.base_manager import CRUDManager
 from src.core.utils import convert_filter_fields
 from src.models import Product
 
 
-class ProductManager(
-    ListMixin,
-    RetrieveMixin,
-    DeleteMixin
-):
+class ProductManager(CRUDManager):
     table = Product
+    preloaded_fields = (
+        joinedload(Product.manufacturer),
+        joinedload(Product.category),
+        selectinload(Product.attributes)  # todo change it and use joinedload instead of this one
+    )
 
     @classmethod
     async def filter_list(
             cls,
             filter_fields: QueryParams,
             session: AsyncSession,
-            prefetch_fields: tuple = None,
             offset: int = 0,
             limit: int = 12
     ) -> list:
         """Get filtered list of objects with pagination."""
-        options = cls.init_preloaded_fields(prefetch_fields=prefetch_fields)
         filter_fields = await convert_filter_fields(filter_fields, session=session)
 
         objects = await session.execute(
             select(cls.table).
             where(*filter_fields).
-            options(*options).
+            options(*cls.preloaded_fields).
             limit(limit).
             offset(offset)
         )

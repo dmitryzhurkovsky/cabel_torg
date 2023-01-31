@@ -6,7 +6,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.db.db import get_session
 from src.core.enums import ProductTypeFilter
 from src.core.managers.product_manager import ProductManager
-from src.rest.schemas.product_schema import ProductSchema, PaginatedProductSchema
+from src.rest.schemas.product_schema import (
+    ProductSchema,
+    PaginatedProductSchema,
+    ProductUpdateSchema
+)
 
 product_router = APIRouter(tags=['products'])
 
@@ -38,11 +42,6 @@ async def get_products(
     products = await ProductManager.filter_list(
         filter_fields=request.query_params,
         session=session,
-        prefetch_fields=(
-            ProductManager.table.manufacturer,
-            ProductManager.table.category,
-            ProductManager.table.attributes,
-        ),
         offset=offset,
         limit=limit
     )
@@ -64,9 +63,17 @@ async def get_product(product_id: int, session: AsyncSession = Depends(get_sessi
     return await ProductManager.retrieve(
         id=product_id,
         session=session,
-        prefetch_fields=(
-            ProductManager.table.manufacturer,
-            ProductManager.table.category,
-            ProductManager.table.attributes,
-        )
+    )
+
+
+@product_router.patch('/products/{product_id}', response_model=ProductSchema)
+async def update_product(
+        product_id: int,
+        product_info: ProductUpdateSchema,
+        session: AsyncSession = Depends(get_session)
+):
+    return await ProductManager.update(
+        pk=product_id,
+        session=session,
+        input_data=product_info
     )

@@ -20,10 +20,7 @@ async def get_product(
 ):
     return await WatchListManager.list(
         session=session,
-        filter_fields={'user_id': user.id},
-        prefetch_fields=(
-            WatchList.product,
-        )
+        filter_fields={'user_id': user.id}
     )
 
 
