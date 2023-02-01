@@ -5,7 +5,9 @@ export default {
 
   state: {
     orders: [],
+    orderDocumrnts: [],
     isApplicationOpen: false,
+    deliveryTypes: [],
   },
 
     getters: {
@@ -15,48 +17,65 @@ export default {
       TOTAL_ORDER_COST(state) {
         let totalOrderCost = 0;
         state.orders.forEach(item => {totalOrderCost = Number(totalOrderCost) + Number((item.amount * item.product.price).toFixed(2))});
-        return totalOrderCost;
+        return Number(totalOrderCost.toFixed(2));
       },
       TOTAL_ORDER_QUANTITY(state) {
         return state.orders.length;
       },
       IS_APPLICATION_OPEN(state) {
           return state.isApplicationOpen;
+      },
+      ORDER_DOCUMENTS(state) {
+        return state.orderDocumrnts;
+      }
+      ,ORDER_DELIVERY_TYPES(state) {
+        return state.deliveryTypes;
       }
     },
 
     mutations: {
-      SET_ORDERS(state, payload){
-        state.orders = payload;
+      SET_ORDERS(state, orders){
+        state.orders = orders;
       },
   
-      SET_IS_APPLICATION_OPEN(state, payload){
-        state.isApplicationOpen = payload;
+      SET_IS_APPLICATION_OPEN(state, status){
+        state.isApplicationOpen = status;
       },
 
-      ADD_ITEM_TO_CART(state, payload) {
-        const isItemInCart = state.orders.filter(item => item.product.id === payload.product.id);
+      ADD_ITEM_TO_CART(state, item) {
+        const isItemInCart = state.orders.filter(element => element.product.id === item.product.id);
         if (isItemInCart.length) {
-          isItemInCart[0].amount = isItemInCart[0].amount + payload.amount;
+          isItemInCart[0].amount = isItemInCart[0].amount + item.amount;
         } else {
-          state.orders.push(payload);
+          state.orders.push(item);
         }
       },
 
-      UPDATE_ITEM_IN_CART(state, payload){
-        const isItemInCart = state.orders.filter(item => item.product.id === payload.product.id);
+      UPDATE_ITEM_IN_CART(state, item){
+        const isItemInCart = state.orders.filter(element => element.product.id === item.product.id);
         if (isItemInCart.length) {
-          isItemInCart[0].amount = payload.amount;
+          isItemInCart[0].amount = item.amount;
         } else {
-          state.orders.push(payload);
+          state.orders.push(item);
         }
       },
       
-      REMOVE_ITEM_FROM_CART(state, payload) {
-          const filteredItemsInCart = state.orders.filter(item => item.product.id !== payload.product.id);
+      REMOVE_ITEM_FROM_CART(state, item) {
+          const filteredItemsInCart = state.orders.filter(element => element.product.id !== item.product.id);
           state.orders = [...filteredItemsInCart];
       },
 
+      SET_ORDER_DOCUMENTS(state, documents){
+        state.orderDocumrnts = documents;
+      },
+
+      CLEAR_ORDER_DOCUMENTS(state){
+        state.orderDocumrnts = [];
+      },
+
+      SET_ORDER_DELIVERY_TYPES(state, deliveryTypes){
+        state.deliveryTypes = deliveryTypes;
+      }
     },
 
     actions: {
@@ -78,7 +97,7 @@ export default {
 
       async UPDATE_ITEMS_IN_CART({ commit, dispatch, getters, rootGetters }, data) {
         const type = data.type; 
-        const itemData = JSON.parse(JSON.stringify(data.itemData));
+        const itemData =JSON.parse(JSON.stringify(data.itemData));;
         const product = itemData.product;
         if (rootGetters['auth/USER']) {
             // обновим базу
@@ -245,5 +264,47 @@ export default {
           }
       },
 
+      async SEND_ORDER_REQUEST({ commit, rootGetters }, itemData ) {
+        if (rootGetters['auth/USER']) {
+            try {
+                const response = await axios.post(process.env.VUE_APP_API_URL + 'orders', itemData);
+                // commit("UPDATE_ITEM_IN_CART", { amount : response.data.amount, product: itemData.product });
+                commit("header/SET_POPUP_ACTION", 'ShowCompleteMsg', {root: true});
+                const msg ={};
+                msg.main = 'Наш менеджер свяжется с вами в ближайшее время.';
+                msg.bolt = 'Время работы:';
+                msg.sub = ' Пн-Пт - 9:00 - 17:00'
+                commit("header/SET_POPUP_MESSAGE", msg, {root: true});
+                commit("header/SET_IS_POPUP_OPEN", true, {root: true});
+                commit("SET_ORDERS", []);
+                commit("SET_IS_APPLICATION_OPEN", false);
+                commit("profile/CHANGE_SCREEN", 0, {root: true});
+            } catch (e) {
+                console.log(e);
+                commit("notification/ADD_MESSAGE", {name: "Не возможно отправить заказ", icon: "error", id: '1'}, {root: true})
+            }
+        }
+      },
+
+      async GET_ORDER_DOCUMENTS({ commit } ){
+        try {
+            const response = await axios.get(process.env.VUE_APP_API_URL + 'orders/mine');
+            commit("SET_ORDER_DOCUMENTS", response.data);
+        } catch (e) {
+            console.log(e);
+            commit("notification/ADD_MESSAGE", {name: "Не возможно обновить заказы", icon: "error", id: '1'}, {root: true})
+        }
+      },
+
+      async GET_ORDER_DELIVERY_TYPES({ commit } ){
+        try {
+            const response = await axios.get(process.env.VUE_APP_API_URL + 'service_entities/delivery_types');
+            commit("SET_ORDER_DELIVERY_TYPES", response.data);
+        } catch (e) {
+            console.log(e);
+            commit("notification/ADD_MESSAGE", {name: "Не возможно обновить способы доставки", icon: "error", id: '1'}, {root: true})
+        }
+      },
+      
     }
   };

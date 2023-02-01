@@ -6,15 +6,15 @@
     >
       <div class="dropdown icon-favorite">
         <div :class="[!favoriteHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
-          <HeaderFavorite @click.stop = "onIconLeave()"/>
+          <HeaderFavorite @click.stop = "onIconLeave()" />
         </div>
 
       </div>
-      <IconQuantity 
+      <!-- <IconQuantity 
         :quantity = 0 
         :left = '12'
         :top = '12'
-      />
+      /> -->
     </div>
     <div class="topmenu__item right-direction" 
         @mouseenter="onUserIconEnter()"

@@ -14,18 +14,15 @@ class RetrieveMixin(BaseMixin):
     async def retrieve(
             cls,
             session: AsyncSession = Depends(get_session),
-            prefetch_fields: tuple = None,
             **kwargs: Any
     ) -> TableType | HTTPException:
         """Get object by primary key or by another fields"""
-
-        options = cls.init_preloaded_fields(prefetch_fields=prefetch_fields)
         filtered_fields = cls.init_filtered_fields(filter_fields=kwargs)
 
         query = await session.execute(
             select(cls.table).
             where(*filtered_fields).
-            options(*options)
+            options(*cls.preloaded_fields)
         )
         obj = query.scalar_one_or_none()
         cls._check_object(obj=obj)

@@ -13,9 +13,9 @@
           :cartItem = cartItem
       />
     </div>
-    <button class="btn" @click="onPutApplication()">Оформить заказ</button>
+    <button class="btn" @click.prevent="onPutApplication()">Оформить заказ</button>
     <div>
-      <a class="" @click="onOpenCart()">Перейти в корзину
+      <a class="" @click.prevent="onOpenCart()">Перейти в корзину
         <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0.5 3.99935H15.0833M15.0833 3.99935L11.75 0.666016M15.0833 3.99935L11.75 7.33268" stroke="#4275D8"/>
         </svg>
