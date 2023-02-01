@@ -70,7 +70,7 @@ class ProductManager(CRUDManager):
             session=session,
             search_fields=(
                 Product.category_id.in_(categories_ids),
-                Product.discount.is_not(None)
+                Product.discount == 0
             )
         )
         for product in products:

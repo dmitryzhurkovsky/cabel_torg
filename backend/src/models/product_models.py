@@ -18,7 +18,7 @@ class Product(Base1CModel):
 
     price = Column(DECIMAL)
     price_with_discount = Column(DECIMAL)  # This attribute is auto-calculated if we change the discount.
-    discount = Column(Integer)
+    discount = Column(Integer, default=0)
 
     attributes = relationship(
         'Attribute',
