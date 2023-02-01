@@ -30,6 +30,7 @@ async def create_order(
         user=Depends(AuthService.get_current_user),
         session: AsyncSession = Depends(get_session)
 ) -> OrderSchema:
+    # todo add validating delivery type
     return await OrderManager.create(
         input_data={
             'user_id': user.id,

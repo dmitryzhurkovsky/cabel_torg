@@ -14,8 +14,9 @@ UpdateBaseSchema = TypeVar('UpdateBaseSchema', bound=BaseModel)
 
 class BaseMixin:
     """Base async database mixin"""
-
     table: TableType = None
+    preloaded_fields: tuple = ()
+
     create_scheme: CreateBaseSchema | None = None
     update_scheme: UpdateBaseSchema | None = None
 

@@ -22,9 +22,15 @@ class ProductSchema(BaseSchema):
     base_unit: BaseUnitSchema | None
     attributes: List['AttributeSchema'] | list
     price: Decimal | None
+    discount: int | None
+    price_with_discount: Decimal | None
 
     class Config:
         orm_mode = True
+
+
+class ProductUpdateSchema(BaseModel):
+    discount: int
 
 
 class PaginatedProductSchema(BaseModel):

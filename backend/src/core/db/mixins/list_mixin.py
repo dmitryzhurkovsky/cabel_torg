@@ -9,23 +9,18 @@ class ListMixin(BaseMixin):
     async def list(
             cls,
             session: AsyncSession,
-            prefetch_fields: tuple = None,
             filter_fields: dict = {},  # noqa
-            search_fields: tuple = (),
-            order_fields: tuple = (),
-            custom_options: tuple = (),
+            search_fields: tuple | list = (),
+            order_fields: tuple | list = (),
             offset: int = 0,
             limit: int = 100,
     ) -> list:
         """Get list of objects"""
-        options = cls.init_preloaded_fields(prefetch_fields=prefetch_fields)
-
         objects = await session.execute(
             select(cls.table).
             filter_by(**filter_fields).
             where(*search_fields).
-            options(*options).
-            options(*custom_options).
+            options(*cls.preloaded_fields).
             order_by(*order_fields).
             limit(limit).
             offset(offset)

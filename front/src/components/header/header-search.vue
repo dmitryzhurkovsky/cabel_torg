@@ -25,7 +25,7 @@
                       :item = item
                       @click.stop = "openCardItem(item.id)"
                   />
-                  <div @click = "openFindedElementInCatalg">
+                  <div class="search__footer" @click = "openFindedElementInCatalg">
                     Показать все
                   </div>
                 </div>
@@ -208,6 +208,17 @@ export default {
   color: #9fa3b1;
 }
 
+.search__footer{
+  background: #4275D8;
+  color: #fff;
+  padding: 8px 5px;
+  text-align: center;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  &:hover{
+    background: #6291ED;
+  }
 
+}
 
 </style>
