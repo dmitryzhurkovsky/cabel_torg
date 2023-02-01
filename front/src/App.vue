@@ -2,6 +2,7 @@
   <div id="app__component">
     <MenuWrapper/>
     <v-notification/>
+    <Loader/>
     <PopUp/>
     <Header/>
     <Breadcrumb/>
@@ -11,15 +12,14 @@
 </template>
 
 <script>
-
+  import { mapActions, mapMutations } from "vuex";
   import Header from '@/components/header.vue';
   import Breadcrumb from '@/components/breadcrumb.vue';
   import Footer from "@/components/footer.vue";
   import vNotification from '@/components/notifications/v-notification.vue';
   import MenuWrapper from '@/components/header/menu-wrapper.vue';
   import PopUp from '@/components/notifications/pop-up.vue';
-
-  import { mapActions, mapMutations } from "vuex";
+  import Loader from '@/components/UI/loader.vue';
 
   export default {
 
@@ -29,7 +29,7 @@
     },
 
     components:{
-      Header, Breadcrumb, Footer, vNotification, MenuWrapper, PopUp
+      Header, Breadcrumb, Footer, vNotification, MenuWrapper, PopUp, Loader
     },
 
     // computed: {

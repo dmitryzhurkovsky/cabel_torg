@@ -10,12 +10,12 @@
     </a>
     <div class="item-card__info">
       <div class="item-card__row flex-center">
-        <div class="old_price">65.3???</div>
+        <div class="old_price">{{ CardPriceWithoutDiscount }}</div>
         <div class="notice">* Цена указана с учетом НДС.</div>
       </div>
 
       <div class="item-card__row flex-center">
-        <div class="current_price">{{ card.price }}
+        <div class="current_price">{{ cardPriceWithDiscount }}
           <span>BYN / {{ card.base_unit.full_name }}</span>
         </div>
         <div 
@@ -65,6 +65,15 @@ export default {
     ChangeParameters(){
       return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES);
     },
+
+    cardPriceWithDiscount(){
+      return this.card.discount ? this.card.price_with_discount : this.card.price;
+    },
+
+    CardPriceWithoutDiscount(){
+      return this.card.discount ? this.card.price : '';
+    },
+
   },
 
   watch: {

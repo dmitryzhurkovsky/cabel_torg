@@ -3,6 +3,7 @@ export default {
 
   state: {
     messages : [],
+    isLoading: false,
   },
 
   getters: {
@@ -12,15 +13,21 @@ export default {
     LENGTH(state) {
       return state.messages.length;
     },
+    IS_LOADING(state) {
+      return state.isLoading;
+    }
   },
 
   mutations: {
-    ADD_MESSAGE(state, payload) {
-      state.messages.unshift(payload);
+    ADD_MESSAGE(state, msg) {
+      state.messages.unshift(msg);
     },
     DELETE_MESSAGE(state) {
       state.messages.pop();
     },
+    SET_IS_LOADING(state, type) {
+      state.isLoading = type;
+    }
   },
 
   actions: {

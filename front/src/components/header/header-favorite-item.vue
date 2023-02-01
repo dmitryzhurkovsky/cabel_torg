@@ -9,7 +9,7 @@
 
         </div>
         <div class="popup-cart__action">
-            <div class="popup-cart__price">{{ favoriteItemData.price }} <span>BYN</span></div>
+            <div class="popup-cart__price">{{ cardPriceWithDiscount }} <span>BYN</span></div>
             <button class="icon-delete" @click.stop="onRemoveItemFromFavorite(favoriteItem)"></button>
         </div>
     </div>
@@ -36,6 +36,12 @@ export default {
     return {
         favoriteItemData: {},
     }
+  },
+
+  computed: {
+    cardPriceWithDiscount(){
+        return this.favoriteItemData.discount ? this.favoriteItemData.price_with_discount : this.favoriteItemData.price;
+    },
   },
 
   async mounted(){

@@ -10,7 +10,7 @@ export default {
     limit: 10,
     sort: {name: 'По дате добавления', type: 'date'},
     view: 'table',
-    minPrice: 0,
+    minPrice: 0.1,
     maxPrice: 10000,
     searchString: '',
     findedElements: [],

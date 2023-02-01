@@ -29,11 +29,11 @@
           <div class="product__price">
             <div class="_label mb-20">Стоимость (с учетом НДС):</div>
             <div class="old_price">
-              <span>70</span>BYN
+              <span>{{ CardPriceWithoutDiscount }}</span>BYN
               <span>/{{ cartItemData?.base_unit?.full_name }}</span>
             </div>
             <div class="current_price">
-              <span>{{ cartItemData.price }}</span> BYN
+              <span>{{ cardPriceWithDiscount }}</span> BYN
             </div>
           </div>
 
@@ -70,6 +70,7 @@
     },
 
     async mounted(){
+        this.SET_IS_LOADING(true);
         try {
             const response = await axios.get(process.env.VUE_APP_API_URL + 'products/' + this.cartItem.product.id);
             this.cartItemData = response.data;
@@ -79,6 +80,7 @@
             this.ADD_MESSAGE({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
         }
         this.checkIsWish();
+        this.SET_IS_LOADING(false);
     },
 
     computed: {
@@ -87,6 +89,15 @@
         ChangeParameters(){
             return JSON.stringify(this.FAVORITES);
         },
+
+        cardPriceWithDiscount(){
+            return this.cartItemData.discount ? this.cartItemData.price_with_discount : this.cartItemData.price;
+        },
+
+        CardPriceWithoutDiscount(){
+            return this.cartItemData.discount ? this.cartItemData.price : '';
+        },
+
     },
 
     watch: {
@@ -99,6 +110,7 @@
         ...mapMutations("notification", ["ADD_MESSAGE"]),
         ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
         ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
+        ...mapMutations("notification", ["SET_IS_LOADING"]),
 
         async onOperationWithCartItem(card, type) {
             if (type === 'decrease' && this.quantity === 1) {

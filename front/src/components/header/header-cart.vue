@@ -55,7 +55,7 @@ export default {
     },
 
     onPutApplication() {
-        if (this.USER) {
+        if (localStorage.getItem("authToken")) {
             this.SET_DESTINATION('');
             this.SET_IS_APPLICATION_OPEN(true);
             if (this.$router.path != '/cart') {

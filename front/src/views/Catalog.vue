@@ -100,7 +100,7 @@
 
         ChangeParameters(){
           return String(this.LIMIT) + String(this.OFFSET) + JSON.stringify(this.TYPE_OF_PRODUCT) + String(this.MIN_PRICE) + 
-                  String(this.MAX_PRICE) + String(this.CATEGORY_ID) + this.CATALOG_SEARCH_STRING;
+                  String(this.MAX_PRICE) + String(this.CATEGORY_ID) + this.CATALOG_SEARCH_STRING + this.VIEW_TYPE;
                   //  + String(this.SUB_CATEGORIES_ITEM_ACTIVE) + String(this.TOP_CATEGORIES_ITEM_ACTIVE) + String(this.LAST_CATEGORIES_ITEM_ACTIVE); 
         }
     },
@@ -111,8 +111,10 @@
       ...mapMutations("query", ["SET_CATEGORY_ID", "SET_OFFSET"]),
       ...mapMutations("query", ["SET_SEARCH_STRING"]),
       ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING"]),
+      ...mapMutations("notification", ["SET_IS_LOADING"]),
 
       async getData() {
+        this.SET_IS_LOADING(true);
         if (this.CATEGORY_ID) {
           if (this.CATALOG_SEARCH_STRING) {
             await this.GET_ALL_CATALOG_ITEMS();
@@ -123,6 +125,7 @@
         } else {
           await this.GET_ALL_CATALOG_ITEMS();
         }
+        this.SET_IS_LOADING(false);
       },
 
       setActiveCategory(id){

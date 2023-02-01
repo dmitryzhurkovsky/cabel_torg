@@ -32,9 +32,12 @@ export default {
   methods:{
     ...mapMutations("order", ["CLEAR_ORDER_DOCUMENTS"]),
     ...mapActions("order", ["GET_ORDER_DOCUMENTS", "GET_ORDER_DELIVERY_TYPES", ]),
+    ...mapMutations("notification", ["SET_IS_LOADING"]),
 
     async getData(){
+      this.SET_IS_LOADING(true);
       this.GET_ORDER_DOCUMENTS();
+      this.SET_IS_LOADING(false);
     }
   },
 

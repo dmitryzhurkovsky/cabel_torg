@@ -16,7 +16,10 @@ export default {
       },
       TOTAL_ORDER_COST(state) {
         let totalOrderCost = 0;
-        state.orders.forEach(item => {totalOrderCost = Number(totalOrderCost) + Number((item.amount * item.product.price).toFixed(2))});
+        state.orders.forEach(item => {
+          const curPrice = item.product.discount ? item.product.price_with_discount : item.product.price;
+          totalOrderCost = Number(totalOrderCost) + Number((item.amount * curPrice).toFixed(2))
+        });
         return Number(totalOrderCost.toFixed(2));
       },
       TOTAL_ORDER_QUANTITY(state) {

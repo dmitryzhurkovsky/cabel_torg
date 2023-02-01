@@ -68,6 +68,10 @@ export default {
       ChangeParameters(){
         return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES);
       },
+
+      cardPriceWithDiscount(){
+        return this.card.discount ? this.card.price_with_discount : this.card.price;
+      },
     },
 
     watch: {

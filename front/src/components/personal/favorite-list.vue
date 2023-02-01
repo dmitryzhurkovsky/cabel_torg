@@ -67,11 +67,14 @@ export default {
     methods: {
         ...mapMutations("favorite", ["CLEAR_FULL_FAVORITES"]),
         ...mapActions("favorite", ["GET_USER_FULL_FAVORITES"]),
+        ...mapMutations("notification", ["SET_IS_LOADING"]),
 
         async getData() {
+            this.SET_IS_LOADING(true);
             this.CLEAR_FULL_FAVORITES();
             await this.GET_USER_FULL_FAVORITES();
-        }
+            this.SET_IS_LOADING(false);
+       }
     },
 
     watch: {

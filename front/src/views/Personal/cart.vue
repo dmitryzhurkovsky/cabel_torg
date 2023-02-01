@@ -42,7 +42,7 @@
                    BYN
                 </div>
                 <div class="">
-                  <button @click.stop = "SET_IS_APPLICATION_OPEN(true)" class="btn">Оформить заказ</button>
+                  <button @click.stop = "openOrderRequest()" class="btn">Оформить заказ</button>
                 </div>
               </div>
             </div>
@@ -254,7 +254,7 @@
       ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
       ...mapMutations("order", ["SET_IS_APPLICATION_OPEN"]),
       ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
-      ...mapMutations("auth", ["SET_ERRORS"]),
+      ...mapMutations("auth", ["SET_ERRORS", "SET_DESTINATION"]),
 
       openPage(page) {
           if (this.$router.path != page) {
@@ -266,7 +266,17 @@
         console.log('Is ' + this.promo_code + ': promo cod available');
       },
 
+      openOrderRequest(){
+        this.SET_IS_APPLICATION_OPEN(true);
+
+        if (!localStorage.getItem("authToken")) {
+          this.SET_DESTINATION('/cart');
+          this.$router.push('/login');
+        }
+      },
+
       async sendOrderRequest(){
+
         const orderProducts = [];
         this.ORDERS.forEach(item => orderProducts.push({amount: item.amount, id: item.product.id}));
 
@@ -351,6 +361,21 @@
         type: "global",
         class: ""
       });
+      if (this.USER) {
+        this.company_name = this.USER.company_name;
+        this.unp = this.USER.unp;
+        this.legal_address = this.USER.legal_address;
+        this.IBAN = this.USER.IBAN;
+        this.BIC = this.USER.BIC;
+        this.serving_bank = this.USER.serving_bank;
+        this.full_name = this.USER.full_name;
+        this.phone_number = this.USER.phone_number;
+        this.email = this.USER.email;
+        // this.city = this.USER.delivery_adress;
+        // this.address = this.USER.address;
+        // this.house = this.USER.house;
+        // this.flat = this.USER.flat;
+      }
     },
   }
 </script>

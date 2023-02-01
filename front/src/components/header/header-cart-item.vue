@@ -9,7 +9,7 @@
 
         </div>
         <div class="popup-cart__action">
-          <div class="popup-cart__price">{{ cartItem.amount + '  X  ' + cartItemData.price }} <span>BYN</span></div>
+          <div class="popup-cart__price">{{ cartItem.amount + '  X  ' + cardPriceWithDiscount }} <span>BYN</span></div>
           <button class="icon-delete" @click.stop="onRemoveItemFromCart(cartItem)"></button>
         </div>
         <!-- {{ cartItemData }} -->
@@ -37,6 +37,12 @@ export default {
     return {
         cartItemData: {},
     }
+  },
+
+  computed: {
+    cardPriceWithDiscount(){
+        return this.cartItemData.discount ? this.cartItemData.price_with_discount : this.cartItemData.price;
+    },
   },
 
   async mounted(){

@@ -4,13 +4,13 @@
         <li class="tools-view__item">
             <a href="" 
               :class="['table' === VIEW_TYPE ? 'tools-view__link icon-catalog-table active' : 'tools-view__link icon-catalog-table']"
-              @click="changeView($event, 'table')"
+              @click.prevent="changeView('table')"
             ></a>
         </li>
         <li class="tools-view__item">
             <a href="" 
               :class="['row' === VIEW_TYPE ? 'tools-view__link icon-catalog-row active' : 'tools-view__link icon-catalog-row']"
-              @click="changeView($event, 'row')"
+              @click.prevent="changeView('row')"
             ></a>
         </li>
     </ul>
@@ -30,8 +30,7 @@
     methods: {
       ...mapMutations("query", ["SET_VIEW_TYPE"]),
 
-      changeView(e, type) {
-        e.preventDefault();
+      changeView(type) {
         this.SET_VIEW_TYPE(type);
       }
     }

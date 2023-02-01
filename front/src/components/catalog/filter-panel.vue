@@ -66,7 +66,7 @@
                 >
                     <div 
                         class = "checkbox-default"
-                        @click.stop = "changeFilterCategory($event, category)"
+                        @click.stop = "changeFilterCategory(category)"
                     >
                         <label class="checkbox__label">
                             <input type="checkbox" name="" class="" value="">
@@ -150,13 +150,13 @@ export default {
           this.SET_CATEGORY_ID(lastCategory.id);
         },
 
-        changeFilterCategory(event, category){
-            event.preventDefault();
-            if (this.SUB_CATEGORIES_ITEM_ACTIVE === category.id) {
-                this.SET_CURRENT_LAST_CATEGORY(null);
-            } else {
-                this.SET_CURRENT_LAST_CATEGORY(category.id);
-            }
+        changeFilterCategory(category){
+            // event.preventDefault();
+            // if (this.SUB_CATEGORIES_ITEM_ACTIVE === category.id) {
+            //     this.SET_CURRENT_LAST_CATEGORY(null);
+            // } else {
+            //     this.SET_CURRENT_LAST_CATEGORY(category.id);
+            // }
             this.SET_TYPE_OF_PRODUCT(category);
         }
     },
