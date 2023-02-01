@@ -300,24 +300,30 @@ h3{
 
 .black{
   background: $mainColor;
+  border: 1.2px solid  $mainColor;
   padding: 12px 24px;
   &:hover{
     background: #5A5A5A;
   }
-
-.empty_black{
+}
+.empty_black {
   background: #F8FAFF;
-  border: 1.2px solid #423E48;
+  color: $mainColor;
+  border: 1.2px solid $mainColor;
   padding: 12px 24px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
   &:hover {
-    background: #5A5A5A;
+    background: #eaedf6;
+    opacity: 0.8;
+    color: $mainColor;
   }
 }
 .blue{
   padding: 12px 24px;
 }
 
-}
+
 .empty{
   background: #fff;
   padding: 12px 24px;
@@ -328,6 +334,11 @@ h3{
 .flex-center{
   display: flex;
   align-items: center;
+}
+
+.center-text{
+  width: 100%;
+  text-align: center;
 }
 
 ._footnote{
