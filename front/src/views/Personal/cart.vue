@@ -86,7 +86,7 @@
                 </div>
 
                 <div class="table3x">
-                  <div class="group">
+                  <div class="group mb-20">
                     <label for="address" class="label">Улица</label>
                     <input id="address" type="text" :class="{ 'is-invalid': ERRORS.address }" v-model="address" autocomplete=off>
                     <div class="error-message" v-if="ERRORS.address"> {{ ERRORS.address }} </div>
@@ -311,13 +311,13 @@
             errorsInData.phone_number = 'Укажите номер телефона'
         }
         if (!this.city) {
-            errorsInData.city = 'Укажите название города для доставки'
+            errorsInData.city = 'Укажите название города'
         }
         if (!this.address) {
-            errorsInData.address = 'Укажите название улицы для доставки'
+            errorsInData.address = 'Укажите название улицы'
         }
         if (!this.house) {
-            errorsInData.house = 'Укажите номер дома доставки'
+            errorsInData.house = 'Укажите номер дома'
         }
         if (!isValidEmail(this.email)) {
             errorsInData.email = 'Укажите валидный адрес эл. почты'
@@ -540,6 +540,7 @@
   }
 
   .radio__list {
+    padding: 0 10px;
     p {
       font-size: 14px;
       line-height: 16px;

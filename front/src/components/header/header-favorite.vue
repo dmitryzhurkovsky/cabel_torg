@@ -83,6 +83,7 @@ export default {
 }
 .popup__link{
   color: #4275D8;
-  font-weight: 300;
+  font-weight: 400;
+  font-size: 14px;
 }
 </style>

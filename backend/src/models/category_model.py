@@ -31,7 +31,7 @@ class Category(Base1CModel):
         backref=backref('parent_category', remote_side=[id]),
         viewonly=True,
     )
-    discount = Column(Integer)
+    discount = Column(Integer, default=0)
 
     __tableargs__ = (
         CheckConstraint(discount < 100, name='check_discount_less_than_100'),

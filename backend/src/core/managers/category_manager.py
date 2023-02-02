@@ -43,8 +43,8 @@ class CategoryManager(CRUDManager):
         query_result = await session.execute(
             select(Category.id).
             where(
-                Category.parent_category_id.in_(categories_and_their_subcategories_ids),
-                Category.discount.is_(None)
+                Category.id.in_(categories_and_their_subcategories_ids),
+                Category.discount == 0
             )
         )
         return query_result.scalars().all()
