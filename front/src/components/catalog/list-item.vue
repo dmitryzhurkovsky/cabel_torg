@@ -1,6 +1,12 @@
 <template>
     <div class="product">
-        <div class="product__tag">Хит</div>
+        <!-- <div class="product__tag">Хит</div> -->
+        <div v-if = "InfoCardBlock === 'Хит'" class="product__taghit">{{ InfoCardBlock }}</div>
+        <div v-if = "InfoCardBlock === '%'" class="product__tagdiscount">
+          <img class="" src="../../assets/catalog/discount.svg" alt="">
+        </div>
+        <div v-if = "InfoCardBlock === 'New'" class="product__tagnew">{{ InfoCardBlock }}</div>
+
         <a class="product__img" @click.stop="openCardItem(card.id)">
             <CardImage :images=card.images />
         </a>
@@ -22,7 +28,8 @@
         <div class="product__action">
             <div class="product__article  _label mb-20">Артикул: <span>{{ card.vendor_code }}</span></div>
             <div class="product__price">
-                <span>{{ card.price }}</span>BYN
+                <span  v-if = "card.price_with_discount" class="product__oldprice">{{ CardPriceWithoutDiscount }}</span>
+                <span>{{ cardPriceWithDiscount }}</span> BYN
                 <span> / {{ card.base_unit.full_name }}</span>
             </div>
             <div class="notice">* Цена указана с учетом НДС.</div>
@@ -45,7 +52,6 @@ import CardImage from '@/components/UI/card-image.vue'
 
 export default {
     name: 'ListItem',
-
     props: {
         card:  null,
     },
@@ -72,6 +78,19 @@ export default {
       cardPriceWithDiscount(){
         return this.card.price_with_discount ? this.card.price_with_discount : this.card.price;
       },
+
+      CardPriceWithoutDiscount(){
+        return this.card.price_with_discount ? this.card.price : '';
+      },
+
+      InfoCardBlock() {
+        let info = '';
+        info = this.card.vendor_code === 'УТ-00000037' ? 'New' : info;
+        info = this.card.vendor_code === 'УТ-00000015' ? 'Хит' : info;
+        info = this.card.price_with_discount ? '%' : info;
+        return info;
+      },
+
     },
 
     watch: {
@@ -164,15 +183,15 @@ export default {
     line-height: 20px;
   }
 
-    &__img {
-      width: 100%;
-      flex-basis: 25%;
-      cursor: pointer;
-      text-align: center;
-      img{
-        max-width: 100%;
-      }
+  &__img {
+    width: 100%;
+    flex-basis: 25%;
+    cursor: pointer;
+    text-align: center;
+    img{
+      max-width: 100%;
     }
+  }
   &__info{
     flex-basis: 45%;
     padding: 0 10px;
@@ -184,7 +203,7 @@ export default {
     padding: 0 10px;
   }
 
-    &__tag{
+    &__taghit{
       background: #7700AF;
       border-radius: 2px;
       padding: 2px 11px;
@@ -195,6 +214,24 @@ export default {
       top:20px;
       color: #fff;
     }
+    &__tagnew{
+      background: #4275d8;;
+      border-radius: 2px;
+      padding: 2px 11px;
+      position: absolute;
+      font-weight: 400;
+      font-size: 12px;
+      left:20px;
+      top:20px;
+      color: #fff;
+    }
+    &__tagdiscount{
+      padding: 2px 11px;
+      position: absolute;
+      left:10px;
+      top:10px;
+    }
+
     &__wishlist{
 
       &.added {
@@ -208,16 +245,22 @@ export default {
       fill: none;
       margin-right: 10px;
     }
-  &__price{
-    font-size: 20px;
-    margin-bottom: 10px;
-    text-align: right;
-    span:nth-child(1){
-      font-weight: 500;
-      margin-right: 5px;
-    }
+    &__price{
+      font-size: 20px;
+      margin-bottom: 10px;
+      text-align: right;
+      span:nth-child(1){
+        font-weight: 500;
+        margin-right: 5px;
+      }
 
-  }
+    }
+    &__oldprice {
+      font-size: 16px;
+      line-height: 24px;
+      text-decoration-line: line-through;
+      opacity: 0.4;
+    }
 
 
     &__row {
@@ -249,18 +292,6 @@ export default {
       font-size: 10px;
       opacity: 0.5;
       text-align: right;
-    }
-
-
-
-    .current_price {
-      font-weight: 500;
-      font-size: 20px;
-      line-height: 24px;
-      span{
-        font-weight: 300;
-      }
-
     }
 
     &__title {

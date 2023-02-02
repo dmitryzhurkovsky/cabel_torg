@@ -1,6 +1,10 @@
 <template lang="html">
   <div class="recomendation__block__item item-card" v-if = "card">
-    <div class="item-card__tag">Хит</div>
+    <div v-if = "InfoCardBlock === 'Хит'" class="item-card__taghit">{{ InfoCardBlock }}</div>
+    <div v-if = "InfoCardBlock === '%'" class="item-card__tagdiscount">
+      <img class="" src="../../assets/catalog/discount.svg" alt="">
+    </div>
+    <div v-if = "InfoCardBlock === 'New'" class="item-card__tagnew">{{ InfoCardBlock }}</div>
     <div 
         :class="[isWish === false ? 'item-card__wishlist icon-favorite' : 'item-card__wishlist icon-favorite-choosed']" 
         @click.stop="onWishClick(card)"
@@ -10,7 +14,9 @@
     </a>
     <div class="item-card__info">
       <div class="item-card__row flex-center">
-        <div class="old_price">{{ CardPriceWithoutDiscount }}</div>
+        <div v-if = "card.price_with_discount" class="old_price">{{ CardPriceWithoutDiscount }}t
+          <span>BYN / {{ card.base_unit.full_name }}</span>
+        </div>
         <div class="notice">* Цена указана с учетом НДС.</div>
       </div>
 
@@ -72,6 +78,14 @@ export default {
 
     CardPriceWithoutDiscount(){
       return this.card.price_with_discount ? this.card.price : '';
+    },
+
+    InfoCardBlock() {
+      let info = '';
+      info = this.card.vendor_code === 'УТ-00000037' ? 'New' : info;
+      info = this.card.vendor_code === 'УТ-00000015' ? 'Хит' : info;
+      info = this.card.price_with_discount ? '%' : info;
+      return info;
     },
 
   },
@@ -175,7 +189,7 @@ export default {
 
   }
 
-  &__tag{
+  &__taghit{
     background: #7700AF;
     border-radius: 2px;
     padding: 2px 11px;
@@ -185,6 +199,23 @@ export default {
     left:20px;
     top:20px;
     color: #fff;
+  }
+  &__tagnew{
+    background: #4275d8;;
+    border-radius: 2px;
+    padding: 2px 11px;
+    position: absolute;
+    font-weight: 400;
+    font-size: 12px;
+    left:20px;
+    top:20px;
+    color: #fff;
+  }
+  &__tagdiscount{
+    padding: 2px 11px;
+    position: absolute;
+    left:10px;
+    top:10px;
   }
   &__wishlist{
 
