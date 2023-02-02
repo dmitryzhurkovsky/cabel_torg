@@ -40,7 +40,7 @@ export default {
 
   computed: {
     cardPriceWithDiscount(){
-        return this.favoriteItemData.discount ? this.favoriteItemData.price_with_discount : this.favoriteItemData.price;
+        return this.favoriteItemData.price_with_discount ? this.favoriteItemData.price_with_discount : this.favoriteItemData.price;
     },
   },
 

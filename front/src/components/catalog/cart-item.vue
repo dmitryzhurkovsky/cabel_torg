@@ -91,11 +91,11 @@
         },
 
         cardPriceWithDiscount(){
-            return this.cartItemData.discount ? this.cartItemData.price_with_discount : this.cartItemData.price;
+            return this.cartItemData.price_with_discount ? this.cartItemData.price_with_discount : this.cartItemData.price;
         },
 
         CardPriceWithoutDiscount(){
-            return this.cartItemData.discount ? this.cartItemData.price : '';
+            return this.cartItemData.price_with_discount ? this.cartItemData.price : '';
         },
 
     },

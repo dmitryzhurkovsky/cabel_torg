@@ -70,7 +70,7 @@ export default {
       },
 
       cardPriceWithDiscount(){
-        return this.card.discount ? this.card.price_with_discount : this.card.price;
+        return this.card.price_with_discount ? this.card.price_with_discount : this.card.price;
       },
     },
 
