@@ -1,8 +1,8 @@
 from abc import ABC
 from decimal import Decimal
 
-from src.core.db import database_services
 from src.models import Product
+from src.parser import database_services
 from src.parser.mixins.base_mixin import BaseMixin
 
 
@@ -15,9 +15,8 @@ class PriceMixin(BaseMixin, ABC):
             product_bookkeeping_id = price[0].text
             product_price = Decimal(price[4][0][2].text)
 
-            product_db = await database_services.get(
-                db=self.db,
-                model=Product,
+            product_db = await database_services.get_object(
+                db=self.db, model=Product,
                 fields={'bookkeeping_id': product_bookkeeping_id},
                 prefetch_fields=(Product.attributes,)
             )

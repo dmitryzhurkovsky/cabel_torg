@@ -1,7 +1,6 @@
 from _elementtree import Element
 from abc import ABC
 
-from src.core.db import database_services
 from src.core.utils import (
     clean_string_from_spaces_and_redundant_symbols,
     clean_fields,
@@ -10,6 +9,7 @@ from src.core.utils import (
 from src.models import Manufacturer, BaseUnit, Category, Attribute
 from src.models.attribute_model import AttributeValue, AttributeName
 from src.models.product_models import Product
+from src.parser import database_services
 from src.parser.mixins.base_mixin import BaseMixin
 
 
@@ -34,11 +34,19 @@ class GoodsMixin(BaseMixin, ABC):
             clean_product = await self.clean_product(element=product)
             attributes = clean_product.pop('attributes', None)
 
-            product_db, _ = await database_services.get_or_create(
-                db=self.db, model=Product, fields=clean_product, prefetch_fields=(Product.attributes,)
+            product_db, _ = await database_services.update_or_create_object(
+                db=self.db,
+                model=Product,
+                update=True,
+                fields=clean_product,
+                prefetch_fields=(Product.attributes,),
             )
             if attributes:
                 product_db.attributes = attributes
+            if is_excluded := clean_product.get('category_id') in self.excluded_categories_cache:  # noqa
+                product_db.is_visible = False
+
+            if attributes or is_excluded:
                 await self.db.commit()
 
     async def clean_product(self, element: Element) -> dict:
@@ -112,9 +120,7 @@ class GoodsMixin(BaseMixin, ABC):
             'international_abbreviated': international_abbreviated
         })
 
-        base_unit, _ = await database_services.get_or_create(
-            db=self.db, model=BaseUnit, fields=fields
-        )
+        base_unit, _ = await database_services.update_or_create_object(db=self.db, model=BaseUnit, fields=fields)
 
         if base_unit:
             return 'base_unit_id', base_unit.id
@@ -124,11 +130,10 @@ class GoodsMixin(BaseMixin, ABC):
         Clean a manufacturer(it's Производитель in a xml tree) and
         transform its fields to "ready to write to a database" state.
         """
-        manufacturer, _ = await database_services.get_or_create(
-            db=self.db, model=Manufacturer, fields={
-                'bookkeeping_id': raw_field[0].text,
-                'name': raw_field[1].text
-            })
+        manufacturer, _ = await database_services.update_or_create_object(db=self.db, model=Manufacturer, fields={
+            'bookkeeping_id': raw_field[0].text,
+            'name': raw_field[1].text
+        })
 
         return 'manufacturer_id', manufacturer.id
 
@@ -136,7 +141,7 @@ class GoodsMixin(BaseMixin, ABC):
         """
         Clean a category(it's Группы in a xml tree) and transform its fields to "ready to write to a database" state.
         """
-        category = await database_services.get(
+        category = await database_services.get_object(
             db=self.db, model=Category, fields={'bookkeeping_id': raw_field[0].text}
         )
 
@@ -157,7 +162,7 @@ class GoodsMixin(BaseMixin, ABC):
             name_id_db = self.names_cache.get(name_bookkeeping_id)
             value_id_db = self.values_cache.get(value_bookkeeping_id)
 
-            db_attribute, _ = await database_services.get_or_create(
+            db_attribute, _ = await database_services.update_or_create_object(
                 db=self.db, model=Attribute, fields={
                     'name_id': name_id_db,
                     'value_id': value_id_db,
@@ -180,7 +185,7 @@ class GoodsMixin(BaseMixin, ABC):
             payload = attribute[1].text
             value_type = attribute[2].text
 
-            db_attribute_name, _ = await database_services.get_or_create(
+            db_attribute_name, _ = await database_services.update_or_create_object(
                 db=self.db, model=AttributeName, fields={
                     'bookkeeping_id': bookkeeping_id,
                     'payload': payload
@@ -201,7 +206,7 @@ class GoodsMixin(BaseMixin, ABC):
             bookkeeping_id = value[0].text
             payload = value[1].text
 
-            db_attribute_value, _ = await database_services.get_or_create(
+            db_attribute_value, _ = await database_services.update_or_create_object(
                 db=self.db, model=AttributeValue, fields={
                     'bookkeeping_id': bookkeeping_id,
                     'payload': payload

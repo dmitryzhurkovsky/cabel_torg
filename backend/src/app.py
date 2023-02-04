@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import time
 
 import uvicorn
 from fastapi import FastAPI
@@ -35,6 +36,7 @@ async def startup():
         event_loop = asyncio.get_running_loop()
 
         async with AsyncSession(engine) as db:
+            start_parsing = time.time()
             xml_parser = XMLParser(db=db)
             price_parser = PricesParser(db=db)
 
@@ -43,7 +45,7 @@ async def startup():
 
             await event_loop.create_task(xml_parser.parse_products())
             await event_loop.create_task(price_parser.parse_prices())
-            logger.info("Parsing a file with products has been finished.")
+            logger.info(f'Parsing has been finished. It took {time.time() - start_parsing}')
 
 
 if __name__ == "__main__":

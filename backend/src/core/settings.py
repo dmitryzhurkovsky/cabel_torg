@@ -28,4 +28,10 @@ JWT_REFRESH_TOKEN_EXPIRATION_TIME = 60 * 60 * 24 * 7  # 7 days
 BOOKKEEPING_SHOULD_BE_PARSED = int(os.getenv('DEBUG', 0))
 XML_BOOKKEEPING_FILE_PATH = os.getenv('XML_BOOKKEEPING_FILE_PATH')
 PATH_TO_XML_FILE_WITH_PRICES = os.getenv('PATH_TO_XML_FILE_WITH_PRICES')
-EXCLUDED_CATEGORIES = os.getenv('EXCLUDE_CATEGORIES', '').split(';')
+EXCLUDED_CATEGORIES = [
+    'Архив',
+    'Товары и услуги, вне основной номенклатуры',
+    'Материалы/расход/организац.',
+    'Топливо',
+    'канцелярия',
+] + os.getenv('EXCLUDED_CATEGORIES', '').split(';')

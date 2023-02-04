@@ -3,7 +3,8 @@ from sqlalchemy import (
     ForeignKey,
     Integer,
     String,
-    CheckConstraint
+    CheckConstraint,
+    Boolean
 )
 from sqlalchemy.orm import backref, relationship
 
@@ -15,14 +16,18 @@ class Category(Base1CModel):
     __tablename__ = 'categories'
 
     id = Column(Integer, index=True, primary_key=True)
-    order = Column(Integer, nullable=True, unique=False)
+    name = Column(String)
+    discount = Column(Integer, default=0)
+
+    # Service fields
+    order = Column(Integer, unique=True)
+    is_visible = Column(Boolean, default=True)
     # An idea of ordering is:
     # an oder attribute of parent categories is 1000, 2000, 3000;
     # an oder attribute of subcategories is 1100, 1200, 1300
     # an oder attribute of subcategories' subcategories is 1101, 1102, 1103
 
-    name = Column(String)
-
+    # Relationship fields
     products = relationship('Product', back_populates='category', lazy='noload')
 
     parent_category_id = Column(Integer, ForeignKey('categories.id'))
@@ -31,7 +36,6 @@ class Category(Base1CModel):
         backref=backref('parent_category', remote_side=[id]),
         viewonly=True,
     )
-    discount = Column(Integer, default=0)
 
     __tableargs__ = (
         CheckConstraint(discount < 100, name='check_discount_less_than_100'),

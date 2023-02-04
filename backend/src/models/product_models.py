@@ -1,4 +1,12 @@
-from sqlalchemy import Column, ForeignKey, Integer, String, DECIMAL, CheckConstraint
+from sqlalchemy import (
+    Column,
+    ForeignKey,
+    Integer,
+    String,
+    DECIMAL,
+    CheckConstraint,
+    Boolean
+)
 from sqlalchemy.dialects.postgresql import ENUM as pgEnum
 from sqlalchemy.orm import relationship
 
@@ -16,10 +24,15 @@ class Product(Base1CModel):
     description = Column(String)
     type = Column('type', pgEnum(ProductType.values(), name='type'))
 
+    # Price fields
     price = Column(DECIMAL)
     price_with_discount = Column(DECIMAL)  # This attribute is auto-calculated if we change the discount.
     discount = Column(Integer, default=0)
 
+    # Service fields
+    is_visible = Column(Boolean, default=True)
+
+    # Relationship fields
     attributes = relationship(
         'Attribute',
         secondary='product_attribute',
