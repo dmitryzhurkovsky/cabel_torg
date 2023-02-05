@@ -1,97 +1,136 @@
 <template lang="html">
   <div class="burger__menu__open">
-<!--    <div v-if = "MENU_ITEM_ACTIVE === 1">first menu item</div>-->
-<!--    <div v-if = "MENU_ITEM_ACTIVE === 2">second menu item</div>-->
-<!--    <div v-if = "MENU_ITEM_ACTIVE === 3">third menu item</div>-->
-    <ul class="cd-accordion-menu animated">
-      <li class="has-children">
-        <input type="checkbox" name="group-1" id="group-1" checked>
-        <label for="group-1">Сетевое оборудование</label>
-        <ul>
-          <li class="has-children">
-            <input type="checkbox" name="sub-group-1" id="sub-group-1">
-            <label for="sub-group-1">Маршрутизаторы</label>
-            <ul>
-              <li><a href="#0">Для корпоративных клиентов</a></li>
-              <li><a href="#0">Для провайдеров услуг связи</a></li>
-              <li><a href="#0">Аксессуары для маршрутизаторов</a></li>
-            </ul>
-          </li>
-          <li class="has-children">
-            <input type="checkbox" name="sub-group-2" id="sub-group-2">
-            <label for="sub-group-2">Коммутаторы</label>
-            <ul>
-              <li class="has-children">
-                <input type="checkbox" name="sub-group-level-3" id="sub-group-level-3">
-                <label for="sub-group-level-3">Фиксированные коммутаторы</label>
-                <ul>
-                  <li><a href="#0">Фиксированные комутаторы</a></li>
-                  <li><a href="#0">Модульные комутаторы</a></li>
-                  <li><a href="#0">Коммутаторы Fibre Channel </a></li>
-                  <li><a href="#0">Аксессуары для коммутаторов</a></li>
-                </ul>
+    <ul class="cd-accordion-menu animated" v-if="CATALOG.length">
+      <li 
+        v-for   = "mainItem in CATALOG"
+        :key    = "mainItem.id"
+      >
+        <label 
+          :class = "{'active' : mainItem.mobileMenu}"  
+          @click.stop  = "changeMainCategory(mainItem)"
+        >
+          {{ mainItem.name }}
+        </label>
+        <div 
+            :class = "{'active' : mainItem.mobileMenu}" 
+            @click.stop  = "toggleCategory(mainItem)"
+            v-if="mainItem.childrens.length"
+         >
+              +
+        </div>
+        <ul class="second" v-if = "mainItem.mobileMenu && mainItem.childrens.length">
+          <li 
+            v-for   = "middleItem in mainItem.childrens"
+            :key    = "middleItem.id"
+          >
+            <label 
+              :class = "{'active' : middleItem.mobileMenu}"  
+              @click.stop  = "changeSubCategory(mainItem, middleItem)"
+            >
+              {{ middleItem.name }}
+            </label>
+            <div 
+              :class = "{'active' : middleItem.mobileMenu}" 
+              @click.stop  = "toggleCategory(middleItem)"
+              v-if="middleItem.childrens.length"
+            >
+              +
+            </div>
+            <ul class="third" v-if = "middleItem.mobileMenu && middleItem.childrens.length">
+              <li 
+                class="has-children"
+                v-for = "lastItem in middleItem.childrens"
+                :key  = "lastItem.id"
+              >
+                <label for="sub-group-level-3"
+                  @click.stop = "changeLastCategory(mainItem, middleItem, lastItem)"
+                >
+                  {{ lastItem.name }}
+                </label>
               </li>
-              <li><a href="#0">Сервисные шлюзы</a></li>
             </ul>
           </li>
-          <li><a href="#0">Сервисные шлюзы</a></li>
-          <li><a href="#0">Сервисные шлюзы</a></li>
-        </ul>
-      </li>
-      <li class="has-children">
-        <input type="checkbox" name="group-2" id="group-2">
-        <label for="group-2">Group 2</label>
-        <ul>
-          <li><a href="#0">Image</a></li>
-          <li><a href="#0">Image</a></li>
-        </ul>
-      </li>
-      <li class="has-children">
-        <input type="checkbox" name="group-3" id="group-3">
-        <label for="group-3">Group 3</label>
-        <ul>
-          <li><a href="#0">Image</a></li>
-          <li><a href="#0">Image</a></li>
-        </ul>
-      </li>
-      <li class="has-children">
-        <input type="checkbox" name="group-4" id="group-4">
-        <label for="group-4">Group 4</label>
-        <ul>
-          <li class="has-children">
-            <input type="checkbox" name="sub-group-3" id="sub-group-3">
-            <label for="sub-group-3">Sub Group 3</label>
-            <ul>
-              <li><a href="#0">Image</a></li>
-              <li><a href="#0">Image</a></li>
-            </ul>
-          </li>
-          <li><a href="#0">Image</a></li>
-          <li><a href="#0">Image</a></li>
         </ul>
       </li>
     </ul>
-    <div class="burger__menu__block flex-center">
-      <a href="" class="burger__menu__item mb-20">Покупателям</a>
-      <a href="" class="burger__menu__item">О нас </a>
-    </div>
-    <div class="burger__menu__block">
-      <a href="tel:+375296889454" class="icon-phone burger__menu__item">+375 29 688 94 54</a>
-    </div>
 
   </div>
 </template>
 
 <script>
 
-import {mapActions, mapGetters} from 'vuex'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 export default {
   name: "BurgerMenu",
 
   computed: {
-    ...mapGetters("header", ["MENU_ITEM_ACTIVE"]),
+    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "CATALOG", "IS_CATALOG_OPEN"]),
   },
+
+  methods:{
+    // ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY", "UPDATE_IS_CATALOG_OPEN"]),
+    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
+    ...mapMutations("query", ["SET_CATEGORY_ID"]),
+    ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
+    ...mapActions("catalog", ["GET_CATALOG_ITEMS"]),
+
+    toggleCategory(item) {
+      item.mobileMenu = !item.mobileMenu;
+    },
+    
+    changeMainCategory(category){
+      this.SET_ALL_CURRENT_CATEGORIES({
+        mainCategory: category.id,
+        middleCategory: null,
+        lastCategory: null,
+      });
+      this.SET_CATEGORY_ID(category.id);
+      // if (category.id === this.TOP_CATEGORIES_ITEM_ACTIVE) {
+      //   this.SET_CURRENT_TOP_CATEGORY(null);
+      // } else {
+      //   this.SET_CURRENT_TOP_CATEGORY(category.id);
+      // }
+      this.openPage();
+    },
+
+    changeSubCategory(mainCategory, middleCategory){
+      this.SET_ALL_CURRENT_CATEGORIES({
+          mainCategory: mainCategory.id,
+          middleCategory: middleCategory.id,
+          lastCategory: null,
+      });
+      this.SET_CATEGORY_ID(middleCategory.id);
+      // if (category.id === this.SUB_CATEGORIES_ITEM_ACTIVE) {
+      //   this.SET_CURRENT_SUB_CATEGORY(null);
+      // } else {
+      //   this.SET_CURRENT_SUB_CATEGORY(category.id);
+      // }
+      this.openPage();
+    },
+
+    changeLastCategory(mainCategory, middleCategory, lastCategory){
+      this.SET_ALL_CURRENT_CATEGORIES({
+          mainCategory: mainCategory.id,
+          middleCategory: middleCategory.id,
+          lastCategory: lastCategory.id,
+      });
+      this.SET_CATEGORY_ID(lastCategory.id);
+      // if (category.id === this.LAST_CATEGORIES_ITEM_ACTIVE) {
+      //   this.SET_CURRENT_LAST_CATEGORY(null);
+      // } else {
+      //   this.SET_CURRENT_LAST_CATEGORY(category.id);
+      // }
+      this.openPage();
+    },
+
+    openPage() {
+      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
+      if (this.$router.path != '/catalog') {
+          this.$router.push('/catalog');
+      }
+    },
+  }
 }
 </script>
 
@@ -124,8 +163,8 @@ input {
 
 .cd-accordion-menu ul {
   /* by default hide all sub menus */
-  display: none;
-  height:0px;
+  // display: none;
+  //height:0px;
   transition:all 0.5s ease-in-out
 }
 

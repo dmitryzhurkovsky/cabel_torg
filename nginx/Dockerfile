@@ -1,5 +1,5 @@
 # build fronend
-FROM node:lts-alpine as build-stage
+FROM node:18.12.1-alpine as build-stage
 WORKDIR /frontend
 COPY /front/package*.json ./
 RUN npm install
@@ -10,5 +10,6 @@ RUN npm run build
 FROM nginx:stable-alpine as production-stage
 COPY --from=build-stage /frontend/dist /usr/share/nginx/html
 COPY /nginx/default.conf /etc/nginx/conf.d/default.conf
+RUN mkdir -p /usr/share/nginx/images
 
 CMD ["nginx", "-g", "daemon off;"]

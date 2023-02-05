@@ -1,6 +1,11 @@
-from typing import Optional
+from decimal import Decimal
+from typing import List
 
+from pydantic import BaseModel
+
+from src.rest.schemas.attribute_schema import AttributeSchema
 from src.rest.schemas.base_schema import BaseSchema
+from src.rest.schemas.base_unit_schema import BaseUnitSchema
 from src.rest.schemas.category_schema import CategorySchema
 from src.rest.schemas.manufacturer_schema import ManufacturerSchema
 
@@ -8,12 +13,29 @@ from src.rest.schemas.manufacturer_schema import ManufacturerSchema
 class ProductSchema(BaseSchema):
     vendor_code: str | None
     name: str
-    base_unit: str
-    category: Optional[CategorySchema]
-    image: str | None
-    manufacturer: Optional[ManufacturerSchema]
+    category: CategorySchema | None
+    images: str | None
+    manufacturer: ManufacturerSchema | None
     tax: int | None
     description: str | None
+    type: str | None
+    base_unit: BaseUnitSchema | None
+    attributes: List['AttributeSchema'] | list
+    price: Decimal | None
+    discount: int | None
+    price_with_discount: Decimal | None
 
     class Config:
         orm_mode = True
+
+
+class ProductUpdateSchema(BaseModel):
+    discount: int
+
+
+class PaginatedProductSchema(BaseModel):
+    limit: int
+    offset: int
+    total: int
+
+    data: List['ProductSchema']

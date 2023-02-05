@@ -1,6 +1,6 @@
 from typing import TypeVar, Type
 
-from fastapi import HTTPException, status
+from fastapi import HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import selectinload
 
@@ -14,14 +14,15 @@ UpdateBaseSchema = TypeVar('UpdateBaseSchema', bound=BaseModel)
 
 class BaseMixin:
     """Base async database mixin"""
-
     table: TableType = None
+    preloaded_fields: tuple = ()
+
     create_scheme: CreateBaseSchema | None = None
     update_scheme: UpdateBaseSchema | None = None
 
     @classmethod
     def init_filtered_fields(cls, filter_fields: dict) -> list:
-        """Initiate filter fields for query"""
+        """Initiate filter fields for a query."""
         initiated_filter_fields = []
 
         for name, value in filter_fields.items():
@@ -30,12 +31,23 @@ class BaseMixin:
         return initiated_filter_fields
 
     @classmethod
-    def init_prefetch_related_fields(cls, prefetch_fields: tuple) -> tuple:
-        """Initiate fields that will be loaded in query to database for related fields"""
+    def init_m2m_filtered_fields(cls, filter_fields: dict) -> list:
+        """Initiate filter fields for a query."""
+        initiated_filter_fields = []
+
+        for name, value in filter_fields.items():
+            if 'id' in name:
+                initiated_filter_fields.append(getattr(cls.table, name) == value)
+
+        return initiated_filter_fields
+
+    @classmethod
+    def init_preloaded_fields(cls, prefetch_fields: tuple) -> tuple:
+        """Initiate fields that will be preloaded in a query to database for related fields"""
         return (selectinload(field) for field in prefetch_fields) if prefetch_fields else tuple()
 
     @classmethod
-    def _check_object(cls, obj: TableType) -> None | Type[HTTPException]:
+    def _check_object(cls, obj: TableType) -> Type[HTTPException]:  # noqa
         """Check if object exist"""
         if not obj:
             raise ObjectNotFoundError()

@@ -1,6 +1,9 @@
 <template>
   <div id="app__component">
+    <MenuWrapper/>
     <v-notification/>
+    <Loader/>
+    <PopUp/>
     <Header/>
     <Breadcrumb/>
     <router-view></router-view>
@@ -9,11 +12,14 @@
 </template>
 
 <script>
-
+  import { mapActions, mapMutations } from "vuex";
   import Header from '@/components/header.vue';
   import Breadcrumb from '@/components/breadcrumb.vue';
   import Footer from "@/components/footer.vue";
-  import vNotification from '@/components/notifications/v-notification';
+  import vNotification from '@/components/notifications/v-notification.vue';
+  import MenuWrapper from '@/components/header/menu-wrapper.vue';
+  import PopUp from '@/components/notifications/pop-up.vue';
+  import Loader from '@/components/UI/loader.vue';
 
   export default {
 
@@ -23,20 +29,34 @@
     },
 
     components:{
-      Header, Breadcrumb, Footer, vNotification,
+      Header, Breadcrumb, Footer, vNotification, MenuWrapper, PopUp, Loader
     },
 
+    // computed: {
+    // },
+
     methods: {
-      setViewParametrs(){
-        // console.log(window.innerWidth);
-        this.$store.commit('header/UPDATE_VIEW_PARAMETERS',window.innerWidth)
-      }
+        ...mapMutations("header", ["UPDATE_VIEW_PARAMETERS"]),
+        ...mapActions("header", ["GET_CATEGORIES"]),
+        ...mapActions("auth", ["GET_USER_DATA", "USER"]),
+        ...mapActions("order", ["GET_USER_ORDER"]),
+        ...mapActions("favorite", ["GET_USER_FAVORITE"]),
+
+        setViewParametrs(){
+            this.UPDATE_VIEW_PARAMETERS(window.innerWidth);
+        }
     },
 
     async mounted() {
-      this.setViewParametrs();
-      window.addEventListener('resize', this.setViewParametrs);
-      await this.$store.dispatch('header/GET_CATEGORIES');
+        // console.log('App mount');
+        this.setViewParametrs();
+        window.addEventListener('resize', this.setViewParametrs);
+        await this.GET_CATEGORIES();
+        await this.GET_USER_FAVORITE();
+        await this.GET_USER_ORDER();
+        if (localStorage.getItem("authToken")) {
+            await this.GET_USER_DATA();
+        }
     },
 
   };
@@ -55,7 +75,7 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
 }
-:focus,
+:focus, 
 :active {
     // outline: none;
 }
@@ -172,7 +192,7 @@ body {
     font-size: 16px ;
     font-weight: 300;
     font-family: 'Rubik', sans-serif;
-    background: linear-gradient(180deg, rgba(246, 247, 249, 0) 0%, #F6F7F9 50.31%, rgba(246, 247, 249, 0) 100%);
+    background: #fff;
     &._lock {
         overflow: hidden;
     }
@@ -269,9 +289,10 @@ h3{
   background: #4275D8;
   border-radius: 6px;
   color:#fff;
-  padding: 8px 24px;
+  padding: 12px 24px;
   min-width:180px;text-align: center;
   cursor: pointer;
+  transition: all 0.3s ease;
   &:hover{
     background: #6291ED;
   }
@@ -279,12 +300,30 @@ h3{
 
 .black{
   background: $mainColor;
+  border: 1.2px solid  $mainColor;
   padding: 12px 24px;
   &:hover{
     background: #5A5A5A;
   }
-
 }
+.empty_black {
+  background: #F8FAFF;
+  color: $mainColor;
+  border: 1.2px solid $mainColor;
+  padding: 12px 24px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+
+  &:hover {
+    background: #eaedf6;
+    opacity: 0.8;
+    color: $mainColor;
+  }
+}
+.blue{
+  padding: 12px 24px;
+}
+
+
 .empty{
   background: #fff;
   padding: 12px 24px;
@@ -295,6 +334,11 @@ h3{
 .flex-center{
   display: flex;
   align-items: center;
+}
+
+.center-text{
+  width: 100%;
+  text-align: center;
 }
 
 ._footnote{
@@ -333,15 +377,15 @@ h3{
   justify-content: space-between;
   gap: 10px;
 }
-.group{
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 15px;
-  //text-align: center;
-  justify-content: center;
-}
+//.group{
+//  width: 100%;
+//  display: flex;
+//  flex-direction: column;
+//  align-items: flex-start;
+//  margin-bottom: 15px;
+//  //text-align: center;
+//  justify-content: center;
+//}
 label{
   text-align: left;
   font-size: 12px;
@@ -493,6 +537,7 @@ input{
   position: relative;
   display: inline-block;
   cursor: pointer;
+  font-weight: 400;
   &__wrapper{
     display: none;
     position: absolute;
@@ -505,6 +550,9 @@ input{
   &:hover{
     color:#4275D8;
   }
+  .wrapper__show{
+    display: block;
+  }
 
   &__content{
     background: #FFFFFF;
@@ -513,12 +561,14 @@ input{
     padding: 16px 10px;
     min-width: 350px;
     width: 100%;
+
     a{
       font-weight: 500;
       font-size: 16px;
       line-height: 24px;
       color: #423E48;
       padding: 10px 16px;
+      transition: all 0.3s ease;
       &:hover{
         background: rgba(66, 117, 216, 0.1);
         border-radius: 6px;
@@ -529,7 +579,7 @@ input{
   }
 }
 
-.dropdown:hover .dropdown__wrapper {
+.dropdown.dropdown__wrapper {
   display: block;
 }
 

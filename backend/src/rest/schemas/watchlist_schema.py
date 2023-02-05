@@ -1,9 +1,22 @@
 from pydantic import BaseModel
 
+from src.rest.schemas.product_schema import ProductSchema
 
-class ProductInWatchListSchema(BaseModel):
-    user_id: int | None = None  # We don't validate user_id because we rewrite it by user_id from request
+
+class WatchListInputSchema(BaseModel):
     product_id: int
+
+
+class WatchListSchema(BaseModel):
+    user_id: int
+    product_id: int
+
+    class Config:
+        orm_mode = True
+
+
+class WatchListWithProductSchema(BaseModel):
+    product: ProductSchema
 
     class Config:
         orm_mode = True

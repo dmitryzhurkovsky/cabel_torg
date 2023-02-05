@@ -91,6 +91,9 @@
 .icon-arrow-l:before {
   content: "\e90e";
 }
+.icon-arrow-r:before {
+  content: "\e90e";
+}
 .icon-catalog-row:before {
   content: "\e90f";
 }
@@ -143,12 +146,35 @@
 .icon-cart:before {
   content: "\e91c";
 }
+.icon-cart-chosen:before {
+  content: "\e91c";
+  background-color: #4275d8;
+  color: #FFFFFF;
+  border-radius: 5px;
+}
 .icon-trash:before {
   content: "\e91d";
 }
 .icon-user:before {
   content: "\e91e";
 }
+
 .icon-favorite:before {
   content: "\e91f";
+}
+
+.icon-user-login:before {
+  content: "\e91e";
+  color: rgb(66, 62, 72);
+}
+.icon-user-login:after {
+  content: "\e926";
+  color: rgb(66, 117, 216);
+  font-size: 22px;
+  position: absolute;
+  bottom: 0;
+  right: -4px;
+}
+.icon-arrow-down:before {
+  content: "\e927";
 }

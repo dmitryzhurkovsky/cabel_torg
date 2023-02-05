@@ -1,26 +1,29 @@
 <template lang="html">
-<!--      <div v-if = "CATALOG_ITEM_ACTIVE === 1">first category item</div>-->
-<!--      <div v-if = "CATALOG_ITEM_ACTIVE === 2">second category item</div>-->
-<!--      <div v-if = "CATALOG_ITEM_ACTIVE === 3">third category item</div>-->
       <div class="catalog__menu menu__container">
         <div class="menu active _container">
           <div class="menu__scroll">
             <div class="container row">
-              <ul class="menu__mass">
-                <li class="menu__item" :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"
-                    v-for   = "item in TOP_CATEGORIES"
-                    :key    = "item.id"
-                    @click  = "changeCategory(item.id)"
-                >
-                  <div class="menu__link">{{item.name}}</div>
-                </li>
-              </ul>
+              <div class="colunm">
+                <ul class="menu__mass">
+                  <li 
+                      class="menu__item" 
+                      :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"
+                      v-for   = "item in TOP_CATEGORIES"
+                      :key    = "item.id"
+                      @click.stop  = "changeCategory(item.id)"
+                  >
+                    <div class="menu__link">{{item.name}}</div>
+                  </li>
+                </ul>
+                <a href="/catalog" class="menu__mass-lnk">Перейти в каталог</a>
+              </div>
+
               <div class="menusub row">
                 <div class="menusub__box">
                   <div class="menusub__item"
                     v-for   = "sub in SUB_CATEGORIES"
                     :key    = "sub.id"
-                    @click  = "subCategoryClick(sub.id, $event)"
+                    @click.stop  = "subCategoryClick(sub.id)"
                   >
                     <div v-if = "sub.id" class="menu__rubric">{{sub.name}}</div>
                     <ul v-if = "sub.subItems.length > 0">
@@ -28,7 +31,7 @@
                           v-for = "subItem in sub.subItems"
                           :key  = "subItem.id"
                       >
-                        <div @click = "subItemCategoryClick(subItem.id, $event)" class="menu__linksub">{{subItem.name}}</div>
+                        <div @click.stop = "subItemCategoryClick(subItem.id)" class="menu__linksub">{{subItem.name}}</div>
                       </li>
                     </ul>
                   </div>
@@ -45,26 +48,59 @@
 
 <script>
 
-import {mapActions, mapGetters} from 'vuex'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 export default {
   name: "CatalogMenu",
 
   computed: {
-    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "TOP_CATEGORIES", "SUB_CATEGORIES"]),
+    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "ALL_CATEGORIES", "TOP_CATEGORIES", "SUB_CATEGORIES", "IS_CATALOG_OPEN"]),
   },
 
   methods:{
-    changeCategory(newActive){
-        this.$store.commit('header/SET_CURRENT_TOP_CATEGORY', newActive);
-        // console.log(this.SUB_CATEGORIES);
+    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
+    ...mapMutations("query", ["SET_CATEGORY_ID"]),
+    ...mapActions("catalog", ["GET_CATALOG_ITEMS"]),
+    ...mapActions("header", ["UPDATE_TOP_CATEGORY", "UPDATE_SUB_CATEGORY", "UPDATE_LAST_CATEGORY", "SET_ALL_CURRENT_CATEGORIES"]),
+
+    changeCategory(id){
+      this.SET_ALL_CURRENT_CATEGORIES({
+          mainCategory: id,
+          middleCategory: null,
+          lastCategory: null,
+      });
+      this.SET_CATEGORY_ID(id);
+      if (this.$router.path != '/catalog') {
+        this.$router.push('/catalog');
+      }
     },
-    subCategoryClick(id, event){
-      console.log('кликнули по подкатегории ', id);
+
+    subCategoryClick(id){
+      this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: this.TOP_CATEGORIES_ITEM_ACTIVE,
+            middleCategory: id,
+            lastCategory: null,
+      });
+      this.SET_CATEGORY_ID(id);
+      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
+      if (this.$router.path != '/catalog') {
+          this.$router.push('/catalog');
+      }
     },
-    subItemCategoryClick(id, event){
-      console.log('кликнули по итему подкатегории ', id, event);
-      event.stopImmediatePropagation();
+
+    subItemCategoryClick(id){
+      // console.log('кликнули по итему подкатегории ', id, event);
+      this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: this.TOP_CATEGORIES_ITEM_ACTIVE,
+            middleCategory: this.ALL_CATEGORIES.filter(item => item.id === id)[0].parent_category_id,
+            lastCategory: id,
+      });
+      // this.UPDATE_LAST_CATEGORY(id);
+      this.SET_CATEGORY_ID(id);
+      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
+      if (this.$router.path != '/catalog') {
+          this.$router.push('/catalog');
+      }
     },
   }
 }
@@ -88,12 +124,23 @@ export default {
     min-width: 250px;
     max-height: 100%;
     position: static;
+    &-lnk{
+      padding-left: 15px;
+      font-size: 12px;
+      margin: 20px 0;
+      color: #423E48;
+      transition: all 0.3s ease;
+      &:hover{
+        color: #4275D8;
+      }
+    }
   }
 
   &__item{
     //margin: 20px 0;
     width: 100%;
     padding: 10px 15px;
+    transition: all 0.2s ease;
     &:hover{
       color:#4275D8;
       background: rgba(66, 117, 216, 0.1);
@@ -123,6 +170,12 @@ export default {
     align-items: flex-start;
 
   }
+  .colunm{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
 
   &__rubric{
     font-weight: 400;
@@ -130,6 +183,11 @@ export default {
     line-height: 20px;
     text-decoration-line: underline;
     color: #423E48;
+    transition: all 0.2s ease;
+    &:hover{
+      color:#4275D8;
+      opacity: 0.8;
+    }
 
   }
 

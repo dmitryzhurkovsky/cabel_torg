@@ -3,64 +3,42 @@
     <div class="header__content _container">
         <div class="header__topmenu topmenu flex-center">
           <div class="topmenu__left flex-center">
-            <div class="topmenu__item">
-              <div class="dropdown icon-burger catalog__btn" @click="toggleMenu()">Каталог товаров</div>
+            <div class="topmenu__item" @click="toggleMenu()">
+              <div class="dropdown icon-burger catalog__btn">Каталог товаров</div>
               <CatalogMenu v-if = "IS_CATALOG_OPEN"/>
             </div>
-            <div class="topmenu__item">
-                  <div class="dropdown">Покупателям
-                    <div class="dropdown__wrapper">
-                      <div class="dropdown__content">
-                        <a @click="openPage('/how_to_work')">Как оформить заказ</a>
-                        <a @click="openPage('/shipping')">Оплата и доставка</a>
-                        <a @click="openPage('/wholesale')">Оптовым клиентам</a>
-                        <a @click="openPage('/warranty')">Гарантийное обслуживание</a>
-                        <a @click="openPage('/offer')">Публичная оферта</a>
-                      </div>
-                    </div>
-
+            <div class="topmenu__item" 
+                @mouseenter="onCustomerIconEnter()"
+                @mouseleave="onIconLeave()"
+            >
+              <div class="dropdown">Покупателям
+                <div :class="[!customerHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
+                  <div class="dropdown__content">
+                    <a @click="openPage('/how_to_work', $event)">Как оформить заказ</a>
+                    <a @click="openPage('/shipping', $event)">Оплата и доставка</a>
+                    <a @click="openPage('/wholesale', $event)">Оптовым клиентам</a>
+                    <a @click="openPage('/warranty', $event)">Гарантийное обслуживание</a>
+                    <a @click="openPage('/offer', $event)">Публичная оферта</a>
                   </div>
+                </div>
+              </div>
             </div>
-            <div class="topmenu__item">
+            <div class="topmenu__item"  
+                @mouseenter="onAboutIconEnter()"
+                @mouseleave="onIconLeave()"
+            >
               <div class="dropdown">О нас
-                <div class="dropdown__wrapper">
+                <div :class="[!aboutHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
                   <div class="dropdown__content ">
-                    <a @click="openPage('/about')">О компании</a>
-                    <a @click="openPage('/contacts')">Контактная информация</a>
-                    <a @click="openPage('/news')">Новости</a>
+                    <a @click="openPage('/about', $event)">О компании</a>
+                    <a @click="openPage('/contacts', $event)">Контактная информация</a>
+                    <a @click="openPage('/news', $event)">Новости</a>
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
-          <div class="topmenu__right client-bar flex-center">
-            <div class="topmenu__item right-direction">
-              <div class="dropdown icon-favorite">
-                <div class="dropdown__wrapper">
-                  <HeaderFavorite/>
-                </div>
-
-              </div>
-
-            </div>
-            <div class="topmenu__item right-direction">
-              <div class="dropdown icon-user">
-                <div class="dropdown__wrapper">
-                  <HeaderUser/>
-                </div>
-
-              </div>
-
-            </div>
-            <div class="topmenu__item right-direction">
-              <div class="dropdown icon-cart">
-                <div class="dropdown__wrapper">
-                  <HeaderCart/>
-                </div>
-              </div>
-            </div>
-          </div>
+          <TopMenuActions />
         </div>
     </div>
   </div>
@@ -68,43 +46,68 @@
 
 <script>
 
-import {mapActions, mapGetters} from 'vuex'
+import {mapMutations, mapGetters} from 'vuex'
 import CatalogMenu  from '@/components/header/catalog-menu.vue'
-import HeaderUser   from '@/components/header/header-user.vue'
-import HeaderCart   from '@/components/header/header-cart.vue'
-import HeaderFavorite   from '@/components/header/header-favorite.vue'
+import TopMenuActions  from '@/components/header/header-actions.vue'
 
 export default {
   name: 'HeaderTopMenu',
 
   components:
   {
-    CatalogMenu, HeaderUser, HeaderCart, HeaderFavorite,
+    CatalogMenu, TopMenuActions
+  },
+
+  data: function(){
+    return {
+      customerHover: false,
+      aboutHover: false,
+    }
   },
 
   computed: {
     ...mapGetters("header", ["IS_CATALOG_OPEN", "TOP_CATEGORIES"]),
-    ...mapGetters("order", ["ORDER_COUNT"]),
   },
 
   methods:{
+    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
+    ...mapMutations("query", ["SET_SEARCH_STRING"]),
+
     toggleMenu() {
-      this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', !this.IS_CATALOG_OPEN);
-      console.log(this.IS_CATALOG_OPEN);
+      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
+      this.SET_SEARCH_STRING('');
+      // console.log(this.IS_CATALOG_OPEN);
     },
-    openPage(page) {
+    openPage(page, event) {
+      event.stopImmediatePropagation();
+      event.preventDefault();
+      this.customerHover = false;
+      this.aboutHover = false;
       if (this.$router.path != page) {
           this.$router.push(page);
+          this.clearSearchString();
       }
-    }
-    // openMenu(){
-    //   this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', true);
-    //   console.log(this.IS_CATALOG_OPEN);
-    // },
-    // closeMenu(){
-    //   this.$store.commit('header/UPDATE_IS_CATALOG_OPEN', false);
-    //   console.log(this.IS_CATALOG_OPEN);
-    // }
+    },
+    
+    clearSearchString(){
+      this.SET_SEARCH_STRING('');
+    },
+
+    onCustomerIconEnter() {
+      this.SET_SEARCH_STRING('');
+      this.customerHover = true;
+    },
+
+    onAboutIconEnter() {
+      this.SET_SEARCH_STRING('');
+      this.aboutHover = true;
+    },
+
+    onIconLeave() {
+      this.customerHover = false;
+      this.aboutHover = false;
+    },
+  
   }
 }
 </script>
@@ -158,6 +161,9 @@ export default {
       .catalog__btn{
         font-weight: 500;
         color: #4275D8;
+        &:hover{
+          opacity: 0.8;
+        }
       }
 
     }
@@ -248,69 +254,5 @@ export default {
     }
 }
 
-//Burger
-.burger-menu{
-  //margin: 0 auto;
-  width: 24px;
-  display: block;
-  transition: all .3s;
-  cursor: pointer;
-  height: 24px;
-
-  .bar{
-    transition: all .3s;
-    height: 2px;
-    width: 100%;
-    display: block;
-    background-color: $secondColor;
-    &:nth-of-type(2){
-      margin: 5px 0;
-    }
-  }
-  &--closed{
-    transition-delay: .3s;
-    .bar:nth-of-type(2){
-      width: 75%;
-      transition-property: margin, height, width;
-      transition-delay: .3s, .3s, 0s;
-    }
-    .bar:nth-of-type(3) {
-      width: 50%;
-    }
-    &:hover{
-      .bar:nth-of-type(2){
-        width: 100%;
-      }
-      .bar:nth-of-type(3){
-        width: 100%;
-      }
-
-    }
-    &--opened{
-    padding-top: 12px;
-    .bar:nth-of-type(1){
-      transform: rotate(45deg);
-      transition-delay: .3s;
-      height: 2px;
-    }
-
-    .bar:nth-of-type(2){
-      opacity: 0;
-      height: 0;
-      margin: -3px;
-    }
-
-    .bar:nth-of-type(3){
-      transform: rotate(-45deg);
-      transition-delay: .3s;
-      height: 2px
-    }
-  }
-  }
-}
-.right-direction .dropdown__wrapper{
-  right: 0;
-  left: unset;
-}
 
 </style>

@@ -15,7 +15,7 @@ class AuthenticateError(BaseError):
     """
     Authentication verifies who the user is.
     Authentication works through passwords, one-time pins, biometric information,
-     and other information provided or entered by the user.
+    and other information provided or entered by the user.
     """
     status_code = status.HTTP_401_UNAUTHORIZED
     default_detail = 'Invalid username or password'

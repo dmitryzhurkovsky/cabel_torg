@@ -1,39 +1,61 @@
-import base64
-
-from sqlalchemy import Column, Float, ForeignKey, Integer, String
+from sqlalchemy import (
+    Column,
+    ForeignKey,
+    Integer,
+    String,
+    DECIMAL,
+    CheckConstraint,
+    Boolean
+)
+from sqlalchemy.dialects.postgresql import ENUM as pgEnum
 from sqlalchemy.orm import relationship
 
+from src.core.enums import ProductType
 from src.models.abstract_model import Base1CModel
 
 
 class Product(Base1CModel):
     __tablename__ = 'products'
 
-    vendor_code = Column(String, nullable=True)
+    vendor_code = Column(String)
     name = Column(String)
-    base_unit = Column(String)
-    image_path = Column(String, nullable=True)
-    tax = Column(Integer, nullable=True)
-    description = Column(String, nullable=True)
-    price = Column(Float, nullable=True)
+    images = Column(String)  # pictures paths in the following format: picture_1,picture_2,picture_3...
+    tax = Column(Integer)
+    description = Column(String)
+    type = Column('type', pgEnum(ProductType.values(), name='type'))
 
-    @property
-    def image(self):
-        if self.image_path:
-            with open(f'src/static/{self.image_path}', 'rb') as image_file:  # todo set static path
-                return base64.b64encode(image_file.read())
+    # Price fields
+    price = Column(DECIMAL)
+    price_with_discount = Column(DECIMAL)  # This attribute is auto-calculated if we change the discount.
+    discount = Column(Integer, default=0)
 
-        return None
+    # Service fields
+    is_visible = Column(Boolean, default=True)
 
-    category_id = Column(Integer, ForeignKey('categories.id'))
-    category = relationship('Category', back_populates='products')
+    # Relationship fields
+    attributes = relationship(
+        'Attribute',
+        secondary='product_attribute',
+        back_populates='products',
+        lazy='joined'
+    )  # m2m
 
-    manufacturer_id = Column(Integer, ForeignKey('manufacturers.id'))
-    manufacturer = relationship('Manufacturer', back_populates='products')
+    base_unit_id = Column(Integer, ForeignKey('base_units.id'))  # o2m
+    base_unit = relationship('BaseUnit', back_populates='products', lazy='joined')
 
-    added_to_cart_for = relationship('Cart', back_populates='products')
+    category_id = Column(Integer, ForeignKey('categories.id'))  # o2m
+    category = relationship('Category', back_populates='products', lazy='joined')
 
-    added_to_watchlist_for = relationship('WatchList', back_populates='products')
+    manufacturer_id = Column(Integer, ForeignKey('manufacturers.id'))  # o2m
+    manufacturer = relationship('Manufacturer', back_populates='products', lazy='joined')
 
-    def __str__(self):
-        return self.name
+    added_to_carts = relationship('Cart', back_populates='product', lazy='noload')  # m2m
+
+    added_to_watchlist_for = relationship('WatchList', back_populates='product', lazy='noload')
+
+    added_to_orders = relationship('ProductOrder', back_populates='product', lazy='noload')
+
+    __tableargs__ = (
+        CheckConstraint(discount < 100, name='check_discount_lt_100'),
+        CheckConstraint(discount >= 0, name='check_discount_gte_0'),
+    )

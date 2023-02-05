@@ -1,15 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 const guest = (to, from, next) => {
-  // console.log('TO', to , 'From', from, 'Next', next);
   if (!localStorage.getItem("authToken")) {
-    // console.log('asasdasd');
     return next();
   } else {
-    // console.log('//////');
     return next("/");
   }
 };
+
 const auth = (to, from, next) => {
   if (localStorage.getItem("authToken")) {
     return next();
@@ -27,21 +25,6 @@ const routes = [
       import("../views/Auth/Login.vue")
   },
   {
-    path: "/register",
-    name: "Register",
-    beforeEnter: guest,
-    component: () =>
-      import("../views/Auth/Register.vue")
-  },
-  {
-    path: "/verify/:hash",
-    name: "Verify",
-    beforeEnter: auth,
-    props: true,
-    component: () =>
-      import("../views/Auth/Verify.vue")
-  },
-  {
     path: "/offer",
     name: "Offer",
     meta: {name: 'Публичная оферта'},
@@ -51,6 +34,7 @@ const routes = [
   {
     path: '/',
     name: 'Main',
+    meta: {name: 'Кабельторг'},
     component: () =>
       import("../views/Main.vue")
   },
@@ -64,12 +48,15 @@ const routes = [
   {
     path: '/catalog',
     name: 'Catalog',
+    meta: {name: 'Каталог'}, 
+    // props: (route) => ({ query: route.query }),
     component: () =>
         import("../views/Catalog.vue")
   },
   {
     path: '/user-cab',
     name: 'user-cab',
+    beforeEnter: auth,
     meta: {name: 'Личный кабинет'},
     component: () =>
         import("../views/Personal/user_cab.vue")
@@ -77,16 +64,17 @@ const routes = [
   {
     path: '/cart',
     name: 'cart',
+    meta: {name: 'Корзина'},
     component: () =>
         import("../views/Personal/cart.vue")
   },
 
-  {
-    path: '/user-cab-set',
-    name: 'user-cab-set',
-    component: () =>
-        import("../views/Personal/user_cab-set.vue")
-  },
+  // {
+  //   path: '/user-cab-set',
+  //   name: 'user-cab-set',
+  //   component: () =>
+  //       import("../views/Personal/user_cab-set.vue")
+  // },
   {
     path: '/wholesale',
     name: 'Wholesale',
@@ -122,17 +110,19 @@ const routes = [
         import("../views/Shipping.vue")
   },
   {
-    path: '/card_product_grid',
-    name: 'Card_product_grid',
+    path: '/card_product/:id',
+    name: 'Card_product',
+    meta: {name: 'Карточка товара'},
+    props: true,
     component: () =>
         import("../views/Card_product_grid.vue")
   },
-  {
-    path: '/card_product',
-    name: 'Card_product',
-    component: () =>
-        import("../views/Card_product.vue")
-  },
+  // {
+  //   path: '/card_product',
+  //   name: 'Card_product',
+  //   component: () =>
+  //       import("../views/Card_product.vue")
+  // },
   {
     path: '/contacts',
     meta: {name: 'Контактная информация'},
@@ -146,6 +136,10 @@ const routes = [
     meta: {name: 'Новости'},
     component: () =>
         import("../views/News.vue")
+  },
+  {
+    path: "/:catch(.*)",
+    redirect: '/404',
   },
 ]
 

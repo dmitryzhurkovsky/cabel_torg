@@ -1,37 +1,40 @@
 <template lang="html">
-  <div class="order__item _open">
-    <div class="order__num" @click = "toggleOrder()">Заказ #  <span>65854</span></div>
+  <div class="order__item _open" v-if = "card">
+    <div class="order__num" @click = "toggleOrder()">
+      Заказ #  <span>{{ card.id }}</span>
+    </div>
     <div class="flex-center order__row">
-      <div class="order__date">10 июня 2022</div>
-      <div class="order__delivery">Тип доставки</div>
-      <div class="order__status _status-color">Отправлен</div>
-      <div class="order__price">58.40 <span>BYN</span></div>
+      <div class="order__date">10 июня 2022???</div>
+      <div class="order__delivery">{{ delivery_type }}</div>
+      <div class="order__status _status-color">Отправлен???</div>
+      <div class="order__price">{{ order_price }}<span> BYN</span></div>
     </div>
 
 
   </div>
-  <div class="order__details" v-if = "isOpen === true">
-      <div class="details-order">
-        <div class="details-order__item flex-center">
-          <div class="details-order__title">Вилка RJ-45 cat 5E FTP для витой пары 8P8C (100 шт) экранированная</div>
-          <div class="details-order__article">арт. <span>125.125.125</span></div>
-          <div class="details-order__count">10 <span>шт.</span></div>
-          <div class="details-order__price"><b>20</b> BYN</div>
+  <div class="order__details" v-if = "isOpen === true && card">
+      <div class="details-order" v-if ="card.products.length">
+        <div class="details-order__item flex-center"
+            v-for   = "orderProduct in card.products"
+            :key    = "orderProduct.id + card.id"
+        >
+          <div class="details-order__title">{{ orderProduct.product.name }}</div>
+          <div class="details-order__article">арт. <span>{{ orderProduct.product.vendor_code }}</span></div>
+          <div class="details-order__count">{{ orderProduct.amount }}<span> {{ orderProduct.product.base_unit.full_name }}</span></div>
+          <div class="details-order__price"><b>{{ (orderProduct.amount * orderProduct.product.price).toFixed(2) }}</b> BYN</div>
         </div>
-        <div class="details-order__item flex-center">
-          <div class="details-order__title">Вилка RJ-45 cat 5E FTP для витой пары 8P8C</div>
-          <div class="details-order__article">арт. <span>125.125.125</span></div>
-          <div class="details-order__count">100 <span>м.</span></div>
-          <div class="details-order__price"><b>220</b> BYN</div>
-        </div>
-
       </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   name: 'OrderItem',
+
+  props: {
+    card:  null,
+  },
 
   data() {
     return {
@@ -39,10 +42,33 @@ export default {
     };
   },
 
+  computed:{
+    ...mapGetters("order", ["ORDER_DELIVERY_TYPES"]),
+
+    order_price(){
+      let totalPrice = 0;
+      this.card.products.forEach(item => {
+        totalPrice = totalPrice + Number((item.amount * item.product.price).toFixed(2));
+      });
+      return Number(totalPrice.toFixed(2));
+    },
+
+    delivery_type(){
+      const type = this.ORDER_DELIVERY_TYPES.filter(item => item.id === this.card.delivery_type_id);
+      return type.length ? type[0].payload : 'unknown';
+    },
+
+    productPrice(item){
+      console.log(item);
+      return (item.amount * item.product.price).toFixed(2)
+    }
+  },
+
   methods:{
     toggleOrder(){
       this.isOpen = !this.isOpen;
-    }
+    },
+
   }
 }
 </script>

@@ -14,7 +14,7 @@
           <div class="recomendation__block" v-if = "VIEW_TYPE === 1">
               <swiper
                   :slides-per-view="4"
-                  :space-between="16"
+                  :space-between="15"
                   :pagination= "{
                     el: '.swiper-pagination',
                     clickable: true,
@@ -26,9 +26,9 @@
                   @slideChange="onSlideChange"
               >
 
-                <swiper-slide v-for="n in 7" :key="n">
+                <swiper-slide v-for="item in RECOMENDED_ITEMS" :key="item.id">
                   <CardItem
-                      :card_id = "n"
+                      :card = "item"
                   />
                 </swiper-slide>
 
@@ -44,16 +44,39 @@
           </div>
           <div class="recomendation__block" v-if = "VIEW_TYPE === 2">
 
-            <CardItem v-for="n in 6"
-              :key="n"
-              :card_id = "n"
-            />
+            <swiper
+                :slides-per-view="3"
+                :space-between="15"
+                :pagination= "{
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    type: 'bullets',
+                    bulletClass: 'swiper-pagination-bullet',
+                    bulletElement: 'span'
+                  }"
+                @swiper="onSwiper"
+                @slideChange="onSlideChange"
+            >
+
+              <swiper-slide v-for="item in RECOMENDED_ITEMS" :key="item.id">
+                <CardItem
+                    :card = "item"
+                />
+              </swiper-slide>
+
+              <div class="swiper-pagination"></div>
+
+              <div class="swiper-navigation-container">
+                <div class="swiper-button-next" @click="nextSlide"></div>
+                <div class="swiper-button-prev" @click="prevSlide"></div>
+              </div>
+
+            </swiper>
           </div>
           <div class="recomendation__block" v-if = "VIEW_TYPE === 3">
 
-            <CardItem v-for="n in 4"
-              :key="n"
-              :card_id = "n"
+            <CardItem v-for="item in RECOMENDED_ITEMS" :key="item.id"
+              :card = "item"
             />
           </div>
 
@@ -64,8 +87,8 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
-  import CardItem from '@/components/goods/card_item.vue'
+  import { mapGetters, mapActions } from 'vuex'
+  import CardItem from '@/components/catalog/card-item.vue'
 
   import { Swiper } from "swiper/vue";
   import { SwiperSlide } from "swiper/vue";
@@ -83,6 +106,7 @@
 
     computed: {
       ...mapGetters("header", ["VIEW_TYPE"]),
+      ...mapGetters("catalog", ["RECOMENDED_ITEMS"]),
     },
 
     data: function(){
@@ -92,6 +116,8 @@
     },
 
     methods:{
+      ...mapActions("catalog", ["GET_RECOMENDED_ITEMS"]),
+      
       onSlideChange() {
          console.log('slide change');
       },
@@ -105,6 +131,10 @@
           this.swiper = swiper;
       },
     },
+
+    async mounted(){
+      await this.GET_RECOMENDED_ITEMS();
+    }
   }
 </script>
 
@@ -113,16 +143,28 @@
 .swiper-pagination, .swiper-pagination-clickable, .swiper-pagination-bullets, .swiper-pagination-horizontal {
   //position: unset;
   //margin-bottom: 3%;
-  bottom: 17px;
+  display: flex;
+  position: inherit;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
 
   span {
-    background: #7700AF;
+    //background: #7700AF;
+    background:red;
   }
 }
 .swiper-pagination-bullet, .swiper-pagination-bullet-active{
-  background: red;
-}
+  background: black!important
 
+}
+.swiper-pagination-bullet-active{
+  background: red!important;
+}
+:root {
+  --swiper-theme-color: red!important;
+}
 
 
 
@@ -131,6 +173,10 @@
   margin: 0 auto;
   width: 20%;
   height: 50px;
+}
+.swiper-button-next, .swiper-button-prev{
+  top: -3px;
+
 }
 .swiper-button-prev::after, .swiper-button-next::after{
   content: "\e90e";
@@ -157,6 +203,12 @@
     &__item{
       width: 100%;
       max-width: 272px;
+    }
+    @media (max-width: $md3+px) {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
     }
 
   }

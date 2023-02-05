@@ -1,13 +1,13 @@
 <template>
-  <div class="product">
+  <div class="product" v-if="cartItemData && id">
     <div class="product__wrapper">
       <div class="product__content _container">
         <div class="product__body">
 
-          <div class="grid ">
+          <div class="grid">
             <div class="grid__item" tabindex="1">
               <div class="product__main-img">
-                <img src="../assets/catalog/card1.png" alt="">
+                <CardImage :images=cartItemData.images />
               </div>
             </div>
             <div class="grid__item" tabindex="2">
@@ -17,10 +17,10 @@
               </div>
             </div>
             <div class="grid__item" tabindex="3">
-              <div class="desc-product__title">Вилка RJ-45 cat 6 UTP для витой пары 8P8C (100 шт)</div>
+              <div class="desc-product__title"> {{ cartItemData.name }}</div>
             </div>
             <div class="grid__item" tabindex="4">
-              <div class="desc-product__article  _label">Артикул: <span>331003</span></div>
+              <div class="desc-product__article  _label">Артикул: <span>{{ cartItemData.vendor_code }}</span></div>
             </div>
             <div class="grid__item" tabindex="5">
             </div>
@@ -34,20 +34,24 @@
               <div class="price-product__block">
                 <div class="_label">Ваша цена:</div>
                 <div class="current_price">
-                  <span>70</span>BYN
-                  <span>/шт</span>
+                  <span>{{ cartItemData.price }}</span>BYN
+                  <span>/{{ cartItemData.base_unit.full_name }}</span>
                 </div>
               </div>
             </div>
             <div class="grid__item" tabindex="9">
-              <div class="product__favorite icon-favorite"></div>
+              <div 
+                  @click.stop="onWishClick()"
+                  :class="[isWish === false ? 'product__favorite icon-favorite' : 'product__favorite icon-favorite-choosed']" 
+              >
+              </div>
             </div>
             <div class="grid__item" tabindex="10">
               <div class="price-product__block">
                 <div class="retail_price">
                   <div>Розничная цена: </div>
                   <div>
-                    <span>70</span>BYN
+                    <span>70???</span>BYN
                     <span>/шт</span>
                   </div>
 
@@ -55,7 +59,7 @@
                 <div class="opt_price">
                   <div>Оптовая цена: </div>
                   <div>
-                    <span>70</span>BYN
+                    <span>70???</span>BYN
                     <span>/шт</span>
                   </div>
 
@@ -63,15 +67,15 @@
               </div>
             </div>
             <div class="grid__item" tabindex="11">
-              <div class="product__btn btn">В корзину</div>
+              <div v-if="quantity !== 0" class="btn black" @click.stop="onOperationWithCartItem(cartItemData, 'remove')">В корзине</div>
+              <div v-if="quantity === 0" class="btn empty_black" @click.stop="onOperationWithCartItem(cartItemData, 'increase')">В корзину</div>
             </div>
-
             <div class="grid__item" tabindex="12">
               <div class="desc-product__count">
                 <span class="_label">Количество</span>
-                <span class="icon-minus"></span>
-                <input class="desc-product__input" type="text">
-                <span class="icon-plus"></span>
+                <span class="icon-minus" @click.stop="onOperationWithCartItem(cartItemData, 'decrease')"></span>
+                <input class="desc-product__input" type="text" v-model="quantity" @input="onOperationWithCartItem(cartItemData, 'set')" @click.stop="">
+                <span class="icon-plus" @click.stop="onOperationWithCartItem(cartItemData, 'increase')"></span>
               </div>
             </div>
             <div class="grid__item" tabindex="13">
@@ -87,9 +91,167 @@
 </template>
 
 <script>
+  import axios from 'axios';
+  import { mapGetters, mapMutations, mapActions } from 'vuex' 
+  import CardImage from '@/components/UI/card-image.vue'
 
   export default {
-    name: 'Card_product_grid',
+    name: 'CardProduct',
+
+    props: {
+      id: null,
+    },
+
+    data(){
+      return {
+        cartItemData: null,
+        isWish: false,
+        quantity: 0,
+      }
+    },
+
+    components: {
+      CardImage,
+    },
+
+   computed: {
+      ...mapGetters("order", ["ORDERS"]),
+      ...mapGetters("favorite", ["FAVORITES"]),
+      ...mapGetters("header", ["ALL_CATEGORIES"]),
+
+      ChangeParameters(){
+        return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES) + String(this.isWish) + 
+              this.cartItemData ? JSON.stringify(this.cartItemData) : String(this.cartItemData);
+      },
+    },
+
+    watch: {
+      ChangeParameters: function() {
+        this.countQuantity();
+        this.checkIsWish();
+      },
+    },
+
+    methods: {
+      ...mapMutations("notification", ["ADD_MESSAGE"]),
+      ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
+      ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
+      ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
+      ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
+      ...mapMutations("query", ["SET_SEARCH_STRING"]),
+
+      async onOperationWithCartItem(card, type) {
+        if (this.quantity == 0 && type === 'remove') {
+          return
+        } else if (this.quantity < 0) return
+
+        const itemData = {
+          amount: 1,
+          product: {
+            id: card.id,
+            vendor_code: card.vendor_code,
+            name: card.name,
+            price: card.price,
+          },
+        }
+        if (type === 'set') {
+          itemData.amount = Number(this.quantity);
+        }
+
+        // const type = this.quantity === 0 ? 'increase' : 'remove';
+        // this.quantity = this.quantity !==0 ? 0 : 1;
+        await this.UPDATE_ITEMS_IN_CART({itemData, type});
+        this.countQuantity();
+      },
+
+      async onWishClick() {
+        const itemData = {
+          product: {
+            id: this.cartItemData.id,
+            vendor_code: this.cartItemData.vendor_code,
+            name: this.cartItemData.name,
+          },
+        }  
+        const type = this.isWish === false ? 'set' : 'remove';
+        await this.UPDATE_IS_WISH_IN_CART({ itemData, type });
+        this.checkIsWish()
+      },
+
+      countQuantity() {
+        if (this.ORDERS.length) {
+          const filtered = this.ORDERS.filter(item => String(item.product.id) === String(this.id));
+          this.quantity =  filtered.length ? filtered[0].amount : 0;
+        } else {
+          this.quantity = 0;
+        }
+      },
+
+      checkIsWish() {
+        if (this.FAVORITES.length) {
+          const filtered = this.FAVORITES.filter(item => String(item.product.id) === String(this.id));
+          this.isWish =  filtered.length ? true : false;
+        } else {
+          this.isWish = false;
+        }
+      },
+
+    },
+
+    async mounted(){
+        this.SET_SEARCH_STRING('');
+        this.CHANGE_BREADCRUMB(0);
+        try {
+            const response = await axios.get(process.env.VUE_APP_API_URL + 'products/' + this.id);
+            this.cartItemData = response.data;
+        } catch (e) {
+            console.log(e);
+            this.ADD_MESSAGE({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
+        }
+
+        const mainBreadCrumb = {
+          name: 'Каталог',
+          path: '/catalog',
+          type: 'local',
+          class: '',
+          category: 1,
+          level: 'root',
+        }
+        this.ADD_BREADCRUMB(mainBreadCrumb);
+
+        const chein = [];
+        const category = this.cartItemData.category;
+        chein.push(category);
+        if (category.parent_category_id) {
+          const category1 = this.ALL_CATEGORIES.filter(item => item.id === category.parent_category_id)[0];
+          chein.push(category1);
+          if (category1.parent_category_id) {
+            const category2 = this.ALL_CATEGORIES.filter(item => item.id === category1.parent_category_id )[0];
+            chein.push(category2);
+          }
+        }
+
+        const level = ['last', 'sub', 'top'];
+
+        for (let i = 0; i < chein.length; i++) {
+          const currBreadCrumb  = {
+            name: chein[chein.length - 1 - i].name,
+            path: '/catalog',
+            type: 'local',
+            class: '',
+            category: chein[chein.length - 1 - i].id,
+            level: level[chein.length - 1 - i],
+          };
+          this.ADD_BREADCRUMB(currBreadCrumb);
+        }
+
+        this.ADD_BREADCRUMB({
+          name: this.cartItemData.name,
+          path: this.$router.currentRoute.value.path,
+          type: "global",
+          class: ""
+        });
+    },
+
   }
 </script>
 
@@ -307,6 +469,7 @@
   }
   &__count{
       span{
+        cursor: pointer;
         &:nth-child(1){
           margin-right: 10px;
         }

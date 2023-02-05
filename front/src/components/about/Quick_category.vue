@@ -9,7 +9,7 @@
             <!-- <div class="quick-category__item quick-category__big" :style = "{backgroundImage : 'url(' + getPath('cat1.png') + ')'}"> -->
               <ul class="quick-category__list">Сетевое оборудование
                 <li class="quick-category__link">
-                  <a href="">Коммутаторы</a> </li>
+                  <a href="">Коммутаторы </a> </li>
                 <li class="quick-category__link"><a href="">Маршрутизаторы</a></li>
                 <li class="quick-category__link"><a href="">Медиаконвекторы</a></li>
                 <li class="quick-category__link"><a href="">Сервисные шлюзы</a></li>
@@ -65,15 +65,20 @@ h3{
 @media (min-width: $md2+px){
   .quick-category__grid{
     display: grid;
-    gap-row:10px;
+    gap:10px;
     grid-template: minmax(180px, 1fr) minmax(180px, 1fr) / 2fr 1fr 1fr ;
   }
 }
 
-.quick-category__grid{
+@media (max-width: $md3+px){
+  .quick-category__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 
-  gap:10px;
+  }
 }
+
 .quick-category__item{
 
   display: flex;
@@ -89,6 +94,7 @@ h3{
 
   &:nth-child(2){
     background-image: url("../../assets/category/cat2.png");
+    background-size: contain;
   }
   &:nth-child(3){
     background-image: url("../../assets/category/cat3.png");
@@ -106,6 +112,9 @@ h3{
   background-image: url("../../assets/category/cat1.png");
   background-position: right;
   background-repeat: no-repeat;
+  @media (max-width: $md3+px){
+    background-size: contain;
+  }
 
 }
 .quick-category__big-row{
@@ -117,13 +126,17 @@ h3{
   font-size: 20px;
   line-height: 24px;
   color: #423E48;
+  @media (max-width: $md3+px) {
+    max-width: 120px;
+
+  }
 }
 .quick-category__link{
   list-style: none;
-  &:hover{
-    font-weight: 500;
-    color:#000
-  }
+  //&:hover{
+  //  font-weight: 500;
+  //  color:#000
+  //}
   &:nth-child(1){
     margin-top: 20px;
   }
@@ -133,10 +146,15 @@ h3{
   text-decoration:none;
   font-weight: 400;
   font-size: 14px;
-  line-height: 130%;
+  line-height: 2;
   color: #423E48;
   opacity: 0.4;
+  &:hover{
+    color: #423E48;
+    opacity: 1;
+  }
 }
+
 
 
 
@@ -145,5 +163,8 @@ h3{
   font-size: 14px;
   line-height: 130%;
   color: #4275D8;
+  @media (max-width: $md3+px) {
+    display: none;
+  }
 }
 </style>

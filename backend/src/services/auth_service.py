@@ -3,17 +3,20 @@ from datetime import timedelta, datetime
 import jwt
 from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm, SecurityScopes
+from jwt import (
+    InvalidTokenError as JWTInvalidTokenError,
+    DecodeError,
+    ExpiredSignatureError)
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.db.db import get_session
-from src.core.redis import redis
 from src.core import settings
+from src.core.db.db import get_session
 from src.core.exception.base_exception import InvalidTokenError, AuthenticateError
 from src.core.managers.user_manager import UserManager
+from src.core.redis import redis
 from src.core.utils import password_is_valid
 from src.models.user_model import User
 from src.rest.schemas.auth_schema import (
-    AuthenticationResponseSchema,
     auth_schema,
 )
 
@@ -47,6 +50,19 @@ class AuthService:
 
         return jwt.encode(headers=default_header, payload=payload, key=settings.JWT_SECRET_KEY)
 
+    @staticmethod
+    def decode_token(token: str) -> int:
+        """Decode a token and return user_id took from payload."""
+        try:
+            payload = jwt.decode(
+                jwt=token.encode(), key=settings.JWT_SECRET_KEY, algorithms='HS256'
+            )
+            user_id = payload.get('sub')
+        except (JWTInvalidTokenError, DecodeError, ExpiredSignatureError, KeyError):
+            raise InvalidTokenError
+
+        return user_id
+
     @classmethod
     async def authenticate_user(cls, user_data: dict, session: AsyncSession) -> User | HTTPException:
         """Check whether there is a user in the database and a password is valid."""
@@ -69,7 +85,7 @@ class AuthService:
             raise InvalidTokenError()
 
     @classmethod
-    async def generate_access_and_refresh_tokens(cls, user_id: int) -> AuthenticationResponseSchema:
+    async def generate_access_and_refresh_tokens(cls, user_id: int) -> tuple:
         """Create new access and refresh tokens by user_id.A refresh token should also be saved in redis
         by the following pattern: key is user_id and value is the refresh_token."""
         access_token = await cls.create_token(user_id=user_id, token_type='access')
@@ -77,13 +93,13 @@ class AuthService:
 
         await redis.set(name=user_id, value=refresh_token, ex=settings.JWT_REFRESH_TOKEN_EXPIRATION_TIME)
 
-        return AuthenticationResponseSchema(access_token=access_token, refresh_token=refresh_token)
+        return access_token, refresh_token
 
     @classmethod
     async def get_access_and_refresh_tokens_by_email_and_password(
             cls, session: AsyncSession,
             user_form: OAuth2PasswordRequestForm
-    ) -> AuthenticationResponseSchema | HTTPException:
+    ) -> tuple | HTTPException:
         """Generate new access and refresh tokens by email and password if a user is authenticated."""
         user_data = {
             'email': user_form.username,
@@ -91,25 +107,21 @@ class AuthService:
         }
         user = await cls.authenticate_user(user_data=user_data, session=session)
 
-        access_and_refresh_tokens = await cls.generate_access_and_refresh_tokens(user_id=user.id)
+        access_token, refresh_token = await cls.generate_access_and_refresh_tokens(user_id=user.id)
 
-        return access_and_refresh_tokens
+        return access_token, refresh_token
 
     @classmethod
     async def get_new_access_and_refresh_tokens_using_old_refresh_token(
             cls, old_refresh_token: str
-    ) -> AuthenticationResponseSchema:
+    ) -> tuple:
         """Generate new access and refresh tokens by a refresh_token if the refresh_token is valid."""
-        payload = jwt.decode(
-            jwt=old_refresh_token.encode(), key=settings.JWT_SECRET_KEY, algorithms='HS256'
-        )
-        user_id = payload.get('sub')
-
+        user_id = cls.decode_token(token=old_refresh_token)
         await cls.validate_refresh_token(user_id=user_id, refresh_token=old_refresh_token)
 
-        access_and_refresh_tokens = await cls.generate_access_and_refresh_tokens(user_id=user_id)
+        access_token, refresh_token = await cls.generate_access_and_refresh_tokens(user_id=user_id)
 
-        return access_and_refresh_tokens
+        return access_token, refresh_token
 
     @classmethod
     async def get_current_user(
@@ -122,12 +134,7 @@ class AuthService:
         if security_scopes.scopes:
             pass
 
-        # todo add try/except blocks
-        payload = jwt.decode(
-            jwt=access_token.encode(), key=settings.JWT_SECRET_KEY, algorithms='HS256'
-        )
-        user_id = payload.get('sub')
+        user_id = cls.decode_token(token=access_token)
 
         user = await UserManager.retrieve(session=session, id=user_id)
-
         return user

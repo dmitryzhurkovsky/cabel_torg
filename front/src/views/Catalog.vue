@@ -1,5 +1,5 @@
 <template>
-  <div class="catalog">
+  <div class="catalog" @click.stop = "clearSearchString()">
     <div class="catalog__wrapper">
       <div class="catalog__content _container">
         <div class="catalog__body">
@@ -8,231 +8,44 @@
 
 <!--        # SIDEBAR-->
             <div class="catalog__sidebar filter">
-              <div class="filter__block">
-                <div class="filter__box">
-                  <div class="filter__title icon-arrow-up">Тип оборудования</div>
-
-                  <div class="filter__checkbox-list">
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Кабели и провода</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Сетевое оборудование</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Группа 3</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
-                <div class="filter__box">
-                  <div class="filter__title icon-arrow-up">Категория</div>
-
-                  <div class="filter__checkbox-list">
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Плинты размыкаетмые</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Коннекторы, разъемы, соединители</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Категория 3</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
-                <div class="filter__box">
-                  <div class="filter__title icon-arrow-up">Показывать:</div>
-
-                  <div class="filter__checkbox-list">
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Все товары</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Только товары со скидкой</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                    <div class="filter__checkbox__item">
-                      <div class="checkbox-default">
-                        <label class="checkbox__label">
-                          <input type="checkbox" name="" class="" value="">
-                          <div class="checkbox"></div>
-                          <div class="filter__text">
-                            <span class="">Только “В наличии”</span>
-                          </div>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-
-                </div>
-              </div>
+              <FilterPanel />
             </div>
 <!--        # CONTENT-->
             <div class="content-block">
-              <div class="content-block__subcategory recomendation__nav">
-                  <div class="recomendation__nav__item">Для кабеля витая пара</div>
-                  <div class="recomendation__nav__item">Для коаксиального кабеля</div>
-                  <div class="recomendation__nav__item">Маршрутизаторы</div>
+              <div class="content-block__subcategory recomendation__nav" v-if = "LastCategory.length">
+                  <div 
+                    class="recomendation__nav__item"
+                    v-for = "category in LastCategory[0].subItems"
+                    :key = "category.id"
+                    @click.stop = setActiveCategory(category.id)
+                  >
+                    {{ category.name }}
+                  </div>
               </div>
               <div class="content-block__topfilter topfilter">
-                <div class="topfilter__share icon-change"> По популярности</div>
+                <SortPanel />
                 <div class="topfilter__right flex-center">
-                  <div class="topfilter__page-result">Показывать по <span>10</span> </div>
-                  <div class="topfilter__box-view icon-catalog-table"></div>
-                  <div class="topfilter__row-view icon-catalog-row active"></div>
+                  <LimitPanel />
+                  <ViewPanel />
                 </div>
-
-
               </div>
               <div class="content-block__list">
-                <div class="content-block__item product-row">
-                  <div class="product">
-                    <div class="product__tag">Хит</div>
-                    <a class="product__img" href="">
-                      <img class="" src="../assets/image44.png" alt="">
-                    </a>
-                    <div class="product__info">
-                      <div class="product__status icon-done-color _label mb-20">В наличии</div>
-                      <div class="product__title">
-                        <a  href="">Коммуникационный кабель</a>
-                      </div>
-                      <div class="product__uptitle">
-                        <a  href="">UTP cat.5e (патч-панель) 19″</a>
-                      </div>
-                      <div class="product__count flex-center">
-                        <span class="_label">Количество:</span>
-                        <span class="icon-minus"></span>
-                        <input class="product__input" type="text">
-                        <span class="icon-plus"></span>
-                      </div>
-
-
-
-
-                    </div>
-                    <div class="product__action">
-                      <div class="product__article  _label mb-20">Артикул: <span>331003</span></div>
-                      <div class="product__price">
-                        <span>70</span>BYN
-                        <span>/шт</span>
-                      </div>
-                      <div class="notice">* Цена указана с учетом НДС.</div>
-                      <div class="product__btn flex-center">
-                        <div class="product__wishlist icon-favorite"></div>
-                        <div class="btn black">В корзину</div>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
-                <div class="content-block__item product-row">
-                  <div class="product">
-                    <div class="product__tag">Хит</div>
-                    <a class="product__img" href="">
-                      <img class="" src="../assets/image44.png" alt="">
-                    </a>
-                    <div class="product__info">
-                      <div class="product__status icon-done-color _label mb-20">В наличии</div>
-                      <div class="product__title">
-                        <a  href="">Коммуникационный кабель</a>
-                      </div>
-                      <div class="product__uptitle">
-                        <a  href="">UTP cat.5e (патч-панель) 19″</a>
-                      </div>
-                      <div class="product__count flex-center">
-                        <span class="_label">Количество:</span>
-                        <span class="icon-minus"></span>
-                        <input class="product__input" type="text">
-                        <span class="icon-plus"></span>
-                      </div>
-
-
-
-
-                    </div>
-                    <div class="product__action">
-                      <div class="product__article  _label mb-20">Артикул: <span>331003</span></div>
-                      <div class="product__price">
-                        <span>70</span>BYN
-                        <span>/шт</span>
-                      </div>
-                      <div class="notice">* Цена указана с учетом НДС.</div>
-                      <div class="product__btn flex-center">
-                        <div class="product__wishlist icon-favorite"></div>
-                        <div class="btn black">В корзину</div>
-                      </div>
-
-                    </div>
-                  </div>
-                </div>
+                <div class="content-block__item product-row" v-if = "ITEMS_LIST.length !== 0 && VIEW_TYPE === 'row'">
+                  <ListItem 
+                    v-for   = "item in ITEMS_LIST"
+                    :key    = "item.id"
+                    :card   = item
+                  />
+                </div>  
+                <div class="content-block__item product-table" v-if = "ITEMS_LIST.length !== 0 && VIEW_TYPE === 'table'">
+                  <CardItem 
+                    v-for   = "item in ITEMS_LIST"
+                    :key    = "item.id"
+                    :card   = item
+                  />
+                </div>  
               </div>
+              <PaginationPanel class="content-block__pagination" />
 
             </div>
           </div>
@@ -244,8 +57,104 @@
 
 <script>
 
+  import FilterPanel from '@/components/catalog/filter-panel.vue';
+  import CardItem from '@/components/catalog/card-item.vue';
+  import ListItem from '@/components/catalog/list-item.vue';
+  import LimitPanel from '@/components/catalog/limit-panel.vue';
+  import ViewPanel from '@/components/catalog/view-panel.vue';
+  import PaginationPanel from '@/components/catalog/pagination-panel.vue';
+  import SortPanel from '@/components/catalog/sort-panel.vue';
+
+  import { mapGetters, mapActions, mapMutations } from 'vuex'
+
   export default {
     name: 'Catalog',
+
+    components:
+    {
+      FilterPanel, ListItem, CardItem, LimitPanel, ViewPanel, PaginationPanel, SortPanel,
+    },
+
+    watch: {
+      ChangeParameters: async function() {
+        await this.getData();
+      },
+
+      CATEGORY_ID: function() {
+        this.SET_CATALOG_SEARCH_STRING('');
+      },
+    },
+
+    computed: {
+        ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES"]),
+        ...mapGetters("catalog", ["ITEMS_LIST", "CATALOG_SEARCH_STRING"]),
+        ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SEARCH_STRING"]),
+
+        LastCategory(){
+            let result = [];
+            if (this.SUB_CATEGORIES_ITEM_ACTIVE && this.SUB_CATEGORIES) {
+                result = this.SUB_CATEGORIES.filter(item => item.id === this.SUB_CATEGORIES_ITEM_ACTIVE);
+            }
+            return result;
+        },
+
+        ChangeParameters(){
+          return String(this.LIMIT) + String(this.OFFSET) + JSON.stringify(this.TYPE_OF_PRODUCT) + String(this.MIN_PRICE) + 
+                  String(this.MAX_PRICE) + String(this.CATEGORY_ID) + this.CATALOG_SEARCH_STRING + this.VIEW_TYPE;
+                  //  + String(this.SUB_CATEGORIES_ITEM_ACTIVE) + String(this.TOP_CATEGORIES_ITEM_ACTIVE) + String(this.LAST_CATEGORIES_ITEM_ACTIVE); 
+        }
+    },
+
+    methods: {
+      ...mapActions("catalog", ["GET_CATALOG_ITEMS", "GET_ALL_CATALOG_ITEMS"]),
+      ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
+      ...mapMutations("query", ["SET_CATEGORY_ID", "SET_OFFSET"]),
+      ...mapMutations("query", ["SET_SEARCH_STRING"]),
+      ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING"]),
+      ...mapMutations("notification", ["SET_IS_LOADING"]),
+
+      async getData() {
+        this.SET_IS_LOADING(true);
+        if (this.CATEGORY_ID) {
+          if (this.CATALOG_SEARCH_STRING) {
+            await this.GET_ALL_CATALOG_ITEMS();
+          } else {
+            await this.GET_CATALOG_ITEMS(this.CATEGORY_ID);
+          }
+          // await this.GET_CATALOG_ITEMS(this.CATEGORY_ID);
+        } else {
+          await this.GET_ALL_CATALOG_ITEMS();
+        }
+        this.SET_IS_LOADING(false);
+      },
+
+      setActiveCategory(id){
+        this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: this.TOP_CATEGORIES_ITEM_ACTIVE,
+            middleCategory: this.SUB_CATEGORIES_ITEM_ACTIVE,
+            lastCategory: id,
+        });
+        this.SET_CATEGORY_ID(id);
+      },
+
+      clearSearchString(){
+        this.SET_SEARCH_STRING('');
+      },
+
+    },
+
+    async mounted() {
+      await this.getData();
+      if (!this.CATEGORY_ID) {
+        this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
+        this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
+          name: this.$router.currentRoute.value.meta.name,
+          path: this.$router.currentRoute.value.path,
+          type: "global",
+          class: ""
+        });
+      }
+    }    
   }
 </script>
 
@@ -275,87 +184,11 @@
 
 }
   &__sidebar{
-    width: 270px;
-  }
-  .content-block{
-
-  }
-
-
-}
-
-.filter{
-
-  &__block{
-
-  }
-  &__checkbox{
-
-    &__item{
-      margin: 0px 15px 10px 0px;
-      //height: 18px;
-      input{
-        position: absolute;
-        opacity: 0;
-        z-index: -1;
-      }
-    }
-
-
-  }
-  &__box{
-    font-weight: 400;
-    position: relative;
-
+    min-width: 260px;
+    width: 272px;
+    padding-right: 10px;
   }
 
-  &__title{
-    background: #F8FAFF;
-    padding: 6px 8px;
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 24px;
-    color: #423E48;
-    margin: 12px 0;
-    &:before{
-      position: absolute;
-      top: 12px;
-      right: 10px;
-      font-size: 10px;
-      //transform: rotate(-90deg);
-    }
-  }
-  &__text{
-    span{
-      font-weight: 400;
-      font-size: 14px;
-      color: #423E48;
-    }
-
-  }
-
-}
-.checkbox{
-  margin-right: 12px;
-
-
-
-  &:before{
-    content: "";
-    width: 18px;
-    height: 18px;
-    display: inline-block;
-    background: rgb(249, 249, 249);
-    border: 1px solid rgb(163, 163, 163);
-  }
-
-
-  &__label{
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    height: 30px;
-  }
 }
 
 .content-block{
@@ -377,6 +210,12 @@
       opacity: 0.5;
       margin-right: 10px;
       padding: 6px 20px;
+      //max-width: 25%;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: all 0.5s ease;
+
       cursor: pointer;
       &:hover{
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
@@ -385,9 +224,19 @@
         opacity: 1;
       }
     }
+
+  }
+  &__pagination{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px 0;
   }
   &__item{
-    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap:16px;
   }
 
   &__topfilter{
@@ -399,13 +248,11 @@
   }
 
 }
+
 .topfilter{
 
   &__right{
 
-  }
-  &__page-result{
-    margin-right: 15px;
   }
   &__box-view{
     margin-right: 15px;
@@ -421,175 +268,18 @@
 
 }
 
-.product{
-    display: flex;
-    position: relative;
-    background: #FFFFFF;
-    border: 2px solid #EEEEEE;
-    box-sizing: border-box;
-    border-radius: 8px;
-    padding: 20px 22px 20px 22px;
-
-  ._label{
-    font-size: 12px;
-    line-height: 20px;
+.product-table{
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  gap: 10px;
+  @media (max-width: $md2+px) {
+    grid-template-columns: repeat(2, 1fr);
   }
-
-    &__img {
-      width: 100%;
-      flex-basis: 30%;
-      img{
-        max-width: 100%;
-      }
-    }
-  &__info{
-    flex-basis: 45%;
-    padding: 0 10px;
-
+  .item-card{
+    min-width: 270px;
   }
-
-  &__action{
-    flex-basis: 25%;
-    padding: 0 10px;
-  }
-
-    &__tag{
-      background: #7700AF;
-      border-radius: 2px;
-      padding: 2px 11px;
-      position: absolute;
-      font-weight: 400;
-      font-size: 12px;
-      left:20px;
-      top:20px;
-      color: #fff;
-    }
-    &__wishlist{
-
-      &.added {
-        fill: #ff6f60;
-        path {
-          stroke: #ff6f60;
-        }
-      }
-
-      cursor: pointer;
-      fill: none;
-      margin-right: 10px;
-    }
-  &__price{
-    font-size: 20px;
-    margin-bottom: 10px;
-    text-align: right;
-    span:nth-child(1){
-      font-weight: 500;
-      margin-right: 5px;
-    }
-  }
-
-
-    &__row {
-      justify-content: space-between;
-      &:nth-child(1){
-        margin-bottom: 3px;
-      }
-      &:nth-child(2){
-        margin-bottom: 15px;
-      }
-    }
-
-    &__buy {
-      &:before {
-        cursor: pointer;
-        padding: 10px 10px;
-      }
-      &:hover{
-        background: #4275D8;
-        border-radius: 6px;
-        color: #fff;
-      }
-
-
-    }
-
-    .notice{
-      font-weight: 300;
-      font-size: 10px;
-      opacity: 0.5;
-      text-align: right;
-    }
-
-
-
-    .current_price {
-      font-weight: 500;
-      font-size: 20px;
-      line-height: 24px;
-      span{
-        font-weight: 300;
-      }
-
-    }
-
-    &__title {
-      margin-bottom: 10px;
-      a{
-        font-weight: 500;
-        font-size: 15px;
-
-        color: #423E48;
-      }
-
-    }
-
-    &__uptitle {
-      a{
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 130%;
-        color: #423E48;
-      }
-
-    }
-  &__status{
-    &:before{
-      margin-right: 10px;
-    }
-  }
-  &__article{
-    text-align: right;
-  }
-
-  &__count{
-    margin: 24px 0;
-    span:nth-child(1){
-      margin-right: 10px;
-    }
-
-    .icon-plus, .icon-minus{
-      cursor: pointer;
-    }
-  }
-
-  &__input{
-    width: 40px;
-    height: 40px;
-    padding: 9px 8px;
-    background: rgba(66, 62, 72, 0.07);
-    border-radius: 2px;
-    border: none;
-    margin: 0 10px;
-  }
-
-  &__btn{
-    margin: 24px 0 ;
-
-
-  }
-
-
-
 }
-
 
 </style>

@@ -1,12 +1,12 @@
 <template>
-  <div class="main">
+  <div class="main" @click.stop = "SET_SEARCH_STRING('')">
     <Banner/>
     <Recomendation/>
     <Quick_category/>
     <News/>
     <Partners/>
-    <!-- <About/>
-    <Offer/> -->
+    <About/>
+    <!--<Offer/> -->
 
 
 
@@ -14,8 +14,9 @@
 </template>
 
 <script>
+import { mapActions, mapMutations } from 'vuex'
 import Banner from '@/components/about/Banner.vue'
-// import About from '@/views/About.vue'
+import About from '@/components/about/About_block_notuse.vue'
 import Quick_category from '@/components/about/Quick_category.vue'
 import Partners from "@/components/about/Partners.vue";
 import News from "@/components/about/News.vue";
@@ -29,15 +30,20 @@ export default {
       Banner,
       Recomendation,
       Partners,
-  		// About,
+  		About,
       Quick_category,
       News,
       // Offer
 
     },
 
+    methods:{
+      ...mapMutations("query", ["SET_SEARCH_STRING"]),
+      ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
+    },
+
     mounted(){
-      this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
+      this.CHANGE_BREADCRUMB(0);
     }
   }
 </script>

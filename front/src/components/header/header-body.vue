@@ -1,5 +1,6 @@
 <template lang="html">
-  <BurgerMenu v-if = "IS_MENU_OPEN"/>
+  <!-- <BurgerMenu v-if = "IS_MENU_OPEN"/> -->
+  <BurgerMenu v-if = "IS_CATALOG_OPEN&&VIEW_TYPE>1"/>
   <div class="header__wrapper">
     <div class="header__content _container">
         <div class="header__body ">
@@ -10,7 +11,7 @@
               <div class="bar"></div>
             </div>
 
-            <a href="/" class="header__logo">
+            <a @click ="onOpenLink('/', $event)" href="/" class="header__logo">
                 <img src="@/assets/logo.svg" alt="CabelTorg">
             </a>
             <HeaderSearch/>
@@ -23,88 +24,8 @@
                   </div>
 <!--                  <div class="info-header__item">BYN</div>-->
             </div> <!--     header__info-->
-      <!--  # CLIENT-BAR -  Appears from tablet version-->
-            <div class="topmenu__right client-bar flex-center">
-              <div class="topmenu__item">
-                <a class="icon-favorite"></a>
-              </div>
-              <div class="topmenu__item popup-container">
-
-                <label class="icon-user" for="login-popup"></label>
-                <input type="checkbox" id="login-popup">
-
-                <div class="popup">
-                  <label for="login-popup"></label>
-                  <div class="inner">
-                    <label class=" close-popup icon-plus"></label>
-                    <div class="title">
-                      <h6>Вход</h6>
-
-                    </div>
-                    <div class="content">
-                      <ul>
-                        <li>
-                          <label class="label_input">Электронная почта</label>
-                          <input type="text" placeholder="">
-                        </li>
-                        <li>
-                          <label class="label_input">Пароль</label>
-                          <input type="password" placeholder="">
-                        </li>
-                        <li  class="center">
-                          <button type="submit" class="btn">Войти</button>
-                        </li>
-                        <li class="center">
-                          <a href="" class="label_input popu">Не помню пароль</a>
-                        </li>
-                        <li  class="center">
-                          <a href="" class="">Зарегистрироваться</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-              <div class="topmenu__item popup-container">
-
-                <label class="icon-cart" for="login-popup"></label>
-                <input type="checkbox" id="login-popup">
-
-                <div class="popup">
-                  <label for="login-popup"></label>
-                  <div class="inner">
-                    <label class=" close-popup icon-plus"></label>
-                    <div class="title">
-                      <h6>Вход</h6>
-
-                    </div>
-                    <div class="content">
-                      <ul>
-                        <li>
-                          <label class="label_input">Электронная почта</label>
-                          <input type="text" placeholder="">
-                        </li>
-                        <li>
-                          <label class="label_input">Пароль</label>
-                          <input type="password" placeholder="">
-                        </li>
-                        <li  class="center">
-                          <button type="submit" class="btn">Войти</button>
-                        </li>
-                        <li class="center">
-                          <a href="" class="label_input popu">Не помню пароль</a>
-                        </li>
-                        <li  class="center">
-                          <a href="" class="">Зарегистрироваться</a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div><!--    client-bar-->
+            <TopMenuActions />
+       <!-- # CLIENT-BAR -  Appears from tablet version -->
 
         </div>  <!--header__body -->
     </div>
@@ -113,27 +34,41 @@
 </template>
 
 <script>
-  import {mapActions, mapGetters} from 'vuex'
+  import {mapMutations, mapGetters} from 'vuex'
   import HeaderSearch from '@/components/header/header-search.vue'
   import BurgerMenu from '@/components/header/burger-menu.vue'
+  // import UserActionsMobile from '@/components/auth/user-actions-mobile.vue'
+  import TopMenuActions  from '@/components/header/header-actions.vue'
 
   export default {
     name: "HeaderBody",
 
     components:
     {
-      HeaderSearch, BurgerMenu
+      HeaderSearch, BurgerMenu, TopMenuActions
     },
 
     computed: {
-      ...mapGetters("header", ["IS_MENU_OPEN"]),
+      ...mapGetters("header", ["IS_CATALOG_OPEN", "TOP_CATEGORIES", "VIEW_TYPE"]),
     },
 
     methods:{
+      ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
+      ...mapMutations("query", ["SET_SEARCH_STRING"]),
+
       toggleMenu() {
-        this.$store.commit('header/UPDATE_IS_MENU_OPEN', !this.IS_MENU_OPEN);
-        // console.log(this.IS_MENU_OPEN);
+        this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
       },
+
+      onOpenLink(link, event) {
+        event.stopImmediatePropagation();
+        event.preventDefault();
+        this.SET_SEARCH_STRING('');
+        if (this.$router.path != link) {
+            this.$router.push(link);
+        }
+      },
+      
     }
 
   }
@@ -180,12 +115,17 @@
 .info-header{
     &__item{
     padding: 0 20px 0 20px;
+
     &:nth-child(1){
       width: 170px;
       a{
         font-weight: 500;
         font-size: 14px;
         color: $mainColor;
+        transition: color 0.3s ease;
+        &:hover{
+          color: #4275D8;
+        }
       }
     }
     &:nth-child(2){
@@ -201,4 +141,64 @@
   }
 }
 
+//Burger
+.burger-menu{
+  //margin: 0 auto;
+  width: 24px;
+  display: block;
+  transition: all .3s;
+  cursor: pointer;
+  height: 24px;
+
+  .bar{
+    transition: all .3s;
+    height: 2px;
+    width: 100%;
+    display: block;
+    background-color: $secondColor;
+    &:nth-of-type(2){
+      margin: 5px 0;
+    }
+  }
+  &--closed{
+    transition-delay: .3s;
+    .bar:nth-of-type(2){
+      width: 75%;
+      transition-property: margin, height, width;
+      transition-delay: .3s, .3s, 0s;
+    }
+    .bar:nth-of-type(3) {
+      width: 50%;
+    }
+    &:hover{
+      .bar:nth-of-type(2){
+        width: 100%;
+      }
+      .bar:nth-of-type(3){
+        width: 100%;
+      }
+
+    }
+    &--opened{
+      padding-top: 12px;
+      .bar:nth-of-type(1){
+        transform: rotate(45deg);
+        transition-delay: .3s;
+        height: 2px;
+      }
+
+      .bar:nth-of-type(2){
+        opacity: 0;
+        height: 0;
+        margin: -3px;
+      }
+
+      .bar:nth-of-type(3){
+        transform: rotate(-45deg);
+        transition-delay: .3s;
+        height: 2px
+      }
+    }
+  }
+}
 </style>

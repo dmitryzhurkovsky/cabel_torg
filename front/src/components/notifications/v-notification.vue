@@ -26,7 +26,7 @@
 
 <script>
 
-  import { mapGetters } from "vuex";
+  import { mapGetters, mapMutations } from "vuex";
 
   export default {
     name: "v-notification",
@@ -34,41 +34,36 @@
       // messages:     { type: Array,   default: () => {return []}},
       rightButton:  { type: String,  default: ''},
       leftButton:   { type: String,  default: ''},
-      timeout:      { type: Number,  default: 300}
-    },
-
-    data() {
-      return {}
+      timeout:      { type: Number,  default: 3000}
     },
 
     computed: {
-      ...mapGetters("notification", ["MESSAGES"]),
+      ...mapGetters("notification", ["MESSAGES", "LENGTH"]),
     },
 
     methods: {
+      ...mapMutations("notification", ["DELETE_MESSAGE"]),
+
       hideNotification() {
         let vm = this;
-        if (this.MESSAGES.length) {
-          setTimeout(function () {
-            vm.$store.commit("notification/DELETE_MESSAGE");
+        if (this.LENGTH) {
+          setTimeout(() => {
+            vm.DELETE_MESSAGE();
           }, vm.timeout)
         }
       },
 
       closeNotification(){
-          this.$store.commit("notification/DELETE_MESSAGE");
+          this.DELETE_MESSAGE();
       },
     },
 
     watch: {
-      MESSAGES() {
-        this.hideNotification()
+      LENGTH() {
+        this.hideNotification();
       }
     },
 
-    mounted() {
-      this.hideNotification()
-    }
   }
 </script>
 

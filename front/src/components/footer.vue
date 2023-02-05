@@ -8,7 +8,7 @@
                         <h3>Остались вопросы?</h3>
                         <p>Напишите нам на почту <a href="mail:info@cabeltorg.by">info@cabeltorg.by</a>  или оставьте свой номер телефона и наш специалист вскоре свяжется с вами!</p>
                       </div>
-                      <button class="btn">Заказать звонок</button>
+                      <button class="btn" @click.stop = "onMadeCall(true)">Заказать звонок</button>
                   </div>
                   <div class="footer__row flex-center">
 
@@ -92,10 +92,14 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex';
+
 export default {
   name: "footer",
 
   methods: {
+    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
+
     linkClick(URL, name){
       if (this.$router.path != URL) {
           this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
@@ -104,6 +108,10 @@ export default {
       }
     },
 
+    onMadeCall(status){
+      this.SET_IS_POPUP_OPEN(status);
+      this.SET_POPUP_ACTION('RequestCall');
+    }
   }
 }
 </script>
@@ -270,12 +278,17 @@ export default {
     &_link{
       padding: 5px 0;
 
+
       span{
         font-weight: 300;
         font-size: 14px;
         line-height: 14px;
         color: #423E48;
         cursor: pointer;
+        transition: all 0.3s ease;
+        &:hover{
+          color:#4275D8;
+        }
       }
 
     }
@@ -315,6 +328,7 @@ export default {
     font-size: 30px;
     color: #423E48;
     opacity: 0.3;
+    transition: all 0.3s ease;
     &:hover{
       color: #4275D8;
       opacity: 1;
