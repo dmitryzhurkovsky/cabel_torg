@@ -3,12 +3,13 @@ from abc import ABC
 
 from src.core import settings
 from src.models.category_model import Category
-from src.parser import database_services
 from src.parser.mixins.base_mixin import BaseMixin
+from src.parser.servers import database_service
 
 
 class CategoryMixin(BaseMixin, ABC):
     EXCLUDED_CATEGORIES = settings.EXCLUDED_CATEGORIES
+    DEFAULT_ORDER = settings.DEFAULT_CATEGORIES_ORDER
 
     @property
     def excluded_categories_cache(self) -> set:
@@ -43,7 +44,7 @@ class CategoryMixin(BaseMixin, ABC):
             if parent_category_id:
                 clean_category |= {'parent_category_id': parent_category_id}
 
-            db_category, _ = await database_services.update_or_create_object(
+            db_category, _ = await database_service.update_or_create_object(
                 db=self.db, refresh=False, update=True, model=Category, fields=clean_category
             )
 
@@ -76,6 +77,10 @@ class CategoryMixin(BaseMixin, ABC):
             field_name, field_value = self.clean_category_field(raw_field=raw_field)
             if field_name and field_value:
                 clean_element[field_name] = field_value
+
+                # Set up a default value for order attribute it's needed it.
+                if order := self.DEFAULT_ORDER.get(field_value) and field_name == 'name':
+                    clean_element['order'] = order
 
         # We shouldn't show some categories on UI.
         clean_element['is_visible'] = False if clean_element.get('name') in self.EXCLUDED_CATEGORIES else True

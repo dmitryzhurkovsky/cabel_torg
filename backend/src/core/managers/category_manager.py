@@ -12,6 +12,19 @@ class CategoryManager(CRUDManager):
     table = Category
 
     @classmethod
+    async def list(
+            cls,
+            session: AsyncSession,
+            filter_fields: dict = {},  # noqa
+            search_fields: tuple | list = (),
+            order_fields: tuple | list = (),
+            offset: int = 0,
+            limit: int = 100,
+    ) -> list:
+        search_fields = (Category.is_visible.is_not(False),)
+        return await super().list(search_fields=search_fields, offset=offset, limit=limit, session=session)
+
+    @classmethod
     async def get_categories_ids(
             cls,
             parent_category_ids: list,

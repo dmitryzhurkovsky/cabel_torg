@@ -12,7 +12,7 @@ from src.models.product_models import Product
 
 
 async def convert_filter_fields(filter_fields: QueryParams, session: AsyncSession = None) -> list:
-    """Convert filter values to SQLALCHEMY filter expressions"""
+    """Convert filter values to SQLALCHEMY filter expressions."""
     from src.core.managers.category_manager import CategoryManager
 
     converted_filter_fields = []

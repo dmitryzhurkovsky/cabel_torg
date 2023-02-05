@@ -28,10 +28,27 @@ JWT_REFRESH_TOKEN_EXPIRATION_TIME = 60 * 60 * 24 * 7  # 7 days
 BOOKKEEPING_SHOULD_BE_PARSED = int(os.getenv('DEBUG', 0))
 XML_BOOKKEEPING_FILE_PATH = os.getenv('XML_BOOKKEEPING_FILE_PATH')
 PATH_TO_XML_FILE_WITH_PRICES = os.getenv('PATH_TO_XML_FILE_WITH_PRICES')
-EXCLUDED_CATEGORIES = [
+EXCLUDED_CATEGORIES = (
     'Архив',
     'Товары и услуги, вне основной номенклатуры',
     'Материалы/расход/организац.',
     'Топливо',
     'канцелярия',
-] + os.getenv('EXCLUDED_CATEGORIES', '').split(';')
+)
+DEFAULT_CATEGORIES_ORDER = {
+    'Кабель и провод': 1,
+    'Кабель оптический': 1000,
+    'Кабель коаксиальный': 1100,
+    'Кабель витая пара': 1200,
+
+    'Сетевое оборудование': 2,
+    'Оборудование для телевидения': 2000,
+    'Оборудование для оптических сетей': 2100,
+    'Оборудование для видеонаблюдения': 2200,
+    'Патч-корд СКС': 2300,
+    'Телефонное оборудование': 2400,
+    'Коннектора, разъёмы, соединители': 2500,
+
+    'Материалы для монтажа кабеля': 3,
+    'Источники бесперебойного питания ИБП (UPS), АКБ': 4
+}

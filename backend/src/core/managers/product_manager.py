@@ -29,6 +29,7 @@ class ProductManager(CRUDManager):
     ) -> list:
         """Get filtered list of objects with pagination."""
         search_fields = await convert_filter_fields(filter_fields, session=session)
+        search_fields.append(Product.is_visible.is_not(False))
         return await cls.list(search_fields=search_fields, offset=offset, limit=limit, session=session)
 
     @classmethod
@@ -38,6 +39,7 @@ class ProductManager(CRUDManager):
             session: AsyncSession,
     ) -> int:
         filter_fields = await convert_filter_fields(filter_fields, session=session)
+        filter_fields.append(Product.is_visible.is_not(False))
 
         result = await session.execute(
             select(count()).
