@@ -13,7 +13,7 @@
       <CardImage :images=card.images />
     </a>
     <div class="item-card__info">
-      <div class="item-card__row flex-center">
+      <div class="item-card__row old_price__row flex-center">
         <div v-if = "card.price_with_discount" class="old_price">{{ CardPriceWithoutDiscount }}t
           <span>BYN / {{ card.base_unit.full_name }}</span>
         </div>
@@ -269,11 +269,16 @@ export default {
     text-align: right;
   }
 
+  .old_price__row{
+    min-height: 30px;
+  }
+
   .old_price {
     font-size: 16px;
     line-height: 24px;
     text-decoration-line: line-through;
     opacity: 0.4;
+    white-space: nowrap;
 
   }
 
