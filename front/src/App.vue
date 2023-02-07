@@ -379,13 +379,8 @@ h3{
 }
 .group{
   position: relative;
-//  width: 100%;
-//  display: flex;
-//  flex-direction: column;
-//  align-items: flex-start;
-//  margin-bottom: 15px;
-//  //text-align: center;
-//  justify-content: center;
+  margin-bottom: 10px;
+  width: 100%;
 }
 label{
   text-align: left;

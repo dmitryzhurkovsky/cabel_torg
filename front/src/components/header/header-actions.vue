@@ -45,19 +45,21 @@
         </div>
         <div v-if = "IS_OPEN_MAIN_LOGIN && USER" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
 
-          <div class="dropdown__content popup-cart">
-            <div class="avatar__box">
-              <div class="avatar  flex-center" :class="[!USER ? 'icon-user' : 'icon-user-login']"></div>
+          <div class="dropdown__content popup-cart user-login">
+            <div class="dropdown__list">
+                <a @click="handleClick('/user-cab', 1)" class="icon-user">
+                  Личный кабинет
+                </a>
+                <a @click="handleClick('/user-cab', 1)" class="icon-go-cart">
+                  Мои заказы
+                </a>
+                <a @click="handleClick('/user-cab', 1)" class="icon-setting">
+                  Настройки
+                </a>
+                <a @click="userLogout()" class="icon-exit">
+                  Выйти из аккаунта
+                </a>
             </div>
-            <div>
-              <div @click="handleClick('/user-cab', 1)" class="">
-                Профиль
-              </div>
-              <div @click="userLogout()" class="">
-                Выйти
-              </div>
-            </div>
-
 
           </div>
           <!-- <UserActions/> -->
@@ -187,6 +189,10 @@ export default {
   text-align: center;
   padding: 40px 24px 40px 24px;
 }
+.user-login{
+  min-width: 270px;
+}
+
 .avatar{
   justify-content: center;
   width: 80px;
@@ -229,6 +235,26 @@ button{
 
 .topmenu__right{
   gap:20px;
+
+}
+
+.dropdown__list{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  a{
+    display: flex;
+    align-items: center;
+    //justify-content: center;
+
+    width: 100%;
+    text-align: left;
+    &:before{
+      margin-right: 10px;
+    }
+  }
 
 }
 

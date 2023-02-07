@@ -59,24 +59,38 @@
         <div class="filter__box">
             <div class="filter__title icon-arrow-up">Показывать:</div>
 
-            <div class="filter__checkbox-list">
-                <div class="filter__checkbox__item"
-                    v-for = "category in categories"
-                    :key = "category"
-                >
-                    <div 
-                        class = "checkbox-default"
-                        @click.stop = "changeFilterCategory(category)"
-                    >
-                        <label class="checkbox__label">
-                            <input type="checkbox" name="" class="" value="">
-                            <div class="checkbox"></div>
-                            <div class="filter__text">
-                            <span :class="[category.type === TYPE_OF_PRODUCT.type ? 'active' : '']">{{ category.name }}</span>
-                            </div>
-                        </label>
-                    </div>
-                </div>
+            <div class="filter__checkbox__list">
+
+              <label class="checkbox__container">Все товары
+                <input type="checkbox" checked="checked">
+                <span class="checkmark"></span>
+              </label>
+              <label class="checkbox__container">Акции
+                <input type="checkbox">
+                <span class="checkmark"></span>
+              </label>
+              <label class="checkbox__container">В наличии
+                <input type="checkbox">
+                <span class="checkmark"></span>
+              </label>
+
+<!--                <div class="filter__checkbox__item"-->
+<!--                    v-for = "category in categories"-->
+<!--                    :key = "category"-->
+<!--                >-->
+<!--                    <div -->
+<!--                        class = "checkbox-default"-->
+<!--                        @click.stop = "changeFilterCategory(category)"-->
+<!--                    >-->
+<!--                        <label class="checkbox__container">-->
+<!--                            <input type="checkbox" name="" class="" value="">-->
+<!--                           <div class="checkbox"></div>-->
+<!--                              <div class="filter__text">-->
+<!--                              <span class="checkmark" :class="[category.type === TYPE_OF_PRODUCT.type ? 'active' : '']">{{ category.name }}</span>-->
+<!--                            </div>-->
+<!--                        </label>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
 
 
@@ -248,27 +262,31 @@ export default {
 
 }
 .checkbox{
-  margin-right: 12px;
+ margin-right: 12px;
 
 
 
-  &:before{
-    content: "";
-    width: 18px;
-    height: 18px;
-    display: inline-block;
-    background: rgb(249, 249, 249);
-    border: 1px solid rgb(163, 163, 163);
-  }
+ &:before{
+   content: "";
+   width: 18px;
+   height: 18px;
+   display: inline-block;
+   background: rgb(249, 249, 249);
+   border: 1px solid rgb(163, 163, 163);
+ }
 
 
-  &__label{
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    height: 30px;
-  }
+ &__label{
+   display: flex;
+   align-items: flex-start;
+   justify-content: flex-start;
+   height: 30px;
+ }
 }
+
+
+
+
 
 .sidebar_menu{
   &__title{
@@ -321,5 +339,75 @@ export default {
   }
 
 }
+
+ .checkbox__container {
+   display: block;
+   position: relative;
+   padding-left: 30px;
+   margin-bottom: 12px;
+   cursor: pointer;
+   font-size: 14px;
+   -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+   opacity: 1;
+ }
+
+/* Hide the browser's default checkbox */
+.checkbox__container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.checkbox__container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.checkbox__container input:checked ~ .checkmark {
+  background-color: #4275D8;
+}
+
+ /* Create the checkmark/indicator (hidden when not checked) */
+ .checkmark:after {
+   content: "";
+   position: absolute;
+   display: none;
+ }
+
+ /* Show the checkmark when checked */
+ .checkbox__container input:checked ~ .checkmark:after {
+   display: block;
+ }
+
+ /* Style the checkmark/indicator */
+ .checkbox__container .checkmark:after {
+   left: 6px;
+   top: 2px;
+   width: 6px;
+   height: 12px;
+   border: solid white;
+   border-width: 0 2px 2px 0;
+   transform: rotate(45deg);
+   -webkit-transform: rotate(45deg);
+   -ms-transform: rotate(45deg);
+   transform: rotate(45deg);
+ }
+
 
 </style>
