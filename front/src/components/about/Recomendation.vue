@@ -6,14 +6,14 @@
 
           <h3>Рекомендации для вас</h3>
           <div class="recomendation__nav">
-            <div class="recomendation__nav__item">Топ продаж</div>
-            <div class="recomendation__nav__item">Новинки</div>
-            <div class="recomendation__nav__item">Скидки</div>
+            <div class="recomendation__nav__item" @click="SET_RECOMENDATION_TYPE('all')">Топ продаж</div>
+            <div class="recomendation__nav__item" @click="SET_RECOMENDATION_TYPE('all')">Новинки</div>
+            <div class="recomendation__nav__item" @click="SET_RECOMENDATION_TYPE('with_discount')">Скидки</div>
           </div>
           <!-- :navigation= "true" -->
-          <div class="recomendation__block" v-if = "VIEW_TYPE === 1">
+          <div class="recomendation__block" v-if = "VIEW_TYPE === 1 || VIEW_TYPE === 2">
               <swiper
-                  :slides-per-view="4"
+                  :slides-per-view="slidersInFrame"
                   :space-between="15"
                   :pagination= "{
                     el: '.swiper-pagination',
@@ -42,37 +42,6 @@
               </swiper>
 
           </div>
-          <div class="recomendation__block" v-if = "VIEW_TYPE === 2">
-
-            <swiper
-                :slides-per-view="3"
-                :space-between="15"
-                :pagination= "{
-                    el: '.swiper-pagination',
-                    clickable: true,
-                    type: 'bullets',
-                    bulletClass: 'swiper-pagination-bullet',
-                    bulletElement: 'span'
-                  }"
-                @swiper="onSwiper"
-                @slideChange="onSlideChange"
-            >
-
-              <swiper-slide v-for="item in RECOMENDED_ITEMS" :key="item.id">
-                <CardItem
-                    :card = "item"
-                />
-              </swiper-slide>
-
-              <div class="swiper-pagination"></div>
-
-              <div class="swiper-navigation-container">
-                <div class="swiper-button-next" @click="nextSlide"></div>
-                <div class="swiper-button-prev" @click="prevSlide"></div>
-              </div>
-
-            </swiper>
-          </div>
           <div class="recomendation__block" v-if = "VIEW_TYPE === 3">
 
             <CardItem v-for="item in RECOMENDED_ITEMS" :key="item.id"
@@ -87,7 +56,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex'
+  import { mapGetters, mapActions, mapMutations } from 'vuex'
   import CardItem from '@/components/catalog/card-item.vue'
 
   import { Swiper } from "swiper/vue";
@@ -106,30 +75,40 @@
 
     computed: {
       ...mapGetters("header", ["VIEW_TYPE"]),
-      ...mapGetters("catalog", ["RECOMENDED_ITEMS"]),
+      ...mapGetters("catalog", ["RECOMENDED_ITEMS", "RECOMENDATION_QUANTITY", "RECOMENDATION_TYPE"]),
     },
 
     data: function(){
       return{
-        swiper : null,
+        slidersInFrame : 4,
+      }
+    },
+
+    watch: {
+      VIEW_TYPE: function() {
+        this.slidersInFrame = this.VIEW_TYPE === 1 ? 4 : 3;
+      },
+
+      slidersInFrame: async function() {
+        await this.GET_RECOMENDED_ITEMS();
+        this.setNewQuantity();
+      },
+
+      RECOMENDATION_TYPE: async function() {
+        await this.GET_RECOMENDED_ITEMS();
+        this.setNewQuantity();
       }
     },
 
     methods:{
       ...mapActions("catalog", ["GET_RECOMENDED_ITEMS"]),
+      ...mapMutations("catalog", ["SET_RECOMENDATION_TYPE", "SET_RECOMENDATION_QUANTITY"]),
       
-      onSlideChange() {
-         console.log('slide change');
+      setNewQuantity(){
+        const newQuantity = this.RECOMENDED_ITEMS.length > 9 ? 10 : this.RECOMENDED_ITEMS.length;
+        this.SET_RECOMENDATION_QUANTITY(newQuantity);
       },
-      nextSlide(){
-          this.swiper.slideNext();
-      },
-      prevSlide(){
-          this.swiper.slidePrev();
-      },
-      onSwiper(swiper){
-          this.swiper = swiper;
-      },
+
     },
 
     async mounted(){

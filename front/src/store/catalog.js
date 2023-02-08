@@ -9,6 +9,8 @@ export default {
     activePage: 0,
     recomendedList: [],
     searchString: '',
+    recomendationType: 'all',
+    recomendationQuantity: 10,
   },
 
     getters: {
@@ -27,6 +29,12 @@ export default {
       CATALOG_SEARCH_STRING(state){
         return state.searchString;
       },
+      RECOMENDATION_TYPE(state) {
+        return state.recomendationType;
+      },
+      RECOMENDATION_QUANTITY(state) {
+        return state.recomendationQuantity;
+      }
     },
 
     mutations: {
@@ -50,6 +58,14 @@ export default {
 
       SET_CATALOG_SEARCH_STRING(state, searchStr) {
         state.searchString = searchStr;
+      },
+
+      SET_RECOMENDATION_TYPE(state, type) {
+        state.recomendationType = type;
+      },
+
+      SET_RECOMENDATION_QUANTITY(state, quantity) {
+        state.recomendationQuantity = quantity;
       }
     },
 
@@ -93,12 +109,12 @@ export default {
         }
       },
 
-      async GET_RECOMENDED_ITEMS({ commit }) {
+      async GET_RECOMENDED_ITEMS({ commit, getters }) {
         try {
             const response = await axios.get(process.env.VUE_APP_API_URL + 
-                'products?type_of_product=all' + 
+                'products?type_of_product=' + getters.RECOMENDATION_TYPE +
                 '&offset=0' +  
-                '&limit=10');
+                '&limit=' + getters.RECOMENDATION_QUANTITY);
             commit("SET_RECOMENDED_ITEMS", response.data);
         } catch (e) {
             console.log(e);

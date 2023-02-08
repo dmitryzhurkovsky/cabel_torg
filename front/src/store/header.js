@@ -89,7 +89,7 @@ export default {
     },
     POPUP_MESSAGE(state) {
       return state.popUpMessage;
-    }
+    },
   },
 
   mutations: {
@@ -178,7 +178,8 @@ export default {
 
     SET_POPUP_MESSAGE(state, msg) {
       state.popUpMessage = {...msg};
-    }
+    },
+
   },
 
   actions: {
