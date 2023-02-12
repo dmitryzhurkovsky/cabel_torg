@@ -117,6 +117,9 @@ export default {
       opacity: 1;
     }
   }
+  .acc-settings{
+    max-width: 400px;
+  }
 }
 
 .input__box {

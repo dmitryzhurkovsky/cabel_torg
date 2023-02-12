@@ -377,15 +377,11 @@ h3{
   justify-content: space-between;
   gap: 10px;
 }
-//.group{
-//  width: 100%;
-//  display: flex;
-//  flex-direction: column;
-//  align-items: flex-start;
-//  margin-bottom: 15px;
-//  //text-align: center;
-//  justify-content: center;
-//}
+.group{
+  position: relative;
+  margin-bottom: 10px;
+  width: 100%;
+}
 label{
   text-align: left;
   font-size: 12px;
@@ -413,6 +409,19 @@ input{
   border-radius: 8px;
   padding: 10px 30px 10px 16px;
   font-weight: 300;
+}
+
+.error-message {
+  position: absolute;
+  left: 15px;
+  bottom: -4px;
+  padding: 0 8px 0 8px;
+  font-size: 12px;
+  background-color: #fff;
+  color: #E30044;
+}
+.is-invalid{
+  border: 1px solid #E30044;
 }
 
 //RADIO

@@ -132,8 +132,10 @@
       border-left: 1px solid $mainColor;
       //border-right: 1px solid $mainColor;
       a{
-        font-weight: 300;
-        text-decoration-line: underline;
+        font-weight: 400;
+        color:#4275D8;
+        letter-spacing: 0.6px;
+        //text-decoration-line: underline;
       }
     }
     &:nth-child(3){

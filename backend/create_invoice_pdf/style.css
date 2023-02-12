@@ -1,0 +1,189 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
+
+
+.text-center{
+  text-align: center;
+
+}
+
+.mb-20{
+  margin-bottom: 20px;
+}
+
+
+.invoice__container{
+
+  padding: 20px 0;
+  position: relative;
+  font-size: 14px;
+  font-family:'Rubik'
+}
+
+.invoice__header div:nth-child(2){
+  font-weight: 500;
+}
+.invoice__logo{
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.invoice__number{
+  width:100%;
+  font-weight: 500;
+  padding-bottom: 5px;
+
+}
+.invoice__number span{
+  margin-right: 5px;
+
+}
+
+.invoice__supplier{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 10px 0;
+  font-weight: 500;
+}
+.invoice__supplier div:nth-child(1){
+  font-weight: 300;
+  padding-right: 20px;
+}
+.invoice__customer{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 20px 0 10px 0;
+  font-weight: 500;
+}
+.invoice__customer div:nth-child(1){
+  font-weight: 300;
+  padding-right: 20px;
+}
+.footer__dop-info{
+  font-size: 10px;
+  margin: 10px 0;
+  line-height: 1.2;
+
+}
+.invoice__footer{
+
+}
+
+.footer__sign, .footer__sign_btn{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 150px;
+  padding: 10px 0;
+}
+.footer__sign_btn{
+  height: 140px;
+}
+.footer__sign_btn .sign__item{
+  position: relative;
+}
+.sign__item span{
+  display: inline-block;
+  width: 120px;
+  border-bottom: 1px solid #000;
+
+}
+.invoice__signature{
+  width: 140px;
+  position: absolute;
+  bottom: -45px;
+  right: 0;
+}
+
+.invoice__stamp{
+  width: 240px;
+  position: absolute;
+  top: -70px;
+  right: -140px;
+  opacity: 0.5;
+}
+
+.footer__sign__clm{
+
+}
+
+.footer__sign div:nth-child(1){
+  font-weight: 500;
+}
+.footer__sign div:nth-child(2){
+  position: relative;
+  font-size: 10px;
+  padding: 3px 30px;
+  border-top: 1px solid #000;
+  margin-top: 16px;
+
+}
+.footer__sign div:nth-child(3){
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+}
+.footer__sign div:nth-child(3) span:nth-child(2) {
+  font-weight: 300;
+  font-size: 10px;
+  padding: 3px 10px;
+  border-top: 1px solid #000;
+
+}
+.hr{
+  height: 2px;
+  background: #3c3f45;
+}
+.hr__dot{
+  /*height: 2px;*/
+  border-top: 1px dashed #3c3f45;
+  margin: 30px 0;
+}
+
+.invoice__body{
+  padding: 20px 0;
+}
+.invoice__table table{
+  width: 100%;
+}
+.invoice__table td{
+  font-weight: 500;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: center;
+  padding: 5px 2px;
+}
+.invoice__table td{}
+
+.invoice__price{
+  padding: 20px 0;
+  font-size: 13px;
+
+}
+.invoice__price__item{
+  font-weight: 500;
+}
+
+.invoice__price__item:nth-child(2){
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.footer__address{
+  font-size: 12px;
+  text-align: center;
+  padding: 10px 0;
+  line-height: 1.2;
+}
+.footer__address div:nth-child(1){
+  font-weight: 500;
+}
