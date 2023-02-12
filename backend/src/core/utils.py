@@ -3,7 +3,7 @@ from decimal import Decimal
 from xml.etree.ElementTree import Element
 
 import bcrypt
-from sqlalchemy import or_, select
+from sqlalchemy import or_, select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.sql.operators import ColumnOperators
 from starlette.datastructures import QueryParams
@@ -38,9 +38,9 @@ async def get_filter_expressions(filter_fields: QueryParams, session: AsyncSessi
         if type_of_product == ProductTypeFilterEnum.AVAILABLE:
             filter_expressions.append(Product.status == ProductStatus.AVAILABLE.value)
         elif type_of_product == ProductTypeFilterEnum.WITH_DISCOUNT:
-            filter_expressions.append(or_(
-                Product.price_with_discount.is_not(0),
-                Product.price_with_discount.is_not(None),
+            filter_expressions.append(and_(
+                Product.discount.is_not(None),
+                Product.discount != 0,
             ))
 
     if search_letters := filter_fields.get('q'):

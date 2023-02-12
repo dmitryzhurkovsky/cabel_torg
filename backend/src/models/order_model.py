@@ -20,8 +20,8 @@ class OrderStatus(str, BaseEnum):
 class Order(BaseModel):
     __tablename__ = 'orders'
 
-    promo_code = Column(String(50))
     status = Column('status', pgEnum(*OrderStatus.values(), name='order_status'), default=OrderStatus.IN_PROCESSING)
+    promo_code = Column(String(50))
 
     # requisites
     company_name = Column(String(50))
@@ -49,6 +49,10 @@ class Order(BaseModel):
 
     user_id = Column(ForeignKey('users.id', ondelete='CASCADE'))
     user = relationship('User', back_populates='orders')
+
+    @property
+    def number(self) -> int:
+        return self.id + 100000
 
 
 class ProductOrder(Base):

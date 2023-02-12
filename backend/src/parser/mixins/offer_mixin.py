@@ -15,7 +15,7 @@ class OfferMixin(BaseMixin, ABC):
         for offer in offers:
             product_bookkeeping_id = offer[0].text
             product_price = Decimal(offer[4][0][2].text).quantize(Decimal('1.00'))
-            product_count = int(offer[5].text) if offer[5].text else 0
+            product_count = Decimal(offer[5].text) if offer[5].text else 0
 
             product_db = await database_service.get_object(
                 db=self.db, model=Product,

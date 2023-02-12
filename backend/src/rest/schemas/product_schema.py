@@ -4,6 +4,7 @@ from typing import List
 
 from pydantic import BaseModel
 
+from src.models.product_models import ProductStatus
 from src.rest.schemas.attribute_schema import AttributeSchema
 from src.rest.schemas.base_schema import BaseSchema
 from src.rest.schemas.base_unit_schema import BaseUnitSchema
@@ -17,7 +18,7 @@ class ProductSchema(BaseSchema):
     images: str | None
     tax: int | None
     description: str | None
-    type: str | None
+    status: ProductStatus | None
 
     price: Decimal | None
     discount: int | None

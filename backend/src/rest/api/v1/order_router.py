@@ -6,7 +6,8 @@ from src.core.db.db import get_session
 from src.core.managers.order_manager import OrderManager
 from src.rest.schemas.order_schema import (
     OrderSchema,
-    OrderCreateInputSchema
+    OrderCreateInputSchema,
+    OrderUpdateInputSchema
 )
 from src.services.auth_service import AuthService
 
@@ -52,4 +53,25 @@ async def delete_order(
     await OrderManager.delete(
         id=order_id,
         session=session
+    )
+
+
+@order_router.patch(
+    '/orders/{order_id}',
+    response_model=OrderSchema,
+    status_code=status.HTTP_200_OK)
+async def update_product_amount_in_cart(
+        order_id: int,
+        order_info: OrderUpdateInputSchema,
+        user=Depends(AuthService.get_current_user),
+        session: AsyncSession = Depends(get_session)
+) -> OrderSchema:
+    # todo add validation
+    return await OrderManager.update(
+        pk=order_id,
+        input_data={
+            'user_id': user.id,
+            **order_info.dict(exclude_unset=True)
+        },
+        session=session,
     )

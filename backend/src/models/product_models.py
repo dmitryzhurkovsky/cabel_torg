@@ -32,7 +32,7 @@ class Product(Base1CModel):
     images = Column(String)  # pictures paths in the following format: picture_1,picture_2,picture_3...
     tax = Column(Integer)
     description = Column(String)
-    count = Column(Integer, default=0)
+    count = Column(DECIMAL, default=0)
 
     # Price fields
     price = Column(DECIMAL)
