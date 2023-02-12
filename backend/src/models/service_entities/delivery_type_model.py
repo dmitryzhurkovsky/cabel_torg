@@ -9,5 +9,5 @@ class DeliveryType(Base):
 
     id = Column(Integer, index=True, primary_key=True)
 
-    payload = Column(String(50))
+    payload = Column(String(255))
     orders = relationship('Order', back_populates='delivery_type', lazy='noload')

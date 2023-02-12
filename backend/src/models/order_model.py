@@ -1,14 +1,27 @@
 from sqlalchemy import Column, ForeignKey, Integer, CheckConstraint, String
+from sqlalchemy.dialects.postgresql import ENUM as pgEnum
 from sqlalchemy.orm import relationship
 
 from src.core.db.db import Base
+from src.core.enums import BaseEnum
 from src.models.abstract_model import BaseModel
+
+
+class OrderStatus(str, BaseEnum):
+    """
+    It's type of order.
+    """
+    IN_PROCESSING = 'P'
+    SENT = 'S'
+    CANCELED = 'c'
+    COMPLETED = 'C'
 
 
 class Order(BaseModel):
     __tablename__ = 'orders'
 
     promo_code = Column(String(50))
+    status = Column('status', pgEnum(*OrderStatus.values(), name='order_status'), default=OrderStatus.IN_PROCESSING)
 
     # requisites
     company_name = Column(String(50))

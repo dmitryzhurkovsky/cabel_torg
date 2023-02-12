@@ -8,8 +8,8 @@ from src.models.abstract_model import Base1CModel
 class ProductAttribute(Base):
     __tablename__ = 'product_attribute'
 
-    attribute_id = Column(ForeignKey("attributes.id"), primary_key=True)
-    product_id = Column(ForeignKey("products.id"), primary_key=True)
+    attribute_id = Column(ForeignKey("attributes.id", ondelete='CASCADE'), primary_key=True)
+    product_id = Column(ForeignKey("products.id", ondelete='CASCADE'), primary_key=True)
 
 
 class Attribute(Base):
@@ -17,10 +17,10 @@ class Attribute(Base):
 
     id = Column(Integer, index=True, primary_key=True)
 
-    value_id = Column(Integer, ForeignKey('attribute_values.id'))
+    value_id = Column(Integer, ForeignKey('attribute_values.id', ondelete='CASCADE'))
     value = relationship('AttributeValue', back_populates='attribute', lazy='joined')
 
-    name_id = Column(Integer, ForeignKey('attribute_names.id'))
+    name_id = Column(Integer, ForeignKey('attribute_names.id', ondelete='CASCADE'))
     name = relationship('AttributeName', back_populates='attribute', lazy='joined')
 
     products = relationship('Product', secondary='product_attribute', back_populates='attributes', lazy='noload')

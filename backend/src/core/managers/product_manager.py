@@ -6,7 +6,11 @@ from sqlalchemy.sql.functions import count
 from starlette.datastructures import QueryParams
 
 from src.core.managers.base_manager import CRUDManager
-from src.core.utils import convert_filter_fields, calculate_price_with_discount
+from src.core.utils import (
+    get_filter_expressions,
+    calculate_price_with_discount,
+    get_order_expressions
+)
 from src.models import Product
 from src.rest.schemas.product_schema import ProductUpdateSchema
 
@@ -28,9 +32,18 @@ class ProductManager(CRUDManager):
             limit: int = 12
     ) -> list:
         """Get filtered list of objects with pagination."""
-        search_fields = await convert_filter_fields(filter_fields, session=session)
+        search_fields = await get_filter_expressions(filter_fields, session=session)
         search_fields.append(Product.is_visible.is_not(False))
-        return await cls.list(search_fields=search_fields, offset=offset, limit=limit, session=session)
+
+        order_fields = get_order_expressions(filter_fields)
+
+        return await cls.list(
+            search_fields=search_fields,
+            order_fields=order_fields,
+            offset=offset,
+            limit=limit,
+            session=session
+        )
 
     @classmethod
     async def get_count_of_products(
@@ -38,7 +51,7 @@ class ProductManager(CRUDManager):
             filter_fields: QueryParams,
             session: AsyncSession,
     ) -> int:
-        filter_fields = await convert_filter_fields(filter_fields, session=session)
+        filter_fields = await get_filter_expressions(filter_fields, session=session)
         filter_fields.append(Product.is_visible.is_not(False))
 
         result = await session.execute(
@@ -58,8 +71,13 @@ class ProductManager(CRUDManager):
             input_data: ProductUpdateSchema
     ) -> Product | HTTPException:
         product = await cls.retrieve(id=pk, session=session)
-        product.price_with_discount = calculate_price_with_discount(product=product, discount=input_data.discount)
-        await session.commit()
+        price_with_discount = calculate_price_with_discount(product=product, discount=input_data.discount)
+
+        # we do one extra query here, but since we do it rarely it's ok for us.
+        await cls.update(pk=pk, session=session, input_data={
+            'price_with_discount': price_with_discount,
+            'discount': input_data.discount
+        })
         return product
 
     @classmethod
@@ -72,7 +90,7 @@ class ProductManager(CRUDManager):
             session=session,
             search_fields=(
                 Product.category_id.in_(categories_ids),
-                Product.discount == 0
+                Product.personal_discount == 0
             )
         )
         for product in products:

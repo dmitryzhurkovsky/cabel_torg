@@ -45,7 +45,7 @@ class CategoryMixin(BaseMixin, ABC):
                 clean_category |= {'parent_category_id': parent_category_id}
 
             db_category, _ = await database_service.update_or_create_object(
-                db=self.db, refresh=False, update=True, model=Category, fields=clean_category
+                db=self.db, refresh=True, update=True, model=Category, fields=clean_category
             )
 
             # If is_visible is False it means that we shouldn't add show goods and child categories on UI.
@@ -79,8 +79,8 @@ class CategoryMixin(BaseMixin, ABC):
                 clean_element[field_name] = field_value
 
                 # Set up a default value for order attribute it's needed it.
-                if order := self.DEFAULT_ORDER.get(field_value) and field_name == 'name':
-                    clean_element['order'] = order
+                if field_name == 'name' and field_value in self.DEFAULT_ORDER:
+                    clean_element['order'] = self.DEFAULT_ORDER.get(field_value)
 
         # We shouldn't show some categories on UI.
         clean_element['is_visible'] = False if clean_element.get('name') in self.EXCLUDED_CATEGORIES else True

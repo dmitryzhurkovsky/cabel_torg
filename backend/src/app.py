@@ -11,7 +11,7 @@ from src.core import settings
 from src.core.db.db import engine
 from src.parser.xml_bookkeeping_parser import (
     XMLParser,
-    PricesParser
+    OffersParser
 )
 from src.rest.api.router import base_router
 
@@ -38,13 +38,13 @@ async def startup():
         async with AsyncSession(engine) as db:
             start_parsing = time.time()
             xml_parser = XMLParser(db=db)
-            price_parser = PricesParser(db=db)
+            price_parser = OffersParser(db=db)
 
             await asyncio.wait([event_loop.create_task(xml_parser.parse_categories())])
             await asyncio.wait([event_loop.create_task(xml_parser.parse_attributes())])
 
             await event_loop.create_task(xml_parser.parse_products())
-            await event_loop.create_task(price_parser.parse_prices())
+            await event_loop.create_task(price_parser.parse_offers())
             logger.info(f'Parsing has been finished. It took {time.time() - start_parsing}')
 
 

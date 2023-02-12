@@ -27,5 +27,4 @@ class RetrieveMixin(BaseMixin):
         obj = query.scalar_one_or_none()
         cls._check_object(obj=obj)
 
-        await session.refresh(obj)
         return obj
