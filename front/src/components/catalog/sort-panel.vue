@@ -1,7 +1,9 @@
 <template>
     <ul class="tools-sort icon-change">
+        <div class= "tools-sort__direction" v-if = "!SORT_DIRECTION" @click.prevent="SET_SORT_DIRECTION('-')">А-Я</div>
+        <div class= "tools-sort__direction" v-if = "SORT_DIRECTION"  @click.prevent="SET_SORT_DIRECTION('')">Я-А</div>
         <li 
-            :class="[item.type === SORT_TYPE.type ? 'tools-sort_item active' : 'tools-sort_item']"
+            :class="[item.type === SORT_TYPE ? 'tools-sort__item active' : 'tools-sort__item']"
             v-for = "item in sortItems"
             :key = "item.type"
         >
@@ -18,13 +20,13 @@
     name: 'SortPanel',
 
     computed: {
-        ...mapGetters("query", ["SORT_TYPE"]),
+        ...mapGetters("query", ["SORT_TYPE", "SORT_DIRECTION"]),
     },
 
     data() {
         return {
             sortItems: [
-                {name: 'По дате добавления', type: 'date'},
+                {name: 'По дате добавления', type: 'created_at'},
                 {name: 'цене', type: 'price'},
                 {name: 'скидке', type: 'discount'},
             ],
@@ -32,12 +34,13 @@
     },
 
     methods: {
-        ...mapMutations("query", ["SET_SORT_TYPE"]),
+        ...mapMutations("query", ["SET_SORT_TYPE", "SET_SORT_DIRECTION"]),
 
         changeSort(e, type) {
             e.preventDefault();
             this.SET_SORT_TYPE(type);
-        }
+        },
+
     },
   }
 </script>
@@ -65,6 +68,9 @@
       color: #423E48;
       opacity: 0.8;
     }
+  }
+  &__direction{
+    cursor: pointer;
   }
 }
 .active{

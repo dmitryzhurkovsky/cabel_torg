@@ -61,16 +61,13 @@
 
             <div class="filter__checkbox__list">
 
-              <label class="checkbox__container">Все товары
-                <input type="checkbox" checked="checked">
-                <span class="checkmark"></span>
-              </label>
-              <label class="checkbox__container">Акции
-                <input type="checkbox">
-                <span class="checkmark"></span>
-              </label>
-              <label class="checkbox__container">В наличии
-                <input type="checkbox">
+              <label class="checkbox__container"
+                v-for = "category in categories"
+                :key = "category"
+              >
+                {{ category.name }}
+                <input type="checkbox" v-if = "category.selected" checked>
+                <input type="checkbox" v-if = "!category.selected" @click.prevent = toggleFilterCategory(category)>
                 <span class="checkmark"></span>
               </label>
 
@@ -117,9 +114,9 @@ export default {
     data(){
         return {
             categories: [
-                {name : 'Все товары', type: 'all'},
-                {name : 'Только товары со скидкой', type: 'with_discount'} , 
-                {name : 'В наличии', type: 'available'},
+                {name : 'Все товары', type: 'all', selected: true},
+                {name : 'Акции', type: 'with_discount', selected: false} , 
+                {name : 'В наличии', type: 'available', selected: false},
             ],
         }
     },
@@ -164,15 +161,13 @@ export default {
           this.SET_CATEGORY_ID(lastCategory.id);
         },
 
-        changeFilterCategory(category){
-            // event.preventDefault();
-            // if (this.SUB_CATEGORIES_ITEM_ACTIVE === category.id) {
-            //     this.SET_CURRENT_LAST_CATEGORY(null);
-            // } else {
-            //     this.SET_CURRENT_LAST_CATEGORY(category.id);
-            // }
-            this.SET_TYPE_OF_PRODUCT(category);
-        }
+        toggleFilterCategory(category){
+          this.categories.forEach(item => {
+            item.selected = false;
+            if (item.name === category.name) item.selected = true;
+          });
+          this.SET_TYPE_OF_PRODUCT(category);
+        },
     },
 }
 </script>

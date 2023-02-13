@@ -72,53 +72,56 @@ export default {
     actions: {
       async GET_CATALOG_ITEMS({ commit, rootGetters }, data) {
         try {
-          const response = await axios.get(process.env.VUE_APP_API_URL + 
-                'products?category_id=' + data + 
-                '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type + 
-                '&offset=' + rootGetters['query/OFFSET'] + 
-                '&limit=' + rootGetters['query/LIMIT'] 
-                + 
-                '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
-                '&price_lte=' + rootGetters['query/MAX_PRICE'] +
-                '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING']
-            );
-            commit("SET_CATALOG_ITEMS", response.data);
-            commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
+          let queryData = 'products?category_id=' + data + 
+          '&offset=' + rootGetters['query/OFFSET'] + 
+          '&limit=' + rootGetters['query/LIMIT'] + 
+          '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
+          '&price_lte=' + rootGetters['query/MAX_PRICE'] +
+          '&ordering=' + rootGetters['query/SORT_DIRECTION'] + rootGetters['query/SORT_TYPE'] +
+          '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING'];
+
+          if (rootGetters['query/TYPE_OF_PRODUCT'].type !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type;
+
+          const response = await axios.get(process.env.VUE_APP_API_URL + queryData);
+          commit("SET_CATALOG_ITEMS", response.data);
+          commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
         } catch (e) {
-            console.log(e);
-            commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить каталог категории", icon: "error", id: '1'}, {root: true})
+          console.log(e);
+          commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить каталог категории", icon: "error", id: '1'}, {root: true})
         }
       },
 
       async GET_ALL_CATALOG_ITEMS({ commit, rootGetters }) {
         try {
-            const response = await axios.get(process.env.VUE_APP_API_URL + 
-                'products?type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type + 
-                '&offset=' + rootGetters['query/OFFSET'] + 
-                '&limit=' + rootGetters['query/LIMIT']
-                 + 
-                '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
-                '&price_lte=' + rootGetters['query/MAX_PRICE'] +
-                '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING']
-            );
-            commit("SET_CATALOG_ITEMS", response.data);
-            commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
+          let queryData = 'products?' + 
+          '&offset=' + rootGetters['query/OFFSET'] + 
+          '&limit=' + rootGetters['query/LIMIT']
+           + 
+          '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
+          '&price_lte=' + rootGetters['query/MAX_PRICE'] +
+          '&ordering=' + rootGetters['query/SORT_DIRECTION'] + rootGetters['query/SORT_TYPE'] +
+          '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING'];
+
+          if (rootGetters['query/TYPE_OF_PRODUCT'].type !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type
+          
+          const response = await axios.get(process.env.VUE_APP_API_URL + queryData);
+          commit("SET_CATALOG_ITEMS", response.data);
+          commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
         } catch (e) {
-            console.log(e);
-            commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить весь каталог ", icon: "error", id: '1'}, {root: true})
+          console.log(e);
+          commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить весь каталог ", icon: "error", id: '1'}, {root: true})
         }
       },
 
       async GET_RECOMENDED_ITEMS({ commit, getters }) {
         try {
-            const response = await axios.get(process.env.VUE_APP_API_URL + 
-                'products?type_of_product=' + getters.RECOMENDATION_TYPE +
-                '&offset=0' +  
-                '&limit=' + getters.RECOMENDATION_QUANTITY);
-            commit("SET_RECOMENDED_ITEMS", response.data);
+          const response = await axios.get(process.env.VUE_APP_API_URL + 
+              'products?offset=0' +  
+              '&limit=' + getters.RECOMENDATION_QUANTITY);
+          commit("SET_RECOMENDED_ITEMS", response.data);
         } catch (e) {
-            console.log(e);
-            commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'}, {root: true})
+          console.log(e);
+          commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'}, {root: true})
         }
       },
     }

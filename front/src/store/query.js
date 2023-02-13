@@ -8,7 +8,8 @@ export default {
     typeOfProduct: {name : 'Все товары', type: 'all'},
     offset: 0,
     limit: 10,
-    sort: {name: 'По дате добавления', type: 'date'},
+    sort: {name: 'По дате добавления', type: 'created_at'},
+    direction: '',
     view: 'table',
     minPrice: 0.1,
     maxPrice: 10000,
@@ -30,7 +31,10 @@ export default {
         return state.limit;
       },
       SORT_TYPE(state){
-        return state.sort;
+        return state.sort.type;
+      },
+      SORT_DIRECTION(state){
+        return state.direction;
       },
       VIEW_TYPE(state){
         return state.view;
@@ -73,6 +77,10 @@ export default {
         state.sort = newSortType;
       },
 
+      SET_SORT_DIRECTION(state, direction) {
+        state.direction = direction;
+      },
+
       SET_VIEW_TYPE(state, newViewType) {
         state.view = newViewType;
       },
@@ -100,7 +108,7 @@ export default {
         try {
             const query = getters.SEARCH_STRING ? '&q=' + getters.SEARCH_STRING : '';
             const response = await axios.get(process.env.VUE_APP_API_URL + 
-                'products?type_of_product=all' + 
+                'products?' + 
                 '&offset=0' +  
                 '&limit=10' + 
                 query
