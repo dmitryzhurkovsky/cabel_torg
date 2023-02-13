@@ -77,7 +77,7 @@ async def update_or_create_object(
     as the first argument and a boolean of whether the instance was created in the second argument.
     """
     # Get filter fields
-    bookkeeping_id = fields.pop('bookkeeping_id', None)
+    bookkeeping_id = fields.get('bookkeeping_id')
     filter_by_fields = {'bookkeeping_id': bookkeeping_id} if bookkeeping_id else fields
 
     # Hit a database to get an instance
@@ -92,7 +92,7 @@ async def update_or_create_object(
     if created:
         return instance, True
 
-    # The instance is already created, try to get the object from the database and update fields again..
+    # The instance is already created, try to get the object from the database and update fields again.
     instance = await get_object(db=db, model=model, fields=filter_by_fields, prefetch_fields=prefetch_fields)
     if update:
         await update_object(db=db, model=model, instance=instance, fields=fields)

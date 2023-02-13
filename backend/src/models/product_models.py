@@ -10,19 +10,29 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import ENUM as pgEnum
 from sqlalchemy.orm import relationship
 
-from src.core.enums import ProductType
+from src.core.enums import BaseEnum
 from src.models.abstract_model import Base1CModel
+
+
+class ProductStatus(str, BaseEnum):
+    """
+    It's type for a product.
+    """
+    AVAILABLE = 'A'
+    ON_THE_WAY_TO_THE_WAREHOUSE = 'W'
+    OUT_OF_STOCK = 'O'
 
 
 class Product(Base1CModel):
     __tablename__ = 'products'
 
+    status = Column('status', pgEnum(*ProductStatus.values(), name='product_status'))
     vendor_code = Column(String)
     name = Column(String)
     images = Column(String)  # pictures paths in the following format: picture_1,picture_2,picture_3...
     tax = Column(Integer)
     description = Column(String)
-    type = Column('type', pgEnum(ProductType.values(), name='type'))
+    count = Column(DECIMAL, default=0)
 
     # Price fields
     price = Column(DECIMAL)

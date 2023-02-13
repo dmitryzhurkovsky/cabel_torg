@@ -2,8 +2,8 @@ from abc import ABC
 
 from src.core import settings
 from src.parser.mixins.category_mixin import CategoryMixin
-from src.parser.mixins.goods_mixin import GoodsMixin
-from src.parser.mixins.price_mixin import PriceMixin
+from src.parser.mixins.good_mixin import GoodsMixin
+from src.parser.mixins.offer_mixin import OfferMixin
 
 
 class XMLParser(CategoryMixin, GoodsMixin, ABC):
@@ -13,7 +13,7 @@ class XMLParser(CategoryMixin, GoodsMixin, ABC):
     __slots__ = ('db',)
 
 
-class PricesParser(PriceMixin, ABC):
+class OffersParser(OfferMixin, ABC):
     """The parser that take a xml file with 1C dump of prices and maps data to a database."""
     XML_FILE = settings.PATH_TO_XML_FILE_WITH_PRICES
 

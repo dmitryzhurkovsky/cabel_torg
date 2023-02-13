@@ -48,7 +48,7 @@ class CategoryManager(CRUDManager):
         return categories_ids
 
     @classmethod
-    async def get_categories_without_discount(cls, pk: int, session: AsyncSession):
+    async def get_categories_ids_without_discount(cls, pk: int, session: AsyncSession):
         categories_and_their_subcategories_ids = await cls.get_categories_ids(
             session=session,
             parent_category_ids=[pk],
@@ -69,7 +69,7 @@ class CategoryManager(CRUDManager):
             input_data: CategoryUpdateSchema,
             session: AsyncSession,
     ) -> Category | HTTPException:
-        categories_ids_without_discount = await cls.get_categories_without_discount(pk=pk, session=session)
+        categories_ids_without_discount = await cls.get_categories_ids_without_discount(pk=pk, session=session)
         await ProductManager.bulk_update_discounts(
             categories_ids=categories_ids_without_discount,
             discount=input_data.discount,

@@ -1,8 +1,10 @@
+from datetime import datetime
 from decimal import Decimal
 from typing import List
 
 from pydantic import BaseModel
 
+from src.models.product_models import ProductStatus
 from src.rest.schemas.attribute_schema import AttributeSchema
 from src.rest.schemas.base_schema import BaseSchema
 from src.rest.schemas.base_unit_schema import BaseUnitSchema
@@ -13,17 +15,23 @@ from src.rest.schemas.manufacturer_schema import ManufacturerSchema
 class ProductSchema(BaseSchema):
     vendor_code: str | None
     name: str
-    category: CategorySchema | None
     images: str | None
-    manufacturer: ManufacturerSchema | None
     tax: int | None
     description: str | None
-    type: str | None
-    base_unit: BaseUnitSchema | None
-    attributes: List['AttributeSchema'] | list
+    status: ProductStatus | None
+
     price: Decimal | None
     discount: int | None
     price_with_discount: Decimal | None
+    count: int | None
+
+    created_at: datetime | None
+    updated_at: datetime | None
+
+    category: CategorySchema | None
+    manufacturer: ManufacturerSchema | None
+    base_unit: BaseUnitSchema | None
+    attributes: List['AttributeSchema'] | list
 
     class Config:
         orm_mode = True

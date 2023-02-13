@@ -7,7 +7,7 @@ from src.core.utils import (
     get_tag_name
 )
 from src.models import Manufacturer, BaseUnit, Category, Attribute
-from src.models.attribute_model import AttributeValue, AttributeName
+from src.models.attribute_model import AttributeName, AttributeValue
 from src.models.product_models import Product
 from src.parser.mixins.base_mixin import BaseMixin
 from src.parser.servers import database_service
@@ -112,6 +112,8 @@ class GoodsMixin(BaseMixin, ABC):
         """
         code = raw_field.attrib.get('Код')
         full_name = raw_field.attrib.get('НаименованиеПолное')
+        if full_name == 'Штука':
+            full_name = 'Шт.'
         international_abbreviated = raw_field.attrib.get('МеждународноеСокращение')
 
         fields = clean_fields({
@@ -192,6 +194,10 @@ class GoodsMixin(BaseMixin, ABC):
                 })
 
             self.names_cache[bookkeeping_id] = db_attribute_name.id
+
+            # It's a special attribute.
+            if db_attribute_name.payload == 'Товар под заказ':
+                self.CACHE['attribute_id_for_goods_under_the_order'] = db_attribute_name.id
 
             if value_type == 'Справочник':
                 await self.clean_available_options(attribute[3])

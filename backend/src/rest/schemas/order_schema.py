@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr
 
+from src.models.order_model import OrderStatus
 from src.rest.schemas.base_schema import BaseSchema
 from src.rest.schemas.product_schema import ProductSchema
 
@@ -24,7 +25,7 @@ class OrderBaseSchema(BaseModel):
     address: str | None
     house: str | None
     flat: str | None
-    delivery_type_id: int
+    delivery_type_id: int | None
     # todo check delivery_type_id
 
 
@@ -38,7 +39,9 @@ class ProductOrderSchema(BaseModel):
 
 class OrderSchema(OrderBaseSchema, BaseSchema):
     user_id: int
-    products: list[ProductOrderSchema]
+    status: OrderStatus | None
+    products: list[ProductOrderSchema] | None
+    number: int | None
 
     class Config:
         orm_mode = True
@@ -51,3 +54,9 @@ class ProductOrderInputSchema(BaseModel):
 
 class OrderCreateInputSchema(OrderBaseSchema):
     products: list['ProductOrderInputSchema']
+    delivery_type_id: int
+
+
+class OrderUpdateInputSchema(OrderBaseSchema):
+    products: list['ProductOrderInputSchema'] | None
+    status: OrderStatus | None

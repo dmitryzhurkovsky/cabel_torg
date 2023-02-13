@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
-from src.core.enums import ProductTypeFilter
+from src.core.enums import ProductTypeFilterEnum, ProductOrderFilterEnum
 from src.core.managers.product_manager import ProductManager
 from src.rest.schemas.product_schema import (
     ProductSchema,
@@ -28,14 +28,15 @@ async def get_products(
         )),
         price_gte: Decimal | None = Query(default=None, description='Start value in range of price'),
         price_lte: Decimal | None = Query(default=None, description='End value in range of price'),
-        type_of_product: ProductTypeFilter = Query(
-            default=ProductTypeFilter.ALL.value,
+        type_of_product: ProductTypeFilterEnum | None = Query(
+            default=None,
             description='The last parameter in the lef column/This parameter set that products will be downloaded'
         ),
         q: str | None = Query(
             default=None,
             description='Search by product\'s name, description, vendor code or category\'s name of products'
         ),
+        ordering: ProductOrderFilterEnum = Query(default=None),
         offset: int = 0, limit: int = Query(default=12, lte=100),
         session: AsyncSession = Depends(get_session)
 ) -> PaginatedProductSchema:

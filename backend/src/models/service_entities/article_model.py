@@ -7,9 +7,9 @@ from src.models.abstract_model import BaseModel
 class Article(BaseModel):
     __tablename__ = 'articles'
 
-    title = Column(String)
+    title = Column(String(255))
     content = Column(String, nullable=True)
-    images = Column(String, nullable=True)
+    image = Column(String, nullable=True)
 
     @property
     def preview_text(self) -> str:
