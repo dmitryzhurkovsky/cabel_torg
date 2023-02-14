@@ -70,9 +70,9 @@ export default {
           lastCategory: null,
       });
       this.SET_CATEGORY_ID(id);
-      if (this.$router.path != '/catalog') {
-        this.$router.push('/catalog');
-      }
+      // if (this.$router.path != '/catalog') {
+      //   this.$router.push('/catalog');
+      // }
     },
 
     subCategoryClick(id){

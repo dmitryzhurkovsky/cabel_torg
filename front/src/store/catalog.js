@@ -10,6 +10,7 @@ export default {
     recomendedList: [],
     searchString: '',
     recomendationType: 'all',
+    recomendationOrder: '',
     recomendationQuantity: 10,
   },
 
@@ -31,6 +32,9 @@ export default {
       },
       RECOMENDATION_TYPE(state) {
         return state.recomendationType;
+      },
+      RECOMENDATION_ORDER(state) {
+        return state.recomendationOrder;
       },
       RECOMENDATION_QUANTITY(state) {
         return state.recomendationQuantity;
@@ -62,6 +66,10 @@ export default {
 
       SET_RECOMENDATION_TYPE(state, type) {
         state.recomendationType = type;
+      },
+
+      SET_RECOMENDATION_ORDER(state, order) {
+        state.recomendationOrder = order;
       },
 
       SET_RECOMENDATION_QUANTITY(state, quantity) {
@@ -115,9 +123,13 @@ export default {
 
       async GET_RECOMENDED_ITEMS({ commit, getters }) {
         try {
-          const response = await axios.get(process.env.VUE_APP_API_URL + 
-              'products?offset=0' +  
-              '&limit=' + getters.RECOMENDATION_QUANTITY);
+          let queryData = 'products?offset=0' +  
+          '&limit=' + getters.RECOMENDATION_QUANTITY;
+
+          if (getters.RECOMENDATION_TYPE !== 'all') queryData = queryData + '&type_of_product=' + getters.RECOMENDATION_TYPE;
+          if (getters.RECOMENDATION_ORDER) queryData = queryData + '&ordering=' + getters.RECOMENDATION_ORDER;
+
+          const response = await axios.get(process.env.VUE_APP_API_URL + queryData);
           commit("SET_RECOMENDED_ITEMS", response.data);
         } catch (e) {
           console.log(e);

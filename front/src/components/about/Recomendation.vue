@@ -6,9 +6,9 @@
 
           <h3>Рекомендации для вас</h3>
           <div class="recomendation__nav">
-            <div class="recomendation__nav__item" @click="SET_RECOMENDATION_TYPE('all')">Топ продаж</div>
-            <div class="recomendation__nav__item" @click="SET_RECOMENDATION_TYPE('all')">Новинки</div>
-            <div class="recomendation__nav__item" @click="SET_RECOMENDATION_TYPE('with_discount')">Скидки</div>
+            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'available', order: 'price' })">Топ продаж</div>
+            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'available', order: 'created_at' })">Новинки</div>
+            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'with_discount', order: 'discount' })">Скидки</div>
           </div>
           <!-- :navigation= "true" -->
           <div class="recomendation__block" v-if = "VIEW_TYPE === 1 || VIEW_TYPE === 2">
@@ -75,7 +75,11 @@
 
     computed: {
       ...mapGetters("header", ["VIEW_TYPE"]),
-      ...mapGetters("catalog", ["RECOMENDED_ITEMS", "RECOMENDATION_QUANTITY", "RECOMENDATION_TYPE"]),
+      ...mapGetters("catalog", ["RECOMENDED_ITEMS", "RECOMENDATION_QUANTITY", "RECOMENDATION_TYPE", "RECOMENDATION_ORDER"]),
+
+      ChangeParameters(){
+        return String(this.RECOMENDATION_TYPE) + String(this.RECOMENDATION_ORDER);
+      },
     },
 
     data: function(){
@@ -94,7 +98,8 @@
         this.setNewQuantity();
       },
 
-      RECOMENDATION_TYPE: async function() {
+      ChangeParameters: async function() {
+        this.SET_RECOMENDATION_QUANTITY(10);
         await this.GET_RECOMENDED_ITEMS();
         this.setNewQuantity();
       }
@@ -102,13 +107,30 @@
 
     methods:{
       ...mapActions("catalog", ["GET_RECOMENDED_ITEMS"]),
-      ...mapMutations("catalog", ["SET_RECOMENDATION_TYPE", "SET_RECOMENDATION_QUANTITY"]),
+      ...mapMutations("catalog", ["SET_RECOMENDATION_TYPE", "SET_RECOMENDATION_QUANTITY", "SET_RECOMENDATION_ORDER"]),
       
       setNewQuantity(){
         const newQuantity = this.RECOMENDED_ITEMS.length > 9 ? 10 : this.RECOMENDED_ITEMS.length;
         this.SET_RECOMENDATION_QUANTITY(newQuantity);
       },
 
+      setTypeAndOrder(params){
+        this.SET_RECOMENDATION_ORDER(params.order);
+        this.SET_RECOMENDATION_TYPE(params.type);
+      },
+
+      onSlideChange() {
+        //  console.log('slide change');
+      },
+      nextSlide(){
+          this.swiper.slideNext();
+      },
+      prevSlide(){
+          this.swiper.slidePrev();
+      },
+      onSwiper(swiper){
+          this.swiper = swiper;
+      },
     },
 
     async mounted(){

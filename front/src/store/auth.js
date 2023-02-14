@@ -78,8 +78,8 @@ export default {
       try {
         const response = await axios.post(process.env.VUE_APP_API_URL + "users", data);
         const loginData = new FormData();
-        data.append('username', response.email);
-        data.append('password', response.this.password);
+        loginData.append('username', data.email);
+        loginData.append('password', data.password);
         await dispatch("SEND_LOGIN_REQUEST", loginData)
       }
       catch (e) {

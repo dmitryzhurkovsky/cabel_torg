@@ -11,7 +11,9 @@
             <CardImage :images=card.images />
         </a>
         <div class="product__info">
-            <div class="product__status icon-done-color _label mb-20">В наличии</div>
+            <div class="product__status icon-done-color _label mb-20" v-if = "card.status === 'A'">В наличии</div>
+            <div class="product__status icon-on-the-way _label mb-20" v-if = "card.status === 'W'">В пути на склад</div>
+            <div class="product__status icon-out-of-stock _label mb-20" v-if = "card.status === 'O'">Нет в наличии</div>
             <div class="product__title">
                 <a v-if ="card.category">{{ card.category.name }}</a>
             </div>

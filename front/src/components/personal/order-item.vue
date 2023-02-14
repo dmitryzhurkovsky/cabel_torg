@@ -6,7 +6,10 @@
     <div class="flex-center order__row">
       <div class="order__date">10 июня 2022???</div>
       <div class="order__delivery">{{ delivery_type }}</div>
-      <div class="order__status _status-color">Отправлен???</div>
+      <div v-if = "card.status ==='P'" class="order__status _status-color__P">В обработке</div>
+      <div v-if = "card.status ==='S'" class="order__status _status-color__S">Отправлен</div>
+      <div v-if = "card.status ==='c'" class="order__status _status-color__c">Отменен</div>
+      <div v-if = "card.status ==='C'" class="order__status _status-color__C">Обработан</div>
       <div class="order__price">{{ order_price }}<span> BYN</span></div>
     </div>
 
@@ -104,7 +107,19 @@ export default {
         align-items: flex-start;
         padding: 12px 12px ;
       }
-      ._status-color{
+      ._status-color__P{
+        color: Orange;
+        font-weight: 500;
+      }
+      ._status-color__S{
+        color: yellow;
+        font-weight: 500;
+      }
+      ._status-color__c{
+        color: red;
+        font-weight: 500;
+      }
+      ._status-color__C{
         color: #32A071;
         font-weight: 500;
       }
