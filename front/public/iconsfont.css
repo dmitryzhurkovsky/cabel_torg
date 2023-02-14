@@ -178,3 +178,12 @@
 .icon-arrow-down:before {
   content: "\e927";
 }
+
+.icon-out-of-stock:before {
+  content: "\e928";
+  color: #e30044;
+}
+.icon-on-the-way:before {
+  content: "\e929";
+  color: #ffd12e;
+}
