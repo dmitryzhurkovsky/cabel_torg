@@ -268,7 +268,7 @@ export default {
       },
 
       async SEND_ORDER_REQUEST({ commit, dispatch, rootGetters, getters }, itemData ) {
-        if (rootGetters['auth/USER']) {
+        // if (rootGetters['auth/USER']) {
             try {
                 const response = await axios.post(process.env.VUE_APP_API_URL + 'orders', itemData);
                 // commit("UPDATE_ITEM_IN_CART", { amount : response.data.amount, product: itemData.product });
@@ -290,7 +290,7 @@ export default {
                 console.log(e);
                 commit("notification/ADD_MESSAGE", {name: "Не возможно отправить заказ", icon: "error", id: '1'}, {root: true})
             }
-        }
+        // }
       },
 
       async GET_ORDER_DOCUMENTS({ commit } ){

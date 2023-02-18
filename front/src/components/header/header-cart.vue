@@ -55,16 +55,16 @@ export default {
     },
 
     onPutApplication() {
-        if (localStorage.getItem("authToken")) {
+        // if (localStorage.getItem("authToken")) {
             this.SET_DESTINATION('');
             this.SET_IS_APPLICATION_OPEN(true);
             if (this.$router.path != '/cart') {
                 this.$router.push('/cart');
             }
-        } else {
-            this.SET_DESTINATION('/cart');
-            this.$router.push('/login');
-        }
+        // } else {
+        //     this.SET_DESTINATION('/cart');
+        //     this.$router.push('/login');
+        // }
     }
   }
 }

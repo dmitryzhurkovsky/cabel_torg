@@ -22,9 +22,9 @@
             </div>
             <div class="product__count flex-center">
                 <span class="_label">Количество:</span>
-                <span class="icon-minus" @click.stop="onOperationWithCartItem(card, 'decrease')"></span>
-                <input class="product__input" type="text" v-model="quantity" @input="onOperationWithCartItem(card, 'set')" @click.stop=""> 
-                <span class="icon-plus" @click.stop="onOperationWithCartItem(card, 'increase')"></span>
+                <span class="icon-minus" @click.stop=quantityLocal--></span>
+                <input class="product__input" type="text" v-model="quantityLocal" @click.stop=""> 
+                <span class="icon-plus" @click.stop=quantityLocal++></span>
             </div>
         </div>
         <div class="product__action">
@@ -40,8 +40,8 @@
                     :class="[isWish === false ? 'product__wishlist icon-favorite' : 'product__wishlist icon-favorite-choosed']"
                     @click.stop="onWishClick(card)"
                   ></div>
-                <div v-if = "quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(card, 'remove')">В корзине {{ quantity }}</div>
-                <div v-if = "quantity === 0" class="btn black" @click.stop="onOperationWithCartItem(card, 'increase')">В корзину</div>
+                <div v-if = "quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(card, 'set')">В корзине {{ quantity }}</div>
+                <div v-if = "quantity === 0" class="btn black" @click.stop="onOperationWithCartItem(card, 'set')">В корзину</div>
             </div>
         </div>
     </div>
@@ -61,6 +61,7 @@ export default {
     data(){
       return {
           quantity: 0,
+          quantityLocal: 0,
           isWish: false,
       }
     },
@@ -128,7 +129,7 @@ export default {
           },
         };
         if (type === 'set') {
-          itemData.amount = Number(this.quantity);
+          itemData.amount = Number(this.quantityLocal);
         }
         
         await this.UPDATE_ITEMS_IN_CART({itemData, type});
@@ -153,6 +154,7 @@ export default {
         } else {
           this.quantity = 0;
         }
+        this.quantityLocal = this.quantity
       },
 
       checkIsWish() {
