@@ -1,0 +1,54 @@
+<script setup lang='ts'>
+import LayoutHeader from "@/components/Layout/Header.vue";
+import LayoutSidebar from "@/components/Layout/Sidebar.vue";
+import Loader from '@/components/UI/Loader.vue';
+import { ref } from "vue";
+
+const isOpenMenu = ref(false);
+
+const onToggleMenu = () => {
+  isOpenMenu.value = !isOpenMenu.value;
+};
+
+</script>
+
+<template>
+  <div class="container">
+    <Loader />
+    <layout-header />
+    <layout-sidebar 
+      :openSidebar="isOpenMenu" 
+      @onToggleMenu="onToggleMenu"
+      />
+    <div :class="['content', { content_full: !isOpenMenu }]">
+      <router-view />
+    </div>
+  </div>
+</template>
+
+<style lang="scss">
+@import "./styles/global.scss";
+
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.content {
+  // max-width: 1400px;
+  margin-left: 250px;
+  padding: 30px;
+  transition: 0.2s;
+  padding-top: 92px;
+  &_full {
+    margin-left: 0;
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .content {
+    margin-left: 0;
+  }
+}
+</style>
