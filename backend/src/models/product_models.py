@@ -66,3 +66,7 @@ class Product(Base1CModel):
         CheckConstraint(discount < 100, name='check_discount_lt_100'),
         CheckConstraint(discount >= 0, name='check_discount_gte_0'),
     )
+
+    @property
+    def actual_price(self) -> float:
+        return self.price_with_discount if self.price_with_discount else self.price

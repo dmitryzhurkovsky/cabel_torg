@@ -27,11 +27,13 @@ class OrderManager(CRUDManager):
         session.add(order)
         await session.flush()
 
+        # Add ProductOrder models
         products_db = [
             ProductOrder(order_id=order.id, product_id=product.id, amount=product.amount)
             for product in products
         ]
         session.add_all(products_db)
+
         await session.commit()
         await session.refresh(order)
 
