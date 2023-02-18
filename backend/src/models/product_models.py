@@ -70,3 +70,11 @@ class Product(Base1CModel):
     @property
     def actual_price(self) -> float:
         return self.price_with_discount if self.price_with_discount else self.price
+
+    @property
+    def tax_sum(self) -> float:
+        return self.actual_price * self.tax / 100
+
+    @property
+    def actual_price_with_tax(self) -> float:
+        return self.tax_sum + self.actual_price

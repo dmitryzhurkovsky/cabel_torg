@@ -6,9 +6,7 @@
             <span>Счет на оплату №</span>
             <span>{{invoice_number}}</span>
             <span>от</span>
-            <span>{{day}}</span>
-            <span>{{month}}</span>
-            <span>{{year}}</span>
+            <span>{{created_at}}</span>
         </div>
         <hr class="hr">
         <div class="invoice__supplier">
@@ -20,7 +18,7 @@
         </div>
         <div class="invoice__customer">
             <div>Покупатель</div>
-            <div> {{customer_credential}}</div>
+            <div>{{customer_requisites}}</div>
         </div>
         <hr class="hr">
     </div>
@@ -33,6 +31,7 @@
                     <td>Товары (работы, услуги)</td>
                     <td>Количество</td>
                     <td>Ед. изм.</td>
+
                     <td>Цена</td>
                     <td>Стоимость</td>
                     <td>Ставка НДС</td>
@@ -40,18 +39,20 @@
                     <td>Всего с НДС</td>
                     <td>Вес</td>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
+                {% for product in products %}
+                    <tr>
+                        <td>{{loop.index}}</td>
+                        <td>{{product.name}}</td>
+                        <td>{{product.amount}}</td>
+                        <td>{{product.base_unit}}</td>
+                        <td>{{product.price}}</td>
+                        <td>{{product.cost}}</td>
+                        <td>{{product.tax}}</td>
+                        <td>{{product.tax_sum}}</td>
+                        <td>{{product.price_with_tax}}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
             </table>
         </div>
         <div class="invoice__price">
@@ -96,7 +97,7 @@
             <div>Руководитель</div>
             <div class="footer__sign__clm">
           <span>
-<!--            <img class="invoice__signature" src="@/assets/signature.png" alt="">-->
+            <img class="invoice__signature" src="@/assets/signature.png" alt="">
           </span>
                 <span>подпись</span>
             </div>
@@ -111,9 +112,7 @@
                 <span>Протокол №</span>
                 <span>{{invoice_number}}</span>
                 <span>от</span>
-                <span>{{day}}</span>
-                <span>{{month}}</span>
-                <span>{{year}}</span>
+                <span>{{created_at}}</span>
             </div>
             <div class="text-center mb-20">согласования свободных отпускных цен на товары (продукцию)</div>
             <hr class="hr">
@@ -127,7 +126,7 @@
             </div>
             <div class="invoice__customer">
                 <div>Покупатель</div>
-                <div>{{customer_credential}}</div>
+                <div>{{customer_requisites}}</div>
             </div>
             <hr class="hr">
         </div>
@@ -161,8 +160,8 @@
                 <div class="sign__item">Исполнитель(поставщик)
                     <span></span>
                     <div class="footer__sign__clm">
-                        <!--              <img class="invoice__signature" src="@/assets/signature.png" alt="">-->
-                        <!--              <img class="invoice__stamp" src="@/assets/stamp.png" alt="">-->
+                        <img class="invoice__signature" src="@/assets/signature.png" alt="">
+                        <img class="invoice__stamp" src="@/assets/stamp.png" alt="">
                     </div>
                 </div>
                 <div class="sign__item">Покупатель
