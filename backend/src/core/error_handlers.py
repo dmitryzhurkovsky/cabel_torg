@@ -1,5 +1,8 @@
+import re
+
 from fastapi import Request, status
 from pydantic import ValidationError
+from sqlalchemy.exc import IntegrityError
 from starlette.responses import JSONResponse
 
 from src.app import app
@@ -44,3 +47,14 @@ async def bad_request_error_handler(request: Request, exception: BadRequestError
 async def object_not_found_error_handler(request: Request, exception: ObjectNotFoundError) -> JSONResponse:
     """Handle a bad request error"""
     return JSONResponse(status_code=exception.status_code, content={'detail': exception.detail})
+
+
+@app.exception_handler(IntegrityError)
+async def object_not_found_error_handler(request: Request, exception: IntegrityError) -> JSONResponse:
+    """Handle a bad request error"""
+    invalid_foreign_keys = ', '.join([re.findall(r'(\w+_id)', exc)[-1] for exc in exception.args])
+
+    return JSONResponse(
+        status_code=BadRequestError.status_code,
+        content={'detail': f'The following fields are invalid: {invalid_foreign_keys}'}
+    )

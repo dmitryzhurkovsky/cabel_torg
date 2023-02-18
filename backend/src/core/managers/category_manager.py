@@ -15,14 +15,18 @@ class CategoryManager(CRUDManager):
     async def list(
             cls,
             session: AsyncSession,
-            filter_fields: dict = {},  # noqa
-            search_fields: tuple | list = (),
+            filter_by: dict = {},
+            where: tuple | list = (),
             order_fields: tuple | list = (),
             offset: int = 0,
-            limit: int = 100,
+            limit: int = 100
     ) -> list:
-        search_fields = (Category.is_visible.is_not(False),)
-        return await super().list(search_fields=search_fields, offset=offset, limit=limit, session=session)
+        return await super().list(
+            session=session,
+            where=(Category.is_visible.is_not(False),),
+            offset=offset,
+            limit=limit
+        )
 
     @classmethod
     async def get_categories_ids(
@@ -49,6 +53,9 @@ class CategoryManager(CRUDManager):
 
     @classmethod
     async def get_categories_ids_without_discount(cls, pk: int, session: AsyncSession):
+        """
+        Get all categories' ids with discounts.
+        """
         categories_and_their_subcategories_ids = await cls.get_categories_ids(
             session=session,
             parent_category_ids=[pk],
@@ -69,6 +76,9 @@ class CategoryManager(CRUDManager):
             input_data: CategoryUpdateSchema,
             session: AsyncSession,
     ) -> Category | HTTPException:
+        """
+        Update category's discount and prices of products in the category and its subcategories.
+        """
         categories_ids_without_discount = await cls.get_categories_ids_without_discount(pk=pk, session=session)
         await ProductManager.bulk_update_discounts(
             categories_ids=categories_ids_without_discount,

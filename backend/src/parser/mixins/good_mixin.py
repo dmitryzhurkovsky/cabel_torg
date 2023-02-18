@@ -1,7 +1,7 @@
 from _elementtree import Element
 from abc import ABC
 
-from src.core.utils import (
+from src.parser.utils import (
     clean_string_from_spaces_and_redundant_symbols,
     clean_fields,
     get_tag_name

@@ -8,9 +8,6 @@ from src.models.abstract_model import BaseModel
 
 
 class OrderStatus(str, BaseEnum):
-    """
-    It's type of order.
-    """
     IN_PROCESSING = 'P'
     SENT = 'S'
     CANCELED = 'c'

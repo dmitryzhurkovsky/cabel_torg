@@ -18,9 +18,9 @@ class CartManager(
     ListMixin
 ):
     table = Cart
+    update_scheme = CartSchema
+    create_scheme = CartCreateInputSchema
+
     preloaded_fields = (
         selectinload(Cart.product),
     )
-
-    update_scheme = CartSchema
-    create_scheme = CartCreateInputSchema

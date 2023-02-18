@@ -15,9 +15,6 @@ from src.models.abstract_model import Base1CModel
 
 
 class ProductStatus(str, BaseEnum):
-    """
-    It's type for a product.
-    """
     AVAILABLE = 'A'
     ON_THE_WAY_TO_THE_WAREHOUSE = 'W'
     OUT_OF_STOCK = 'O'

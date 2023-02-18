@@ -3,7 +3,7 @@ from xml.etree import ElementTree
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.utils import clean_string_from_spaces_and_redundant_symbols
+from src.parser.utils import clean_string_from_spaces_and_redundant_symbols
 
 
 class BaseMixin:
