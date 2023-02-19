@@ -5,7 +5,7 @@ from sqlalchemy.orm import selectinload, joinedload
 from sqlalchemy.sql.functions import count
 from starlette.datastructures import QueryParams
 
-from src.core.managers.base_manager import CRUDManager
+from src.managers.base_manager import CRUDManager
 from src.core.utils import (
     get_filter_expressions,
     calculate_price_with_discount,
@@ -36,12 +36,12 @@ class ProductManager(CRUDManager):
         search_fields = await get_filter_expressions(filter_fields, session=session)
         search_fields.append(Product.is_visible.is_not(False))
 
-        order_fields = get_order_expressions(filter_fields)
+        order_by = get_order_expressions(filter_fields)
 
         return await cls.list(
             session=session,
             where=search_fields,
-            order_fields=order_fields,
+            order_by=order_by,
             offset=offset,
             limit=limit
         )

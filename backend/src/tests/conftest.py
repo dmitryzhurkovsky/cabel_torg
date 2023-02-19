@@ -1,20 +1,19 @@
 import asyncio
 from asyncio import AbstractEventLoop
-from typing import Generator, AsyncGenerator, Any
+from typing import AsyncGenerator
 
 import pytest
 import pytest_asyncio
 from faker import Faker
 from httpx import AsyncClient
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.app import app
-from src.core.db.db import Base, engine, async_session
-from src.core.managers.category_manager import CategoryManager
-from src.core.managers.product_manager import ProductManager
-from src.core.managers.user_manager import UserManager
-from src.models import User, Product, Manufacturer, Category
+from src.core.db.db import async_session
+from src.managers.category_manager import CategoryManager
+from src.managers.product_manager import ProductManager
+from src.managers.user_manager import UserManager
+from src.models import User, Product, Category
 from src.services.auth_service import AuthService
 
 faker = Faker()

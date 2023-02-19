@@ -27,8 +27,10 @@ class OfferMixin(BaseMixin, ABC):
             product_db.count = product_count
             if product_count > 0:
                 product_db.status = ProductStatus.AVAILABLE.value
-            elif product_count <= 0 and product_db.status != ProductStatus.ON_THE_WAY_TO_THE_WAREHOUSE:
+            elif product_count <= 0 and product_db.status == ProductStatus.ON_THE_WAY_TO_THE_WAREHOUSE:
                 # We set up status of a product to ON_THE_WAY_TO_THE_WAREHOUSE during parsing products.
+                product_db.status = ProductStatus.ON_THE_WAY_TO_THE_WAREHOUSE.value
+            else:
                 product_db.status = ProductStatus.OUT_OF_STOCK.value
 
         await self.db.commit()

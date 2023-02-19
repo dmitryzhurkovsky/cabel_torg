@@ -1,4 +1,4 @@
-from src.core.managers.base_manager import CRUDManager
+from src.managers.base_manager import CRUDManager
 from src.models.service_entities.article_model import Article
 from src.models.service_entities.delivery_type_model import DeliveryType
 from src.models.service_entities.partner_model import Partner

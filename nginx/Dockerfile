@@ -1,5 +1,5 @@
 # build fronend
-FROM node:18.12.1-alpine as build-stage
+FROM node:18.14.1-alpine as build-stage
 WORKDIR /frontend
 COPY /front/package*.json ./
 RUN npm install

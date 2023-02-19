@@ -2,8 +2,8 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.managers.base_manager import CRUDManager
-from src.core.managers.product_manager import ProductManager
+from src.managers.base_manager import CRUDManager
+from src.managers.product_manager import ProductManager
 from src.models.category_model import Category
 from src.rest.schemas.category_schema import CategoryUpdateSchema
 
@@ -17,13 +17,15 @@ class CategoryManager(CRUDManager):
             session: AsyncSession,
             filter_by: dict = {},
             where: tuple | list = (),
-            order_fields: tuple | list = (),
+            order_by: tuple | list = (),
             offset: int = 0,
             limit: int = 100
     ) -> list:
         return await super().list(
             session=session,
+            filter_by=filter_by,
             where=(Category.is_visible.is_not(False),),
+            order_by=(CategoryManager.table.order,),
             offset=offset,
             limit=limit
         )

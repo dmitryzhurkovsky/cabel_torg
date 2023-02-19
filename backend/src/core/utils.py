@@ -13,7 +13,7 @@ from src.models.product_models import Product, ProductStatus
 
 async def get_filter_expressions(filter_fields: QueryParams, session: AsyncSession) -> list:
     """Convert filter values to SQLALCHEMY filter expressions."""
-    from src.core.managers.category_manager import CategoryManager
+    from src.managers.category_manager import CategoryManager
 
     filter_expressions = []
 
@@ -78,11 +78,7 @@ def get_order_expressions(filter_fields: QueryParams) -> list[ColumnOperators | 
     return order_expressions
 
 
-async def delivery_type_is_valid(pk: int, session: AsyncSession) -> list:
-    D
-
-
-def password_is_valid(password: str, password_hash: str) -> bool:
+def is_valid(password: str, password_hash: str) -> bool:
     """Check whether a password is valid."""
     return bcrypt.checkpw(password.encode(), password_hash.encode())
 

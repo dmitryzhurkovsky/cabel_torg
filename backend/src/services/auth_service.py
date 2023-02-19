@@ -12,9 +12,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core import settings
 from src.core.db.db import get_session
 from src.core.exception.base_exception import InvalidTokenError, AuthenticateError
-from src.core.managers.user_manager import UserManager
+from src.managers.user_manager import UserManager
 from src.core.redis import redis
-from src.core.utils import password_is_valid
+from src.core.utils import is_valid
 from src.models.user_model import User
 from src.rest.schemas.auth_schema import (
     auth_schema,
@@ -72,7 +72,7 @@ class AuthService:
             session=session,
             **user_data
         )
-        if password_is_valid(password=password, password_hash=user.password):
+        if is_valid(password=password, password_hash=user.password):
             return user
 
         raise AuthenticateError()

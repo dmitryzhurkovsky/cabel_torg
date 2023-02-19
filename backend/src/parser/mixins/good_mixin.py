@@ -1,31 +1,63 @@
 from _elementtree import Element
 from abc import ABC
 
+from src.models import Manufacturer, BaseUnit, Category, Attribute
+from src.models.attribute_model import AttributeName, AttributeValue
+from src.models.product_models import Product, ProductStatus
+from src.parser.mixins.base_mixin import BaseMixin
+from src.parser.servers import database_service
 from src.parser.utils import (
     clean_string_from_spaces_and_redundant_symbols,
     clean_fields,
     get_tag_name
 )
-from src.models import Manufacturer, BaseUnit, Category, Attribute
-from src.models.attribute_model import AttributeName, AttributeValue
-from src.models.product_models import Product
-from src.parser.mixins.base_mixin import BaseMixin
-from src.parser.servers import database_service
 
 
 class GoodsMixin(BaseMixin, ABC):
+    # It's a special attribute to find goods under the order.
+    # It's initialized in cache_attribute_under_the_order function.
+    attribute_under_the_order_id = None
+
+    # Service methods
     @property
     def names_cache(self) -> dict:
+        """It's used to escape extra queries to a database. We keep ids of AttributeName here."""
         if not self.CACHE.get('names'):
             self.CACHE['names'] = dict()
         return self.CACHE['names']
 
     @property
     def values_cache(self) -> dict:
+        """It's used to escape extra queries to a database. We keep ids of AttributeValue here."""
         if not self.CACHE.get('values'):
             self.CACHE['values'] = dict()
         return self.CACHE['values']
 
+    @property
+    def attributes_cache(self) -> set:
+        """
+        It's used to save ProductAttribute with Attribute.name = 'Товар под заказ'.
+        We keep ids of ProductAttribute here to check them when we create a product and set a suitable status.
+        """
+        if not self.CACHE.get('attributes'):
+            self.CACHE['attributes'] = set()
+        return self.CACHE['attributes']
+
+    async def cache_attribute_under_the_order(self):
+        """
+        Get AttributeName with name = 'Товар под заказ' and cache its.
+        This attribute is used to set right status for a product during parsing of products.
+        """
+        query_result = await database_service.get_object(
+            db=self.db, model=AttributeName, fields={'name': 'Товар под заказ'}
+        )
+        self.attribute_under_the_order_id = query_result.id
+
+    def is_on_the_way_to_the_warehouse(self, attributes: list) -> bool:
+        """Check wheter a product is on the way to the warehouse."""
+        return len({attribute.id for attribute in attributes} & self.attributes_cache) > 0
+
+    # Products methods
     async def parse_products(self):
         """Parse "Товары" node and then write them to a database."""
         goods = self.root_element[1][4]  # noqa
@@ -43,6 +75,9 @@ class GoodsMixin(BaseMixin, ABC):
             )
             if attributes:
                 product_db.attributes = attributes
+                if self.is_on_the_way_to_the_warehouse(attributes):
+                    product_db.status = ProductStatus.ON_THE_WAY_TO_THE_WAREHOUSE
+
             if is_excluded := clean_product.get('category_id') in self.excluded_categories_cache:  # noqa
                 product_db.is_visible = False
 
@@ -172,8 +207,12 @@ class GoodsMixin(BaseMixin, ABC):
 
             attributes.append(db_attribute)
 
+            if name_id_db == self.attribute_under_the_order_id:
+                self.attributes_cache.add(db_attribute.id)
+
         return 'attributes', attributes
 
+    # Attributes methods
     async def parse_attributes(self):
         """
         Clean an attributes's node(it's Свойства in a xml tree) and
@@ -195,12 +234,10 @@ class GoodsMixin(BaseMixin, ABC):
 
             self.names_cache[bookkeeping_id] = db_attribute_name.id
 
-            # It's a special attribute.
-            if db_attribute_name.payload == 'Товар под заказ':
-                self.CACHE['attribute_id_for_goods_under_the_order'] = db_attribute_name.id
-
             if value_type == 'Справочник':
                 await self.clean_available_options(attribute[3])
+
+        await self.cache_attribute_under_the_order()
 
     async def clean_available_options(self, available_values: Element):
         """
