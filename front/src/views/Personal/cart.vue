@@ -269,10 +269,10 @@
       openOrderRequest(){
         this.SET_IS_APPLICATION_OPEN(true);
 
-        if (!localStorage.getItem("authToken")) {
-          this.SET_DESTINATION('/cart');
-          this.$router.push('/login');
-        }
+        // if (!localStorage.getItem("authToken")) {
+        //   this.SET_DESTINATION('/cart');
+        //   this.$router.push('/login');
+        // }
       },
 
       async sendOrderRequest(){
@@ -342,7 +342,7 @@
             house: this.house,
             flat: this.flat,
             delivery_type_id: this.delivery_type_id,
-            user_id: this.USER.id,
+            // user_id: this.USER.id,
             products: orderProducts
           };
           await this.SEND_ORDER_REQUEST(orderData);

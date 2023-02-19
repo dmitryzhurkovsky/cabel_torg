@@ -191,6 +191,7 @@ export default {
 }
 .user-login{
   min-width: 270px;
+  padding: 20px 14px 20px 14px;
 }
 
 .avatar{

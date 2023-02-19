@@ -16,6 +16,8 @@ backend/src/static/
 
 front/node_modules
 front/dist
+admin/node_modules
+admin/dist
 
 # Log files
 front/npm-debug.log*

@@ -220,6 +220,7 @@
     border-radius: 8px;
     width: 100%;
     padding: 14px 16px;
+    resize: vertical;
   }
   button{
 

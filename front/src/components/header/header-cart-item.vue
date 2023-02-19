@@ -4,12 +4,12 @@
             <CardImage :images=cartItemData.images />
         </div>
         <div class="popup-cart__description">
-          <div class="popup-cart__title">{{ cartItemData.name }}</div>
+          <div class="popup-cart__title long_text">{{ cartItemData.name }}</div>
           <div class="popup-cart__uptitle">{{ cartItemData.vendor_code }}</div>
 
         </div>
         <div class="popup-cart__action">
-          <div class="popup-cart__price">{{ cartItem.amount + '  X  ' + cardPriceWithDiscount }} <span>BYN</span></div>
+          <div class="popup-cart__price">{{ Number((cartItem.amount * cardPriceWithDiscount).toFixed(2)) }} <span>BYN</span></div>
           <button class="icon-delete" @click.stop="onRemoveItemFromCart(cartItem)"></button>
         </div>
         <!-- {{ cartItemData }} -->
@@ -73,8 +73,8 @@ export default {
   &__item{
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
-    gap:10px;
-    align-items: self-start;
+    gap:6px;
+    align-items:center;
     &:hover{
       background: #F9F9F9;
     }
@@ -99,11 +99,14 @@ export default {
     text-align: left;
   }
   &__title{
+    max-width: 150px;
     font-weight: 500;
 
   }
   &__action{
+    max-width: 90px;
     align-items: stretch;
+    text-align: right;
 
   }
 
@@ -114,7 +117,7 @@ export default {
     line-height: 140%;
 
     color: #423E48;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   .icon-delete{
