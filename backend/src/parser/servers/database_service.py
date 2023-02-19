@@ -11,7 +11,7 @@ async def get_object(
         prefetch_fields: tuple = None,
 ):
     """Get an object from a database."""
-    options = BaseMixin.init_preloaded_fields(prefetch_fields=prefetch_fields)
+    options = BaseMixin.init_preloaded_fields(preloaded_fields=prefetch_fields)
 
     query_result = await db.execute(
         select(model).

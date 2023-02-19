@@ -49,7 +49,7 @@ class GoodsMixin(BaseMixin, ABC):
         This attribute is used to set right status for a product during parsing of products.
         """
         query_result = await database_service.get_object(
-            db=self.db, model=AttributeName, fields={'name': 'Товар под заказ'}
+            db=self.db, model=AttributeName, fields={'payload': 'Товар под заказ'}
         )
         self.attribute_under_the_order_id = query_result.id
 
@@ -74,6 +74,9 @@ class GoodsMixin(BaseMixin, ABC):
                 prefetch_fields=(Product.attributes,),
             )
             if attributes:
+                for attribute in attributes:
+                    await self.db.refresh(attribute)
+
                 product_db.attributes = attributes
                 if self.is_on_the_way_to_the_warehouse(attributes):
                     product_db.status = ProductStatus.ON_THE_WAY_TO_THE_WAREHOUSE

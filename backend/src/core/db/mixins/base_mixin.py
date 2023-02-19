@@ -42,9 +42,9 @@ class BaseMixin:
         return initiated_filter_fields
 
     @classmethod
-    def init_preloaded_fields(cls, prefetch_fields: tuple) -> tuple:
+    def init_preloaded_fields(cls, preloaded_fields: tuple) -> tuple:
         """Initiate fields that will be preloaded in a query to database for related fields"""
-        return (selectinload(field) for field in prefetch_fields) if prefetch_fields else tuple()
+        return (selectinload(field) for field in preloaded_fields) if preloaded_fields else tuple()
 
     @classmethod
     def _check_object(cls, obj: TableType) -> Type[HTTPException]:  # noqa

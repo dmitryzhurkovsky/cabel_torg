@@ -1,18 +1,25 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query, Request, status, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
+from src.core.enums import CategoryTypeFilterEnum
 from src.managers.category_manager import CategoryManager
-from src.rest.schemas.category_schema import CategorySchema, CategoryUpdateSchema
+from src.rest.schemas.category_schema import (
+    CategorySchema,
+    CategoryUpdateSchema,
+    QuickCategoryCreateSchema
+)
 
 category_router = APIRouter(tags=['categories'])
 
 
 @category_router.get('/categories', response_model=list[CategorySchema])
 async def get_categories(
-        session: AsyncSession = Depends(get_session)
-):
-    return await CategoryManager.list(session=session)
+        request: Request,
+        session: AsyncSession = Depends(get_session),
+        type_of_category: CategoryTypeFilterEnum | None = Query(default=None),
+) -> list[CategorySchema]:
+    return await CategoryManager.filter_list(session=session, filters=request.query_params)
 
 
 @category_router.patch('/categories', response_model=CategorySchema)
@@ -26,3 +33,16 @@ async def update_category(
         pk=category_id,
         input_data=category_info
     )
+
+
+@category_router.post(
+    '/categories/set_quick_categories',
+    response_model=CategorySchema,
+    status_code=status.HTTP_201_CREATED
+)
+async def update_category(
+        quick_categories_info: QuickCategoryCreateSchema,
+        session: AsyncSession = Depends(get_session),
+):
+    await CategoryManager.set_quick_categories(session=session, categories_ids=quick_categories_info.categories)
+    return Response(status_code=status.HTTP_201_CREATED)

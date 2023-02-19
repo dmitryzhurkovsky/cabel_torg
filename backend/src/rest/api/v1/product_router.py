@@ -41,13 +41,13 @@ async def get_products(
         session: AsyncSession = Depends(get_session)
 ) -> PaginatedProductSchema:
     products = await ProductManager.filter_list(
-        filter_fields=request.query_params,
+        filters=request.query_params,
         session=session,
         offset=offset,
         limit=limit
     )
     count_of_products = await ProductManager.get_count_of_products(
-        filter_fields=request.query_params,
+        filters=request.query_params,
         session=session
     )
 
