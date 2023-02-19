@@ -15,11 +15,20 @@ order_router = APIRouter(tags=['orders'])
 
 
 @order_router.get('/orders/mine', response_model=list[OrderSchema])
-async def get_orders(
+async def get_my_orders(
         session: AsyncSession = Depends(get_session),
         user=Depends(AuthService.get_current_user)
 ) -> list[OrderSchema]:
     return await OrderManager.list(session=session, filter_by={'user_id': user.id})
+
+
+@order_router.get('/orders/{order_id}}', response_model=OrderSchema)
+async def get_order(
+        order_id: int,
+        session: AsyncSession = Depends(get_session),
+        user=Depends(AuthService.get_current_user)
+) -> OrderSchema:
+    return await OrderManager.retrieve(id=order_id, session=session)
 
 
 @order_router.post('/orders', response_model=OrderSchema, status_code=status.HTTP_201_CREATED)

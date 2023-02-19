@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 
 from pydantic import BaseModel, EmailStr
 
@@ -24,7 +25,7 @@ class OrderBaseSchema(BaseModel):
 
     # delivery information
     city: str | None
-    address: str | None
+    street: str | None
     house: str | None
     flat: str | None
     delivery_type_id: int | None
@@ -46,6 +47,7 @@ class OrderSchema(OrderBaseSchema, BaseSchema):
     number: int | None
 
     created_at: datetime
+    total_price: Decimal
 
     class Config:
         orm_mode = True

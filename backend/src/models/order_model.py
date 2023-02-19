@@ -1,5 +1,6 @@
 from sqlalchemy import Column, ForeignKey, Integer, CheckConstraint, String
 from sqlalchemy.dialects.postgresql import ENUM as pgEnum
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
 from src.core.db.db import Base
@@ -20,6 +21,10 @@ class Order(BaseModel):
     status = Column('status', pgEnum(*OrderStatus.values(), name='order_status'), default=OrderStatus.IN_PROCESSING)
     promo_code = Column(String(50))
 
+    # It's a special discount if a customer buys a lot of products a vendor can provide a special discount.
+    # We can see it in an invoice.
+    discount = Column(Integer, default=0)
+
     # requisites
     company_name = Column(String(50))
     unp = Column(String(9))  # Payer's Account Number
@@ -35,7 +40,7 @@ class Order(BaseModel):
 
     # delivery information
     city = Column(String(50))
-    address = Column(String(128))
+    street = Column(String(128))
     house = Column(String(12))
     flat = Column(String(12))
     delivery_type = relationship('DeliveryType', back_populates='orders')
@@ -51,9 +56,13 @@ class Order(BaseModel):
     def number(self) -> int:
         return self.id + 100000
 
+    @hybrid_property
+    def total_price(self):
+        return sum([product.amount * product.product.actual_price for product in self.products])
+
 
 class ProductOrder(Base):
-    __tablename__ = 'product_orders'
+    __tablename__ = 'product_order'
 
     product_id = Column(ForeignKey('products.id', ondelete='CASCADE'), primary_key=True)
     product = relationship('Product', back_populates='added_to_orders', lazy='joined')

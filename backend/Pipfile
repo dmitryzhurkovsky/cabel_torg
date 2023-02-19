@@ -18,6 +18,8 @@ python-multipart = "*"
 aioredis = "*"
 sqladmin = "*"
 requests = "*"
+pdfkit = "*"
+num2words = "*"
 
 [dev-packages]
 pytest = "*"
