@@ -2,8 +2,8 @@
       <div class="catalog__menu menu__container">
         <div class="menu active _container">
           <div class="menu__scroll">
-            <div class="container row">
-              <div class="colunm">
+            <div class="container">
+              <div class="left_sidebar">
                 <ul class="menu__mass">
                   <li 
                       class="menu__item" 
@@ -107,18 +107,25 @@ export default {
 </script>
 
 <style scoped lang="scss">
-    .catalog__menu{
-      position: absolute;
-      top: 50px;
-      left: 0;
-      padding: 38px 0;
-      width: 100%;
-      height: 420px;
-      background: #FFFFFF;
-      box-shadow: 0px 4px 20px rgba(66, 62, 72, 0.05);
-      z-index: 5;
-    }
+
+.catalog__menu{
+  position: absolute;
+  top: 50px;
+  left: 0;
+  padding: 38px 0 0 0;
+  width: 100%;
+  //height: 420px;
+  background: #FFFFFF;
+  box-shadow: 0px 4px 20px rgba(66, 62, 72, 0.05);
+  z-index: 5;
+}
 .menu{
+
+  .container {
+    display: grid;
+    grid-template-columns: 290px 1fr;
+  }
+
 
   &__mass{
     min-width: 250px;
@@ -170,12 +177,17 @@ export default {
     align-items: flex-start;
 
   }
-  .colunm{
+  .left_sidebar{
+
+
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
+    height: 100%;
+    box-shadow: 0px 4px 20px rgb(66 62 72 / 5%);
   }
+
 
   &__rubric{
     font-weight: 400;
@@ -207,11 +219,9 @@ export default {
   display: flex;
   align-items: center;
   padding: 15px;
-  box-shadow: 0px 4px 20px rgba(66, 62, 72, 0.05);
   width: 100%;
   max-height: 100%;
   position: static;
-  width: 600px;
 
   &__box{
     display: grid;
