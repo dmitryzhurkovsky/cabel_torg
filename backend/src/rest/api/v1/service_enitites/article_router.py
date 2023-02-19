@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
-from src.core.managers.services_managers import ArticleManager
+from src.managers.services_managers import ArticleManager
 from src.rest.schemas.service_entities.article_schema import ArticleSchema, ArticleInputSchema
 
 article_router = APIRouter(tags=['articles'])

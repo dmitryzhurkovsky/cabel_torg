@@ -7,11 +7,10 @@ from sys import platform
 
 import jinja2
 import pdfkit
-from num2words import num2words
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import engine
-from src.core.managers.order_manager import OrderManager
+from src.managers.order_manager import OrderManager
 from src.models import Order
 
 root_directory = pathlib.Path(__file__).parent.resolve()
@@ -38,6 +37,7 @@ pdf_kit_options = {
 }
 # Set the locale to Russian
 locale.setlocale(locale.LC_TIME, 'ru_RU')
+
 
 @dataclass
 class ProductJinjaSchema:

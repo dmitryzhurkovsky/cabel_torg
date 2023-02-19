@@ -29,7 +29,7 @@ class Order(BaseModel):
     company_name = Column(String(50))
     unp = Column(String(9))  # Payer's Account Number
     legal_address = Column(String(128))
-    IBAN = Column(String(34))
+    IBAN = Column(String(35))
     BIC = Column(String(50))  # Belarusian Central Bank Identification Code
     serving_bank = Column(String(128))
 
@@ -44,7 +44,7 @@ class Order(BaseModel):
     house = Column(String(12))
     flat = Column(String(12))
     delivery_type = relationship('DeliveryType', back_populates='orders')
-    delivery_type_id = Column(ForeignKey('delivery_types.id'))
+    delivery_type_id = Column(ForeignKey('service__delivery_types.id'))
 
     # relations
     products = relationship('ProductOrder', back_populates='order', lazy='joined')

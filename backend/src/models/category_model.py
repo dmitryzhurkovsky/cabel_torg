@@ -26,6 +26,8 @@ class Category(Base1CModel):
     # an oder attribute of parent categories is 1000, 2000, 3000;
     # an oder attribute of subcategories is 1100, 1200, 1300
     # an oder attribute of subcategories' subcategories is 1101, 1102, 1103
+    quick_order = Column(Integer, unique=True)
+    # It's a special attribute that defines categories on the main page.
 
     # Relationship fields
     products = relationship('Product', back_populates='category', lazy='noload')

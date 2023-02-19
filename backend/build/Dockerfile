@@ -2,7 +2,12 @@ FROM python:3.10.2-slim-buster
 
 WORKDIR /backend
 
-RUN apt-get update && apt-get install -y netcat
+RUN apt-get update && apt-get install -y  \
+    netcat \
+    locales \
+    locales-all \
+    wkhtmltopdf
+
 
 COPY ../Pipfile ../Pipfile.lock /backend/
 RUN pip install pipenv

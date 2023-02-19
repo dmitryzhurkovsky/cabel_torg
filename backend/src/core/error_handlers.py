@@ -50,11 +50,15 @@ async def object_not_found_error_handler(request: Request, exception: ObjectNotF
 
 
 @app.exception_handler(IntegrityError)
-async def object_not_found_error_handler(request: Request, exception: IntegrityError) -> JSONResponse:
+async def integrity_error(request: Request, exception: IntegrityError) -> JSONResponse:
     """Handle a bad request error"""
-    invalid_foreign_keys = ', '.join([re.findall(r'(\w+_id)', exc)[-1] for exc in exception.args])
+    foreign_keys_indvalid = re.findall(r'(\w+_id)', exception.args[0])
+    if foreign_keys_indvalid:
+        detail = f'The following fields are invalid: {foreign_keys_indvalid}'
+    else:
+        detail = exception.args[0]
 
     return JSONResponse(
         status_code=BadRequestError.status_code,
-        content={'detail': f'The following fields are invalid: {invalid_foreign_keys}'}
+        content={'detail': detail}
     )

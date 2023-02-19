@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
 from src.core.exception.base_exception import BadRequestError, ObjectNotFoundError
-from src.core.managers.user_manager import UserManager
+from src.managers.user_manager import UserManager
 from src.rest.schemas.user_schema import UserSchema, UserCreateSchema, UserUpdateSchema
 from src.services.auth_service import AuthService
 

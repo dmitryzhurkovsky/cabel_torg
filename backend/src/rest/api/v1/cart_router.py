@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from src.core.db.db import get_session
-from src.core.managers.cart_manager import CartManager
+from src.managers.cart_manager import CartManager
 from src.rest.schemas.cart_schema import (
     CartSchema,
     CartCreateInputSchema,
