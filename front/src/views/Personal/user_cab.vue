@@ -12,7 +12,7 @@
                   <div class="filter__title icon-arrow-up">Личный кабинет</div>
 
                   <ul class="filter__list">
-                     <li class="filter__item icon-cart" @click="changeScreen(0)">Мои заказы</li>
+                     <li class="filter__item icon-order" @click="changeScreen(0)">Мои заказы</li>
                      <li class="filter__item icon-favorite-choosed" @click="changeScreen(1)">Избранные товары</li>
                      <li class="filter__item icon-setting" @click="changeScreen(2)">Настройки аккаунта</li>
                      <li class="filter__item icon-setting" @click="changeScreen(3)">Сменить пароль</li>

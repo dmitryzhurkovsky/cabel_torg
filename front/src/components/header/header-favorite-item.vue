@@ -109,7 +109,7 @@ export default {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     gap:10px;
-    align-items: self-start;
+    align-items: center;
     &:hover{
       background: #F9F9F9;
     }
