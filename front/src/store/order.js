@@ -267,8 +267,8 @@ export default {
           }
       },
 
-      async SEND_ORDER_REQUEST({ commit, rootGetters }, itemData ) {
-        if (rootGetters['auth/USER']) {
+      async SEND_ORDER_REQUEST({ commit, dispatch, rootGetters, getters }, itemData ) {
+        // if (rootGetters['auth/USER']) {
             try {
                 const response = await axios.post(process.env.VUE_APP_API_URL + 'orders', itemData);
                 // commit("UPDATE_ITEM_IN_CART", { amount : response.data.amount, product: itemData.product });
@@ -279,14 +279,18 @@ export default {
                 msg.sub = ' Пн-Пт - 9:00 - 17:00'
                 commit("header/SET_POPUP_MESSAGE", msg, {root: true});
                 commit("header/SET_IS_POPUP_OPEN", true, {root: true});
-                commit("SET_ORDERS", []);
+                getters.ORDERS.forEach(async item => {
+                  await dispatch("DELETE_ITEM_FROM_DB", item );
+                  commit("REMOVE_ITEM_FROM_CART", item);
+                })
+                // commit("SET_ORDERS", []);
                 commit("SET_IS_APPLICATION_OPEN", false);
                 commit("profile/CHANGE_SCREEN", 0, {root: true});
             } catch (e) {
                 console.log(e);
                 commit("notification/ADD_MESSAGE", {name: "Не возможно отправить заказ", icon: "error", id: '1'}, {root: true})
             }
-        }
+        // }
       },
 
       async GET_ORDER_DOCUMENTS({ commit } ){

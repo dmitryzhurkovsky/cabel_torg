@@ -3,7 +3,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
 from src.core.managers.watch_list_manager import WatchListManager
-from src.models import WatchList
 from src.rest.schemas.watchlist_schema import (
     WatchListSchema,
     WatchListInputSchema, WatchListWithProductSchema
@@ -18,10 +17,7 @@ async def get_product(
         session: AsyncSession = Depends(get_session),
         user=Depends(AuthService.get_current_user)
 ):
-    return await WatchListManager.list(
-        session=session,
-        filter_fields={'user_id': user.id}
-    )
+    return await WatchListManager.list(session=session, filter_by={'user_id': user.id})
 
 
 @watchlist_router.post(

@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel, EmailStr
 
 from src.models.order_model import OrderStatus
@@ -42,6 +44,8 @@ class OrderSchema(OrderBaseSchema, BaseSchema):
     status: OrderStatus | None
     products: list[ProductOrderSchema] | None
     number: int | None
+
+    created_at: datetime
 
     class Config:
         orm_mode = True

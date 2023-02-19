@@ -9,7 +9,7 @@
 
         </div>
         <div class="popup-cart__action">
-          <div class="popup-cart__price">{{ cartItem.amount + '  X  ' + cardPriceWithDiscount }} <span>BYN</span></div>
+          <div class="popup-cart__price">{{ Number((cartItem.amount * cardPriceWithDiscount).toFixed(2)) }} <span>BYN</span></div>
           <button class="icon-delete" @click.stop="onRemoveItemFromCart(cartItem)"></button>
         </div>
         <!-- {{ cartItemData }} -->

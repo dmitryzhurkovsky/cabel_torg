@@ -17,6 +17,7 @@ from src.rest.schemas.product_schema import ProductUpdateSchema
 
 class ProductManager(CRUDManager):
     table = Product
+
     preloaded_fields = (
         joinedload(Product.manufacturer),
         joinedload(Product.category),
@@ -38,11 +39,11 @@ class ProductManager(CRUDManager):
         order_fields = get_order_expressions(filter_fields)
 
         return await cls.list(
-            search_fields=search_fields,
+            session=session,
+            where=search_fields,
             order_fields=order_fields,
             offset=offset,
-            limit=limit,
-            session=session
+            limit=limit
         )
 
     @classmethod
@@ -86,13 +87,10 @@ class ProductManager(CRUDManager):
             categories_ids: tuple,
             discount: int
     ):
-        products = await cls.list(
-            session=session,
-            search_fields=(
-                Product.category_id.in_(categories_ids),
-                Product.personal_discount == 0
-            )
-        )
+        products = await cls.list(session=session, where=(
+            Product.category_id.in_(categories_ids),
+            Product.personal_discount == 0
+        ))
         for product in products:
             product.price_with_discount = calculate_price_with_discount(product=product, discount=discount)
         # we don't do commit here because we should also update a category

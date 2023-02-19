@@ -19,10 +19,7 @@ async def get_orders(
         session: AsyncSession = Depends(get_session),
         user=Depends(AuthService.get_current_user)
 ) -> list[OrderSchema]:
-    return await OrderManager.list(
-        session=session,
-        filter_fields={'user_id': user.id},
-    )
+    return await OrderManager.list(session=session, filter_by={'user_id': user.id})
 
 
 @order_router.post('/orders', response_model=OrderSchema, status_code=status.HTTP_201_CREATED)

@@ -8,6 +8,7 @@ from src.models.order_model import Order, ProductOrder
 
 class OrderManager(CRUDManager):
     table = Order
+
     preloaded_fields = (
         selectinload(Order.products).selectinload(ProductOrder.product),
     )

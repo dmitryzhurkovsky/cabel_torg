@@ -14,6 +14,7 @@ class WatchListManager(
     ListMixin
 ):
     table = WatchList
+
     preloaded_fields = (
         selectinload(WatchList.product),
     )

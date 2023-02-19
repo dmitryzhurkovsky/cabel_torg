@@ -1,6 +1,4 @@
-import re
 from decimal import Decimal
-from xml.etree.ElementTree import Element
 
 import bcrypt
 from sqlalchemy import or_, select, and_
@@ -13,7 +11,7 @@ from src.models import Category
 from src.models.product_models import Product, ProductStatus
 
 
-async def get_filter_expressions(filter_fields: QueryParams, session: AsyncSession = None) -> list:
+async def get_filter_expressions(filter_fields: QueryParams, session: AsyncSession) -> list:
     """Convert filter values to SQLALCHEMY filter expressions."""
     from src.core.managers.category_manager import CategoryManager
 
@@ -80,6 +78,10 @@ def get_order_expressions(filter_fields: QueryParams) -> list[ColumnOperators | 
     return order_expressions
 
 
+async def delivery_type_is_valid(pk: int, session: AsyncSession) -> list:
+    D
+
+
 def password_is_valid(password: str, password_hash: str) -> bool:
     """Check whether a password is valid."""
     return bcrypt.checkpw(password.encode(), password_hash.encode())
@@ -88,31 +90,6 @@ def password_is_valid(password: str, password_hash: str) -> bool:
 def hash_password(password: str) -> str:
     """Hash a password by bcrypt."""
     return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
-
-
-def clean_fields(fields: dict) -> dict:
-    """Delete None elements from dict"""
-    prepared_fields = dict()
-    for key, value in fields.items():
-        if value:
-            prepared_fields[key] = value
-
-    return prepared_fields
-
-
-def clean_string_from_spaces_and_redundant_symbols(dirty_string: str) -> str | None:
-    """Clean an input element from any redundant symbols and spaces."""
-    if dirty_string == '.' or not dirty_string.strip():
-        return None
-    try:
-        clean_string = re.findall(pattern='[А-Яа-яЁёa-zA-Z0-9].+[А-Яа-яЁёa-zA-Z.0-9)"]', string=dirty_string)[0]
-        return clean_string
-    except Exception:  # todo add to logger
-        return None
-
-
-def get_tag_name(raw_field: Element) -> str:
-    return raw_field.tag.split('}')[-1]
 
 
 def calculate_price_with_discount(product: Product, discount: int) -> Decimal:

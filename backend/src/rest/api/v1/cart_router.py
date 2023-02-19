@@ -20,10 +20,7 @@ async def get_product(
         session: AsyncSession = Depends(get_session),
         user=Depends(AuthService.get_current_user)
 ) -> list[CartWithProductSchema]:
-    return await CartManager.list(
-        session=session,
-        filter_fields={'user_id': user.id},
-    )
+    return await CartManager.list(session=session, filter_by={'user_id': user.id})
 
 
 @cart_router.post(
