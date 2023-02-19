@@ -17,6 +17,7 @@ const toggleMenu = (): void => {
 const links = ref([
   { name: "Партнеры", href: "/partners" },
   { name: "Варианты доставки", href: "/delivery_types" },
+  { name: "Новости", href: "/articles" },
 ]);
 
 </script>

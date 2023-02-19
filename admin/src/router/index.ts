@@ -47,7 +47,7 @@ const router = createRouter({
       beforeEnter: auth,
       path: '/articles',
       name: 'Articles',
-      component: () => import('@/views/Articless.vue')
+      component: () => import('@/views/Articles.vue')
     },
   ]
 })
