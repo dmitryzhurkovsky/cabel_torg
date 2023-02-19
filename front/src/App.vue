@@ -357,7 +357,7 @@ h3{
 
 ._link{
   font-weight: 400;
-  font-size: 14px;
+  //font-size: 14px;
   line-height: 130%;
   color: #4275D8;
 }
@@ -591,6 +591,11 @@ input{
 .dropdown.dropdown__wrapper {
   display: block;
 }
-
+.long_text{
+  width: 200px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow: ellipsis;
+}
 
 </style>

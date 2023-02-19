@@ -73,9 +73,11 @@ export default {
 .breadcrumb{
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   padding: 20px 0 30px 0;
 
   li{
+    white-space: nowrap;
     &:last-child{
       a{
         opacity: 0.6;
@@ -86,7 +88,7 @@ export default {
     div{
       font-weight: 300;
       font-size: 12px;
-      line-height: 16px;
+      line-height: 2;
       text-align: center;
       color: #423E48;
       cursor: pointer;

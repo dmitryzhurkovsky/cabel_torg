@@ -122,6 +122,12 @@
     background-image: url("../assets/about-bg.png");
     background-repeat: no-repeat;
     background-position: top right;
+    @media (max-width: $md2+px) {
+      background-size:50%;
+    }
+    @media (max-width: $md3+px) {
+      background-image: none;
+    }
 
   }
   &__header{
@@ -141,12 +147,15 @@
 
   }
   &__block{
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: repeat(3, 270px);
+    gap: 10px;
     margin: 60px 0;
+    @media (max-width: $md2+px) {
+      grid-template-columns: repeat(2, minmax(200px, auto));
+    }
     @media (max-width: $md3+px) {
-     flex-direction: column;
+      grid-template-columns: 1fr;
     }
 
 
@@ -165,7 +174,8 @@
       border-radius: 8px;
       margin: 0 16px 8px 0;
       padding: 24px 24px;
-      max-width: 272px;
+      width: 270px;
+      max-width: 100%;
 
       &:last-child{
         margin: 0 0px 8px 0;
@@ -183,7 +193,7 @@
       font-size: 18px;
       line-height: 24px;
       color: #423E48;
-      @media (max-width: $md2+px) {
+      @media (max-width: $md3+px) {
         padding-left: 20px;
       }
     }
