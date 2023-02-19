@@ -5,7 +5,7 @@ from src.core.db.db import Base
 
 
 class DeliveryType(Base):
-    __tablename__ = 'delivery_types'
+    __tablename__ = 'service__delivery_types'
 
     id = Column(Integer, index=True, primary_key=True)
 

@@ -1,11 +1,9 @@
 import json
 
-import pytest
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from src.core.managers.watch_list_manager import WatchListManager
 from src.models import Product
 
 

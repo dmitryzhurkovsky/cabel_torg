@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
 from src.core.enums import ProductTypeFilterEnum, ProductOrderFilterEnum
-from src.core.managers.product_manager import ProductManager
+from src.managers.product_manager import ProductManager
 from src.rest.schemas.product_schema import (
     ProductSchema,
     PaginatedProductSchema,
@@ -41,13 +41,13 @@ async def get_products(
         session: AsyncSession = Depends(get_session)
 ) -> PaginatedProductSchema:
     products = await ProductManager.filter_list(
-        filter_fields=request.query_params,
+        filters=request.query_params,
         session=session,
         offset=offset,
         limit=limit
     )
     count_of_products = await ProductManager.get_count_of_products(
-        filter_fields=request.query_params,
+        filters=request.query_params,
         session=session
     )
 

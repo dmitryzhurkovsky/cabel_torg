@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
-from src.core.managers.services_managers import PartnerManager
+from src.managers.services_managers import PartnerManager
 from src.rest.schemas.service_entities.partner_schema import PartnerSchema, PartnerInputSchema
 
 partner_router = APIRouter(tags=['partners'])

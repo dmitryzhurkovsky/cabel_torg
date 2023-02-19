@@ -2,10 +2,11 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
-from src.core.managers.watch_list_manager import WatchListManager
+from src.managers.watch_list_manager import WatchListManager
 from src.rest.schemas.watchlist_schema import (
     WatchListSchema,
-    WatchListInputSchema, WatchListWithProductSchema
+    WatchListInputSchema,
+    WatchListWithProductSchema
 )
 from src.services.auth_service import AuthService
 

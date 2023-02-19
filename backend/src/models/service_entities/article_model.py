@@ -5,7 +5,7 @@ from src.models.abstract_model import BaseModel
 
 
 class Article(BaseModel):
-    __tablename__ = 'articles'
+    __tablename__ = 'service__articles'
 
     title = Column(String(255))
     content = Column(String, nullable=True)

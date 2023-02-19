@@ -2,7 +2,7 @@ from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.mixins.base_mixin import TableType
-from src.core.managers.base_manager import CRUDManager
+from src.managers.base_manager import CRUDManager
 from src.core.utils import hash_password
 from src.models.user_model import User
 from src.rest.schemas.user_schema import UserCreateSchema, UserUpdateSchema

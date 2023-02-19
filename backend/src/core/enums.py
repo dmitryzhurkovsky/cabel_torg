@@ -23,6 +23,14 @@ class ProductTypeFilterEnum(str, Enum):
     AVAILABLE = 'available'
 
 
+class CategoryTypeFilterEnum(str, Enum):
+    """
+    It's query params for Category.
+    """
+    WITH_DISCOUNT = 'with_discount'
+    QUICK = 'quick'
+
+
 class ProductOrderFilterEnum(str, Enum):
     """
     It's query params for ordering of Product.
