@@ -19,7 +19,8 @@ export interface Actions {
     payload: any
   ): Promise<any>,
   [ActionTypes.GET_USER_DATA](
-    { commit }: AugmentedActionContext
+    { commit }: AugmentedActionContext,
+    payload: null
   ): Promise<any>,
   [ActionTypes.GET_DELIVERY_TYPE](
     { commit }: AugmentedActionContext,

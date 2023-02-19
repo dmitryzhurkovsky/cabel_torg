@@ -33,7 +33,9 @@
               <span>/{{ cartItemData?.base_unit?.full_name }}</span>
             </div>
             <div class="current_price">
-              <span>{{ cardPriceWithDiscount }}</span> BYN
+              <span v-if="!type">{{ cardPriceWithDiscount }}</span>
+              <span v-if="type">{{ (cardPriceWithDiscount * quantity).toFixed(2) }}</span>
+              BYN
             </div>
           </div>
 
@@ -55,6 +57,7 @@
   
     props: {
         cartItem: null,
+        type: false,
     },
 
     data(){

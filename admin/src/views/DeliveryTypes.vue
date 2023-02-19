@@ -2,7 +2,7 @@
   import { useStore } from '../store';
   import { ActionTypes } from '../store/action-types';
   import { MutationTypes } from '../store/mutation-types';
-  import {ref, computed, onMounted, watchEffect} from 'vue'
+  import {ref, computed, onMounted, watchEffect, watch} from 'vue'
   import BaseTable from '@/components/Table/BaseTable.vue'
   import TableRow from '@/components/Table/TableRow.vue'
   import TableColumn from '@/components/Table/TableColumn.vue'
@@ -12,8 +12,6 @@
   import { IDeliveryType } from '../types';
   import { helpers, minLength, required } from '@vuelidate/validators';
   import { useVuelidate } from '@vuelidate/core';
-import { watch } from 'fs';
-import { log } from 'console';
 
   const store = useStore()
 
@@ -68,15 +66,18 @@ import { log } from 'console';
 
   const sendDataRequest = async () => {
     await store.dispatch(ActionTypes.GET_DELIVERY_TYPE, null)
-    store.commit(MutationTypes.SET_IS_LOADING, false)
-    tableData.value = [...store.getters.deliveryTypesData]
-    store.commit(MutationTypes.SET_IS_LOADING, false);
   };
 
-  watchEffect(() => {
+  watch(() => store.getters.deliveryTypesData,
+    (curr, prev) => {
+      tableData.value = [...curr];
+      store.commit(MutationTypes.SET_IS_LOADING, false)
+  });
+
+  onMounted(() => {
     store.commit(MutationTypes.SET_IS_LOADING, true)
     sendDataRequest()
-  });
+  })
 
   const onSetIsFormOpen = (val: boolean) => {
     isFormOpen.value = val
@@ -100,7 +101,6 @@ import { log } from 'console';
     store.commit(MutationTypes.SET_IS_LOADING, true)
     await store.dispatch(ActionTypes.DELETE_DELIVERY_TYPE, rowData.id as number)
     isFormOpen.value = false
-    sendDataRequest()
   }
 
   const submitForm = async () => {
@@ -109,18 +109,14 @@ import { log } from 'console';
     if (formType.value) {
       store.commit(MutationTypes.SET_IS_LOADING, true)
       const data = {payload: payloadField.value}
-      console.log('Add');
-      
       await store.dispatch(ActionTypes.ADD_DELIVERY_TYPE, data)
     } else {
       store.commit(MutationTypes.SET_IS_LOADING, true)
       const data = {id: idField.value, payload: payloadField.value}
-            
-      console.log('Edit');
       await store.dispatch(ActionTypes.EDIT_DELIVERY_TYPE, data)
     }
     isFormOpen.value = false
-    sendDataRequest()
+    // store.commit(MutationTypes.SET_IS_LOADING, false)
   }
 
 </script>
@@ -179,33 +175,8 @@ import { log } from 'console';
 </template>
 
 <style lang="scss" scoped>
-  .info{
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    &-elem{
-      display: inline-block;
-      padding: 10px;
-      border: 1px solid var(--primary);
-    }
-    &-elem:first-child{
-      border-top-left-radius: 7px;
-      border-bottom-left-radius: 7px;
-      border-right: none;
-    }
-    &-elem:nth-child(2) {
-      border-top-right-radius: 7px;
-      border-bottom-right-radius: 7px;
-    }
-    &-button{
-      margin: auto 0;
-      margin-left: auto;
-    
-      display: inline-block;
-    }
-  }
+  @import "../styles/table-info.scss";
+
   .form{
     &-container {
       display: flex;

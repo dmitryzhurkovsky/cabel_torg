@@ -27,7 +27,7 @@ export const mutations: MutationTree<State> & Mutations = {
     state.deliveryTypesData = payload
   },
   [MutationTypes.ADD_TO_DELIVERY_TYPES](state, payload: IDeliveryType) {
-    state.deliveryTypesData.push(payload)
+    state.deliveryTypesData = [...state.deliveryTypesData, payload]
   },
   [MutationTypes.DELETE_FROM_DELIVERY_TYPES](state, payload: number) {
     state.deliveryTypesData = state.deliveryTypesData.filter(item => item.id !== payload)

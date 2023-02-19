@@ -43,31 +43,12 @@ const router = createRouter({
       name: 'DeliveryTypes',
       component: () => import('@/views/DeliveryTypes.vue')
     },
-    // {
-    //   path: '/radiobutton',
-    //   name: 'Radiobutton',
-    //   component: Radiobutton
-    // },
-    // {
-    //   path: '/progress',
-    //   name: 'Progress',
-    //   component: Progress
-    // },
-    // {
-    //   path: '/input',
-    //   name: 'Input',
-    //   component: Input
-    // },
-    // {
-    //   path: '/tabs',
-    //   name: 'Tabs',
-    //   component: Tabs
-    // },
-    // {
-    //   path: '/table',
-    //   name: 'Table',
-    //   component: Table
-    // },
+    {
+      beforeEnter: auth,
+      path: '/articles',
+      name: 'Articles',
+      component: () => import('@/views/Articless.vue')
+    },
   ]
 })
 

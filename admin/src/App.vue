@@ -1,22 +1,38 @@
 <script setup lang='ts'>
-import LayoutHeader from "@/components/Layout/Header.vue";
-import LayoutSidebar from "@/components/Layout/Sidebar.vue";
-import Loader from '@/components/UI/Loader.vue';
-import { ref } from "vue";
+  import LayoutHeader from "@/components/Layout/Header.vue";
+  import LayoutSidebar from "@/components/Layout/Sidebar.vue";
+  import Loader from '@/components/UI/Loader.vue';
+  import { onMounted, ref, watch } from "vue";
+  import { useStore } from './store';
+  import { ActionTypes } from './store/action-types';
 
-const isOpenMenu = ref(false);
+  const isOpenMenu = ref(true);
+  const isLogin = ref(false)
+  const store = useStore()
 
-const onToggleMenu = () => {
-  isOpenMenu.value = !isOpenMenu.value;
-};
+  const onToggleMenu = () => {
+    isOpenMenu.value = !isOpenMenu.value;
+  };
+       
+  watch(() => store.getters.isLogin,
+    (curr, prev) => {
+      isLogin.value = curr
+    }
+  )
+
+  onMounted( async () => {
+    if (localStorage.getItem("authToken")) {
+      await store.dispatch(ActionTypes.GET_USER_DATA, null)
+    }
+  })
 
 </script>
 
 <template>
   <div class="container">
     <Loader />
-    <layout-header />
-    <layout-sidebar 
+    <layout-header v-if="isLogin"/>
+    <layout-sidebar v-if="isLogin"
       :openSidebar="isOpenMenu" 
       @onToggleMenu="onToggleMenu"
       />
@@ -46,9 +62,9 @@ const onToggleMenu = () => {
   }
 }
 
-@media screen and (max-width: 1023px) {
-  .content {
-    margin-left: 0;
-  }
-}
+// @media screen and (max-width: 1023px) {
+//   .content {
+//     margin-left: 0;
+//   }
+// }
 </style>

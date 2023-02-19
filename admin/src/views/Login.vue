@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import {ref, computed} from 'vue';
-import useVuelidate from '@vuelidate/core';
-import {helpers, minLength, maxLength, numeric, email, sameAs} from '@vuelidate/validators';
-import { useStore } from '../store';
-import { ActionTypes } from '../store/action-types';
-import { MutationTypes } from '../store/mutation-types';
-import Input from '@/components/UI/Input.vue';
-import Button from '@/components/UI/Button.vue';
-import { router } from '../router';
+import {ref, computed} from 'vue'
+import useVuelidate from '@vuelidate/core'
+import {helpers, minLength, maxLength, numeric, email, sameAs} from '@vuelidate/validators'
+import { useStore } from '../store'
+import { ActionTypes } from '../store/action-types'
+import { MutationTypes } from '../store/mutation-types'
+import Input from '@/components/UI/Input.vue'
+import Button from '@/components/UI/Button.vue'
+import { router } from '../router'
 
-const emailField = ref('');
-const passwordField = ref('');
-const store = useStore();
+const emailField = ref('')
+const passwordField = ref('')
+const store = useStore()
 
 const rules = computed(() => ({
   emailField: {
@@ -22,22 +22,22 @@ const rules = computed(() => ({
   },
 }))
 
-const v = useVuelidate(rules, {emailField, passwordField});
+const v = useVuelidate(rules, {emailField, passwordField})
 
 const sendLoginRequest = async (data: FormData) => {
-  const result = await store.dispatch(ActionTypes.SEND_USER_REQUEST, data);
-  store.commit(MutationTypes.SET_IS_LOADING, false);
-  router.push('/');
+  const result = await store.dispatch(ActionTypes.SEND_USER_REQUEST, data)
+  store.commit(MutationTypes.SET_IS_LOADING, false)
+  router.push('/')
 }
 
 const submitForm = () => {
   v.value.$touch()
   if (v.value.$error) return
-  store.commit(MutationTypes.SET_IS_LOADING, true);
-  const data = new FormData();
-  data.append('username', emailField.value);
-  data.append('password', passwordField.value);
-  sendLoginRequest(data);
+  store.commit(MutationTypes.SET_IS_LOADING, true)
+  const data = new FormData()
+  data.append('username', emailField.value)
+  data.append('password', passwordField.value)
+  sendLoginRequest(data)
 }
 </script>
 

@@ -24,6 +24,7 @@
                 v-for = "cartItem in ORDERS"
                 :key = "cartItem.product.id"
                 :cartItem = cartItem
+                :type = true
               />
             </div>
             <div v-if = "ORDERS.length !== 0" class="cart__footer flex-center">
