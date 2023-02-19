@@ -310,6 +310,7 @@ export default {
 
   &__uptitle{
     font-size: 14px;
+    min-height: 42px;
     a{
       font-weight: 400;
       font-size: 14px;
