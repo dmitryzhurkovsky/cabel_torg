@@ -4,7 +4,7 @@
             <CardImage :images=cartItemData.images />
         </div>
         <div class="popup-cart__description">
-          <div class="popup-cart__title">{{ cartItemData.name }}</div>
+          <div class="popup-cart__title long_text">{{ cartItemData.name }}</div>
           <div class="popup-cart__uptitle">{{ cartItemData.vendor_code }}</div>
 
         </div>
@@ -99,11 +99,14 @@ export default {
     text-align: left;
   }
   &__title{
+    max-width: 150px;
     font-weight: 500;
 
   }
   &__action{
+    min-width: 90px;
     align-items: stretch;
+
 
   }
 
@@ -114,7 +117,7 @@ export default {
     line-height: 140%;
 
     color: #423E48;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   .icon-delete{

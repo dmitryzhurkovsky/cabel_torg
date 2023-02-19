@@ -18,8 +18,8 @@
             v-for   = "orderProduct in card.products"
             :key    = "orderProduct.id + card.id"
         >
-          <div class="details-order__title">{{ orderProduct.product.name }}</div>
-          <div class="details-order__article">арт. <span>{{ orderProduct.product.vendor_code }}</span></div>
+          <div class="details-order__title long_text">{{ orderProduct.product.name }}</div>
+          <div class="details-order__article"><span>{{ orderProduct.product.vendor_code }}</span></div>
           <div class="details-order__count">{{ orderProduct.amount }}<span> {{ orderProduct.product.base_unit.full_name }}</span></div>
           <div class="details-order__price"><b>{{ (orderProduct.amount * orderProduct.product.price).toFixed(2) }}</b> BYN</div>
         </div>
@@ -112,10 +112,12 @@ export default {
     }
 
     &__num{
-      flex-basis: 22%;
+      flex-basis: 16%;
       font-weight: 500;
       font-size: 16px;
       line-height: 24px;
+      padding-right: 5px;
+      white-space: nowrap;
       text-decoration-line: underline;
       color: #423E48;
       z-index: 4;
@@ -129,18 +131,23 @@ export default {
       }
     }
     &__date{
+      padding: 0 5px;
       @media (max-width: $md2+px) {
         order: 1;
       }
     }
 
     &__delivery{
+      padding: 0 5px;
+      max-width: 250px;
       @media (max-width: $md2+px) {
         order: 2;
       }
     }
 
     &__status{
+      padding: 0 5px;
+
       @media (max-width: $md2+px) {
         order: 3;
       }
@@ -158,7 +165,9 @@ export default {
 
 
     &__price{
+      padding-left: 5px;
       font-weight: 500;
+      white-space: nowrap;
       @media (max-width: $md2+px) {
         font-weight: 600;
         font-size: 14px!important;
@@ -181,24 +190,29 @@ export default {
     margin-bottom: 10px;
   }
   &__title{
+    padding-right: 5px;
     flex-basis: 55%;
     font-weight: 300;
     font-size: 14px;
     text-decoration-line: underline;
   }
   &__article{
+    padding: 0 5px;
     flex-basis: 15%;
     opacity: 0.4;
     text-align: center;
   }
   &__count{
+    padding:5px;
     flex-basis: 15%;
     text-align: center;
 
   }
   &__price{
-    flex-basis: 15%;
+    padding-left: 5px;
+    flex-basis: 20%;
     text-align: right;
+    white-space: nowrap;
 
   }
 }

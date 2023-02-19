@@ -215,7 +215,7 @@
   &__nav{
     display: grid;
     gap: 10px;
-    grid-template-columns: repeat(3, minmax(0, 185px));
+    grid-template-columns: repeat(3, minmax(0, 170px));
     /*
     if we did this instead of the template it would be a problem:
     grid-auto-flow: column;
@@ -229,14 +229,16 @@
     &__item{
 
       background: #FFFFFF;
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      border: 2px solid #EEEEEE;
       border-radius: 50px;
       font-size: 14px;
+      font-weight: 500;
       line-height: 24px;
       text-align: center;
       opacity: 0.5;
       padding: 6px 20px;
       cursor: pointer;
+      transition: all 0.3s ease;
       @media (max-width: $md2+px) {
         font-size: 10px;
         line-height: 12px;
@@ -244,8 +246,8 @@
       }
 
       &:hover{
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
         color:#4275D8;
+        border: 2px solid #4275D8;
         font-weight: 500;
         opacity: 1;
       }

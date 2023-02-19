@@ -583,5 +583,13 @@ input{
   display: block;
 }
 
+.long_text{
+  width: 200px;
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow: ellipsis;
+  color: red;
+}
+
 
 </style>
