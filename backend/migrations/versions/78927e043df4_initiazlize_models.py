@@ -1,8 +1,8 @@
-"""Init models
+"""Initiazlize models
 
-Revision ID: bc8623dfdb6d
+Revision ID: 78927e043df4
 Revises: 
-Create Date: 2023-02-19 14:44:20.142968
+Create Date: 2023-02-19 18:50:27.291868
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
 
 # revision identifiers, used by Alembic.
-revision = 'bc8623dfdb6d'
+revision = '78927e043df4'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -52,6 +52,7 @@ def upgrade():
     sa.Column('discount', sa.Integer(), nullable=True),
     sa.Column('order', sa.Integer(), nullable=True),
     sa.Column('is_visible', sa.Boolean(), nullable=True),
+    sa.Column('quick_order', sa.Integer(), nullable=True),
     sa.Column('parent_category_id', sa.Integer(), nullable=True),
     sa.Column('bookkeeping_id', sa.String(length=128), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
@@ -60,7 +61,8 @@ def upgrade():
     sa.ForeignKeyConstraint(['parent_category_id'], ['categories.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('bookkeeping_id'),
-    sa.UniqueConstraint('order')
+    sa.UniqueConstraint('order'),
+    sa.UniqueConstraint('quick_order')
     )
     op.create_index(op.f('ix_categories_id'), 'categories', ['id'], unique=False)
     op.create_table('manufacturers',
