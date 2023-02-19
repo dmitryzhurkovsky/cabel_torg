@@ -21,6 +21,10 @@ class Order(BaseModel):
     status = Column('status', pgEnum(*OrderStatus.values(), name='order_status'), default=OrderStatus.IN_PROCESSING)
     promo_code = Column(String(50))
 
+    # It's a special discount if a customer buys a lot of products a vendor can provide a special discount.
+    # We can see it in an invoice.
+    discount = Column(Integer, default=0)
+
     # requisites
     company_name = Column(String(50))
     unp = Column(String(9))  # Payer's Account Number
