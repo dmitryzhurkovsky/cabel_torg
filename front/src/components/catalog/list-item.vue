@@ -119,6 +119,10 @@ export default {
       },
 
       async onOperationWithCartItem(card, type) {
+        if (this.quantityLocal < 0) {
+          this.quantityLocal = this.quantity;
+          return
+        }
         const itemData = {
           amount: 0,
           product: {
