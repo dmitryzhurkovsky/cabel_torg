@@ -18,8 +18,15 @@ async def get_categories(
         request: Request,
         session: AsyncSession = Depends(get_session),
         type_of_category: CategoryTypeFilterEnum | None = Query(default=None),
+        offset: int = 0, limit: int = Query(default=150, lte=150)
+        # todo add norm pagonation
 ) -> list[CategorySchema]:
-    return await CategoryManager.filter_list(session=session, filters=request.query_params)
+    return await CategoryManager.filter_list(
+        filters=request.query_params,
+        session=session,
+        limit=limit,
+        offset=offset
+    )
 
 
 @category_router.patch('/categories', response_model=CategorySchema)

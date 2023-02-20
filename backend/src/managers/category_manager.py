@@ -47,7 +47,7 @@ class CategoryManager(CRUDManager):
             session: AsyncSession,
             custom_preloaded_fields: tuple | list = (),
             offset: int = 0,
-            limit: int = 12
+            limit: int = 100
     ) -> list:
         """Get filtered list of objects with pagination."""
         filter_expressions = cls.get_filter_expressions(filters)
