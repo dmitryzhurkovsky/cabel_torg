@@ -386,6 +386,7 @@
 <style scoped lang="scss">
 
 .cart {
+  min-height: 300px;
   h3{
     margin-bottom: 45px;
   }

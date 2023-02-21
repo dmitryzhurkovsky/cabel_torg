@@ -106,6 +106,9 @@ body {
     -moz-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
 }
+#app__component{
+
+}
 input,
 button,
 textarea {

@@ -118,16 +118,16 @@ export default {
 
   &__description{
     display: flex;
+    text-align: left;
     flex-direction: column;
     justify-content: space-between;
     font-size: 12px;
     line-height: 140%;
     color: #423E48;
-    text-align: left;
   }
   &__title{
-    font-weight: 500;
     max-width: 150px;
+    font-weight: 500;
 
 
   }
