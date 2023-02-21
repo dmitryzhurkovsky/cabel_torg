@@ -72,7 +72,7 @@
   import { SwiperSlide } from "swiper/vue";
   import SwiperCore, { Pagination, Navigation } from "swiper";
   import "swiper/swiper.min.css";
-import { mapGetters } from 'vuex';
+  import { mapGetters } from 'vuex';
   SwiperCore.use([Navigation, Pagination]);
 
   export default {
@@ -90,11 +90,11 @@ import { mapGetters } from 'vuex';
     },
 
     computed: {
-      ...mapGetters("header", ["VIEW_TYPE"]),
+      ...mapGetters("header", ["DEVICE_VIEW_TYPE"]),
     },
 
     watch: {
-      VIEW_TYPE: function() {
+      DEVICE_VIEW_TYPE: function() {
         this.setQuantity();
       },  
     },
@@ -105,9 +105,9 @@ import { mapGetters } from 'vuex';
 
     methods:{
       setQuantity(){
-        if (this.VIEW_TYPE===1) this.quantity = 5
-        if (this.VIEW_TYPE===2) this.quantity = 4
-        if (this.VIEW_TYPE===3) this.quantity = 3
+        if (this.DEVICE_VIEW_TYPE===1) this.quantity = 5
+        if (this.DEVICE_VIEW_TYPE===2) this.quantity = 4
+        if (this.DEVICE_VIEW_TYPE===3) this.quantity = 3
       }
     },
 }

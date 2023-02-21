@@ -71,23 +71,6 @@
                 <span class="checkmark"></span>
               </label>
 
-<!--                <div class="filter__checkbox__item"-->
-<!--                    v-for = "category in categories"-->
-<!--                    :key = "category"-->
-<!--                >-->
-<!--                    <div -->
-<!--                        class = "checkbox-default"-->
-<!--                        @click.stop = "changeFilterCategory(category)"-->
-<!--                    >-->
-<!--                        <label class="checkbox__container">-->
-<!--                            <input type="checkbox" name="" class="" value="">-->
-<!--                           <div class="checkbox"></div>-->
-<!--                              <div class="filter__text">-->
-<!--                              <span class="checkmark" :class="[category.type === TYPE_OF_PRODUCT.type ? 'active' : '']">{{ category.name }}</span>-->
-<!--                            </div>-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                </div>-->
             </div>
 
 

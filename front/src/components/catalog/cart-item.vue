@@ -91,7 +91,7 @@
 
     computed: {
         ...mapGetters("favorite", ["FAVORITES"]),
-        ...mapGetters("header", ["VIEW_TYPE"]),
+        ...mapGetters("header", ["DEVICE_VIEW_TYPE"]),
 
         ChangeParameters(){
             return JSON.stringify(this.FAVORITES);
@@ -106,9 +106,9 @@
         },
 
         isMobileVersion(){
-            if (this.VIEW_TYPE===1) return false
-            if (this.VIEW_TYPE===2) return true
-            if (this.VIEW_TYPE===3) return true
+            if (this.DEVICE_VIEW_TYPE===1) return false
+            if (this.DEVICE_VIEW_TYPE===2) return true
+            if (this.DEVICE_VIEW_TYPE===3) return true
         }
     },
 
