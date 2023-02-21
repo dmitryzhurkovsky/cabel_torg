@@ -4,7 +4,7 @@
             <CardImage :images=favoriteItemData.images />
         </div>
         <div class="popup-cart__description">
-            <div class="popup-cart__title">{{ favoriteItemData.name }}</div>
+            <div class="popup-cart__title long_text">{{ favoriteItemData.name }}</div>
             <div class="popup-cart__uptitle">{{ -favoriteItemData.vendor_code }}</div>
 
         </div>
@@ -70,14 +70,6 @@ export default {
 .popup-cart{
   text-align: center;
 
-//   h3{
-//     font-weight: 500;
-//     font-size: 20px;
-//     line-height: 140%;
-//     text-align: center;
-//     margin-bottom: 16px;
-//   }
-
   &__summary{
     display: flex;
     align-items: center;
@@ -135,19 +127,22 @@ export default {
   }
   &__title{
     font-weight: 500;
+    max-width: 150px;
+
 
   }
   &_action{
     align-items: stretch;
+    text-align: right;
 
   }
 
   &__price{
     font-size: 12px;
     line-height: 140%;
-
+    white-space: nowrap;
     color: #423E48;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
   }
 
   .icon-delete{

@@ -122,6 +122,9 @@
   }
   &__sidebar{
     width: 270px;
+    @media (max-width: $md2+px){
+      display: none;
+    }
   }
 
 
@@ -129,6 +132,9 @@
     width: 100%;
     padding-left: 20px;
     padding-bottom: 20px;
+    @media (max-width: $md2+px){
+      padding-left: 0px;
+    }
   }
 
 }
