@@ -75,6 +75,10 @@ export default {
   align-items: center;
   flex-wrap: wrap;
   padding: 20px 0 30px 0;
+  &__wrapper{
+    width: 100%;
+    text-align: left;
+  }
 
   li{
     white-space: nowrap;

@@ -181,6 +181,10 @@ export default {
   box-sizing: border-box;
   border-radius: 8px;
   padding: 20px 22px 30px 22px;
+  @media (max-width: $md3+px){
+    padding: 5px 15px 10px 15px;
+
+  }
 
   &__img {
     width: 100%;
@@ -286,8 +290,14 @@ export default {
     font-weight: 500;
     font-size: 20px;
     line-height: 24px;
+    @media (max-width: $md3+px){
+      font-size: 18px;
+    }
     span{
       font-weight: 300;
+      @media (max-width: $md3+px){
+        font-size: 15px;
+      }
     }
 
   }
@@ -299,11 +309,16 @@ export default {
     line-height: 1.26;
     font-weight: 400;
     cursor: pointer;
+    @media (max-width: $md3+px){
+      font-size: 13px;
+      height: 33px;
+
+    }
     a{
       font-weight: 500;
       font-size: 15px;
-
       color: #423E48;
+
     }
 
   }
@@ -311,6 +326,11 @@ export default {
   &__uptitle{
     font-size: 14px;
     //min-height: 42px;
+    @media (max-width: $md3+px){
+      font-size: 13px;
+      height: 33px;
+
+    }
     a{
       font-weight: 400;
       font-size: 14px;
