@@ -13,14 +13,11 @@
             {{ mainItem.name }}
           </label>
           <div
-              :class = "{'active' : mainItem.mobileMenu}"
-              class="icon-arrow-down"
+              :class = "[mainItem.mobileMenu ? 'icon-arrow-down burger__menu_active' : 'icon-arrow-down']"
               @click.stop  = "toggleCategory(mainItem)"
               v-if="mainItem.childrens.length"
           >
-
           </div>
-
         </div>
 
         <ul class="second" v-if = "mainItem.mobileMenu && mainItem.childrens.length">
@@ -64,9 +61,51 @@
       </li>
     </ul>
     <hr class="burger__menu__hr">
-    <ul class="burger__menu_list">
-      <li><a href="">Покупателям</a></li>
-      <li><a href="">О нас</a></li>
+    <ul class="burger__menu_list animated">
+      <li>
+        <div class="burger__menu_item flex-center">
+          <label :class = "{'active' : activeMenuItem === 'Покупателям'}"
+            @click.stop  = "activeMenuItem === 'Покупателям' ? activeMenuItem = null: activeMenuItem = 'Покупателям'"
+          >
+            Покупателям
+          </label>
+          <div :class = "[activeMenuItem === 'Покупателям' ? 'icon-arrow-down burger__menu_active' : 'icon-arrow-down']"
+            @click.stop  = "activeMenuItem === 'Покупателям' ? activeMenuItem = null: activeMenuItem = 'Покупателям'"
+          >
+          </div>
+        </div>
+        <ul class="second" v-if = "activeMenuItem === 'Покупателям'">
+          <li><a @click.prevent="openPage('how_to_work')">Как оформит заказ</a></li>        
+          <li><a @click.prevent="openPage('shipping')">Оплата и доставка</a></li>        
+          <li><a @click.prevent="openPage('wholesale')">Оптовым клиентам</a></li>        
+          <li><a @click.prevent="openPage('warranty')">Гарантийное обслуживание</a></li>        
+          <li><a @click.prevent="openPage('hoffer')">Публичная оферта</a></li>        
+        </ul>  
+      </li>
+      <li>
+        <div class="burger__menu_item flex-center">
+          <label :class = "{'active' : activeMenuItem === 'О нас'}"
+            @click.stop  = "activeMenuItem === 'О нас' ? activeMenuItem = null: activeMenuItem = 'О нас'"
+          >
+            О нас
+          </label>
+          <div :class = "[activeMenuItem === 'О нас' ? 'icon-arrow-down burger__menu_active' : 'icon-arrow-down']"
+            @click.stop  = "activeMenuItem === 'О нас' ? activeMenuItem = null: activeMenuItem = 'О нас'"
+          >
+          </div>
+        </div>
+        <ul class="second" v-if = "activeMenuItem === 'О нас'">
+          <li><a @click.prevent="openPage('about')">О компании</a></li>        
+          <li><a @click.prevent="openPage('contacts')">Контактная информация</a></li>        
+          <li><a @click.prevent="openPage('news')">Новости</a></li>        
+        </ul>  
+      </li>
+      <!-- <li>
+        <a href="">Покупателям</a>
+      </li>
+      <li>
+        <a href="">О нас</a>
+      </li> -->
     </ul>
     <hr class="burger__menu__hr">
     <ul class="burger__menu_list">
@@ -83,6 +122,13 @@ import {mapGetters, mapMutations, mapActions} from 'vuex'
 
 export default {
   name: "BurgerMenu",
+
+  data(){
+    return {
+      activeMenuItem : null,
+
+    }
+  },
 
   computed: {
     ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "CATALOG", "IS_CATALOG_OPEN"]),
@@ -111,7 +157,7 @@ export default {
       // } else {
       //   this.SET_CURRENT_TOP_CATEGORY(category.id);
       // }
-      this.openPage();
+      this.openCatalog();
     },
 
     changeSubCategory(mainCategory, middleCategory){
@@ -126,7 +172,7 @@ export default {
       // } else {
       //   this.SET_CURRENT_SUB_CATEGORY(category.id);
       // }
-      this.openPage();
+      this.openCatalog();
     },
 
     changeLastCategory(mainCategory, middleCategory, lastCategory){
@@ -141,15 +187,22 @@ export default {
       // } else {
       //   this.SET_CURRENT_LAST_CATEGORY(category.id);
       // }
-      this.openPage();
+      this.openCatalog();
     },
 
-    openPage() {
+    openCatalog() {
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
       if (this.$router.path != '/catalog') {
           this.$router.push('/catalog');
       }
     },
+
+    openPage(page) {
+      this.UPDATE_IS_CATALOG_OPEN(false);
+      if (this.$router.path != page) {
+          this.$router.push(page);
+      }
+    }
   }
 }
 </script>
@@ -191,6 +244,9 @@ a {
 
     }
   }
+  &_active{
+    transform: rotate(180deg);
+  }
   &__item{
     font-size: 12px;
     font-weight: bold;
@@ -200,7 +256,7 @@ a {
       color:#423E48;
       text-decoration: none;
     }
-
+    
   }
   &__hr{
     height: 2px;

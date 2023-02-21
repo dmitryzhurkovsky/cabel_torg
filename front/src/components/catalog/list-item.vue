@@ -22,8 +22,8 @@
             </div>
             <div class="product__count flex-center">
                 <span class="_label">Количество:</span>
-                <span class="icon-minus" @click.stop=quantityLocal--></span>
-                <input class="product__input" type="text" v-model="quantityLocal" @click.stop=""> 
+                <span class="icon-minus" @click.stop="minusQuantityLocal"></span>
+                <input class="product__input" type="number" v-model="quantityLocal" @click.stop="" @input="checkQuantityLocal"> 
                 <span class="icon-plus" @click.stop=quantityLocal++></span>
             </div>
         </div>
@@ -61,7 +61,7 @@ export default {
     data(){
       return {
           quantity: 0,
-          quantityLocal: 0,
+          quantityLocal: 1,
           isWish: false,
       }
     },
@@ -118,25 +118,38 @@ export default {
         this.$router.push(URL);
       },
 
+      checkQuantityLocal() {
+        if (this.quantityLocal <= 0) {
+          if (this.quantityLocal < 0) this.quantityLocal = 1;
+        } else if (this.quantityLocal > 100) {
+          this.quantityLocal = 10;
+        }
+      },
+
+      minusQuantityLocal() {
+        this.quantityLocal = this.quantityLocal >=1 ? this.quantityLocal - 1 : this.quantityLocal;
+      },
+
       async onOperationWithCartItem(card, type) {
-        if (this.quantityLocal < 0) {
-          this.quantityLocal = this.quantity;
+        if (this.quantity === 0 && this.quantityLocal === 0) { 
           return
-        }
-        const itemData = {
-          amount: 0,
-          product: {
-            id: card.id,
-            vendor_code: card.vendor_code,
-            name: card.name,
-            price: card.price,
-          },
-        };
-        if (type === 'set') {
-          itemData.amount = Number(this.quantityLocal);
-        }
-        
-        await this.UPDATE_ITEMS_IN_CART({itemData, type});
+        } else {
+          const itemData = {
+            amount: 0,
+            product: {
+              id: card.id,
+              vendor_code: card.vendor_code,
+              name: card.name,
+              price: card.price,
+            },
+          };
+          if (type === 'set') {
+            itemData.amount = Number(this.quantityLocal);
+          }
+          
+          await this.UPDATE_ITEMS_IN_CART({itemData, type});
+          if (this.quantityLocal === 0) this.quantityLocal = 1;
+        }  
       },
 
       async onWishClick(card) {
@@ -158,7 +171,7 @@ export default {
         } else {
           this.quantity = 0;
         }
-        this.quantityLocal = this.quantity
+        this.quantityLocal = this.quantity ? this.quantity : this.quantityLocal;
       },
 
       checkIsWish() {
@@ -353,6 +366,7 @@ export default {
     border: none;
     margin: 0 10px;
     text-align: center;
+
   }
 
   &__btn{

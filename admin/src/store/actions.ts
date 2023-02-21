@@ -53,6 +53,12 @@ export const actions: ActionTree<State, State> & Actions = {
         .then((response) => {
           resolve(response.data);
         })
+      }).catch((err) => {
+        if (err.response.status = 404) {
+          resolve({});
+        }
+        console.log('Send login request ', err);
+        
       });
     }) 
   },

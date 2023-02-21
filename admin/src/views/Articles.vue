@@ -1,8 +1,8 @@
 <script setup lang='ts'>
   import Button from '@/components/UI/Button.vue';
-import { computed, onMounted, ref } from 'vue';
-import { useStore } from '../store';
-import { IArticleItem } from '../types';
+  import { computed, onMounted, ref } from 'vue';
+  import { useStore } from '../store';
+  import { IArticleItem } from '../types';
 
   const store = useStore()
   

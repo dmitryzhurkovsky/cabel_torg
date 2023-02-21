@@ -12,7 +12,8 @@
                     :class="[isWish === false ? 'icon icon-favorite' : 'icon icon-favorite-choosed']" 
                     @click.stop="onWishClick(cartItemData)"
                 >В избранное</span>
-                <span class="icon icon-delete" @click.stop="onOperationWithCartItem(cartItemData, 'remove')">Удалить</span>
+                <span v-if ="!isMobileVersion" class="icon icon-delete" @click.stop="onOperationWithCartItem(cartItemData, 'remove')">Удалить</span>
+                <span v-if ="isMobileVersion" class="icon icon-close" @click.stop="onOperationWithCartItem(cartItemData, 'remove')"></span>
             </div>
         </div>
       </div>
@@ -22,7 +23,7 @@
             <div class="_label mb-20">Количество:</div>
             <div class="flex-center">
               <span class="icon-minus" @click.stop="onOperationWithCartItem(cartItemData, 'decrease')"></span>
-              <input class="product__input" type="text" v-model="quantity"  @input="onOperationWithCartItem(cartItemData, 'set')" @click.stop="">
+              <input class="product__input" type="number" v-model="quantity"  @input="onOperationWithCartItem(cartItemData, 'set')" @click.stop="">
               <span class="icon-plus" @click.stop="onOperationWithCartItem(cartItemData, 'increase')"></span>
             </div>
           </div>
@@ -64,6 +65,7 @@
         return {
             cartItemData: {},
             quantity: 0,
+            lastQuantity: 0,
             isWish: false,
         }
     },
@@ -78,6 +80,7 @@
             const response = await axios.get(process.env.VUE_APP_API_URL + 'products/' + this.cartItem.product.id);
             this.cartItemData = response.data;
             this.quantity = this.cartItem.amount;
+            this.lastQuantity = this.cartItem.amount;
         } catch (e) {
             console.log(e);
             this.ADD_MESSAGE({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
@@ -88,6 +91,7 @@
 
     computed: {
         ...mapGetters("favorite", ["FAVORITES"]),
+        ...mapGetters("header", ["VIEW_TYPE"]),
 
         ChangeParameters(){
             return JSON.stringify(this.FAVORITES);
@@ -101,6 +105,11 @@
             return this.cartItemData.price_with_discount ? this.cartItemData.price : '';
         },
 
+        isMobileVersion(){
+            if (this.VIEW_TYPE===1) return false
+            if (this.VIEW_TYPE===2) return true
+            if (this.VIEW_TYPE===3) return true
+        }
     },
 
     watch: {
@@ -116,8 +125,18 @@
         ...mapMutations("notification", ["SET_IS_LOADING"]),
 
         async onOperationWithCartItem(card, type) {
+          if (!this.quantity ) {
+              this.quantity = this.lastQuantity;
+          } else {
             if (type === 'decrease' && this.quantity === 1) {
-                return;
+              return;
+            };
+            if (this.quantity < 1) {
+              this.quantity = this.lastQuantity;
+            };
+            if (this.quantity >99) {
+              this.quantity = this.lastQuantity;
+              return;
             };
             const itemData = {
                 amount: 0,
@@ -134,10 +153,14 @@
             
             await this.UPDATE_ITEMS_IN_CART({itemData, type});
             if (type === 'increase') {
-                this.quantity++;
+                if (this.quantity < 99) {
+                  this.quantity++;
+                }
             } else if (type === 'decrease') {
                 this.quantity--;
-            } 
+            };
+            this.lastQuantity = this.quantity; 
+          }
         },
 
         async onWishClick(card) {
@@ -203,7 +226,7 @@
         cursor: pointer;
         }
     }
-      .icon-delete{
+      .icon-delete, .icon-close{
         @media (max-width: $md2 + px){
           position: absolute;
           top: 0;
