@@ -24,7 +24,7 @@
                 <span class="_label">Количество:</span>
                 <span class="icon-minus" @click.stop="minusQuantityLocal"></span>
                 <input class="product__input" type="number" v-model="quantityLocal" @click.stop="" @input="checkQuantityLocal"> 
-                <span class="icon-plus" @click.stop=quantityLocal++></span>
+                <span class="icon-plus" @click.stop="plusQuantityLocal"></span>
             </div>
         </div>
         <div class="product__action">
@@ -119,21 +119,26 @@ export default {
       },
 
       checkQuantityLocal() {
-        if (this.quantityLocal <= 0) {
-          if (this.quantityLocal < 0) this.quantityLocal = 1;
-        } else if (this.quantityLocal > 100) {
-          this.quantityLocal = 10;
+        if (this.quantityLocal < 1) {
+          this.quantityLocal = 1;
+        };
+        if (this.quantityLocal > 99) {
+          this.quantityLocal = 99;
         }
       },
 
       minusQuantityLocal() {
-        this.quantityLocal = this.quantityLocal >=1 ? this.quantityLocal - 1 : this.quantityLocal;
+        this.quantityLocal = this.quantityLocal > 1 ? this.quantityLocal - 1 : 1;
+      },
+
+      plusQuantityLocal() {
+        this.quantityLocal = this.quantityLocal < 99 ? this.quantityLocal + 1 : 99;
       },
 
       async onOperationWithCartItem(card, type) {
-        if (this.quantity === 0 && this.quantityLocal === 0) { 
-          return
-        } else {
+        // if (this.quantity === 0 && this.quantityLocal === 0) { 
+        //   return
+        // } else {
           const itemData = {
             amount: 0,
             product: {
@@ -149,7 +154,7 @@ export default {
           
           await this.UPDATE_ITEMS_IN_CART({itemData, type});
           if (this.quantityLocal === 0) this.quantityLocal = 1;
-        }  
+        // }  
       },
 
       async onWishClick(card) {
