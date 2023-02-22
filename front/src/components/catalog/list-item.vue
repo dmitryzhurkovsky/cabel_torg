@@ -13,6 +13,7 @@
         <div class="product__info">
             <div class="product__status icon-done-color _label mb-20" v-if = "card.status === 'A'">В наличии</div>
             <div class="product__status icon-on-the-way _label mb-20" v-if = "card.status === 'W'">В пути на склад</div>
+            <div class="product__status _label mb-20" v-if = "card.status === 'W'">Доставим в течение 14 дней</div>
             <div class="product__status icon-out-of-stock _label mb-20" v-if = "card.status === 'O'">Нет в наличии</div>
             <div class="product__title">
                 <a v-if ="card.category">{{ card.category.name }}</a>
@@ -41,7 +42,8 @@
                     @click.stop="onWishClick(card)"
                   ></div>
                 <div v-if = "quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(card, 'set')">В корзине {{ quantity }}</div>
-                <div v-if = "quantity === 0" class="btn black" @click.stop="onOperationWithCartItem(card, 'set')">В корзину</div>
+                <div v-if = "quantity === 0 && card.status === 'A'" class="btn black" @click.stop="onOperationWithCartItem(card, 'set')">В корзину</div>
+                <div v-if = "quantity === 0 && card.status !== 'A'" class="btn black" @click.stop="onCreatePopUp(true)">Узнать о поступлении</div>
             </div>
         </div>
     </div>
@@ -49,7 +51,7 @@
 
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import CardImage from '@/components/UI/card-image.vue'
 
 export default {
@@ -112,7 +114,13 @@ export default {
     methods: {
       ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
       ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-      
+      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
+
+      onCreatePopUp(status) {
+        this.SET_IS_POPUP_OPEN(status);
+        this.SET_POPUP_ACTION('RequestCall');
+      },
+
       openCardItem(id) {
         const URL = '/card_product/' + id;
         this.$router.push(URL);

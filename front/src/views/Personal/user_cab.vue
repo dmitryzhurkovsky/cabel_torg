@@ -28,7 +28,6 @@
                 <OrderList v-if = "SCREEN === 0"/>
                 <FavoriteList v-if = "SCREEN === 1"/>
                 <Profile v-if = "SCREEN === 2"/>
-                <ChangePassword v-if = "SCREEN === 3"/>
             </div>
 
           </div>
@@ -42,12 +41,10 @@
 <script>
 
   import { mapGetters, mapActions, mapMutations } from "vuex";
-  // import { mapGetters,  } from "vuex";
 
   import OrderList from '@/components/personal/order-list.vue';
   import FavoriteList from '@/components/personal/favorite-list.vue';
   import Profile from '@/components/personal/profile.vue';
-  import ChangePassword from '@/components/personal/password.vue';
 
   export default {
     name: "personal",
@@ -64,7 +61,7 @@
 
     components:
     {
-      OrderList, FavoriteList, Profile, ChangePassword
+      OrderList, FavoriteList, Profile
     },
 
     methods: {
