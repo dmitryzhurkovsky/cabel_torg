@@ -13,7 +13,7 @@
                     @click.stop="onWishClick(cartItemData)"
                 >В избранное</span>
                 <span v-if ="!isMobileVersion" class="icon icon-delete" @click.stop="onOperationWithCartItem(cartItemData, 'remove')">Удалить</span>
-                <span v-if ="isMobileVersion" class="icon icon-close" @click.stop="onOperationWithCartItem(cartItemData, 'remove')"></span>
+                <span v-if ="isMobileVersion" class="icon icon-close delete-goods flex-center" @click.stop="onOperationWithCartItem(cartItemData, 'remove')"></span>
             </div>
         </div>
       </div>
@@ -226,11 +226,24 @@
         cursor: pointer;
         }
     }
-      .icon-delete, .icon-close{
+      .delete-goods, .icon-close{
         @media (max-width: $md2 + px){
           position: absolute;
-          top: 0;
-          right: 0;
+          top: -9px;
+          right: -9px;
+          font-weight: 700;
+          background:#423E48;
+          color:#fff;
+          border-radius: 6px;
+          width: 20px;
+          height: 20px;
+          opacity: 1;
+          justify-content: center;
+          &:before{
+            font-size: 10px!important;
+            font-weight: 700;
+            margin-right: 0;
+          }
         }
 
       }

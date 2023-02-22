@@ -22,7 +22,7 @@
                     {{ category.name }}
                   </div>
               </div>
-              <div v-if = "isMobileVersion" class="btn" @click.stop="setIsFilterPanelOpen(!isFilterPanelOpen)">Фильтры</div>
+              <div v-if = "isMobileVersion" class="btn mobile-filter mb-20" @click.stop="setIsFilterPanelOpen(!isFilterPanelOpen)">Фильтры</div>
               <div v-if ="isMobileVersion&&isFilterPanelOpen">
                 <PriceSlider />
                 <SortPanel />
@@ -286,6 +286,17 @@
     justify-content: space-between;
     padding: 10px 0;
     font-size: 12px;
+  }
+
+  .mobile-filter{
+    max-width: 100px;
+    background: #FFFFFF;
+    color: #423E48;
+    opacity: 0.5;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 50px;
+
+
   }
 
 }
