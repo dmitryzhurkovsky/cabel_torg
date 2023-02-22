@@ -25,13 +25,13 @@
           <span>BYN / {{ card.base_unit.full_name }}</span>
         </div>
         <div 
-          v-if = "card.status === 'A'"
+          v-if = "card.status !== 'O'"
           :class="[quantity === 0 ? 'item-card__buy flex-center icon-cart' : 'item-card__buy flex-center icon-cart-chosen']"
           @click.stop="onOperationWithCartItem(card)"
         >
         </div>
         <div 
-          v-if = "card.status !== 'A'"
+          v-if = "card.status === 'O'"
           class="item-card__buy flex-center icon-share"
           @click.stop="onCreatePopUp(true)"
         >

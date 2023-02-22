@@ -258,6 +258,11 @@ a {
     }
     
   }
+  &__item {
+    label .active{
+      color: #4275D8;
+    }
+  }
   &__hr{
     height: 2px;
     background: #F0F0F1;
