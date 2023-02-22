@@ -43,7 +43,7 @@
                   ></div>
                 <div v-if = "quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(card, 'set')">В корзине {{ quantity }}</div>
                 <div v-if = "quantity === 0 && card.status === 'A'" class="btn black" @click.stop="onOperationWithCartItem(card, 'set')">В корзину</div>
-                <div v-if = "quantity === 0 && card.status !== 'A'" class="btn black" @click.stop="onCreatePopUp(true)">Узнать о поступлении</div>
+                <div v-if = "quantity === 0 && card.status !== 'A'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true)">Узнать о поступлении</div>
             </div>
         </div>
     </div>
@@ -387,6 +387,11 @@ export default {
 
 
   }
+}
+
+.popup-btn{
+  font-size: 14px;
+  padding: 12px 15px;
 }
 </style>
 
