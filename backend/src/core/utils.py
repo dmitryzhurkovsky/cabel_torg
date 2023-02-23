@@ -16,4 +16,5 @@ def hash_password(password: str) -> str:
 
 
 def calculate_price_with_discount(product: Product, discount: int) -> Decimal:
+    """Calculate a price based on a discount"""
     return Decimal(product.price - (product.price * discount / 100))
