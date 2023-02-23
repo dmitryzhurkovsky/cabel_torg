@@ -91,7 +91,7 @@ class AuthService:
         access_token = await cls.create_token(user_id=user_id, token_type='access')
         refresh_token = await cls.create_token(user_id=user_id, token_type='refresh')
 
-        await redis.set(name=user_id, value=refresh_token, ex=settings.JWT_REFRESH_TOKEN_EXPIRATION_TIME)
+        # await redis.set(name=user_id, value=refresh_token, ex=settings.JWT_REFRESH_TOKEN_EXPIRATION_TIME)
 
         return access_token, refresh_token
 
@@ -117,7 +117,7 @@ class AuthService:
     ) -> tuple:
         """Generate new access and refresh tokens by a refresh_token if the refresh_token is valid."""
         user_id = cls.decode_token(token=old_refresh_token)
-        await cls.validate_refresh_token(user_id=user_id, refresh_token=old_refresh_token)
+        # await cls.validate_refresh_token(user_id=user_id, refresh_token=old_refresh_token)
 
         access_token, refresh_token = await cls.generate_access_and_refresh_tokens(user_id=user_id)
 
