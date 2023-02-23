@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
 from src.managers.services_managers import PartnerManager
-from src.rest.schemas.service_entities.partner_schema import PartnerSchema, PartnerInputSchema
+from src.rest.schemas.service_entities.partner_schema import PartnerSchema
 
 partner_router = APIRouter(tags=['partners'])
 
@@ -15,24 +15,27 @@ async def get_partners(session: AsyncSession = Depends(get_session)) -> list[Par
 
 @partner_router.post('/partners', response_model=PartnerSchema, status_code=status.HTTP_201_CREATED)
 async def create_partner(
-        partner_info: PartnerInputSchema,
+        file: UploadFile,
         session: AsyncSession = Depends(get_session),
 ) -> PartnerSchema:
-    return await PartnerManager.create(
-        session=session,
-        input_data=partner_info
-    )
+    partner = await PartnerManager.create(input_data={'image': 'tmp'}, session=session)
+    file_name = await PartnerManager.upload_file(pk=partner.id, input_file=file)
+    await PartnerManager.update(pk=partner.id, input_data={'image': file_name})
+    await session.refresh(partner)
+
+    return partner
 
 
 @partner_router.patch('/partners/{partner_id}', response_model=PartnerSchema)
 async def update_info_about_partner(
         partner_id: int,
-        partner_info: PartnerInputSchema,
+        file: UploadFile,
         session: AsyncSession = Depends(get_session)
 ) -> PartnerSchema:
-    return await PartnerManager.update(
-        session=session, pk=partner_id, input_data=partner_info.dict(exclude_unset=True)
-    )
+    await PartnerManager.upload_file(pk=partner_id, input_file=file)
+    product = await PartnerManager.update(pk=partner_id, session=session)
+
+    return product
 
 
 @partner_router.delete('/partners/{partner_id}', status_code=status.HTTP_204_NO_CONTENT)
@@ -40,7 +43,8 @@ async def create_partner(
         partner_id: int,
         session: AsyncSession = Depends(get_session)
 ):
-    return await PartnerManager.delete(
-        session=session,
-        id=partner_id
-    )
+    result = await PartnerManager.delete(id=partner_id, session=session)
+    PartnerManager.delete_file(pk=partner_id)
+
+    return result
+

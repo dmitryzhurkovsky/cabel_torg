@@ -1,3 +1,4 @@
+from src.core.db.mixins.upload_file_mixin import FileMixin
 from src.managers.base_manager import CRUDManager
 from src.models.service_entities.article_model import Article
 from src.models.service_entities.delivery_type_model import DeliveryType
@@ -13,7 +14,7 @@ class DeliveryTypeManager(CRUDManager):
     table = DeliveryType
 
 
-class PartnerManager(CRUDManager):
+class PartnerManager(CRUDManager, FileMixin):
     table = Partner
 
 
