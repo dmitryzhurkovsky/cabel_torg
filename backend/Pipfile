@@ -20,6 +20,7 @@ sqladmin = "*"
 requests = "*"
 pdfkit = "*"
 num2words = "*"
+aiofiles = "*"
 
 [dev-packages]
 pytest = "*"
