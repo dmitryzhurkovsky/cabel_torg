@@ -6,21 +6,15 @@ interface IDeliveryType {
 
 type ITableHeadItem = {
   db: string,
-  name: string
+  name: string,
+  type: string,
+  src: string,
 }
 
 type ITableHead = Array<ITableHeadItem>
-
-type IArticleItem = {
-  [key: string]: string
-}
-
-type IArticles = Array<IArticleItem>
 
 export type { 
   IDeliveryType, 
   ITableHead, 
   ITableHeadItem,
-  IArticleItem,
-  IArticles
 }

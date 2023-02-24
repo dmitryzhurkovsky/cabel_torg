@@ -4,7 +4,7 @@
   import TableRow from '@/components/Table/TableRow.vue'
   import TableColumn from '@/components/Table/TableColumn.vue'
   import Button from '@/components/UI/Button.vue'
-import { watch } from 'fs';
+ import { watch } from 'fs';
 
   const props = defineProps({
     tableData: {
@@ -18,7 +18,17 @@ import { watch } from 'fs';
     head: {
       type: Object as PropType<Array<ITableHeadItem>>,
       required: true
-    }
+    },
+    editButton: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
+    deleteButton: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
   })
   const emit = defineEmits<{
     (event: 'editRow', id: string): void
@@ -53,17 +63,14 @@ import { watch } from 'fs';
   }
 
   const onAddButtonClick = () => {
-    console.log('Add click');
     emit('openForm')
   }
 
   const onEditButtonClick = (id: string) => {
-    console.log('Edit click', id);
     emit('editRow', id)
   }
 
   const onDeleteButtonClick = (id: string) => {
-    console.log('Delete click', id);
     emit('deleteRow', id)
   }
 
@@ -95,17 +102,21 @@ import { watch } from 'fs';
       >
         <table-column 
           v-for="(col) of props.head"
+          :image="col.type === 'image'"
+          :srcImage="rowData[col.src]"
           :key="col.db"
           :columnTitle="col">
           {{rowData[col.db]}}
         </table-column>
         
-        <table-column
+        <table-column 
+          v-if="editButton"
           :columnTitle="{db: 'Edit', name: ''}"
         >
           <Button icon="pen-to-square" @click="onEditButtonClick(rowData)"></Button>
         </table-column>
         <table-column
+          v-if="deleteButton"
           :columnTitle="{db: 'Del', name: ''}"
         >
           <Button icon="trash-can" color="danger" @click="onDeleteButtonClick(rowData)"></Button>

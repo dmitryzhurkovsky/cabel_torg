@@ -28,13 +28,45 @@ export interface Actions {
   ): Promise<Array<IDeliveryType>>,
   [ActionTypes.ADD_DELIVERY_TYPE](
     { commit }: AugmentedActionContext,
-    payload: {[key: string]:string}
+    payload: IDeliveryType
   ): Promise<Array<IDeliveryType>>,
   [ActionTypes.DELETE_DELIVERY_TYPE](
     { commit }: AugmentedActionContext,
     payload: number
   ): Promise<Array<IDeliveryType>>,
   [ActionTypes.EDIT_DELIVERY_TYPE](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.GET_ARTICLE_DATA](
+    { commit }: AugmentedActionContext,
+    payload: null
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.ADD_ARTICLE](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.DELETE_ARTICLE](
+    { commit }: AugmentedActionContext,
+    payload: number
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.EDIT_ARTICLE](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.GET_PARTNERS_DATA](
+    { commit }: AugmentedActionContext,
+    payload: null
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.ADD_PARTNER](
+    { commit }: AugmentedActionContext,
+    payload: any
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.DELETE_PARTNER](
+    { commit }: AugmentedActionContext,
+    payload: number
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.EDIT_PARTNER](
     { commit }: AugmentedActionContext,
     payload: IDeliveryType
   ): Promise<Array<IDeliveryType>>,
@@ -109,6 +141,91 @@ export const actions: ActionTree<State, State> & Actions = {
       axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/delivery_types/" + String(data.id), params).
       then((response) => {
         commit(MutationTypes.UPDATE_DELIVERY_TYPES, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.GET_ARTICLE_DATA]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/articles").
+      then((response) => {
+        commit(MutationTypes.SET_ARTICLES, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.DELETE_ARTICLE]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/articles/" + String(payload)).
+      then((response) => {
+        commit(MutationTypes.DELETE_FROM_ARTICLES, payload);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.ADD_ARTICLE]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/articles", payload).
+      then((response) => {
+        commit(MutationTypes.ADD_TO_ARTICLES, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.EDIT_ARTICLE]({ commit }, data) {
+    return new Promise((resolve) => {
+      const params = { 
+        title: data.title as string,
+        content: data.content as string,
+      }
+      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/articles/" + String(data.id), params).
+      then((response) => {
+        commit(MutationTypes.UPDATE_ARTICLE, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.GET_PARTNERS_DATA]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/partners").
+      then((response) => {
+        commit(MutationTypes.SET_PARTNERS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.DELETE_PARTNER]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/partners/" + String(payload)).
+      then((response) => {
+        commit(MutationTypes.DELETE_FROM_PARTNERS, payload);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.ADD_PARTNER]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/partners", payload).
+      then((response) => {
+        commit(MutationTypes.ADD_TO_PARTNERS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.EDIT_PARTNER]({ commit }, data) {
+    return new Promise((resolve) => {
+      const params = { image: data.image as string, }
+      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/partners/" + String(data.id), params).
+      then((response) => {
+        commit(MutationTypes.UPDATE_PARTNER, response.data);
         resolve(response.data);
       })
     })

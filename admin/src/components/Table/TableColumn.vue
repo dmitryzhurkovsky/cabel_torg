@@ -5,11 +5,13 @@ import { ITableHeadItem } from '../../types'
 const props = defineProps({
   image: {
     type: Boolean,
-    required: false
+    required: false,
+    default: false
   },
   srcImage: {
     type: String,
-    required: false
+    required: false,
+    default: '',
   },
   columnTitle: {
     type: Object as PropType<ITableHeadItem>,
@@ -20,7 +22,7 @@ const props = defineProps({
 
 <template>
   <div v-if="columnTitle?.db" class="table-column">
-    <span class="table-column__title" v-if="columnTitle?.db">{{columnTitle.name}}: </span>
+    <span class="table-column__title" v-if="columnTitle?.db">{{columnTitle.db}}: </span>
     <slot v-if="!image"></slot>
     <img v-else class="table-column-image" :src="srcImage" alt="">
   </div>
@@ -31,7 +33,7 @@ const props = defineProps({
   padding: 15px 0;
   position: relative;
   &-image {
-    max-width: 100%;
+    max-width: 400px;
     @media screen and (max-width: 767px) {
       max-width: 200px;
     }

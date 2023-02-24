@@ -9,17 +9,16 @@ import { faHeart, faHand, faAddressBook, faTrashCan, faPenToSquare, faFile } fro
 library.add([faHeart, faHand, faAddressBook, faTrashCan, faPenToSquare, faFile])
 
 axios.interceptors.request.use(
-    (config) => {
-        if (localStorage.getItem("authToken")) {
-            config.headers = {
-                Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-                "Content-Type": "application/json",
-                Accept: "application/json"
-            };
-        }
-
-        return config;
+  (config) => {
+    if (localStorage.getItem("authToken")) {
+      config.headers = {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Accept: "application/json"
+      };
     }
+
+    return config;
+  }
 );
   
 createApp(App).component('font-awesome-icon', FontAwesomeIcon).use(router).use(store).mount('#app')

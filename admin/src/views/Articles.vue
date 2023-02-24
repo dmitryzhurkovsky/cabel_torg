@@ -5,7 +5,7 @@
   import {ref, computed, onMounted, watch} from 'vue'
   import BaseTable from '@/components/Table/BaseTable.vue'
   import Button from '@/components/UI/Button.vue'
-  import Input from '@/components/UI/Input.vue';
+  import TextArea from '@/components/UI/TextArea.vue';
   import { router } from '../router';
   import { IDeliveryType } from '../types';
   import { helpers, minLength, required } from '@vuelidate/validators';
@@ -14,36 +14,40 @@
   const store = useStore()
 
   const tableHeads = [
-    {db: 'id', name: 'N'},
-    {db: 'payload', name: 'name'}, 
+    {db: 'id', name: 'Id'},
+    {db: 'title', name: 'Заголовок'}, 
+    {db: 'content', name: 'Контент'}, 
     {db: '', name: ''},
     {db: '', name: ''},
   ]
   const tableData = ref([] as Array<IDeliveryType>)
-  const tableSizeColumns = '30px 1fr 40px 40px'
+  const tableSizeColumns = '30px 1fr 2fr 40px 40px'
 
   const isFormOpen = ref(false)
-  const payloadField = ref('')
+  const titleField = ref('')
+  const contentField = ref('')
   const idField = ref()
   const formType = ref(true)
 
   const rules = computed(() => ({
-    payloadField: {
+    titleField: {
+      requered:  helpers.withMessage(`Обязательно поле`, required),
+      minLength: helpers.withMessage(`Минимальная длина поля 5 символов`, minLength(5)),
+    },
+    contentField: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
       minLength: helpers.withMessage(`Минимальная длина поля 5 символов`, minLength(5)),
     },
   }))
 
-  const v = useVuelidate(rules, {payloadField});
+  const v = useVuelidate(rules, {titleField, contentField});
 
   const sendDataRequest = async () => {
-    await store.dispatch(ActionTypes.GET_DELIVERY_TYPE, null)
+    await store.dispatch(ActionTypes.GET_ARTICLE_DATA, null)
   };
 
-  watch(() => store.getters.deliveryTypesData,
+  watch(() => store.getters.articlesData,
     (curr, prev) => {
-      console.log('Watch ', curr);
-      
       tableData.value = [...curr];
       store.commit(MutationTypes.SET_IS_LOADING, false)
   });
@@ -59,21 +63,23 @@
 
   const onEditButtonClick = (rowData: IDeliveryType) => {
     idField.value = rowData.id
-    payloadField.value = rowData.payload as string
+    titleField.value = rowData.title as string
+    contentField.value = rowData.content as string
     formType.value = false
     onSetIsFormOpen(true)
   } 
 
   const onAddButtonClick = () => {
     idField.value = null
-    payloadField.value = '' as string
+    titleField.value = '' as string
+    contentField.value = '' as string
     formType.value = true
     onSetIsFormOpen(true)
   }
 
-  const onDeleteDeliveryType = async (rowData: IDeliveryType) => {
+  const onDeleteArticle = async (rowData: IDeliveryType) => {
     store.commit(MutationTypes.SET_IS_LOADING, true)
-    await store.dispatch(ActionTypes.DELETE_DELIVERY_TYPE, rowData.id as number)
+    await store.dispatch(ActionTypes.DELETE_ARTICLE, rowData.id as number)
     isFormOpen.value = false
   }
 
@@ -82,12 +88,19 @@
     if (v.value.$error) return
     if (formType.value) {
       store.commit(MutationTypes.SET_IS_LOADING, true)
-      const data = {payload: payloadField.value}
-      await store.dispatch(ActionTypes.ADD_DELIVERY_TYPE, data)
+      const data = {
+        title: titleField.value,
+        content: contentField.value,
+      }
+      await store.dispatch(ActionTypes.ADD_ARTICLE, data)
     } else {
       store.commit(MutationTypes.SET_IS_LOADING, true)
-      const data = {id: idField.value, payload: payloadField.value}
-      await store.dispatch(ActionTypes.EDIT_DELIVERY_TYPE, data)
+      const data = {
+        id: idField.value, 
+        title: titleField.value,
+        content: contentField.value,
+      }
+      await store.dispatch(ActionTypes.EDIT_ARTICLE, data)
     }
     isFormOpen.value = false
     // store.commit(MutationTypes.SET_IS_LOADING, false)
@@ -96,23 +109,34 @@
 </script>
 
 <template>
-  <h2 class="heading-2">Способы доставки</h2>
+  <h2 class="heading-2">Новости</h2>
 
   <div class="form-container" v-if="isFormOpen">
-    <h3 class="heading-3">Новый тип доставки</h3>
+    <h3 class="heading-3">Новая новость</h3>
 
     <form @submit.prevent="submitForm">
-      <Input
-        label="Название"
-        name="payload"
-        placeholder="Укажите название"
-        v-model:value="v.payloadField.$model"
-        :error="v.payloadField.$errors"
+      <TextArea
+        label="Заголовок"
+        name="title"
+        placeholder="Укажите заголовок"
+        v-model:value="v.titleField.$model"
+        :error="v.titleField.$errors"
+        width="600px"
+        height="80px"
+      />
+      <TextArea
+        label="Крнтент"
+        name="content"
+        placeholder="Укажите содержание"
+        v-model:value="v.contentField.$model"
+        :error="v.contentField.$errors" 
+        width="600px"
+        height="150px"
       />
       <div class="form-buttons">
         <Button label="Создать" color="primary" v-if="formType"></Button>
         <Button label="Сохранить" color="primary" v-if="!formType"></Button>
-        <Button label="Отменить" color="warning"  @click="onSetIsFormOpen(false)"></Button>
+        <Button label="Отменить" color="warning" @click="onSetIsFormOpen(false)"></Button>
       </div>
     </form>
   </div>
@@ -123,7 +147,7 @@
     :tableData="tableData"
     @openForm="onAddButtonClick"
     @editRow="onEditButtonClick"
-    @deleteRow="onDeleteDeliveryType"
+    @deleteRow="onDeleteArticle"
   />
 </template>
 
