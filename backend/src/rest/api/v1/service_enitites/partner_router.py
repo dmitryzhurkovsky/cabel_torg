@@ -20,7 +20,7 @@ async def create_partner(
 ) -> PartnerSchema:
     partner = await PartnerManager.create(input_data={'image': 'tmp'}, session=session)
     file_name = await PartnerManager.upload_file(pk=partner.id, input_file=file)
-    await PartnerManager.update(pk=partner.id, input_data={'image': file_name})
+    await PartnerManager.update(pk=partner.id, input_data={'image': file_name}, session=session)
     await session.refresh(partner)
 
     return partner
@@ -32,14 +32,15 @@ async def update_info_about_partner(
         file: UploadFile,
         session: AsyncSession = Depends(get_session)
 ) -> PartnerSchema:
-    await PartnerManager.upload_file(pk=partner_id, input_file=file)
-    product = await PartnerManager.update(pk=partner_id, session=session)
+    file_name = await PartnerManager.upload_file(pk=partner_id, input_file=file)
+    partner = await PartnerManager.update(pk=partner_id, session=session)
+    await session.refresh(partner)
 
-    return product
+    return partner
 
 
 @partner_router.delete('/partners/{partner_id}', status_code=status.HTTP_204_NO_CONTENT)
-async def create_partner(
+async def delete_partner(
         partner_id: int,
         session: AsyncSession = Depends(get_session)
 ):
