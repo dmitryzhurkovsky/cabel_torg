@@ -35,7 +35,6 @@ services:
       - '443:443'  # for https
     volumes:
       - images:/usr/share/nginx/images/
-      - /root/images:/usr/share/nginx/images/
 
   redis:
     image: redis:latest
