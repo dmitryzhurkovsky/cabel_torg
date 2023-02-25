@@ -16,6 +16,7 @@ services:
       context: backend
       dockerfile: ./build/Dockerfile
     volumes:
+      - images:/images
       - ./backend:/backend
     ports:
       - '8000:8000'
@@ -33,9 +34,13 @@ services:
       - '81:81'  # for images
       - '443:443'  # for https
     volumes:
+      - images:/usr/share/nginx/images/
       - /root/images:/usr/share/nginx/images/
 
   redis:
     image: redis:latest
     ports:
       - '6379:6379'
+
+volumes:
+  images:
