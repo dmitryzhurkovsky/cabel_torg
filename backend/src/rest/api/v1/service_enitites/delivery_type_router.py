@@ -52,6 +52,10 @@ async def delete_delivery_type(
         delivery_type_id: int,
         session: AsyncSession = Depends(get_session)
 ):
+    await DeliveryTypeManager.retrieve(
+        session=session,
+        id=delivery_type_id
+    )
     return await DeliveryTypeManager.delete(
         session=session,
         id=delivery_type_id

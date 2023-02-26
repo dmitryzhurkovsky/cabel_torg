@@ -6,8 +6,6 @@ from src.models.category_model import Category
 from src.models.manufacturer_model import Manufacturer
 from src.models.order_model import Order, ProductOrder
 from src.models.product_models import Product
-from src.models.service_entities.article_model import Article
-from src.models.service_entities.delivery_type_model import DeliveryType
-from src.models.service_entities.partner_model import Partner
+from src.models.service_entities import *
 from src.models.user_model import User
 from src.models.watchlist_model import WatchList

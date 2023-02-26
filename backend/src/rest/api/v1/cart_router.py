@@ -4,6 +4,7 @@ from starlette import status
 
 from src.core.db.db import get_session
 from src.managers.cart_manager import CartManager
+from src.managers.product_manager import ProductManager
 from src.rest.schemas.cart_schema import (
     CartSchema,
     CartCreateInputSchema,
@@ -50,6 +51,7 @@ async def delete_product_from_cart(
         user=Depends(AuthService.get_current_user),
         session: AsyncSession = Depends(get_session)
 ):
+    await ProductManager.retrieve(id=product_id, session=session)
     await CartManager.delete(
         product_id=product_id,
         user_id=user.id,

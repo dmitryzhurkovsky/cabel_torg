@@ -121,7 +121,11 @@ async def delete_addresses(
         address_id: int,
         session: AsyncSession = Depends(get_session)
 ):
+    await AddressManager.retrieve(
+        id=address_id,
+        session=session
+    )
     return await AddressManager.delete(
-        session=session,
-        id=address_id
+        id=address_id,
+        session=session
     )
