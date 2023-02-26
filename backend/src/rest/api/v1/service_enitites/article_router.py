@@ -25,7 +25,7 @@ async def create_article(
 
 
 @article_router.post(
-    '/articles/{article_id}/images/1',
+    '/articles/{article_id}/images',
     response_model=ArticleSchema,
     status_code=status.HTTP_201_CREATED)
 async def upload_image_for_article(
