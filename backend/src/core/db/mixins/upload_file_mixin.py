@@ -11,7 +11,8 @@ class FileMixin(BaseMixin):
     @classmethod
     async def upload_file(cls, pk: int, input_file: UploadFile) -> str:
         """Upload a file on a disk and return file's path."""
-        file_name = f'{cls.table.__tablename__}/{pk}.{input_file}'
+        file_extension = input_file.filename.split('.')[-1]
+        file_name = f'{cls.table.__tablename__}/{pk}.{file_extension}'
         file_name_with_path = f'{settings.IMAGES_PATH}/{file_name}'
         os.makedirs(os.path.dirname(file_name_with_path), exist_ok=True)
 
@@ -22,8 +23,7 @@ class FileMixin(BaseMixin):
         return file_name
 
     @classmethod
-    def delete_file(cls, pk: int):
+    def delete_file(cls, file_name: str):
         """Delete a file from a disk."""
-        file_name = f'{settings.IMAGES_PATH}/{cls.table.__tablename__}/{pk}'
         file_name_with_path = f'{settings.IMAGES_PATH}/{file_name}'
         os.remove(file_name_with_path)
