@@ -6,7 +6,7 @@ from src.rest.api.v1.category_router import category_router
 from src.rest.api.v1.invoice_router import invoice_router
 from src.rest.api.v1.order_router import order_router
 from src.rest.api.v1.product_router import product_router
-from src.rest.api.v1.service_entities_router import service_entities_router
+from src.rest.api.v1.service_enitites.router import service_entities_router
 from src.rest.api.v1.user_router import user_router
 from src.rest.api.v1.watchlist_router import watchlist_router
 
