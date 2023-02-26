@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
 from src.core.exception.base_exception import BadRequestError
-from src.managers.services_managers import VendorInfoManager, AddressManager
+from src.rest.managers.services_managers import VendorInfoManager, AddressManager
 from src.rest.schemas.service_entities.vendor_info_schema import (
     VendorInfoSchema,
     VendorInfoInputSchema,

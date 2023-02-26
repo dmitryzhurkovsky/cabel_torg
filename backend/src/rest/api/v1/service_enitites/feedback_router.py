@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
-from src.managers.services_managers import FeedbackManager
+from src.rest.managers.services_managers import FeedbackManager
 from src.rest.schemas.service_entities.feedback_schema import (
     FeedbackSchema,
     FeedbackInputSchema

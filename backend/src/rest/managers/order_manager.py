@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
 from src.core.db.mixins.base_mixin import CreateBaseSchema, TableType
-from src.managers.base_manager import CRUDManager
+from src.rest.managers.base_manager import CRUDManager
 from src.models.order_model import Order, ProductOrder
 
 

@@ -10,9 +10,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.app import app
 from src.core.db.db import async_session
-from src.managers.category_manager import CategoryManager
-from src.managers.product_manager import ProductManager
-from src.managers.user_manager import UserManager
+from src.rest.managers import CategoryManager
+from src.rest.managers.product_manager import ProductManager
+from src.rest.managers.user_manager import UserManager
 from src.models import User, Product, Category
 from src.services.auth_service import AuthService
 

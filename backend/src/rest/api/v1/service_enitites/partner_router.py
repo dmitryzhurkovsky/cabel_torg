@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
-from src.managers.services_managers import PartnerManager
+from src.rest.managers.services_managers import PartnerManager
 from src.rest.schemas.service_entities.partner_schema import PartnerSchema
 
 partner_router = APIRouter(tags=['partners'])

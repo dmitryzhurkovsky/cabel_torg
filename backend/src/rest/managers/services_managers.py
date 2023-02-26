@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.datastructures import QueryParams
 
 from src.core.db.mixins.upload_file_mixin import FileMixin
-from src.managers.base_manager import CRUDManager
+from src.rest.managers.base_manager import CRUDManager
 from src.models.service_entities import *
 
 

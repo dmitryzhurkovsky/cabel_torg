@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from src.core.db.db import get_session
-from src.managers.order_manager import OrderManager
+from src.rest.managers.order_manager import OrderManager
 from src.rest.schemas.order_schema import (
     OrderSchema,
     OrderCreateInputSchema,
