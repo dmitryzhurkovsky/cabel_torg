@@ -106,6 +106,9 @@ body {
     -moz-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
 }
+#app__component{
+
+}
 input,
 button,
 textarea {
@@ -148,6 +151,25 @@ h6 {
     font-weight: inherit;
     font-size: inherit;
 }
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+input[type="number"]:hover,
+input[type="number"]:focus {
+  -moz-appearance: number-input;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 //-webkit-overflow-scrolling: touch;
 //animation-play-state: paused !important;
 

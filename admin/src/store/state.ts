@@ -4,7 +4,9 @@ const state = {
   user: {},
   errors: {},
   isLoading: false,
-  deliveryTypesData: [] as Array<IDeliveryType>
+  deliveryTypesData: [] as Array<IDeliveryType>,
+  articles: [] as Array<IDeliveryType>,
+  partners: [] as Array<IDeliveryType>,
 }
 
 export type State = typeof state

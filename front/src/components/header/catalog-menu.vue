@@ -133,7 +133,7 @@ export default {
     position: static;
     &-lnk{
       padding-left: 15px;
-      font-size: 12px;
+      font-size: 14px;
       margin: 20px 0;
       color: #423E48;
       transition: all 0.3s ease;

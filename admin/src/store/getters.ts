@@ -7,6 +7,8 @@ export type Getters = {
   isLoading(sate: State): boolean,
   deliveryTypesData(state: State): Array<IDeliveryType>
   isLogin(state: State): boolean
+  articlesData(state: State): Array<IDeliveryType>
+  partnersData(state: State): Array<IDeliveryType>
 }
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -22,5 +24,11 @@ export const getters: GetterTree<State, State> & Getters = {
   isLogin: (state) => {
     console.log('Getter', Boolean(Object.keys(state.user).length));
     return Boolean(Object.keys(state.user).length)
-  }
+  },
+  articlesData: (state) => {
+    return state.articles
+  },
+  partnersData: (state) => {
+    return state.partners
+  },
 }

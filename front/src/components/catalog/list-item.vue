@@ -13,6 +13,7 @@
         <div class="product__info">
             <div class="product__status icon-done-color _label mb-20" v-if = "card.status === 'A'">В наличии</div>
             <div class="product__status icon-on-the-way _label mb-20" v-if = "card.status === 'W'">В пути на склад</div>
+            <div class="product__status _label mb-20" v-if = "card.status === 'W'">Доставим в течение 14 дней</div>
             <div class="product__status icon-out-of-stock _label mb-20" v-if = "card.status === 'O'">Нет в наличии</div>
             <div class="product__title">
                 <a v-if ="card.category">{{ card.category.name }}</a>
@@ -22,9 +23,9 @@
             </div>
             <div class="product__count flex-center">
                 <span class="_label">Количество:</span>
-                <span class="icon-minus" @click.stop=quantityLocal--></span>
-                <input class="product__input" type="text" v-model="quantityLocal" @click.stop=""> 
-                <span class="icon-plus" @click.stop=quantityLocal++></span>
+                <span class="icon-minus" @click.stop="minusQuantityLocal"></span>
+                <input class="product__input" type="number" v-model="quantityLocal" @click.stop="" @input="checkQuantityLocal"> 
+                <span class="icon-plus" @click.stop="plusQuantityLocal"></span>
             </div>
         </div>
         <div class="product__action">
@@ -41,7 +42,8 @@
                     @click.stop="onWishClick(card)"
                   ></div>
                 <div v-if = "quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(card, 'set')">В корзине {{ quantity }}</div>
-                <div v-if = "quantity === 0" class="btn black" @click.stop="onOperationWithCartItem(card, 'set')">В корзину</div>
+                <div v-if = "quantity === 0 && card.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(card, 'set')">В корзину</div>
+                <div v-if = "quantity === 0 && card.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true)">Узнать о поступлении</div>
             </div>
         </div>
     </div>
@@ -49,7 +51,7 @@
 
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import CardImage from '@/components/UI/card-image.vue'
 
 export default {
@@ -61,7 +63,7 @@ export default {
     data(){
       return {
           quantity: 0,
-          quantityLocal: 0,
+          quantityLocal: 1,
           isWish: false,
       }
     },
@@ -112,27 +114,55 @@ export default {
     methods: {
       ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
       ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-      
+      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
+
+      onCreatePopUp(status) {
+        this.SET_IS_POPUP_OPEN(status);
+        this.SET_POPUP_ACTION('RequestCall');
+      },
+
       openCardItem(id) {
         const URL = '/card_product/' + id;
         this.$router.push(URL);
       },
 
-      async onOperationWithCartItem(card, type) {
-        const itemData = {
-          amount: 0,
-          product: {
-            id: card.id,
-            vendor_code: card.vendor_code,
-            name: card.name,
-            price: card.price,
-          },
+      checkQuantityLocal() {
+        if (this.quantityLocal < 1) {
+          this.quantityLocal = 1;
         };
-        if (type === 'set') {
-          itemData.amount = Number(this.quantityLocal);
+        if (this.quantityLocal > 99) {
+          this.quantityLocal = 99;
         }
-        
-        await this.UPDATE_ITEMS_IN_CART({itemData, type});
+      },
+
+      minusQuantityLocal() {
+        this.quantityLocal = this.quantityLocal > 1 ? this.quantityLocal - 1 : 1;
+      },
+
+      plusQuantityLocal() {
+        this.quantityLocal = this.quantityLocal < 99 ? this.quantityLocal + 1 : 99;
+      },
+
+      async onOperationWithCartItem(card, type) {
+        // if (this.quantity === 0 && this.quantityLocal === 0) { 
+        //   return
+        // } else {
+          const itemData = {
+            amount: 0,
+            product: {
+              id: card.id,
+              vendor_code: card.vendor_code,
+              name: card.name,
+              price: card.price,
+            },
+          };
+          if (type === 'set') {
+            itemData.amount = Number(this.quantityLocal);
+          }
+          
+          await this.UPDATE_ITEMS_IN_CART({itemData, type});
+          if (this.quantityLocal === 0) this.quantityLocal = 1;
+        // }  
       },
 
       async onWishClick(card) {
@@ -154,7 +184,7 @@ export default {
         } else {
           this.quantity = 0;
         }
-        this.quantityLocal = this.quantity
+        this.quantityLocal = this.quantity ? this.quantity : this.quantityLocal;
       },
 
       checkIsWish() {
@@ -349,6 +379,7 @@ export default {
     border: none;
     margin: 0 10px;
     text-align: center;
+
   }
 
   &__btn{
@@ -356,6 +387,11 @@ export default {
 
 
   }
+}
+
+.popup-btn{
+  font-size: 14px;
+  padding: 12px 15px;
 }
 </style>
 

@@ -25,8 +25,15 @@
           <span>BYN / {{ card.base_unit.full_name }}</span>
         </div>
         <div 
+          v-if = "card.status !== 'O'"
           :class="[quantity === 0 ? 'item-card__buy flex-center icon-cart' : 'item-card__buy flex-center icon-cart-chosen']"
           @click.stop="onOperationWithCartItem(card)"
+        >
+        </div>
+        <div 
+          v-if = "card.status === 'O'"
+          class="item-card__buy flex-center icon-share"
+          @click.stop="onCreatePopUp(true)"
         >
         </div>
 
@@ -43,7 +50,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapMutations, mapGetters } from 'vuex'
 import CardImage from '@/components/UI/card-image.vue'
 
 export default {
@@ -106,6 +113,12 @@ export default {
   methods: {
     ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
     ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
+    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
+
+    onCreatePopUp(status) {
+        this.SET_IS_POPUP_OPEN(status);
+        this.SET_POPUP_ACTION('RequestCall');
+      },
 
     openCardItem(id) {
       const URL = '/card_product/' + id;
@@ -113,18 +126,22 @@ export default {
     },
 
     async onOperationWithCartItem(card) {
-      const itemData = {
-        amount: 1,
-        product: {
-          id: card.id,
-          vendor_code: card.vendor_code,
-          name: card.name,
-          price: card.price,
-        },
+      if (card.status === 'A') {
+        const itemData = {
+          amount: 1,
+          product: {
+            id: card.id,
+            vendor_code: card.vendor_code,
+            name: card.name,
+            price: card.price,
+          },
+        }
+        const type = this.quantity === 0 ? 'increase' : 'remove';
+        this.quantity = this.quantity !==0 ? 0 : 1;
+        await this.UPDATE_ITEMS_IN_CART({itemData, type});
+      } else {
+
       }
-      const type = this.quantity === 0 ? 'increase' : 'remove';
-      this.quantity = this.quantity !==0 ? 0 : 1;
-      await this.UPDATE_ITEMS_IN_CART({itemData, type});
     },
 
     async onWishClick(card) {
@@ -181,6 +198,10 @@ export default {
   box-sizing: border-box;
   border-radius: 8px;
   padding: 20px 22px 30px 22px;
+  @media (max-width: $md3+px){
+    padding: 5px 15px 10px 15px;
+
+  }
 
   &__img {
     width: 100%;
@@ -286,8 +307,14 @@ export default {
     font-weight: 500;
     font-size: 20px;
     line-height: 24px;
+    @media (max-width: $md3+px){
+      font-size: 18px;
+    }
     span{
       font-weight: 300;
+      @media (max-width: $md3+px){
+        font-size: 15px;
+      }
     }
 
   }
@@ -299,11 +326,16 @@ export default {
     line-height: 1.26;
     font-weight: 400;
     cursor: pointer;
+    @media (max-width: $md3+px){
+      font-size: 13px;
+      height: 33px;
+
+    }
     a{
       font-weight: 500;
       font-size: 15px;
-
       color: #423E48;
+
     }
 
   }
@@ -311,6 +343,11 @@ export default {
   &__uptitle{
     font-size: 14px;
     //min-height: 42px;
+    @media (max-width: $md3+px){
+      font-size: 13px;
+      height: 33px;
+
+    }
     a{
       font-weight: 400;
       font-size: 14px;

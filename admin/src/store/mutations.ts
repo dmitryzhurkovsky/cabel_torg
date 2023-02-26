@@ -11,6 +11,14 @@ export type Mutations<S = State> = {
   [MutationTypes.ADD_TO_DELIVERY_TYPES](state: S, payload: IDeliveryType): void,
   [MutationTypes.DELETE_FROM_DELIVERY_TYPES](state: S, payload: number): void,
   [MutationTypes.UPDATE_DELIVERY_TYPES](state: S, payload: IDeliveryType): void,
+  [MutationTypes.SET_ARTICLES](state: S, payload: Array<IDeliveryType>): void,
+  [MutationTypes.ADD_TO_ARTICLES](state: S, payload: IDeliveryType): void,
+  [MutationTypes.DELETE_FROM_ARTICLES](state: S, payload: number): void,
+  [MutationTypes.UPDATE_ARTICLE](state: S, payload: IDeliveryType): void,
+  [MutationTypes.SET_PARTNERS](state: S, payload: Array<IDeliveryType>): void,
+  [MutationTypes.ADD_TO_PARTNERS](state: S, payload: IDeliveryType): void,
+  [MutationTypes.DELETE_FROM_PARTNERS](state: S, payload: number): void,
+  [MutationTypes.UPDATE_PARTNER](state: S, payload: IDeliveryType): void,
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -35,5 +43,31 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationTypes.UPDATE_DELIVERY_TYPES](state, payload: IDeliveryType) {
     state.deliveryTypesData = state.deliveryTypesData.filter(item => item.id !== payload.id)
     state.deliveryTypesData.push(payload)
+  },
+  [MutationTypes.SET_ARTICLES](state, payload: Array<IDeliveryType>) {
+    state.articles = payload
+  },
+  [MutationTypes.ADD_TO_ARTICLES](state, payload: IDeliveryType) {
+    state.articles = [...state.articles, payload]
+  },
+  [MutationTypes.DELETE_FROM_ARTICLES](state, payload: number) {
+    state.articles = state.articles.filter(item => item.id !== payload)
+  },
+  [MutationTypes.UPDATE_ARTICLE](state, payload: IDeliveryType) {
+    state.articles = state.articles.filter(item => item.id !== payload.id)
+    state.articles.push(payload)
+  },
+  [MutationTypes.SET_PARTNERS](state, payload: Array<IDeliveryType>) {
+    state.partners = payload
+  },
+  [MutationTypes.ADD_TO_PARTNERS](state, payload: IDeliveryType) {
+    state.partners = [...state.partners, payload]
+  },
+  [MutationTypes.DELETE_FROM_PARTNERS](state, payload: number) {
+    state.partners = state.partners.filter(item => item.id !== payload)
+  },
+  [MutationTypes.UPDATE_PARTNER](state, payload: IDeliveryType) {
+    state.partners = state.partners.filter(item => item.id !== payload.id)
+    state.partners.push(payload)
   },
 }

@@ -94,11 +94,13 @@
                   </div>
                   <div class="group__row flex-center">
                     <div class="group">
+                      <label for="" class="label">Дом</label>
                       <input id="house" type="text" :class="{ 'is-invalid': ERRORS.house }" v-model="house" autocomplete=off>
                       <div class="error-message" v-if="ERRORS.house"> {{ ERRORS.house }} </div>
                     </div>
                     <div class="group">
-                      <input id="city" type="text" class="input">
+                      <label for="address" class="label">Квартира</label>
+                      <input id="" type="text" class="input">
                     </div>
                   </div>
 
@@ -384,6 +386,7 @@
 <style scoped lang="scss">
 
 .cart {
+  min-height: 300px;
   h3{
     margin-bottom: 45px;
   }

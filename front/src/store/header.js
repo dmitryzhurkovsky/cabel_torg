@@ -43,7 +43,7 @@ export default {
     LAST_CATEGORIES_ITEM_ACTIVE(state){
       return state.lastCategoriesItemActive;
     },
-    VIEW_TYPE(state){
+    DEVICE_VIEW_TYPE(state){
       return state.viewType;
     },
     WINDOW_WIDTH(state){

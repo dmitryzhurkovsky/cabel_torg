@@ -7,7 +7,7 @@
           <div class="catalog__block">
 
 <!--        # SIDEBAR-->
-            <div class="catalog__sidebar filter">
+            <div v-if ="!isMobileVersion" class="catalog__sidebar filter">
               <FilterPanel />
             </div>
 <!--        # CONTENT-->
@@ -22,7 +22,14 @@
                     {{ category.name }}
                   </div>
               </div>
-              <div class="content-block__topfilter topfilter">
+              <div v-if = "isMobileVersion" class="btn mobile-filter mb-20" @click.stop="setIsFilterPanelOpen(!isFilterPanelOpen)">Фильтры</div>
+              <div v-if ="isMobileVersion&&isFilterPanelOpen">
+                <PriceSlider />
+                <SortPanel />
+                <LimitPanel />
+                <!-- <ViewPanel /> -->
+              </div>
+              <div v-if = "!isMobileVersion" class="content-block__topfilter topfilter">
                 <SortPanel />
                 <div class="topfilter__right flex-center">
                   <LimitPanel />
@@ -64,6 +71,7 @@
   import ViewPanel from '@/components/catalog/view-panel.vue';
   import PaginationPanel from '@/components/catalog/pagination-panel.vue';
   import SortPanel from '@/components/catalog/sort-panel.vue';
+  import PriceSlider from '@/components/catalog/price-slider.vue';
 
   import { mapGetters, mapActions, mapMutations } from 'vuex'
 
@@ -72,7 +80,13 @@
 
     components:
     {
-      FilterPanel, ListItem, CardItem, LimitPanel, ViewPanel, PaginationPanel, SortPanel,
+      FilterPanel, ListItem, CardItem, LimitPanel, ViewPanel, PaginationPanel, SortPanel, PriceSlider,
+    },
+
+    data(){
+      return {
+        isFilterPanelOpen : false,
+      }
     },
 
     watch: {
@@ -86,7 +100,7 @@
     },
 
     computed: {
-        ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES"]),
+        ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES", "DEVICE_VIEW_TYPE"]),
         ...mapGetters("catalog", ["ITEMS_LIST", "CATALOG_SEARCH_STRING"]),
         ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SEARCH_STRING", "SORT_TYPE", "SORT_DIRECTION"]),
 
@@ -101,7 +115,14 @@
         ChangeParameters(){
           return String(this.LIMIT) + String(this.OFFSET) + JSON.stringify(this.TYPE_OF_PRODUCT) + String(this.MIN_PRICE) + String(this.SORT_DIRECTION) +
                   String(this.MAX_PRICE) + String(this.CATEGORY_ID) + this.CATALOG_SEARCH_STRING + this.VIEW_TYPE + JSON.stringify(this.SORT_TYPE);
+        },
+
+        isMobileVersion(){
+          if (this.DEVICE_VIEW_TYPE===1) return false;
+          if (this.DEVICE_VIEW_TYPE===2) return true;
+          if (this.DEVICE_VIEW_TYPE===3) return true;
         }
+
     },
 
     methods: {
@@ -139,6 +160,10 @@
       clearSearchString(){
         this.SET_SEARCH_STRING('');
       },
+
+      setIsFilterPanelOpen(data) {
+        this.isFilterPanelOpen = data;
+      }
 
     },
 
@@ -186,10 +211,27 @@
     min-width: 260px;
     width: 272px;
     padding-right: 10px;
+    // @media (max-width:$md2+px) {
+    //   display: none;
+    // }
   }
 
 }
 
+// filter{
+//   &__box{
+//         font-weight: 400;
+//         position: relative;
+//       .icon-arrow-l:before{
+//         transform: rotate(90deg);
+//         cursor: pointer;
+//       }
+//       .icon-arrow-r:before{
+//         transform: rotate(-90deg);
+//         cursor: pointer;
+//       }
+//     }
+// }
 .content-block{
 
   &__subcategory{
@@ -246,6 +288,17 @@
     font-size: 12px;
   }
 
+  .mobile-filter{
+    max-width: 100px;
+    background: #FFFFFF;
+    color: #423E48;
+    opacity: 0.5;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 50px;
+
+
+  }
+
 }
 
 .topfilter{
@@ -270,14 +323,14 @@
 .product-table{
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(242px, 272px));
   grid-template-rows: auto;
   gap: 10px;
   @media (max-width: $md2+px) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(142px, 272px));
   }
   .item-card{
-    min-width: 270px;
+    //min-width: 270px;
   }
 }
 

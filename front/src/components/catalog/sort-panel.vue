@@ -1,5 +1,11 @@
 <template>
-    <ul class="tools-sort icon-change">
+    <ul class="tools-sort">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <line x1="2" y1="17.1133" x2="23" y2="17.1133" stroke="#423E48" stroke-width="1.25"/>
+          <line x1="23" y1="7.50391" x2="2" y2="7.5039" stroke="#423E48" stroke-width="1.25"/>
+          <circle cx="16.6619" cy="16.911" r="3.08088" fill="white" stroke="#423E48" stroke-width="1.25"/>
+          <circle cx="8.33806" cy="7.70623" r="3.08088" transform="rotate(-180 8.33806 7.70623)" fill="white" stroke="#423E48" stroke-width="1.25"/>
+        </svg>
         <div class= "tools-sort__direction" v-if = "!SORT_DIRECTION" @click.prevent="SET_SORT_DIRECTION('-')">А-Я</div>
         <div class= "tools-sort__direction" v-if = "SORT_DIRECTION"  @click.prevent="SET_SORT_DIRECTION('')">Я-А</div>
         <li 

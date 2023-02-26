@@ -11,7 +11,7 @@
             <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'with_discount', order: 'discount' })">Скидки</div>
           </div>
           <!-- :navigation= "true" -->
-          <div class="recomendation__block" v-if = "VIEW_TYPE === 1 || VIEW_TYPE === 2">
+          <div class="recomendation__block" v-if = "DEVICE_VIEW_TYPE === 1 || DEVICE_VIEW_TYPE === 2">
               <swiper
                   :slides-per-view="slidersInFrame"
                   :space-between="15"
@@ -42,7 +42,7 @@
               </swiper>
 
           </div>
-          <div class="recomendation__block" v-if = "VIEW_TYPE === 3">
+          <div class="recomendation__block" v-if = "DEVICE_VIEW_TYPE === 3">
 
             <CardItem v-for="item in RECOMENDED_ITEMS" :key="item.id"
               :card = "item"
@@ -74,7 +74,7 @@
     },
 
     computed: {
-      ...mapGetters("header", ["VIEW_TYPE"]),
+      ...mapGetters("header", ["DEVICE_VIEW_TYPE"]),
       ...mapGetters("catalog", ["RECOMENDED_ITEMS", "RECOMENDATION_QUANTITY", "RECOMENDATION_TYPE", "RECOMENDATION_ORDER"]),
 
       ChangeParameters(){
@@ -89,8 +89,8 @@
     },
 
     watch: {
-      VIEW_TYPE: function() {
-        this.slidersInFrame = this.VIEW_TYPE === 1 ? 4 : 3;
+      DEVICE_VIEW_TYPE: function() {
+        this.slidersInFrame = this.DEVICE_VIEW_TYPE === 1 ? 4 : 3;
       },
 
       slidersInFrame: async function() {

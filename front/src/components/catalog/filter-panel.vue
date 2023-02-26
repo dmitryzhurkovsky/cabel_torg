@@ -5,7 +5,7 @@
             :key    = "mainItem.id"
         >
             <div class="sidebar_menu__title">
-              <div
+              <div :class = "{'active' : mainItem.filterPanel}"
                   @click.stop = "openMainCategory(mainItem)"
               >
                 {{mainItem.name}}
@@ -24,7 +24,7 @@
                         :key    = "middleItem.id"
                     >
                       <div class="subtitle__row">
-                        <div
+                        <div :class = "{'active' : middleItem.filterPanel}"
                             @click.stop  = "openMiddleCategory(mainItem, middleItem)"
                         >
                           {{middleItem.name}}
@@ -44,7 +44,7 @@
                             @click.stop = "openLastCategory(mainItem, middleItem, lastItem)"
                         >
                             <div class="">
-                              <div class="">
+                              <div :class = "{'active' : LAST_CATEGORIES_ITEM_ACTIVE === lastItem.id}">
                                 {{lastItem.name}}
                               </div>
 
@@ -71,23 +71,6 @@
                 <span class="checkmark"></span>
               </label>
 
-<!--                <div class="filter__checkbox__item"-->
-<!--                    v-for = "category in categories"-->
-<!--                    :key = "category"-->
-<!--                >-->
-<!--                    <div -->
-<!--                        class = "checkbox-default"-->
-<!--                        @click.stop = "changeFilterCategory(category)"-->
-<!--                    >-->
-<!--                        <label class="checkbox__container">-->
-<!--                            <input type="checkbox" name="" class="" value="">-->
-<!--                           <div class="checkbox"></div>-->
-<!--                              <div class="filter__text">-->
-<!--                              <span class="checkmark" :class="[category.type === TYPE_OF_PRODUCT.type ? 'active' : '']">{{ category.name }}</span>-->
-<!--                            </div>-->
-<!--                        </label>-->
-<!--                    </div>-->
-<!--                </div>-->
             </div>
 
 
@@ -292,11 +275,17 @@ export default {
     div:first-child {
       cursor: pointer;
     }
+    .active{
+      color:#4275D8;
+    }
   }
   &__subtitle{
     .subtitle__row{
       div:first-child {
         cursor: pointer;
+      }
+      .active{
+        color:#4275D8;
       }
       display: flex;
       align-items: center;
@@ -313,8 +302,10 @@ export default {
       line-height: 1.2;
       padding: 5px 5px;
       opacity: 0.8;
+      .active{
+        color:#4275D8;
+      }
     }
-
   }
 }
 .sidebar_menu {
@@ -332,7 +323,6 @@ export default {
     font-size: 12px;
     transform: rotate(90deg);
   }
-
 }
 
  .checkbox__container {

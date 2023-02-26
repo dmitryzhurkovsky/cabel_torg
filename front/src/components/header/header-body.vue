@@ -1,6 +1,6 @@
 <template lang="html">
   <!-- <BurgerMenu v-if = "IS_MENU_OPEN"/> -->
-  <BurgerMenu v-if = "IS_CATALOG_OPEN&&VIEW_TYPE>1"/>
+  <BurgerMenu v-if = "IS_CATALOG_OPEN&&DEVICE_VIEW_TYPE>1"/>
   <div class="header__wrapper">
     <div class="header__content _container">
         <div class="header__body ">
@@ -49,7 +49,7 @@
     },
 
     computed: {
-      ...mapGetters("header", ["IS_CATALOG_OPEN", "TOP_CATEGORIES", "VIEW_TYPE"]),
+      ...mapGetters("header", ["IS_CATALOG_OPEN", "TOP_CATEGORIES", "DEVICE_VIEW_TYPE"]),
     },
 
     methods:{

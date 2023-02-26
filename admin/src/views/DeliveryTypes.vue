@@ -2,10 +2,8 @@
   import { useStore } from '../store';
   import { ActionTypes } from '../store/action-types';
   import { MutationTypes } from '../store/mutation-types';
-  import {ref, computed, onMounted, watchEffect, watch} from 'vue'
+  import {ref, computed, onMounted, watch} from 'vue'
   import BaseTable from '@/components/Table/BaseTable.vue'
-  import TableRow from '@/components/Table/TableRow.vue'
-  import TableColumn from '@/components/Table/TableColumn.vue'
   import Button from '@/components/UI/Button.vue'
   import Input from '@/components/UI/Input.vue';
   import { router } from '../router';
@@ -21,39 +19,13 @@
     {db: '', name: ''},
     {db: '', name: ''},
   ]
-
+  const tableData = ref([] as Array<IDeliveryType>)
   const tableSizeColumns = '30px 1fr 40px 40px'
 
-  const sortField = ref('id')
-  const typeSort = ref('asc')
   const isFormOpen = ref(false)
-  const tableData = ref([] as Array<IDeliveryType>)
   const payloadField = ref('')
   const idField = ref()
   const formType = ref(true)
-
-  const tableDataSorting = computed(() => {
-    return tableData.value.sort((a, b) => {
-      let modifier = 1;
-      if (typeSort.value === 'desc') modifier = -1
-      const param = sortField.value;
-      if (a[param] < b[param]) return -1 * modifier
-      if (a[param] > b[param]) return 1 * modifier
-      return 0
-    })
-  })
-
-  const setSort = (name: string) => {
-    if (sortField.value === name) {
-      if (typeSort.value === 'asc') {
-        typeSort.value = 'desc'
-      } else {
-        typeSort.value = 'asc'
-      }
-    } else {
-      sortField.value = name
-    }
-  }
 
   const rules = computed(() => ({
     payloadField: {
@@ -70,6 +42,8 @@
 
   watch(() => store.getters.deliveryTypesData,
     (curr, prev) => {
+      console.log('Watch ', curr);
+      
       tableData.value = [...curr];
       store.commit(MutationTypes.SET_IS_LOADING, false)
   });
@@ -143,39 +117,17 @@
     </form>
   </div>
 
-  <div class="table-info info">
-    <span class="info-elem">Сортировка по полю: {{sortField}}</span>
-    <span class="info-elem">Сортируем по направлению: {{typeSort}}</span>
-    <Button label="Добавить" @click="onAddButtonClick()"></Button>
-  </div>
-
   <base-table
     :head="tableHeads"
     :columnTemplates="tableSizeColumns"
-    @sorting="setSort">
-    <table-row
-      v-for="rowData in tableDataSorting"
-      :key="rowData.id"
-      :columnTemplates="tableSizeColumns"
-      >
-      <table-column :columnTitle="tableHeads[0]">
-        {{rowData.id}}
-      </table-column>
-      <table-column :columnTitle="tableHeads[1]">
-        {{rowData.payload}}
-      </table-column>
-      <table-column>
-        <Button icon="pen-to-square" @click="onEditButtonClick(rowData)"></Button>
-      </table-column>
-      <table-column>
-        <Button icon="trash-can" color="danger" @click="onDeleteDeliveryType(rowData)"></Button>
-      </table-column>
-    </table-row>
-  </base-table>
+    :tableData="tableData"
+    @openForm="onAddButtonClick"
+    @editRow="onEditButtonClick"
+    @deleteRow="onDeleteDeliveryType"
+  />
 </template>
 
 <style lang="scss" scoped>
-  @import "../styles/table-info.scss";
 
   .form{
     &-container {
