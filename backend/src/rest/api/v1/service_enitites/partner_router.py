@@ -20,8 +20,7 @@ async def create_partner(
 ) -> PartnerSchema:
     partner = await PartnerManager.create(input_data={'image': 'tmp'}, session=session)
     file_name = await PartnerManager.upload_file(pk=partner.id, input_file=file)
-    await PartnerManager.update(pk=partner.id, input_data={'image': file_name}, session=session)
-    await session.refresh(partner)
+    partner = await PartnerManager.update(pk=partner.id, input_data={'image': file_name}, session=session)
 
     return partner
 
@@ -32,9 +31,13 @@ async def update_info_about_partner(
         file: UploadFile,
         session: AsyncSession = Depends(get_session)
 ) -> PartnerSchema:
+    await PartnerManager.retrieve(id=partner_id, session=session)
     file_name = await PartnerManager.upload_file(pk=partner_id, input_file=file)
-    partner = await PartnerManager.update(pk=partner_id, session=session)
-    await session.refresh(partner)
+    partner = await PartnerManager.update(
+        input_data={'image': file_name},
+        pk=partner_id,
+        session=session
+    )
 
     return partner
 
@@ -44,8 +47,9 @@ async def delete_partner(
         partner_id: int,
         session: AsyncSession = Depends(get_session)
 ):
-    result = await PartnerManager.delete(id=partner_id, session=session)
-    PartnerManager.delete_file(pk=partner_id)
+    partner: PartnerManager.table = await PartnerManager.retrieve(id=partner_id, session=session)
+    result = await PartnerManager.delete(id=partner_id, session=session)  # noqa
+    PartnerManager.delete_file(file_name=partner.image)
 
     return result
 
