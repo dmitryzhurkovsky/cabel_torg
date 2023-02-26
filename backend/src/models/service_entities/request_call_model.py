@@ -7,7 +7,12 @@ from src.models.abstract_model import BaseModel
 
 class RequestCallType(str, BaseEnum):
     UNSET = 'U'
-    GOOD_RECEIPT = 'GR'
+    GOODS_RECEIPT = 'GR'
+
+    @classmethod
+    def description(cls) -> str:
+        return 'U - Unset. It\' used for all request calls.' \
+               'GD - Good Receipt. It\'s used for notify about the receipt of goods in the warehouse.'
 
 
 class RequestCall(BaseModel):

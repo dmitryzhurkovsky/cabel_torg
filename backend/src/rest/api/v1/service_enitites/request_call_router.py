@@ -15,7 +15,9 @@ request_call_router = APIRouter(tags=['request_calls'])
 @request_call_router.get('/request_calls', response_model=list[RequestCallSchema])
 async def get_request_calls(
         request: Request,
-        type_of_request_call: RequestCallType | None = Query(),
+        type_of_request_call: RequestCallType | None = Query(
+            description=RequestCallType.description(), default=RequestCallType.UNSET
+        ),
         session: AsyncSession = Depends(get_session)
 ) -> list[RequestCallSchema]:
     return await RequestCallManager.filter_list(filters=request.query_params, session=session)

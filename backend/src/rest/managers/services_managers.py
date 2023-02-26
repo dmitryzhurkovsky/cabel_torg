@@ -33,8 +33,8 @@ class RequestCallManager(CRUDManager):
     @staticmethod
     def get_filter_expressions(filter_fields: QueryParams) -> list[ColumnOperators | None]:
         if type_of_request_call := filter_fields.get('type_of_request_call'):
-            if type_of_request_call == RequestCallType.GOOD_RECEIPT:
-                return [RequestCall.type == RequestCallType.GOOD_RECEIPT.value, ]
+            if type_of_request_call == RequestCallType.GOODS_RECEIPT:
+                return [RequestCall.type == RequestCallType.GOODS_RECEIPT.value, ]
 
         return []
 
