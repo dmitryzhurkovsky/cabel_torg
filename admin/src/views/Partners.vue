@@ -6,11 +6,9 @@
   import BaseTable from '@/components/Table/BaseTable.vue'
   import Button from '@/components/UI/Button.vue'
   import PhotoUploader from '@/components/UI/PhotoUploader.vue';
-  import { router } from '../router';
   import { IDeliveryType } from '../types';
   import { helpers, minLength, required } from '@vuelidate/validators';
   import { useVuelidate } from '@vuelidate/core';
-import { log } from 'console';
 
   const store = useStore()
 
@@ -18,13 +16,13 @@ import { log } from 'console';
     {db: 'id', name: 'Id'},
     {db: 'image', name: 'Логотип', type: 'image', src: 'image'}, 
     {db: '', name: ''},
-    {db: '', name: ''},
   ]
   const tableData = ref([] as Array<IDeliveryType>)
   const tableSizeColumns = '30px 1fr 40px 40px'
 
   const isFormOpen = ref(false)
-  const files = ref<Array<File>>([]);  const idField = ref()
+  const files = ref<Array<File>>([])
+  const idField = ref()
   const formType = ref(true)
 
   const sendDataRequest = async () => {
@@ -48,7 +46,6 @@ import { log } from 'console';
 
   const onEditButtonClick = (rowData: IDeliveryType) => {
     idField.value = rowData.id
-    // imageField.value = rowData.image as string
     formType.value = false
     onSetIsFormOpen(true)
   } 
@@ -69,7 +66,6 @@ import { log } from 'console';
   const submitForm = async () => {
     if (!files.value.length) return
     store.commit(MutationTypes.SET_IS_LOADING, true)
-    let reader = new FileReader();
     const data = new FormData()
     data.append('file', files.value[0])
     await store.dispatch(ActionTypes.ADD_PARTNER, data)

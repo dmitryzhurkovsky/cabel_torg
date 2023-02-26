@@ -6,7 +6,7 @@
   import BaseTable from '@/components/Table/BaseTable.vue'
   import Button from '@/components/UI/Button.vue'
   import TextArea from '@/components/UI/TextArea.vue';
-  import { router } from '../router';
+  import PhotoUploader from '@/components/UI/PhotoUploader.vue';
   import { IDeliveryType } from '../types';
   import { helpers, minLength, required } from '@vuelidate/validators';
   import { useVuelidate } from '@vuelidate/core';
@@ -17,13 +17,18 @@
     {db: 'id', name: 'Id'},
     {db: 'title', name: 'Заголовок'}, 
     {db: 'content', name: 'Контент'}, 
+    {db: 'image', name: 'Картинка', type: 'image', src: 'image'}, 
+    {db: '', name: ''},
     {db: '', name: ''},
     {db: '', name: ''},
   ]
   const tableData = ref([] as Array<IDeliveryType>)
-  const tableSizeColumns = '30px 1fr 2fr 40px 40px'
+  const files = ref<Array<File>>([])
+  
+  const tableSizeColumns = '30px 1fr 2fr 1fr 40px 40px 40px'
 
   const isFormOpen = ref(false)
+  const isUploadOpen = ref(false)
   const titleField = ref('')
   const contentField = ref('')
   const idField = ref()
@@ -61,12 +66,23 @@
     isFormOpen.value = val
   }
 
+  const onSetIsUploadOpen = (val: boolean) => {
+    isUploadOpen.value = val
+  }
+
+  const onUploadButtonClick = (rowData: IDeliveryType) => {
+    idField.value = rowData.id
+    onSetIsFormOpen(false)
+    onSetIsUploadOpen(true)
+  }
+
   const onEditButtonClick = (rowData: IDeliveryType) => {
     idField.value = rowData.id
     titleField.value = rowData.title as string
     contentField.value = rowData.content as string
     formType.value = false
     onSetIsFormOpen(true)
+    onSetIsUploadOpen(false)
   } 
 
   const onAddButtonClick = () => {
@@ -75,12 +91,23 @@
     contentField.value = '' as string
     formType.value = true
     onSetIsFormOpen(true)
+    onSetIsUploadOpen(false)
   }
 
   const onDeleteArticle = async (rowData: IDeliveryType) => {
     store.commit(MutationTypes.SET_IS_LOADING, true)
     await store.dispatch(ActionTypes.DELETE_ARTICLE, rowData.id as number)
     isFormOpen.value = false
+  }
+
+  const submitUpload = async () => {
+    if (files.value.length) {
+      const data = new FormData()
+      data.append('file', files.value[0])
+      await store.dispatch(ActionTypes.UPLOAD_ARTICLE_PHOTO, { id: idField.value, data: data })
+    } 
+    files.value = []
+    onSetIsUploadOpen(false)
   }
 
   const submitForm = async () => {
@@ -102,7 +129,7 @@
       }
       await store.dispatch(ActionTypes.EDIT_ARTICLE, data)
     }
-    isFormOpen.value = false
+    onSetIsFormOpen(false)
     // store.commit(MutationTypes.SET_IS_LOADING, false)
   }
 
@@ -111,10 +138,18 @@
 <template>
   <h2 class="heading-2">Новости</h2>
 
-  <div class="form-container" v-if="isFormOpen">
+  <div class="form-container">
     <h3 class="heading-3">Новая новость</h3>
 
-    <form @submit.prevent="submitForm">
+    <form @submit.prevent="submitUpload"  v-if="isUploadOpen">
+      <PhotoUploader v-model="files" />
+      <div class="form-buttons">
+        <Button label="Сохранить" color="primary" ></Button>
+        <Button label="Отменить" color="warning" @click="onSetIsUploadOpen(false)"></Button>
+      </div>
+    </form>
+
+    <form @submit.prevent="submitForm" v-if="isFormOpen">
       <TextArea
         label="Заголовок"
         name="title"
@@ -133,6 +168,7 @@
         width="600px"
         height="150px"
       />
+      <!-- <PhotoUploader v-model="files" /> -->
       <div class="form-buttons">
         <Button label="Создать" color="primary" v-if="formType"></Button>
         <Button label="Сохранить" color="primary" v-if="!formType"></Button>
@@ -145,7 +181,9 @@
     :head="tableHeads"
     :columnTemplates="tableSizeColumns"
     :tableData="tableData"
+    :uploadButton=true
     @openForm="onAddButtonClick"
+    @uploadRow="onUploadButtonClick"
     @editRow="onEditButtonClick"
     @deleteRow="onDeleteArticle"
   />

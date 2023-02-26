@@ -49,6 +49,18 @@ const router = createRouter({
       name: 'Articles',
       component: () => import('@/views/Articles.vue')
     },
+    {
+      beforeEnter: auth,
+      path: '/call_requests',
+      name: 'Calls',
+      component: () => import('@/views/CallRequests.vue')
+    },
+    {
+      beforeEnter: auth,
+      path: '/feedback_requests',
+      name: 'Feedback',
+      component: () => import('@/views/FeedbackRequests.vue')
+    },
   ]
 })
 

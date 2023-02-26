@@ -18,7 +18,10 @@ export type Mutations<S = State> = {
   [MutationTypes.SET_PARTNERS](state: S, payload: Array<IDeliveryType>): void,
   [MutationTypes.ADD_TO_PARTNERS](state: S, payload: IDeliveryType): void,
   [MutationTypes.DELETE_FROM_PARTNERS](state: S, payload: number): void,
-  [MutationTypes.UPDATE_PARTNER](state: S, payload: IDeliveryType): void,
+  [MutationTypes.SET_CALL_REQUESTS](state: S, payload: Array<IDeliveryType>): void,
+  [MutationTypes.DELETE_FROM_CALL_REQUESTS](state: S, payload: number): void,
+  [MutationTypes.SET_FEEDBACK_REQUESTS](state: S, payload: Array<IDeliveryType>): void,
+  [MutationTypes.DELETE_FROM_FEEDBACK_REQUESTS](state: S, payload: number): void,
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -66,8 +69,16 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationTypes.DELETE_FROM_PARTNERS](state, payload: number) {
     state.partners = state.partners.filter(item => item.id !== payload)
   },
-  [MutationTypes.UPDATE_PARTNER](state, payload: IDeliveryType) {
-    state.partners = state.partners.filter(item => item.id !== payload.id)
-    state.partners.push(payload)
+  [MutationTypes.SET_CALL_REQUESTS](state, payload: Array<IDeliveryType>) {
+    state.callRequests = payload
+  },
+  [MutationTypes.DELETE_FROM_CALL_REQUESTS](state, payload: number) {
+    state.callRequests = state.callRequests.filter(item => item.id !== payload)
+  },
+  [MutationTypes.SET_FEEDBACK_REQUESTS](state, payload: Array<IDeliveryType>) {
+    state.feedbackRequests = payload
+  },
+  [MutationTypes.DELETE_FROM_FEEDBACK_REQUESTS](state, payload: number) {
+    state.feedbackRequests = state.feedbackRequests.filter(item => item.id !== payload)
   },
 }

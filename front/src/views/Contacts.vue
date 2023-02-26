@@ -36,33 +36,56 @@
               </div>
             </div>
             <div class="contacts__block__item">
-              <form class="contacts__form form-contacts" action="">
-                  <div class="form-contacts__title mb-20 ">Напишите нам</div>
-                  <input type="text"  class="input mb-20" placeholder="ФИО">
-                  <div class="form-contacts__row flex-center mb-20">
-                    <input type="text" class="input" placeholder="Email">
-                    <input type="text" class="input" placeholder="Телефон">
+              <form class="contacts__form form-contacts">
+                <div class="form-contacts__title mb-20 ">Напишите нам</div>
+                <div class="group">
+                    <input type="text" class="input mb-20" placeholder="ФИО" v-model="fullname">
+                    <div class="error-message" v-if="ERRORS.fullname"> {{ ERRORS.fullname }} </div>
+                </div>
+                <!-- <input type="text" class="input mb-20" placeholder="ФИО" v-model="fullname"> -->
+                <div class="form-contacts__row flex-center mb-20">
+                  <div class="group">
+                    <input type="text" class="input" placeholder="Email" v-model="email">
+                    <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>
                   </div>
-                  <textarea class="textarea mb-20" placeholder="Сообщение"></textarea>
-                  <button class="btn">Отправить</button>
+                  <div class="group">
+                    <input type="text" class="input" placeholder="Телефон" v-model="phone_number">
+                    <div class="error-message" v-if="ERRORS.phone_number"> {{ ERRORS.phone_number }} </div>
+                  </div>
+                </div>
+                <div class="group">
+                  <textarea class="textarea mb-20" placeholder="Сообщение" v-model="message"></textarea>
+                  <div class="error-message" v-if="ERRORS.message"> {{ ERRORS.message }} </div>
+                </div>>  
+                <button class="btn" @click = "sendRequest($event)">Отправить</button>
               </form>
-
-          </div>
-
-
-
             </div>
-
+          </div>
         </div>
-        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import { mapActions, mapGetters, mapMutations } from "vuex";
 
   export default {
     name: 'Contacts',
+
+    data: function() {
+      return {
+          fullname: '',
+          phone_number: '',
+          email: '',
+          message: '',
+          isLoading: false,
+      }
+    },
+
+    computed: {
+      ...mapGetters("auth",["ERRORS"]),
+    },
 
     mounted(){
       this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
@@ -72,11 +95,62 @@
         type: "global",
         class: ""
       });
+    },
+
+    methods: {
+      ...mapMutations("auth", ["SET_ERRORS",]),
+      ...mapActions("header", ["SEND_REQUEST_FEEDBACK",]),
+
+      async sendRequest(event){
+        event.preventDefault();
+        if (this.isLoading) return;
+
+        this.isLoading = true;
+        const errorsInData = {};
+        this.SET_ERRORS(errorsInData);
+
+        if (!this.fullname) {
+          errorsInData.fullname = 'Укажите валидное имя'
+        }
+        if (!this.phone_number) {
+          errorsInData.phone_number = 'Укажите номер телефона'
+        }
+        if (!this.email) {
+          errorsInData.email = 'Укажите email'
+        }
+        if (!this.message) {
+          errorsInData.message = 'Укажите текст сообщения'
+        }
+        if (Object.keys(errorsInData).length) {
+          this.SET_ERRORS(errorsInData);
+        } else {
+          const data = {
+              fullname: this.fullname,
+              phone_number: this.phone_number,
+              email: this.email,
+              message: this.message,
+          };
+          // Тут посылаем на бэк запрос и ждем ответа, по результатам фомируем окно с ответом
+          await this.SEND_REQUEST_FEEDBACK(data);
+        }
+        this.isLoading = false;
+      }
     }
+
   }
 </script>
 
 <style scoped lang="scss">
+  .error-message {
+    position: absolute;
+    left: 15px;
+    bottom: -4px;
+    padding: 0 8px 0 8px;
+    font-size: 12px;
+    background-color: #fff;
+    color: #E30044;
+
+  }
 
 .contacts {
 
@@ -117,7 +191,6 @@
       display: flex;
       align-items: center;
       padding: 14px 16px;
-
       color: #423E48;
     }
 
@@ -221,6 +294,7 @@
     width: 100%;
     padding: 14px 16px;
     resize: vertical;
+    position: relative;
   }
   button{
 

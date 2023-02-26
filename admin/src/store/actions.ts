@@ -54,6 +54,10 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: IDeliveryType
   ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.UPLOAD_ARTICLE_PHOTO](
+    { commit }: AugmentedActionContext,
+    payload: any
+  ): Promise<Array<IDeliveryType>>,
   [ActionTypes.GET_PARTNERS_DATA](
     { commit }: AugmentedActionContext,
     payload: null
@@ -66,9 +70,21 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: number
   ): Promise<Array<IDeliveryType>>,
-  [ActionTypes.EDIT_PARTNER](
+  [ActionTypes.GET_CALL_REQUESTS_DATA](
     { commit }: AugmentedActionContext,
-    payload: IDeliveryType
+    payload: null
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.DELETE_CALL_REQUEST](
+    { commit }: AugmentedActionContext,
+    payload: number
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.GET_FEEDBACK_REQUESTS_DATA](
+    { commit }: AugmentedActionContext,
+    payload: null
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.DELETE_FEEDBACK_REQUEST](
+    { commit }: AugmentedActionContext,
+    payload: number
   ): Promise<Array<IDeliveryType>>,
 }
 
@@ -78,7 +94,6 @@ export const actions: ActionTree<State, State> & Actions = {
       commit(MutationTypes.SET_ERRORS, {})
       axios.post(import.meta.env.VITE_APP_API_URL + "token", payload).
       then((response) => {
-        console.log(response);
         localStorage.setItem("authToken", response.data.access_token);
         localStorage.setItem("refreshToken", response.data.refresh_token);
         dispatch(ActionTypes.GET_USER_DATA, null)
@@ -190,6 +205,16 @@ export const actions: ActionTree<State, State> & Actions = {
     })
   },
 
+  [ActionTypes.UPLOAD_ARTICLE_PHOTO]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/articles/" + payload.id + '/images', payload.data).
+      then((response) => {
+        commit(MutationTypes.UPDATE_ARTICLE, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
   [ActionTypes.GET_PARTNERS_DATA]({ commit }, payload) {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/partners").
@@ -220,12 +245,41 @@ export const actions: ActionTree<State, State> & Actions = {
     })
   },
 
-  [ActionTypes.EDIT_PARTNER]({ commit }, data) {
+  [ActionTypes.GET_CALL_REQUESTS_DATA]({ commit }, payload) {
     return new Promise((resolve) => {
-      const params = { image: data.image as string, }
-      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/partners/" + String(data.id), params).
+      axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/request_calls?type_of_request_call=U").
       then((response) => {
-        commit(MutationTypes.UPDATE_PARTNER, response.data);
+        commit(MutationTypes.SET_CALL_REQUESTS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.DELETE_CALL_REQUEST]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/request_calls/" + String(payload)).
+      then((response) => {
+        commit(MutationTypes.DELETE_FROM_CALL_REQUESTS, payload);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.GET_FEEDBACK_REQUESTS_DATA]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/feedbacks").
+      then((response) => {
+        commit(MutationTypes.SET_FEEDBACK_REQUESTS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.DELETE_FEEDBACK_REQUEST]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/feedbacks/" + String(payload)).
+      then((response) => {
+        commit(MutationTypes.DELETE_FROM_FEEDBACK_REQUESTS, payload);
         resolve(response.data);
       })
     })

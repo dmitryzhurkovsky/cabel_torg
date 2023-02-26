@@ -6,7 +6,6 @@
   import BaseTable from '@/components/Table/BaseTable.vue'
   import Button from '@/components/UI/Button.vue'
   import Input from '@/components/UI/Input.vue';
-  import { router } from '../router';
   import { IDeliveryType } from '../types';
   import { helpers, minLength, required } from '@vuelidate/validators';
   import { useVuelidate } from '@vuelidate/core';

@@ -29,7 +29,7 @@
 
 <script>
 
-  import { mapGetters, mapMutations } from "vuex";
+  import { mapActions, mapGetters, mapMutations } from "vuex";
 
   export default {
     name: "RequestCall",
@@ -42,9 +42,9 @@
       }
     },
 
-
     computed: {
-        ...mapGetters("auth",["ERRORS"]),
+      ...mapGetters("auth",["ERRORS"]),
+      ...mapGetters("header",["REQUEST_CALL_TYPE"]),
     },
 
     async beforeUnmount() {
@@ -53,45 +53,41 @@
 
 
     methods: {
-        ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_MESSAGE"]),
-        ...mapMutations("auth", ["SET_ERRORS"]),
+      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_MESSAGE",]),
+      ...mapActions("header", ["SEND_REQUEST_CALL",]),
+      ...mapMutations("auth", ["SET_ERRORS",]),
 
-        cancelRequest(){
-            this.SET_IS_POPUP_OPEN(false);
-            this.SET_POPUP_ACTION('');
-        },
+      cancelRequest(){
+        this.SET_IS_POPUP_OPEN(false);
+        this.SET_POPUP_ACTION('');
+      },
 
-        sendRequest(){
-            if (this.isLoading) return;
+      async sendRequest(){
+        if (this.isLoading) return;
 
-            this.isLoading = true;
-            const errorsInData = {};
-            this.SET_ERRORS(errorsInData);
+        this.isLoading = true;
+        const errorsInData = {};
+        this.SET_ERRORS(errorsInData);
 
-            if (!this.name) {
-                errorsInData.name = 'Укажите валидное имя'
-            }
-            if (!this.phone) {
-                errorsInData.phone = 'Укажите номер телефона'
-            }
-            if (Object.keys(errorsInData).length) {
-                this.SET_ERRORS(errorsInData);
-            } else {
-                const data = {
-                    name: this.name,
-                    phone_number: this.phone,
-                };
-                // Тут посылаем на бэк запрос и ждем ответа, по результатам фомируем окно с ответом
-                // await this.SEND_REGISTER_REQUEST(data);
-                this.SET_POPUP_ACTION('ShowCompleteMsg');
-                const msg ={};
-                msg.main = 'Наш менеджер свяжется с вами в ближайшее время.';
-                msg.bolt = 'Время работы:';
-                msg.sub = ' Пн-Пт - 9:00 - 17:00'
-                this.SET_POPUP_MESSAGE(msg);
-            }
-            this.isLoading = false;
+        if (!this.name) {
+          errorsInData.name = 'Укажите валидное имя'
         }
+        if (!this.phone) {
+          errorsInData.phone = 'Укажите номер телефона'
+        }
+        if (Object.keys(errorsInData).length) {
+          this.SET_ERRORS(errorsInData);
+        } else {
+          const data = {
+              fullname: this.name,
+              phone_number: this.phone,
+              type: this.REQUEST_CALL_TYPE,
+          };
+          // Тут посылаем на бэк запрос и ждем ответа, по результатам фомируем окно с ответом
+          await this.SEND_REQUEST_CALL(data);
+        }
+        this.isLoading = false;
+      }
     }
   }
 </script>

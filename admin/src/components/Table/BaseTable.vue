@@ -4,7 +4,7 @@
   import TableRow from '@/components/Table/TableRow.vue'
   import TableColumn from '@/components/Table/TableColumn.vue'
   import Button from '@/components/UI/Button.vue'
- import { watch } from 'fs';
+  import { watch } from 'fs';
 
   const props = defineProps({
     tableData: {
@@ -19,6 +19,11 @@
       type: Object as PropType<Array<ITableHeadItem>>,
       required: true
     },
+    uploadButton: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     editButton: {
       type: Boolean,
       required: false,
@@ -32,6 +37,7 @@
   })
   const emit = defineEmits<{
     (event: 'editRow', id: string): void
+    (event: 'uploadRow', id: string): void
     (event: 'deleteRow', id: string): void
     (event:'openForm'): void
   }>()
@@ -68,6 +74,10 @@
 
   const onEditButtonClick = (id: string) => {
     emit('editRow', id)
+  }
+
+  const onUploadButtonClick = (id: string) => {
+    emit('uploadRow', id)
   }
 
   const onDeleteButtonClick = (id: string) => {
@@ -109,6 +119,12 @@
           {{rowData[col.db]}}
         </table-column>
         
+        <table-column 
+          v-if="uploadButton"
+          :columnTitle="{db: 'Upload', name: ''}"
+        >
+          <Button icon="file" @click="onUploadButtonClick(rowData)"></Button>
+        </table-column>
         <table-column 
           v-if="editButton"
           :columnTitle="{db: 'Edit', name: ''}"

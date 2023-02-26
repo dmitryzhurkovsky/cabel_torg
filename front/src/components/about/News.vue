@@ -5,33 +5,15 @@
         <div class="news__body">
 
           <h3>Новости CabelTorg</h3>
-          <div class="news__block">
-            <a class="news__item">
-              <img src="../../assets/news/new1.png" alt="">
-              <div class="news__title">Новый бренд!</div>
-              <div class="news__desc">Высококлассное оборудование от Cisco уже в каталоге CabelTorg</div>
+          <div class="news__block" v-if="NEWS">
+            <a class="news__item" v-for="oneNew in filteredNews" :key="oneNew.id">
+              <CardImage :images = "oneNew.image" />
+              <!-- <img src="../../assets/news/new1.png" alt=""> -->
+              <div class="news__title">{{ oneNew.title }}</div>
+              <div class="news__desc">{{ oneNew.content }}</div>
             </a>
 
-            <a class="news__item">
-              <img src="../../assets/news/new2.png" alt="">
-              <div class="news__title">Большое поступление</div>
-              <div class="news__desc">Более 1000 товарных новинок уже доступны для заказа!</div>
-            </a>
-
-            <a class="news__item">
-              <img src="../../assets/news/new3.png" alt="">
-              <div class="news__title">Февральские скидки!</div>
-              <div class="news__desc">Не пропустите масштабную распродажу от CabelTorg</div>
-            </a>
-
-            <a class="news__item">
-              <img src="../../assets/news/new1.png" alt="">
-              <div class="news__title">Новый бренд!</div>
-              <div class="news__desc">Высококлассное оборудование от Cisco уже в каталоге CabelTorg</div>
-            </a>
           </div>
-
-
         </div>
       </div>
     </div>
@@ -39,10 +21,34 @@
 </template>
 
 <script>
+  import { mapGetters, mapActions } from 'vuex';
+  import CardImage from '@/components/UI/card-image.vue';
 
   export default {
     name: 'News',
+
+    components: {
+      CardImage,
+    },
+
+    computed: {
+      ...mapGetters("main", ["NEWS"]),
+
+      filteredNews() {
+        return this.NEWS.slice(-4);
+      }
+    },
+
+    methods: {
+      ...mapActions("main", ["GET_NEWS"]),
+    },
+
+    async mounted(){
+      await this.GET_NEWS();
+    },
+
   }
+
 </script>
 
 <style scoped lang="scss">

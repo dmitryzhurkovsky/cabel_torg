@@ -28,7 +28,7 @@ export default defineComponent({
     const input = ref<HTMLInputElement | null>(null);
     const isDragStarted = ref(false);
 
-    const uploadFile = ({ currentTarget }: Event & { currentTarget: HTMLInputElement }) => {
+    const uploadFile = ({ currentTarget }: any) => {
       console.log(props.quantity, modelValue.value.length);
       console.log(currentTarget.files);
       

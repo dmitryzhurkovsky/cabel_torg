@@ -1,5 +1,5 @@
 <template>
-  <div class="partners">
+  <div class="partners" v-if="PARTNERS">
     <div class="partners__wrapper">
       <div class="partners__content _container">
         <div class="partners__body">
@@ -13,54 +13,17 @@
                 @slideChange="onSlideChange"
             >
 
-              <swiper-slide>
+              <swiper-slide v-for="partner in PARTNERS" :key = "partner.id">
                 <div class="parnters__item">
-                  <img src="../../assets/partners/11.png" alt="partners">
+                  <CardImage :images = "partner.image" />
                 </div>
               </swiper-slide>
 
-              <swiper-slide>
-                <div class="parnters__item">
-                  <img src="../../assets/partners/12.png" alt="partners">
-                </div>
-              </swiper-slide>
-
-              <swiper-slide>
-                <div class="parnters__item">
-                  <img src="../../assets/partners/13.png" alt="partners">
-                </div>
-              </swiper-slide>
-
-              <swiper-slide>
-                <div class="parnters__item">
-                  <img src="../../assets/partners/14.png" alt="partners">
-                </div>
-              </swiper-slide>
-
-              <swiper-slide>
-                <div class="parnters__item">
-                  <img src="../../assets/partners/12.png" alt="partners">
-                </div>
-              </swiper-slide>
-
-              <swiper-slide>
-                <div class="parnters__item">
-                  <img src="../../assets/partners/11.png" alt="partners">
-                </div>
-              </swiper-slide>
 
               <div class="swiper-pagination"></div>
 
-              <!-- <div class="swiper-navigation-container">
-                <div class="swiper-button-next" @click="nextSlide"></div>
-                <div class="swiper-button-prev" @click="prevSlide"></div>
-              </div> -->
-
             </swiper>
-
           </div>
-
-
         </div>
       </div>
     </div>
@@ -72,7 +35,8 @@
   import { SwiperSlide } from "swiper/vue";
   import SwiperCore, { Pagination, Navigation } from "swiper";
   import "swiper/swiper.min.css";
-  import { mapGetters } from 'vuex';
+  import { mapGetters, mapActions } from 'vuex';
+  import CardImage from '@/components/UI/card-image.vue';
   SwiperCore.use([Navigation, Pagination]);
 
   export default {
@@ -86,11 +50,12 @@
   
     components:
     {
-      Swiper, SwiperSlide,
+      Swiper, SwiperSlide, CardImage
     },
 
     computed: {
       ...mapGetters("header", ["DEVICE_VIEW_TYPE"]),
+      ...mapGetters("main", ["PARTNERS"]),
     },
 
     watch: {
@@ -99,16 +64,22 @@
       },  
     },
 
-    mounted(){
+    async mounted(){
+      await this.GET_PARTNERS();
       this.setQuantity();
     },
 
     methods:{
-      setQuantity(){
-        if (this.DEVICE_VIEW_TYPE===1) this.quantity = 5
-        if (this.DEVICE_VIEW_TYPE===2) this.quantity = 4
-        if (this.DEVICE_VIEW_TYPE===3) this.quantity = 3
+      ...mapActions('main', ["GET_PARTNERS"]),
+
+      setQuantity() {
+        let quantity = 0;
+        if (this.DEVICE_VIEW_TYPE===1) quantity = 5
+        if (this.DEVICE_VIEW_TYPE===2) quantity = 4
+        if (this.DEVICE_VIEW_TYPE===3) quantity = 3
+        this.quantity = Math.min(this.PARTNERS.length, quantity);
       }
+
     },
 }
 </script>

@@ -25,6 +25,7 @@ export default {
     isPopUpOpen: false,
     popUpAction: '',
     popUpMessage: null,
+    requestCallType: 'U',
   },
 
   getters: {
@@ -90,6 +91,9 @@ export default {
     POPUP_MESSAGE(state) {
       return state.popUpMessage;
     },
+    REQUEST_CALL_TYPE(state) {
+      return state.requestCallType;
+    }
   },
 
   mutations: {
@@ -180,6 +184,9 @@ export default {
       state.popUpMessage = {...msg};
     },
 
+    SET_REQUEST_CALL_TYPE(state, type) {
+      state.requestCallType = type;
+    }
   },
 
   actions: {
@@ -245,5 +252,42 @@ export default {
       }
       commit("breadcrumb/RESET_ALL_BREADCRUMBS", breadCrumbs, {root: true});
     },
+
+    async SEND_REQUEST_CALL({ commit }, data){
+      try {
+        await axios.post(process.env.VUE_APP_API_URL + 'service_entities/request_calls', data);
+        commit("SET_POPUP_ACTION", 'ShowCompleteMsg');
+        const msg ={};
+        msg.main = 'Наш менеджер свяжется с вами в ближайшее время.';
+        msg.bolt = 'Время работы:';
+        msg.sub = ' Пн-Пт - 9:00 - 17:00'
+        commit("SET_POPUP_MESSAGE", msg);
+      } catch (e) {
+        console.log(e);
+        commit("notification/ADD_MESSAGE", {name: "Не возможно обновить каталог товаров", icon: "error", id: '1'}, {root: true})
+        commit("SET_POPUP_MESSAGE", {});
+        commit("SET_IS_POPUP_OPEN", false);
+        commit("SET_POPUP_ACTION", '');
+      }
+    },
+
+    async SEND_REQUEST_FEEDBACK({ commit }, data){
+      try {
+        await axios.post(process.env.VUE_APP_API_URL + 'service_entities/feedbacks', data);
+        commit("SET_POPUP_ACTION", 'ShowCompleteMsg');
+        const msg ={};
+        msg.main = 'Наш менеджер свяжется с вами в ближайшее время.';
+        msg.bolt = 'Время работы:';
+        msg.sub = ' Пн-Пт - 9:00 - 17:00'
+        commit("SET_POPUP_MESSAGE", msg);
+      } catch (e) {
+        console.log(e);
+        commit("notification/ADD_MESSAGE", {name: "Не возможно обновить каталог товаров", icon: "error", id: '1'}, {root: true})
+        commit("SET_POPUP_MESSAGE", {});
+        commit("SET_IS_POPUP_OPEN", false);
+        commit("SET_POPUP_ACTION", '');
+      }
+    },
+    
   }
 };

@@ -8,6 +8,7 @@ import order from './order.js';
 import query from './query.js';
 import catalog from './catalog';
 import favorite from './favorite';
+import main from './main';
 
 export default createStore({
 
@@ -21,5 +22,6 @@ export default createStore({
     query         : query,
     catalog       : catalog,
     favorite      : favorite,
+    main          : main,
   }
 })

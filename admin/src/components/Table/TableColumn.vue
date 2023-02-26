@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { PropType } from 'vue'
 import { ITableHeadItem } from '../../types'
+import Img from '@/components/UI/Img.vue'
 
 const props = defineProps({
   image: {
@@ -24,7 +25,9 @@ const props = defineProps({
   <div v-if="columnTitle?.db" class="table-column">
     <span class="table-column__title" v-if="columnTitle?.db">{{columnTitle.db}}: </span>
     <slot v-if="!image"></slot>
-    <img v-else class="table-column-image" :src="srcImage" alt="">
+    <div v-else class="table-column-image">
+      <Img :image="srcImage" />
+    </div>
   </div>
 </template>
 
