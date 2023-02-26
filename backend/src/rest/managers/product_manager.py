@@ -10,7 +10,7 @@ from starlette.datastructures import QueryParams
 
 from src.core.enums import ProductOrderFilterEnum, ProductTypeFilterEnum
 from src.core.utils import calculate_price_with_discount
-from src.managers.base_manager import CRUDManager
+from src.rest.managers.base_manager import CRUDManager
 from src.models import Product, Category
 from src.models.product_models import ProductStatus
 from src.rest.schemas.product_schema import ProductUpdateSchema
@@ -28,12 +28,12 @@ class ProductManager(CRUDManager):
     @classmethod
     async def get_filter_expressions(cls, filter_fields: QueryParams, session: AsyncSession) -> list[ColumnOperators]:
         """Convert filter values to SQLALCHEMY filter expressions."""
-        from src.managers.category_manager import CategoryManager
+        from src.rest.managers.category_manager import CategoryManager
 
         filter_expressions = []
 
         price_gte = filter_fields.get('price_gte')
-        if price_gte:
+        if price_gte and price_gte != '0':
             filter_expressions.append(Product.price >= Decimal(price_gte))
         else:
             filter_expressions.append(Product.price > Decimal(0))

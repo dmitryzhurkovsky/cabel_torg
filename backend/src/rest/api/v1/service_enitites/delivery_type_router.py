@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
-from src.managers.services_managers import DeliveryTypeManager
+from src.rest.managers.services_managers import DeliveryTypeManager
 from src.rest.schemas.service_entities.delivery_type_schema import (
     DeliveryTypeSchema,
     DeliveryTypeInputSchema
@@ -52,6 +52,10 @@ async def delete_delivery_type(
         delivery_type_id: int,
         session: AsyncSession = Depends(get_session)
 ):
+    await DeliveryTypeManager.retrieve(
+        session=session,
+        id=delivery_type_id
+    )
     return await DeliveryTypeManager.delete(
         session=session,
         id=delivery_type_id

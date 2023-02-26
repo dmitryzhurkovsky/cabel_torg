@@ -6,13 +6,14 @@ from fastapi.security import OAuth2PasswordRequestForm, SecurityScopes
 from jwt import (
     InvalidTokenError as JWTInvalidTokenError,
     DecodeError,
-    ExpiredSignatureError)
+    ExpiredSignatureError
+)
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core import settings
 from src.core.db.db import get_session
 from src.core.exception.base_exception import InvalidTokenError, AuthenticateError
-from src.managers.user_manager import UserManager
+from src.rest.managers.user_manager import UserManager
 from src.core.redis import redis
 from src.core.utils import is_valid
 from src.models.user_model import User

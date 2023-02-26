@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
 from src.core.enums import CategoryTypeFilterEnum
-from src.managers.category_manager import CategoryManager
+from src.rest.managers.category_manager import CategoryManager
 from src.rest.schemas.category_schema import (
     CategorySchema,
     CategoryUpdateSchema,

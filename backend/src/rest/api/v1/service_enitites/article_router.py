@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
-from src.managers.services_managers import ArticleManager
+from src.rest.managers.services_managers import ArticleManager
 from src.rest.schemas.service_entities.article_schema import ArticleSchema, ArticleInputSchema
 
 article_router = APIRouter(tags=['articles'])
@@ -25,7 +25,7 @@ async def create_article(
 
 
 @article_router.post(
-    '/articles/{article_id}/images/1',
+    '/articles/{article_id}/images',
     response_model=ArticleSchema,
     status_code=status.HTTP_201_CREATED)
 async def upload_image_for_article(

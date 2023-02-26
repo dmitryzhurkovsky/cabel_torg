@@ -10,7 +10,7 @@ import pdfkit
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import engine
-from src.managers.order_manager import OrderManager
+from src.rest.managers.order_manager import OrderManager
 from src.models import Order
 
 root_directory = pathlib.Path(__file__).parent.resolve()

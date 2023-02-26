@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
-from src.managers.watch_list_manager import WatchListManager
+from src.rest.managers.watch_list_manager import WatchListManager
 from src.rest.schemas.watchlist_schema import (
     WatchListSchema,
     WatchListInputSchema,

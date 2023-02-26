@@ -9,5 +9,7 @@ class ArticleInputSchema(BaseModel):
 
 
 class ArticleSchema(ArticleInputSchema, BaseSchema):
+    image: str | None
+
     class Config:
         orm_mode = True
