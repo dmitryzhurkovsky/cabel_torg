@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
@@ -24,6 +24,27 @@ async def create_article(
     )
 
 
+@article_router.post(
+    '/articles/{article_id}/images/1',
+    response_model=ArticleSchema,
+    status_code=status.HTTP_201_CREATED)
+async def upload_image_for_article(
+        article_id: int,
+        file: UploadFile,
+        session: AsyncSession = Depends(get_session),
+) -> ArticleSchema:
+    article = await ArticleManager.retrieve(id=article_id, session=session)
+    file_name = await ArticleManager.upload_file(pk=article_id, input_file=file)
+    await ArticleManager.update(
+        input_data={'image': file_name},
+        pk=article_id,
+        session=session
+    )
+    await session.refresh(article)
+
+    return article
+
+
 @article_router.patch('/articles/{article_id}', response_model=ArticleSchema)
 async def update_info_about_article(
         article_id: int,
@@ -40,7 +61,11 @@ async def delete_article(
         article_id: int,
         session: AsyncSession = Depends(get_session)
 ):
-    return await ArticleManager.delete(
-        session=session,
-        id=article_id
+    article = await ArticleManager.retrieve(id=article_id, session=session)
+    result = await ArticleManager.delete(
+        id=article_id,
+        session=session
     )
+    ArticleManager.delete_file(file_name=article.image)
+
+    return result

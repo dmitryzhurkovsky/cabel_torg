@@ -6,7 +6,7 @@ from src.models.service_entities.partner_model import Partner
 from src.models.service_entities.vender_info_model import Address, VendorInfo
 
 
-class ArticleManager(CRUDManager):
+class ArticleManager(CRUDManager, FileMixin):
     table = Article
 
 
