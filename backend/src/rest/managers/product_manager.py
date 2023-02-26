@@ -33,7 +33,7 @@ class ProductManager(CRUDManager):
         filter_expressions = []
 
         price_gte = filter_fields.get('price_gte')
-        if price_gte:
+        if price_gte and price_gte != '0':
             filter_expressions.append(Product.price >= Decimal(price_gte))
         else:
             filter_expressions.append(Product.price > Decimal(0))
