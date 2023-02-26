@@ -10,7 +10,7 @@ CORS_ALLOWED_HEADERS = os.environ.get('CORS_ALLOWED_HEADERS', '').split(',')
 ORIGINS = os.environ.get('ORIGINS', '').split(',')
 REDIS_URL = os.getenv('REDIS_URL')
 PREVIEW_CONTENT_LENGTH = os.getenv('PREVIEW_CONTENT_LENGTH', 150)
-IMAGES_PATH = os.getenv('IMAGES_PATH', '/usr/share/nginx/images')
+IMAGES_PATH = os.getenv('IMAGES_PATH', '/images')
 
 # Database's settings
 DB_NAME = os.getenv('DATABASE_NAME')
