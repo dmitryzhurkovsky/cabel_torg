@@ -29,7 +29,7 @@
               <div class="desc-product__status icon-done-color _label" v-if = "cartItemData.status === 'A'">В наличии</div>
               <div class="desc-product__status icon-on-the-way _label" v-if = "cartItemData.status === 'W'">В пути на склад</div>
               <div class="" v-if = "cartItemData.status === 'W'">Доставим в течение 14 дней</div>
-              <div class="desc-product__status icon-out-of-stock _label" v-if = "cartItemData.status === 'A'">Нет в наличии</div>
+              <div class="desc-product__status icon-out-of-stock _label" v-if = "cartItemData.status === 'O'">Нет в наличии</div>
             </div>
             <div class="grid__item" tabindex="8">
               <div class="price-product__block">
