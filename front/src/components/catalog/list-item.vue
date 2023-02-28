@@ -144,25 +144,21 @@ export default {
       },
 
       async onOperationWithCartItem(card, type) {
-        // if (this.quantity === 0 && this.quantityLocal === 0) { 
-        //   return
-        // } else {
-          const itemData = {
-            amount: 0,
-            product: {
-              id: card.id,
-              vendor_code: card.vendor_code,
-              name: card.name,
-              price: card.price,
-            },
-          };
-          if (type === 'set') {
-            itemData.amount = Number(this.quantityLocal);
-          }
-          
-          await this.UPDATE_ITEMS_IN_CART({itemData, type});
-          if (this.quantityLocal === 0) this.quantityLocal = 1;
-        // }  
+        const itemData = {
+          amount: 0,
+          product: {
+            id: card.id,
+            vendor_code: card.vendor_code,
+            name: card.name,
+            price: card.price,
+          },
+        };
+        if (type === 'set') {
+          itemData.amount = Number(this.quantityLocal);
+        }
+        
+        await this.UPDATE_ITEMS_IN_CART({itemData, type});
+        if (this.quantityLocal === 0) this.quantityLocal = 1;
       },
 
       async onWishClick(card) {

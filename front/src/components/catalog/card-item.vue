@@ -24,19 +24,18 @@
         <div class="current_price">{{ cardPriceWithDiscount }}
           <span>BYN / {{ card.base_unit.full_name }}</span>
         </div>
-        <div 
-          v-if = "card.status !== 'O'"
+        <div v-if = "quantity !== 0" @click.stop="onOperationWithCartItem(card)"
           :class="[quantity === 0 ? 'item-card__buy flex-center icon-cart' : 'item-card__buy flex-center icon-cart-chosen']"
-          @click.stop="onOperationWithCartItem(card)"
         >
         </div>
-        <div 
-          v-if = "card.status === 'O'"
+        <div v-if = "quantity === 0 && card.status !== 'O'" @click.stop="onOperationWithCartItem(card)"
+          :class="[quantity === 0 ? 'item-card__buy flex-center icon-cart' : 'item-card__buy flex-center icon-cart-chosen']"
+        >
+        </div>
+        <div v-if = "quantity === 0 && card.status === 'O'" @click.stop="onCreatePopUp(true)"
           class="item-card__buy flex-center icon-share"
-          @click.stop="onCreatePopUp(true)"
         >
         </div>
-
       </div>
       <div class="item-card__title" @click.stop="openCardItem(card.id)">
         <div>{{ card.name }}</div>
@@ -126,22 +125,18 @@ export default {
     },
 
     async onOperationWithCartItem(card) {
-      if (card.status === 'A') {
-        const itemData = {
-          amount: 1,
-          product: {
-            id: card.id,
-            vendor_code: card.vendor_code,
-            name: card.name,
-            price: card.price,
-          },
-        }
-        const type = this.quantity === 0 ? 'increase' : 'remove';
-        this.quantity = this.quantity !==0 ? 0 : 1;
-        await this.UPDATE_ITEMS_IN_CART({itemData, type});
-      } else {
-
+      const itemData = {
+        amount: 1,
+        product: {
+          id: card.id,
+          vendor_code: card.vendor_code,
+          name: card.name,
+          price: card.price,
+        },
       }
+      const type = this.quantity === 0 ? 'increase' : 'remove';
+      this.quantity = this.quantity !==0 ? 0 : 1;
+      await this.UPDATE_ITEMS_IN_CART({itemData, type});
     },
 
     async onWishClick(card) {

@@ -12,8 +12,6 @@
             </div>
             <div class="grid__item" tabindex="2">
               <div class="product__add-img add-img">
-                <!--                <img class="add-img__item" src="../assets/catalog/card1.png" alt="">-->
-                <!--                <img class="add-img__item" src="../assets/catalog/card1.png" alt="">-->
               </div>
             </div>
             <div class="grid__item" tabindex="3">
@@ -28,7 +26,10 @@
               <div class="status-row__link icon-share"><span>Поделиться</span></div>
             </div>
             <div class="grid__item" tabindex="7">
-              <div class="desc-product__status icon-done-color _label">В наличии</div>
+              <div class="desc-product__status icon-done-color _label" v-if = "cartItemData.status === 'A'">В наличии</div>
+              <div class="desc-product__status icon-on-the-way _label" v-if = "cartItemData.status === 'W'">В пути на склад</div>
+              <div class="" v-if = "cartItemData.status === 'W'">Доставим в течение 14 дней</div>
+              <div class="desc-product__status icon-out-of-stock _label" v-if = "cartItemData.status === 'A'">Нет в наличии</div>
             </div>
             <div class="grid__item" tabindex="8">
               <div class="price-product__block">
@@ -67,15 +68,16 @@
               </div>
             </div>
             <div class="grid__item" tabindex="11">
-              <div v-if="quantity !== 0" class="btn black" @click.stop="onOperationWithCartItem(cartItemData, 'remove')">В корзине</div>
-              <div v-if="quantity === 0" class="btn empty_black" @click.stop="onOperationWithCartItem(cartItemData, 'increase')">В корзину</div>
+              <div v-if="quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(cartItemData, 'set')">В корзине</div>
+              <div v-if="quantity === 0 && cartItemData.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(cartItemData, 'set')">В корзину</div>
+              <div v-if="quantity === 0 && cartItemData.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true)">Узнать о поступлении</div>
             </div>
             <div class="grid__item" tabindex="12">
               <div class="desc-product__count">
                 <span class="_label">Количество</span>
-                <span class="icon-minus" @click.stop="onOperationWithCartItem(cartItemData, 'decrease')"></span>
-                <input class="desc-product__input" type="text" v-model="quantity" @input="onOperationWithCartItem(cartItemData, 'set')" @click.stop="">
-                <span class="icon-plus" @click.stop="onOperationWithCartItem(cartItemData, 'increase')"></span>
+                <span class="icon-minus" @click.stop="minusQuantityLocal"></span>
+                <input class="desc-product__input"  type="number" v-model="quantityLocal" @click.stop="" @input="checkQuantityLocal">
+                <span class="icon-plus" @click.stop="plusQuantityLocal"></span>
               </div>
             </div>
             <div class="grid__item" tabindex="13">
@@ -107,6 +109,7 @@
         cartItemData: null,
         isWish: false,
         quantity: 0,
+        quantityLocal: 1,
       }
     },
 
@@ -120,8 +123,7 @@
       ...mapGetters("header", ["ALL_CATEGORIES"]),
 
       ChangeParameters(){
-        return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES) + String(this.isWish) + 
-              this.cartItemData ? JSON.stringify(this.cartItemData) : String(this.cartItemData);
+        return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES);
       },
     },
 
@@ -139,14 +141,28 @@
       ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
       ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
       ...mapMutations("query", ["SET_SEARCH_STRING"]),
+      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
+
+      checkQuantityLocal() {
+        if (this.quantityLocal < 1) {
+          this.quantityLocal = 1;
+        };
+        if (this.quantityLocal > 99) {
+          this.quantityLocal = 99;
+        }
+      },
+
+      minusQuantityLocal() {
+        this.quantityLocal = this.quantityLocal > 1 ? this.quantityLocal - 1 : 1;
+      },
+
+      plusQuantityLocal() {
+        this.quantityLocal = this.quantityLocal < 99 ? this.quantityLocal + 1 : 99;
+      },
 
       async onOperationWithCartItem(card, type) {
-        if (this.quantity == 0 && type === 'remove') {
-          return
-        } else if (this.quantity < 0) return
-
         const itemData = {
-          amount: 1,
+          amount: 0,
           product: {
             id: card.id,
             vendor_code: card.vendor_code,
@@ -155,13 +171,16 @@
           },
         }
         if (type === 'set') {
-          itemData.amount = Number(this.quantity);
+          itemData.amount = Number(this.quantityLocal);
         }
 
-        // const type = this.quantity === 0 ? 'increase' : 'remove';
-        // this.quantity = this.quantity !==0 ? 0 : 1;
         await this.UPDATE_ITEMS_IN_CART({itemData, type});
-        this.countQuantity();
+        if (this.quantityLocal === 0) this.quantityLocal = 1;
+      },
+
+      onCreatePopUp(status) {
+        this.SET_IS_POPUP_OPEN(status);
+        this.SET_POPUP_ACTION('RequestCall');
       },
 
       async onWishClick() {
@@ -184,6 +203,7 @@
         } else {
           this.quantity = 0;
         }
+        this.quantityLocal = this.quantity ? this.quantity : this.quantityLocal;
       },
 
       checkIsWish() {
@@ -198,6 +218,8 @@
     },
 
     async mounted(){
+        this.countQuantity();
+        this.checkIsWish();
         this.SET_SEARCH_STRING('');
         this.CHANGE_BREADCRUMB(0);
         try {
