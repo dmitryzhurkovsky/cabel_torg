@@ -178,6 +178,11 @@
           class: ""
         });
       }
+      this.SET_ALL_CURRENT_CATEGORIES({
+        mainCategory: this.TOP_CATEGORIES_ITEM_ACTIVE,
+        middleCategory: this.SUB_CATEGORIES_ITEM_ACTIVE,
+        lastCategory: this.LAST_CATEGORIES_ITEM_ACTIVE,
+      });
     }    
   }
 </script>
