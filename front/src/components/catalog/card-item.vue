@@ -33,8 +33,11 @@
         >
         </div>
         <div v-if = "quantity === 0 && card.status === 'O'" @click.stop="onCreatePopUp(true)"
-          class="item-card__buy flex-center icon-share"
+          class="item-card__buy flex-center icon-ring"
         >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C13.105 22 14 21.105 14 20H10C10 21.105 10.895 22 12 22ZM18 16.5V11C18 7.925 16.365 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.635 5.36 6 7.925 6 11V16.5L4 18V18.5H20V18L18 16.5ZM16.5 17H7.5V11C7.5 8.515 9.515 6 12 6C14.485 6 16.5 8.515 16.5 11V17Z" fill="#423E48"/>
+          </svg>
         </div>
       </div>
       <div class="item-card__title" @click.stop="openCardItem(card.id)">
@@ -202,6 +205,9 @@ export default {
     width: 100%;
     cursor: pointer;
     text-align: center;
+    min-height: 162px;
+    display: flex;
+    align-items: center;
 
   }
 
@@ -358,5 +364,17 @@ export default {
 .item-card__img img{
   max-height: 162px;
 }
+.icon-ring{
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    cursor: pointer;
+  &:hover{
 
+    path{
+      fill:#fff;
+    }
+
+  }
+}
 </style>
