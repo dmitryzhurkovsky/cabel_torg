@@ -73,4 +73,7 @@ const submitForm = () => {
   flex-direction: column;
   align-items: center;
 }
+.content{
+  margin-left: 0;
+}
 </style>

@@ -159,6 +159,7 @@ export default {
 .filter{
 
     &__block{
+      margin-top: 30px;
 
     }
     &__checkbox{
@@ -262,16 +263,13 @@ export default {
  }
 }
 
-
-
-
-
 .sidebar_menu{
   &__title{
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 10px 10px 0;
+    line-height: 1.8;
     div:first-child {
       cursor: pointer;
     }
