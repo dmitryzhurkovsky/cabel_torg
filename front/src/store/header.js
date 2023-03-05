@@ -280,6 +280,7 @@ export default {
         msg.bolt = 'Время работы:';
         msg.sub = ' Пн-Пт - 9:00 - 17:00'
         commit("SET_POPUP_MESSAGE", msg);
+        commit("SET_IS_POPUP_OPEN", true);
       } catch (e) {
         console.log(e);
         commit("notification/ADD_MESSAGE", {name: "Не возможно обновить каталог товаров", icon: "error", id: '1'}, {root: true})

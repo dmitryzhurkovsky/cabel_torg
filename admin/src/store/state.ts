@@ -9,6 +9,13 @@ const state = {
   partners: [] as Array<IDeliveryType>,
   callRequests: [] as Array<IDeliveryType>,
   feedbackRequests: [] as Array<IDeliveryType>,
+  orders: [] as Array<IDeliveryType>,
+  orderTypes: [
+    {id: 'P', name: 'В обработке'},
+    {id: 'S', name: 'Отправлен'},
+    {id: 'c', name: 'Отменен'},
+    {id: 'C', name: 'Выполнен'},
+  ] 
 }
 
 export type State = typeof state

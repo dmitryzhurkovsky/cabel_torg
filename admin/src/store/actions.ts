@@ -86,6 +86,10 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: number
   ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.GET_ORDERS_DATA](
+    { commit }: AugmentedActionContext,
+    payload: null
+  ): Promise<Array<IDeliveryType>>,
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -284,4 +288,15 @@ export const actions: ActionTree<State, State> & Actions = {
       })
     })
   },
+
+  [ActionTypes.GET_ORDERS_DATA]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.get(import.meta.env.VITE_APP_API_URL + "orders").
+      then((response) => {
+        commit(MutationTypes.SET_ORDERS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
 }

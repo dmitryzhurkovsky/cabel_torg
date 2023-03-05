@@ -1,7 +1,7 @@
 import { type } from "os"
 
 interface IDeliveryType {
-  [key: string]: string | number
+  [key: string]: any
 }
 
 type ITableHeadItem = {

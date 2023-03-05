@@ -11,6 +11,9 @@ export type Getters = {
   partnersData(state: State): Array<IDeliveryType>
   callRequests(state: State): Array<IDeliveryType>
   feedbackRequests(state: State): Array<IDeliveryType>
+  orders(state: State): Array<IDeliveryType>
+  orderList(state: State): Array<IDeliveryType>
+  orderTypes(state:State): Array<IDeliveryType>
 }
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -38,5 +41,30 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   feedbackRequests: (state) => {
     return state.feedbackRequests
+  },
+  orders: (state) => {
+    return state.orders
+  },
+  orderTypes: (state) => {
+    return state.orderTypes
+  },
+  orderList: (state) => {
+    const list = [] as Array<IDeliveryType>;
+    
+    state.orders.forEach(item => {
+      const listElement = {} as IDeliveryType
+      listElement.id = 'Заказ # ' + item.id 
+      listElement.idFromDB = item.id 
+      listElement.date = item.created_at.slice(0, 10)
+      listElement.status = item.status
+      listElement.statusName = state.orderTypes.filter(elem => elem.id === item.status)[0].name
+      listElement.total_price = item.total_price
+      const isDelivery_type_name = state.deliveryTypesData.filter(elem => elem.id === item.delivery_type_id)[0]
+      const delivery_type_name = isDelivery_type_name ? isDelivery_type_name.payload : 'Не определено'
+      listElement.delivery_type_name = delivery_type_name
+      listElement.delivery_type_id = item.delivery_type_id
+      list.push(listElement)
+    })
+    return list
   },
 }

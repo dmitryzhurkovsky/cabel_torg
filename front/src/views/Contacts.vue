@@ -132,6 +132,10 @@
           };
           // Тут посылаем на бэк запрос и ждем ответа, по результатам фомируем окно с ответом
           await this.SEND_REQUEST_FEEDBACK(data);
+          this.fullname = '';
+          this.phone_number = '';
+          this.fullnaemailme = '';
+          this.message = '';
         }
         this.isLoading = false;
       }

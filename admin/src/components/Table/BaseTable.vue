@@ -24,6 +24,11 @@
       required: false,
       default: false
     },
+    addButton: {
+      type: Boolean,
+      required: false,
+      default: true
+    },
     editButton: {
       type: Boolean,
       required: false,
@@ -89,7 +94,7 @@
   <div class="table-info info">
     <span class="info-elem">Сортировка по полю: {{sortField}}</span>
     <span class="info-elem">Сортируем по направлению: {{typeSort}}</span>
-    <Button label="Добавить" @click="onAddButtonClick()"></Button>
+    <Button v-if="addButton" label="Добавить" @click="onAddButtonClick()"></Button>
   </div>
 
   <div class="table-wrapper">

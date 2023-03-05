@@ -5,6 +5,7 @@
   import {ref, onMounted, watch} from 'vue'
   import BaseTable from '@/components/Table/BaseTable.vue'
   import { IDeliveryType } from '../types';
+  import Select from '@/components/UI/Select.vue'
 
   const store = useStore()
 
@@ -15,20 +16,29 @@
     {db: 'type', name: 'Тип запроса'}, 
     {db: '', name: ''},
   ]
+
+  const requesrTypes = [
+    {id: 'U', name: 'Запрос обратной связи'},
+    {id: 'GR', name: 'Запрос о поступлении товара'}
+  ]
+
   const tableData = ref([] as Array<IDeliveryType>)
   const tableSizeColumns = '30px 1fr 1fr 20px 40px'
 
-  const idField = ref()
+  const requestType = ref('')
+  const fileredData = ref([] as Array<IDeliveryType>)
 
   const sendDataRequest = async () => {
     await store.dispatch(ActionTypes.GET_CALL_REQUESTS_DATA, null)
   };
 
   watch(() => store.getters.callRequests,
-    (curr, prev) => {
-      tableData.value = [...curr];
+    (curr) => {
+      tableData.value = [...curr]
+      fileredData.value = [...curr]
       store.commit(MutationTypes.SET_IS_LOADING, false)
-  });
+    }
+  )
 
   onMounted(() => {
     store.commit(MutationTypes.SET_IS_LOADING, true)
@@ -40,33 +50,42 @@
     await store.dispatch(ActionTypes.DELETE_CALL_REQUEST, rowData.id as number)
   }
 
+  const onChangeType = (id: string) => {
+    requestType.value = id
+    fileredData.value = tableData.value.filter(item => item.type === id)
+  }
+
 </script>
 
 <template>
   <h2 class="heading-2">Запросы на звонок</h2>
 
+  <div class="parameters-block">
+    <Select
+      v-if="requesrTypes.length"
+      text = 'Выберите тип запроса'
+      id   = ''
+      fieldForSearch = "name"
+      :data = "requesrTypes"
+      @onSelectItem="onChangeType"
+    />
+  </div>
   <base-table
     :head="tableHeads"
     :columnTemplates="tableSizeColumns"
-    :tableData="tableData"
+    :tableData="fileredData"
     :editButton=false
+    :addButton=false
     @deleteRow="onDeleteRow"
   />
 </template>
 
 <style lang="scss" scoped>
 
-  .form{
-    &-container {
-      display: flex;
-      flex-direction: column;
-      align-items: baseline;
-      margin: 15px 0;
-      background-color: var(--background-content);
-    }
-    &-buttons {
-      display: flex;
-      justify-content: space-around;
+  .parameters{
+    &-block{
+      margin: 20px 0;
+      width: 500px;
     }
   }
 </style>

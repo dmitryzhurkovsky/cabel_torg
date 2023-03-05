@@ -22,6 +22,7 @@ export type Mutations<S = State> = {
   [MutationTypes.DELETE_FROM_CALL_REQUESTS](state: S, payload: number): void,
   [MutationTypes.SET_FEEDBACK_REQUESTS](state: S, payload: Array<IDeliveryType>): void,
   [MutationTypes.DELETE_FROM_FEEDBACK_REQUESTS](state: S, payload: number): void,
+  [MutationTypes.SET_ORDERS](state: S, payload: Array<IDeliveryType>): void,
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -80,5 +81,8 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationTypes.DELETE_FROM_FEEDBACK_REQUESTS](state, payload: number) {
     state.feedbackRequests = state.feedbackRequests.filter(item => item.id !== payload)
+  },
+  [MutationTypes.SET_ORDERS](state, payload: Array<IDeliveryType>) {
+    state.orders = payload
   },
 }
