@@ -55,6 +55,7 @@ export default {
 
   computed:{
     ...mapGetters("query", ["SEARCH_STRING", "FINDED_ELEMENTS"]),
+    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
   },
 
   watch: {
@@ -91,11 +92,9 @@ export default {
 
     openFindedElementInCatalg(){
       this.SET_CATALOG_SEARCH_STRING(this.SEARCH_STRING);
-      // this.SET_CATEGORY_ID(null);
       this.SET_SEARCH_STRING('');
-      if (this.$router.path != '/catalog') {
-        this.$router.push('/catalog');
-      }
+      const category = this.LAST_CATEGORIES_ITEM_ACTIVE || this.SUB_CATEGORIES_ITEM_ACTIVE || this.TOP_CATEGORIES_ITEM_ACTIVE + '12';
+      this.$router.push('/catalog/' + category);
     }
 
   },

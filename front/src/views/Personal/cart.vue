@@ -10,7 +10,7 @@
 
             <div v-if = "ORDERS.length === 0" class="cart__list">
               <div class="cart__empty__item">Ваша корзина пуста</div>
-              <a class="_link" @click.prevent = "openPage('/catalog')">
+              <a class="_link" @click.prevent = "openPage('/catalog/' + (LAST_CATEGORIES_ITEM_ACTIVE || SUB_CATEGORIES_ITEM_ACTIVE || TOP_CATEGORIES_ITEM_ACTIVE || '12'))">
                 <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M15.5 3.99935H0.916666M0.916666 3.99935L4.25 0.666016M0.916666 3.99935L4.25 7.33268" stroke="#4275D8"/>
                 </svg>
@@ -250,6 +250,7 @@
     computed: {
       ...mapGetters("order", ["ORDERS", "TOTAL_ORDER_QUANTITY", "TOTAL_ORDER_COST", "IS_APPLICATION_OPEN"]),
       ...mapGetters("auth",["ERRORS", "USER"]),
+      ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
     },
 
     methods: {

@@ -46,10 +46,11 @@ const routes = [
         import("../views/About.vue")
   },
   {
-    path: '/catalog',
+    path: '/catalog/:id',
     name: 'Catalog',
     meta: {name: 'Каталог'}, 
     // props: (route) => ({ query: route.query }),
+    props: true,
     component: () =>
         import("../views/Catalog.vue")
   },
@@ -68,13 +69,6 @@ const routes = [
     component: () =>
         import("../views/Personal/cart.vue")
   },
-
-  // {
-  //   path: '/user-cab-set',
-  //   name: 'user-cab-set',
-  //   component: () =>
-  //       import("../views/Personal/user_cab-set.vue")
-  // },
   {
     path: '/wholesale',
     name: 'Wholesale',
@@ -117,12 +111,6 @@ const routes = [
     component: () =>
         import("../views/Card_product_grid.vue")
   },
-  // {
-  //   path: '/card_product',
-  //   name: 'Card_product',
-  //   component: () =>
-  //       import("../views/Card_product.vue")
-  // },
   {
     path: '/contacts',
     meta: {name: 'Контактная информация'},

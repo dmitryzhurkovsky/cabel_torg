@@ -135,7 +135,6 @@ export default {
   },
 
   methods:{
-    // ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY", "UPDATE_IS_CATALOG_OPEN"]),
     ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
     ...mapMutations("query", ["SET_CATEGORY_ID"]),
     ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
@@ -152,11 +151,6 @@ export default {
         lastCategory: null,
       });
       this.SET_CATEGORY_ID(category.id);
-      // if (category.id === this.TOP_CATEGORIES_ITEM_ACTIVE) {
-      //   this.SET_CURRENT_TOP_CATEGORY(null);
-      // } else {
-      //   this.SET_CURRENT_TOP_CATEGORY(category.id);
-      // }
       this.openCatalog();
     },
 
@@ -167,11 +161,6 @@ export default {
           lastCategory: null,
       });
       this.SET_CATEGORY_ID(middleCategory.id);
-      // if (category.id === this.SUB_CATEGORIES_ITEM_ACTIVE) {
-      //   this.SET_CURRENT_SUB_CATEGORY(null);
-      // } else {
-      //   this.SET_CURRENT_SUB_CATEGORY(category.id);
-      // }
       this.openCatalog();
     },
 
@@ -182,19 +171,13 @@ export default {
           lastCategory: lastCategory.id,
       });
       this.SET_CATEGORY_ID(lastCategory.id);
-      // if (category.id === this.LAST_CATEGORIES_ITEM_ACTIVE) {
-      //   this.SET_CURRENT_LAST_CATEGORY(null);
-      // } else {
-      //   this.SET_CURRENT_LAST_CATEGORY(category.id);
-      // }
       this.openCatalog();
     },
 
     openCatalog() {
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      if (this.$router.path != '/catalog') {
-          this.$router.push('/catalog');
-      }
+      const category = this.LAST_CATEGORIES_ITEM_ACTIVE || this.SUB_CATEGORIES_ITEM_ACTIVE || this.TOP_CATEGORIES_ITEM_ACTIVE + '12';
+      this.$router.push('/catalog/' + category);
     },
 
     openPage(page) {

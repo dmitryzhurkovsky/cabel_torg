@@ -2,7 +2,7 @@ import axios from "axios";
 
 const mainBreadCrumb = {
   name: 'Каталог',
-  path: '/catalog',
+  path: '/catalog/12',
   type: 'local',
   class: '',
   category: 1,
@@ -210,7 +210,7 @@ export default {
         const currCategory = getters.ALL_CATEGORIES.filter(item => item.id === mainCategory)[0];
         const currBreadCrumb  = {
           name: currCategory.name,
-          path: '/catalog',
+          path: '/catalog/' + currCategory.id,
           type: 'local',
           class: '',
           category: currCategory.id,
@@ -225,7 +225,7 @@ export default {
         const currCategory = getters.ALL_CATEGORIES.filter(item => item.id === middleCategory)[0];
         const currBreadCrumb  = {
           name: currCategory.name,
-          path: '/catalog',
+          path: '/catalog/' + currCategory.id,
           type: 'local',
           class: '',
           category: currCategory.id,
@@ -240,7 +240,7 @@ export default {
         const currCategory = getters.ALL_CATEGORIES.filter(item => item.id === lastCategory)[0]
         const currBreadCrumb  = {
           name: currCategory.name,
-          path: '/catalog',
+          path: '/catalog/' + currCategory.id,
           type: 'local',
           class: '',
           category: currCategory.id,

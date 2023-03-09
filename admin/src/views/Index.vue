@@ -84,7 +84,7 @@
     :columnTemplates="tableSizeColumns"
     :tableData="fileredData"
     :addButton=false
-    @deleteRow="onDeletOrder"
+    :deleteButton="false"
     @editRow="onEditOrder"
   />
 </template>

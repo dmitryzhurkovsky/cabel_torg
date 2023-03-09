@@ -70,9 +70,6 @@ export default {
           lastCategory: null,
       });
       this.SET_CATEGORY_ID(id);
-      // if (this.$router.path != '/catalog') {
-      //   this.$router.push('/catalog');
-      // }
     },
 
     subCategoryClick(id){
@@ -83,9 +80,7 @@ export default {
       });
       this.SET_CATEGORY_ID(id);
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      if (this.$router.path != '/catalog') {
-          this.$router.push('/catalog');
-      }
+      this.$router.push('/catalog/' + id);
     },
 
     subItemCategoryClick(id){
@@ -95,12 +90,10 @@ export default {
             middleCategory: this.ALL_CATEGORIES.filter(item => item.id === id)[0].parent_category_id,
             lastCategory: id,
       });
-      // this.UPDATE_LAST_CATEGORY(id);
+      this.UPDATE_LAST_CATEGORY(id);
       this.SET_CATEGORY_ID(id);
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      if (this.$router.path != '/catalog') {
-          this.$router.push('/catalog');
-      }
+      this.$router.push('/catalog/' + id);
     },
   }
 }

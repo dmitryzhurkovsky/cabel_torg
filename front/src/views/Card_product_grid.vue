@@ -232,7 +232,7 @@
 
         const mainBreadCrumb = {
           name: 'Каталог',
-          path: '/catalog',
+          path: '/catalog/12',
           type: 'local',
           class: '',
           category: 1,
@@ -257,7 +257,7 @@
         for (let i = 0; i < chein.length; i++) {
           const currBreadCrumb  = {
             name: chein[chein.length - 1 - i].name,
-            path: '/catalog',
+            path: '/catalog/12',
             type: 'local',
             class: '',
             category: chein[chein.length - 1 - i].id,
