@@ -118,8 +118,13 @@ export default {
         },
 
         openMainCategory(category){
+          this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: category.id,
+            middleCategory: null,
+            lastCategory: null,
+          });
           this.SET_CATEGORY_ID(category.id);
-          this.$router.push('/catalog/' + category);
+          this.$router.push('/catalog/' + category.id);
           // this.SET_ALL_CURRENT_CATEGORIES({
           //   mainCategory: category.id,
           //   middleCategory: null,
@@ -129,6 +134,11 @@ export default {
         },
 
         openMiddleCategory(mainCategory, middleCategory){
+          this.SET_ALL_CURRENT_CATEGORIES({
+              mainCategory: mainCategory.id,
+              middleCategory: middleCategory.id,
+              lastCategory: null,
+          });
           this.SET_CATEGORY_ID(middleCategory.id);
           this.$router.push('/catalog/' + middleCategory.id);
           // this.SET_ALL_CURRENT_CATEGORIES({
@@ -140,6 +150,11 @@ export default {
         },
 
         openLastCategory(mainCategory, middleCategory, lastCategory){
+          this.SET_ALL_CURRENT_CATEGORIES({
+              mainCategory: mainCategory.id,
+              middleCategory: middleCategory.id,
+              lastCategory: lastCategory.id,
+          });
           this.SET_CATEGORY_ID(lastCategory.id);
           this.$router.push('/catalog/' + lastCategory.id);
           // this.SET_ALL_CURRENT_CATEGORIES({

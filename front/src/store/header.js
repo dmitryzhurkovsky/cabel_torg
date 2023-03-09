@@ -204,7 +204,7 @@ export default {
     SET_ALL_CURRENT_CATEGORIES({ commit, getters }, categoryState){
       const { mainCategory, middleCategory, lastCategory } = categoryState;
       // console.log(categoryState);
-      const breadCrumbs = [ mainBreadCrumb ];
+      const breadCrumbs = [  ];
       if (mainCategory) {
         commit("SET_CURRENT_TOP_CATEGORY", mainCategory);
         const currCategory = getters.ALL_CATEGORIES.filter(item => item.id === mainCategory)[0];
