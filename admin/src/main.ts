@@ -3,13 +3,13 @@ import App from '@/App.vue';
 import { router } from './router';
 import { store } from './store';
 import axios from 'axios';
-import { IconDefinition, library } from '@fortawesome/fontawesome-svg-core'
+import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faHeart, faHand, faAddressBook, faTrashCan, faPenToSquare, faFile, faSquareCaretDown, faSquareCaretUp } from '@fortawesome/free-regular-svg-icons'
-library.add([faHeart, faHand, faAddressBook, faTrashCan, faPenToSquare, faFile, faSquareCaretDown, faSquareCaretUp])
+library.add([faHeart, faHand, faAddressBook, faTrashCan, faPenToSquare, faFile, faSquareCaretDown, faSquareCaretUp] as any)
 
 axios.interceptors.request.use(
-  (config) => {
+  (config: any) => {
     if (localStorage.getItem("authToken")) {
       config.headers = {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,

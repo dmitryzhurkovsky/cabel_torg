@@ -1,9 +1,11 @@
 <script setup lang='ts'>
-import { Ref } from 'vue';
+import { IDeliveryType } from '../../types';
+
+// import { Ref } from 'vue';
 const emit = defineEmits(['update:value']);
 const props = defineProps({
   error: {
-    type: Array,
+    type: Array<IDeliveryType>,
     required: false
   },
   value: {
