@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, status, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
+from src.rest.managers.product_manager import ProductManager
 from src.rest.managers.services_managers import RequestCallManager
 from src.models.service_entities.request_call_model import RequestCallType
 from src.rest.schemas.service_entities.request_call_schema import (
@@ -31,6 +32,9 @@ async def create_request_call(
         request_call_info: RequestCallInputSchema,
         session: AsyncSession = Depends(get_session),
 ) -> RequestCallSchema:
+    if product_id := request_call_info.product_id:
+        await ProductManager.retrieve(id=product_id)
+
     return await RequestCallManager.create(
         session=session,
         input_data=request_call_info
