@@ -31,6 +31,7 @@ services:
     restart: unless-stopped
     ports:
       - '80:80'
+      - '82:82' # for admin panel
       - '81:81'  # for images
       - '443:443'  # for https
     volumes:
