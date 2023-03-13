@@ -15,7 +15,8 @@ const state = {
     {id: 'S', name: 'Отправлен'},
     {id: 'c', name: 'Отменен'},
     {id: 'C', name: 'Выполнен'},
-  ] 
+  ],
+  isPopUpOpen: false, 
 }
 
 export type State = typeof state

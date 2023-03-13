@@ -14,6 +14,7 @@ export type Getters = {
   orders(state: State): Array<IDeliveryType>
   orderList(state: State): Array<IDeliveryType>
   orderTypes(state:State): Array<IDeliveryType>
+  isPopUpOpen(state: State): Boolean
 }
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -27,7 +28,6 @@ export const getters: GetterTree<State, State> & Getters = {
     return state.deliveryTypesData
   },
   isLogin: (state) => {
-    console.log('Getter', Boolean(Object.keys(state.user).length));
     return Boolean(Object.keys(state.user).length)
   },
   articlesData: (state) => {
@@ -67,4 +67,7 @@ export const getters: GetterTree<State, State> & Getters = {
     })
     return list
   },
+  isPopUpOpen: (state) => {
+    return state.isPopUpOpen
+  }
 }

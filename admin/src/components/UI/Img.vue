@@ -4,6 +4,7 @@
 </template>
 
 <script setup lang="ts">
+  import { onMounted } from "vue";
 
   const props = defineProps({
     image: {
@@ -16,15 +17,17 @@
   const getImagePath = (path: string) => {
     let imgPath = '';
     if (path) {
-      imgPath = import.meta.env.VITE_APP_IMAGES + path;
+      const allPath = path.split(',');
+      imgPath = import.meta.env.VITE_APP_IMAGES + allPath[0];
     }
     return imgPath;
   }
+
 </script>
 
 <style lang="scss" scoped>
-img{
-max-width: 100%;
-}
+  img{
+    max-width: 100%;
+  }
 
 </style>

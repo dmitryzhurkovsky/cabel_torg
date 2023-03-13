@@ -90,6 +90,10 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: null
   ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.UPDATE_ORDER_STATUS](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -299,4 +303,44 @@ export const actions: ActionTree<State, State> & Actions = {
     })
   },
 
+  [ActionTypes.UPDATE_ORDER_STATUS]({ commit, getters }, payload) {
+    return new Promise((resolve) => {
+      const orderForUpdate = getters.orders.filter((item: IDeliveryType) => item.id === payload.orderId)[0]
+      const data = {} as IDeliveryType
+      if (orderForUpdate.promo_code) data.promo_code = orderForUpdate.promo_code
+      if (orderForUpdate.company_name) data.company_name = orderForUpdate.company_name
+      if (orderForUpdate.unp) data.unp = orderForUpdate.unp
+      if (orderForUpdate.legal_address) data.legal_address = orderForUpdate.legal_address
+      if (orderForUpdate.IBAN) data.IBAN = orderForUpdate.IBAN
+      if (orderForUpdate.BIC) data.BIC = orderForUpdate.BIC
+      if (orderForUpdate.serving_bank) data.serving_bank = orderForUpdate.serving_bank
+      if (orderForUpdate.full_name) data.full_name = orderForUpdate.full_name
+      if (orderForUpdate.phone_number) data.phone_number = orderForUpdate.phone_number
+      if (orderForUpdate.email) data.email = orderForUpdate.email
+      if (orderForUpdate.city) data.city = orderForUpdate.city
+      if (orderForUpdate.street) data.street = orderForUpdate.street
+      if (orderForUpdate.house) data.house = orderForUpdate.house
+      if (orderForUpdate.flat) data.flat = orderForUpdate.flat
+      if (orderForUpdate.delivery_type_id) data.delivery_type_id = orderForUpdate.delivery_type_id
+      const products = [] as Array<IDeliveryType>
+      orderForUpdate.products.forEach((item: IDeliveryType) => {
+        const product = {
+          id: item.product.id,
+          amount: item.amount
+        }
+        products.push(product)
+      })
+      data.products = products
+      data.status = payload.newStatus
+      console.log(data);
+      
+      axios.patch(import.meta.env.VITE_APP_API_URL + "orders/" + payload.orderId, data).
+      then((response) => {
+        orderForUpdate.status = payload.newStatus
+        commit(MutationTypes.SET_NEW_ORDER_STATUS, orderForUpdate);
+        // resolve(orderForUpdate);
+        resolve(response.data);
+      })
+    })
+  },
 }
