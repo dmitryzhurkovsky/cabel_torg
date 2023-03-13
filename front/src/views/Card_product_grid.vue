@@ -23,7 +23,7 @@
             <div class="grid__item" tabindex="5">
             </div>
             <div class="grid__item" tabindex="6">
-              <div class="status-row__link icon-share"><span>Поделиться</span></div>
+<!--              <div class="status-row__link icon-share"><span>Поделиться</span></div>-->
             </div>
             <div class="grid__item" tabindex="7">
               <div class="desc-product__status icon-done-color _label" v-if = "cartItemData.status === 'A'">В наличии</div>
@@ -89,6 +89,18 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="product__attention flex-center _container">
+    <div class="icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 7H11V5H9V7ZM9 15H11V9H9V15ZM9.99 20C4.47 20 0 15.52 0 10C0 4.48 4.47 0 9.99 0C15.52 0 20 4.48 20 10C20 15.52 15.52 20 9.99 20ZM10 2C5.58 2 2 5.58 2 10C2 14.42 5.58 18 10 18C14.42 18 18 14.42 18 10C18 5.58 14.42 2 10 2Z" fill="#423E48"/>
+    </svg>
+    </div>
+    <div class="attention__text">
+      <p>Уважаемые покупатели.</p>
+      <p>Обращаем Ваше внимание, что производитель оставляет за собой право изменять внешний вид, технические характеристики и комплектацию без уведомления.</p>
+    </div>
+
+
   </div>
 </template>
 
@@ -319,7 +331,8 @@
     grid-template-areas:
         "breadcrumb breadcrumb breadcrumb breadcrumb breadcrumb "
         "title title  title title title"
-        "photo photo photo arcticle status"
+        "photo photo photo arcticle arcticle"
+        "photo photo photo status status"
         "photo photo photo add_price add_price"
         "photo photo photo count count"
         "photo photo photo price price"
@@ -569,6 +582,29 @@ margin-top: 15px;
     }
   }
 }
+.product__attention{
+  width: 100%;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 20px;
+  color: #423E48;
+  opacity: 0.4;
+  padding: 20px 0;
+  align-items: flex-start;
+  justify-content: flex-start;
+  .icon{
 
+  }
+  .attention__text{
+    padding-left: 20px;
+    max-width: 60%;
+    @media (max-width: $md3+px) {
+      max-width: 100%;
+    }
+  }
+  p{
+
+  }
+}
 
 </style>

@@ -105,7 +105,7 @@ export default {
   position: absolute;
   top: 50px;
   left: 0;
-  padding: 38px 0 0 0;
+  padding: 38px 0 20px 0;
   width: 100%;
   //height: 420px;
   background: #FFFFFF;
@@ -178,7 +178,6 @@ export default {
     align-items: flex-start;
     justify-content: space-between;
     height: 100%;
-    box-shadow: 0px 4px 20px rgb(66 62 72 / 5%);
   }
 
 
