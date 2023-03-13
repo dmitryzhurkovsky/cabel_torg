@@ -346,21 +346,30 @@
 
 @media screen and (min-width: $md1+px) {
   .grid {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     grid-template-rows: auto;
+    gap: 5px;
     grid-template-areas:
-      "breadcrumb breadcrumb  breadcrumb breadcrumb share  share"
-      "photo photo photo title title title"
-      "photo photo photo arcticle arcticle arcticle"
-      "photo photo photo status status status"
-      "photo photo photo count count count"
-      "photo photo photo price add_price add_price"
-      "big1 big1 big1 cart_button wishlist wishlist"
-      "big1 big1 big1 link link link";
+      "breadcrumb breadcrumb  breadcrumb breadcrumb breadcrumb share  share"
+      "photo photo photo title title title title"
+      "photo photo photo arcticle arcticle arcticle arcticle"
+      "photo photo photo status status status status"
+      "photo photo photo count count count count"
+      "photo photo photo price price add_price add_price"
+      "big1 big1 big1 cart_button cart_button wishlist wishlist"
+      "big1 big1 big1 link link link link";
   }
 }
 
-.grid__item:nth-child(1)  { grid-area: photo; }
+.grid__item:nth-child(1)  {
+  grid-area: photo;
+  grid-row: 1/9;
+  align-self: center;
+  justify-self: center;
+  @media (max-width: $md2+px){
+    grid-row: 1;
+  }
+}
 .grid__item:nth-child(2)  { grid-area: big1; }
 .grid__item:nth-child(3)  { grid-area: title; }
 .grid__item:nth-child(4)  { grid-area: arcticle; }
@@ -376,7 +385,13 @@
 ;
 }
 .grid__item:nth-child(10) { grid-area: add_price; }
-.grid__item:nth-child(11) { grid-area: cart_button; }
+.grid__item:nth-child(11) {
+  grid-area: cart_button;
+  align-self: center;
+  @media (max-width: $md2+px){
+
+  }
+}
 .grid__item:nth-child(12) { grid-area: count; }
 .grid__item:nth-child(13) { grid-area: link; }
 
@@ -483,6 +498,7 @@
   }
 
 }
+
 .desc-product{
   font-size: 14px;
 
@@ -493,7 +509,12 @@
     color: #423E48;
   }
 
-  &__arcticle{
+  &__article{
+
+
+     @media (max-width: $md2+px) {
+       margin-bottom: 20px;
+    }
 
   }
   &__status{
@@ -503,6 +524,9 @@
     }
   }
   &__count{
+    @media (max-width: $md2+px) {
+      margin: 20px 0;
+    }
       span{
         cursor: pointer;
         &:nth-child(1){
@@ -549,6 +573,9 @@
   font-weight: 500;
   font-size: 24px;
   line-height: 36px;
+  @media (max-width: $md3 + px){
+
+  }
   span{
     margin-right: 10px;
     &:nth-child(2){
@@ -589,7 +616,9 @@ margin-top: 15px;
   line-height: 20px;
   color: #423E48;
   opacity: 0.4;
-  padding: 20px 0;
+  padding-top: 20px;
+  padding-bottom: 20px;
+
   align-items: flex-start;
   justify-content: flex-start;
   .icon{
