@@ -296,6 +296,7 @@
     box-sizing: border-box;
     border-radius: 8px;
     width: 100%;
+    max-height: 400px;
     padding: 14px 16px;
     resize: vertical;
     position: relative;

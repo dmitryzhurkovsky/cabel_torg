@@ -23,7 +23,7 @@
             <div class="grid__item" tabindex="5">
             </div>
             <div class="grid__item" tabindex="6">
-              <div class="status-row__link icon-share"><span>Поделиться</span></div>
+<!--              <div class="status-row__link icon-share"><span>Поделиться</span></div>-->
             </div>
             <div class="grid__item" tabindex="7">
               <div class="desc-product__status icon-done-color _label" v-if = "cartItemData.status === 'A'">В наличии</div>
@@ -89,6 +89,18 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="product__attention flex-center _container">
+    <div class="icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 7H11V5H9V7ZM9 15H11V9H9V15ZM9.99 20C4.47 20 0 15.52 0 10C0 4.48 4.47 0 9.99 0C15.52 0 20 4.48 20 10C20 15.52 15.52 20 9.99 20ZM10 2C5.58 2 2 5.58 2 10C2 14.42 5.58 18 10 18C14.42 18 18 14.42 18 10C18 5.58 14.42 2 10 2Z" fill="#423E48"/>
+    </svg>
+    </div>
+    <div class="attention__text">
+      <p>Уважаемые покупатели.</p>
+      <p>Обращаем Ваше внимание, что производитель оставляет за собой право изменять внешний вид, технические характеристики и комплектацию без уведомления.</p>
+    </div>
+
+
   </div>
 </template>
 
@@ -319,7 +331,8 @@
     grid-template-areas:
         "breadcrumb breadcrumb breadcrumb breadcrumb breadcrumb "
         "title title  title title title"
-        "photo photo photo arcticle status"
+        "photo photo photo arcticle arcticle"
+        "photo photo photo status status"
         "photo photo photo add_price add_price"
         "photo photo photo count count"
         "photo photo photo price price"
@@ -333,21 +346,30 @@
 
 @media screen and (min-width: $md1+px) {
   .grid {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(7, 1fr);
     grid-template-rows: auto;
+    gap: 5px;
     grid-template-areas:
-      "breadcrumb breadcrumb  breadcrumb breadcrumb share  share"
-      "photo photo photo title title title"
-      "photo photo photo arcticle arcticle arcticle"
-      "photo photo photo status status status"
-      "photo photo photo count count count"
-      "photo photo photo price add_price add_price"
-      "big1 big1 big1 cart_button wishlist wishlist"
-      "big1 big1 big1 link link link";
+      "breadcrumb breadcrumb  breadcrumb breadcrumb breadcrumb share  share"
+      "photo photo photo title title title title"
+      "photo photo photo arcticle arcticle arcticle arcticle"
+      "photo photo photo status status status status"
+      "photo photo photo count count count count"
+      "photo photo photo price price add_price add_price"
+      "big1 big1 big1 cart_button cart_button wishlist wishlist"
+      "big1 big1 big1 link link link link";
   }
 }
 
-.grid__item:nth-child(1)  { grid-area: photo; }
+.grid__item:nth-child(1)  {
+  grid-area: photo;
+  grid-row: 1/9;
+  align-self: center;
+  justify-self: center;
+  @media (max-width: $md2+px){
+    grid-row: 1;
+  }
+}
 .grid__item:nth-child(2)  { grid-area: big1; }
 .grid__item:nth-child(3)  { grid-area: title; }
 .grid__item:nth-child(4)  { grid-area: arcticle; }
@@ -363,7 +385,13 @@
 ;
 }
 .grid__item:nth-child(10) { grid-area: add_price; }
-.grid__item:nth-child(11) { grid-area: cart_button; }
+.grid__item:nth-child(11) {
+  grid-area: cart_button;
+  align-self: center;
+  @media (max-width: $md2+px){
+
+  }
+}
 .grid__item:nth-child(12) { grid-area: count; }
 .grid__item:nth-child(13) { grid-area: link; }
 
@@ -470,6 +498,7 @@
   }
 
 }
+
 .desc-product{
   font-size: 14px;
 
@@ -480,7 +509,12 @@
     color: #423E48;
   }
 
-  &__arcticle{
+  &__article{
+
+
+     @media (max-width: $md2+px) {
+       margin-bottom: 20px;
+    }
 
   }
   &__status{
@@ -490,6 +524,9 @@
     }
   }
   &__count{
+    @media (max-width: $md2+px) {
+      margin: 20px 0;
+    }
       span{
         cursor: pointer;
         &:nth-child(1){
@@ -536,6 +573,9 @@
   font-weight: 500;
   font-size: 24px;
   line-height: 36px;
+  @media (max-width: $md3 + px){
+
+  }
   span{
     margin-right: 10px;
     &:nth-child(2){
@@ -569,6 +609,31 @@ margin-top: 15px;
     }
   }
 }
+.product__attention{
+  width: 100%;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 20px;
+  color: #423E48;
+  opacity: 0.4;
+  padding-top: 20px;
+  padding-bottom: 20px;
 
+  align-items: flex-start;
+  justify-content: flex-start;
+  .icon{
+
+  }
+  .attention__text{
+    padding-left: 20px;
+    max-width: 60%;
+    @media (max-width: $md3+px) {
+      max-width: 100%;
+    }
+  }
+  p{
+
+  }
+}
 
 </style>

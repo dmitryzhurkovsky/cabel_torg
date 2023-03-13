@@ -179,10 +179,7 @@ export default {
 <style scoped lang="scss">
 .filter{
 
-    &__block{
-      margin-top: 30px;
-
-    }
+    &__block{}
     &__checkbox{
 
     &__item{

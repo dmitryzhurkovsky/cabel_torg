@@ -120,6 +120,9 @@
       display: flex;
       flex-direction: column;
       padding: 20px 20px;
+      @media (max-width: $md3+px) {
+        padding: 0 20px 20px 20px;
+      }
     }
     }
 

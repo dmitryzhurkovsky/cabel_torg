@@ -91,6 +91,12 @@
     img{
       max-width: 100%;
     }
+    ._block{
+      &:nth-child(2){
+        padding: 0 20px 20px 20px;
+        background: red;
+      }
+    }
 
   }
   &__title{

@@ -132,6 +132,9 @@ export default {
 
   &__item{
     padding: 0 10px 0 10px;
+    &:nth-child(1){
+      padding: 0 10px 0 0;
+    }
     //position: relative;
   }
   &__left{

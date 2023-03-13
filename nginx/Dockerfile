@@ -17,9 +17,9 @@ RUN npm run build
 # production client frontend
 FROM nginx:stable-alpine as production-stage
 # Copy files for clinet frontend
-COPY --from=build-client-frontend-stage /client_frontend/dist /usr/share/nginx/html
+COPY --from=build-client-frontend-stage /client_frontend/dist /usr/share/nginx/client_app
 # Copy files for admin frontend
-COPY --from=build-admin-frontend-stage /admin_frontend/dist /usr/share/nginx/html/admin
+COPY --from=build-admin-frontend-stage /admin_frontend/dist /usr/share/nginx/admin_app
 # Copy nginx configruations
 COPY /nginx/default.conf /etc/nginx/conf.d/default.conf
 # Create a directory for maintaing images

@@ -115,6 +115,9 @@
 .info-header{
     &__item{
     padding: 0 20px 0 20px;
+      &:last-child{
+        padding: 0 0 0 20px;
+      }
 
     &:nth-child(1){
       width: 170px;
