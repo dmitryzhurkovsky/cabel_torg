@@ -334,7 +334,12 @@ export const actions: ActionTree<State, State> & Actions = {
       data.status = payload.newStatus
       console.log(data);
       
-      axios.patch(import.meta.env.VITE_APP_API_URL + "orders/" + payload.orderId, data).
+      axios.patch(import.meta.env.VITE_APP_API_URL + "orders/" + payload.orderId, {
+        Headers: {
+          "Content-Type": "application/json",
+        },
+        boby: data
+      }).
       then((response) => {
         orderForUpdate.status = payload.newStatus
         commit(MutationTypes.SET_NEW_ORDER_STATUS, orderForUpdate);

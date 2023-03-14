@@ -61,6 +61,12 @@ const router = createRouter({
       name: 'Feedback',
       component: () => import('@/views/FeedbackRequests.vue')
     },
+    {
+      beforeEnter: auth,
+      path: '/discount',
+      name: 'Discount',
+      component: () => import('@/views/Discount.vue')
+    },
   ]
 })
 
