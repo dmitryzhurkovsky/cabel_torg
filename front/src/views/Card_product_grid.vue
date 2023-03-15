@@ -81,7 +81,7 @@
               </div>
             </div>
             <div class="grid__item" tabindex="13">
-              <a class="product__link">Как оформить заказ ></a>
+              <a class="product__link _link" href="/how_to_work">Как оформить заказ ></a>
             </div>
           </div>
 
