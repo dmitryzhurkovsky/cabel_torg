@@ -13,6 +13,7 @@
     {db: 'id', name: 'Id'},
     {db: 'fullname', name: 'Имя'}, 
     {db: 'phone_number', name: 'Телефон'}, 
+    {db: 'product_id', name: 'Товар'},
     {db: 'type', name: 'Тип запроса'}, 
     {db: '', name: ''},
   ]
@@ -23,7 +24,7 @@
   ]
 
   const tableData = ref([] as Array<IDeliveryType>)
-  const tableSizeColumns = '30px 1fr 1fr 20px 40px'
+  const tableSizeColumns = '30px 1fr 1fr 1fr 20px 40px'
 
   const requestType = ref('')
   const fileredData = ref([] as Array<IDeliveryType>)

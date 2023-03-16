@@ -43,7 +43,7 @@
                   ></div>
                 <div v-if = "quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(card, 'set')">В корзине {{ quantity }}</div>
                 <div v-if = "quantity === 0 && card.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(card, 'set')">В корзину</div>
-                <div v-if = "quantity === 0 && card.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true)">Узнать о поступлении</div>
+                <div v-if = "quantity === 0 && card.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, card.id)">Узнать о поступлении</div>
             </div>
         </div>
     </div>
@@ -114,11 +114,12 @@ export default {
     methods: {
       ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
       ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
+      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA"]),
 
-      onCreatePopUp(status) {
+      onCreatePopUp(status, cardID) {
         this.SET_IS_POPUP_OPEN(status);
         this.SET_POPUP_ACTION('RequestCall');
+        this.SET_POPUP_ADDITIONAL_DATA({cardID});
       },
 
       openCardItem(id) {

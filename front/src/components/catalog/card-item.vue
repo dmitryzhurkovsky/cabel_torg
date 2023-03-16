@@ -32,7 +32,7 @@
           :class="[quantity === 0 ? 'item-card__buy flex-center icon-cart' : 'item-card__buy flex-center icon-cart-chosen']"
         >
         </div>
-        <div v-if = "quantity === 0 && card.status === 'O'" @click.stop="onCreatePopUp(true)"
+        <div v-if = "quantity === 0 && card.status === 'O'" @click.stop="onCreatePopUp(true, card.id)"
           class="item-card__buy flex-center icon-ring"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -115,11 +115,12 @@ export default {
   methods: {
     ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
     ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
+    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA"]),
 
-    onCreatePopUp(status) {
+    onCreatePopUp(status, cardID) {
         this.SET_IS_POPUP_OPEN(status);
         this.SET_POPUP_ACTION('RequestCall');
+        this.SET_POPUP_ADDITIONAL_DATA({cardID});
       },
 
     openCardItem(id) {

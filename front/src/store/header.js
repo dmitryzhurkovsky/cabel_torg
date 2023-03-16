@@ -26,6 +26,7 @@ export default {
     popUpAction: '',
     popUpMessage: null,
     requestCallType: 'U',
+    popUpAdditionalData: {},
   },
 
   getters: {
@@ -93,6 +94,9 @@ export default {
     },
     REQUEST_CALL_TYPE(state) {
       return state.requestCallType;
+    },
+    POPUP_ADDITONAL_DATA(state) {
+      return state.popUpAdditionalData;
     }
   },
 
@@ -186,6 +190,10 @@ export default {
 
     SET_REQUEST_CALL_TYPE(state, type) {
       state.requestCallType = type;
+    },
+
+    SET_POPUP_ADDITIONAL_DATA(state, data) {
+      state.popUpAdditionalData = data;
     }
   },
 

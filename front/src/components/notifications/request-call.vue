@@ -44,7 +44,7 @@
 
     computed: {
       ...mapGetters("auth",["ERRORS"]),
-      ...mapGetters("header",["REQUEST_CALL_TYPE"]),
+      ...mapGetters("header",["REQUEST_CALL_TYPE", "POPUP_ADDITONAL_DATA"]),
     },
 
     async beforeUnmount() {
@@ -53,13 +53,14 @@
 
 
     methods: {
-      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_MESSAGE",]),
+      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_MESSAGE", "SET_POPUP_ADDITIONAL_DATA"]),
       ...mapActions("header", ["SEND_REQUEST_CALL",]),
       ...mapMutations("auth", ["SET_ERRORS",]),
 
       cancelRequest(){
         this.SET_IS_POPUP_OPEN(false);
         this.SET_POPUP_ACTION('');
+        this.SET_POPUP_ADDITIONAL_DATA({});
       },
 
       async sendRequest(){
@@ -82,9 +83,11 @@
               fullname: this.name,
               phone_number: this.phone,
               type: this.REQUEST_CALL_TYPE,
+              product_id: Number(this.POPUP_ADDITONAL_DATA.cardID),
           };
           // Тут посылаем на бэк запрос и ждем ответа, по результатам фомируем окно с ответом
           await this.SEND_REQUEST_CALL(data);
+          this.SET_POPUP_ADDITIONAL_DATA({});
         }
         this.isLoading = false;
       }

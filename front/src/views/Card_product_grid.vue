@@ -70,7 +70,7 @@
             <div class="grid__item" tabindex="11">
               <div v-if="quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(cartItemData, 'set')">В корзине</div>
               <div v-if="quantity === 0 && cartItemData.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(cartItemData, 'set')">В корзину</div>
-              <div v-if="quantity === 0 && cartItemData.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true)">Узнать о поступлении</div>
+              <div v-if="quantity === 0 && cartItemData.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, cartItemData.id)">Узнать о поступлении</div>
             </div>
             <div class="grid__item" tabindex="12">
               <div class="desc-product__count">
@@ -153,7 +153,7 @@
       ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
       ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
       ...mapMutations("query", ["SET_SEARCH_STRING"]),
-      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
+      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA"]),
 
       checkQuantityLocal() {
         if (this.quantityLocal < 1) {
@@ -190,9 +190,10 @@
         if (this.quantityLocal === 0) this.quantityLocal = 1;
       },
 
-      onCreatePopUp(status) {
+      onCreatePopUp(status, cardID) {
         this.SET_IS_POPUP_OPEN(status);
         this.SET_POPUP_ACTION('RequestCall');
+        this.SET_POPUP_ADDITIONAL_DATA({cardID});
       },
 
       async onWishClick() {
