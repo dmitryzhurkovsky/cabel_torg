@@ -551,6 +551,12 @@
       line-height: 16px;
       opacity: 0.4;
     }
+    .radio input{
+      width: auto;
+    }
+    label{
+      opacity: 1;
+    }
   }
 }
 
