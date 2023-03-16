@@ -23,7 +23,7 @@
   onMounted( async () => {
     if (localStorage.getItem("authToken")) {
       await store.dispatch(ActionTypes.GET_USER_DATA, null)
-      await store.dispatch(ActionTypes.GET_DELIVERY_TYPE, null)
+      // await store.dispatch(ActionTypes.GET_DELIVERY_TYPE, null)
     }
   })
 

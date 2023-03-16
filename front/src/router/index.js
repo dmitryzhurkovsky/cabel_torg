@@ -126,6 +126,14 @@ const routes = [
         import("../views/News.vue")
   },
   {
+    path: '/new/:id',
+    name: 'New',
+    meta: {name: 'Новость'},
+    props: true,
+    component: () =>
+        import("../views/OneNew.vue")
+  },
+  {
     path: "/:catch(.*)",
     redirect: '/404',
   },

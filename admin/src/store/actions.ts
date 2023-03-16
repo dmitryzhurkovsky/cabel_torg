@@ -94,6 +94,10 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: IDeliveryType
   ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.GET_CATEGORIES_DATA](
+    { commit }: AugmentedActionContext,
+    payload: null
+  ): Promise<Array<IDeliveryType>>,
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -343,9 +347,19 @@ export const actions: ActionTree<State, State> & Actions = {
       then((response) => {
         orderForUpdate.status = payload.newStatus
         commit(MutationTypes.SET_NEW_ORDER_STATUS, orderForUpdate);
-        // resolve(orderForUpdate);
         resolve(response.data);
       })
     })
   },
+
+  [ActionTypes.GET_CATEGORIES_DATA]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.get(import.meta.env.VITE_APP_API_URL + "categories").
+      then((response) => {
+        commit(MutationTypes.SET_CATEGORIES, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+  
 }

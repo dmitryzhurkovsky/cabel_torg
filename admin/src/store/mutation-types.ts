@@ -20,6 +20,7 @@ const enum MutationTypes {
   SET_ORDERS = 'SET_ORDERS',
   SET_ISPOPUPOPEN = 'SET_ISPOPUPOPEN',
   SET_NEW_ORDER_STATUS = 'SET_NEW_ORDER_STATUS',
+  SET_CATEGORIES = 'SET_CATEGORIES',
 }
 
 export { MutationTypes }

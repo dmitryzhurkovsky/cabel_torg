@@ -17,6 +17,8 @@ const state = {
     {id: 'C', name: 'Выполнен'},
   ],
   isPopUpOpen: false, 
+  categories: [] as Array<IDeliveryType>,
+  activeCategory: '' as string,
 }
 
 export type State = typeof state

@@ -25,6 +25,7 @@ export type Mutations<S = State> = {
   [MutationTypes.SET_ORDERS](state: S, payload: Array<IDeliveryType>): void,
   [MutationTypes.SET_ISPOPUPOPEN](state: S, payload: boolean): void,
   [MutationTypes.SET_NEW_ORDER_STATUS](state: S, payload: IDeliveryType): void,
+  [MutationTypes.SET_CATEGORIES](state: S, payload: Array<IDeliveryType>): void,
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -93,5 +94,9 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationTypes.SET_NEW_ORDER_STATUS](state, payload: IDeliveryType) {
     const without = state.orders.filter(order => order.id !== payload.id)
     state.orders = [...without, payload]
-  }
+  },
+  [MutationTypes.SET_CATEGORIES](state, payload: Array<IDeliveryType>) {
+    state.categories = payload
+  },
+  
 }

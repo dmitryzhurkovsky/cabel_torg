@@ -32,6 +32,7 @@ import { log } from 'console'
   const tableSizeColumns = '100px 1fr 1fr 1fr 60px 40px 40px'
 
   const ordersRequest = async () => {
+    await store.dispatch(ActionTypes.GET_DELIVERY_TYPE, null)
     await store.dispatch(ActionTypes.GET_ORDERS_DATA, null)
   };
 
@@ -127,7 +128,7 @@ import { log } from 'console'
             <div class="product__price">
               <div class="_label mb-20">Стоимость (с учетом НДС):</div>
               <div class="old_price">
-                <span>{{ element.product.price }}</span>BYN
+                <span>{{ (element.product.price * element.amount).toFixed(2) }}</span>BYN
                 <span>/{{ element?.product?.base_unit?.full_name }}</span>
               </div>
               <div class="current_price">

@@ -20,6 +20,7 @@ const links = ref([
   { name: "Новости", href: "/articles" },
   { name: "Партнеры", href: "/partners" },
   { name: "Варианты доставки", href: "/delivery_types" },
+  { name: "Скидки", href: "/discount" },
 ]);
 
 </script>

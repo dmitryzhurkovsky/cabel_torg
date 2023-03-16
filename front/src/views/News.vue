@@ -4,52 +4,12 @@
       <div class="news__content _container">
         <div class="news__body">
           <div class="news__block">
-            <a class="news__item">
-              <div class="_block">
-                <img src="../assets/news/1.png" alt="">
-              </div>
-              <div class="_block">
-                <div class="news__date">22.04.2022</div>
-                <div class="news__title">Новый бренд</div>
-                <div class="news__description">Высококлассное оборудование от Cisco уже в каталоге CabelTorg</div>
-
-              </div>
-
-
-            </a>
-            <a class="news__item">
-              <div class="_block">
-                <img src="../assets/news/1.png" alt="">
-              </div>
-              <div class="_block">
-                <div class="news__date">22.04.2022</div>
-                <div class="news__title">Новый бренд</div>
-                <div class="news__description">Высококлассное оборудование от Cisco уже в каталоге CabelTorg</div>
-
-              </div>
-            </a>
-
-
-              <a class="news__item">
-                <div class="_block">
-                  <img src="../assets/news/1.png" alt="">
-                </div>
-                <div class="_block">
-                  <div class="news__date">22.04.2022</div>
-                  <div class="news__title">Новый бренд</div>
-                  <div class="news__description">Высококлассное оборудование от Cisco уже в каталоге CabelTorg</div>
-
-                </div>
-              </a>
-
-
+            <NewsItem
+              v-for = "oneNew in NEWS"
+              :key = "oneNew.id"
+              :data = "oneNew"
+            />
           </div>
-
-
-
-
-
-
         </div>
       </div>
     </div>
@@ -57,11 +17,29 @@
 </template>
 
 <script>
+  import { mapGetters, mapActions } from 'vuex';
+  import NewsItem from '@/components/news/news-item.vue'
 
   export default {
     name: 'News',
 
-    mounted(){
+    components: {
+      NewsItem,
+    },
+
+    computed: {
+      ...mapGetters("main", ["NEWS"]),
+
+      filteredNews() {
+        return this.NEWS.slice(-4);
+      }
+    },
+
+    methods: {
+      ...mapActions("main", ["GET_NEWS"]),
+    },
+
+    async mounted(){
       this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
       this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
         name: this.$router.currentRoute.value.meta.name,
@@ -69,6 +47,7 @@
         type: "global",
         class: ""
       });
+      await this.GET_NEWS();
     }
   }
 </script>
@@ -105,49 +84,6 @@
     }
 
   }
-  &__item{
-    display: flex;
-    align-items: flex-start;
-
-    ._block{
-      flex-basis: 50%;
-    &:nth-child(1){
-      img{
-        width: 100%;
-      }
-    }
-    &:nth-child(2){
-      display: flex;
-      flex-direction: column;
-      padding: 20px 20px;
-      @media (max-width: $md3+px) {
-        padding: 0 20px 20px 20px;
-      }
-    }
-    }
-
-  }
-
-  &__date{
-    font-size: 14px;
-    line-height: 130%;
-    opacity: 0.4;
-  }
-  &__title{
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 24px;
-    letter-spacing: 0.44px;
-    margin: 16px 0;
-  }
-
-  &__description{
-    font-size: 14px;
-    line-height: 130%;
-    opacity: 0.4;
-  }
-
-
 }
 
 
