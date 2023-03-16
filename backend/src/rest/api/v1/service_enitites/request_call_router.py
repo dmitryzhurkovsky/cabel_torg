@@ -33,7 +33,7 @@ async def create_request_call(
         session: AsyncSession = Depends(get_session),
 ) -> RequestCallSchema:
     if product_id := request_call_info.product_id:
-        await ProductManager.retrieve(id=product_id)
+        await ProductManager.retrieve(id=product_id, session=session)
 
     return await RequestCallManager.create(
         session=session,

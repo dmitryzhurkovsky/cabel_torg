@@ -13,7 +13,7 @@ class RetrieveMixin(BaseMixin):
     @classmethod
     async def retrieve(
             cls,
-            session: AsyncSession = Depends(get_session),
+            session: AsyncSession,
             **kwargs: Any
     ) -> TableType | HTTPException:
         """Get object by primary key or by another fields"""
