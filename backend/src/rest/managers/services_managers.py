@@ -1,5 +1,6 @@
 from sqlalchemy import ColumnOperators
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from starlette.datastructures import QueryParams
 
 from src.core.db.mixins.upload_file_mixin import FileMixin
@@ -29,6 +30,10 @@ class VendorInfoManager(CRUDManager):
 
 class RequestCallManager(CRUDManager):
     table = RequestCall
+
+    preloaded_fields = (
+        selectinload(RequestCall.product),
+    )
 
     @staticmethod
     def get_filter_expressions(filter_fields: QueryParams) -> list[ColumnOperators | None]:

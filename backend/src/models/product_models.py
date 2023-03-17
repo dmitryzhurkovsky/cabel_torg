@@ -62,6 +62,8 @@ class Product(Base1CModel):
 
     added_to_orders = relationship('ProductOrder', back_populates='product', lazy='noload')
 
+    request_calls = relationship('RequestCall', back_populates='product', lazy='noload')
+
     __tableargs__ = (
         CheckConstraint(discount < 100, name='check_discount_lt_100'),
         CheckConstraint(discount >= 0, name='check_discount_gte_0'),

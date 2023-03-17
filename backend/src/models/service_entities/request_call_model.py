@@ -1,5 +1,6 @@
 from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.dialects.postgresql import ENUM as pgEnum
+from sqlalchemy.orm import relationship
 
 from src.core.enums import BaseEnum
 from src.models.abstract_model import BaseModel
@@ -23,4 +24,6 @@ class RequestCall(BaseModel):
     type = Column('type', pgEnum(*RequestCallType.values(), name='request_call_status'), default=RequestCallType.UNSET)
 
     product_id = Column(Integer, ForeignKey('products.id'))
+    product = relationship('Product', back_populates='request_calls')
+
 
