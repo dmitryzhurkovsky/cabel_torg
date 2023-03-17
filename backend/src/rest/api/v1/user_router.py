@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, status
+from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
@@ -10,9 +11,20 @@ from src.services.auth_service import AuthService
 user_router = APIRouter(tags=['users'])
 
 
+@user_router.get('/users/check_email/<email>')
+async def get_users(
+        email: EmailStr | None = None,
+        session: AsyncSession = Depends(get_session)
+) -> dict:
+    user = await UserManager.retrieve(email=email, session=session)
+    if user:
+        return {'message': 'An user with such email exists.'}
+
+
 @user_router.get('/users/<user_id>', response_model=UserSchema)
 async def get_user(
-        user_id: int, session: AsyncSession = Depends(get_session)
+        user_id: int,
+        session: AsyncSession = Depends(get_session)
 ) -> UserSchema:
     return await UserManager.retrieve(id=user_id, session=session)
 
