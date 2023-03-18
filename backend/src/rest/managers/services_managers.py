@@ -1,4 +1,6 @@
-from sqlalchemy import ColumnOperators
+from typing import Any, Sequence
+
+from sqlalchemy import ColumnOperators, Row, RowMapping
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from starlette.datastructures import QueryParams
@@ -27,6 +29,10 @@ class AddressManager(CRUDManager):
 class VendorInfoManager(CRUDManager):
     table = VendorInfo
 
+    preloaded_fields = (
+        selectinload(VendorInfo.addresses),
+    )
+
 
 class RequestCallManager(CRUDManager):
     table = RequestCall
@@ -51,7 +57,7 @@ class RequestCallManager(CRUDManager):
             custom_preloaded_fields: tuple | list = (),
             offset: int = 0,
             limit: int = 100
-    ) -> list:
+    ) -> Sequence[Row | RowMapping | Any]:
         """Get filtered list of objects with pagination."""
         filter_expressions = cls.get_filter_expressions(filters)
 
