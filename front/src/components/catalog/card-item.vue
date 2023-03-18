@@ -115,11 +115,12 @@ export default {
   methods: {
     ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
     ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA"]),
+    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA", "SET_REQUEST_CALL_TYPE"]),
 
     onCreatePopUp(status, cardID) {
         this.SET_IS_POPUP_OPEN(status);
         this.SET_POPUP_ACTION('RequestCall');
+        this.SET_REQUEST_CALL_TYPE('GR');
         this.SET_POPUP_ADDITIONAL_DATA({cardID});
       },
 

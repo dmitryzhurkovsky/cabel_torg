@@ -153,7 +153,7 @@
       ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
       ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
       ...mapMutations("query", ["SET_SEARCH_STRING"]),
-      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA"]),
+      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA", "SET_REQUEST_CALL_TYPE"]),
 
       checkQuantityLocal() {
         if (this.quantityLocal < 1) {
@@ -193,6 +193,7 @@
       onCreatePopUp(status, cardID) {
         this.SET_IS_POPUP_OPEN(status);
         this.SET_POPUP_ACTION('RequestCall');
+        this.SET_REQUEST_CALL_TYPE('GR');
         this.SET_POPUP_ADDITIONAL_DATA({cardID});
       },
 

@@ -67,6 +67,12 @@ const router = createRouter({
       name: 'Discount',
       component: () => import('@/views/Discount.vue')
     },
+    {
+      beforeEnter: auth,
+      path: '/settings',
+      name: 'Settings',
+      component: () => import('@/views/Settings.vue')
+    },
   ]
 })
 

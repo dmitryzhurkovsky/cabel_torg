@@ -15,12 +15,13 @@ const toggleMenu = (): void => {
 };
 
 const links = ref([
+  { name: "Скидки", href: "/discount" },
   { name: "Запросы на звонки", href: "/call_requests" },
   { name: "Запросы обратной связи", href: "/feedback_requests" },
   { name: "Новости", href: "/articles" },
   { name: "Партнеры", href: "/partners" },
   { name: "Варианты доставки", href: "/delivery_types" },
-  { name: "Скидки", href: "/discount" },
+  { name: "Настройки", href: "/settings" },
 ]);
 
 </script>

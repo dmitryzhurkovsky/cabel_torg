@@ -17,6 +17,7 @@ export type Getters = {
   isPopUpOpen(state: State): Boolean
   categories(state: State): Array<IDeliveryType>
   activeCategory(state: State): string
+  settings(state: State): IDeliveryType
 }
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -77,5 +78,8 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   activeCategory: (state) => {
     return state.activeCategory
+  },
+  settings: (state) => {
+    return state.settings
   }
 }

@@ -197,7 +197,7 @@
                   <div class="summary__item">Скидка по промокоду: <span>{{ promo_price }}</span></div>
                   <div class="summary__item">Итоговая стоимость: <span><b>{{ (TOTAL_ORDER_COST - promo_price).toFixed(2) }}</b></span>BYN</div>
                   <div class="_footnote">* Сумма указана с учетом НДС</div>
-                  <button class="btn" @click="sendOrderRequest()">Оформить заказ</button>
+                  <button class="btn" @click="checkRequestData()">Оформить заказ</button>
 
                 </div>
 
@@ -214,6 +214,7 @@
 </template>
 
 <script>
+  import axios from "axios";
   import {mapActions, mapGetters, mapMutations} from 'vuex'
   import CartItem from '@/components/catalog/cart-item.vue';
   import { isValidEmail } from "../../common/validation";
@@ -247,18 +248,38 @@
       }
     },
 
+    watch:{
+      changeParameters: function() {
+        this.company_name = this.USER.company_name;
+        this.unp = this.USER.unp;
+        this.legal_address = this.USER.legal_address;
+        this.IBAN = this.USER.IBAN;
+        this.BIC = this.USER.BIC;
+        this.serving_bank = this.USER.serving_bank;
+        this.full_name = this.USER.full_name;
+        this.phone_number = this.USER.phone_number;
+        this.email = this.USER.email;
+      }
+    },
+
     computed: {
       ...mapGetters("order", ["ORDERS", "TOTAL_ORDER_QUANTITY", "TOTAL_ORDER_COST", "IS_APPLICATION_OPEN"]),
       ...mapGetters("auth",["ERRORS", "USER"]),
       ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
+
+      changeParameters(){
+        return JSON.stringify(this.USER)
+      }
     },
 
     methods: {
       ...mapActions("order", ["GET_USER_ORDER", "SEND_ORDER_REQUEST"]),
       ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
+      ...mapActions("auth", ["SEND_REGISTER_REQUEST"]),
       ...mapMutations("order", ["SET_IS_APPLICATION_OPEN"]),
       ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
       ...mapMutations("auth", ["SET_ERRORS", "SET_DESTINATION"]),
+      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA"]),
 
       openPage(page) {
           if (this.$router.path != page) {
@@ -272,15 +293,10 @@
 
       openOrderRequest(){
         this.SET_IS_APPLICATION_OPEN(true);
-
-        // if (!localStorage.getItem("authToken")) {
-        //   this.SET_DESTINATION('/cart');
-        //   this.$router.push('/login');
-        // }
       },
 
-      async sendOrderRequest(){
-
+      async checkRequestData(){
+        console.log('Start send order ');
         const orderProducts = [];
         this.ORDERS.forEach(item => orderProducts.push({amount: item.amount, id: item.product.id}));
 
@@ -330,6 +346,7 @@
           this.SET_ERRORS(errorsInData);
           this.isLoading = false;
         } else {
+
           const orderData = {
             promo_code: this.promo_code, 
             company_name: this.company_name,
@@ -349,11 +366,86 @@
             // user_id: this.USER.id,
             products: orderProducts
           };
-          await this.SEND_ORDER_REQUEST(orderData);
+
+          if (localStorage.getItem("authToken")) {
+            // this.SET_DESTINATION('/cart');
+            // this.$router.push('/login');
+            orderData.user = this.USER.id;
+            await this.SEND_ORDER_REQUEST(orderData);
+            this.isLoading = false;
+            this.$router.push({name: "user-cab"});
+          } else {
+            console.log('Тут проверяем есть ли пользователь');
+            try {
+              const response = await axios.get(process.env.VUE_APP_API_URL + "users/check_email/<email>?email=" + this.email);
+              // console.log(response);
+              if (Boolean(response.data)) {
+                this.SET_IS_POPUP_OPEN(true);
+                this.SET_POPUP_ACTION('UserLogin');
+                this.SET_POPUP_ADDITIONAL_DATA({email: orderData.email});
+                console.log('Пользователь существует. Требуем залогиниться');
+              } else {
+              //   console.log('прльзователя нет создаем с нуля');
+              //   let password = '';
+              //   for (let i = 0; i < 8; i++){
+              //     let rand = Math.random() * 10 - 0.5;
+              //     password = password + String(Math.round(rand))
+              //   }
+              //   const userData = {
+              //     email: this.email,
+              //     full_name: this.full_name,
+              //     phone_number: this.phone_number,
+              //     company_name: this.company_name,
+              //     unp: this.unp,
+              //     password: password,
+              //     legal_address: this.legal_address,
+              //     IBAN: this.IBAN,
+              //     BIC: this.BIC,
+              //     serving_bank: this.serving_bank,
+              //   };
+
+              //   await this.SEND_REGISTER_REQUEST(userData);
+              //   orderData.user = this.USER.id;
+              //   await this.SEND_ORDER_REQUEST(orderData);
+              //   this.isLoading = false;
+              //   this.$router.push({name: "user-cab"});
+              }
+            }
+            catch (e) {
+                console.log(e);
+                console.log('прльзователя нет создаем с нуля');
+                let password = '';
+                for (let i = 0; i < 8; i++){
+                  let rand = Math.random() * 10 - 0.5;
+                  password = password + String(Math.round(rand))
+                }
+                const userData = {
+                  email: this.email,
+                  full_name: this.full_name,
+                  phone_number: this.phone_number,
+                  company_name: this.company_name,
+                  unp: this.unp,
+                  password: password,
+                  legal_address: this.legal_address,
+                  IBAN: this.IBAN,
+                  BIC: this.BIC,
+                  serving_bank: this.serving_bank,
+                };
+
+                await this.SEND_REGISTER_REQUEST(userData);
+                orderData.user = this.USER.id;
+                await this.SEND_ORDER_REQUEST(orderData);
+                this.isLoading = false;
+                this.$router.push({name: "user-cab"});
+            };
+          }
           this.isLoading = false;
-          this.$router.push({name: "user-cab"});
         }
       },
+    },
+
+    async checkIsUserLogin() {
+      // await 
     },
 
     mounted() {

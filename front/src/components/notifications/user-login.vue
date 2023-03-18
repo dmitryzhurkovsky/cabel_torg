@@ -1,16 +1,16 @@
 <template>
     <div class="content__popup">
-        <h3>Заказать звонок</h3>
+        <h3>Вход</h3>
         <div class="">
             <div class="group">
-                <label class="label">Ваше имя</label>
-                <input type="text" class="input" :class="{ 'is-invalid': ERRORS.name }" v-model="name">
-                <div class="error-message" v-if="ERRORS.name"> {{ ERRORS.name }} </div>
+                <label class="label">E-mail</label>
+                <input v-if = "POPUP_ADDITONAL_DATA"  type="text" class="input" :class="{ 'is-invalid': ERRORS.email }" v-model="POPUP_ADDITONAL_DATA.email" disabled>
+                <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>
             </div>
             <div class="group">
-                <label class="label">Контактный телефон</label>
-                <input type="text" class="input" :class="{ 'is-invalid': ERRORS.phone }" v-model="phone">
-                <div class="error-message" v-if="ERRORS.phone"> {{ ERRORS.phone }} </div>
+                <label class="label">Пароль</label>
+                <input type="password" class="input" :class="{ 'is-invalid': ERRORS.password }" v-model="password" autocomplete=off>
+                <div class="error-message" v-if="ERRORS.password"> {{ ERRORS.password }} </div>
             </div>
 
             <div class="group__row flex-center mt-20">
@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="center-text">
-                    <button @click = "sendRequest()" type="submit" class="btn black">Заказать звонок</button>
+                    <button @click = "sendLoginRequest()" type="submit" class="btn black">Войти</button>
                 </div>
 
             </div>
@@ -36,26 +36,25 @@
 
     data: function() {
       return {
-          name     : '',
-          phone: '',
+          password  : '',
           isLoading: false,
       }
     },
 
     computed: {
-      ...mapGetters("auth",["ERRORS"]),
+      ...mapGetters("auth",["ERRORS", "USER"]),
       ...mapGetters("header",["REQUEST_CALL_TYPE", "POPUP_ADDITONAL_DATA"]),
+
     },
 
     async beforeUnmount() {
       this.SET_ERRORS({});
     },
 
-
     methods: {
       ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_MESSAGE", "SET_POPUP_ADDITIONAL_DATA"]),
-      ...mapActions("header", ["SEND_REQUEST_CALL",]),
       ...mapMutations("auth", ["SET_ERRORS",]),
+      ...mapActions("auth", ["SEND_LOGIN_REQUEST",]),
 
       cancelRequest(){
         this.SET_IS_POPUP_OPEN(false);
@@ -63,32 +62,23 @@
         this.SET_POPUP_ADDITIONAL_DATA({});
       },
 
-      async sendRequest(){
+      async sendLoginRequest(){
         if (this.isLoading) return;
 
         this.isLoading = true;
-        const errorsInData = {};
-        this.SET_ERRORS(errorsInData);
+        const data = new FormData();
+        data.append('username', this.POPUP_ADDITONAL_DATA.email);
+        data.append('password', this.password);
+        await this.SEND_LOGIN_REQUEST(data);
 
-        if (!this.name) {
-          errorsInData.name = 'Укажите валидное имя'
-        }
-        if (!this.phone) {
-          errorsInData.phone = 'Укажите номер телефона'
-        }
-        if (Object.keys(errorsInData).length) {
-          this.SET_ERRORS(errorsInData);
-        } else {
-          const data = {
-              fullname: this.name,
-              phone_number: this.phone,
-              type: this.REQUEST_CALL_TYPE,
-              product_id: Number(this.POPUP_ADDITONAL_DATA.cardID),
-          };
-          // Тут посылаем на бэк запрос и ждем ответа, по результатам фомируем окно с ответом
-          await this.SEND_REQUEST_CALL(data);
-          this.SET_POPUP_ADDITIONAL_DATA({});
-          this.SET_REQUEST_CALL_TYPE('');
+        if (this.USER) {
+          this.SET_IS_POPUP_OPEN(true);
+          this.SET_POPUP_ACTION('ShowCompleteMsg');
+          const msg ={};
+              msg.main = 'Авторизация прошла успешно';
+              msg.bolt = 'Обращаем Ваше внимание, что реквизиты заказа синхронизированы с учетной записью.';
+              msg.sub = 'Подтведите оформление заказа'
+          this.SET_POPUP_MESSAGE(msg);
         }
         this.isLoading = false;
       }

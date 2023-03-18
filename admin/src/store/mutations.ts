@@ -26,6 +26,7 @@ export type Mutations<S = State> = {
   [MutationTypes.SET_ISPOPUPOPEN](state: S, payload: boolean): void,
   [MutationTypes.SET_NEW_ORDER_STATUS](state: S, payload: IDeliveryType): void,
   [MutationTypes.SET_CATEGORIES](state: S, payload: Array<IDeliveryType>): void,
+  [MutationTypes.SET_SETTINGS](state: S, payload: IdleDeadline): void,
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -98,5 +99,8 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationTypes.SET_CATEGORIES](state, payload: Array<IDeliveryType>) {
     state.categories = payload
   },
+  [MutationTypes.SET_SETTINGS](state, payload: IDeliveryType) {
+    state.settings = payload
+  }
   
 }

@@ -98,7 +98,7 @@ export default {
   name: "footer",
 
   methods: {
-    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
+    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_REQUEST_CALL_TYPE"]),
 
     linkClick(URL, name){
       if (this.$router.path != URL) {
@@ -110,6 +110,7 @@ export default {
 
     onMadeCall(status){
       this.SET_IS_POPUP_OPEN(status);
+      this.SET_REQUEST_CALL_TYPE('U');
       this.SET_POPUP_ACTION('RequestCall');
     }
   }

@@ -10,6 +10,7 @@
             <div class="popup__content" >
               <PopUpMsg v-if = "POPUP_ACTION === 'ShowCompleteMsg'" />
               <RequestCall v-if = "POPUP_ACTION === 'RequestCall'"/>
+              <UserLogin v-if = "POPUP_ACTION === 'UserLogin'"/>
             </div>
         </div>
       </div>
@@ -23,12 +24,13 @@
   import TopMenuActions  from '@/components/header/header-actions.vue'
   import PopUpMsg from '@/components/notifications/pop-up-msg.vue'
   import RequestCall from '@/components/notifications/request-call.vue'
+  import UserLogin from '@/components/notifications/user-login.vue'
 
   export default {
     name: "PopUp",
 
     components: {
-        TopMenuActions, PopUpMsg, RequestCall
+        TopMenuActions, PopUpMsg, RequestCall, UserLogin
     },
 
     watch: {
