@@ -24,6 +24,6 @@ class RequestCall(BaseModel):
     type = Column('type', pgEnum(*RequestCallType.values(), name='request_call_status'), default=RequestCallType.UNSET)
 
     product_id = Column(Integer, ForeignKey('products.id'))
-    product = relationship('Product', back_populates='request_calls')
+    product = relationship('Product', back_populates='request_calls', lazy='selectin')
 
 
