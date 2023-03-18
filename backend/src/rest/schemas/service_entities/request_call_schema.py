@@ -2,6 +2,7 @@ from pydantic import BaseModel, ValidationError, validator
 
 from src.models.service_entities.request_call_model import RequestCallType
 from src.rest.schemas.base_schema import BaseSchema
+from src.rest.schemas.product_schema import ProductRequestCallSchema
 
 
 class RequestCallInputSchema(BaseModel):
@@ -19,5 +20,7 @@ class RequestCallInputSchema(BaseModel):
 
 
 class RequestCallSchema(RequestCallInputSchema, BaseSchema):
+    product: ProductRequestCallSchema | None
+
     class Config:
         orm_mode = True

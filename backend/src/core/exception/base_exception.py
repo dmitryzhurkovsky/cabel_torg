@@ -19,7 +19,7 @@ class AuthenticateError(BaseError):
     """
     status_code = status.HTTP_401_UNAUTHORIZED
     default_detail = 'Invalid username or password'
-    default_headers = ({'WWW-Authenticate': 'Bearer'},)
+    default_headers = {'WWW-Authenticate': 'Bearer'}
 
 
 class InvalidTokenError(AuthenticateError):

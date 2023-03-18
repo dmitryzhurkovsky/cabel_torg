@@ -12,6 +12,14 @@ from src.rest.schemas.category_schema import CategorySchema
 from src.rest.schemas.manufacturer_schema import ManufacturerSchema
 
 
+class ProductRequestCallSchema(BaseSchema):
+    id: int
+    name: str
+
+    class Config:
+        orm_mode = True
+
+
 class ProductSchema(BaseSchema):
     vendor_code: str | None
     name: str

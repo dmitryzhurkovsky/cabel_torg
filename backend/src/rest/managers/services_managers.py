@@ -1,5 +1,8 @@
-from sqlalchemy import ColumnOperators
+from typing import Any, Sequence
+
+from sqlalchemy import ColumnOperators, Row, RowMapping
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from starlette.datastructures import QueryParams
 
 from src.core.db.mixins.upload_file_mixin import FileMixin
@@ -26,9 +29,17 @@ class AddressManager(CRUDManager):
 class VendorInfoManager(CRUDManager):
     table = VendorInfo
 
+    preloaded_fields = (
+        selectinload(VendorInfo.addresses),
+    )
+
 
 class RequestCallManager(CRUDManager):
     table = RequestCall
+
+    preloaded_fields = (
+        selectinload(RequestCall.product),
+    )
 
     @staticmethod
     def get_filter_expressions(filter_fields: QueryParams) -> list[ColumnOperators | None]:
@@ -46,7 +57,7 @@ class RequestCallManager(CRUDManager):
             custom_preloaded_fields: tuple | list = (),
             offset: int = 0,
             limit: int = 100
-    ) -> list:
+    ) -> Sequence[Row | RowMapping | Any]:
         """Get filtered list of objects with pagination."""
         filter_expressions = cls.get_filter_expressions(filters)
 

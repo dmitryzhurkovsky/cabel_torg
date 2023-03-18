@@ -250,7 +250,6 @@
       }
 
       &:hover{
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
         color:#4275D8;
         border: 2px solid #4275D8;
         font-weight: 500;

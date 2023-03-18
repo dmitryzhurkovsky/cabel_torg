@@ -9,7 +9,7 @@
 
         </div>
         <div class="popup-cart__action">
-          <div class="popup-cart__price">{{ Number((cartItem.amount * cardPriceWithDiscount).toFixed(2)) }} <span>BYN</span></div>
+          <div class="popup-cart__price">{{ cartItem.amount + '  X  ' + cardPriceWithDiscount }} <span>BYN</span></div>
           <button class="icon-delete" @click.stop="onRemoveItemFromCart(cartItem)"></button>
         </div>
         <!-- {{ cartItemData }} -->
@@ -73,8 +73,8 @@ export default {
   &__item{
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
-    gap:6px;
-    align-items:center;
+    gap:10px;
+    align-items: self-start;
     &:hover{
       background: #F9F9F9;
     }
@@ -104,9 +104,9 @@ export default {
 
   }
   &__action{
-    max-width: 90px;
+    min-width: 90px;
     align-items: stretch;
-    text-align: right;
+
 
   }
 

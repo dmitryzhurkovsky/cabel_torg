@@ -106,9 +106,6 @@ body {
     -moz-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
 }
-#app__component{
-
-}
 input,
 button,
 textarea {
@@ -151,25 +148,6 @@ h6 {
     font-weight: inherit;
     font-size: inherit;
 }
-
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-input[type="number"]:hover,
-input[type="number"]:focus {
-  -moz-appearance: number-input;
-}
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
 //-webkit-overflow-scrolling: touch;
 //animation-play-state: paused !important;
 
@@ -379,7 +357,7 @@ h3{
 
 ._link{
   font-weight: 400;
-  //font-size: 14px;
+  font-size: 14px;
   line-height: 130%;
   color: #4275D8;
 }
@@ -399,11 +377,15 @@ h3{
   justify-content: space-between;
   gap: 10px;
 }
-.group{
-  position: relative;
-  margin-bottom: 10px;
-  width: 100%;
-}
+//.group{
+//  width: 100%;
+//  display: flex;
+//  flex-direction: column;
+//  align-items: flex-start;
+//  margin-bottom: 15px;
+//  //text-align: center;
+//  justify-content: center;
+//}
 label{
   text-align: left;
   font-size: 12px;
@@ -431,19 +413,6 @@ input{
   border-radius: 8px;
   padding: 10px 30px 10px 16px;
   font-weight: 300;
-}
-
-.error-message {
-  position: absolute;
-  left: 15px;
-  bottom: -4px;
-  padding: 0 8px 0 8px;
-  font-size: 12px;
-  background-color: #fff;
-  color: #E30044;
-}
-.is-invalid{
-  border: 1px solid #E30044;
 }
 
 //RADIO
@@ -613,11 +582,14 @@ input{
 .dropdown.dropdown__wrapper {
   display: block;
 }
+
 .long_text{
   width: 200px;
   overflow:hidden;
   white-space:nowrap;
   text-overflow: ellipsis;
+  color: red;
 }
+
 
 </style>
