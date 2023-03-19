@@ -20,6 +20,7 @@ const state = {
   categories: [] as Array<IDeliveryType>,
   activeCategory: '' as string,
   settings: {} as IDeliveryType,
+  stocks: [] as Array<IDeliveryType>,
 }
 
 export type State = typeof state

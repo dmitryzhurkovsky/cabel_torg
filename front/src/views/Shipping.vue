@@ -6,10 +6,17 @@
           <div class="structure__block">
             <h3 class="structure__title">Доставка</h3>
             <p class="structure__text">Для оптовых покупателей из РБ мы предлагаем несколько различных способов получения заказа:</p>
-            <li class="structure__list__item">Самовывоз со склада Брест с 09:00 до 18:00 (бесплатно)</li>
+            <li 
+              class="structure__list__item" 
+              v-for = "delivery in ORDER_DELIVERY_TYPES" 
+              :key = delivery.id 
+            >
+              {{ delivery.payload }}
+            </li>
+            <!-- <li class="structure__list__item">Самовывоз со склада Брест с 09:00 до 18:00 (бесплатно)</li>
             <li class="structure__list__item">Самовывоз со склада Минск с 09:00 до 18:00 (бесплатно)</li>
             <li class="structure__list__item">Бесплатная доставка по РБ от 500 рублей (бесплатно)</li>
-            <li class="structure__list__item">Доставка по РБ  в любую точку (платно за счет клиента). Обсуждается индивидуально с менеджером.</li>
+            <li class="structure__list__item">Доставка по РБ  в любую точку (платно за счет клиента). Обсуждается индивидуально с менеджером.</li> -->
             <h3  class="structure__title">Оплата</h3>
             <p>Для оптовых покупателей из РБ доступен только безналичный расчет.</p>
           </div>
@@ -26,9 +33,14 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'Shipping',
+
+    computed: {
+      ...mapGetters("order", ["ORDER_DELIVERY_TYPES"]),
+    },
 
     mounted(){
       this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);

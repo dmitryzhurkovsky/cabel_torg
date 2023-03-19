@@ -18,6 +18,7 @@ export type Getters = {
   categories(state: State): Array<IDeliveryType>
   activeCategory(state: State): string
   settings(state: State): IDeliveryType
+  stocks(state: State): Array<IDeliveryType>
 }
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -81,5 +82,9 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   settings: (state) => {
     return state.settings
-  }
+  },
+  stocks: (state) => {
+    return state.stocks
+  },
+
 }

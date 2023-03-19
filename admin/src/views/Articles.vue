@@ -13,15 +13,6 @@
 
   const store = useStore()
 
-  const tableHeads = [
-    {db: 'id', name: 'Id'},
-    {db: 'title', name: 'Заголовок'}, 
-    {db: 'content', name: 'Контент'}, 
-    {db: 'image', name: 'Картинка', type: 'image', src: 'image'}, 
-    {db: '', name: ''},
-    {db: '', name: ''},
-    {db: '', name: ''},
-  ]
   const tableData = ref([] as Array<IDeliveryType>)
   const files = ref<Array<File>>([])
   
@@ -34,18 +25,24 @@
   const idField = ref()
   const formType = ref(true)
 
+  const tableHeads = [
+    {db: 'id', name: 'Id'},
+    {db: 'title', name: 'Заголовок'}, 
+    {db: 'content', name: 'Контент', type: 'v-html', src: 'content'}, 
+    {db: 'image', name: 'Картинка', type: 'image', src: 'image'}, 
+    {db: '', name: ''},
+    {db: '', name: ''},
+    {db: '', name: ''},
+  ]
+
   const rules = computed(() => ({
     titleField: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
       minLength: helpers.withMessage(`Минимальная длина поля 5 символов`, minLength(5)),
     },
-    contentField: {
-      requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 5 символов`, minLength(5)),
-    },
   }))
 
-  const v = useVuelidate(rules, {titleField, contentField});
+  const v = useVuelidate(rules, {titleField});
 
   const sendDataRequest = async () => {
     await store.dispatch(ActionTypes.GET_ARTICLE_DATA, null)
@@ -138,8 +135,11 @@
 <template>
   <h2 class="heading-2">Новости</h2>
 
+  <div v-html="contentField"></div>
+
   <div class="form-container">
     <h3 class="heading-3">Новая новость</h3>
+
 
     <form @submit.prevent="submitUpload"  v-if="isUploadOpen">
       <PhotoUploader v-model="files" />
@@ -159,7 +159,7 @@
         width="600px"
         height="80px"
       />
-      <TextArea
+      <!-- <TextArea
         label="Крнтент"
         name="content"
         placeholder="Укажите содержание"
@@ -167,6 +167,13 @@
         :error="v.contentField.$errors" 
         width="600px"
         height="150px"
+      /> -->
+      <QuillEditor 
+        theme="snow" 
+        v-model:content = "contentField" 
+        contentType = "html" 
+        width="1200px"
+        height="200px"
       />
       <!-- <PhotoUploader v-model="files" /> -->
       <div class="form-buttons">

@@ -27,6 +27,11 @@ export type Mutations<S = State> = {
   [MutationTypes.SET_NEW_ORDER_STATUS](state: S, payload: IDeliveryType): void,
   [MutationTypes.SET_CATEGORIES](state: S, payload: Array<IDeliveryType>): void,
   [MutationTypes.SET_SETTINGS](state: S, payload: IdleDeadline): void,
+  [MutationTypes.SET_STOCKS](state: S, payload: Array<IDeliveryType>): void,
+  [MutationTypes.ADD_TO_STOCKS](state: S, payload: IDeliveryType): void,
+  [MutationTypes.DELETE_FROM_STOCKS](state: S, payload: number): void,
+  [MutationTypes.UPDATE_STOCK](state: S, payload: IDeliveryType): void,
+  
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -101,5 +106,18 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationTypes.SET_SETTINGS](state, payload: IDeliveryType) {
     state.settings = payload
+  },
+  [MutationTypes.SET_STOCKS](state, payload: Array<IDeliveryType>) {
+    state.stocks = payload
+  },
+  [MutationTypes.ADD_TO_STOCKS](state, payload: IDeliveryType) {
+    state.stocks = [...state.stocks, payload]
+  },
+  [MutationTypes.DELETE_FROM_STOCKS](state, payload: number) {
+    state.stocks = state.stocks.filter(item => item.id !== payload)
+  },
+  [MutationTypes.UPDATE_STOCK](state, payload: IDeliveryType) {
+    state.stocks = state.stocks.filter(item => item.id !== payload.id)
+    state.stocks.push(payload)
   },
 }
