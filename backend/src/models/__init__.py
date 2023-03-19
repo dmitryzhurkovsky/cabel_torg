@@ -5,7 +5,7 @@ from src.models.cart_model import Cart
 from src.models.category_model import Category
 from src.models.manufacturer_model import Manufacturer
 from src.models.order_model import Order, ProductOrder
-from src.models.product_models import Product
+from src.models.product_model import Product
 from src.models.service_entities import *
 from src.models.user_model import User
 from src.models.watchlist_model import WatchList

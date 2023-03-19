@@ -30,6 +30,7 @@ class Product(Base1CModel):
     tax = Column(Integer)
     description = Column(String)
     count = Column(DECIMAL, default=0)
+    weight = Column(DECIMAL, default=0)
 
     # Price fields
     price = Column(DECIMAL)

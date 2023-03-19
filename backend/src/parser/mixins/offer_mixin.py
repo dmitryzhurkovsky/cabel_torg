@@ -2,7 +2,7 @@ from abc import ABC
 from decimal import Decimal
 
 from src.models import Product
-from src.models.product_models import ProductStatus
+from src.models.product_model import ProductStatus
 from src.parser.mixins.base_mixin import BaseMixin
 from src.parser.servers import database_service
 

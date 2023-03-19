@@ -13,6 +13,14 @@ async def get_articles(session: AsyncSession = Depends(get_session)) -> list[Art
     return await ArticleManager.list(session=session)
 
 
+@article_router.get('/articles/{article_id}', response_model=ArticleSchema)
+async def get_articles(
+        article_id: int,
+        session: AsyncSession = Depends(get_session)
+) -> ArticleSchema:
+    return await ArticleManager.retrieve(id=article_id, session=session)
+
+
 @article_router.post('/articles', response_model=ArticleSchema, status_code=status.HTTP_201_CREATED)
 async def create_article(
         article_info: ArticleInputSchema,
