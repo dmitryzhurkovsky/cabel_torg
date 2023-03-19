@@ -6,6 +6,7 @@ export default {
   state: {
     partners: [],
     news: [],
+    settings: {},
   },
 
   getters: {
@@ -14,6 +15,9 @@ export default {
     },
     NEWS(state) {
       return state.news;
+    },
+    SETTINGS(state) {
+      return state.settings;
     }
   },
 
@@ -25,6 +29,10 @@ export default {
     SET_NEWS(state, news) {
       state.news = [...news];
     },
+
+    SET_SETTINGS(state, settings) {
+      state.settings = {...settings};
+    }
   },
 
   actions: {
@@ -42,6 +50,16 @@ export default {
       try {
         const response = await axios.get(process.env.VUE_APP_API_URL + 'service_entities/articles');
         commit("SET_NEWS", response.data);
+      } catch (e) {
+        console.log(e);
+        commit("notification/ADD_MESSAGE", {name: "Не возможно обновить новости", icon: "error", id: '1'}, {root: true})
+      }
+    },
+
+    async GET_SETTINGS({ commit }){
+      try {
+        const response = await axios.get(process.env.VUE_APP_API_URL + 'service_entities/vendor_info/1');
+        commit("SET_SETTINGS", response.data);
       } catch (e) {
         console.log(e);
         commit("notification/ADD_MESSAGE", {name: "Не возможно обновить новости", icon: "error", id: '1'}, {root: true})

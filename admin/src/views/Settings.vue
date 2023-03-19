@@ -1,6 +1,6 @@
 <script setup lang='ts'>
   import useVuelidate from '@vuelidate/core';
-  import { helpers, minLength, required } from '@vuelidate/validators';
+  import { email, helpers, maxLength, minLength, numeric, required } from '@vuelidate/validators';
   import { computed, onMounted, ref, watch } from 'vue'
   import { useStore } from '../store';
   import { ActionTypes } from '../store/action-types';
@@ -9,8 +9,9 @@
   import Input from '@/components/UI/Input.vue';
 
   const store = useStore()
+  const id = ref('')
   const phone = ref('')
-  const email = ref('')
+  const mail = ref('')
   const director_fullname = ref('')
   const unp = ref('')
   const OKPO = ref('')
@@ -34,29 +35,28 @@
       requered:  helpers.withMessage(`Обязательно поле`, required),
       minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
     },
-    email: {
+    mail: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
+      email: helpers.withMessage(`укажите валидный E-Mail`, email),
     },
     director_fullname: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
     },
     unp: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
+      minLength: helpers.withMessage(`Длина поля 9 символов`, minLength(9)),
+      maxLength: helpers.withMessage(`Длина поля 9 символов`, maxLength(9)),
+      numeric: helpers.withMessage(`Это числовое поле`, numeric)
     },
     OKPO: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
+      numeric: helpers.withMessage(`Это числовое поле`, numeric)
     },
     legal_address: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
     },
     postal_address: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
     },
     phone_and_fax: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
@@ -64,59 +64,52 @@
     },
     serving_bank: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
     },
     serving_bank_short: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
     },
     IBAN: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
+      minLength: helpers.withMessage(`Длина поля 9 символов`, minLength(28)),
+      maxLength: helpers.withMessage(`Длина поля 9 символов`, maxLength(28)),
+      numeric: helpers.withMessage(`Это числовое поле`, numeric)
     },
     RUR: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
     },
     instagram_url: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
     },
     facebook_url: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
     },
     vk_url: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
     },
     telegram_url: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
     },
     twitter_url: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
     },
     tiktok_url: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
     },
     youtube_url: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 7 символов`, minLength(7)),
     },
   }))
 
   const v = useVuelidate(rules, {
-    phone, email, director_fullname, unp, OKPO, legal_address, postal_address, phone_and_fax, serving_bank, serving_bank_short, IBAN,
+    phone, mail, director_fullname, unp, OKPO, legal_address, postal_address, phone_and_fax, serving_bank, serving_bank_short, IBAN,
     RUR, instagram_url, facebook_url, vk_url, telegram_url, twitter_url, tiktok_url, youtube_url,
   });
 
   watch(() => store.getters.settings,
     (curr, prev) => {
+      id.value = curr.id
       phone.value = curr.phone
-      email.value = curr.email
+      mail.value = curr.email
       director_fullname.value = curr.director_fullname
       unp.value = curr.unp
       OKPO.value = curr.OKPO
@@ -149,7 +142,30 @@
   const submitForm = async () => {
     v.value.$touch()
     if (v.value.$error) return
-
+    store.commit(MutationTypes.SET_IS_LOADING, true)
+    const data = {
+      id : id.value,
+      phone : phone.value, 
+      email : mail.value, 
+      director_fullname: director_fullname.value, 
+      unp : unp.value, 
+      OKPO : OKPO.value, 
+      legal_address : legal_address.value, 
+      postal_address : postal_address.value, 
+      phone_and_fax : phone_and_fax.value, 
+      serving_bank : serving_bank.value, 
+      serving_bank_short : serving_bank_short.value, 
+      IBAN : IBAN.value,
+      RUR: RUR.value, 
+      instagram_url : instagram_url.value, 
+      facebook_url : facebook_url.value, 
+      vk_url :vk_url.value, 
+      telegram_url : telegram_url.value, 
+      twitter_url : twitter_url.value, 
+      tiktok_url : tiktok_url.value, 
+      youtube_url : youtube_url.value,
+    }
+    await store.dispatch(ActionTypes.EDIT_SETTINGS_DATA, data)
   }
 
 </script>
@@ -171,11 +187,11 @@
       />
       <Input
         label="E-Mail"
-        name="email"
+        name="mail"
         width="600px"
         placeholder="Укажите E-Mail"
-        v-model:value="v.email.$model"
-        :error="v.email.$errors"
+        v-model:value="v.mail.$model"
+        :error="v.mail.$errors"
       />
       <Input
         label="Директор"

@@ -64,25 +64,15 @@
                   <div class="error-message" v-if="ERRORS.city"> {{ ERRORS.city }} </div>
                 </div>
                 <div class="radio__list table3x">
-                  <div class="radio">
+
+                  <div class="radio" v-for = "delivery in ORDER_DELIVERY_TYPES" :key = delivery.id>
+                    <input :id = delivery.id name="radio" type="radio" :value = delivery.id v-model = "delivery_type_id">
+                    <label :for = delivery.id class="radio-label">{{ delivery.payload }}</label>
+                  </div>
+                  <!-- <div class="radio">
                     <input id="radio-1" name="radio" type="radio" checked value="0">
-                    <label for="radio-1" class="radio-label">Самовывоз со склада в г. Минск (9:00-18:00), <b>бесплатно</b></label>
-                  </div>
-
-                  <div class="radio">
-                    <input id="radio-2" name="radio" type="radio" value="1">
-                    <label  for="radio-2" class="radio-label">Самовывоз со склада в г. Брест (9:00-18:00), <b>бесплатно</b></label>
-                  </div>
-
-                  <div class="radio">
-                    <input id="radio-3" name="radio" type="radio" value="2">
-                    <label  for="radio-3" class="radio-label">Доставка по РБ при заказе от 500 рублей, <b>бесплатно</b></label>
-                  </div>
-
-                  <div class="radio">
-                    <input id="radio-4" name="radio" type="radio" value="3">
-                    <label  for="radio-4" class="radio-label">Платная доставка, стоимость обсуждается индивидуально</label>
-                  </div>
+                    <label for="radio-1" class="radio-label">Самовывоз со склада в г. Минск (9:00-18:00), <b>бесплатно</b></label>  
+                  </div> -->
 
                 </div>
 
@@ -263,7 +253,7 @@
     },
 
     computed: {
-      ...mapGetters("order", ["ORDERS", "TOTAL_ORDER_QUANTITY", "TOTAL_ORDER_COST", "IS_APPLICATION_OPEN"]),
+      ...mapGetters("order", ["ORDERS", "TOTAL_ORDER_QUANTITY", "TOTAL_ORDER_COST", "IS_APPLICATION_OPEN", "ORDER_DELIVERY_TYPES"]),
       ...mapGetters("auth",["ERRORS", "USER"]),
       ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
 
@@ -386,34 +376,6 @@
                 console.log('Пользователь существует. Требуем залогиниться');
               } else {
               //   console.log('прльзователя нет создаем с нуля');
-              //   let password = '';
-              //   for (let i = 0; i < 8; i++){
-              //     let rand = Math.random() * 10 - 0.5;
-              //     password = password + String(Math.round(rand))
-              //   }
-              //   const userData = {
-              //     email: this.email,
-              //     full_name: this.full_name,
-              //     phone_number: this.phone_number,
-              //     company_name: this.company_name,
-              //     unp: this.unp,
-              //     password: password,
-              //     legal_address: this.legal_address,
-              //     IBAN: this.IBAN,
-              //     BIC: this.BIC,
-              //     serving_bank: this.serving_bank,
-              //   };
-
-              //   await this.SEND_REGISTER_REQUEST(userData);
-              //   orderData.user = this.USER.id;
-              //   await this.SEND_ORDER_REQUEST(orderData);
-              //   this.isLoading = false;
-              //   this.$router.push({name: "user-cab"});
-              }
-            }
-            catch (e) {
-                console.log(e);
-                console.log('прльзователя нет создаем с нуля');
                 let password = '';
                 for (let i = 0; i < 8; i++){
                   let rand = Math.random() * 10 - 0.5;
@@ -437,6 +399,10 @@
                 await this.SEND_ORDER_REQUEST(orderData);
                 this.isLoading = false;
                 this.$router.push({name: "user-cab"});
+              }
+            }
+            catch (e) {
+              console.log(e);
             };
           }
           this.isLoading = false;

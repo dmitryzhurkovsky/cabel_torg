@@ -17,10 +17,10 @@
             <HeaderSearch/>
             <div class="header__info info-header flex-center">
                   <div class="info-header__item">
-                    <a href="tel:+375296889454">+375 29 688 94 54</a>
+                    <a :href="'tel:' + String(SETTINGS.phone).replace(/ /g,'')">{{ SETTINGS.phone }}</a>
                   </div>
                   <div class="info-header__item">
-                    <a href="mail:info@cabeltorg.by">info@cabeltorg.by</a>
+                    <a :href="'mailto:' + SETTINGS.email">{{ SETTINGS.email }}</a>
                   </div>
 <!--                  <div class="info-header__item">BYN</div>-->
             </div> <!--     header__info-->
@@ -50,6 +50,7 @@
 
     computed: {
       ...mapGetters("header", ["IS_CATALOG_OPEN", "TOP_CATEGORIES", "DEVICE_VIEW_TYPE"]),
+      ...mapGetters("main", ["SETTINGS"]),
     },
 
     methods:{

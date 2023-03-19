@@ -32,31 +32,31 @@
       Header, Breadcrumb, Footer, vNotification, MenuWrapper, PopUp, Loader
     },
 
-    // computed: {
-    // },
-
     methods: {
-        ...mapMutations("header", ["UPDATE_VIEW_PARAMETERS"]),
-        ...mapActions("header", ["GET_CATEGORIES"]),
-        ...mapActions("auth", ["GET_USER_DATA", "USER"]),
-        ...mapActions("order", ["GET_USER_ORDER"]),
-        ...mapActions("favorite", ["GET_USER_FAVORITE"]),
+      ...mapMutations("header", ["UPDATE_VIEW_PARAMETERS"]),
+      ...mapActions("header", ["GET_CATEGORIES"]),
+      ...mapActions("auth", ["GET_USER_DATA", "USER"]),
+      ...mapActions("order", ["GET_USER_ORDER", "GET_ORDER_DELIVERY_TYPES"]),
+      ...mapActions("favorite", ["GET_USER_FAVORITE"]),
+      ...mapActions("main", ["GET_SETTINGS"]),
 
-        setViewParametrs(){
-            this.UPDATE_VIEW_PARAMETERS(window.innerWidth);
-        }
+      setViewParametrs(){
+          this.UPDATE_VIEW_PARAMETERS(window.innerWidth);
+      }
     },
 
     async mounted() {
-        // console.log('App mount');
-        this.setViewParametrs();
-        window.addEventListener('resize', this.setViewParametrs);
-        await this.GET_CATEGORIES();
-        await this.GET_USER_FAVORITE();
-        await this.GET_USER_ORDER();
-        if (localStorage.getItem("authToken")) {
-            await this.GET_USER_DATA();
-        }
+      // console.log('App mount');
+      this.setViewParametrs();
+      window.addEventListener('resize', this.setViewParametrs);
+      await this.GET_CATEGORIES();
+      await this.GET_USER_FAVORITE();
+      await this.GET_USER_ORDER();
+      if (localStorage.getItem("authToken")) {
+          await this.GET_USER_DATA();
+      }
+      await this.GET_ORDER_DELIVERY_TYPES();
+      await this.GET_SETTINGS();
     },
 
   };

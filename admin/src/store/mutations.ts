@@ -101,6 +101,5 @@ export const mutations: MutationTree<State> & Mutations = {
   },
   [MutationTypes.SET_SETTINGS](state, payload: IDeliveryType) {
     state.settings = payload
-  }
-  
+  },
 }

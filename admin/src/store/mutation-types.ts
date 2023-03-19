@@ -23,5 +23,4 @@ const enum MutationTypes {
   SET_CATEGORIES = 'SET_CATEGORIES',
   SET_SETTINGS = 'SET_SETTINGS',
 }
-
 export { MutationTypes }

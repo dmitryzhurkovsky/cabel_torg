@@ -102,6 +102,10 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: null
   ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.EDIT_SETTINGS_DATA](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
   
 }
 
@@ -377,4 +381,21 @@ export const actions: ActionTree<State, State> & Actions = {
     })
   },
   
+  [ActionTypes.EDIT_SETTINGS_DATA]({ commit }, data) {
+    return new Promise((resolve) => {
+      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1", data
+      //  {
+      //     Headers: {
+      //       "Content-Type": "application/json",
+      //     },
+      //     boby: data
+      //   }
+      ).
+      then((response) => {
+        commit(MutationTypes.SET_SETTINGS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
 }
