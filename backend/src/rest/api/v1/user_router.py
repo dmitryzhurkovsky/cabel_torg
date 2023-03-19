@@ -16,9 +16,12 @@ async def get_users(
         email: EmailStr | None = None,
         session: AsyncSession = Depends(get_session)
 ) -> dict:
-    user = await UserManager.retrieve(email=email, session=session)
-    if user:
-        return {'message': 'An user with such email exists.'}
+    try:
+        await UserManager.retrieve(email=email, session=session)
+    except ObjectNotFoundError:
+        return {'message': 'False'}
+
+    return {'message': 'True'}
 
 
 @user_router.get('/users/<user_id>', response_model=UserSchema)
