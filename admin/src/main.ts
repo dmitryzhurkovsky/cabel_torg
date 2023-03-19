@@ -6,6 +6,9 @@ import axios from 'axios';
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faHeart, faHand, faAddressBook, faTrashCan, faPenToSquare, faFile, faSquareCaretDown, faSquareCaretUp } from '@fortawesome/free-regular-svg-icons'
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css';
+
 library.add([faHeart, faHand, faAddressBook, faTrashCan, faPenToSquare, faFile, faSquareCaretDown, faSquareCaretUp] as any)
 
 axios.interceptors.request.use(
@@ -48,4 +51,4 @@ axios.interceptors.response.use(
   }
 );
 
-createApp(App).component('font-awesome-icon', FontAwesomeIcon).use(router).use(store).mount('#app')
+createApp(App).component('font-awesome-icon', FontAwesomeIcon).component('QuillEditor', QuillEditor).use(router).use(store).mount('#app')

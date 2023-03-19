@@ -12,63 +12,51 @@
                   </div>
                   <div class="footer__row flex-center">
 
-                  <div class="footer__col footer__subrow">
-                    <div class="footer__logo">
-                      <img cla src="../assets/logo.svg" alt="CabelTorg">
-                    </div>
-                    <div class="footer__social social">
-                      <a :href = SETTINGS.instagram_url class="social__item icon-instagram"></a>
-                      <a :href = SETTINGS.vk_url class="social__item icon-vk"></a>
-                      <a :href = SETTINGS.facebook_url class="social__item icon-facebook"></a>
-                    </div>
-
-                  </div>
-                  <div class="footer__subrow">
-                    <div class="footer__col">
-                      <div class="footer__item flex-center icon-phone">
-                        <a class="_title" :href="'tel:' + String(SETTINGS.phone).replace(/ /g,'')">{{ SETTINGS.phone }}</a>
+                    <div class="footer__col footer__subrow">
+                      <div class="footer__logo">
+                        <img cla src="../assets/logo.svg" alt="CabelTorg">
                       </div>
-                      <div class="footer__item flex-center icon-place">
-                        <div>
-                          <div class="_title">Адрес склада в Бресте:</div>
-                          <div>225033, Брестская область,  а/г Большие Мотыкалы, ул. Центральная д.26А</div>
+                      <div class="footer__social social">
+                        <a :href = SETTINGS.instagram_url class="social__item icon-instagram"></a>
+                        <a :href = SETTINGS.vk_url class="social__item icon-vk"></a>
+                        <a :href = SETTINGS.facebook_url class="social__item icon-facebook"></a>
+                      </div>
+                    </div>
+                    <div class="footer__subrow">
+                      <div class="footer__col">
+                        <div class="footer__item flex-center icon-phone">
+                          <a class="_title" :href="'tel:' + String(SETTINGS.phone).replace(/ /g,'')">{{ SETTINGS.phone }}</a>
+                        </div>
+                        <div class="footer__item flex-center icon-place" 
+                          v-for = "address in SETTINGS.addresses" 
+                          :key ="address.id"
+                        >
+                          <div>
+                            <div class="_title">{{ address.title }}:</div>
+                            <div>{{ address.payload }}</div>
+                          </div>
                         </div>
                       </div>
-                      <div class="footer__item flex-center icon-place">
-                        <div>
-                          <div class="_title">Адрес склада в Минске:</div>
-                          <div>Минск, Монтажников 3-й пер., 3</div>
-
-                        </div>
-
-                      </div>
+                      <ul class="footer__col footer__menu">
+                        <li @click = "linkClick('/about')" class="footer__menu_link">
+                          <span>О компании</span>
+                        </li>
+                        <li @click = "linkClick('/contacts')" class="footer__menu_link">
+                          <span>Контакты</span>
+                        </li>
+                        <li @click = "linkClick('/shipping')" class="footer__menu_link">
+                          <span>Оплата и доставка</span>
+                        </li>
+                        <li @click = "linkClick('/how_to_work')" class="footer__menu_link">
+                          <span>Оптовым покупателям</span>
+                        </li>
+                        <li @click = "linkClick('/')" class="footer__menu_link">
+                          <span >Скачать прайс-лист</span>
+                        </li>
+                      </ul>
                     </div>
-                    <ul class="footer__col footer__menu">
-                      <li @click = "linkClick('/about')" class="footer__menu_link">
-                        <span>О компании</span>
-                      </li>
-                      <li @click = "linkClick('/contacts')" class="footer__menu_link">
-                        <span>Контакты</span>
-                      </li>
-                      <li @click = "linkClick('/shipping')" class="footer__menu_link">
-                        <span>Оплата и доставка</span>
-                      </li>
-                      <li @click = "linkClick('/how_to_work')" class="footer__menu_link">
-                        <span>Оптовым покупателям</span>
-                      </li>
-                      <li @click = "linkClick('/')" class="footer__menu_link">
-                        <span >Скачать прайс-лист</span>
-                      </li>
-                    </ul>
-                  </div>
-
-
-
                   </div>
               </div>
-
-
-
           </div>
       </div>
       <div class="footer__down">

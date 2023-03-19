@@ -106,6 +106,22 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: IDeliveryType
   ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.GET_STOCKS_DATA](
+    { commit }: AugmentedActionContext,
+    payload: null
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.ADD_STOCK](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.DELETE_STOCK](
+    { commit }: AugmentedActionContext,
+    payload: number
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.EDIT_STOCK](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
   
 }
 
@@ -383,16 +399,50 @@ export const actions: ActionTree<State, State> & Actions = {
   
   [ActionTypes.EDIT_SETTINGS_DATA]({ commit }, data) {
     return new Promise((resolve) => {
-      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1", data
-      //  {
-      //     Headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     boby: data
-      //   }
-      ).
+      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1", data).
       then((response) => {
         commit(MutationTypes.SET_SETTINGS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.GET_STOCKS_DATA]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses").
+      then((response) => {
+        commit(MutationTypes.SET_STOCKS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+  
+  [ActionTypes.DELETE_STOCK]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses/" + String(payload)).
+      then((response) => {
+        commit(MutationTypes.DELETE_FROM_STOCKS, payload);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.ADD_STOCK]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses", payload).
+      then((response) => {
+        commit(MutationTypes.ADD_TO_STOCKS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.EDIT_STOCK]({ commit }, data) {
+    return new Promise((resolve) => {
+      console.log('data: ', data);
+      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses/" + String(data.id), data).
+      then((response) => {
+        commit(MutationTypes.UPDATE_STOCK, response.data);
         resolve(response.data);
       })
     })

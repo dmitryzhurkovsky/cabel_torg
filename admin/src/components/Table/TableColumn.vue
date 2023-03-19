@@ -9,6 +9,11 @@ const props = defineProps({
     required: false,
     default: false
   },
+  vHtml: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
   srcImage: {
     type: String,
     required: false,
@@ -24,10 +29,11 @@ const props = defineProps({
 <template>
   <div v-if="columnTitle?.db" class="table-column">
     <span class="table-column__title" v-if="columnTitle?.db">{{columnTitle.db}}: </span>
-    <slot v-if="!image"></slot>
-    <div v-else class="table-column-image">
+    <div v-if="image" class="table-column-image">
       <Img :image="srcImage" />
     </div>
+    <div v-if="vHtml" v-html = "srcImage"></div>
+    <slot v-else></slot>
   </div>
 </template>
 

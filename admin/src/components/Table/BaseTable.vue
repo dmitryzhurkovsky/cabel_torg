@@ -119,6 +119,7 @@
           v-for="(col) of props.head"
           :image="col.type === 'image'"
           :srcImage="rowData[col.src]"
+          :vHtml="col.type === 'v-html'"
           :key="col.db"
           :columnTitle="col">
           {{rowData[col.db]}}

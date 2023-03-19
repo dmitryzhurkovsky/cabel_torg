@@ -9,7 +9,7 @@
               <p>Организация СabelTorg занимается реализацией кабельной продукции на всей территории Республики Беларусь.</p>
               <p>Наличие складов в Минске и Бресте позволяет оперативно осуществлять доставку в любую точку страны. А при покупке от 300 бел. рублей, доставка будет для Вас бесплатной!</p>
               <p>Мы являемся первыми импортерами в РБ. Продукция почти всегда в наличии на складе или может быть пополнена за короткий промежуток времени.</p>
-              <button class="btn">Позвонить</button>
+              <a class="btn" :href="'tel:' + String(SETTINGS.phone).replace(/ /g,'')">Позвонить</a>
             </div>
 
             <div class="wholesale__item _block">
@@ -31,9 +31,14 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'Wholesale',
+
+    computed: {
+      ...mapGetters("main", ["SETTINGS"]),
+    },
 
     mounted(){
       this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);

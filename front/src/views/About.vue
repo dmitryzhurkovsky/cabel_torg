@@ -55,19 +55,19 @@
             </div>
             <div class="about__paragraph__text">
               <p class="text_paragraph__item">ООО «КабельЭлектроТорг»</p>
-              <p class="text_paragraph__item">УНП 291132270</p>
-              <p class="text_paragraph__item"> ОКПО 302938961000</p>
+              <p class="text_paragraph__item">УНП {{ SETTINGS.unp }}</p>
+              <p class="text_paragraph__item"> ОКПО {{ SETTINGS.OKPO }}</p>
               <br>
-              <p class="text_paragraph__item"><b>Юр. адрес:</b> 225033, Брестская область, а-г Большие Мотыкалы, ул. Центральная д.26А</p>
-              <p class="text_paragraph__item"><b>Почтовый адрес:</b> 224005, г. Брест, ул. ГОБК, 7, оф. 128</p>
-              <p class="text_paragraph__item"><b>Тел/факс:</b> +375 162 54-54-07</p>
+              <p class="text_paragraph__item"><b>Юр. адрес:</b> {{ SETTINGS.legal_address }}</p>
+              <p class="text_paragraph__item"><b>Почтовый адрес:</b> {{ SETTINGS.postal_address }}</p>
+              <p class="text_paragraph__item"><b>Тел/факс:</b> {{ SETTINGS.phone_and_fax }}</p>
               <br>
-              <p class="text_paragraph__item"><b>Банк:</b> Открытое акционерное общество "Банк Дабрабыт"</p>
-              <p class="text_paragraph__item"><b>р/с в формате IBAN:</b> BY75MMBN30125085100109330000</p>
-              <p class="text_paragraph__item"><b>(RUR)</b> BY32MMBN30125000001100466382</p>
-              <p class="text_paragraph__item">ОАО «Банк Дабрабыт»</p>
+              <p class="text_paragraph__item"><b>Банк:</b> {{ SETTINGS.serving_bank }}</p>
+              <p class="text_paragraph__item"><b>р/с в формате IBAN:</b> {{ SETTINGS.IBAN }}</p>
+              <p class="text_paragraph__item"><b>(RUR)</b> {{ SETTINGS.RUR }}</p>
+              <p class="text_paragraph__item">{{ SETTINGS.serving_bank_short }}</p>
               <br>
-              <p class="text_paragraph__item"><b>Директор:</b> Петрошевич Роман</p>
+              <p class="text_paragraph__item"><b>Директор:</b> {{ SETTINGS.director_fullname }}</p>
             </div>
           </div>
 
@@ -90,9 +90,14 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'About',
+
+    computed:{
+      ...mapGetters("main", ["SETTINGS"]),
+    },
 
     mounted(){
       this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);

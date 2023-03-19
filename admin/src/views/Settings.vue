@@ -72,7 +72,6 @@
       requered:  helpers.withMessage(`Обязательно поле`, required),
       minLength: helpers.withMessage(`Длина поля 9 символов`, minLength(28)),
       maxLength: helpers.withMessage(`Длина поля 9 символов`, maxLength(28)),
-      numeric: helpers.withMessage(`Это числовое поле`, numeric)
     },
     RUR: {
       requered:  helpers.withMessage(`Обязательно поле`, required),

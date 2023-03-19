@@ -6,11 +6,13 @@
 
           <h3>Новости CabelTorg</h3>
           <div class="news__block" v-if="NEWS">
-            <a class="news__item" v-for="oneNew in filteredNews" :key="oneNew.id">
+            <a class="news__item" v-for="oneNew in filteredNews" :key="oneNew.id" @click="onOpenNew(oneNew.id)">
               <CardImage :images = "oneNew.image" />
               <!-- <img src="../../assets/news/new1.png" alt=""> -->
               <div class="news__title">{{ oneNew.title }}</div>
-              <div class="news__desc">{{ oneNew.content }}</div>
+              <div class="news__desc">
+                <div v-html = "oneNew.content"></div>
+              </div>
             </a>
 
           </div>
@@ -41,6 +43,10 @@
 
     methods: {
       ...mapActions("main", ["GET_NEWS"]),
+
+      onOpenNew(id) {
+        this.$router.push('/new/' + id);
+      }
     },
 
     async mounted(){
