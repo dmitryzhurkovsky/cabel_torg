@@ -1,9 +1,10 @@
+from _decimal import Decimal
 from _elementtree import Element
 from abc import ABC
 
 from src.models import Manufacturer, BaseUnit, Category, Attribute
 from src.models.attribute_model import AttributeName, AttributeValue
-from src.models.product_models import Product, ProductStatus
+from src.models.product_model import Product, ProductStatus
 from src.parser.mixins.base_mixin import BaseMixin
 from src.parser.servers import database_service
 from src.parser.utils import (
@@ -130,6 +131,8 @@ class GoodsMixin(BaseMixin, ABC):
                 if raw_field[0][1].text == 'Без НДС':
                     return None, None
                 return 'tax', int(raw_field[0][1].text)
+            case 'Вес':
+                return 'weight', Decimal(raw_field.text)
             case 'Артикул':
                 field_name, field_value = 'vendor_code', raw_field.text
             case 'Описание':

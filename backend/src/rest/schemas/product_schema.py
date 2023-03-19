@@ -4,7 +4,7 @@ from typing import List
 
 from pydantic import BaseModel
 
-from src.models.product_models import ProductStatus
+from src.models.product_model import ProductStatus
 from src.rest.schemas.attribute_schema import AttributeSchema
 from src.rest.schemas.base_schema import BaseSchema
 from src.rest.schemas.base_unit_schema import BaseUnitSchema
@@ -32,6 +32,7 @@ class ProductSchema(BaseSchema):
     discount: int | None
     price_with_discount: Decimal | None
     count: int | None
+    weight: Decimal | None
 
     created_at: datetime | None
     updated_at: datetime | None

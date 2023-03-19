@@ -49,6 +49,7 @@ class ProductJinjaSchema:
     tax: int
     tax_sum: Decimal | float
     price_with_tax: Decimal | float
+    weight: Decimal | float
 
     # It's a special discount if a customer buys a lot of products a vendor can provide a special discount.
     price_with_tax_and_ordr_discount: Decimal | float
@@ -82,6 +83,7 @@ class InvoiceGenerator:
                 order_products.append(ProductJinjaSchema(
                     name=product.product.name,
                     amount=product.amount,
+                    weight=product.product.weight,
                     base_unit=product.product.base_unit.full_name,
                     price=product.product.actual_price,
                     cost=product.amount * product.product.actual_price,
@@ -90,7 +92,7 @@ class InvoiceGenerator:
                     price_with_tax=price_with_tax,
                     price_with_tax_and_ordr_discount=(
                         price_with_tax * order.discount if order.discount else price_with_tax
-                    )
+                    ),
                 ))
 
             return {
