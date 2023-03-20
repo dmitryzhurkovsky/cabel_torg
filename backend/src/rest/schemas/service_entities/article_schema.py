@@ -10,6 +10,7 @@ class ArticleInputSchema(BaseModel):
 
 class ArticleSchema(ArticleInputSchema, BaseSchema):
     image: str | None
+    preview_text: str
 
     class Config:
         orm_mode = True

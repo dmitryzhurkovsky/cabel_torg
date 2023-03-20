@@ -72,3 +72,7 @@ class RequestCallManager(CRUDManager):
 
 class FeedbackManager(CRUDManager):
     table = Feedback
+
+
+class BannerManager(CRUDManager, FileMixin):
+    table = Banner
