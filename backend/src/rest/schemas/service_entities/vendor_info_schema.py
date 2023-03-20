@@ -21,6 +21,7 @@ class AddressSchema(AddressInputSchema, BaseSchema):
 class VendorInfoInputSchema(BaseModel):
     phone: str | None
     email: str | None
+    logo: str | None
 
     director_fullname: str | None
 

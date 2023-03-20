@@ -26,7 +26,7 @@ class AddressManager(CRUDManager):
     table = Address
 
 
-class VendorInfoManager(CRUDManager):
+class VendorInfoManager(CRUDManager, FileMixin):
     table = VendorInfo
 
     preloaded_fields = (
