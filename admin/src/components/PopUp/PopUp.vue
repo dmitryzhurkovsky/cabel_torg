@@ -89,6 +89,8 @@
     background: #fff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
     border-radius: 16px;
+    max-width: 70%;
+    overflow-y: scroll;
   }
 }
 .left-menu {

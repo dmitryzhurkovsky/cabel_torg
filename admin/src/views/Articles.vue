@@ -135,8 +135,6 @@
 <template>
   <h2 class="heading-2">Новости</h2>
 
-  <div v-html="contentField"></div>
-
   <div class="form-container">
     <h3 class="heading-3">Новая новость</h3>
 
@@ -156,24 +154,13 @@
         placeholder="Укажите заголовок"
         v-model:value="v.titleField.$model"
         :error="v.titleField.$errors"
-        width="600px"
-        height="80px"
+        width="1000px"
+        height="200px"
       />
-      <!-- <TextArea
-        label="Крнтент"
-        name="content"
-        placeholder="Укажите содержание"
-        v-model:value="v.contentField.$model"
-        :error="v.contentField.$errors" 
-        width="600px"
-        height="150px"
-      /> -->
       <QuillEditor 
         theme="snow" 
         v-model:content = "contentField" 
         contentType = "html" 
-        width="1200px"
-        height="200px"
       />
       <!-- <PhotoUploader v-model="files" /> -->
       <div class="form-buttons">

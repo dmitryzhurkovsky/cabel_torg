@@ -9,7 +9,7 @@
   import PopUp from '@/components/PopUp/PopUp.vue'
   import Img from '@/components/UI/Img.vue'
   import Button from '@/components/UI/Button.vue'
-import { log } from 'console'
+  import axios from 'axios'
 
   const store = useStore()
 
@@ -93,7 +93,24 @@ import { log } from 'console'
     orderID.value = null as unknown as string
     orderData.value = null
     console.log(orderData);
-    
+  }
+
+  const onGetInvoice = () => {
+    console.log('Invoice');
+    // store.commit(MutationTypes.SET_IS_LOADING, true)
+    // window.open(import.meta.env.VITE_APP_API_URL + "orders/" + orderID.value + '/invoices')
+    axios.post(import.meta.env.VITE_APP_API_URL + "orders/" + orderID.value + '/invoices').
+      then((response) => {
+        console.log('Get response');
+        let filename = '123' + (Math.floor(Date.now() / 1000)) + '.pdf';
+        let url = window.URL.createObjectURL(new Blob([response.data], {type: 'text/plain'}));
+        let link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+       })
   }
 
 </script>
@@ -152,6 +169,7 @@ import { log } from 'console'
           @onSelectItem="onSetNewType"
         />
         <Button label="Сохранить" color="primary" @click="onSaveNewData()"></Button>
+        <Button label="Счет" color="primary" @click="onGetInvoice()"></Button>
       </div>
     </PopUp>
     <h2 class="heading-2">Список заказов</h2>
