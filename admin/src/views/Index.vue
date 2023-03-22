@@ -96,21 +96,26 @@
   }
 
   const onGetInvoice = () => {
-    console.log('Invoice');
-    // store.commit(MutationTypes.SET_IS_LOADING, true)
-    // window.open(import.meta.env.VITE_APP_API_URL + "orders/" + orderID.value + '/invoices')
-    axios.post(import.meta.env.VITE_APP_API_URL + "orders/" + orderID.value + '/invoices').
-      then((response) => {
-        console.log('Get response');
-        let filename = '123' + (Math.floor(Date.now() / 1000)) + '.pdf';
-        let url = window.URL.createObjectURL(new Blob([response.data], {type: 'text/plain'}));
-        let link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', filename);
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-       })
+    store.commit(MutationTypes.SET_IS_LOADING, true)
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    const urlencoded = new URLSearchParams();
+
+    const requestOptions = {
+        method  : 'POST',
+        headers : myHeaders,
+    };
+    fetch(import.meta.env.VITE_APP_API_URL + "orders/" + orderID.value + '/invoices', requestOptions)
+    .then((response) => response.blob())
+    .then((blob) => {
+        const _url = window.URL.createObjectURL(blob);
+        window.open(_url, '_blank');
+        store.commit(MutationTypes.SET_IS_LOADING, false)
+    }).catch((err) => {
+        console.log(err);
+        store.commit(MutationTypes.SET_IS_LOADING, false)
+    });
   }
 
 </script>
