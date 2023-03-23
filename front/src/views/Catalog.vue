@@ -138,7 +138,6 @@
       ...mapMutations("query", ["SET_SEARCH_STRING"]),
       ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING"]),
       ...mapMutations("notification", ["SET_IS_LOADING"]),
-      // ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
 
       async getData(category) {
         this.SET_IS_LOADING(true);
@@ -156,11 +155,6 @@
       },
 
       setActiveCategory(id){
-        // this.SET_ALL_CURRENT_CATEGORIES({
-        //     mainCategory: this.TOP_CATEGORIES_ITEM_ACTIVE,
-        //     middleCategory: this.SUB_CATEGORIES_ITEM_ACTIVE,
-        //     lastCategory: id,
-        // });
         this.SET_CATEGORY_ID(id);
         this.setBreabcrumbs();
         this.$router.push('/category/' + id);
@@ -175,16 +169,14 @@
       },
 
       setBreabcrumbs() {
-        // this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
-        // // this.ADD_BREADCRUMB(mainBreadCrumb);
-        // this.ADD_BREADCRUMB({
-        //   name: this.$router.currentRoute.value.meta.name,
-        //   path: this.$router.currentRoute.value.path,
-        //   type: "global",
-        //   class: ""
-        // });
-        // this.SET_CATEGORY_ID(this.$props.id);
-        if (!this.$props.id) return;
+        if (!this.$props.id) {
+          this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: null,
+            middleCategory: null,
+            lastCategory: null,
+          });
+          return;
+        }
         const categoryStack = [];
         categoryStack.push(Number(this.$props.id));
         let curLevel = this.ALL_CATEGORIES.filter(item => item.id == this.$props.id)[0];
@@ -214,12 +206,6 @@
             lastCategory: null,
           });
         }; 
-        // this.SET_ALL_CURRENT_CATEGORIES({
-        //   mainCategory: this.TOP_CATEGORIES_ITEM_ACTIVE,
-        //   middleCategory: this.SUB_CATEGORIES_ITEM_ACTIVE,
-        //   lastCategory: this.LAST_CATEGORIES_ITEM_ACTIVE,
-        // });
-
       },
     },
 
@@ -230,9 +216,9 @@
     },
 
     async mounted() {
-      await this.getData(this.$props.id);
       this.SET_CATEGORY_ID(this.$props.id);
       this.setBreabcrumbs();
+      await this.getData(this.$props.id);
     }    
   }
 </script>

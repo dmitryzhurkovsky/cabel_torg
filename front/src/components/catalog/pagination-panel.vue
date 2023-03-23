@@ -22,6 +22,12 @@
       ...mapGetters("catalog", ["TOTAL_PAGES", "ACTIVE_PAGE"]),
       ...mapGetters("query", ["LIMIT", "OFFSET"]),
 
+      watch: {
+        OFFSET: function(){
+          this.Pages();
+        },
+      },
+
       Pages() {
         let result = []
         const firstLink = { name: '<', pageNumber: this.ACTIVE_PAGE - 1, isAvailable: this.ACTIVE_PAGE !== 1 };
