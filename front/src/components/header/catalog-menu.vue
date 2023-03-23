@@ -80,7 +80,7 @@ export default {
       });
       this.SET_CATEGORY_ID(id);
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      this.$router.push('/catalog/' + id);
+      this.$router.push('/category/' + id);
     },
 
     subItemCategoryClick(id){
@@ -93,7 +93,7 @@ export default {
       this.UPDATE_LAST_CATEGORY(id);
       this.SET_CATEGORY_ID(id);
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      this.$router.push('/catalog/' + id);
+      this.$router.push('/category/' + id);
     },
   }
 }

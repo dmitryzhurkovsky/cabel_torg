@@ -246,8 +246,8 @@
 
         const mainBreadCrumb = {
           name: 'Каталог',
-          path: '/catalog/12',
-          type: 'local',
+          path: '/catalog',
+          type: 'global',
           class: '',
           category: 1,
           level: 'root',
@@ -269,10 +269,11 @@
         const level = ['last', 'sub', 'top'];
 
         for (let i = 0; i < chein.length; i++) {
+          // console.log(chein[i]);
           const currBreadCrumb  = {
             name: chein[chein.length - 1 - i].name,
-            path: '/catalog/12',
-            type: 'local',
+            path: '/category/' + chein[chein.length - 1 - i].id,
+            type: 'global',
             class: '',
             category: chein[chein.length - 1 - i].id,
             level: level[chein.length - 1 - i],

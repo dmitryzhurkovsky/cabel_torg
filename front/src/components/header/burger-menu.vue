@@ -177,7 +177,7 @@ export default {
     openCatalog() {
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
       const category = this.LAST_CATEGORIES_ITEM_ACTIVE || this.SUB_CATEGORIES_ITEM_ACTIVE || this.TOP_CATEGORIES_ITEM_ACTIVE + '12';
-      this.$router.push('/catalog/' + category);
+      this.$router.push('/category/' + category);
     },
 
     openPage(page) {

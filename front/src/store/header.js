@@ -2,8 +2,8 @@ import axios from "axios";
 
 const mainBreadCrumb = {
   name: 'Каталог',
-  path: '/catalog/12',
-  type: 'local',
+  path: '/catalog',
+  type: 'global',
   class: '',
   category: 1,
   level: 'root',
@@ -212,14 +212,14 @@ export default {
     SET_ALL_CURRENT_CATEGORIES({ commit, getters }, categoryState){
       const { mainCategory, middleCategory, lastCategory } = categoryState;
       // console.log(categoryState);
-      const breadCrumbs = [  ];
+      const breadCrumbs = [ mainBreadCrumb ];
       if (mainCategory) {
         commit("SET_CURRENT_TOP_CATEGORY", mainCategory);
         const currCategory = getters.ALL_CATEGORIES.filter(item => item.id === mainCategory)[0];
         const currBreadCrumb  = {
           name: currCategory.name,
-          path: '/catalog/' + currCategory.id,
-          type: 'local',
+          path: '/category/' + currCategory.id,
+          type: 'global',
           class: '',
           category: currCategory.id,
           level: 'top',
@@ -233,8 +233,8 @@ export default {
         const currCategory = getters.ALL_CATEGORIES.filter(item => item.id === middleCategory)[0];
         const currBreadCrumb  = {
           name: currCategory.name,
-          path: '/catalog/' + currCategory.id,
-          type: 'local',
+          path: '/category/' + currCategory.id,
+          type: 'global',
           class: '',
           category: currCategory.id,
           level: 'sub',
@@ -248,8 +248,8 @@ export default {
         const currCategory = getters.ALL_CATEGORIES.filter(item => item.id === lastCategory)[0]
         const currBreadCrumb  = {
           name: currCategory.name,
-          path: '/catalog/' + currCategory.id,
-          type: 'local',
+          path: '/category/' + currCategory.id,
+          type: 'global',
           class: '',
           category: currCategory.id,
           level: 'last',

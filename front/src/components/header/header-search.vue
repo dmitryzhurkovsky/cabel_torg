@@ -71,7 +71,8 @@ export default {
 
   methods: {
     ...mapMutations("query", ["SET_SEARCH_STRING", "SET_FINDED_ELEMENTS", "SET_CATEGORY_ID"]),
-    ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING"]),
+    ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING", ""]),
+    ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY"]),
     ...mapActions("query", ["FIND_ELEMENTS"]),
 
     onInput(){
@@ -93,8 +94,11 @@ export default {
     openFindedElementInCatalg(){
       this.SET_CATALOG_SEARCH_STRING(this.SEARCH_STRING);
       this.SET_SEARCH_STRING('');
-      const category = this.LAST_CATEGORIES_ITEM_ACTIVE || this.SUB_CATEGORIES_ITEM_ACTIVE || this.TOP_CATEGORIES_ITEM_ACTIVE + '12';
-      this.$router.push('/catalog/' + category);
+      this.SET_CURRENT_TOP_CATEGORY(null);
+      this.SET_CURRENT_SUB_CATEGORY(null);
+      this.SET_CURRENT_LAST_CATEGORY(null);
+      // const category = this.LAST_CATEGORIES_ITEM_ACTIVE || this.SUB_CATEGORIES_ITEM_ACTIVE || this.TOP_CATEGORIES_ITEM_ACTIVE + '12';
+      this.$router.push('/catalog');
     }
 
   },

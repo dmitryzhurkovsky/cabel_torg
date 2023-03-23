@@ -57,6 +57,7 @@ export default {
     changePage(item){
       this.SET_SEARCH_STRING('');
       this.MOVE_TO_SELECT_PATH(item.index);
+      // console.log('Move', item);
       // this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", item.index);
       this.$router.push(item.path);
     }
