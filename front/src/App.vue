@@ -1,5 +1,5 @@
 <template>
-  <div id="app__component">
+  <div id="app__component" v-if="ALL_CATEGORIES.length">
     <MenuWrapper/>
     <v-notification/>
     <Loader/>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import { mapActions, mapMutations } from "vuex";
+  import { mapActions, mapGetters, mapMutations } from "vuex";
   import Header from '@/components/header.vue';
   import Breadcrumb from '@/components/breadcrumb.vue';
   import Footer from "@/components/footer.vue";
@@ -26,6 +26,7 @@
     name: "App",
 
     computed: {
+      ...mapGetters("header", ["ALL_CATEGORIES"])
     },
 
     components:{
