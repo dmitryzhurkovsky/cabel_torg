@@ -39,6 +39,7 @@ export default {
   &__item{
     display: flex;
     align-items: flex-start;
+    height: 100%;
 
     ._block{
       flex-basis: 50%;
@@ -69,12 +70,16 @@ export default {
     letter-spacing: 0.44px;
     margin: 16px 0;
     cursor: pointer;
+    height: 100%;
+    max-height: 50px;
   }
 
   &__description{
     font-size: 14px;
     line-height: 130%;
     opacity: 0.4;
+    height: 100%;
+    max-height: 60px;
   }
 
 }

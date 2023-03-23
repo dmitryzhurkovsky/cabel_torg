@@ -206,6 +206,9 @@ export default {
     padding:5px;
     flex-basis: 15%;
     text-align: center;
+    span{
+      margin-left: 5px;
+    }
 
   }
   &__price{
