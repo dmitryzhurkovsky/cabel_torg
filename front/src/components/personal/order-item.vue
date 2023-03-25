@@ -4,9 +4,10 @@
       Заказ #  <span>{{ card.id }}</span>
     </div>
     <div class="flex-center order__row">
-      <div class="order__date">10 июня 2022???</div>
+      <div class="order__invoice" @click.stop = "dowwnloadInvoice"> Счет </div>
+      <div class="order__date">{{ card.created_at.slice(0, 10) }}</div>
       <div class="order__delivery">{{ delivery_type }}</div>
-      <div class="order__status _status-color">Отправлен???</div>
+      <div class="order__status _status-color">{{ order_status }}</div>
       <div class="order__price">{{ order_price }}<span> BYN</span></div>
     </div>
 
@@ -28,7 +29,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 export default {
   name: 'OrderItem',
 
@@ -53,6 +54,13 @@ export default {
       return Number(totalPrice.toFixed(2));
     },
 
+    order_status(){
+      if (this.card.status === 'P') return 'В обработке';
+      if (this.card.status === 'S') return 'Отправлен';
+      if (this.card.status === 'c') return 'Отменен';
+      if (this.card.status === 'C') return 'Выполнен';
+    },
+
     delivery_type(){
       const type = this.ORDER_DELIVERY_TYPES.filter(item => item.id === this.card.delivery_type_id);
       return type.length ? type[0].payload : 'unknown';
@@ -65,10 +73,33 @@ export default {
   },
 
   methods:{
+    ...mapMutations("notification", ["SET_IS_LOADING"]),
+
     toggleOrder(){
       this.isOpen = !this.isOpen;
     },
 
+    dowwnloadInvoice(){
+      this.SET_IS_LOADING(true);
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+      const urlencoded = new URLSearchParams();
+      const requestOptions = {
+          method  : 'POST',
+          headers : myHeaders,
+      };
+      fetch(process.env.VUE_APP_API_URL + "orders/" + this.card.id + '/invoices', requestOptions)
+      .then((response) => response.blob())
+      .then((blob) => {
+          const _url = window.URL.createObjectURL(blob);
+          window.open(_url, '_blank');
+          this.SET_IS_LOADING(false);
+      }).catch((err) => {
+          console.log(err);
+          this.SET_IS_LOADING(false);
+      });
+
+    }
   }
 }
 </script>
@@ -144,7 +175,12 @@ export default {
         order: 2;
       }
     }
-
+    &__invoice{
+      &:hover{
+        color: #4275D8;
+        cursor: pointer;
+      }
+    }
     &__status{
       padding: 0 5px;
 

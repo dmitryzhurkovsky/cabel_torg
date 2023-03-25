@@ -92,7 +92,6 @@
     newStatus.value = null as unknown as string
     orderID.value = null as unknown as string
     orderData.value = null
-    console.log(orderData);
   }
 
   const onGetInvoice = () => {

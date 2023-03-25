@@ -6,6 +6,7 @@ export default {
   state: {
     partners: [],
     news: [],
+    banners: [],
     settings: {},
   },
 
@@ -15,6 +16,9 @@ export default {
     },
     NEWS(state) {
       return state.news;
+    },
+    BANNERS(state) {
+      return state.banners;
     },
     SETTINGS(state) {
       return state.settings;
@@ -28,6 +32,10 @@ export default {
 
     SET_NEWS(state, news) {
       state.news = [...news];
+    },
+
+    SET_BANNERS(state, banners) {
+      state.banners = [...banners];
     },
 
     SET_SETTINGS(state, settings) {
@@ -47,9 +55,20 @@ export default {
     },
 
     async GET_NEWS({ commit }){
+      // try {
+      //   const response = await axios.get(process.env.VUE_APP_API_URL + 'service_entities/articles');
+      //   commit("SET_NEWS", response.data);
+      // } catch (e) {
+      //   console.log(e);
+      //   commit("notification/ADD_MESSAGE", {name: "Не возможно обновить новости", icon: "error", id: '1'}, {root: true})
+      // }
+    },
+
+    async GET_BANNERS({ commit }){
+      console.log('AAA');
       try {
-        const response = await axios.get(process.env.VUE_APP_API_URL + 'service_entities/articles');
-        commit("SET_NEWS", response.data);
+        const response = await axios.get(process.env.VUE_APP_API_URL + 'service_entities/banners');
+        commit("SET_BANNERS", response.data);
       } catch (e) {
         console.log(e);
         commit("notification/ADD_MESSAGE", {name: "Не возможно обновить новости", icon: "error", id: '1'}, {root: true})

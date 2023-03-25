@@ -43,7 +43,7 @@
                    BYN
                 </div>
                 <div class="">
-                  <button @click.stop = "openOrderRequest()" class="btn">Оформить заказ</button>
+                  <button @click.stop = "openOrderRequest()" class="btn" ref="secondPartElement">Оформить заказ</button>
                 </div>
               </div>
             </div>
@@ -51,7 +51,7 @@
 
           <!-- Появляется если есть товар в корзине  и человек наживаем кнопку оформить заказ -->
 
-          <div v-if = "IS_APPLICATION_OPEN === true" class="cart__order ">
+          <div v-if = "IS_APPLICATION_OPEN === true" class="cart__order">
             <h3>Оформление заказа </h3>
             <div class="about__paragraph">
               <div class="about__paragraph__title">
@@ -64,16 +64,10 @@
                   <div class="error-message" v-if="ERRORS.city"> {{ ERRORS.city }} </div>
                 </div>
                 <div class="radio__list table3x">
-
                   <div class="radio" v-for = "delivery in ORDER_DELIVERY_TYPES" :key = delivery.id>
                     <input :id = delivery.id name="radio" type="radio" :value = delivery.id v-model = "delivery_type_id">
                     <label :for = delivery.id class="radio-label">{{ delivery.payload }}</label>
                   </div>
-                  <!-- <div class="radio">
-                    <input id="radio-1" name="radio" type="radio" checked value="0">
-                    <label for="radio-1" class="radio-label">Самовывоз со склада в г. Минск (9:00-18:00), <b>бесплатно</b></label>  
-                  </div> -->
-
                 </div>
 
                 <div class="table3x">
@@ -283,6 +277,8 @@
 
       openOrderRequest(){
         this.SET_IS_APPLICATION_OPEN(true);
+        const scrollY = this.$refs.secondPartElement.getBoundingClientRect().bottom + window.pageYOffset;
+        setTimeout(() => window.scrollTo(0, scrollY), 200);
       },
 
       async checkRequestData(){
@@ -335,6 +331,9 @@
         if (Object.keys(errorsInData).length) {
           this.SET_ERRORS(errorsInData);
           this.isLoading = false;
+          const scrollY = this.$refs.secondPartElement.getBoundingClientRect().bottom + window.pageYOffset;
+          // window.scrollTo(0, scrollY);
+          setTimeout(() => window.scrollTo(0, scrollY), 200);
         } else {
 
           const orderData = {

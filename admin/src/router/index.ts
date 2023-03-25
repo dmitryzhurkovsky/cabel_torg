@@ -51,6 +51,12 @@ const router = createRouter({
     },
     {
       beforeEnter: auth,
+      path: '/banners',
+      name: 'Banners',
+      component: () => import('@/views/Banners.vue')
+    },
+    {
+      beforeEnter: auth,
       path: '/call_requests',
       name: 'Calls',
       component: () => import('@/views/CallRequests.vue')

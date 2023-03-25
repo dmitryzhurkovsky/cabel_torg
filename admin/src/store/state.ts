@@ -6,6 +6,7 @@ const state = {
   isLoading: false,
   deliveryTypesData: [] as Array<IDeliveryType>,
   articles: [] as Array<IDeliveryType>,
+  banners: [] as Array<IDeliveryType>,
   partners: [] as Array<IDeliveryType>,
   callRequests: [] as Array<IDeliveryType>,
   feedbackRequests: [] as Array<IDeliveryType>,

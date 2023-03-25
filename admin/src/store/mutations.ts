@@ -31,6 +31,10 @@ export type Mutations<S = State> = {
   [MutationTypes.ADD_TO_STOCKS](state: S, payload: IDeliveryType): void,
   [MutationTypes.DELETE_FROM_STOCKS](state: S, payload: number): void,
   [MutationTypes.UPDATE_STOCK](state: S, payload: IDeliveryType): void,
+  [MutationTypes.SET_BANNERS](state: S, payload: Array<IDeliveryType>): void,
+  [MutationTypes.ADD_TO_BANNERS](state: S, payload: IDeliveryType): void,
+  [MutationTypes.DELETE_FROM_BANNERS](state: S, payload: number): void,
+  [MutationTypes.UPDATE_BANNER](state: S, payload: IDeliveryType): void,
   
 }
 
@@ -119,5 +123,18 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationTypes.UPDATE_STOCK](state, payload: IDeliveryType) {
     state.stocks = state.stocks.filter(item => item.id !== payload.id)
     state.stocks.push(payload)
+  },
+  [MutationTypes.SET_BANNERS](state, payload: Array<IDeliveryType>) {
+    state.banners = payload
+  },
+  [MutationTypes.ADD_TO_BANNERS](state, payload: IDeliveryType) {
+    state.banners = [...state.banners, payload]
+  },
+  [MutationTypes.DELETE_FROM_BANNERS](state, payload: number) {
+    state.banners = state.banners.filter(item => item.id !== payload)
+  },
+  [MutationTypes.UPDATE_BANNER](state, payload: IDeliveryType) {
+    state.banners = state.banners.filter(item => item.id !== payload.id)
+    state.banners.push(payload)
   },
 }

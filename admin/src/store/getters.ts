@@ -8,6 +8,7 @@ export type Getters = {
   deliveryTypesData(state: State): Array<IDeliveryType>
   isLogin(state: State): boolean
   articlesData(state: State): Array<IDeliveryType>
+  bannersData(state: State): Array<IDeliveryType>
   partnersData(state: State): Array<IDeliveryType>
   callRequests(state: State): Array<IDeliveryType>
   feedbackRequests(state: State): Array<IDeliveryType>
@@ -36,6 +37,9 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   articlesData: (state) => {
     return state.articles
+  },
+  bannersData: (state) => {
+    return state.banners
   },
   partnersData: (state) => {
     return state.partners

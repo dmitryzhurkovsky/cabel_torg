@@ -1,37 +1,79 @@
 <template>
   <div class="banner">
-    <div class="banner__wrapper">
-      <div class="banner__content _container">
-        <div class="banner__body">
-          <h1>Распродажа сетевого оборудования!</h1>
-          <p>* Подробные условия и полный ассортимент товаров со скидками смотрите на странице распродажи</p>
-          <button class="btn"> К распродаже
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 12H20.5M20.5 12L16.5 8M20.5 12L16.5 16" stroke="white"/>
-            </svg>
-          </button>
+    <swiper
+      :slides-per-view=quantity
+      :space-between="15"
+      @swiper="onSwiper"
+      @slideChange="onSlideChange"
+    >
+
+      <swiper-slide v-for="banner in filteredBanners" :key = "banner.id">
+        <div class="banner__wrapper" 
+          :style = "{
+            backgroundImage     : 'url(' + getPath(banner.image) + ')',
+            backgroundRepeat    : 'no-repeat',
+            backgroundPosition  : 'center',
+            backgroundSize      : 'cover',
+          }"
+        >
+          <div class="banner__content _container">
+            <div class="banner__body">
+              <h1>{{ banner.title }}</h1>
+              <p>{{ banner.subtitle }}</p>
+              <button class="btn"> К распродаже
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 12H20.5M20.5 12L16.5 8M20.5 12L16.5 16" stroke="white"/>
+                </svg>
+              </button>
 
 
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </swiper-slide>
+    </swiper>
+
   </div>
 </template>
 
 <script>
-
+  import { mapGetters, mapActions } from 'vuex';
+  import { Swiper } from "swiper/vue";
+  import { SwiperSlide } from "swiper/vue";
+  import SwiperCore, { Pagination, Navigation } from "swiper";
+  import "swiper/swiper.min.css";
+  
   export default {
     name: 'Banner',
+  
+    components: {
+      Swiper, SwiperSlide,
+    },
+
+    computed: {
+      ...mapGetters("main", ["BANNERS"]),
+
+      filteredBanners() {
+        return this.BANNERS.filter(item => item.is_active);
+      }
+    },
+
     methods: {
+      ...mapActions("main", ["GET_BANNERS"]),
+
       getPath: function(item){
         console.log(process.env.BASE_URL);
         console.log(process.env.VUE_APP_IMAGES);
         let path = process.env.VUE_APP_IMAGES + item;
-        // return path;
-        return item;
+        return path;
       },
+    },
 
-    }
+    async mounted(){
+      console.log('Mounted');
+      await this.GET_BANNERS();
+    },
+
   }
 </script>
 
@@ -39,12 +81,12 @@
 
 .banner {
 
-  &__wrapper{
-    background-image:url("../../assets/banner/1.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-  }
+  // &__wrapper{
+  //   // background-image:url("../../assets/banner/1.png");
+  //   // background-repeat: no-repeat;
+  //   // background-position: center;
+  //   // background-size: cover;
+  // }
   &__content{
 
   }

@@ -19,6 +19,7 @@ const links = ref([
   { name: "Запросы на звонки", href: "/call_requests" },
   { name: "Запросы обратной связи", href: "/feedback_requests" },
   { name: "Новости", href: "/articles" },
+  { name: "Банеры", href: "/banners" },
   { name: "Партнеры", href: "/partners" },
   { name: "Варианты доставки", href: "/delivery_types" },
   { name: "Настройки", href: "/settings" },
