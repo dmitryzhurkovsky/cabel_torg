@@ -6,11 +6,11 @@ from src.rest.schemas.base_schema import BaseSchema
 class ArticleInputSchema(BaseModel):
     title: str
     content: str
+    preview_text: str
 
 
 class ArticleSchema(ArticleInputSchema, BaseSchema):
     image: str | None
-    preview_text: str
 
     class Config:
         orm_mode = True

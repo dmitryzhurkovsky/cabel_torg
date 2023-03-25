@@ -35,8 +35,8 @@
                 <div class="swiper-pagination"></div>
 
                 <div class="swiper-navigation-container">
-                  <div class="swiper-button-next" @click="nextSlide"></div>
-                  <div class="swiper-button-prev" @click="prevSlide"></div>
+<!--                  <div class="swiper-button-next" @click="nextSlide"></div>-->
+<!--                  <div class="swiper-button-prev" @click="prevSlide"></div>-->
                 </div>
 
               </swiper>

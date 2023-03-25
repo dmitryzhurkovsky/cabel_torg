@@ -9,7 +9,7 @@
             <a class="news__item" v-for="oneNew in filteredNews" :key="oneNew.id" @click="onOpenNew(oneNew.id)">
               <CardImage :images = "oneNew.image" />
               <!-- <img src="../../assets/news/new1.png" alt=""> -->
-              <div class="news__title">{{ oneNew.title }}</div>
+              <div class="news__title long-text">{{ oneNew.title }}</div>
               <div class="news__desc">
                 <div v-html = "oneNew.content"></div>
               </div>
@@ -112,12 +112,19 @@
     line-height: 24px;
     letter-spacing: 0.44px;
     color: $mainColor;
+    height: 100%;
+    max-height: 50px;
+    overflow: hidden;
+
   }
   &__desc{
     font-size: 14px;
     line-height: 130%;
     color: $mainColor;
     opacity: 0.4;
+    height: 100%;
+    max-height: 70px;
+    overflow: hidden;
 
   }
 

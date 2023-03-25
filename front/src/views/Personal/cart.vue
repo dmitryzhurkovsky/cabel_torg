@@ -591,6 +591,10 @@
   &__box {
     padding: 24px 0 30px 0;
     align-items: flex-start;
+    .group{
+      width: 100%;
+      position: relative;
+    }
   }
 
   &__text {
@@ -645,5 +649,16 @@
     max-width: 10%;
 
   }
+}
+
+.error-message {
+  position: absolute;
+  left: 15px;
+  bottom: -4px;
+  padding: 0 8px 0 8px;
+  font-size: 12px;
+  background-color: #fff;
+  color: #E30044;
+
 }
 </style>
