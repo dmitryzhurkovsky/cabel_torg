@@ -39,7 +39,7 @@ async def create_banner(
 
 
 @banner_router.post(
-    '/banners/{article_id}/images',
+    '/banners/{banner_id}/images',
     response_model=BannerSchema,
     status_code=status.HTTP_201_CREATED)
 async def upload_image_for_banner(
