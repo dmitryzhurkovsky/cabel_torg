@@ -8,11 +8,12 @@ class BannerInputSchema(BaseModel):
     subtitle: str | None
     text: str | None
     is_active: bool | None
+    preview_text: str | None
+
 
 
 class BannerSchema(BannerInputSchema, BaseSchema):
     image: str | None
-    preview_text: str
 
     class Config:
         orm_mode = True
