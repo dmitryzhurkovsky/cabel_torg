@@ -9,7 +9,8 @@ class BannerInputSchema(BaseModel):
     text: str | None
     is_active: bool | None
     preview_text: str | None
-
+    button_name: str | None
+    button_link: str | None
 
 
 class BannerSchema(BannerInputSchema, BaseSchema):
