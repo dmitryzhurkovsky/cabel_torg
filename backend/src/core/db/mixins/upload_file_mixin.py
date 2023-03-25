@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 import aiofiles
 from fastapi import UploadFile
@@ -25,5 +26,5 @@ class FileMixin(BaseMixin):
     @classmethod
     def delete_file(cls, file_name: str):
         """Delete a file from a disk."""
-        file_name_with_path = f'{settings.IMAGES_PATH}/{file_name}'
-        os.remove(file_name_with_path)
+        file = Path(f'{settings.IMAGES_PATH}/{file_name}')
+        file.unlink(missing_ok=True)
