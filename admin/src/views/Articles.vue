@@ -80,6 +80,7 @@
     formType.value = false
     onSetIsFormOpen(true)
     onSetIsUploadOpen(false)
+    setTimeout(() => window.scrollTo(0, 0), 0);
   } 
 
   const onAddButtonClick = () => {
@@ -89,6 +90,7 @@
     formType.value = true
     onSetIsFormOpen(true)
     onSetIsUploadOpen(false)
+    setTimeout(() => window.scrollTo(0, 0), 0);
   }
 
   const onDeleteArticle = async (rowData: IDeliveryType) => {

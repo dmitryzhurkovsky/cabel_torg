@@ -61,6 +61,7 @@
     payloadField.value = rowData.payload as string
     formType.value = false
     onSetIsFormOpen(true)
+    setTimeout(() => window.scrollTo(0, 0), 0);
   } 
 
   const onAddButtonClick = () => {
@@ -68,6 +69,7 @@
     payloadField.value = '' as string
     formType.value = true
     onSetIsFormOpen(true)
+    setTimeout(() => window.scrollTo(0, 0), 0);
   }
 
   const onDeleteDeliveryType = async (rowData: IDeliveryType) => {

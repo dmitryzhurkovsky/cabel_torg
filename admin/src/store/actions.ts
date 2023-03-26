@@ -467,11 +467,7 @@ export const actions: ActionTree<State, State> & Actions = {
 
   [ActionTypes.EDIT_BANNER]({ commit }, data) {
     return new Promise((resolve) => {
-      const params = { 
-        title: data.title as string,
-        content: data.content as string,
-      }
-      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/banners/" + String(data.id), params).
+      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/banners/" + String(data.id), data).
       then((response) => {
         commit(MutationTypes.UPDATE_BANNER, response.data);
         resolve(response.data);

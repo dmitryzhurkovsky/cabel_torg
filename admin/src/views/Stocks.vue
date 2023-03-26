@@ -67,6 +67,7 @@
     titleField.value = rowData.title as string
     formType.value = false
     onSetIsFormOpen(true)
+    setTimeout(() => window.scrollTo(0, 0), 0);
   } 
 
   const onAddButtonClick = () => {
@@ -75,6 +76,7 @@
     titleField.value = '' as string
     formType.value = true
     onSetIsFormOpen(true)
+    setTimeout(() => window.scrollTo(0, 0), 0);
   }
 
   const onDeleteDeliveryType = async (rowData: IDeliveryType) => {

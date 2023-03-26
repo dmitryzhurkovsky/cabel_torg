@@ -6,6 +6,7 @@
   import BaseTable from '@/components/Table/BaseTable.vue'
   import Button from '@/components/UI/Button.vue'
   import TextArea from '@/components/UI/TextArea.vue';
+  import Input from '@/components/UI/Input.vue';
   import Select from '@/components/UI/Select.vue'
   import PhotoUploader from '@/components/UI/PhotoUploader.vue';
   import { IDeliveryType } from '../types';
@@ -17,11 +18,13 @@
   const tableData = ref([] as Array<IDeliveryType>)
   const files = ref<Array<File>>([])
   
-  const tableSizeColumns = '30px 1fr 1fr 2fr 1fr 50px 40px 40px 40px'
+  const tableSizeColumns = '30px 1fr 1fr 1fr 1fr 1fr 1fr 50px 40px 40px 40px'
 
   const isFormOpen = ref(false)
   const isUploadOpen = ref(false)
   const titleField = ref('')
+  const buttonNameField = ref('')
+  const buttonLinkField = ref('')
   const subtitleField = ref('')
   const textField = ref('')
   const isActiveField = ref()
@@ -37,6 +40,8 @@
     {db: 'id', name: 'Id'},
     {db: 'title', name: 'Заголовок'}, 
     {db: 'subtitle', name: 'Подзаголовок',}, 
+    {db: 'button_name', name: 'Кнопка',}, 
+    {db: 'button_link', name: 'Переход',}, 
     {db: 'text', name: 'Контент', type: 'v-html', src: 'text'}, 
     {db: 'image', name: 'Картинка', type: 'image', src: 'image'}, 
     {db: 'is_active', name: 'Актив.'}, 
@@ -55,9 +60,15 @@
     isActiveField: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
     },
+    buttonNameField: {     
+     requered:  helpers.withMessage(`Обязательно поле`, required),
+    },
+    buttonLinkField: {
+      requered:  helpers.withMessage(`Обязательно поле`, required),
+    },
   }))
 
-  const v = useVuelidate(rules, {titleField, subtitleField, isActiveField});
+  const v = useVuelidate(rules, {titleField, subtitleField, isActiveField, buttonNameField, buttonLinkField});
 
   const sendDataRequest = async () => {
     await store.dispatch(ActionTypes.GET_BANNERS_DATA, null)
@@ -93,12 +104,15 @@
     titleField.value = rowData.title
     subtitleField.value = rowData.subtitle
     textField.value = rowData.text
+    buttonNameField.value = rowData.button_name
+    buttonLinkField.value = rowData.button_link
     isActiveField.value = rowData.is_active ? 0 : 1
     isActiveNameField.value = rowData.is_active ? isActiveData[0].name : isActiveData[1].name
     isActiveValue.value = rowData.is_active ? true : false
     formType.value = false
     onSetIsFormOpen(true)
     onSetIsUploadOpen(false)
+    setTimeout(() => window.scrollTo(0, 0), 0);
   } 
 
   const onAddButtonClick = () => {
@@ -106,12 +120,15 @@
     titleField.value = ''
     subtitleField.value = ''
     textField.value = ''
+    buttonNameField.value = ''
+    buttonLinkField.value = ''
     isActiveField.value = isActiveData[0].id
     isActiveNameField.value = isActiveData[0].name
     isActiveValue.value = true
     formType.value = true
     onSetIsFormOpen(true)
     onSetIsUploadOpen(false)
+    setTimeout(() => window.scrollTo(0, 0), 0);
   }
 
   const onDeleteArticle = async (rowData: IDeliveryType) => {
@@ -143,15 +160,19 @@
       title: titleField.value,
       subtitle: subtitleField.value,
       text: textField.value,
+      button_name: buttonNameField.value,
+      button_link: buttonLinkField.value,
       is_active: isActiveValue.value,
     } as IDeliveryType
+    console.log(data);
+    
     if (formType.value) {
       store.commit(MutationTypes.SET_IS_LOADING, true)
       await store.dispatch(ActionTypes.ADD_BANNER, data)
     } else {
       store.commit(MutationTypes.SET_IS_LOADING, true)
-      data.id = idField.value, 
-       await store.dispatch(ActionTypes.EDIT_BANNER, data)
+      data.id = idField.value
+      await store.dispatch(ActionTypes.EDIT_BANNER, data)
     }
     onSetIsFormOpen(false)
     // store.commit(MutationTypes.SET_IS_LOADING, false)
@@ -198,10 +219,24 @@
         v-model:content = "textField" 
         contentType = "html" 
       />
+      <Input
+        label="Название кнопки"
+        name="buttonNameField"
+        placeholder="Название кнопки"
+        v-model:value="v.buttonNameField.$model"
+        :error="v.buttonNameField.$errors"
+      />
+      <Input
+        label="Линк кнопки"
+        name="buttonLinkField"
+        placeholder="Линк кнопки"
+        v-model:value="v.buttonLinkField.$model"
+        :error="v.buttonLinkField.$errors"
+      />
       <Select
         v-if="isActiveData.length"
         :text = "isActiveNameField"
-        :id  = "isActiveField" 
+        :id  = "String(isActiveField)" 
         fieldForSearch = "name"
         :data = "isActiveData"
         @onSelectItem="onSetNewStatus"
