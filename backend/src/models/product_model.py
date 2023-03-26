@@ -5,9 +5,9 @@ from sqlalchemy import (
     String,
     DECIMAL,
     CheckConstraint,
-    Boolean
+    Boolean,
+    Enum
 )
-from sqlalchemy.dialects.postgresql import ENUM as pgEnum
 from sqlalchemy.orm import relationship
 
 from src.core.enums import BaseEnum
@@ -23,7 +23,7 @@ class ProductStatus(str, BaseEnum):
 class Product(Base1CModel):
     __tablename__ = 'products'
 
-    status = Column('status', pgEnum(*ProductStatus.values(), name='product_status'))
+    status = Column('status', Enum(*ProductStatus.values(), name='product_status'))
     vendor_code = Column(String)
     name = Column(String)
     images = Column(String)  # pictures paths in the following format: picture_1,picture_2,picture_3...

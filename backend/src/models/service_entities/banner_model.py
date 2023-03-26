@@ -11,4 +11,6 @@ class Banner(BaseModel):
     text = Column(String, nullable=True)
     preview_text = Column(String, nullable=True)
     image = Column(String, nullable=True)
+    button_name = Column(String, nullable=True)
+    button_link = Column(String, nullable=True)
     is_active = Column(Boolean, default=True)
