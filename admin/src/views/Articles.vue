@@ -16,18 +16,20 @@
   const tableData = ref([] as Array<IDeliveryType>)
   const files = ref<Array<File>>([])
   
-  const tableSizeColumns = '30px 1fr 2fr 1fr 40px 40px 40px'
+  const tableSizeColumns = '30px 1fr 2fr 2fr 1fr 40px 40px 40px'
 
   const isFormOpen = ref(false)
   const isUploadOpen = ref(false)
   const titleField = ref('')
   const contentField = ref('')
+  const contentShortField = ref('')
   const idField = ref()
   const formType = ref(true)
 
   const tableHeads = [
     {db: 'id', name: 'Id'},
     {db: 'title', name: 'Заголовок'}, 
+    {db: 'preview_text', name: 'Контент превью', type: 'v-html', src: 'preview_text'}, 
     {db: 'content', name: 'Контент', type: 'v-html', src: 'content'}, 
     {db: 'image', name: 'Картинка', type: 'image', src: 'image'}, 
     {db: '', name: ''},
@@ -77,6 +79,7 @@
     idField.value = rowData.id
     titleField.value = rowData.title as string
     contentField.value = rowData.content as string
+    contentShortField.value = rowData.preview_text as string
     formType.value = false
     onSetIsFormOpen(true)
     onSetIsUploadOpen(false)
@@ -87,6 +90,7 @@
     idField.value = null
     titleField.value = '' as string
     contentField.value = '' as string
+    contentShortField.value = '' as string
     formType.value = true
     onSetIsFormOpen(true)
     onSetIsUploadOpen(false)
@@ -112,20 +116,17 @@
   const submitForm = async () => {
     v.value.$touch()
     if (v.value.$error) return
-    if (formType.value) {
-      store.commit(MutationTypes.SET_IS_LOADING, true)
-      const data = {
+    const data = {
         title: titleField.value,
         content: contentField.value,
-      }
+        preview_text: contentShortField.value,
+      } as IDeliveryType
+    if (formType.value) {
+      store.commit(MutationTypes.SET_IS_LOADING, true)
       await store.dispatch(ActionTypes.ADD_ARTICLE, data)
     } else {
       store.commit(MutationTypes.SET_IS_LOADING, true)
-      const data = {
-        id: idField.value, 
-        title: titleField.value,
-        content: contentField.value,
-      }
+      data.id = idField.value
       await store.dispatch(ActionTypes.EDIT_ARTICLE, data)
     }
     onSetIsFormOpen(false)
@@ -159,6 +160,13 @@
         width="1000px"
         height="200px"
       />
+      <h3 class="heading-3">Превью новости</h3>
+      <QuillEditor 
+        theme="snow" 
+        v-model:content = "contentShortField" 
+        contentType = "html" 
+      />
+      <h3 class="heading-3">Новость</h3>
       <QuillEditor 
         theme="snow" 
         v-model:content = "contentField" 

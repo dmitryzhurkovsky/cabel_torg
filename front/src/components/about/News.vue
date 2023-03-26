@@ -11,7 +11,7 @@
               <!-- <img src="../../assets/news/new1.png" alt=""> -->
               <div class="news__title long-text">{{ oneNew.title }}</div>
               <div class="news__desc">
-                <div v-html = "oneNew.content"></div>
+                <div v-html = "oneNew.preview_text"></div>
               </div>
             </a>
 

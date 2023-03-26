@@ -18,7 +18,7 @@
   const tableData = ref([] as Array<IDeliveryType>)
   const files = ref<Array<File>>([])
   
-  const tableSizeColumns = '30px 1fr 1fr 1fr 1fr 1fr 1fr 50px 40px 40px 40px'
+  const tableSizeColumns = '30px 1fr 1fr 1fr 1fr 1fr 50px 40px 40px 40px'
 
   const isFormOpen = ref(false)
   const isUploadOpen = ref(false)
@@ -39,10 +39,10 @@
   const tableHeads = [
     {db: 'id', name: 'Id'},
     {db: 'title', name: 'Заголовок'}, 
-    {db: 'subtitle', name: 'Подзаголовок',}, 
+    {db: 'subtitle', name: 'Контент',}, 
     {db: 'button_name', name: 'Кнопка',}, 
     {db: 'button_link', name: 'Переход',}, 
-    {db: 'text', name: 'Контент', type: 'v-html', src: 'text'}, 
+    // {db: 'text', name: 'Контент', type: 'v-html', src: 'text'}, 
     {db: 'image', name: 'Картинка', type: 'image', src: 'image'}, 
     {db: 'is_active', name: 'Актив.'}, 
     {db: '', name: ''},
@@ -206,19 +206,19 @@
         height="200px"
       />
       <TextArea
-        label="Под заголовок"
+        label="Контент"
         name="subtitle"
-        placeholder="Укажите под заголовок"
+        placeholder="Укажите контент"
         v-model:value="v.subtitleField.$model"
         :error="v.subtitleField.$errors"
         width="1000px"
         height="200px"
       />
-      <QuillEditor 
+      <!-- <QuillEditor 
         theme="snow" 
         v-model:content = "textField" 
         contentType = "html" 
-      />
+      /> -->
       <Input
         label="Название кнопки"
         name="buttonNameField"

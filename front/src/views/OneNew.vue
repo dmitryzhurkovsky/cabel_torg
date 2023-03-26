@@ -1,19 +1,39 @@
 <template>
   <div>
-    Тут страница новости
+    <div class="news__block" v-if="oneNewData">
+      <a class="news__item">
+        <CardImage :images = "oneNewData.image" />
+        <div class="news__title long-text">{{ oneNewData.title }}</div>
+        <div class="news__desc">
+          <div v-html = "oneNewData.content"></div>
+        </div>
+      </a>
+
+    </div>
+
   </div>
 </template>
 
 <script>
   import axios from 'axios';
-  import { mapGetters, mapMutations, mapActions } from 'vuex' 
+  import { mapMutations, mapActions } from 'vuex' 
   import CardImage from '@/components/UI/card-image.vue'
 
   export default {
-    name: 'CardProduct',
+    name: 'OneNew',
 
     props: {
       id: null,
+    },
+
+    data(){
+      return {
+        oneNewData: null,
+      }
+    },
+
+    components: {
+        CardImage,
     },
 
     methods: {
@@ -23,13 +43,13 @@
 
     async mounted(){
       this.CHANGE_BREADCRUMB(0);
-      // try {
-      //     const response = await axios.get(process.env.VUE_APP_API_URL + 'products/' + this.id);
-      //     this.cartItemData = response.data;
-      // } catch (e) {
-      //     console.log(e);
-      //     this.ADD_MESSAGE({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
-      // }
+      try {
+          const response = await axios.get(process.env.VUE_APP_API_URL + 'service_entities/articles/' + this.id);
+          this.oneNewData = response.data;
+      } catch (e) {
+          console.log(e);
+          this.ADD_MESSAGE({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
+      }
 
       const mainBreadCrumb = {
         name: 'Новости',

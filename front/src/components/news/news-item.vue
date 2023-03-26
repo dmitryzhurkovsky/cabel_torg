@@ -7,7 +7,7 @@
     <div class="_block">
       <div class="news__date">???????? Дата?</div>
       <div class="news__title"  @click.prevent="onOpenOneNew(data.id)">{{ data.title }}</div>
-      <div class="news__description" v-html="data.content"></div>
+      <div class="news__description" v-html="data.preview_text"></div>
     </div>
   </a>
 </template>
