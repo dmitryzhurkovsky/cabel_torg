@@ -71,13 +71,25 @@ class Product(Base1CModel):
     )
 
     @property
-    def actual_price(self) -> float:
-        return self.price_with_discount if self.price_with_discount else self.price
+    def price_with_tax(self) -> float:
+        return self.price + (self.price * self.tax / 100)
+
+    @property
+    def price_with_discount_and_tax(self) -> float | None:
+        if self.price_with_discount:
+            return self.price_with_discount + (self.price_with_discount * self.tax / 100)
 
     @property
     def tax_sum(self) -> float:
+        """For generating an invoice."""
         return self.actual_price * self.tax / 100
 
     @property
+    def actual_price(self) -> float:
+        """For generating an invoice."""
+        return self.price_with_discount if self.price_with_discount else self.price
+
+    @property
     def actual_price_with_tax(self) -> float:
+        """For generating an invoice."""
         return self.tax_sum + self.actual_price

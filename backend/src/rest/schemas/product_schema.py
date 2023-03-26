@@ -28,9 +28,12 @@ class ProductSchema(BaseSchema):
     description: str | None
     status: ProductStatus | None
 
-    price: Decimal | None
+    price: Decimal | None  # without a tax
     discount: int | None
-    price_with_discount: Decimal | None
+    price_with_discount: Decimal | None  # without a tax
+    price_with_tax: Decimal | None  # with a tax
+    price_with_discount_and_tax: Decimal | None  # with a tax
+
     count: int | None
     weight: Decimal | None
 
