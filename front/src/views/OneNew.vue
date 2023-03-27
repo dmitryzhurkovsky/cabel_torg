@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <div class="news__block" v-if="oneNewData">
-      <a class="news__item">
+  <div class="_container">
+    <div class="one-news__block" v-if="oneNewData">
+      <a class="one-news__item">
         <CardImage :images = "oneNewData.image" />
-        <div class="news__title long-text">{{ oneNewData.title }}</div>
-        <div class="news__desc">
+        <div class="one-news__title ">{{ oneNewData.title }}</div>
+        <div class="one-news__content">
           <div v-html = "oneNewData.content"></div>
         </div>
       </a>
@@ -70,5 +70,23 @@
 </script>
 
 <style lang="scss" scoped>
+.one-news{
+  &__title{
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 140%;
+    color: #423E48;
 
+  }
+  &__content{
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 140%;
+    color: #423E48;
+    p{
+      margin: 5px 0;
+    }
+  }
+
+}
 </style>

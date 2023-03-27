@@ -1,18 +1,24 @@
 <template>
   <a class="news__item" v-if = "data">
     <div class="_block">
-      <!-- <img src="../../assets/news/1.png" alt=""> -->
       <CardImage :images = "data.image"/>
     </div>
     <div class="_block">
-      <div class="news__date">???????? Дата?</div>
-      <div class="news__title"  @click.prevent="onOpenOneNew(data.id)">{{ data.title }}</div>
+      <div class="news__date">Дата?</div>
+      <div class="news__title"  >{{ data.title }}</div>
       <div class="news__description" v-html="data.preview_text"></div>
+      <a class="news__link _link" @click.prevent="onOpenOneNew(data.id)">Читать
+        <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0.5 3.99935H15.0833M15.0833 3.99935L11.75 0.666016M15.0833 3.99935L11.75 7.33268" stroke="#4275D8"></path>
+        </svg>
+      </a>
+
     </div>
   </a>
 </template>
 <script>
 import CardImage from '@/components/UI/card-image.vue'
+import Header from "@/App.vue";
 
 export default {
   name: "NewsItem",
@@ -22,6 +28,7 @@ export default {
   },
 
   components: {
+    Header,
     CardImage,
   },
 
@@ -40,12 +47,18 @@ export default {
     display: flex;
     align-items: flex-start;
     height: 100%;
+    border: 2px solid #EEEEEE;
+    border-radius: 8px;
 
     ._block{
       flex-basis: 50%;
+      height: 189px;
       &:nth-child(1){
         img{
           width: 100%;
+          max-height: 100%;
+          height: 100%;
+          object-fit: cover;
         }
       }
       &:nth-child(2){
@@ -80,6 +93,9 @@ export default {
     opacity: 0.4;
     height: 100%;
     max-height: 60px;
+  }
+  &__link{
+    cursor: pointer;
   }
 
 }

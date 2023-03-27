@@ -17,9 +17,9 @@
                         <img cla src="../assets/logo.svg" alt="CabelTorg">
                       </div>
                       <div class="footer__social social">
-                        <a :href = SETTINGS.instagram_url class="social__item icon-instagram"></a>
-                        <a :href = SETTINGS.vk_url class="social__item icon-vk"></a>
-                        <a :href = SETTINGS.facebook_url class="social__item icon-facebook"></a>
+                        <a :href = SETTINGS.instagram_url class="social__item icon-instagram" target="_blank"></a>
+                        <a :href = SETTINGS.vk_url class="social__item icon-vk" target="_blank"></a>
+                        <a :href = SETTINGS.facebook_url class="social__item icon-facebook" target="_blank"></a>
                       </div>
                     </div>
                     <div class="footer__subrow">

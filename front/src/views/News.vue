@@ -11,6 +11,9 @@
             />
           </div>
         </div>
+        <div class="news__button">
+          <button class="btn empty_black"> Все новости</button>
+        </div>
       </div>
     </div>
   </div>
@@ -61,10 +64,11 @@
 
   }
   &__content{
-
+    padding: 20px 0 30px 0;
   }
 
   &__body{
+
 
 
   }
@@ -83,6 +87,9 @@
       grid-template-columns: repeat(1, 1fr);
     }
 
+  }
+  &__button{
+    text-align:center ;
   }
 }
 
