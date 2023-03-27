@@ -66,7 +66,7 @@ export default {
         flex-direction: column;
         padding: 20px 20px;
         @media (max-width: $md3+px) {
-          padding: 0 20px 20px 20px;
+          //padding: 0 20px 20px 20px;
         }
       }
     }
@@ -75,24 +75,28 @@ export default {
     font-size: 14px;
     line-height: 130%;
     opacity: 0.4;
+    margin-bottom: 5px;
   }
   &__title{
     font-weight: 500;
-    font-size: 20px;
-    line-height: 24px;
+    font-size: 18px;
+    line-height: 22px;
     letter-spacing: 0.44px;
-    margin: 16px 0;
+    //margin: 16px 0;
     cursor: pointer;
-    height: 100%;
-    max-height: 50px;
+    height: 50px;
+    overflow: hidden;
   }
 
   &__description{
     font-size: 14px;
     line-height: 130%;
     opacity: 0.4;
-    height: 100%;
-    max-height: 60px;
+    height: 60px;
+    margin-top: 5px;
+    overflow: hidden;
+    margin-bottom: 5px;
+
   }
   &__link{
     cursor: pointer;
