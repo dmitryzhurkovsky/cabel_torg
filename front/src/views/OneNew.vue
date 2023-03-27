@@ -60,7 +60,7 @@
       this.ADD_BREADCRUMB(mainBreadCrumb);
 
       this.ADD_BREADCRUMB({
-        name: this.$router.currentRoute.value.meta.name,
+        name: this.oneNewData.title,
         path: this.$router.currentRoute.value.path,
         type: "global",
         class: ""

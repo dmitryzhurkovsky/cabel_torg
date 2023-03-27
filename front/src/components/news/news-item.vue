@@ -4,7 +4,7 @@
       <CardImage :images = "data.image"/>
     </div>
     <div class="_block">
-      <div class="news__date">Дата?</div>
+      <div class="news__date">{{ data.created_at.slice(0,10) }}</div>
       <div class="news__title"  >{{ data.title }}</div>
       <div class="news__description" v-html="data.preview_text"></div>
       <a class="news__link _link" @click.prevent="onOpenOneNew(data.id)">Читать

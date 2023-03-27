@@ -15,7 +15,9 @@ export default {
       return state.partners;
     },
     NEWS(state) {
-      return state.news;
+      const sorted = state.news.sort( (a, b) => Number(b.id) - Number(a.id));
+      // return state.news;
+      return sorted;
     },
     BANNERS(state) {
       return state.banners;
