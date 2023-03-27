@@ -2,7 +2,10 @@
   <div class="_container">
     <div class="one-news__block" v-if="oneNewData">
       <a class="one-news__item">
-        <CardImage :images = "oneNewData.image" />
+        <div class="one-news__img">
+          <CardImage :images = "oneNewData.image" />
+        </div>
+
         <div class="one-news__title ">{{ oneNewData.title }}</div>
         <div class="one-news__content">
           <div v-html = "oneNewData.content"></div>
@@ -71,11 +74,20 @@
 
 <style lang="scss" scoped>
 .one-news{
+  &__img{
+    height: 200px;
+    display: block;
+    margin: 20px 0;
+    img{
+      width: 100%;
+    }
+  }
   &__title{
     font-weight: 500;
     font-size: 24px;
     line-height: 140%;
     color: #423E48;
+    margin-bottom: 20px;
 
   }
   &__content{

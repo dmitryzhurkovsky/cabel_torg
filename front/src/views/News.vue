@@ -64,7 +64,7 @@
 
   }
   &__content{
-    padding: 20px 0 30px 0;
+    padding-bottom: 30px;
   }
 
   &__body{

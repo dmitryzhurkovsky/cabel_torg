@@ -31,7 +31,6 @@ img{
     max-height: 100%;
     height: 100%;
     object-fit: cover;
-    //max-height: 162px;
+    width:100%;
 }
-
 </style>
