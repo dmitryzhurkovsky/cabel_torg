@@ -77,10 +77,7 @@
 
     watch: {
       DEVICE_VIEW_TYPE: function() {
-        if (this.DEVICE_VIEW_TYPE === 1) this.slidersInFrame = 4
-        if (this.DEVICE_VIEW_TYPE === 2) this.slidersInFrame = 2
-        if (this.DEVICE_VIEW_TYPE === 3) this.slidersInFrame = 1
-        // this.slidersInFrame = this.DEVICE_VIEW_TYPE === 1 ? 4 : 3;
+        this.setQuantityInSlider();
       },
     },
 
@@ -89,11 +86,18 @@
 
       onOpenNew(id) {
         this.$router.push('/new/' + id);
+      },
+
+      setQuantityInSlider() {
+        if (this.DEVICE_VIEW_TYPE === 1) this.slidersInFrame = 4
+        if (this.DEVICE_VIEW_TYPE === 2) this.slidersInFrame = 2
+        if (this.DEVICE_VIEW_TYPE === 3) this.slidersInFrame = 1
       }
     },
 
     async mounted(){
       await this.GET_NEWS();
+      this.setQuantityInSlider();
     },
 
   }

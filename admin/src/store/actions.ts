@@ -209,8 +209,8 @@ export const actions: ActionTree<State, State> & Actions = {
 
   [ActionTypes.EDIT_DELIVERY_TYPE]({ commit }, data) {
     return new Promise((resolve) => {
-      const params = { payload: data.payload as string}
-      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/delivery_types/" + String(data.id), params).
+      // const params = { payload: data.payload as string}
+      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/delivery_types/" + String(data.id), data).
       then((response) => {
         commit(MutationTypes.UPDATE_DELIVERY_TYPES, response.data);
         resolve(response.data);

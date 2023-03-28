@@ -16,7 +16,8 @@
   const tableData = ref([] as Array<IDeliveryType>)
   const files = ref<Array<File>>([])
   
-  const tableSizeColumns = '30px 1fr 2fr 2fr 1fr 40px 40px 40px'
+  // const tableSizeColumns = '30px 1fr 2fr 2fr 1fr 40px 40px 40px'
+  const tableSizeColumns = '30px 1fr 2fr 1fr 40px 40px 40px'
 
   const isFormOpen = ref(false)
   const isUploadOpen = ref(false)
@@ -30,7 +31,7 @@
     {db: 'id', name: 'Id'},
     {db: 'title', name: 'Заголовок'}, 
     {db: 'preview_text', name: 'Контент превью', type: 'v-html', src: 'preview_text'}, 
-    {db: 'content', name: 'Контент', type: 'v-html', src: 'content'}, 
+    // {db: 'content', name: 'Контент', type: 'v-html', src: 'content'}, 
     {db: 'image', name: 'Картинка', type: 'image', src: 'image'}, 
     {db: '', name: ''},
     {db: '', name: ''},

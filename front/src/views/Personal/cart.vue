@@ -51,7 +51,7 @@
 
           <!-- Появляется если есть товар в корзине  и человек наживаем кнопку оформить заказ -->
 
-          <div v-if = "IS_APPLICATION_OPEN === true" class="cart__order">
+          <div v-if = "IS_APPLICATION_OPEN === true && ORDERS.length !== 0" class="cart__order">
             <h3>Оформление заказа </h3>
             <div class="about__paragraph">
               <div class="about__paragraph__title">
@@ -60,12 +60,12 @@
               <div class="about__paragraph__box flex-center">
                 <div class="group table3x">
                   <label for="city" class="label">Город / населенный пункт</label>
-                  <input id="city" type="text" :class="{ 'is-invalid': ERRORS.city }" v-model="city" autocomplete=off>
+                  <input id="city" type="text" :class="{ 'is-invalid': ERRORS.city }" v-model="city" autocomplete=off :disabled="checkPickUp()">
                   <div class="error-message" v-if="ERRORS.city"> {{ ERRORS.city }} </div>
                 </div>
                 <div class="radio__list table3x">
                   <div class="radio" v-for = "delivery in ORDER_DELIVERY_TYPES" :key = delivery.id>
-                    <input :id = delivery.id name="radio" type="radio" :value = delivery.id v-model = "delivery_type_id">
+                    <input :id = delivery.id name="radio" type="radio" :value = delivery.id v-model = "delivery_type_id" @click=onChangeDeliveryType(delivery.is_pickup)>
                     <label :for = delivery.id class="radio-label">{{ delivery.payload }}</label>
                   </div>
                 </div>
@@ -73,18 +73,18 @@
                 <div class="table3x">
                   <div class="group mb-20">
                     <label for="address" class="label">Улица</label>
-                    <input id="address" type="text" :class="{ 'is-invalid': ERRORS.address }" v-model="address" autocomplete=off>
+                    <input id="address" type="text" :class="{ 'is-invalid': ERRORS.address }" v-model="address" autocomplete=off :disabled="checkPickUp()">
                     <div class="error-message" v-if="ERRORS.address"> {{ ERRORS.address }} </div>
                   </div>
                   <div class="group__row flex-center">
                     <div class="group">
                       <label for="" class="label">Дом</label>
-                      <input id="house" type="text" :class="{ 'is-invalid': ERRORS.house }" v-model="house" autocomplete=off>
+                      <input id="house" type="text" :class="{ 'is-invalid': ERRORS.house }" v-model="house" autocomplete=off :disabled="checkPickUp()">
                       <div class="error-message" v-if="ERRORS.house"> {{ ERRORS.house }} </div>
                     </div>
                     <div class="group">
                       <label for="address" class="label">Квартира</label>
-                      <input id="" type="text" class="input">
+                      <input id="" type="text" class="input" :disabled="checkPickUp()">
                     </div>
                   </div>
 
@@ -229,6 +229,7 @@
         delivery_type_id: 1,
         promo_price: 0,
         isLoading: false,
+        isEnablePickup: false,
       }
     },
 
@@ -275,10 +276,20 @@
         console.log('Is ' + this.promo_code + ': promo cod available');
       },
 
+      checkPickUp(){
+        console.log(this.isEnablePickup);
+        return !this.isEnablePickup;
+      },
+
       openOrderRequest(){
         this.SET_IS_APPLICATION_OPEN(true);
         const scrollY = this.$refs.secondPartElement.getBoundingClientRect().bottom + window.pageYOffset;
         setTimeout(() => window.scrollTo(0, scrollY), 200);
+      },
+
+      onChangeDeliveryType(type){
+        console.log(type);
+        this.isEnablePickup = Boolean(type)
       },
 
       async checkRequestData(){

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import { computed, PropType, ref } from 'vue';
+  import { computed, PropType, ref, watch } from 'vue';
   import { ITableHeadItem } from '../../types'
   import TableRow from '@/components/Table/TableRow.vue'
   import TableColumn from '@/components/Table/TableColumn.vue'
   import Button from '@/components/UI/Button.vue'
-  import { watch } from 'fs';
+  import Select from '@/components/UI/Select.vue'
 
   const props = defineProps({
     tableData: {
@@ -49,6 +49,15 @@
 
   const sortField = ref('id')
   const typeSort = ref('asc')
+  const itemsInPage = ref(20)
+  const pageNumber = ref(1)
+  const totalPages = ref(1)
+
+  const itemsInPageArray = [
+    {id: 10, name: '10'},
+    {id: 20, name: '20'},
+    {id: 50, name: '50'},
+  ]
 
   const tableDataSorting = computed(() => {
     return props.tableData.sort((a, b) => {
@@ -61,6 +70,19 @@
     })
   })
 
+  const tableDataPaginating = computed(() => {
+    const start = (pageNumber.value - 1) * itemsInPage.value
+    return tableDataSorting.value.slice(start, start + itemsInPage.value)
+  })
+
+  const sortFieldName = computed(() => {
+    return props.head.filter(item => item.db === sortField.value)[0].name
+  })
+
+  const typeSortName = computed(() => {
+    return typeSort.value === 'asc' ? 'А-Я' : 'Я-А'
+  })
+
   const setSort = (name: string) => {
     if (sortField.value === name) {
       if (typeSort.value === 'asc') {
@@ -71,6 +93,15 @@
     } else {
       sortField.value = name
     }
+  }
+
+  const onChangePageNumber = (page: number) => {
+    pageNumber.value = page
+  }
+
+  const onChangeItemsInPage = (value: number) => {
+    itemsInPage.value = value
+    totalPages.value = Math.ceil(props.tableData.length / itemsInPage.value);
   }
 
   const onAddButtonClick = () => {
@@ -89,12 +120,54 @@
     emit('deleteRow', id)
   }
 
+  watch(() => props.tableData,
+    () => {
+      onChangeItemsInPage(itemsInPage.value)
+  });
+
+  // onBeforeUpdate(() => {
+  //   onChangeItemsInPage(itemsInPage.value)
+  // })
+
 </script>
 <template>
-  <div class="table-info info">
-    <span class="info-elem">Сортировка по полю: {{sortField}}</span>
-    <span class="info-elem">Сортируем по направлению: {{typeSort}}</span>
-    <Button v-if="addButton" label="Добавить" @click="onAddButtonClick()"></Button>
+  <div class="table-infowrapper" v-if="tableDataPaginating">
+    <div class="table-info info">
+      <span class="info-elem">Сортировка по полю: {{sortFieldName}}</span>
+      <span class="info-elem">Сортируем по направлению: {{typeSortName}}</span>
+      <Button v-if="addButton" label="Добавить" @click="onAddButtonClick()"></Button>
+    </div>
+
+    <div class="table-pagination">
+        <div 
+            :class="[pageNumber > 1 ? 'pagination-item active' : 'pagination-item']"
+            @click="onChangePageNumber(1)"
+        >{{ '<<' }}</div>
+        <div
+            :class="[pageNumber > 1 ? 'pagination-item active' : 'pagination-item']"
+            @click="onChangePageNumber(pageNumber - 1)"
+        >{{ '<' }}</div>
+        <div class="pagination-pages news__pagenumber">{{ pageNumber }} / {{ totalPages }}</div>
+        <!-- <span>{{ '/' }}</span>
+        <div class="pagination-item news__pagenumber">{{ totalPages }}</div> -->
+        <div 
+            :class="[pageNumber < totalPages ? 'pagination-item active' : 'pagination-item']"
+            @click="onChangePageNumber(pageNumber + 1)"
+        >{{ '>' }}</div>
+        <div 
+            :class="[pageNumber < totalPages ? 'pagination-item active' : 'pagination-item']"
+            @click="onChangePageNumber(totalPages)"
+        >{{ '>>' }}</div>
+        <div class="pagination-selector">
+          <Select
+            :text = String(itemsInPage)
+            :id   = String(itemsInPage)
+            fieldForSearch = "name"
+            :data = "itemsInPageArray"
+            @onSelectItem="onChangeItemsInPage"
+          />
+        </div>
+    </div>
   </div>
 
   <div class="table-wrapper">
@@ -111,7 +184,7 @@
         </div>
       </div>
       <table-row
-        v-for="rowData in tableDataSorting"
+        v-for="rowData in tableDataPaginating"
         :key="rowData.id"
         :columnTemplates="columnTemplates"
       >
@@ -146,6 +219,38 @@
       </table-row>
     </div>
   </div>
+
+  <div class="table-pagination">
+      <div 
+          :class="[pageNumber > 1 ? 'pagination-item active' : 'pagination-item']"
+          @click="onChangePageNumber(1)"
+      >{{ '<<' }}</div>
+      <div
+          :class="[pageNumber > 1 ? 'pagination-item active' : 'pagination-item']"
+          @click="onChangePageNumber(pageNumber - 1)"
+      >{{ '<' }}</div>
+      <div class="pagination-item news__pagenumber">{{ pageNumber }}</div>
+      <span>{{ '/' }}</span>
+      <div class="pagination-item news__pagenumber">{{ totalPages }}</div>
+      <div 
+          :class="[pageNumber < totalPages ? 'pagination-item active' : 'pagination-item']"
+          @click="onChangePageNumber(pageNumber + 1)"
+      >{{ '>' }}</div>
+      <div 
+          :class="[pageNumber < totalPages ? 'pagination-item active' : 'pagination-item']"
+          @click="onChangePageNumber(totalPages)"
+      >{{ '>>' }}</div>
+      <div class="pagination-selector">
+        <Select
+          :text = String(itemsInPage)
+          :id   = String(itemsInPage)
+          fieldForSearch = "name"
+          :data = "itemsInPageArray"
+          @onSelectItem="onChangeItemsInPage"
+        />
+      </div>
+  </div>
+
 </template>
 
 <style lang="scss" scoped>
@@ -154,9 +259,21 @@
   width: 100%;
   margin-bottom: 40px;
   margin-top: 15px;
+  &-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px 0;
+  }
   &-wrapper {
     display: flex;
     justify-content: center;
+  }
+  &-infowrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
   &-head {
     padding: 5px 16px;
@@ -205,4 +322,36 @@
   }
 }
 
+.pagination{
+  &-selector{
+    max-width: 100px;
+  }
+  &-pages{
+    border: 1px solid var(--primary);
+    padding: 10px 10px;
+    height: 40px;
+    border-radius: 7px;
+    font-size: 15px;
+    width: 100%;
+    text-align: center;
+  }
+  &-item{
+    border: 1px solid var(--primary);
+    padding: 10px 10px;
+    height: 40px;
+    border-radius: 7px;
+    font-size: 15px;
+    width: 40px;
+    text-align: center;
+  }
+}
+
+.active {
+  cursor: pointer;
+  &:hover{
+    background-color: var(--primary-hover);
+    color: var(--background-content);
+  }
+
+}
 </style>
