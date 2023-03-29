@@ -10,6 +10,7 @@ CORS_ALLOWED_HEADERS = os.environ.get('CORS_ALLOWED_HEADERS', '').split(',')
 ORIGINS = os.environ.get('ORIGINS', '').split(',')
 REDIS_URL = os.getenv('REDIS_URL')
 IMAGES_PATH = os.getenv('IMAGES_PATH', '/images')
+STATIC_PATH = os.getenv('STATIC_PATH', '/static')
 
 # Database's settings
 DB_NAME = os.getenv('DATABASE_NAME')
