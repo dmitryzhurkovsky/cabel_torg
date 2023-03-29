@@ -73,7 +73,7 @@
   }
 
   const price = (product: IDeliveryType) => {
-    return product.price_with_discount ? product.price_with_discount : product.price
+    return product.price_with_discount_and_tax ? product.price_with_discount_and_tax : product.price_with_tax
   }
 
   const statusName = (id: string) => {

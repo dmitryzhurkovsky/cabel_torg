@@ -93,11 +93,11 @@
         },
 
         cardPriceWithDiscount(){
-            return this.cartItemData.price_with_discount ? this.cartItemData.price_with_discount : this.cartItemData.price;
+            return this.cartItemData.price_with_discount_and_tax ? this.cartItemData.price_with_discount_and_tax : this.cartItemData.price_with_tax;
         },
 
         CardPriceWithoutDiscount(){
-            return this.cartItemData.price_with_discount ? this.cartItemData.price : '';
+            return this.cartItemData.price_with_discount_and_tax ? this.cartItemData.price_with_tax : '';
         },
 
         isMobileVersion(){

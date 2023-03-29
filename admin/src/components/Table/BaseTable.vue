@@ -96,7 +96,11 @@
   }
 
   const onChangePageNumber = (page: number) => {
-    pageNumber.value = page
+    if (pageNumber.value !== page && page !== 0) {
+      if (page > 0 && page < totalPages.value + 1) {
+        pageNumber.value = page
+      }
+    }
   }
 
   const onChangeItemsInPage = (value: number) => {

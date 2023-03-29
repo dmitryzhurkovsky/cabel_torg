@@ -194,6 +194,33 @@ export default {
 
     SET_POPUP_ADDITIONAL_DATA(state, data) {
       state.popUpAdditionalData = data;
+    },
+
+    SET_CATALOG_STATE_FOR_FILTER_PANEL_TO_FALSE(state) {
+      state.catalog.forEach(mainItem => {
+        mainItem.filterPanel = false;
+        const sub = mainItem.childrens;
+        sub.forEach(subItem => {
+          subItem.filterPanel = false;
+          const last = subItem.childrens;
+          last.forEach(lastItem => lastItem.filterPanel = false);
+        });
+      });
+      if (state.topCategoriesItemActive) {
+        const main = state.catalog.filter(item => item.id === state.topCategoriesItemActive)[0];
+        main.filterPanel = true;
+        const mianChildrens = main.childrens;
+        if (state.subCategoriesItemActive) {
+          const sub = mianChildrens.filter(item => item.id === state.subCategoriesItemActive)[0];
+          sub.filterPanel = true;
+          const subChildrens = sub.childrens;
+          if (state.lastCategoriesItemActive) {
+            const last = subChildrens.filter(item => item.id === state.lastCategoriesItemActive)[0];
+            last.filterPanel = true
+          }
+        }
+      }
+
     }
   },
 
@@ -211,7 +238,6 @@ export default {
 
     SET_ALL_CURRENT_CATEGORIES({ commit, getters }, categoryState){
       const { mainCategory, middleCategory, lastCategory } = categoryState;
-      // console.log(categoryState);
       const breadCrumbs = [ mainBreadCrumb ];
       if (mainCategory) {
         commit("SET_CURRENT_TOP_CATEGORY", mainCategory);
@@ -259,6 +285,8 @@ export default {
         commit("SET_CURRENT_LAST_CATEGORY", null);
       }
       commit("breadcrumb/RESET_ALL_BREADCRUMBS", breadCrumbs, {root: true});
+
+      commit("SET_CATALOG_STATE_FOR_FILTER_PANEL_TO_FALSE");
     },
 
     async SEND_REQUEST_CALL({ commit }, data){
