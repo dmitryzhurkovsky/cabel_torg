@@ -392,4 +392,8 @@ export default {
   padding: 12px 15px;
 }
 </style>
-
+<style lang="scss">
+.product__img img{
+      object-fit: contain;
+}
+</style>
