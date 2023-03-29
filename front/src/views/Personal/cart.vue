@@ -658,6 +658,9 @@
   .product__img{
     min-width: 100px;
     max-width: 10%;
+    img{
+      object-fit: contain;
+    }
 
   }
 }

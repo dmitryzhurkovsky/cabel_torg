@@ -102,3 +102,9 @@
 
 }
 </style>
+
+<style lang="scss">
+.one-news__img img{
+  width: 100%;
+}
+</style>
