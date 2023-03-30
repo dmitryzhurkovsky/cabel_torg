@@ -1,7 +1,7 @@
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 <div class="invoice__container _container">
     <div class="invoice__header">
-        <img class="invoice__logo" src="http://194.62.19.21/img/logo.fbe4852c.svg" alt="">
+        <img class="invoice__logo" src="{{static_url}}/logo.svg" alt="">
         <div class="invoice__number">
             <span>Счет на оплату №</span>
             <span>{{invoice_number}}</span>
@@ -87,7 +87,7 @@
             <div>Руководитель</div>
             <div class="footer__sign__clm">
           <span>
-            <img class="invoice__signature" src="@/assets/signature.png" alt="">
+            <img class="invoice__signature" src="{{static_url}}/signature.png" alt="">
           </span>
                 <span>подпись</span>
             </div>
@@ -152,8 +152,8 @@
                 <div class="sign__item">Исполнитель(поставщик)
                     <span></span>
                     <div class="footer__sign__clm">
-                        <img class="invoice__signature" src="@/assets/signature.png" alt="">
-                        <img class="invoice__stamp" src="@/assets/stamp.png" alt="">
+                        <img class="invoice__signature" src="{{static_url}}/signature.png" alt="">
+                        <img class="invoice__stamp" src="{{static_url}}/stamp.png" alt="">
                     </div>
                 </div>
                 <div class="sign__item">Покупатель

@@ -10,6 +10,7 @@ import jinja2
 import pdfkit
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.core import settings
 from src.core.db.db import engine
 from src.rest.managers.order_manager import OrderManager
 from src.models import Order
@@ -103,7 +104,9 @@ class InvoiceGenerator:
                 'contract_number': f'№ {order.number}',
                 'products': order_products,
                 'products_tax_sum': num2words(round(products_tax_sum, 2)),
-                'products_price_with_tax': num2words(round(products_price_with_tax, 2))
+                'products_price_with_tax': num2words(round(products_price_with_tax, 2)),
+
+                'static_url': settings.STATIC_PATH
             }
 
     @staticmethod
