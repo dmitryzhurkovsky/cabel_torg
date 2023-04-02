@@ -72,12 +72,12 @@ class Product(Base1CModel):
 
     @property
     def price_with_tax(self) -> float:
-        return self.price + (self.price * self.tax / 100)
+        return round(self.price + (self.price * self.tax / 100), 2)
 
     @property
     def price_with_discount_and_tax(self) -> float | None:
         if self.price_with_discount:
-            return self.price_with_discount + (self.price_with_discount * self.tax / 100)
+            return round(self.price_with_discount + (self.price_with_discount * self.tax / 100), 2)
 
     @property
     def tax_sum(self) -> float:

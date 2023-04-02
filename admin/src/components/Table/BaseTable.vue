@@ -48,7 +48,7 @@
   }>()
 
   const sortField = ref('id')
-  const typeSort = ref('asc')
+  const typeSort = ref('desc')
   const itemsInPage = ref(20)
   const pageNumber = ref(1)
   const totalPages = ref(1)
@@ -64,9 +64,33 @@
       let modifier = 1;
       if (typeSort.value === 'desc') modifier = -1
       const param = sortField.value;
-      if (a[param] < b[param]) return -1 * modifier
-      if (a[param] > b[param]) return 1 * modifier
-      return 0
+      let sortAs = 'string'
+      if (typeof a[param] === 'number') {
+        sortAs = 'number'
+      }
+      if (typeof a[param] === 'string' && param === 'id') {
+        if (a[param].indexOf('Заказ # ') !== -1) {
+          sortAs = 'id'
+        } else {
+          sortAs = 'string'
+        }
+      }
+      console.log(sortAs);
+      if (sortAs === 'string') {
+        if (Number(a[param]) < Number(b[param])) return -1 * modifier
+        if (Number(a[param]) > Number(b[param])) return 1 * modifier
+        return 0
+      } else if (sortAs === 'id') {
+        const aModified = a[param].slice(8)
+        const bModified = b[param].slice(8)
+        if (Number(aModified) < Number(bModified)) return -1 * modifier
+        if (Number(aModified) > Number(bModified)) return 1 * modifier
+        return 0
+      } else{
+        if (a[param] < b[param]) return -1 * modifier
+        if (a[param] > b[param]) return 1 * modifier
+        return 0
+      } 
     })
   })
 
