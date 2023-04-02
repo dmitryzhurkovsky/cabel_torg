@@ -21,7 +21,9 @@
 
               <swiper-slide v-for="oneNew in filteredNews" :key="oneNew.id">
                 <a class="news__item" @click="onOpenNew(oneNew.id)">
-                  <CardImage :images = "oneNew.image" />
+                  <div class="news__item__box">
+                    <CardImage :images = "oneNew.image" />
+                  </div>
                   <div class="news__title long-text">{{ oneNew.title }}</div>
                   <div class="news__desc">
                     <div v-html = "oneNew.preview_text"></div>
@@ -162,8 +164,17 @@
     align-items: flex-start;
     justify-content: space-between;
     cursor: pointer;
+    &__box{
+     width: 100%;
+     height: 150px;
+      @media (max-width: $md3+px) {
+        height: 250px;
+      }
+
+    }
     img{
-      max-width: 100%;
+      width: 100%;
+      max-height: 100%;
     }
     ._block{
       &:nth-child(2){
@@ -197,6 +208,12 @@
   }
 
 
+}
+
+</style>
+<style lang="scss">
+.news__item__box img{
+  width: 100%;
 }
 
 </style>

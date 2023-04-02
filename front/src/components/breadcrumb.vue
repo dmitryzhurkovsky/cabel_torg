@@ -81,6 +81,10 @@ export default {
   align-items: center;
   flex-wrap: wrap;
   padding: 20px 0 30px 0;
+  @media (max-width: $md3+px){
+    padding: 10px 0 10px 0;
+  }
+
   &__wrapper{
     width: 100%;
     text-align: left;
