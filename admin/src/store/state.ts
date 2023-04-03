@@ -16,12 +16,14 @@ const state = {
     {id: 'S', name: 'Отправлен'},
     {id: 'c', name: 'Отменен'},
     {id: 'C', name: 'Выполнен'},
+    {id: '', name: 'Все заказы'},
   ],
   isPopUpOpen: false, 
   categories: [] as Array<IDeliveryType>,
   activeCategory: '' as string,
   settings: {} as IDeliveryType,
   stocks: [] as Array<IDeliveryType>,
+  goods: [] as Array<IDeliveryType>,
 }
 
 export type State = typeof state

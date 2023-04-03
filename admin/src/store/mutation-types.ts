@@ -30,5 +30,6 @@ const enum MutationTypes {
   ADD_TO_BANNERS = 'ADD_TO_BANNERS',
   DELETE_FROM_BANNERS = 'DELETE_FROM_BANNERS',
   UPDATE_BANNER = 'UPDATE_BANNER',
+  SET_GOODS = 'SET_GOODS',
 }
 export { MutationTypes }

@@ -31,6 +31,7 @@ const enum ActionTypes {
   DELETE_BANNER = 'DELETE_BANNER',
   EDIT_BANNER = 'EDIT_BANNER',
   UPLOAD_BANNER_PHOTO = 'UPLOAD_BANNER_PHOTO',
+  GET_GOODS_DATA = 'GET_GOODS_DATA',
 }
 
 export { ActionTypes }

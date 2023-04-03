@@ -35,6 +35,7 @@ export type Mutations<S = State> = {
   [MutationTypes.ADD_TO_BANNERS](state: S, payload: IDeliveryType): void,
   [MutationTypes.DELETE_FROM_BANNERS](state: S, payload: number): void,
   [MutationTypes.UPDATE_BANNER](state: S, payload: IDeliveryType): void,
+  [MutationTypes.SET_GOODS](state: S, payload: Array<IDeliveryType>): void,
   
 }
 
@@ -136,5 +137,8 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationTypes.UPDATE_BANNER](state, payload: IDeliveryType) {
     state.banners = state.banners.filter(item => item.id !== payload.id)
     state.banners.push(payload)
+  },
+  [MutationTypes.SET_GOODS](state, payload: Array<IDeliveryType>) {
+    state.goods = payload
   },
 }

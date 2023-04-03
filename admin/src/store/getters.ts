@@ -90,5 +90,8 @@ export const getters: GetterTree<State, State> & Getters = {
   stocks: (state) => {
     return state.stocks
   },
+  goods: (state) => {
+    return state.goods
+  },
 
 }

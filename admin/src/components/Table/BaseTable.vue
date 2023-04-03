@@ -75,7 +75,7 @@
           sortAs = 'string'
         }
       }
-      console.log(sortAs);
+      // console.log(sortAs);
       if (sortAs === 'string') {
         if (Number(a[param]) < Number(b[param])) return -1 * modifier
         if (Number(a[param]) > Number(b[param])) return 1 * modifier
@@ -95,7 +95,12 @@
   })
 
   const tableDataPaginating = computed(() => {
-    const start = (pageNumber.value - 1) * itemsInPage.value
+    let start = (pageNumber.value - 1) * itemsInPage.value
+    if (start > tableDataSorting.value.length) {
+      totalPages.value = Math.ceil(tableDataSorting.value.length / itemsInPage.value);
+      pageNumber.value = totalPages.value
+      start = (totalPages.value - 1) * itemsInPage.value
+    }
     return tableDataSorting.value.slice(start, start + itemsInPage.value)
   })
 

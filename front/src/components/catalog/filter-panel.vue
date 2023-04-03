@@ -114,7 +114,7 @@ export default {
         ...mapActions("header",["SET_ALL_CURRENT_CATEGORIES"]),
 
         toggleCategory(item) {
-            item.filterPanel = !item.filterPanel;
+          item.filterPanel = !item.filterPanel;
         },
 
         openMainCategory(category){

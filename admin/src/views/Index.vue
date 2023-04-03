@@ -9,7 +9,6 @@
   import PopUp from '@/components/PopUp/PopUp.vue'
   import Img from '@/components/UI/Img.vue'
   import Button from '@/components/UI/Button.vue'
-  import axios from 'axios'
 
   const store = useStore()
 
@@ -181,8 +180,8 @@
     <div class="parameters-block">
       <Select
         v-if="store.getters.orderTypes.length"
-        text = 'Выберите статус заказов'
-        id   = ''
+        text = "Все заказы"
+        :id   = orederType
         fieldForSearch = "name"
         :data = "store.getters.orderTypes"
         @onSelectItem="onChangeType"

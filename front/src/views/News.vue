@@ -71,6 +71,8 @@
       },
 
       onChangePage(page) {
+        if (page < 1) return
+        if (page > this.totalPages) return
         this.pageNumber = page;
       }
     },

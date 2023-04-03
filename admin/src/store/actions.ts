@@ -142,6 +142,10 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: any
   ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.GET_GOODS_DATA](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
   
 }
 
@@ -480,5 +484,16 @@ export const actions: ActionTree<State, State> & Actions = {
       })
     })
   },
+
+  [ActionTypes.GET_GOODS_DATA]({ commit }, params) {
+    return new Promise((resolve) => {
+      axios.get(import.meta.env.VITE_APP_API_URL + "products?category_id=" + params.id).
+      then((response) => {
+        commit(MutationTypes.SET_GOODS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
 
 }
