@@ -52,7 +52,7 @@
                 <div class="group">
                   <textarea class="textarea mb-20" placeholder="Сообщение" v-model="message"></textarea>
                   <div class="error-message" v-if="ERRORS.message"> {{ ERRORS.message }} </div>
-                </div>>  
+                </div>
                 <button class="btn" @click = "sendRequest($event)">Отправить</button>
               </form>
             </div>
@@ -272,9 +272,13 @@
   &__title{
 
   }
+  .group{
+    width: 100%;
+  }
 
   &__row{
     width: 100%;
+
     @media (max-width: $md2+px) {
       flex-direction: column;
     }

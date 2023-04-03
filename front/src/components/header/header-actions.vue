@@ -236,6 +236,9 @@ button{
 
 .topmenu__right{
   gap:20px;
+  @media (max-width:$md3+px) {
+    margin-right: 10px;
+  }
 
 }
 

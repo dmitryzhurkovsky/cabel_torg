@@ -294,6 +294,9 @@ h3{
   min-width:180px;text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
+  @media (max-width: $md2+px){
+    padding: 6px 12px;
+  }
   &:hover{
     background: #6291ED;
   }

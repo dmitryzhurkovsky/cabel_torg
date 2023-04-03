@@ -282,4 +282,7 @@
   }
 
 }
+.recomendation__nav__item{
+  white-space: nowrap;
+}
 </style>

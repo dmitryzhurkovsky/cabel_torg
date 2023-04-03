@@ -115,10 +115,18 @@
   &__body{
     max-width: 427px;
     padding: 60px 0;
+    @media (max-width: $md2+px){
+      padding: 10px 0;
+    }
     h1{
       margin-bottom: 20px;
-      @include adaptiv-value("line-height",43,20,43);
-      @include adaptiv-font(36, 18, 36);
+     @media (max-width: $md2+px){
+       font-size: 18px;
+       margin-bottom: 10px;
+       line-height: 1.4;
+     }
+      //@include adaptiv-value("line-height",43,20,43);
+      //@include adaptiv-font(36, 18, 36);
     }
 
     p{
@@ -127,8 +135,11 @@
       line-height: 14px;
       display: flex;
       align-items: center;
-
       color: #423E48;
+      @media (max-width: $md2+px){
+        font-size: 10px;
+        max-width: 200px;
+      }
     }
     button{
       margin-top: 30px;
@@ -137,6 +148,10 @@
       color: #FFFFFF;
       display: flex;
       align-items: center;
+      @media (max-width: $md2+px){
+        margin-top: 10px;
+        min-width: auto;
+      }
       svg{
         margin-left: 10px;
       }
