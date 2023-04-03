@@ -124,6 +124,7 @@
        font-size: 18px;
        margin-bottom: 10px;
        line-height: 1.4;
+       max-width: 200px;
      }
       //@include adaptiv-value("line-height",43,20,43);
       //@include adaptiv-font(36, 18, 36);
