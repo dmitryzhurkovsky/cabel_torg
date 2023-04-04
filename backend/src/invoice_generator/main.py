@@ -103,8 +103,8 @@ class InvoiceGenerator:
                 'customer_requisites': cls.generate_customer_requirements(order),
                 'contract_number': f'№ {order.number}',
                 'products': order_products,
-                'products_tax_sum': num2words(round(products_tax_sum, 2)),
-                'products_price_with_tax': num2words(round(products_price_with_tax, 2)),
+                'products_tax_sum': num2words(round(products_tax_sum, 2), lang='ru'),
+                'products_price_with_tax': num2words(round(products_price_with_tax, 2), lang='ru'),
 
                 'static_url': settings.STATIC_PATH
             }
