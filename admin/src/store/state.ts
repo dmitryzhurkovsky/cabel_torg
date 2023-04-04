@@ -24,6 +24,10 @@ const state = {
   settings: {} as IDeliveryType,
   stocks: [] as Array<IDeliveryType>,
   goods: [] as Array<IDeliveryType>,
+  goodsOfset: 0,
+  activePage: 1,
+  totalPages: 1,
+  itemsInPage: 12
 }
 
 export type State = typeof state

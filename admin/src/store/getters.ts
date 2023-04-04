@@ -20,6 +20,11 @@ export type Getters = {
   activeCategory(state: State): string
   settings(state: State): IDeliveryType
   stocks(state: State): Array<IDeliveryType>
+  goods(state: State): Array<IDeliveryType>
+  goodsOfset(state: State): number 
+  activePage(state: State): number 
+  totalPages(state: State): number 
+  itemsInPage(state: State): number 
 }
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -93,5 +98,16 @@ export const getters: GetterTree<State, State> & Getters = {
   goods: (state) => {
     return state.goods
   },
-
+  goodsOfset: (state) => {
+    return state.goodsOfset
+  },
+  activePage: (state) => {
+    return state.activePage
+  },
+  totalPages: (state) => {
+    return state.totalPages
+  },
+  itemsInPage: (state) => {
+    return state.itemsInPage
+  },
 }

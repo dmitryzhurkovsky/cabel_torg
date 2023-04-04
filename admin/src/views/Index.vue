@@ -209,24 +209,24 @@
 
   .product{
 
-  &__container {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 24px 20px;
-    background: #FFFFFF;
-    border: 2px solid #EEEEEE;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    ._label{
-      font-weight: 300;
-      font-size: 12px;
-      line-height: 20px;
+    &__container {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 24px 20px;
+      background: #FFFFFF;
+      border: 2px solid #EEEEEE;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      ._label{
+        font-weight: 300;
+        font-size: 12px;
+        line-height: 20px;
 
+      }
     }
-  }
 
-  &__img {
+    &__img {
       width: 100%;
       flex-basis: 20%;
       text-align: center;
@@ -234,46 +234,46 @@
           max-width: 100%;
           object-fit: fill;
       }
-  }
-  &__info{
-    width: 100%;
+    }
+    &__info{
+      width: 100%;
 
-  .icon{
-      font-size: 10px;
-      line-height: 20px;
-      color: #423E48;
-      opacity: 0.6;
-      &:before{
-        margin-right: 5px;
-      }
-      &:nth-child(1){
-        margin-right: 15px;
+    .icon{
+        font-size: 10px;
+        line-height: 20px;
+        color: #423E48;
+        opacity: 0.6;
+        &:before{
+          margin-right: 5px;
+        }
+        &:nth-child(1){
+          margin-right: 15px;
+        }
       }
     }
-  }
 
-  &__title{
+    &__title{
       font-size: 14px;
       line-height: 24px;
       text-decoration-line: underline;
       color: #423E48;
-  }
+    }
 
-  &__wrapper{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+    &__wrapper{
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-  &__count{
+    &__count{
       flex-direction: column;
       //margin: 24px 0;
       .icon-plus, .icon-minus{
           cursor: pointer;
       }
-  }
-  &__input{
+    }
+    &__input{
       width: 40px;
       height: 40px;
       padding: 9px 8px;
@@ -282,9 +282,9 @@
       border: none;
       margin: 0 10px;
       text-align: center;
-  }
+    }
 
-  &__price{
+    &__price{
       display: flex;
       flex-direction: column;
       align-items: flex-end;
@@ -304,7 +304,7 @@
           font-weight: 500;
       }
 
+    }
   }
-}
 
 </style>
