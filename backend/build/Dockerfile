@@ -1,5 +1,8 @@
 FROM python:3.10.2-slim-buster
 
+ENV LANG ru_RU.UTF-8
+ENV LC_ALL ru_RU.UTF-8
+
 WORKDIR /backend
 
 RUN apt-get update && apt-get install -y  \
