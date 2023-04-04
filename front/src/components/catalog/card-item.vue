@@ -136,7 +136,11 @@ export default {
           id: card.id,
           vendor_code: card.vendor_code,
           name: card.name,
-          price: card.price,
+          // price: card.discont ? card.price_with_discount_and_tax : card.price_with_tax,
+          discont: card.discont,
+          price_with_discount: card.price_with_discount,
+          price_with_discount_and_tax: card.price_with_discount_and_tax,
+          price_with_tax: card.price_with_tax,
         },
       }
       const type = this.quantity === 0 ? 'increase' : 'remove';

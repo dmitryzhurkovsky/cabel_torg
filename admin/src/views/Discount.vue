@@ -8,12 +8,15 @@
   import Button from '@/components/UI/Button.vue'
   import { helpers, required } from '@vuelidate/validators';
   import { useVuelidate } from '@vuelidate/core';
+  import Img from '@/components/UI/Img.vue'
 
   const store = useStore()
   const categories = ref([] as Array<IDeliveryType>)
   const activeCategory = ref()
   const categoryDiscount= ref()
   const goods = ref()
+  const activeGood = ref()
+  const goodDiscount =ref()
 
   watch(() => store.getters.categories,
     (curr, prev) => {
@@ -52,6 +55,12 @@
       store.commit(MutationTypes.SET_IS_LOADING, false)
   })
 
+  watch(() => store.getters.goods,
+    (curr, prev) => {
+      goods.value = [...curr]
+      store.commit(MutationTypes.SET_IS_LOADING, false)
+   });
+
   watch(() => activeCategory.value,
     (curr, prev) => {
       if (curr !== prev) {
@@ -73,9 +82,12 @@
     categoryDiscount: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
     },
+    goodDiscount: {
+      requered:  helpers.withMessage(`Обязательно поле`, required),
+    },
   }))
 
-  const v = useVuelidate(rules, {categoryDiscount, });
+  const v = useVuelidate(rules, {categoryDiscount, goodDiscount});
 
   onMounted(async () => {
     store.commit(MutationTypes.SET_IS_LOADING, true)
@@ -91,7 +103,19 @@
   }
 
   const onSetDiscountForCategory = () => {
-    console.log('Сдесь установить скидку: ', categoryDiscount.value);
+    console.log('Сдесь установить скидку для категории: ', categoryDiscount.value);
+  }
+
+  const onSetDiscountForGood = () => {
+    console.log('Сдесь установить скидку для товара: ', categoryDiscount.value);
+  }
+
+  const CardPriceWithoutDiscount = () => {
+
+  }
+
+  const cardPriceWithDiscount = () => {
+
   }
 </script>
 
@@ -167,7 +191,44 @@
             </div>
         </div>
     </div>
-    <div class="goods__block"></div>
+    <div class="goods__block">
+      <div class="filter__discount" v-if="activeGood">
+          <div class="filter__dbox" style="margin-bottom: 30px;">{{ activeGood.name }}</div>
+          <div class="filter__dbox">
+            <Input
+              name="categoryDiscount"
+              width="100px"
+              v-model:value="v.goodDiscount.$model"
+            />
+          </div>
+          <div class="filter__dbox" style="margin-bottom: 30px;">
+            <Button label="Установить" color="primary" @click="onSetDiscountForGood()"></Button>
+          </div>
+        </div>
+        <br>
+        <div class="content-block__list">
+          <div class="content-block__item product-row" v-if = "goods">
+            <div class="product"
+              v-for   = "card in goods"
+              :key    = "card.id"
+            >
+                <a class="product__img">
+                    <Img :image=card.images />
+                </a>
+                <div class="product__action">
+                    <div class="product__article  _label mb-20">Артикул: <span>{{ card.vendor_code }}</span></div>
+                    <div class="product__price">
+                        <span  v-if = "card.price_with_discount_and_tax" class="product__oldprice">{{ CardPriceWithoutDiscount }}</span>
+                        <span>{{ cardPriceWithDiscount }}</span> BYN
+                        <span> / {{ card.base_unit.full_name }}</span>
+                    </div>
+                    <div class="notice">* Цена указана с учетом НДС.</div>
+                </div>
+            </div>
+
+          </div>  
+        </div>
+    </div>
   </div>
 </template>
 
@@ -327,6 +388,74 @@
   &__close {
     font-size: 12px;
     transform: rotate(90deg);
+  }
+}
+
+.content-block{
+  &__item{
+    display: flex;
+    flex-direction: column;
+    gap:16px;
+  }
+}
+.product{
+
+  display: flex;
+  position: relative;
+  background: #FFFFFF;
+  border: 2px solid #EEEEEE;
+  box-sizing: border-box;
+  border-radius: 8px;
+  padding: 20px 22px 20px 22px;
+  justify-content: space-between;
+
+  // &__container {
+  //   display: flex;
+  //   align-items: flex-start;
+  //   justify-content: space-between;
+  //   padding: 24px 20px;
+  //   background: #FFFFFF;
+  //   border: 2px solid #EEEEEE;
+  //   border-radius: 8px;
+  //   margin-bottom: 16px;
+  //   ._label{
+  //     font-weight: 300;
+  //     font-size: 12px;
+  //     line-height: 20px;
+
+  //   }
+  // }
+
+  &__img {
+    width: 100%;
+    flex-basis: 20%;
+    text-align: center;
+    img{
+        max-width: 100%;
+        object-fit: fill;
+    }
+  }
+
+  &__price{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    .old_price{
+        font-size: 14px;
+        line-height: 20px;
+        text-decoration-line: line-through;
+        opacity: 0.4;
+        margin-bottom: 5px;
+        min-height: 20px;
+    }
+    .current_price{
+        font-size: 20px;
+        line-height: 20px;
+        color: #423E48;
+        font-weight: 500;
+    }
+
   }
 }
 

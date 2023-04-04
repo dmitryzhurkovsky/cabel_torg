@@ -444,10 +444,10 @@
         this.full_name = this.USER.full_name;
         this.phone_number = this.USER.phone_number;
         this.email = this.USER.email;
-        // this.city = this.USER.delivery_adress;
-        // this.address = this.USER.address;
-        // this.house = this.USER.house;
-        // this.flat = this.USER.flat;
+        this.city = this.USER.delivery_adress;
+        this.address = this.USER.address;
+        this.house = this.USER.house;
+        this.flat = this.USER.flat;
       }
     },
   }

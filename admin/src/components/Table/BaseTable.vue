@@ -75,7 +75,6 @@
           sortAs = 'string'
         }
       }
-      // console.log(sortAs);
       if (sortAs === 'string') {
         if (Number(a[param]) < Number(b[param])) return -1 * modifier
         if (Number(a[param]) > Number(b[param])) return 1 * modifier
@@ -172,10 +171,10 @@
     </div>
 
     <div class="table-pagination">
-        <div 
+        <!-- <div 
             :class="[pageNumber > 1 ? 'pagination-item active' : 'pagination-item']"
             @click="onChangePageNumber(1)"
-        >{{ '<<' }}</div>
+        >{{ '<<' }}</div> -->
         <div
             :class="[pageNumber > 1 ? 'pagination-item active' : 'pagination-item']"
             @click="onChangePageNumber(pageNumber - 1)"
@@ -187,10 +186,10 @@
             :class="[pageNumber < totalPages ? 'pagination-item active' : 'pagination-item']"
             @click="onChangePageNumber(pageNumber + 1)"
         >{{ '>' }}</div>
-        <div 
+        <!-- <div 
             :class="[pageNumber < totalPages ? 'pagination-item active' : 'pagination-item']"
             @click="onChangePageNumber(totalPages)"
-        >{{ '>>' }}</div>
+        >{{ '>>' }}</div> -->
         <div class="pagination-selector">
           <Select
             :text = String(itemsInPage)
@@ -254,10 +253,10 @@
   </div>
 
   <div class="table-pagination">
-      <div 
+      <!-- <div 
           :class="[pageNumber > 1 ? 'pagination-item active' : 'pagination-item']"
           @click="onChangePageNumber(1)"
-      >{{ '<<' }}</div>
+      >{{ '<<' }}</div> -->
       <div
           :class="[pageNumber > 1 ? 'pagination-item active' : 'pagination-item']"
           @click="onChangePageNumber(pageNumber - 1)"
@@ -269,10 +268,10 @@
           :class="[pageNumber < totalPages ? 'pagination-item active' : 'pagination-item']"
           @click="onChangePageNumber(pageNumber + 1)"
       >{{ '>' }}</div>
-      <div 
+      <!-- <div 
           :class="[pageNumber < totalPages ? 'pagination-item active' : 'pagination-item']"
           @click="onChangePageNumber(totalPages)"
-      >{{ '>>' }}</div>
+      >{{ '>>' }}</div> -->
       <div class="pagination-selector">
         <Select
           :text = String(itemsInPage)
