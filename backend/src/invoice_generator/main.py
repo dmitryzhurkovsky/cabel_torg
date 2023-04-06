@@ -126,5 +126,5 @@ class InvoiceGenerator:
             type_='string',
             configuration=pdf_kit_config,
             css=styles,
-            options=pdf_kit_options
+            options=pdf_kit_optionsl
         ).to_pdf()

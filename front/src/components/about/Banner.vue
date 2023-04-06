@@ -25,7 +25,7 @@
             <div class="banner__body">
               <h1>{{ banner.title }}</h1>
               <p>{{ banner.subtitle }}</p>
-              <button class="btn" @click="onButtonClick(banner.button_link)">{{ banner.button_name }}
+              <button class="btn btn-banner" @click="onButtonClick(banner.button_link)">{{ banner.button_name }}
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M3 12H20.5M20.5 12L16.5 8M20.5 12L16.5 16" stroke="white"/>
                 </svg>

@@ -31,7 +31,7 @@
               <div class="group cart__promo">
                 <label for="promo" class="label">Промокод</label>
                 <div class="input__box">
-                  <input id="promo_code" type="text" v-model="promo_code" autocomplete=off>
+                  <input id="promo_code" class="promo_code" type="text" v-model="promo_code" autocomplete=off>
                   <button class="btn black" @click = "checkPromoCod()">Применить</button>
                 </div>
               </div>
@@ -518,6 +518,10 @@
   &__summary{
     flex-basis: 50%;
     text-align: right;
+    @media (max-width: $md3+px){
+      margin-top: 30px;
+    }
+
     .label{
       justify-content: flex-end;
       margin-top: 15px;
@@ -559,7 +563,12 @@
   }
 
   &__promo{
-
+      .input__box{
+        display: flex;
+    }
+      .promo_code{
+        width: inherit;
+      }
   }
 
 }
@@ -578,6 +587,21 @@
 
 .about__paragraph {
   margin-bottom: 60px;
+  @media (max-width: $md3+px) {
+    margin-bottom: 30px;
+    &:last-child {
+      .about__paragraph__box {
+        align-items: flex-end;
+      }
+    }
+    &:nth-child(4) {
+      .group__row{
+        flex-direction: column;
+      }
+    }
+  }
+
+
 
   &__title {
     position: relative;
@@ -602,6 +626,18 @@
   &__box {
     padding: 24px 0 30px 0;
     align-items: flex-start;
+    @media (max-width: $md3+px) {
+      flex-direction: column;
+
+      .group__row{
+        //flex-direction: column;
+      }
+    }
+    .table3x{
+      @media (max-width: $md3+px) {
+        width: 100%;
+      }
+    }
     .group{
       width: 100%;
       position: relative;
@@ -619,6 +655,9 @@
 
   .radio__list {
     padding: 0 10px;
+    @media (max-width: $md3+px) {
+      order: -1;
+    }
     p {
       font-size: 14px;
       line-height: 16px;
