@@ -11,7 +11,8 @@
             <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'with_discount', order: 'discount' })">Скидки</div>
           </div>
           <!-- :navigation= "true" -->
-          <div class="recomendation__block" v-if = "DEVICE_VIEW_TYPE === 1 || DEVICE_VIEW_TYPE === 2">
+          <!-- <div class="recomendation__block" v-if = "DEVICE_VIEW_TYPE === 1 || DEVICE_VIEW_TYPE === 2"> -->
+          <div class="recomendation__block">
               <swiper
                   :slides-per-view="slidersInFrame"
                   :space-between="15"
@@ -35,20 +36,13 @@
                 <div class="swiper-pagination"></div>
 
                 <div class="swiper-navigation-container">
-<!--                  <div class="swiper-button-next" @click="nextSlide"></div>-->
-<!--                  <div class="swiper-button-prev" @click="prevSlide"></div>-->
+                 <!-- <div class="swiper-button-next" @click="nextSlide"></div>
+                 <div class="swiper-button-prev" @click="prevSlide"></div> -->
                 </div>
 
               </swiper>
 
           </div>
-          <div class="recomendation__block" v-if = "DEVICE_VIEW_TYPE === 3">
-
-            <CardItem v-for="item in RECOMENDED_ITEMS" :key="item.id"
-              :card = "item"
-            />
-          </div>
-
         </div>
       </div>
     </div>
@@ -90,7 +84,7 @@
 
     watch: {
       DEVICE_VIEW_TYPE: function() {
-        this.slidersInFrame = this.DEVICE_VIEW_TYPE === 1 ? 4 : 3;
+        this.setSlidersInFrame();
       },
 
       slidersInFrame: async function() {
@@ -114,6 +108,16 @@
         this.SET_RECOMENDATION_QUANTITY(newQuantity);
       },
 
+      setSlidersInFrame(){
+        if (this.DEVICE_VIEW_TYPE === 1) {
+          this.slidersInFrame = 4;
+        } else if (this.DEVICE_VIEW_TYPE === 2) {
+          this.slidersInFrame = 3;
+        } else {
+          this.slidersInFrame = 1;
+        }
+      },
+
       setTypeAndOrder(params){
         this.SET_RECOMENDATION_ORDER(params.order);
         this.SET_RECOMENDATION_TYPE(params.type);
@@ -135,6 +139,8 @@
 
     async mounted(){
       await this.GET_RECOMENDED_ITEMS();
+      this.setNewQuantity();
+      this.setSlidersInFrame();
     }
   }
 </script>
@@ -142,10 +148,11 @@
 <style scoped lang="scss">
 
 .swiper-pagination, .swiper-pagination-clickable, .swiper-pagination-bullets, .swiper-pagination-horizontal {
-  //position: unset;
-  //margin-bottom: 3%;
+  // position: unset;
+  // margin-bottom: 3%;
   display: flex;
-  position: inherit;
+  // position: inherit;
+  width: 100vw;
   align-items: center;
   justify-content: center;
   gap: 10px;
