@@ -151,8 +151,8 @@
   // position: unset;
   // margin-bottom: 3%;
   display: flex;
-  // position: inherit;
-  width: 100vw;
+  position: inherit;
+  width: 100%;
   align-items: center;
   justify-content: center;
   gap: 10px;
@@ -212,15 +212,16 @@
     &__item{
       width: 100%;
       max-width: 272px;
+      margin: 0 auto;
 
     }
 
-    @media (max-width: $md3+px) {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-    }
+    //@media (max-width: $md3+px) {
+    //  display: flex;
+    //  flex-direction: column;
+    //  align-items: center;
+    //  gap: 20px;
+    //}
 
   }
   &__nav{
