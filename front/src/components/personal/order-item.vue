@@ -4,9 +4,10 @@
       Заказ #  <span>{{ card.id }}</span>
     </div>
     <div class="flex-center order__row">
-      <div class="order__date">10 июня 2022???</div>
+      <div class="order__invoice" @click.stop = "dowwnloadInvoice"> Счет </div>
+      <div class="order__date">{{ card.created_at.slice(0, 10) }}</div>
       <div class="order__delivery">{{ delivery_type }}</div>
-      <div class="order__status _status-color">Отправлен???</div>
+      <div class="order__status _status-color">{{ order_status }}</div>
       <div class="order__price">{{ order_price }}<span> BYN</span></div>
     </div>
 
@@ -21,14 +22,15 @@
           <div class="details-order__title long_text">{{ orderProduct.product.name }}</div>
           <div class="details-order__article"><span>{{ orderProduct.product.vendor_code }}</span></div>
           <div class="details-order__count">{{ orderProduct.amount }}<span> {{ orderProduct.product.base_unit.full_name }}</span></div>
-          <div class="details-order__price"><b>{{ (orderProduct.amount * orderProduct.product.price).toFixed(2) }}</b> BYN</div>
+          <div class="details-order__price"><b>{{ (orderProduct.amount * orderProduct.product.discont ? orderProduct.product.price_with_discount_and_tax : orderProduct.product.price_with_tax).toFixed(2) }}</b> BYN</div>
+          <!-- orderProduct.product.price -->
         </div>
       </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 export default {
   name: 'OrderItem',
 
@@ -53,6 +55,13 @@ export default {
       return Number(totalPrice.toFixed(2));
     },
 
+    order_status(){
+      if (this.card.status === 'P') return 'В обработке';
+      if (this.card.status === 'S') return 'Отправлен';
+      if (this.card.status === 'c') return 'Отменен';
+      if (this.card.status === 'C') return 'Выполнен';
+    },
+
     delivery_type(){
       const type = this.ORDER_DELIVERY_TYPES.filter(item => item.id === this.card.delivery_type_id);
       return type.length ? type[0].payload : 'unknown';
@@ -65,10 +74,34 @@ export default {
   },
 
   methods:{
+    ...mapMutations("notification", ["SET_IS_LOADING"]),
+
     toggleOrder(){
       this.isOpen = !this.isOpen;
     },
 
+    dowwnloadInvoice(){
+      this.SET_IS_LOADING(true);
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+      myHeaders.append("Authorization", "Bearer " + localStorage.getItem("authToken"));
+      const urlencoded = new URLSearchParams();
+      const requestOptions = {
+          method  : 'POST',
+          headers : myHeaders,
+      };
+      fetch(process.env.VUE_APP_API_URL + "orders/" + this.card.id + '/invoices', requestOptions)
+      .then((response) => response.blob())
+      .then((blob) => {
+          const _url = window.URL.createObjectURL(blob);
+          window.open(_url, '_blank');
+          this.SET_IS_LOADING(false);
+      }).catch((err) => {
+          console.log(err);
+          this.SET_IS_LOADING(false);
+      });
+
+    }
   }
 }
 </script>
@@ -144,7 +177,12 @@ export default {
         order: 2;
       }
     }
-
+    &__invoice{
+      &:hover{
+        color: #4275D8;
+        cursor: pointer;
+      }
+    }
     &__status{
       padding: 0 5px;
 
@@ -206,6 +244,9 @@ export default {
     padding:5px;
     flex-basis: 15%;
     text-align: center;
+    span{
+      margin-left: 5px;
+    }
 
   }
   &__price{

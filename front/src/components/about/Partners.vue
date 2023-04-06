@@ -48,8 +48,7 @@
       }
     },
   
-    components:
-    {
+    components: {
       Swiper, SwiperSlide, CardImage
     },
 

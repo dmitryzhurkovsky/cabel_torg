@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 from src.rest.schemas.base_schema import BaseSchema
 
@@ -6,7 +6,11 @@ from src.rest.schemas.base_schema import BaseSchema
 class AddressInputSchema(BaseModel):
     title: str | None
     payload: str | None
-    vendor_info_id: int
+    vendor_info_id: int | None = 1
+
+    @validator('vendor_info_id')
+    def product_id_is_required_for_goods_receipt(cls, v):
+        return 1
 
 
 class AddressSchema(AddressInputSchema, BaseSchema):
@@ -17,6 +21,7 @@ class AddressSchema(AddressInputSchema, BaseSchema):
 class VendorInfoInputSchema(BaseModel):
     phone: str | None
     email: str | None
+    logo: str | None
 
     director_fullname: str | None
 

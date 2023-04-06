@@ -10,7 +10,7 @@
 
             <div v-if = "ORDERS.length === 0" class="cart__list">
               <div class="cart__empty__item">Ваша корзина пуста</div>
-              <a class="_link" @click.prevent = "openPage('/catalog/' + (LAST_CATEGORIES_ITEM_ACTIVE || SUB_CATEGORIES_ITEM_ACTIVE || TOP_CATEGORIES_ITEM_ACTIVE || '12'))">
+              <a class="_link" @click.prevent = "openPage('/catalog')">
                 <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M15.5 3.99935H0.916666M0.916666 3.99935L4.25 0.666016M0.916666 3.99935L4.25 7.33268" stroke="#4275D8"/>
                 </svg>
@@ -31,7 +31,7 @@
               <div class="group cart__promo">
                 <label for="promo" class="label">Промокод</label>
                 <div class="input__box">
-                  <input id="promo_code" type="text" v-model="promo_code" autocomplete=off>
+                  <input id="promo_code" class="promo_code" type="text" v-model="promo_code" autocomplete=off>
                   <button class="btn black" @click = "checkPromoCod()">Применить</button>
                 </div>
               </div>
@@ -43,7 +43,7 @@
                    BYN
                 </div>
                 <div class="">
-                  <button @click.stop = "openOrderRequest()" class="btn">Оформить заказ</button>
+                  <button @click.stop = "openOrderRequest()" class="btn" ref="secondPartElement">Оформить заказ</button>
                 </div>
               </div>
             </div>
@@ -51,7 +51,7 @@
 
           <!-- Появляется если есть товар в корзине  и человек наживаем кнопку оформить заказ -->
 
-          <div v-if = "IS_APPLICATION_OPEN === true" class="cart__order ">
+          <div v-if = "IS_APPLICATION_OPEN === true && ORDERS.length !== 0" class="cart__order">
             <h3>Оформление заказа </h3>
             <div class="about__paragraph">
               <div class="about__paragraph__title">
@@ -60,47 +60,31 @@
               <div class="about__paragraph__box flex-center">
                 <div class="group table3x">
                   <label for="city" class="label">Город / населенный пункт</label>
-                  <input id="city" type="text" :class="{ 'is-invalid': ERRORS.city }" v-model="city" autocomplete=off>
+                  <input id="city" type="text" :class="{ 'is-invalid': ERRORS.city }" v-model="city" autocomplete=off :disabled="checkPickUp()">
                   <div class="error-message" v-if="ERRORS.city"> {{ ERRORS.city }} </div>
                 </div>
                 <div class="radio__list table3x">
-                  <div class="radio">
-                    <input id="radio-1" name="radio" type="radio" checked value="0">
-                    <label for="radio-1" class="radio-label">Самовывоз со склада в г. Минск (9:00-18:00), <b>бесплатно</b></label>
+                  <div class="radio" v-for = "delivery in ORDER_DELIVERY_TYPES" :key = delivery.id>
+                    <input :id = delivery.id name="radio" type="radio" :value = delivery.id v-model = "delivery_type_id" @click=onChangeDeliveryType(delivery.is_pickup)>
+                    <label :for = delivery.id class="radio-label">{{ delivery.payload }}</label>
                   </div>
-
-                  <div class="radio">
-                    <input id="radio-2" name="radio" type="radio" value="1">
-                    <label  for="radio-2" class="radio-label">Самовывоз со склада в г. Брест (9:00-18:00), <b>бесплатно</b></label>
-                  </div>
-
-                  <div class="radio">
-                    <input id="radio-3" name="radio" type="radio" value="2">
-                    <label  for="radio-3" class="radio-label">Доставка по РБ при заказе от 500 рублей, <b>бесплатно</b></label>
-                  </div>
-
-                  <div class="radio">
-                    <input id="radio-4" name="radio" type="radio" value="3">
-                    <label  for="radio-4" class="radio-label">Платная доставка, стоимость обсуждается индивидуально</label>
-                  </div>
-
                 </div>
 
                 <div class="table3x">
                   <div class="group mb-20">
                     <label for="address" class="label">Улица</label>
-                    <input id="address" type="text" :class="{ 'is-invalid': ERRORS.address }" v-model="address" autocomplete=off>
+                    <input id="address" type="text" :class="{ 'is-invalid': ERRORS.address }" v-model="address" autocomplete=off :disabled="checkPickUp()">
                     <div class="error-message" v-if="ERRORS.address"> {{ ERRORS.address }} </div>
                   </div>
                   <div class="group__row flex-center">
                     <div class="group">
                       <label for="" class="label">Дом</label>
-                      <input id="house" type="text" :class="{ 'is-invalid': ERRORS.house }" v-model="house" autocomplete=off>
+                      <input id="house" type="text" :class="{ 'is-invalid': ERRORS.house }" v-model="house" autocomplete=off :disabled="checkPickUp()">
                       <div class="error-message" v-if="ERRORS.house"> {{ ERRORS.house }} </div>
                     </div>
                     <div class="group">
                       <label for="address" class="label">Квартира</label>
-                      <input id="" type="text" class="input">
+                      <input id="" type="text" class="input" :disabled="checkPickUp()">
                     </div>
                   </div>
 
@@ -197,7 +181,7 @@
                   <div class="summary__item">Скидка по промокоду: <span>{{ promo_price }}</span></div>
                   <div class="summary__item">Итоговая стоимость: <span><b>{{ (TOTAL_ORDER_COST - promo_price).toFixed(2) }}</b></span>BYN</div>
                   <div class="_footnote">* Сумма указана с учетом НДС</div>
-                  <button class="btn" @click="sendOrderRequest()">Оформить заказ</button>
+                  <button class="btn" @click="checkRequestData()">Оформить заказ</button>
 
                 </div>
 
@@ -214,6 +198,7 @@
 </template>
 
 <script>
+  import axios from "axios";
   import {mapActions, mapGetters, mapMutations} from 'vuex'
   import CartItem from '@/components/catalog/cart-item.vue';
   import { isValidEmail } from "../../common/validation";
@@ -244,21 +229,42 @@
         delivery_type_id: 1,
         promo_price: 0,
         isLoading: false,
+        isEnablePickup: false,
+      }
+    },
+
+    watch:{
+      changeParameters: function() {
+        this.company_name = this.USER.company_name;
+        this.unp = this.USER.unp;
+        this.legal_address = this.USER.legal_address;
+        this.IBAN = this.USER.IBAN;
+        this.BIC = this.USER.BIC;
+        this.serving_bank = this.USER.serving_bank;
+        this.full_name = this.USER.full_name;
+        this.phone_number = this.USER.phone_number;
+        this.email = this.USER.email;
       }
     },
 
     computed: {
-      ...mapGetters("order", ["ORDERS", "TOTAL_ORDER_QUANTITY", "TOTAL_ORDER_COST", "IS_APPLICATION_OPEN"]),
+      ...mapGetters("order", ["ORDERS", "TOTAL_ORDER_QUANTITY", "TOTAL_ORDER_COST", "IS_APPLICATION_OPEN", "ORDER_DELIVERY_TYPES"]),
       ...mapGetters("auth",["ERRORS", "USER"]),
       ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
+
+      changeParameters(){
+        return JSON.stringify(this.USER)
+      }
     },
 
     methods: {
       ...mapActions("order", ["GET_USER_ORDER", "SEND_ORDER_REQUEST"]),
       ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
+      ...mapActions("auth", ["SEND_REGISTER_REQUEST"]),
       ...mapMutations("order", ["SET_IS_APPLICATION_OPEN"]),
       ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
       ...mapMutations("auth", ["SET_ERRORS", "SET_DESTINATION"]),
+      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA"]),
 
       openPage(page) {
           if (this.$router.path != page) {
@@ -270,17 +276,24 @@
         console.log('Is ' + this.promo_code + ': promo cod available');
       },
 
-      openOrderRequest(){
-        this.SET_IS_APPLICATION_OPEN(true);
-
-        // if (!localStorage.getItem("authToken")) {
-        //   this.SET_DESTINATION('/cart');
-        //   this.$router.push('/login');
-        // }
+      checkPickUp(){
+        console.log(this.isEnablePickup);
+        return !this.isEnablePickup;
       },
 
-      async sendOrderRequest(){
+      openOrderRequest(){
+        this.SET_IS_APPLICATION_OPEN(true);
+        const scrollY = this.$refs.secondPartElement.getBoundingClientRect().bottom + window.pageYOffset;
+        setTimeout(() => window.scrollTo(0, scrollY), 200);
+      },
 
+      onChangeDeliveryType(type){
+        console.log(type);
+        this.isEnablePickup = Boolean(type)
+      },
+
+      async checkRequestData(){
+        console.log('Start send order ');
         const orderProducts = [];
         this.ORDERS.forEach(item => orderProducts.push({amount: item.amount, id: item.product.id}));
 
@@ -329,7 +342,11 @@
         if (Object.keys(errorsInData).length) {
           this.SET_ERRORS(errorsInData);
           this.isLoading = false;
+          const scrollY = this.$refs.secondPartElement.getBoundingClientRect().bottom + window.pageYOffset;
+          // window.scrollTo(0, scrollY);
+          setTimeout(() => window.scrollTo(0, scrollY), 200);
         } else {
+
           const orderData = {
             promo_code: this.promo_code, 
             company_name: this.company_name,
@@ -349,11 +366,63 @@
             // user_id: this.USER.id,
             products: orderProducts
           };
-          await this.SEND_ORDER_REQUEST(orderData);
+
+          if (localStorage.getItem("authToken")) {
+            // this.SET_DESTINATION('/cart');
+            // this.$router.push('/login');
+            orderData.user = this.USER.id;
+            await this.SEND_ORDER_REQUEST(orderData);
+            this.isLoading = false;
+            this.$router.push({name: "user-cab"});
+          } else {
+            console.log('Тут проверяем есть ли пользователь');
+            try {
+              const response = await axios.get(process.env.VUE_APP_API_URL + "users/check_email/<email>?email=" + this.email);
+              console.log(response);
+              console.log(response.data.message === 'True');
+              if (response.data.message === 'True') {
+                this.SET_IS_POPUP_OPEN(true);
+                this.SET_POPUP_ACTION('UserLogin');
+                this.SET_POPUP_ADDITIONAL_DATA({email: orderData.email});
+                console.log('Пользователь существует. Требуем залогиниться');
+              } else if (response.data.message === 'False') {
+                console.log('прльзователя нет создаем с нуля');
+                let password = '';
+                for (let i = 0; i < 8; i++){
+                  let rand = Math.random() * 10 - 0.5;
+                  password = password + String(Math.round(rand))
+                }
+                const userData = {
+                  email: this.email,
+                  full_name: this.full_name,
+                  phone_number: this.phone_number,
+                  company_name: this.company_name,
+                  unp: this.unp,
+                  password: password,
+                  legal_address: this.legal_address,
+                  IBAN: this.IBAN,
+                  BIC: this.BIC,
+                  serving_bank: this.serving_bank,
+                };
+
+                await this.SEND_REGISTER_REQUEST(userData);
+                orderData.user = this.USER.id;
+                await this.SEND_ORDER_REQUEST(orderData);
+                this.isLoading = false;
+                this.$router.push({name: "user-cab"});
+              }
+            }
+            catch (e) {
+              console.log(e);
+            };
+          }
           this.isLoading = false;
-          this.$router.push({name: "user-cab"});
         }
       },
+    },
+
+    async checkIsUserLogin() {
+      // await 
     },
 
     mounted() {
@@ -375,10 +444,10 @@
         this.full_name = this.USER.full_name;
         this.phone_number = this.USER.phone_number;
         this.email = this.USER.email;
-        // this.city = this.USER.delivery_adress;
-        // this.address = this.USER.address;
-        // this.house = this.USER.house;
-        // this.flat = this.USER.flat;
+        this.city = this.USER.delivery_adress;
+        this.address = this.USER.address;
+        this.house = this.USER.house;
+        this.flat = this.USER.flat;
       }
     },
   }
@@ -449,6 +518,10 @@
   &__summary{
     flex-basis: 50%;
     text-align: right;
+    @media (max-width: $md3+px){
+      margin-top: 30px;
+    }
+
     .label{
       justify-content: flex-end;
       margin-top: 15px;
@@ -490,7 +563,12 @@
   }
 
   &__promo{
-
+      .input__box{
+        display: flex;
+    }
+      .promo_code{
+        width: inherit;
+      }
   }
 
 }
@@ -509,6 +587,21 @@
 
 .about__paragraph {
   margin-bottom: 60px;
+  @media (max-width: $md3+px) {
+    margin-bottom: 30px;
+    &:last-child {
+      .about__paragraph__box {
+        align-items: flex-end;
+      }
+    }
+    &:nth-child(4) {
+      .group__row{
+        flex-direction: column;
+      }
+    }
+  }
+
+
 
   &__title {
     position: relative;
@@ -533,6 +626,22 @@
   &__box {
     padding: 24px 0 30px 0;
     align-items: flex-start;
+    @media (max-width: $md3+px) {
+      flex-direction: column;
+
+      .group__row{
+        //flex-direction: column;
+      }
+    }
+    .table3x{
+      @media (max-width: $md3+px) {
+        width: 100%;
+      }
+    }
+    .group{
+      width: 100%;
+      position: relative;
+    }
   }
 
   &__text {
@@ -546,6 +655,9 @@
 
   .radio__list {
     padding: 0 10px;
+    @media (max-width: $md3+px) {
+      order: -1;
+    }
     p {
       font-size: 14px;
       line-height: 16px;
@@ -585,7 +697,21 @@
   .product__img{
     min-width: 100px;
     max-width: 10%;
+    img{
+      object-fit: contain;
+    }
 
   }
+}
+
+.error-message {
+  position: absolute;
+  left: 15px;
+  bottom: -4px;
+  padding: 0 8px 0 8px;
+  font-size: 12px;
+  background-color: #fff;
+  color: #E30044;
+
 }
 </style>

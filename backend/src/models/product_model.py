@@ -5,9 +5,9 @@ from sqlalchemy import (
     String,
     DECIMAL,
     CheckConstraint,
-    Boolean
+    Boolean,
+    Enum
 )
-from sqlalchemy.dialects.postgresql import ENUM as pgEnum
 from sqlalchemy.orm import relationship
 
 from src.core.enums import BaseEnum
@@ -23,13 +23,14 @@ class ProductStatus(str, BaseEnum):
 class Product(Base1CModel):
     __tablename__ = 'products'
 
-    status = Column('status', pgEnum(*ProductStatus.values(), name='product_status'))
+    status = Column('status', Enum(*ProductStatus.values(), name='product_status'))
     vendor_code = Column(String)
     name = Column(String)
     images = Column(String)  # pictures paths in the following format: picture_1,picture_2,picture_3...
     tax = Column(Integer)
     description = Column(String)
     count = Column(DECIMAL, default=0)
+    weight = Column(DECIMAL, default=0)
 
     # Price fields
     price = Column(DECIMAL)
@@ -70,13 +71,25 @@ class Product(Base1CModel):
     )
 
     @property
-    def actual_price(self) -> float:
-        return self.price_with_discount if self.price_with_discount else self.price
+    def price_with_tax(self) -> float:
+        return round(self.price + (self.price * self.tax / 100), 2)
+
+    @property
+    def price_with_discount_and_tax(self) -> float | None:
+        if self.price_with_discount:
+            return round(self.price_with_discount + (self.price_with_discount * self.tax / 100), 2)
 
     @property
     def tax_sum(self) -> float:
+        """For generating an invoice."""
         return self.actual_price * self.tax / 100
 
     @property
+    def actual_price(self) -> float:
+        """For generating an invoice."""
+        return self.price_with_discount if self.price_with_discount else self.price
+
+    @property
     def actual_price_with_tax(self) -> float:
+        """For generating an invoice."""
         return self.tax_sum + self.actual_price

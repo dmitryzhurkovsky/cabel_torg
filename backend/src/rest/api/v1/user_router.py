@@ -7,6 +7,7 @@ from src.core.exception.base_exception import BadRequestError, ObjectNotFoundErr
 from src.rest.managers.user_manager import UserManager
 from src.rest.schemas.user_schema import UserSchema, UserCreateSchema, UserUpdateSchema
 from src.services.auth_service import AuthService
+from src.services.user_service import UserService
 
 user_router = APIRouter(tags=['users'])
 
@@ -16,9 +17,12 @@ async def get_users(
         email: EmailStr | None = None,
         session: AsyncSession = Depends(get_session)
 ) -> dict:
-    user = await UserManager.retrieve(email=email, session=session)
-    if user:
-        return {'message': 'An user with such email exists.'}
+    try:
+        await UserManager.retrieve(email=email, session=session)
+    except ObjectNotFoundError:
+        return {'message': 'False'}
+
+    return {'message': 'True'}
 
 
 @user_router.get('/users/<user_id>', response_model=UserSchema)
@@ -48,7 +52,10 @@ async def create_user(
             raise BadRequestError(detail='User with such email exists')
 
     except ObjectNotFoundError:
-        return await UserManager.create(input_data=user, session=session)
+        user = await UserManager.create(input_data=user, session=session)
+        UserService.send_confirmation_url(user=user)
+
+        return user
 
 
 @user_router.patch('/users/mine', response_model=UserSchema)

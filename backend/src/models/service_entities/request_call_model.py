@@ -1,5 +1,11 @@
-from sqlalchemy import Column, String, Integer, ForeignKey
-from sqlalchemy.dialects.postgresql import ENUM as pgEnum
+from sqlalchemy import (
+    Column,
+    String,
+    Integer,
+    ForeignKey,
+    Enum
+)
+
 from sqlalchemy.orm import relationship
 
 from src.core.enums import BaseEnum
@@ -21,9 +27,9 @@ class RequestCall(BaseModel):
 
     fullname = Column(String)
     phone_number = Column(String(50))
-    type = Column('type', pgEnum(*RequestCallType.values(), name='request_call_status'), default=RequestCallType.UNSET)
+    type = Column('type', Enum(*RequestCallType.values(), name='request_call_status'), default=RequestCallType.UNSET)
 
     product_id = Column(Integer, ForeignKey('products.id'))
-    product = relationship('Product', back_populates='request_calls')
+    product = relationship('Product', back_populates='request_calls', lazy='selectin')
 
 

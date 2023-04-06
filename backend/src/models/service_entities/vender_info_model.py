@@ -13,7 +13,7 @@ class Address(Base):
     payload = Column(String)
 
     vendor_info_id = Column(Integer, ForeignKey('service__vendor_info.id'))  # o2m
-    vendors = relationship('VendorInfo', back_populates='addresses', lazy='joined')
+    vendors = relationship('VendorInfo', back_populates='addresses', lazy='noload')
 
 
 class VendorInfo(Base):
@@ -25,6 +25,7 @@ class VendorInfo(Base):
 
     phone = Column(String(255))
     email = Column(String(255))
+    logo = Column(String(255))
 
     director_fullname = Column(String(255))
 

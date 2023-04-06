@@ -28,7 +28,10 @@ export default {
 <style lang="scss" scoped>
 img{
     max-width: 100%;
-    //max-height: 162px;
-}
+    max-height: 100%;
+    height: 100%;
+    object-fit: cover;
 
+
+}
 </style>

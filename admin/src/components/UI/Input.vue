@@ -21,11 +21,11 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    required: true
+    default: ''
   },
   label: {
     type: String,
-    required: true
+    default: ''
   },
   width: {
     type: String,

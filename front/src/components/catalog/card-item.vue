@@ -14,7 +14,7 @@
     </a>
     <div class="item-card__info">
       <div class="item-card__row old_price__row flex-center">
-        <div v-if = "card.price_with_discount" class="old_price">{{ CardPriceWithoutDiscount }}t
+        <div v-if = "card.price_with_discount_and_tax" class="old_price">{{ CardPriceWithoutDiscount }}t
           <span>BYN / {{ card.base_unit.full_name }}</span>
         </div>
         <div class="notice">* Цена указана с учетом НДС.</div>
@@ -82,18 +82,18 @@ export default {
     },
 
     cardPriceWithDiscount(){
-      return this.card.price_with_discount ? this.card.price_with_discount : this.card.price;
+      return this.card.price_with_discount_and_tax ? this.card.price_with_discount_and_tax : this.card.price_with_tax;
     },
 
     CardPriceWithoutDiscount(){
-      return this.card.price_with_discount ? this.card.price : '';
+      return this.card.price_with_discount_and_tax ? this.card.price_with_tax : '';
     },
 
     InfoCardBlock() {
       let info = '';
       info = this.card.vendor_code === 'УТ-00000037' ? 'New' : info;
       info = this.card.vendor_code === 'УТ-00000015' ? 'Хит' : info;
-      info = this.card.price_with_discount ? '%' : info;
+      info = this.card.price_with_discount_and_tax ? '%' : info;
       return info;
     },
 
@@ -115,11 +115,12 @@ export default {
   methods: {
     ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
     ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA"]),
+    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA", "SET_REQUEST_CALL_TYPE"]),
 
     onCreatePopUp(status, cardID) {
         this.SET_IS_POPUP_OPEN(status);
         this.SET_POPUP_ACTION('RequestCall');
+        this.SET_REQUEST_CALL_TYPE('GR');
         this.SET_POPUP_ADDITIONAL_DATA({cardID});
       },
 
@@ -135,7 +136,11 @@ export default {
           id: card.id,
           vendor_code: card.vendor_code,
           name: card.name,
-          price: card.price,
+          // price: card.discont ? card.price_with_discount_and_tax : card.price_with_tax,
+          discont: card.discont,
+          price_with_discount: card.price_with_discount,
+          price_with_discount_and_tax: card.price_with_discount_and_tax,
+          price_with_tax: card.price_with_tax,
         },
       }
       const type = this.quantity === 0 ? 'increase' : 'remove';

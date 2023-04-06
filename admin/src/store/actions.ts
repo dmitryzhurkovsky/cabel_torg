@@ -98,6 +98,55 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: null
   ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.GET_SETTINGS_DATA](
+    { commit }: AugmentedActionContext,
+    payload: null
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.EDIT_SETTINGS_DATA](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.GET_STOCKS_DATA](
+    { commit }: AugmentedActionContext,
+    payload: null
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.ADD_STOCK](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.DELETE_STOCK](
+    { commit }: AugmentedActionContext,
+    payload: number
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.EDIT_STOCK](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.GET_BANNERS_DATA](
+    { commit }: AugmentedActionContext,
+    payload: null
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.ADD_BANNER](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.DELETE_BANNER](
+    { commit }: AugmentedActionContext,
+    payload: number
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.EDIT_BANNER](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.UPLOAD_BANNER_PHOTO](
+    { commit }: AugmentedActionContext,
+    payload: any
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.GET_GOODS_DATA](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+  
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -164,8 +213,8 @@ export const actions: ActionTree<State, State> & Actions = {
 
   [ActionTypes.EDIT_DELIVERY_TYPE]({ commit }, data) {
     return new Promise((resolve) => {
-      const params = { payload: data.payload as string}
-      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/delivery_types/" + String(data.id), params).
+      // const params = { payload: data.payload as string}
+      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/delivery_types/" + String(data.id), data).
       then((response) => {
         commit(MutationTypes.UPDATE_DELIVERY_TYPES, response.data);
         resolve(response.data);
@@ -205,11 +254,7 @@ export const actions: ActionTree<State, State> & Actions = {
 
   [ActionTypes.EDIT_ARTICLE]({ commit }, data) {
     return new Promise((resolve) => {
-      const params = { 
-        title: data.title as string,
-        content: data.content as string,
-      }
-      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/articles/" + String(data.id), params).
+      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/articles/" + String(data.id), data).
       then((response) => {
         commit(MutationTypes.UPDATE_ARTICLE, response.data);
         resolve(response.data);
@@ -310,40 +355,7 @@ export const actions: ActionTree<State, State> & Actions = {
   [ActionTypes.UPDATE_ORDER_STATUS]({ commit, getters }, payload) {
     return new Promise((resolve) => {
       const orderForUpdate = getters.orders.filter((item: IDeliveryType) => item.id === payload.orderId)[0]
-      const data = {} as IDeliveryType
-      if (orderForUpdate.promo_code) data.promo_code = orderForUpdate.promo_code
-      if (orderForUpdate.company_name) data.company_name = orderForUpdate.company_name
-      if (orderForUpdate.unp) data.unp = orderForUpdate.unp
-      if (orderForUpdate.legal_address) data.legal_address = orderForUpdate.legal_address
-      if (orderForUpdate.IBAN) data.IBAN = orderForUpdate.IBAN
-      if (orderForUpdate.BIC) data.BIC = orderForUpdate.BIC
-      if (orderForUpdate.serving_bank) data.serving_bank = orderForUpdate.serving_bank
-      if (orderForUpdate.full_name) data.full_name = orderForUpdate.full_name
-      if (orderForUpdate.phone_number) data.phone_number = orderForUpdate.phone_number
-      if (orderForUpdate.email) data.email = orderForUpdate.email
-      if (orderForUpdate.city) data.city = orderForUpdate.city
-      if (orderForUpdate.street) data.street = orderForUpdate.street
-      if (orderForUpdate.house) data.house = orderForUpdate.house
-      if (orderForUpdate.flat) data.flat = orderForUpdate.flat
-      if (orderForUpdate.delivery_type_id) data.delivery_type_id = orderForUpdate.delivery_type_id
-      const products = [] as Array<IDeliveryType>
-      orderForUpdate.products.forEach((item: IDeliveryType) => {
-        const product = {
-          id: item.product.id,
-          amount: item.amount
-        }
-        products.push(product)
-      })
-      data.products = products
-      data.status = payload.newStatus
-      console.log(data);
-      
-      axios.patch(import.meta.env.VITE_APP_API_URL + "orders/" + payload.orderId, {
-        Headers: {
-          "Content-Type": "application/json",
-        },
-        boby: data
-      }).
+      axios.patch(import.meta.env.VITE_APP_API_URL + "orders/" + payload.orderId, {status: payload.newStatus}).
       then((response) => {
         orderForUpdate.status = payload.newStatus
         commit(MutationTypes.SET_NEW_ORDER_STATUS, orderForUpdate);
@@ -361,5 +373,127 @@ export const actions: ActionTree<State, State> & Actions = {
       })
     })
   },
+
+  [ActionTypes.GET_SETTINGS_DATA]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1").
+      then((response) => {
+        commit(MutationTypes.SET_SETTINGS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
   
+  [ActionTypes.EDIT_SETTINGS_DATA]({ commit }, data) {
+    return new Promise((resolve) => {
+      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1", data).
+      then((response) => {
+        commit(MutationTypes.SET_SETTINGS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.GET_STOCKS_DATA]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses").
+      then((response) => {
+        commit(MutationTypes.SET_STOCKS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+  
+  [ActionTypes.DELETE_STOCK]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses/" + String(payload)).
+      then((response) => {
+        commit(MutationTypes.DELETE_FROM_STOCKS, payload);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.ADD_STOCK]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses", payload).
+      then((response) => {
+        commit(MutationTypes.ADD_TO_STOCKS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.EDIT_STOCK]({ commit }, data) {
+    return new Promise((resolve) => {
+      console.log('data: ', data);
+      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses/" + String(data.id), data).
+      then((response) => {
+        commit(MutationTypes.UPDATE_STOCK, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.GET_BANNERS_DATA]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/banners").
+      then((response) => {
+        commit(MutationTypes.SET_BANNERS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.DELETE_BANNER]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/banners/" + String(payload)).
+      then((response) => {
+        commit(MutationTypes.DELETE_FROM_BANNERS, payload);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.ADD_BANNER]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/banners", payload).
+      then((response) => {
+        commit(MutationTypes.ADD_TO_BANNERS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.EDIT_BANNER]({ commit }, data) {
+    return new Promise((resolve) => {
+      axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/banners/" + String(data.id), data).
+      then((response) => {
+        commit(MutationTypes.UPDATE_BANNER, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.UPLOAD_BANNER_PHOTO]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/banners/" + payload.id + '/images', payload.data).
+      then((response) => {
+        commit(MutationTypes.UPDATE_BANNER, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.GET_GOODS_DATA]({ commit }, params) {
+    return new Promise((resolve) => {
+      axios.get(import.meta.env.VITE_APP_API_URL + "products?category_id=" + params.id).
+      then((response) => {
+        commit(MutationTypes.SET_GOODS, response.data);
+        resolve(response.data);
+      })
+    })
+  },
+
+
 }

@@ -9,7 +9,6 @@
   import PopUp from '@/components/PopUp/PopUp.vue'
   import Img from '@/components/UI/Img.vue'
   import Button from '@/components/UI/Button.vue'
-import { log } from 'console'
 
   const store = useStore()
 
@@ -73,7 +72,7 @@ import { log } from 'console'
   }
 
   const price = (product: IDeliveryType) => {
-    return product.price_with_discount ? product.price_with_discount : product.price
+    return product.price_with_discount_and_tax ? product.price_with_discount_and_tax : product.price_with_tax
   }
 
   const statusName = (id: string) => {
@@ -92,8 +91,30 @@ import { log } from 'console'
     newStatus.value = null as unknown as string
     orderID.value = null as unknown as string
     orderData.value = null
-    console.log(orderData);
-    
+  }
+
+  const onGetInvoice = () => {
+    store.commit(MutationTypes.SET_IS_LOADING, true)
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+    myHeaders.append("Authorization", "Bearer " + localStorage.getItem("authToken"));
+
+    const urlencoded = new URLSearchParams();
+
+    const requestOptions = {
+        method  : 'POST',
+        headers : myHeaders,
+    };
+    fetch(import.meta.env.VITE_APP_API_URL + "orders/" + orderID.value + '/invoices', requestOptions)
+    .then((response) => response.blob())
+    .then((blob) => {
+        const _url = window.URL.createObjectURL(blob);
+        window.open(_url, '_blank');
+        store.commit(MutationTypes.SET_IS_LOADING, false)
+    }).catch((err) => {
+        console.log(err);
+        store.commit(MutationTypes.SET_IS_LOADING, false)
+    });
   }
 
 </script>
@@ -152,6 +173,7 @@ import { log } from 'console'
           @onSelectItem="onSetNewType"
         />
         <Button label="Сохранить" color="primary" @click="onSaveNewData()"></Button>
+        <Button label="Счет" color="primary" @click="onGetInvoice()"></Button>
       </div>
     </PopUp>
     <h2 class="heading-2">Список заказов</h2>
@@ -159,8 +181,8 @@ import { log } from 'console'
     <div class="parameters-block">
       <Select
         v-if="store.getters.orderTypes.length"
-        text = 'Выберите статус заказов'
-        id   = ''
+        text = "Все заказы"
+        :id   = orederType
         fieldForSearch = "name"
         :data = "store.getters.orderTypes"
         @onSelectItem="onChangeType"
@@ -188,24 +210,24 @@ import { log } from 'console'
 
   .product{
 
-  &__container {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    padding: 24px 20px;
-    background: #FFFFFF;
-    border: 2px solid #EEEEEE;
-    border-radius: 8px;
-    margin-bottom: 16px;
-    ._label{
-      font-weight: 300;
-      font-size: 12px;
-      line-height: 20px;
+    &__container {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 24px 20px;
+      background: #FFFFFF;
+      border: 2px solid #EEEEEE;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      ._label{
+        font-weight: 300;
+        font-size: 12px;
+        line-height: 20px;
 
+      }
     }
-  }
 
-  &__img {
+    &__img {
       width: 100%;
       flex-basis: 20%;
       text-align: center;
@@ -213,46 +235,46 @@ import { log } from 'console'
           max-width: 100%;
           object-fit: fill;
       }
-  }
-  &__info{
-    width: 100%;
+    }
+    &__info{
+      width: 100%;
 
-  .icon{
-      font-size: 10px;
-      line-height: 20px;
-      color: #423E48;
-      opacity: 0.6;
-      &:before{
-        margin-right: 5px;
-      }
-      &:nth-child(1){
-        margin-right: 15px;
+    .icon{
+        font-size: 10px;
+        line-height: 20px;
+        color: #423E48;
+        opacity: 0.6;
+        &:before{
+          margin-right: 5px;
+        }
+        &:nth-child(1){
+          margin-right: 15px;
+        }
       }
     }
-  }
 
-  &__title{
+    &__title{
       font-size: 14px;
       line-height: 24px;
       text-decoration-line: underline;
       color: #423E48;
-  }
+    }
 
-  &__wrapper{
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+    &__wrapper{
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
 
-  &__count{
+    &__count{
       flex-direction: column;
       //margin: 24px 0;
       .icon-plus, .icon-minus{
           cursor: pointer;
       }
-  }
-  &__input{
+    }
+    &__input{
       width: 40px;
       height: 40px;
       padding: 9px 8px;
@@ -261,9 +283,9 @@ import { log } from 'console'
       border: none;
       margin: 0 10px;
       text-align: center;
-  }
+    }
 
-  &__price{
+    &__price{
       display: flex;
       flex-direction: column;
       align-items: flex-end;
@@ -283,7 +305,7 @@ import { log } from 'console'
           font-weight: 500;
       }
 
+    }
   }
-}
 
 </style>

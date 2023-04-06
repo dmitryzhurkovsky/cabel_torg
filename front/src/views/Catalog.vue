@@ -79,7 +79,7 @@
     name: 'Catalog',
 
     props: {
-      id: 12,
+      id: null,
     },
 
     components:
@@ -107,6 +107,7 @@
         ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES", "DEVICE_VIEW_TYPE", "ALL_CATEGORIES"]),
         ...mapGetters("catalog", ["ITEMS_LIST", "CATALOG_SEARCH_STRING"]),
         ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SEARCH_STRING", "SORT_TYPE", "SORT_DIRECTION"]),
+        ...mapGetters("breadcrumb", ["STACK"]),
 
         LastCategory(){
             let result = [];
@@ -117,8 +118,9 @@
         },
 
         ChangeParameters(){
-          return String(this.LIMIT) + String(this.OFFSET) + JSON.stringify(this.TYPE_OF_PRODUCT) + String(this.MIN_PRICE) + String(this.SORT_DIRECTION) +
-                  String(this.MAX_PRICE) + String(this.CATEGORY_ID) + this.CATALOG_SEARCH_STRING + this.VIEW_TYPE + JSON.stringify(this.SORT_TYPE);
+          return String(this.LIMIT) + String(this.OFFSET) + JSON.stringify(this.TYPE_OF_PRODUCT) + String(this.MIN_PRICE) + String(this.SORT_DIRECTION) + 
+                  String(this.MAX_PRICE) + String(this.CATEGORY_ID) + this.CATALOG_SEARCH_STRING + this.VIEW_TYPE + JSON.stringify(this.SORT_TYPE) +
+                  JSON.stringify(this.STACK);
         },
 
         isMobileVersion(){
@@ -153,13 +155,9 @@
       },
 
       setActiveCategory(id){
-        // this.SET_ALL_CURRENT_CATEGORIES({
-        //     mainCategory: this.TOP_CATEGORIES_ITEM_ACTIVE,
-        //     middleCategory: this.SUB_CATEGORIES_ITEM_ACTIVE,
-        //     lastCategory: id,
-        // });
         this.SET_CATEGORY_ID(id);
-        this.$router.push('/catalog/' + id);
+        this.setBreabcrumbs();
+        this.$router.push('/category/' + id);
       },
 
       clearSearchString(){
@@ -168,58 +166,59 @@
 
       setIsFilterPanelOpen(data) {
         this.isFilterPanelOpen = data;
-      }
+      },
 
+      setBreabcrumbs() {
+        if (!this.$props.id) {
+          this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: null,
+            middleCategory: null,
+            lastCategory: null,
+          });
+          return;
+        }
+        const categoryStack = [];
+        categoryStack.push(Number(this.$props.id));
+        let curLevel = this.ALL_CATEGORIES.filter(item => item.id == this.$props.id)[0];
+        while (curLevel.parent_category_id) {
+          const parent_category_id = curLevel.parent_category_id;
+          categoryStack.push(parent_category_id);
+          curLevel = this.ALL_CATEGORIES.filter(item => item.id == parent_category_id)[0];
+        }
+        if (categoryStack.length === 3) {
+          this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: categoryStack[2],
+            middleCategory: categoryStack[1],
+            lastCategory: categoryStack[0],
+          });
+        };
+        if (categoryStack.length === 2) {
+          this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: categoryStack[1],
+            middleCategory: categoryStack[0],
+            lastCategory: null,
+          });
+        };
+        if (categoryStack.length === 1) {
+          this.SET_ALL_CURRENT_CATEGORIES({
+            mainCategory: categoryStack[0],
+            middleCategory: null,
+            lastCategory: null,
+          });
+        }; 
+      },
+    },
+
+    async beforeUpdate(){
+      this.SET_CATEGORY_ID(this.$props.id);
+      // await this.getData(this.$props.id);
+      this.setBreabcrumbs();
     },
 
     async mounted() {
+      this.SET_CATEGORY_ID(this.$props.id);
+      this.setBreabcrumbs();
       await this.getData(this.$props.id);
-
-      // if (!this.CATEGORY_ID) {
-      //   this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
-      //   this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
-      //     name: this.$router.currentRoute.value.meta.name,
-      //     path: this.$router.currentRoute.value.path,
-      //     type: "global",
-      //     class: ""
-      //   });
-      // }
-
-      const categoryStack = [];
-      categoryStack.push(Number(this.$props.id));
-      let curLevel = this.ALL_CATEGORIES.filter(item => item.id == this.$props.id)[0];
-      while (curLevel.parent_category_id) {
-        const parent_category_id = curLevel.parent_category_id;
-        categoryStack.push(parent_category_id);
-        curLevel = this.ALL_CATEGORIES.filter(item => item.id == parent_category_id)[0];
-      }
-      console.log(categoryStack.length);
-      if (categoryStack.length === 3) {
-        this.SET_ALL_CURRENT_CATEGORIES({
-          mainCategory: categoryStack[2],
-          middleCategory: categoryStack[1],
-          lastCategory: categoryStack[0],
-        });
-      };
-      if (categoryStack.length === 2) {
-        this.SET_ALL_CURRENT_CATEGORIES({
-          mainCategory: categoryStack[1],
-          middleCategory: categoryStack[0],
-          lastCategory: null,
-        });
-      };
-      if (categoryStack.length === 1) {
-        this.SET_ALL_CURRENT_CATEGORIES({
-          mainCategory: categoryStack[0],
-          middleCategory: null,
-          lastCategory: null,
-        });
-      }; 
-      // this.SET_ALL_CURRENT_CATEGORIES({
-      //   mainCategory: this.TOP_CATEGORIES_ITEM_ACTIVE,
-      //   middleCategory: this.SUB_CATEGORIES_ITEM_ACTIVE,
-      //   lastCategory: this.LAST_CATEGORIES_ITEM_ACTIVE,
-      // });
     }    
   }
 </script>

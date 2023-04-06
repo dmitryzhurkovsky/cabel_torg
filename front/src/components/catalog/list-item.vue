@@ -31,7 +31,7 @@
         <div class="product__action">
             <div class="product__article  _label mb-20">Артикул: <span>{{ card.vendor_code }}</span></div>
             <div class="product__price">
-                <span  v-if = "card.price_with_discount" class="product__oldprice">{{ CardPriceWithoutDiscount }}</span>
+                <span  v-if = "card.price_with_discount_and_tax" class="product__oldprice">{{ CardPriceWithoutDiscount }}</span>
                 <span>{{ cardPriceWithDiscount }}</span> BYN
                 <span> / {{ card.base_unit.full_name }}</span>
             </div>
@@ -81,18 +81,18 @@ export default {
       },
 
       cardPriceWithDiscount(){
-        return this.card.price_with_discount ? this.card.price_with_discount : this.card.price;
+        return this.card.price_with_discount_and_tax ? this.card.price_with_discount_and_tax : this.card.price_with_tax;
       },
 
       CardPriceWithoutDiscount(){
-        return this.card.price_with_discount ? this.card.price : '';
+        return this.card.price_with_discount_and_tax ? this.card.price_with_tax : '';
       },
 
       InfoCardBlock() {
         let info = '';
         info = this.card.vendor_code === 'УТ-00000037' ? 'New' : info;
         info = this.card.vendor_code === 'УТ-00000015' ? 'Хит' : info;
-        info = this.card.price_with_discount ? '%' : info;
+        info = this.card.price_with_discount_and_tax ? '%' : info;
         return info;
       },
 
@@ -114,11 +114,12 @@ export default {
     methods: {
       ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
       ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA"]),
+      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA", "SET_REQUEST_CALL_TYPE"]),
 
       onCreatePopUp(status, cardID) {
         this.SET_IS_POPUP_OPEN(status);
         this.SET_POPUP_ACTION('RequestCall');
+        this.SET_REQUEST_CALL_TYPE('GR');
         this.SET_POPUP_ADDITIONAL_DATA({cardID});
       },
 
@@ -151,7 +152,11 @@ export default {
             id: card.id,
             vendor_code: card.vendor_code,
             name: card.name,
-            price: card.price,
+            // price: card.discont ? card.price_with_discount_and_tax : card.price_with_tax,
+            discont: card.discont,
+            price_with_discount: card.price_with_discount,
+            price_with_discount_and_tax: card.price_with_discount_and_tax,
+            price_with_tax: card.price_with_tax,
           },
         };
         if (type === 'set') {
@@ -391,4 +396,8 @@ export default {
   padding: 12px 15px;
 }
 </style>
-
+<style lang="scss">
+.product__img img{
+      object-fit: contain;
+}
+</style>

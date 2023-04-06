@@ -35,7 +35,8 @@
               <div class="price-product__block">
                 <div class="_label">Ваша цена:</div>
                 <div class="current_price">
-                  <span>{{ cartItemData.price }}</span>BYN
+                  <span>{{ cartItemData.discont ? cartItemData.price_with_discount_and_tax : cartItemData.price_with_tax }}</span>BYN
+                  <!-- cartItemData.price  -->
                   <span>/{{ cartItemData.base_unit.full_name }}</span>
                 </div>
               </div>
@@ -153,7 +154,7 @@
       ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
       ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
       ...mapMutations("query", ["SET_SEARCH_STRING"]),
-      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA"]),
+      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA", "SET_REQUEST_CALL_TYPE"]),
 
       checkQuantityLocal() {
         if (this.quantityLocal < 1) {
@@ -179,7 +180,11 @@
             id: card.id,
             vendor_code: card.vendor_code,
             name: card.name,
-            price: card.price,
+            // price: card.discont ? card.price_with_discount_and_tax : card.price_with_tax,
+            discont: card.discont,
+            price_with_discount: card.price_with_discount,
+            price_with_discount_and_tax: card.price_with_discount_and_tax,
+            price_with_tax: card.price_with_tax,
           },
         }
         if (type === 'set') {
@@ -193,6 +198,7 @@
       onCreatePopUp(status, cardID) {
         this.SET_IS_POPUP_OPEN(status);
         this.SET_POPUP_ACTION('RequestCall');
+        this.SET_REQUEST_CALL_TYPE('GR');
         this.SET_POPUP_ADDITIONAL_DATA({cardID});
       },
 
@@ -245,8 +251,8 @@
 
         const mainBreadCrumb = {
           name: 'Каталог',
-          path: '/catalog/12',
-          type: 'local',
+          path: '/catalog',
+          type: 'global',
           class: '',
           category: 1,
           level: 'root',
@@ -268,10 +274,11 @@
         const level = ['last', 'sub', 'top'];
 
         for (let i = 0; i < chein.length; i++) {
+          // console.log(chein[i]);
           const currBreadCrumb  = {
             name: chein[chein.length - 1 - i].name,
-            path: '/catalog/12',
-            type: 'local',
+            path: '/category/' + chein[chein.length - 1 - i].id,
+            type: 'global',
             class: '',
             category: chein[chein.length - 1 - i].id,
             level: level[chein.length - 1 - i],

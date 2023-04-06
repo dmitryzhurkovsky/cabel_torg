@@ -13,8 +13,8 @@
     {db: 'id', name: 'Id'},
     {db: 'fullname', name: 'Имя'}, 
     {db: 'phone_number', name: 'Телефон'}, 
-    {db: 'product_id', name: 'Товар'},
-    {db: 'type', name: 'Тип запроса'}, 
+    {db: 'product', name: 'Товар'},
+    {db: 'type', name: 'Тип'}, 
     {db: '', name: ''},
   ]
 
@@ -35,8 +35,14 @@
 
   watch(() => store.getters.callRequests,
     (curr) => {
-      tableData.value = [...curr]
-      fileredData.value = [...curr]
+      const tableWithProduct = [] as Array<IDeliveryType>
+        curr.forEach(element => {
+        const productName = element.product ? element.product.name : 'не указан'
+        const newElem = {...element, product: productName}
+        tableWithProduct.push(newElem)
+      });
+      tableData.value = [...tableWithProduct]
+      fileredData.value = [...tableWithProduct]
       store.commit(MutationTypes.SET_IS_LOADING, false)
     }
   )

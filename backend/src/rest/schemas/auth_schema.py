@@ -8,3 +8,8 @@ auth_schema = OAuth2PasswordBearer(
 
 class AuthenticationResponseSchema(BaseModel):
     access_token: str
+    refresh_token: str
+
+
+class UpdateRefreshTokenSchema(BaseModel):
+    refresh_token: str

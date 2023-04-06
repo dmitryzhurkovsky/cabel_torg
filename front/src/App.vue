@@ -1,5 +1,5 @@
 <template>
-  <div id="app__component">
+  <div id="app__component" v-if="ALL_CATEGORIES.length">
     <MenuWrapper/>
     <v-notification/>
     <Loader/>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import { mapActions, mapMutations } from "vuex";
+  import { mapActions, mapGetters, mapMutations } from "vuex";
   import Header from '@/components/header.vue';
   import Breadcrumb from '@/components/breadcrumb.vue';
   import Footer from "@/components/footer.vue";
@@ -26,37 +26,38 @@
     name: "App",
 
     computed: {
+      ...mapGetters("header", ["ALL_CATEGORIES"])
     },
 
     components:{
       Header, Breadcrumb, Footer, vNotification, MenuWrapper, PopUp, Loader
     },
 
-    // computed: {
-    // },
-
     methods: {
-        ...mapMutations("header", ["UPDATE_VIEW_PARAMETERS"]),
-        ...mapActions("header", ["GET_CATEGORIES"]),
-        ...mapActions("auth", ["GET_USER_DATA", "USER"]),
-        ...mapActions("order", ["GET_USER_ORDER"]),
-        ...mapActions("favorite", ["GET_USER_FAVORITE"]),
+      ...mapMutations("header", ["UPDATE_VIEW_PARAMETERS"]),
+      ...mapActions("header", ["GET_CATEGORIES"]),
+      ...mapActions("auth", ["GET_USER_DATA", "USER"]),
+      ...mapActions("order", ["GET_USER_ORDER", "GET_ORDER_DELIVERY_TYPES"]),
+      ...mapActions("favorite", ["GET_USER_FAVORITE"]),
+      ...mapActions("main", ["GET_SETTINGS"]),
 
-        setViewParametrs(){
-            this.UPDATE_VIEW_PARAMETERS(window.innerWidth);
-        }
+      setViewParametrs(){
+          this.UPDATE_VIEW_PARAMETERS(window.innerWidth);
+      }
     },
 
     async mounted() {
-        // console.log('App mount');
-        this.setViewParametrs();
-        window.addEventListener('resize', this.setViewParametrs);
-        await this.GET_CATEGORIES();
-        await this.GET_USER_FAVORITE();
-        await this.GET_USER_ORDER();
-        if (localStorage.getItem("authToken")) {
-            await this.GET_USER_DATA();
-        }
+      // console.log('App mount');
+      this.setViewParametrs();
+      window.addEventListener('resize', this.setViewParametrs);
+      await this.GET_CATEGORIES();
+      await this.GET_USER_FAVORITE();
+      await this.GET_USER_ORDER();
+      if (localStorage.getItem("authToken")) {
+          await this.GET_USER_DATA();
+      }
+      await this.GET_ORDER_DELIVERY_TYPES();
+      await this.GET_SETTINGS();
     },
 
   };
@@ -295,6 +296,11 @@ h3{
   transition: all 0.3s ease;
   &:hover{
     background: #6291ED;
+  }
+}
+.btn-banner{
+  @media (max-width: $md2+px){
+    padding: 6px 12px;
   }
 }
 
@@ -588,7 +594,7 @@ input{
   overflow:hidden;
   white-space:nowrap;
   text-overflow: ellipsis;
-  color: red;
+
 }
 
 

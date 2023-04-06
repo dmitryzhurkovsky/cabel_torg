@@ -47,7 +47,7 @@ async def client():
 async def patched_client(test_user):
     """The same as usual client but with user and bearer token."""
     async with AsyncClient(app=app, base_url=f"https:///api/v1") as client:
-        token = await AuthService.create_token(user_id=test_user.id, token_type="access")
+        token = AuthService.create_token(user_id=test_user.id, token_type="access")
         client.headers["Authorization"] = f"Bearer {token}"
         client.user = test_user
         yield client

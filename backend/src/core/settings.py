@@ -9,8 +9,8 @@ DEBUG = int(os.getenv('DEBUG', 0))
 CORS_ALLOWED_HEADERS = os.environ.get('CORS_ALLOWED_HEADERS', '').split(',')
 ORIGINS = os.environ.get('ORIGINS', '').split(',')
 REDIS_URL = os.getenv('REDIS_URL')
-PREVIEW_CONTENT_LENGTH = os.getenv('PREVIEW_CONTENT_LENGTH', 150)
 IMAGES_PATH = os.getenv('IMAGES_PATH', '/images')
+STATIC_PATH = os.getenv('STATIC_PATH', '/static')
 
 # Database's settings
 DB_NAME = os.getenv('DATABASE_NAME')
@@ -24,6 +24,9 @@ DATABASE_URL = f'postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT
 JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
 JWT_ACCESS_TOKEN_EXPIRATION_TIME = 60 * 15  # 15 minutes
 JWT_REFRESH_TOKEN_EXPIRATION_TIME = 60 * 60 * 24 * 7  # 7 days
+
+# SMTP settings
+SMTP_SENDER_EMAIL = os.getenv('SMTP_SENDER_EMAIL')
 
 # Parsers' settings
 BOOKKEEPING_SHOULD_BE_PARSED = int(os.getenv('BOOKKEEPING_SHOULD_BE_PARSED', 0))

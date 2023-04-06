@@ -28,6 +28,13 @@ export default {
   computed: {
     ...mapGetters("breadcrumb", ["STACK"]),
 
+    // watch: {
+    //   STACK: function() {
+    //     console.log('watch');
+    //     this.ELEMENTS()
+    //   },
+    // },
+
     ELEMENTS(){
       if (this.STACK.length > 1){
         let result = [];
@@ -57,7 +64,6 @@ export default {
     changePage(item){
       this.SET_SEARCH_STRING('');
       this.MOVE_TO_SELECT_PATH(item.index);
-      // this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", item.index);
       this.$router.push(item.path);
     }
   }
@@ -75,6 +81,10 @@ export default {
   align-items: center;
   flex-wrap: wrap;
   padding: 20px 0 30px 0;
+  @media (max-width: $md3+px){
+    padding: 10px 0 10px 0;
+  }
+
   &__wrapper{
     width: 100%;
     text-align: left;

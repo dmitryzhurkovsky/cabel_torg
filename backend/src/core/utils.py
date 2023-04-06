@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import bcrypt
 
-from src.models.product_models import Product
+from src.models.product_model import Product
 
 
 def is_valid(password: str, password_hash: str) -> bool:

@@ -51,6 +51,12 @@ const router = createRouter({
     },
     {
       beforeEnter: auth,
+      path: '/banners',
+      name: 'Banners',
+      component: () => import('@/views/Banners.vue')
+    },
+    {
+      beforeEnter: auth,
       path: '/call_requests',
       name: 'Calls',
       component: () => import('@/views/CallRequests.vue')
@@ -66,6 +72,18 @@ const router = createRouter({
       path: '/discount',
       name: 'Discount',
       component: () => import('@/views/Discount.vue')
+    },
+    {
+      beforeEnter: auth,
+      path: '/settings',
+      name: 'Settings',
+      component: () => import('@/views/Settings.vue')
+    },
+    {
+      beforeEnter: auth,
+      path: '/stocks',
+      name: 'Stocks',
+      component: () => import('@/views/Stocks.vue')
     },
   ]
 })

@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <router-link to="/">CabelTorg</router-link>
+    <a href="http://localhost:8080">CabelTorg</a>
   </header>
 </template>
 

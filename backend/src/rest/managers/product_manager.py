@@ -12,7 +12,7 @@ from src.core.enums import ProductOrderFilterEnum, ProductTypeFilterEnum
 from src.core.utils import calculate_price_with_discount
 from src.rest.managers.base_manager import CRUDManager
 from src.models import Product, Category
-from src.models.product_models import ProductStatus
+from src.models.product_model import ProductStatus
 from src.rest.schemas.product_schema import ProductUpdateSchema
 
 

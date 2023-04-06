@@ -6,6 +6,7 @@ const state = {
   isLoading: false,
   deliveryTypesData: [] as Array<IDeliveryType>,
   articles: [] as Array<IDeliveryType>,
+  banners: [] as Array<IDeliveryType>,
   partners: [] as Array<IDeliveryType>,
   callRequests: [] as Array<IDeliveryType>,
   feedbackRequests: [] as Array<IDeliveryType>,
@@ -15,10 +16,18 @@ const state = {
     {id: 'S', name: 'Отправлен'},
     {id: 'c', name: 'Отменен'},
     {id: 'C', name: 'Выполнен'},
+    {id: '', name: 'Все заказы'},
   ],
   isPopUpOpen: false, 
   categories: [] as Array<IDeliveryType>,
   activeCategory: '' as string,
+  settings: {} as IDeliveryType,
+  stocks: [] as Array<IDeliveryType>,
+  goods: [] as Array<IDeliveryType>,
+  goodsOfset: 0,
+  activePage: 1,
+  totalPages: 1,
+  itemsInPage: 12
 }
 
 export type State = typeof state

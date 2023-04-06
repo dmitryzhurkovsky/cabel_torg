@@ -39,13 +39,8 @@
               BYN
             </div>
           </div>
-
         </div>
-
-
-
     </div>
-    
 </template>
 
 <script>
@@ -98,11 +93,11 @@
         },
 
         cardPriceWithDiscount(){
-            return this.cartItemData.price_with_discount ? this.cartItemData.price_with_discount : this.cartItemData.price;
+            return this.cartItemData.price_with_discount_and_tax ? this.cartItemData.price_with_discount_and_tax : this.cartItemData.price_with_tax;
         },
 
         CardPriceWithoutDiscount(){
-            return this.cartItemData.price_with_discount ? this.cartItemData.price : '';
+            return this.cartItemData.price_with_discount_and_tax ? this.cartItemData.price_with_tax : '';
         },
 
         isMobileVersion(){
@@ -144,7 +139,11 @@
                     id: card.id,
                     vendor_code: card.vendor_code,
                     name: card.name,
-                    price: card.price,
+                    // price: card.discont ? card.price_with_discount_and_tax : card.price_with_tax,
+                    discont: card.discont,
+                    price_with_discount: card.price_with_discount,
+                    price_with_discount_and_tax: card.price_with_discount_and_tax,
+                    price_with_tax: card.price_with_tax,
                 },
             };
             if (type === 'set') {

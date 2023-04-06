@@ -48,6 +48,7 @@
     idField.value = rowData.id
     formType.value = false
     onSetIsFormOpen(true)
+    setTimeout(() => window.scrollTo(0, 0), 0);
   } 
 
   const onAddButtonClick = () => {
@@ -55,6 +56,7 @@
     // imageField.value = '' as string
     formType.value = true
     onSetIsFormOpen(true)
+    setTimeout(() => window.scrollTo(0, 0), 0);
   }
 
   const onDeleteArticle = async (rowData: IDeliveryType) => {

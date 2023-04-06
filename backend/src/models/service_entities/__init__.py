@@ -4,3 +4,4 @@ from src.models.service_entities.feedback_model import Feedback
 from src.models.service_entities.partner_model import Partner
 from src.models.service_entities.request_call_model import RequestCall, RequestCallType
 from src.models.service_entities.vender_info_model import VendorInfo, Address
+from src.models.service_entities.banner_model import Banner

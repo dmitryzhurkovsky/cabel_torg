@@ -11,29 +11,25 @@
             <div class="contacts__block__item">
                 <div class="block__item flex-center">
                   <img  class="_icon" src="../assets/svg/phone.svg" alt="Phone">
-                  <a class="_title" href="tel:+375296889454">+375 29 688 94 54</a>
+                  <a class="_title"  :href="'tel:' + String(SETTINGS.phone).replace(/ /g,'')">{{ SETTINGS.phone }}</a>
                 </div>
                 <div class="block__item flex-center">
                   <img class="_icon" src="../assets/svg/round-place.svg" alt="Address">
                   <div>
                     <div class="_title">Наш адрес:</div>
-                    <div>225033, Брестская область,  а/г Большие Мотыкалы, ул. Центральная д.26А</div>
+                    <div>{{ SETTINGS.legal_address }}</div>
                   </div>
                 </div>
-                <div class="block__item flex-center">
+                <div class="block__item flex-center" 
+                  v-for = "address in SETTINGS.addresses" 
+                  :key ="address.id"
+                >
                   <img class="_icon" src="../assets/svg/round-place.svg" alt="Address">
                   <div>
-                    <div class="_title">Адрес склада в Минске:</div>
-                    <div>Минск, Монтажников 3-й пер., 3</div>
+                    <div class="_title">{{ address.title }}:</div>
+                    <div>{{ address.payload }}</div>
                   </div>
                 </div>
-              <div class="block__item flex-center">
-                <img class="_icon" src="../assets/svg/round-place.svg" alt="Address">
-                <div>
-                  <div class="_title">Адрес склада в Бресте:</div>
-                  <div>225033, Брестская область,  а/г Большие Мотыкалы, ул. Центральная д.26А</div>
-                </div>
-              </div>
             </div>
             <div class="contacts__block__item">
               <form class="contacts__form form-contacts">
@@ -56,7 +52,7 @@
                 <div class="group">
                   <textarea class="textarea mb-20" placeholder="Сообщение" v-model="message"></textarea>
                   <div class="error-message" v-if="ERRORS.message"> {{ ERRORS.message }} </div>
-                </div>>  
+                </div>
                 <button class="btn" @click = "sendRequest($event)">Отправить</button>
               </form>
             </div>
@@ -85,6 +81,7 @@
 
     computed: {
       ...mapGetters("auth",["ERRORS"]),
+      ...mapGetters("main", ["SETTINGS"]),
     },
 
     mounted(){
@@ -275,9 +272,13 @@
   &__title{
 
   }
+  .group{
+    width: 100%;
+  }
 
   &__row{
     width: 100%;
+
     @media (max-width: $md2+px) {
       flex-direction: column;
     }

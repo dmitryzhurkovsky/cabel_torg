@@ -8,6 +8,7 @@ export type Getters = {
   deliveryTypesData(state: State): Array<IDeliveryType>
   isLogin(state: State): boolean
   articlesData(state: State): Array<IDeliveryType>
+  bannersData(state: State): Array<IDeliveryType>
   partnersData(state: State): Array<IDeliveryType>
   callRequests(state: State): Array<IDeliveryType>
   feedbackRequests(state: State): Array<IDeliveryType>
@@ -17,6 +18,13 @@ export type Getters = {
   isPopUpOpen(state: State): Boolean
   categories(state: State): Array<IDeliveryType>
   activeCategory(state: State): string
+  settings(state: State): IDeliveryType
+  stocks(state: State): Array<IDeliveryType>
+  goods(state: State): Array<IDeliveryType>
+  goodsOfset(state: State): number 
+  activePage(state: State): number 
+  totalPages(state: State): number 
+  itemsInPage(state: State): number 
 }
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -34,6 +42,9 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   articlesData: (state) => {
     return state.articles
+  },
+  bannersData: (state) => {
+    return state.banners
   },
   partnersData: (state) => {
     return state.partners
@@ -77,5 +88,26 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   activeCategory: (state) => {
     return state.activeCategory
-  }
+  },
+  settings: (state) => {
+    return state.settings
+  },
+  stocks: (state) => {
+    return state.stocks
+  },
+  goods: (state) => {
+    return state.goods
+  },
+  goodsOfset: (state) => {
+    return state.goodsOfset
+  },
+  activePage: (state) => {
+    return state.activePage
+  },
+  totalPages: (state) => {
+    return state.totalPages
+  },
+  itemsInPage: (state) => {
+    return state.itemsInPage
+  },
 }

@@ -54,14 +54,14 @@ export default {
   name: "CatalogMenu",
 
   computed: {
-    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "ALL_CATEGORIES", "TOP_CATEGORIES", "SUB_CATEGORIES", "IS_CATALOG_OPEN"]),
+    ...mapGetters("header", ["CATALOG","TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "ALL_CATEGORIES", "TOP_CATEGORIES", "SUB_CATEGORIES", "IS_CATALOG_OPEN"]),
   },
 
   methods:{
     ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
     ...mapMutations("query", ["SET_CATEGORY_ID"]),
     ...mapActions("catalog", ["GET_CATALOG_ITEMS"]),
-    ...mapActions("header", ["UPDATE_TOP_CATEGORY", "UPDATE_SUB_CATEGORY", "UPDATE_LAST_CATEGORY", "SET_ALL_CURRENT_CATEGORIES"]),
+    ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
 
     changeCategory(id){
       this.SET_ALL_CURRENT_CATEGORIES({
@@ -80,7 +80,7 @@ export default {
       });
       this.SET_CATEGORY_ID(id);
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      this.$router.push('/catalog/' + id);
+      this.$router.push('/category/' + id);
     },
 
     subItemCategoryClick(id){
@@ -90,12 +90,13 @@ export default {
             middleCategory: this.ALL_CATEGORIES.filter(item => item.id === id)[0].parent_category_id,
             lastCategory: id,
       });
-      this.UPDATE_LAST_CATEGORY(id);
       this.SET_CATEGORY_ID(id);
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      this.$router.push('/catalog/' + id);
+      this.$router.push('/category/' + id);
     },
-  }
+
+  },
+
 }
 </script>
 

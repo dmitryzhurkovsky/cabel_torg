@@ -1,84 +1,62 @@
 <template>
-  <footer class="footer">
+  <footer class="footer" v-if = "SETTINGS">
       <div class="footer__wrapper">
           <div class="footer__content _container">
               <div class="footer__body">
                   <div class="footer__row flex-center">
                       <div class="footer__item">
                         <h3>Остались вопросы?</h3>
-                        <p>Напишите нам на почту <a class="_link" href="mail:info@cabeltorg.by">info@cabeltorg.by</a>  или оставьте свой номер телефона и наш специалист вскоре свяжется с вами!</p>
+                        <p>Напишите нам на почту <a class="_link" :href = "'mailto:' + SETTINGS.email">{{ SETTINGS.email }}</a>  или оставьте свой номер телефона и наш специалист вскоре свяжется с вами!</p>
                       </div>
                       <button class="btn" @click.stop = "onMadeCall(true)">Заказать звонок</button>
                   </div>
                   <div class="footer__row flex-center">
 
-                  <div class="footer__col footer__subrow">
-                    <div class="footer__logo">
-                      <img cla src="../assets/logo.svg" alt="CabelTorg">
-                    </div>
-                    <div class="footer__social social">
-                      <a href="" class="social__item icon-instagram">
-<!--                        <img src="../assets/svg/instagram.svg" alt="instagram">-->
-                      </a>
-                      <a href="" class="social__item icon-vk">
-<!--                        <img src="../assets/svg/vk.svg" alt="vkontakte">-->
-
-                      </a>
-                      <a href="" class="social__item icon-facebook">
-<!--                        <img src="../assets/svg/facebook.svg" alt="facebook">-->
-
-                      </a>
-                    </div>
-
-                  </div>
-                  <div class="footer__subrow">
-                    <div class="footer__col">
-                      <div class="footer__item flex-center icon-phone">
-<!--                        <img  class="_icon" src="../assets/svg/phone.svg" alt="Phone">-->
-                        <a class="_title" href="tel:+375296889454">+375 29 688 94 54</a>
+                    <div class="footer__col footer__subrow">
+                      <div class="footer__logo">
+                        <img cla src="../assets/logo.svg" alt="CabelTorg">
                       </div>
-                      <div class="footer__item flex-center icon-place">
-<!--                        <img class="_icon" src="../assets/svg/round-place.svg" alt="Address">-->
-                        <div>
-                          <div class="_title">Адрес склада в Бресте:</div>
-                          <div>225033, Брестская область,  а/г Большие Мотыкалы, ул. Центральная д.26А</div>
+                      <div class="footer__social social">
+                        <a :href = SETTINGS.instagram_url class="social__item icon-instagram" target="_blank"></a>
+                        <a :href = SETTINGS.vk_url class="social__item icon-vk" target="_blank"></a>
+                        <a :href = SETTINGS.facebook_url class="social__item icon-facebook" target="_blank"></a>
+                      </div>
+                    </div>
+                    <div class="footer__subrow">
+                      <div class="footer__col">
+                        <div class="footer__item flex-center icon-phone">
+                          <a class="_title" :href="'tel:' + String(SETTINGS.phone).replace(/ /g,'')">{{ SETTINGS.phone }}</a>
+                        </div>
+                        <div class="footer__item flex-center icon-place" 
+                          v-for = "address in SETTINGS.addresses" 
+                          :key ="address.id"
+                        >
+                          <div>
+                            <div class="_title">{{ address.title }}:</div>
+                            <div>{{ address.payload }}</div>
+                          </div>
                         </div>
                       </div>
-                      <div class="footer__item flex-center icon-place">
-                        <div>
-                          <div class="_title">Адрес склада в Минске:</div>
-                          <div>Минск, Монтажников 3-й пер., 3</div>
-
-                        </div>
-
-                      </div>
+                      <ul class="footer__col footer__menu">
+                        <li @click = "linkClick('/about')" class="footer__menu_link">
+                          <span>О компании</span>
+                        </li>
+                        <li @click = "linkClick('/contacts')" class="footer__menu_link">
+                          <span>Контакты</span>
+                        </li>
+                        <li @click = "linkClick('/shipping')" class="footer__menu_link">
+                          <span>Оплата и доставка</span>
+                        </li>
+                        <li @click = "linkClick('/how_to_work')" class="footer__menu_link">
+                          <span>Оптовым покупателям</span>
+                        </li>
+                        <li @click = "linkClick('/')" class="footer__menu_link">
+                          <span >Скачать прайс-лист</span>
+                        </li>
+                      </ul>
                     </div>
-                    <ul class="footer__col footer__menu">
-                      <li @click = "linkClick('/about')" class="footer__menu_link">
-                        <span>О компании</span>
-                      </li>
-                      <li @click = "linkClick('/contacts')" class="footer__menu_link">
-                        <span>Контакты</span>
-                      </li>
-                      <li @click = "linkClick('/shipping')" class="footer__menu_link">
-                        <span>Оплата и доставка</span>
-                      </li>
-                      <li @click = "linkClick('/how_to_work')" class="footer__menu_link">
-                        <span>Оптовым покупателям</span>
-                      </li>
-                      <li @click = "linkClick('/')" class="footer__menu_link">
-                        <span >Скачать прайс-лист</span>
-                      </li>
-                    </ul>
-                  </div>
-
-
-
                   </div>
               </div>
-
-
-
           </div>
       </div>
       <div class="footer__down">
@@ -97,8 +75,12 @@ import { mapGetters, mapMutations } from 'vuex';
 export default {
   name: "footer",
 
+  computed: {
+    ...mapGetters("main", ["SETTINGS"]),
+  },
+
   methods: {
-    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
+    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_REQUEST_CALL_TYPE"]),
 
     linkClick(URL, name){
       if (this.$router.path != URL) {
@@ -110,6 +92,7 @@ export default {
 
     onMadeCall(status){
       this.SET_IS_POPUP_OPEN(status);
+      this.SET_REQUEST_CALL_TYPE('U');
       this.SET_POPUP_ACTION('RequestCall');
     }
   }

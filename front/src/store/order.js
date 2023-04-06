@@ -17,7 +17,8 @@ export default {
       TOTAL_ORDER_COST(state) {
         let totalOrderCost = 0;
         state.orders.forEach(item => {
-          const curPrice = item.product.discount ? item.product.price_with_discount : item.product.price;
+          console.log(item);
+          const curPrice = item.product.discount ? item.product.price_with_discount_and_tax : item.product.price_with_tax;
           totalOrderCost = Number(totalOrderCost) + Number((item.amount * curPrice).toFixed(2))
         });
         return Number(totalOrderCost.toFixed(2));

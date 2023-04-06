@@ -55,7 +55,9 @@ export default {
 
     mutations: {
       SET_CATEGORY_ID(state, category) {
-        state.offset = 0;
+        if (state.categoryId !== category) {
+          state.offset = 0;
+        }
         state.categoryId = category;
         state.searchString = '';
       },

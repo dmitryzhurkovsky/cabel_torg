@@ -1,6 +1,6 @@
 <template>
     <div class="content__popup">
-        <h3>Заказать звонок1</h3>
+        <h3>Заказать звонок</h3>
         <div class="">
             <div class="group">
                 <label class="label">Ваше имя</label>
@@ -88,6 +88,7 @@
           // Тут посылаем на бэк запрос и ждем ответа, по результатам фомируем окно с ответом
           await this.SEND_REQUEST_CALL(data);
           this.SET_POPUP_ADDITIONAL_DATA({});
+          this.SET_REQUEST_CALL_TYPE('');
         }
         this.isLoading = false;
       }

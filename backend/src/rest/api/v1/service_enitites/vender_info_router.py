@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
@@ -41,6 +41,26 @@ async def create_vendor_info(
         session=session,
         input_data=vendor_info
     )
+
+
+@vendor_info_router.post(
+    '/vendor_info/1/logos/',
+    response_model=VendorInfoSchema,
+    status_code=status.HTTP_201_CREATED)
+async def create_vendor_info(
+        file: UploadFile,
+        session: AsyncSession = Depends(get_session),
+) -> VendorInfoSchema:
+    vendor_info = await VendorInfoManager.retrieve(id=1, session=session)
+    file_name = await VendorInfoManager.upload_file(pk=1, input_file=file)
+    await VendorInfoManager.update(
+        input_data={'logo': file_name},
+        pk=1,
+        session=session
+    )
+    await session.refresh(vendor_info)
+
+    return vendor_info
 
 
 @vendor_info_router.patch(

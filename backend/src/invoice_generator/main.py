@@ -4,11 +4,13 @@ from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
 from sys import platform
+from num2words import num2words
 
 import jinja2
 import pdfkit
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.core import settings
 from src.core.db.db import engine
 from src.rest.managers.order_manager import OrderManager
 from src.models import Order
@@ -49,6 +51,7 @@ class ProductJinjaSchema:
     tax: int
     tax_sum: Decimal | float
     price_with_tax: Decimal | float
+    weight: Decimal | float | None
 
     # It's a special discount if a customer buys a lot of products a vendor can provide a special discount.
     price_with_tax_and_ordr_discount: Decimal | float
@@ -82,15 +85,16 @@ class InvoiceGenerator:
                 order_products.append(ProductJinjaSchema(
                     name=product.product.name,
                     amount=product.amount,
+                    weight=product.product.weight if product.product.weight else '',
                     base_unit=product.product.base_unit.full_name,
                     price=product.product.actual_price,
                     cost=product.amount * product.product.actual_price,
                     tax=product.product.tax,
-                    tax_sum=tax_sum,
-                    price_with_tax=price_with_tax,
-                    price_with_tax_and_ordr_discount=(
-                        price_with_tax * order.discount if order.discount else price_with_tax
-                    )
+                    tax_sum=round(tax_sum, 2),
+                    price_with_tax=round(price_with_tax, 2),
+                    price_with_tax_and_ordr_discount=round(
+                        price_with_tax * order.discount if order.discount else price_with_tax, 2
+                    ),
                 ))
 
             return {
@@ -98,11 +102,11 @@ class InvoiceGenerator:
                 'created_at': datetime.now().strftime('%d %B, %Y'),
                 'customer_requisites': cls.generate_customer_requirements(order),
                 'contract_number': f'№ {order.number}',
-                'final_price': 'cls.calculate_price',
                 'products': order_products,
-                'products_tax_sum': products_tax_sum,
-                'products_price_with_tax': products_price_with_tax
-                # todo add a signature and a trademark
+                'products_tax_sum': num2words(round(products_tax_sum, 2), lang='ru'),
+                'products_price_with_tax': num2words(round(products_price_with_tax, 2), lang='ru'),
+
+                'static_url': settings.STATIC_PATH
             }
 
     @staticmethod
@@ -122,5 +126,5 @@ class InvoiceGenerator:
             type_='string',
             configuration=pdf_kit_config,
             css=styles,
-            options=pdf_kit_options
+            options=pdf_kit_optionsl
         ).to_pdf()

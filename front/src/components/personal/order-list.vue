@@ -31,7 +31,7 @@ export default {
 
   methods:{
     ...mapMutations("order", ["CLEAR_ORDER_DOCUMENTS"]),
-    ...mapActions("order", ["GET_ORDER_DOCUMENTS", "GET_ORDER_DELIVERY_TYPES", ]),
+    ...mapActions("order", ["GET_ORDER_DOCUMENTS"]),
     ...mapMutations("notification", ["SET_IS_LOADING"]),
 
     async getData(){
@@ -43,7 +43,6 @@ export default {
 
   async mounted() {
     await this.getData();
-    this.GET_ORDER_DELIVERY_TYPES();
   },
 
   beforeUnmount() {

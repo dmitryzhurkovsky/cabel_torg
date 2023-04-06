@@ -13,39 +13,39 @@
 
   const store = useStore()
 
-  const tableHeads = [
-    {db: 'id', name: 'Id'},
-    {db: 'title', name: 'Заголовок'}, 
-    {db: 'content', name: 'Контент'}, 
-    {db: 'image', name: 'Картинка', type: 'image', src: 'image'}, 
-    {db: '', name: ''},
-    {db: '', name: ''},
-    {db: '', name: ''},
-  ]
   const tableData = ref([] as Array<IDeliveryType>)
   const files = ref<Array<File>>([])
   
+  // const tableSizeColumns = '30px 1fr 2fr 2fr 1fr 40px 40px 40px'
   const tableSizeColumns = '30px 1fr 2fr 1fr 40px 40px 40px'
 
   const isFormOpen = ref(false)
   const isUploadOpen = ref(false)
   const titleField = ref('')
   const contentField = ref('')
+  const contentShortField = ref('')
   const idField = ref()
   const formType = ref(true)
+
+  const tableHeads = [
+    {db: 'id', name: 'Id'},
+    {db: 'title', name: 'Заголовок'}, 
+    {db: 'preview_text', name: 'Контент превью', type: 'v-html', src: 'preview_text'}, 
+    // {db: 'content', name: 'Контент', type: 'v-html', src: 'content'}, 
+    {db: 'image', name: 'Картинка', type: 'image', src: 'image'}, 
+    {db: '', name: ''},
+    {db: '', name: ''},
+    {db: '', name: ''},
+  ]
 
   const rules = computed(() => ({
     titleField: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
       minLength: helpers.withMessage(`Минимальная длина поля 5 символов`, minLength(5)),
     },
-    contentField: {
-      requered:  helpers.withMessage(`Обязательно поле`, required),
-      minLength: helpers.withMessage(`Минимальная длина поля 5 символов`, minLength(5)),
-    },
   }))
 
-  const v = useVuelidate(rules, {titleField, contentField});
+  const v = useVuelidate(rules, {titleField});
 
   const sendDataRequest = async () => {
     await store.dispatch(ActionTypes.GET_ARTICLE_DATA, null)
@@ -80,18 +80,22 @@
     idField.value = rowData.id
     titleField.value = rowData.title as string
     contentField.value = rowData.content as string
+    contentShortField.value = rowData.preview_text as string
     formType.value = false
     onSetIsFormOpen(true)
     onSetIsUploadOpen(false)
+    setTimeout(() => window.scrollTo(0, 0), 0);
   } 
 
   const onAddButtonClick = () => {
     idField.value = null
     titleField.value = '' as string
     contentField.value = '' as string
+    contentShortField.value = '' as string
     formType.value = true
     onSetIsFormOpen(true)
     onSetIsUploadOpen(false)
+    setTimeout(() => window.scrollTo(0, 0), 0);
   }
 
   const onDeleteArticle = async (rowData: IDeliveryType) => {
@@ -113,20 +117,17 @@
   const submitForm = async () => {
     v.value.$touch()
     if (v.value.$error) return
-    if (formType.value) {
-      store.commit(MutationTypes.SET_IS_LOADING, true)
-      const data = {
+    const data = {
         title: titleField.value,
         content: contentField.value,
-      }
+        preview_text: contentShortField.value,
+      } as IDeliveryType
+    if (formType.value) {
+      store.commit(MutationTypes.SET_IS_LOADING, true)
       await store.dispatch(ActionTypes.ADD_ARTICLE, data)
     } else {
       store.commit(MutationTypes.SET_IS_LOADING, true)
-      const data = {
-        id: idField.value, 
-        title: titleField.value,
-        content: contentField.value,
-      }
+      data.id = idField.value
       await store.dispatch(ActionTypes.EDIT_ARTICLE, data)
     }
     onSetIsFormOpen(false)
@@ -140,6 +141,7 @@
 
   <div class="form-container">
     <h3 class="heading-3">Новая новость</h3>
+
 
     <form @submit.prevent="submitUpload"  v-if="isUploadOpen">
       <PhotoUploader v-model="files" />
@@ -156,17 +158,20 @@
         placeholder="Укажите заголовок"
         v-model:value="v.titleField.$model"
         :error="v.titleField.$errors"
-        width="600px"
-        height="80px"
+        width="1000px"
+        height="200px"
       />
-      <TextArea
-        label="Крнтент"
-        name="content"
-        placeholder="Укажите содержание"
-        v-model:value="v.contentField.$model"
-        :error="v.contentField.$errors" 
-        width="600px"
-        height="150px"
+      <h3 class="heading-3">Превью новости</h3>
+      <QuillEditor 
+        theme="snow" 
+        v-model:content = "contentShortField" 
+        contentType = "html" 
+      />
+      <h3 class="heading-3">Новость</h3>
+      <QuillEditor 
+        theme="snow" 
+        v-model:content = "contentField" 
+        contentType = "html" 
       />
       <!-- <PhotoUploader v-model="files" /> -->
       <div class="form-buttons">

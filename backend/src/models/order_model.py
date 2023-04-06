@@ -1,5 +1,11 @@
-from sqlalchemy import Column, ForeignKey, Integer, CheckConstraint, String
-from sqlalchemy.dialects.postgresql import ENUM as pgEnum
+from sqlalchemy import (
+    Column,
+    ForeignKey,
+    Integer,
+    CheckConstraint,
+    String,
+    Enum
+)
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
@@ -18,7 +24,7 @@ class OrderStatus(str, BaseEnum):
 class Order(BaseModel):
     __tablename__ = 'orders'
 
-    status = Column('status', pgEnum(*OrderStatus.values(), name='order_status'), default=OrderStatus.IN_PROCESSING)
+    status = Column('status', Enum(*OrderStatus.values(), name='order_status'), default=OrderStatus.IN_PROCESSING)
     promo_code = Column(String(50))
 
     # It's a special discount if a customer buys a lot of products a vendor can provide a special discount.
