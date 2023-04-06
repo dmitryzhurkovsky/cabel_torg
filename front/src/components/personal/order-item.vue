@@ -84,6 +84,7 @@ export default {
       this.SET_IS_LOADING(true);
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+      myHeaders.append("Authorization", "Bearer " + localStorage.getItem("authToken"));
       const urlencoded = new URLSearchParams();
       const requestOptions = {
           method  : 'POST',
