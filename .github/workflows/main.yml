@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Create an env file'
-        run: echo '${{ secrets.CABEL_TORG_ENV_DEV }}' > .env.dev
+        run: echo '${{ secrets.CABEL_TORG_ENV_DEV }}' > backend/.env.dev
 
   build:
     runs-on: ubuntu-latest
