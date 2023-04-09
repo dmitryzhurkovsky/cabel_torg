@@ -157,7 +157,7 @@ class ProductManager(CRUDManager):
     ):
         products = await cls.list(session=session, where=(
             Product.category_id.in_(categories_ids),
-            Product.personal_discount == 0
+            Product.discount == 0
         ))
         for product in products:
             product.price_with_discount = calculate_price_with_discount(product=product, discount=discount)
