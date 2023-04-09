@@ -294,6 +294,7 @@ h3{
   min-width:180px;text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
+  white-space: nowrap;
   &:hover{
     background: #6291ED;
   }
