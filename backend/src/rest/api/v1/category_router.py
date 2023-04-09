@@ -29,7 +29,7 @@ async def get_categories(
     )
 
 
-@category_router.patch('/categories', response_model=CategorySchema)
+@category_router.patch('/categories/<category_id>', response_model=CategorySchema)
 async def update_category(
         category_id: int,
         category_info: CategoryUpdateSchema,
