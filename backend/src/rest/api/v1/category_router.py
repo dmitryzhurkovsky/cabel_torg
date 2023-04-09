@@ -29,12 +29,14 @@ async def get_categories(
     )
 
 
-@category_router.patch('/categories/<category_id>', response_model=CategorySchema)
+@category_router.patch('/categories/{category_id}', response_model=CategorySchema)
 async def update_category(
         category_id: int,
         category_info: CategoryUpdateSchema,
         session: AsyncSession = Depends(get_session)
 ):
+    await CategoryManager.retrieve(id=category_id, session=session)
+
     return await CategoryManager.update_discount(
         session=session,
         pk=category_id,
