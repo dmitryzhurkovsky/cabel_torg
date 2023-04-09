@@ -63,6 +63,7 @@ const clickOnButton = () => {
   cursor: pointer;
   font-size: 15px;
   transition: .2s;
+
   &_primary {
     background: var(--primary);
     border: 1px solid var(--primary);
