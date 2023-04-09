@@ -90,10 +90,11 @@ export default {
     },
 
     InfoCardBlock() {
+      if (this.card.discount) return '%';
       let info = '';
       info = this.card.vendor_code === 'УТ-00000037' ? 'New' : info;
       info = this.card.vendor_code === 'УТ-00000015' ? 'Хит' : info;
-      info = this.card.price_with_discount_and_tax ? '%' : info;
+      // info = this.card.price_with_discount_and_tax ? '%' : info;
       return info;
     },
 

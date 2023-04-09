@@ -1,14 +1,16 @@
 <script setup lang='ts'>
   import { computed, onMounted, ref, watch } from 'vue'
-  import { useStore } from '../store';
-  import { ActionTypes } from '../store/action-types';
-  import { MutationTypes } from '../store/mutation-types';
-  import { IDeliveryType } from '../types';
-  import Input from '@/components/UI/Input.vue';
+  import { useStore } from '../store'
+  import { ActionTypes } from '../store/action-types'
+  import { MutationTypes } from '../store/mutation-types'
+  import { IDeliveryType } from '../types'
+  import Input from '@/components/UI/Input.vue'
   import Button from '@/components/UI/Button.vue'
-  import { helpers, required } from '@vuelidate/validators';
-  import { useVuelidate } from '@vuelidate/core';
+  import Select from '@/components/UI/Select.vue'
+  import { helpers, required } from '@vuelidate/validators'
+  import { useVuelidate } from '@vuelidate/core'
   import Img from '@/components/UI/Img.vue'
+import { getters } from '../store/getters'
 
   const store = useStore()
   const categories = ref([] as Array<IDeliveryType>)
@@ -17,6 +19,12 @@
   const goods = ref()
   const activeGood = ref()
   const goodDiscount =ref()
+
+  const itemsInPageArray = [
+    {id: 10, name: '10'},
+    {id: 20, name: '20'},
+    {id: 50, name: '50'},
+  ]
 
   watch(() => store.getters.categories,
     (curr, prev) => {
@@ -58,6 +66,7 @@
   watch(() => store.getters.goods,
     (curr, prev) => {
       goods.value = [...curr]
+      goods.value.sort((a: IDeliveryType, b: IDeliveryType) => a.id - b.id)
       store.commit(MutationTypes.SET_IS_LOADING, false)
    });
 
@@ -74,7 +83,7 @@
 
   const sendGoodsRequest = async () => {
     store.commit(MutationTypes.SET_IS_LOADING, true)
-    await store.dispatch(ActionTypes.GET_GOODS_DATA, activeCategory.value)
+    await store.dispatch(ActionTypes.GET_PRODUCTS_DATA, activeCategory.value)
     store.commit(MutationTypes.SET_IS_LOADING, false)
   };
 
@@ -102,20 +111,36 @@
     menuItem.filterPanel = !menuItem.filterPanel
   }
 
-  const onSetDiscountForCategory = () => {
-    console.log('Сдесь установить скидку для категории: ', categoryDiscount.value);
+  const onSetDiscountForCategory = async () => {
+    await store.dispatch(ActionTypes.EDIT_CATEGORY_DISCOUNT, {category: activeCategory.value, discount: categoryDiscount.value})
   }
 
-  const onSetDiscountForGood = () => {
-    console.log('Сдесь установить скидку для товара: ', categoryDiscount.value);
+  const onSetAciveGood = (card: IDeliveryType) => {
+    activeGood.value = card
   }
 
-  const CardPriceWithoutDiscount = () => {
-
+  const onSetDiscountForGood = async () => {
+    await store.dispatch(ActionTypes.EDIT_PRODUCT_DISCOUNT, {product: activeGood.value, discount: goodDiscount.value})
   }
 
-  const cardPriceWithDiscount = () => {
+  const cardPriceWithDiscount = (card: IDeliveryType) => {
+    return card.discount ? card.price_with_discount_and_tax : card.price_with_tax
+  }
 
+  const onChangePageNumber = (page: number) => {
+    if (page === 0) return
+    if (page > store.getters.totalPages) return
+    store.commit(MutationTypes.SET_ACTIVE_PAGE, page)
+    const offSet = store.getters.itemsInPage * (store.getters.activePage - 1)
+    store.commit(MutationTypes.SET_PRODUCTS_OFSET, offSet)
+    sendGoodsRequest()
+  }
+
+  const onChangeItemsInPage = async (itemsInPage: number) => {
+    store.commit(MutationTypes.SET_ACTIVE_PAGE, 1)
+    store.commit(MutationTypes.SET_ITEMS_IN_PAGE, itemsInPage) 
+    store.commit(MutationTypes.SET_PRODUCTS_OFSET, 0)
+    sendGoodsRequest()
   }
 </script>
 
@@ -196,7 +221,7 @@
           <div class="filter__dbox" style="margin-bottom: 30px;">{{ activeGood.name }}</div>
           <div class="filter__dbox">
             <Input
-              name="categoryDiscount"
+              name="goodDiscount"
               width="100px"
               v-model:value="v.goodDiscount.$model"
             />
@@ -207,10 +232,33 @@
         </div>
         <br>
         <div class="content-block__list">
+          <div class="table-pagination" v-if = "goods">
+              <div
+                  :class="[store.getters.activePage > 1 ? 'pagination-item active' : 'pagination-item']"
+                  @click="onChangePageNumber(store.getters.activePage - 1)"
+              >{{ '<' }}</div>
+              <div class="pagination-item news__pagenumber">{{ store.getters.activePage }}</div>
+              <span>{{ '/' }}</span>
+              <div class="pagination-item news__pagenumber">{{ store.getters.totalPages }}</div>
+              <div 
+                  :class="[store.getters.activePage < store.getters.totalPages ? 'pagination-item active' : 'pagination-item']"
+                  @click="onChangePageNumber(store.getters.activePage + 1)"
+              >{{ '>' }}</div>
+              <div class="pagination-selector">
+                <Select
+                  :text = "10"
+                  :id   = String(store.getters.activePage)
+                  fieldForSearch = "name"
+                  :data = "itemsInPageArray"
+                  @onSelectItem="onChangeItemsInPage"
+                />
+              </div>
+          </div>
           <div class="content-block__item product-row" v-if = "goods">
             <div class="product"
               v-for   = "card in goods"
               :key    = "card.id"
+              @click = "onSetAciveGood(card)"
             >
                 <a class="product__img">
                     <Img :image=card.images />
@@ -218,9 +266,9 @@
                 <div class="product__action">
                     <div class="product__article  _label mb-20">Артикул: <span>{{ card.vendor_code }}</span></div>
                     <div class="product__price">
-                        <span  v-if = "card.price_with_discount_and_tax" class="product__oldprice">{{ CardPriceWithoutDiscount }}</span>
-                        <span>{{ cardPriceWithDiscount }}</span> BYN
-                        <span> / {{ card.base_unit.full_name }}</span>
+                        <span class="product__oldprice old_price">{{ card.price_with_tax }}</span>
+                        <span class="product__oldprice current_price">{{ cardPriceWithDiscount(card) }}</span> 
+                        <span> BYN / {{ card.base_unit.full_name }}</span>
                     </div>
                     <div class="notice">* Цена указана с учетом НДС.</div>
                 </div>
@@ -409,23 +457,9 @@
   padding: 20px 22px 20px 22px;
   justify-content: space-between;
 
-  // &__container {
-  //   display: flex;
-  //   align-items: flex-start;
-  //   justify-content: space-between;
-  //   padding: 24px 20px;
-  //   background: #FFFFFF;
-  //   border: 2px solid #EEEEEE;
-  //   border-radius: 8px;
-  //   margin-bottom: 16px;
-  //   ._label{
-  //     font-weight: 300;
-  //     font-size: 12px;
-  //     line-height: 20px;
-
-  //   }
-  // }
-
+  &:hover{
+    cursor: pointer;
+  }
   &__img {
     width: 100%;
     flex-basis: 20%;
@@ -456,6 +490,48 @@
         font-weight: 500;
     }
 
+  }
+}
+
+.table{
+  &-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px 0;
+  }
+}
+
+.pagination{
+  &-selector{
+    max-width: 100px;
+  }
+  &-pages{
+    border: 1px solid var(--primary);
+    padding: 10px 10px;
+    height: 40px;
+    border-radius: 7px;
+    font-size: 15px;
+    width: 100%;
+    text-align: center;
+  }
+  &-item{
+    border: 1px solid var(--primary);
+    padding: 10px 10px;
+    height: 40px;
+    border-radius: 7px;
+    font-size: 15px;
+    width: 40px;
+    text-align: center;
+  }
+}
+
+.active {
+  cursor: pointer;
+  &:hover{
+    background-color: var(--primary-hover);
+    color: var(--background-content);
   }
 }
 

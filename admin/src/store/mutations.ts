@@ -26,6 +26,7 @@ export type Mutations<S = State> = {
   [MutationTypes.SET_ISPOPUPOPEN](state: S, payload: boolean): void,
   [MutationTypes.SET_NEW_ORDER_STATUS](state: S, payload: IDeliveryType): void,
   [MutationTypes.SET_CATEGORIES](state: S, payload: Array<IDeliveryType>): void,
+  [MutationTypes.UPDATE_CATEGORY](state: S, payload: IDeliveryType): void,
   [MutationTypes.SET_SETTINGS](state: S, payload: IdleDeadline): void,
   [MutationTypes.SET_STOCKS](state: S, payload: Array<IDeliveryType>): void,
   [MutationTypes.ADD_TO_STOCKS](state: S, payload: IDeliveryType): void,
@@ -35,11 +36,12 @@ export type Mutations<S = State> = {
   [MutationTypes.ADD_TO_BANNERS](state: S, payload: IDeliveryType): void,
   [MutationTypes.DELETE_FROM_BANNERS](state: S, payload: number): void,
   [MutationTypes.UPDATE_BANNER](state: S, payload: IDeliveryType): void,
-  [MutationTypes.SET_GOODS](state: S, payload: IDeliveryType): void,
-  [MutationTypes.SET_GOODS_OFSET](state: S, payload: number): void,
+  [MutationTypes.SET_PRODUCTS](state: S, payload: IDeliveryType): void,
+  [MutationTypes.SET_PRODUCTS_OFSET](state: S, payload: number): void,
   [MutationTypes.SET_ACTIVE_PAGE](state: S, payload: number): void,
   [MutationTypes.SET_TOTAL_PAGES](state: S, payload: number): void,
   [MutationTypes.SET_ITEMS_IN_PAGE](state: S, payload: number): void,
+  [MutationTypes.UPDATE_PRODUCT](state: S, payload: IDeliveryType): void,
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -112,6 +114,12 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationTypes.SET_CATEGORIES](state, payload: Array<IDeliveryType>) {
     state.categories = payload
   },
+  [MutationTypes.UPDATE_CATEGORY](state, payload: IDeliveryType) {
+    const category = state.categories.filter(item => item.id === payload.id)[0]
+    if (category) {
+      category.discount = payload.discount
+    }
+  },
   [MutationTypes.SET_SETTINGS](state, payload: IDeliveryType) {
     state.settings = payload
   },
@@ -141,11 +149,11 @@ export const mutations: MutationTree<State> & Mutations = {
     state.banners = state.banners.filter(item => item.id !== payload.id)
     state.banners.push(payload)
   },
-  [MutationTypes.SET_GOODS](state, payload: IDeliveryType) {
+  [MutationTypes.SET_PRODUCTS](state, payload: IDeliveryType) {
     state.goods = payload.data
     state.totalPages =  Math.ceil(payload.total / payload.limit);    
   },
-  [MutationTypes.SET_GOODS_OFSET](state, payload: number) {
+  [MutationTypes.SET_PRODUCTS_OFSET](state, payload: number) {
     state.goodsOfset = payload
   },
   [MutationTypes.SET_ACTIVE_PAGE](state, payload: number) {
@@ -157,4 +165,9 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationTypes.SET_ITEMS_IN_PAGE](state, payload: number) {
     state.itemsInPage = payload
   },
+  [MutationTypes.UPDATE_PRODUCT](state, payload: IDeliveryType) {
+    state.goods = state.goods.filter(item => item.id !== payload.id)
+    state.goods.push(payload)
+  },
+
 }

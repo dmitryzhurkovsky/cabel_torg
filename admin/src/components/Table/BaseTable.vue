@@ -253,10 +253,6 @@
   </div>
 
   <div class="table-pagination">
-      <!-- <div 
-          :class="[pageNumber > 1 ? 'pagination-item active' : 'pagination-item']"
-          @click="onChangePageNumber(1)"
-      >{{ '<<' }}</div> -->
       <div
           :class="[pageNumber > 1 ? 'pagination-item active' : 'pagination-item']"
           @click="onChangePageNumber(pageNumber - 1)"
@@ -268,10 +264,6 @@
           :class="[pageNumber < totalPages ? 'pagination-item active' : 'pagination-item']"
           @click="onChangePageNumber(pageNumber + 1)"
       >{{ '>' }}</div>
-      <!-- <div 
-          :class="[pageNumber < totalPages ? 'pagination-item active' : 'pagination-item']"
-          @click="onChangePageNumber(totalPages)"
-      >{{ '>>' }}</div> -->
       <div class="pagination-selector">
         <Select
           :text = String(itemsInPage)
@@ -384,6 +376,5 @@
     background-color: var(--primary-hover);
     color: var(--background-content);
   }
-
 }
 </style>

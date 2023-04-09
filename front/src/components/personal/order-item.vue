@@ -1,5 +1,7 @@
 <template lang="html">
-  <div class="order__item _open" v-if = "card">
+  <div v-if = "card"
+    :class="[isOpen ? 'order__item _open' : 'order__item']"
+  >
     <div class="order__num" @click = "toggleOrder()">
       Заказ #  <span>{{ card.id }}</span>
     </div>
@@ -7,7 +9,7 @@
       <div class="order__invoice" @click.stop = "dowwnloadInvoice"> Счет </div>
       <div class="order__date">{{ card.created_at.slice(0, 10) }}</div>
       <div class="order__delivery">{{ delivery_type }}</div>
-      <div class="order__status _status-color">{{ order_status }}</div>
+      <div :class="['order__status', `_status-color-${order_color}`]">{{ order_status }}</div>
       <div class="order__price">{{ order_price }}<span> BYN</span></div>
     </div>
 
@@ -60,6 +62,13 @@ export default {
       if (this.card.status === 'S') return 'Отправлен';
       if (this.card.status === 'c') return 'Отменен';
       if (this.card.status === 'C') return 'Выполнен';
+    },
+
+    order_color(){
+      if (this.card.status === 'P') return 'progress';
+      if (this.card.status === 'S') return 'send';
+      if (this.card.status === 'c') return 'cancel';
+      if (this.card.status === 'C') return 'complete';
     },
 
     delivery_type(){
@@ -137,8 +146,20 @@ export default {
         align-items: flex-start;
         padding: 12px 12px ;
       }
-      ._status-color{
+      ._status-color-complete{
         color: #32A071;
+        font-weight: 500;
+      }
+      ._status-color-send{
+        color: orange;
+        font-weight: 500;
+      }
+      ._status-color-cancel{
+        color: red;
+        font-weight: 500;
+      }
+      ._status-color-progress{
+        color: blue;
         font-weight: 500;
       }
 

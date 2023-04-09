@@ -27,7 +27,7 @@ const state = {
   goodsOfset: 0,
   activePage: 1,
   totalPages: 1,
-  itemsInPage: 12
+  itemsInPage: 10
 }
 
 export type State = typeof state

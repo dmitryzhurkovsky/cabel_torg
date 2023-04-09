@@ -98,6 +98,10 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: null
   ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.EDIT_CATEGORY_DISCOUNT](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
   [ActionTypes.GET_SETTINGS_DATA](
     { commit }: AugmentedActionContext,
     payload: null
@@ -142,7 +146,11 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: any
   ): Promise<Array<IDeliveryType>>,
-  [ActionTypes.GET_GOODS_DATA](
+  [ActionTypes.GET_PRODUCTS_DATA](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.EDIT_PRODUCT_DISCOUNT](
     { commit }: AugmentedActionContext,
     payload: IDeliveryType
   ): Promise<Array<IDeliveryType>>,
@@ -155,17 +163,17 @@ export const actions: ActionTree<State, State> & Actions = {
       commit(MutationTypes.SET_ERRORS, {})
       axios.post(import.meta.env.VITE_APP_API_URL + "token", payload).
       then((response) => {
-        localStorage.setItem("authToken", response.data.access_token);
-        localStorage.setItem("refreshToken", response.data.refresh_token);
+        localStorage.setItem("authToken", response.data.access_token)
+        localStorage.setItem("refreshToken", response.data.refresh_token)
         dispatch(ActionTypes.GET_USER_DATA, null)
         .then((response) => {
-          resolve(response.data);
+          resolve(response.data)
         })
       }).catch((err) => {
         if (err.response.status = 404) {
           resolve({});
         }
-        console.log('Send login request ', err);
+        console.log('Send login request ', err)
         
       });
     }) 
@@ -175,7 +183,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "users/mine").
       then((response) => {
-        commit(MutationTypes.SET_USER, response.data);
+        commit(MutationTypes.SET_USER, response.data)
         resolve(response.data);
       })
     })
@@ -185,7 +193,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/delivery_types").
       then((response) => {
-        commit(MutationTypes.SET_DELIVERY_TYPES, response.data);
+        commit(MutationTypes.SET_DELIVERY_TYPES, response.data)
         resolve(response.data);
       })
     })
@@ -195,7 +203,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/delivery_types", payload).
       then((response) => {
-        commit(MutationTypes.ADD_TO_DELIVERY_TYPES, response.data);
+        commit(MutationTypes.ADD_TO_DELIVERY_TYPES, response.data)
         resolve(response.data);
       })
     })
@@ -205,7 +213,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/delivery_types/" + String(payload)).
       then((response) => {
-        commit(MutationTypes.DELETE_FROM_DELIVERY_TYPES, payload);
+        commit(MutationTypes.DELETE_FROM_DELIVERY_TYPES, payload)
         resolve(response.data);
       })
     })
@@ -216,7 +224,7 @@ export const actions: ActionTree<State, State> & Actions = {
       // const params = { payload: data.payload as string}
       axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/delivery_types/" + String(data.id), data).
       then((response) => {
-        commit(MutationTypes.UPDATE_DELIVERY_TYPES, response.data);
+        commit(MutationTypes.UPDATE_DELIVERY_TYPES, response.data)
         resolve(response.data);
       })
     })
@@ -226,7 +234,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/articles").
       then((response) => {
-        commit(MutationTypes.SET_ARTICLES, response.data);
+        commit(MutationTypes.SET_ARTICLES, response.data)
         resolve(response.data);
       })
     })
@@ -236,7 +244,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/articles/" + String(payload)).
       then((response) => {
-        commit(MutationTypes.DELETE_FROM_ARTICLES, payload);
+        commit(MutationTypes.DELETE_FROM_ARTICLES, payload)
         resolve(response.data);
       })
     })
@@ -246,7 +254,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/articles", payload).
       then((response) => {
-        commit(MutationTypes.ADD_TO_ARTICLES, response.data);
+        commit(MutationTypes.ADD_TO_ARTICLES, response.data)
         resolve(response.data);
       })
     })
@@ -256,7 +264,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/articles/" + String(data.id), data).
       then((response) => {
-        commit(MutationTypes.UPDATE_ARTICLE, response.data);
+        commit(MutationTypes.UPDATE_ARTICLE, response.data)
         resolve(response.data);
       })
     })
@@ -266,7 +274,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/articles/" + payload.id + '/images', payload.data).
       then((response) => {
-        commit(MutationTypes.UPDATE_ARTICLE, response.data);
+        commit(MutationTypes.UPDATE_ARTICLE, response.data)
         resolve(response.data);
       })
     })
@@ -276,7 +284,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/partners").
       then((response) => {
-        commit(MutationTypes.SET_PARTNERS, response.data);
+        commit(MutationTypes.SET_PARTNERS, response.data)
         resolve(response.data);
       })
     })
@@ -286,7 +294,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/partners/" + String(payload)).
       then((response) => {
-        commit(MutationTypes.DELETE_FROM_PARTNERS, payload);
+        commit(MutationTypes.DELETE_FROM_PARTNERS, payload)
         resolve(response.data);
       })
     })
@@ -296,7 +304,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/partners", payload).
       then((response) => {
-        commit(MutationTypes.ADD_TO_PARTNERS, response.data);
+        commit(MutationTypes.ADD_TO_PARTNERS, response.data)
         resolve(response.data);
       })
     })
@@ -306,7 +314,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/request_calls?type_of_request_call=U").
       then((response) => {
-        commit(MutationTypes.SET_CALL_REQUESTS, response.data);
+        commit(MutationTypes.SET_CALL_REQUESTS, response.data)
         resolve(response.data);
       })
     })
@@ -316,7 +324,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/request_calls/" + String(payload)).
       then((response) => {
-        commit(MutationTypes.DELETE_FROM_CALL_REQUESTS, payload);
+        commit(MutationTypes.DELETE_FROM_CALL_REQUESTS, payload)
         resolve(response.data);
       })
     })
@@ -326,7 +334,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/feedbacks").
       then((response) => {
-        commit(MutationTypes.SET_FEEDBACK_REQUESTS, response.data);
+        commit(MutationTypes.SET_FEEDBACK_REQUESTS, response.data)
         resolve(response.data);
       })
     })
@@ -336,7 +344,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/feedbacks/" + String(payload)).
       then((response) => {
-        commit(MutationTypes.DELETE_FROM_FEEDBACK_REQUESTS, payload);
+        commit(MutationTypes.DELETE_FROM_FEEDBACK_REQUESTS, payload)
         resolve(response.data);
       })
     })
@@ -346,7 +354,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "orders").
       then((response) => {
-        commit(MutationTypes.SET_ORDERS, response.data);
+        commit(MutationTypes.SET_ORDERS, response.data)
         resolve(response.data);
       })
     })
@@ -358,7 +366,7 @@ export const actions: ActionTree<State, State> & Actions = {
       axios.patch(import.meta.env.VITE_APP_API_URL + "orders/" + payload.orderId, {status: payload.newStatus}).
       then((response) => {
         orderForUpdate.status = payload.newStatus
-        commit(MutationTypes.SET_NEW_ORDER_STATUS, orderForUpdate);
+        commit(MutationTypes.SET_NEW_ORDER_STATUS, orderForUpdate)
         resolve(response.data);
       })
     })
@@ -368,7 +376,19 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "categories").
       then((response) => {
-        commit(MutationTypes.SET_CATEGORIES, response.data);
+        commit(MutationTypes.SET_CATEGORIES, response.data)
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.EDIT_CATEGORY_DISCOUNT]({ commit, dispatch }, data) {
+    return new Promise((resolve) => {
+      const { category, discount } = data
+      axios.patch(import.meta.env.VITE_APP_API_URL + "categories/" + category.id, { discount }).
+      then((response) => {
+        commit(MutationTypes.UPDATE_CATEGORY, response.data)
+        dispatch(ActionTypes.GET_PRODUCTS_DATA, data.category)
         resolve(response.data);
       })
     })
@@ -378,7 +398,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1").
       then((response) => {
-        commit(MutationTypes.SET_SETTINGS, response.data);
+        commit(MutationTypes.SET_SETTINGS, response.data)
         resolve(response.data);
       })
     })
@@ -388,7 +408,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1", data).
       then((response) => {
-        commit(MutationTypes.SET_SETTINGS, response.data);
+        commit(MutationTypes.SET_SETTINGS, response.data)
         resolve(response.data);
       })
     })
@@ -398,7 +418,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses").
       then((response) => {
-        commit(MutationTypes.SET_STOCKS, response.data);
+        commit(MutationTypes.SET_STOCKS, response.data)
         resolve(response.data);
       })
     })
@@ -408,7 +428,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses/" + String(payload)).
       then((response) => {
-        commit(MutationTypes.DELETE_FROM_STOCKS, payload);
+        commit(MutationTypes.DELETE_FROM_STOCKS, payload)
         resolve(response.data);
       })
     })
@@ -418,7 +438,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses", payload).
       then((response) => {
-        commit(MutationTypes.ADD_TO_STOCKS, response.data);
+        commit(MutationTypes.ADD_TO_STOCKS, response.data)
         resolve(response.data);
       })
     })
@@ -429,7 +449,7 @@ export const actions: ActionTree<State, State> & Actions = {
       console.log('data: ', data);
       axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses/" + String(data.id), data).
       then((response) => {
-        commit(MutationTypes.UPDATE_STOCK, response.data);
+        commit(MutationTypes.UPDATE_STOCK, response.data)
         resolve(response.data);
       })
     })
@@ -439,7 +459,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/banners").
       then((response) => {
-        commit(MutationTypes.SET_BANNERS, response.data);
+        commit(MutationTypes.SET_BANNERS, response.data)
         resolve(response.data);
       })
     })
@@ -449,7 +469,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/banners/" + String(payload)).
       then((response) => {
-        commit(MutationTypes.DELETE_FROM_BANNERS, payload);
+        commit(MutationTypes.DELETE_FROM_BANNERS, payload)
         resolve(response.data);
       })
     })
@@ -459,7 +479,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/banners", payload).
       then((response) => {
-        commit(MutationTypes.ADD_TO_BANNERS, response.data);
+        commit(MutationTypes.ADD_TO_BANNERS, response.data)
         resolve(response.data);
       })
     })
@@ -469,7 +489,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/banners/" + String(data.id), data).
       then((response) => {
-        commit(MutationTypes.UPDATE_BANNER, response.data);
+        commit(MutationTypes.UPDATE_BANNER, response.data)
         resolve(response.data);
       })
     })
@@ -479,21 +499,33 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/banners/" + payload.id + '/images', payload.data).
       then((response) => {
-        commit(MutationTypes.UPDATE_BANNER, response.data);
+        commit(MutationTypes.UPDATE_BANNER, response.data)
         resolve(response.data);
       })
     })
   },
 
-  [ActionTypes.GET_GOODS_DATA]({ commit }, params) {
+  [ActionTypes.GET_PRODUCTS_DATA]({ commit, getters }, params) {
     return new Promise((resolve) => {
-      axios.get(import.meta.env.VITE_APP_API_URL + "products?category_id=" + params.id).
-      then((response) => {
-        commit(MutationTypes.SET_GOODS, response.data);
+      axios.get(import.meta.env.VITE_APP_API_URL + "products?category_id=" + 
+        params.id + 
+        "&offset=" + getters.goodsOfset +
+        "&limit=" + getters.itemsInPage
+      ).then((response) => {
+        commit(MutationTypes.SET_PRODUCTS, response.data)
         resolve(response.data);
       })
     })
   },
 
-
+  [ActionTypes.EDIT_PRODUCT_DISCOUNT]({ commit }, data) {
+    const { product, discount } = data
+    return new Promise((resolve) => {
+      axios.patch(import.meta.env.VITE_APP_API_URL + "products/" + String(product.id), { discount }).
+      then((response) => {
+        commit(MutationTypes.UPDATE_PRODUCT, response.data)
+        resolve(response.data);
+      })
+    })
+  },
 }
