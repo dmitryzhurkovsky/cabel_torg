@@ -35,7 +35,12 @@
               <div class="price-product__block">
                 <div class="_label">Ваша цена:</div>
                 <div class="current_price">
-                  <span>{{ cartItemData.discont ? cartItemData.price_with_discount_and_tax : cartItemData.price_with_tax }}</span>BYN
+                  <span>
+                    {{ cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax 
+                          ? cartItemData.price_with_discount_and_tax 
+                          : cartItemData.price_with_tax 
+                    }}
+                  </span>BYN
                   <!-- cartItemData.price  -->
                   <span>/{{ cartItemData.base_unit.full_name }}</span>
                 </div>
@@ -53,7 +58,8 @@
                 <div class="retail_price">
                   <div>Первоначальная цена: </div>
                   <div>
-                    <span class="price__value"> {{ cartItemData.discont ? cartItemData.price_with_discount_and_tax : cartItemData.price_with_tax }}</span>BYN
+                    <span class="price__value"> {{ cartItemData.price_with_tax }}</span>
+                      BYN
                     <span>/шт</span>
                   </div>
 
@@ -61,7 +67,10 @@
                 <div class="opt_price">
                   <div>Цена со скидкой: </div>
                   <div>
-                    <span class="price__value">{{ cartItemData.discont ? cartItemData.price_with_discount_and_tax : cartItemData.price_with_tax }}</span>BYN
+                    <span class="price__value">{{ 
+                        cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax 
+                          ? cartItemData.price_with_discount_and_tax 
+                          : cartItemData.price_with_tax }}</span>BYN
                     <span>/шт</span>
                   </div>
 
@@ -180,9 +189,7 @@
             id: card.id,
             vendor_code: card.vendor_code,
             name: card.name,
-            // price: card.discont ? card.price_with_discount_and_tax : card.price_with_tax,
             discont: card.discont,
-            price_with_discount: card.price_with_discount,
             price_with_discount_and_tax: card.price_with_discount_and_tax,
             price_with_tax: card.price_with_tax,
           },

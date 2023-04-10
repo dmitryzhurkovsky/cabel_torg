@@ -14,7 +14,7 @@
     </a>
     <div class="item-card__info">
       <div class="item-card__row old_price__row flex-center">
-        <div v-if = "card.price_with_discount_and_tax" class="old_price">{{ CardPriceWithoutDiscount }}t
+        <div class="old_price">{{ card.price_with_tax }}
           <span>BYN / {{ card.base_unit.full_name }}</span>
         </div>
         <div class="notice">* Цена указана с учетом НДС.</div>
@@ -82,11 +82,9 @@ export default {
     },
 
     cardPriceWithDiscount(){
-      return this.card.price_with_discount_and_tax ? this.card.price_with_discount_and_tax : this.card.price_with_tax;
-    },
-
-    CardPriceWithoutDiscount(){
-      return this.card.price_with_discount_and_tax ? this.card.price_with_tax : '';
+      return this.card.price_with_discount_and_tax && this.card.price_with_discount_and_tax !== this.card.price_with_tax 
+        ? this.card.price_with_discount_and_tax 
+        : this.card.price_with_tax;
     },
 
     InfoCardBlock() {
@@ -137,9 +135,7 @@ export default {
           id: card.id,
           vendor_code: card.vendor_code,
           name: card.name,
-          // price: card.discont ? card.price_with_discount_and_tax : card.price_with_tax,
           discont: card.discont,
-          price_with_discount: card.price_with_discount,
           price_with_discount_and_tax: card.price_with_discount_and_tax,
           price_with_tax: card.price_with_tax,
         },

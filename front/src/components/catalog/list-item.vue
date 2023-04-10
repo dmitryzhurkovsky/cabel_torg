@@ -31,7 +31,7 @@
         <div class="product__action">
             <div class="product__article  _label mb-20">Артикул: <span>{{ card.vendor_code }}</span></div>
             <div class="product__price">
-                <span  v-if = "card.price_with_discount_and_tax" class="product__oldprice">{{ CardPriceWithoutDiscount }}</span>
+                <span class="product__oldprice">{{ card.price_with_tax }}</span>
               <div>
                 <span>{{ cardPriceWithDiscount }}</span> BYN
                 <span> / {{ card.base_unit.full_name }}</span>
@@ -84,11 +84,9 @@ export default {
       },
 
       cardPriceWithDiscount(){
-        return this.card.price_with_discount_and_tax ? this.card.price_with_discount_and_tax : this.card.price_with_tax;
-      },
-
-      CardPriceWithoutDiscount(){
-        return this.card.price_with_discount_and_tax ? this.card.price_with_tax : '';
+        return this.card.price_with_discount_and_tax && this.card.price_with_discount_and_tax !== this.card.price_with_tax 
+          ? this.card.price_with_discount_and_tax 
+          : this.card.price_with_tax;
       },
 
       InfoCardBlock() {
@@ -156,9 +154,7 @@ export default {
             id: card.id,
             vendor_code: card.vendor_code,
             name: card.name,
-            // price: card.discont ? card.price_with_discount_and_tax : card.price_with_tax,
             discont: card.discont,
-            price_with_discount: card.price_with_discount,
             price_with_discount_and_tax: card.price_with_discount_and_tax,
             price_with_tax: card.price_with_tax,
           },

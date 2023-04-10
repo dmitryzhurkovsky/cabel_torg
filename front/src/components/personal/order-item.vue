@@ -24,7 +24,12 @@
           <div class="details-order__title long_text">{{ orderProduct.product.name }}</div>
           <div class="details-order__article"><span>{{ orderProduct.product.vendor_code }}</span></div>
           <div class="details-order__count">{{ orderProduct.amount }}<span> {{ orderProduct.product.base_unit.full_name }}</span></div>
-          <div class="details-order__price"><b>{{ (orderProduct.amount * orderProduct.product.discont ? orderProduct.product.price_with_discount_and_tax : orderProduct.product.price_with_tax).toFixed(2) }}</b> BYN</div>
+          <div class="details-order__price"><b>
+            {{ (orderProduct.amount * orderProduct.product.price_with_discount_and_tax && orderProduct.product.price_with_discount_and_tax !== orderProduct.product.price_with_tax 
+              ? orderProduct.product.price_with_discount_and_tax 
+              : orderProduct.product.price_with_tax).toFixed(2) 
+            }}</b> BYN
+              </div>
           <!-- orderProduct.product.price -->
         </div>
       </div>

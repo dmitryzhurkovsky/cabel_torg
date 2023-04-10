@@ -9,7 +9,14 @@
 
         </div>
         <div class="popup-cart__action">
-            <div class="popup-cart__price">{{ item.discont ? item.price_with_discount_and_tax : item.price_with_tax }} <span>BYN</span></div>
+            <div class="popup-cart__price">
+              {{ 
+                item.price_with_discount_and_tax && item.price_with_discount_and_tax !== item.price_with_tax 
+                  ? item.price_with_discount_and_tax 
+                  : item.price_with_tax 
+              }} 
+              <span>BYN</span>
+            </div>
             <!-- item.price -->
         </div>
     </div>

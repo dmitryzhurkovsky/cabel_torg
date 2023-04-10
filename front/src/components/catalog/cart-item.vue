@@ -30,7 +30,7 @@
           <div class="product__price">
             <div class="_label mb-20">Стоимость (с учетом НДС):</div>
             <div class="old_price">
-              <span>{{ CardPriceWithoutDiscount }}</span>BYN
+              <span>{{ cartItemData.price_with_tax }}</span>BYN
               <span>/{{ cartItemData?.base_unit?.full_name }}</span>
             </div>
             <div class="current_price">
@@ -93,11 +93,9 @@
         },
 
         cardPriceWithDiscount(){
-            return this.cartItemData.price_with_discount_and_tax ? this.cartItemData.price_with_discount_and_tax : this.cartItemData.price_with_tax;
-        },
-
-        CardPriceWithoutDiscount(){
-            return this.cartItemData.price_with_discount_and_tax ? this.cartItemData.price_with_tax : '';
+            return this.cartItemData.price_with_discount_and_tax && this.cartItemData.price_with_discount_and_tax !== this.cartItemData.price_with_tax 
+              ? this.cartItemData.price_with_discount_and_tax 
+              : this.cartItemData.price_with_tax;
         },
 
         isMobileVersion(){
@@ -139,9 +137,7 @@
                     id: card.id,
                     vendor_code: card.vendor_code,
                     name: card.name,
-                    // price: card.discont ? card.price_with_discount_and_tax : card.price_with_tax,
                     discont: card.discont,
-                    price_with_discount: card.price_with_discount,
                     price_with_discount_and_tax: card.price_with_discount_and_tax,
                     price_with_tax: card.price_with_tax,
                 },

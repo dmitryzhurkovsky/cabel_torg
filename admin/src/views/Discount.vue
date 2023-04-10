@@ -124,7 +124,9 @@ import { getters } from '../store/getters'
   }
 
   const cardPriceWithDiscount = (card: IDeliveryType) => {
-    return card.discount ? card.price_with_discount_and_tax : card.price_with_tax
+    return card.price_with_discount_and_tax && card.price_with_discount_and_tax !== card.price_with_tax 
+      ? card.price_with_discount_and_tax 
+      : card.price_with_tax
   }
 
   const onChangePageNumber = (page: number) => {

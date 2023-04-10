@@ -72,7 +72,9 @@
   }
 
   const price = (product: IDeliveryType) => {
-    return product.price_with_discount_and_tax ? product.price_with_discount_and_tax : product.price_with_tax
+    return product.price_with_discount_and_tax && product.price_with_discount_and_tax !== product.price_with_tax 
+      ? product.price_with_discount_and_tax 
+      : product.price_with_tax
   }
 
   const statusName = (id: string) => {
@@ -149,7 +151,7 @@
             <div class="product__price">
               <div class="_label mb-20">Стоимость (с учетом НДС):</div>
               <div class="old_price">
-                <span>{{ (element.product.price * element.amount).toFixed(2) }}</span>BYN
+                <span>{{ (element.product.price_with_tax * element.amount).toFixed(2) }}</span>BYN
                 <span>/{{ element?.product?.base_unit?.full_name }}</span>
               </div>
               <div class="current_price">
