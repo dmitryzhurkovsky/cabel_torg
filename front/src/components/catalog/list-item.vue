@@ -30,7 +30,7 @@
         </div>
         <div class="product__action">
             <div class="product__article  _label mb-20">Артикул: <span>{{ card.vendor_code }}</span></div>
-            <div class="product__price">
+            <div class="product__price" v-if="card.price_with_tax !== cardPriceWithDiscount">
                 <span class="product__oldprice">{{ card.price_with_tax }}</span>
               <div>
                 <span>{{ cardPriceWithDiscount }}</span> BYN

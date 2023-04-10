@@ -29,7 +29,7 @@
           </div>
           <div class="product__price">
             <div class="_label mb-20">Стоимость (с учетом НДС):</div>
-            <div class="old_price">
+            <div class="old_price" v-if="cartItemData.price_with_tax !== cardPriceWithDiscount">
               <span>{{ cartItemData.price_with_tax }}</span>BYN
               <span>/{{ cartItemData?.base_unit?.full_name }}</span>
             </div>

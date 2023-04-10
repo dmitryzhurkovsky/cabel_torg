@@ -14,7 +14,7 @@
     </a>
     <div class="item-card__info">
       <div class="item-card__row old_price__row flex-center">
-        <div class="old_price">{{ card.price_with_tax }}
+        <div class="old_price" v-if="card.price_with_tax !== cardPriceWithDiscount">{{ card.price_with_tax }}
           <span>BYN / {{ card.base_unit.full_name }}</span>
         </div>
         <div class="notice">* Цена указана с учетом НДС.</div>
