@@ -91,9 +91,9 @@
       },
 
       setQuantityInSlider() {
-        if (this.DEVICE_VIEW_TYPE === 1) this.slidersInFrame = 4
-        if (this.DEVICE_VIEW_TYPE === 2) this.slidersInFrame = 2
-        if (this.DEVICE_VIEW_TYPE === 3) this.slidersInFrame = 1
+        if (this.DEVICE_VIEW_TYPE === 1) this.slidersInFrame = 4.5
+        if (this.DEVICE_VIEW_TYPE === 2) this.slidersInFrame = 2.5
+        if (this.DEVICE_VIEW_TYPE === 3) this.slidersInFrame = 1.5
       }
     },
 
