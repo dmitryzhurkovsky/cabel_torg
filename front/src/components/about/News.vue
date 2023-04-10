@@ -64,7 +64,7 @@
 
     data: function(){
       return{
-        slidersInFrame : 4,
+        slidersInFrame : 4.5,
       }
     },
 
