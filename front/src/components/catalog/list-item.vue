@@ -13,7 +13,7 @@
         <div class="product__info">
             <div class="product__status icon-done-color _label mb-20" v-if = "card.status === 'A'">В наличии</div>
             <div class="product__status icon-on-the-way _label mb-20" v-if = "card.status === 'W'">В пути на склад</div>
-            <div class="product__status _label mb-20" v-if = "card.status === 'W'">Доставим в течение 14 дней</div>
+            <div class="product__status _label mb-20 if_status_on_the_way" v-if = "card.status === 'W'">Доставим в течение 14 дней</div>
             <div class="product__status icon-out-of-stock _label mb-20" v-if = "card.status === 'O'">Нет в наличии</div>
             <div class="product__title">
                 <a v-if ="card.category">{{ card.category.name }}</a>
@@ -32,8 +32,11 @@
             <div class="product__article  _label mb-20">Артикул: <span>{{ card.vendor_code }}</span></div>
             <div class="product__price">
                 <span  v-if = "card.price_with_discount_and_tax" class="product__oldprice">{{ CardPriceWithoutDiscount }}</span>
+              <div>
                 <span>{{ cardPriceWithDiscount }}</span> BYN
                 <span> / {{ card.base_unit.full_name }}</span>
+              </div>
+
             </div>
             <div class="notice">* Цена указана с учетом НДС.</div>
             <div class="product__btn flex-center">
@@ -232,6 +235,11 @@ export default {
   &__info{
     flex-basis: 45%;
     padding: 0 10px;
+      .if_status_on_the_way{
+        margin-top: -15px;
+
+      }
+
 
   }
 

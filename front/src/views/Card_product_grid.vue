@@ -27,8 +27,8 @@
             </div>
             <div class="grid__item" tabindex="7">
               <div class="desc-product__status icon-done-color _label" v-if = "cartItemData.status === 'A'">В наличии</div>
-              <div class="desc-product__status icon-on-the-way _label" v-if = "cartItemData.status === 'W'">В пути на склад</div>
-              <div class="" v-if = "cartItemData.status === 'W'">Доставим в течение 14 дней</div>
+              <div class="desc-product__status icon-on-the-way " v-if = "cartItemData.status === 'W'">В пути на склад</div>
+              <div class="desc-product__status if_status_on_the_way _label" v-if = "cartItemData.status === 'W'">Доставим в течение 14 дней</div>
               <div class="desc-product__status icon-out-of-stock _label" v-if = "cartItemData.status === 'O'">Нет в наличии</div>
             </div>
             <div class="grid__item" tabindex="8">
@@ -51,17 +51,17 @@
             <div class="grid__item" tabindex="10">
               <div class="price-product__block">
                 <div class="retail_price">
-                  <div>Розничная цена: </div>
+                  <div>Первоначальная цена: </div>
                   <div>
-                    <span>70???</span>BYN
+                    <span class="price__value"> {{ cartItemData.discont ? cartItemData.price_with_discount_and_tax : cartItemData.price_with_tax }}</span>BYN
                     <span>/шт</span>
                   </div>
 
                 </div>
                 <div class="opt_price">
-                  <div>Оптовая цена: </div>
+                  <div>Цена со скидкой: </div>
                   <div>
-                    <span>70???</span>BYN
+                    <span class="price__value">{{ cartItemData.discont ? cartItemData.price_with_discount_and_tax : cartItemData.price_with_tax }}</span>BYN
                     <span>/шт</span>
                   </div>
 
@@ -417,7 +417,10 @@
   }
 
   &__body{
-
+    .if_status_on_the_way{
+      font-size: 12px;
+      margin-left: 25px;
+    }
 
   }
   &__status-row{
@@ -531,6 +534,7 @@
       margin-right: 10px;
     }
   }
+
   &__count{
     @media (max-width: $md2+px) {
       margin: 20px 0;
@@ -563,6 +567,7 @@
     .retail_price{
 
     }
+
   }
 
 
@@ -596,7 +601,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
+  .price__value{
+    margin: 0 5px;
+    font-weight: 600;
+  }
 }
 
 .opt_price{
