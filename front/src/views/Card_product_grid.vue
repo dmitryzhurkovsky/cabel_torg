@@ -35,6 +35,10 @@
               <div class="price-product__block">
                 <div class="_label">Ваша цена:</div>
                 <div class="current_price">
+                  <span 
+                    v-if="cartItemData.price_with_discount_and_tax && cartItemData.price_with_tax !== cartItemData.price_with_discount_and_tax"
+                    class="old_price"
+                  >{{ cartItemData.price_with_tax }}</span>
                   <span>
                     {{ cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax 
                           ? cartItemData.price_with_discount_and_tax 
@@ -68,9 +72,7 @@
                   <div>Цена со скидкой: </div>
                   <div>
                     <span class="price__value">{{ 
-                        cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax 
-                          ? cartItemData.price_with_discount_and_tax 
-                          : cartItemData.price_with_tax }}</span>BYN
+                        cartItemData.price_with_tax }}</span>BYN
                     <span>/шт</span>
                   </div>
 
@@ -596,11 +598,17 @@
   @media (max-width: $md3 + px){
 
   }
+  .old_price {
+    text-decoration-line: line-through;
+    opacity: 0.4;
+    white-space: nowrap;
+    font-weight: 300;
+  }
   span{
     margin-right: 10px;
-    &:nth-child(2){
-      font-weight: 300;
-    }
+    // &:nth-child(2){
+    //   font-weight: 300;
+    // }
   }
 }
 
@@ -615,7 +623,7 @@
 }
 
 .opt_price{
-margin-top: 15px;
+  margin-top: 15px;
 }
 
 
