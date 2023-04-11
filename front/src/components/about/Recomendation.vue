@@ -41,8 +41,14 @@
                 </div>
 
               </swiper>
+              <div class="recomendation__link  _link">Смотреть все
+                <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0.5 3.99935H15.0833M15.0833 3.99935L11.75 0.666016M15.0833 3.99935L11.75 7.33268" stroke="#4275D8"/>
+                </svg>
+              </div>
 
           </div>
+
         </div>
       </div>
     </div>
@@ -197,6 +203,7 @@
 }
 .recomendation {
   margin-top: 30px;
+  position: relative;
 
   &__wrapper{
 
@@ -205,14 +212,23 @@
 
   }
 
-  &__body{
+  &__link{
+    position: absolute;
+    right: 0;
+    bottom: 43px;
+    cursor: pointer;
+    @media (max-width: $md3+px) {
+      display: none;
+    }
   }
 
   &__block{
+    position: relative;
     &__item{
       width: 100%;
       max-width: 272px;
       margin: 0 auto;
+
 
     }
 
@@ -265,15 +281,17 @@
       }
 
     }
+    &__link{
+      position: absolute;
+      right: 0;
+      bottom: 0;
+    }
   }
 
 
   &__item{
 
   }
-  &__link{
-
-}
 
 }
 
