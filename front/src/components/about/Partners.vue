@@ -44,7 +44,7 @@
 
     data: function(){
       return {
-        quantity: 5,
+        quantity: 5.5,
       }
     },
   
@@ -73,9 +73,9 @@
 
       setQuantity() {
         let quantity = 0;
-        if (this.DEVICE_VIEW_TYPE===1) quantity = 5
-        if (this.DEVICE_VIEW_TYPE===2) quantity = 4
-        if (this.DEVICE_VIEW_TYPE===3) quantity = 3
+        if (this.DEVICE_VIEW_TYPE===1) quantity = 5.5
+        if (this.DEVICE_VIEW_TYPE===2) quantity = 4.5
+        if (this.DEVICE_VIEW_TYPE===3) quantity = 3.5
         this.quantity = Math.min(this.PARTNERS.length, quantity);
       }
 

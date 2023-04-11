@@ -84,7 +84,7 @@
 
     data: function(){
       return{
-        slidersInFrame : 4,
+        slidersInFrame : 4.5,
       }
     },
 
@@ -116,11 +116,11 @@
 
       setSlidersInFrame(){
         if (this.DEVICE_VIEW_TYPE === 1) {
-          this.slidersInFrame = 4;
+          this.slidersInFrame = 4.5;
         } else if (this.DEVICE_VIEW_TYPE === 2) {
-          this.slidersInFrame = 3;
+          this.slidersInFrame = 3.5;
         } else {
-          this.slidersInFrame = 1;
+          this.slidersInFrame = 1.5;
         }
       },
 
