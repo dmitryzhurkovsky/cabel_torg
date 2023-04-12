@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from dateutil.relativedelta import relativedelta
 from sqlalchemy import (
     Column,
     ForeignKey,
@@ -93,3 +96,7 @@ class Product(Base1CModel):
     def actual_price_with_tax(self) -> float:
         """For generating an invoice."""
         return self.tax_sum + self.actual_price
+
+    @property
+    def is_new(self) -> bool:
+        return self.created_at > (datetime.now() - relativedelta(months=1))
