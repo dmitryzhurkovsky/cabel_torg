@@ -299,6 +299,8 @@ export default {
 
   .old_price__row{
     min-height: 30px;
+    flex-direction: column-reverse;
+    align-items: flex-start;
   }
 
   .old_price {

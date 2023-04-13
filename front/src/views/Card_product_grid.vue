@@ -102,6 +102,34 @@
       </div>
     </div>
   </div>
+  <div class="tab__description _container">
+      <!-- Tab links -->
+      <div class="tab ">
+          <button class="tablinks" onclick="openCity(event, 'London')">Описание</button>
+          <button class="tablinks" onclick="openCity(event, 'Paris')">Характеристики</button>
+          <button class="tablinks" onclick="openCity(event, 'Tokyo')">Документация</button>
+      </div>
+      <!-- Tab content Описание  -->
+      <div id="London" class="tabcontent">
+          <h3>Описание</h3>
+          <p>Коннекторы NMC-RJ88RZ50SA3-T-100 предназначены для оконцевания одножильных и многожильных 8-ти проводных кабелей связи, также может использоваться для оконцевания 4-х парных кабелей обоих типов проводников.</p>
+          <p>   Коннектор выполнен в экранированном исполнении и соответствует категории 6а. Коннекторы обладают специально отдельно вынесенным хвостовиком, который позволяет производить обжим экрана снаружи коннектора, тем самым повышая допустимые наружные диаметры вводимых экранированных кабелей. Корпус коннектора изготавливается из поликарбоната, соответствующего стандарту UL 94-V2.</p>
+          <p>  Поставляются в индивидуальной упаковке по 100 штук.</p>
+      </div>
+      <!-- Tab content Характеристики  -->
+      <div id="Paris" class="tabcontent">
+          <h3>Характеристики</h3>
+          <p>Paris is the capital of France.</p>
+      </div>
+      <!-- Tab content Документация  -->
+      <div id="Tokyo" class="tabcontent">
+          <h3>Документация</h3>
+          <p>Tokyo is the capital of Japan.</p>
+      </div>
+  </div>
+
+
+
   <div class="product__attention flex-center _container">
     <div class="icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M9 7H11V5H9V7ZM9 15H11V9H9V15ZM9.99 20C4.47 20 0 15.52 0 10C0 4.48 4.47 0 9.99 0C15.52 0 20 4.48 20 10C20 15.52 15.52 20 9.99 20ZM10 2C5.58 2 2 5.58 2 10C2 14.42 5.58 18 10 18C14.42 18 18 14.42 18 10C18 5.58 14.42 2 10 2Z" fill="#423E48"/>
@@ -115,6 +143,10 @@
 
   </div>
 </template>
+
+
+
+
 
 <script>
   import axios from 'axios';
@@ -304,6 +336,8 @@
     },
 
   }
+
+
 </script>
 
 <style scoped lang="scss">
@@ -667,4 +701,72 @@
   }
 }
 
+.tab__description{
+  /* Style the tab */
+  .tab {
+    overflow: hidden;
+
+  }
+
+  /* Style the buttons inside the tab */
+  .tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+    @media (max-width: $md3+px) {
+        font-size: 14px;
+        padding: 10px 10px;
+    }
+  }
+
+  /* Change background color of buttons on hover */
+  .tab button:hover {
+    color: #4275D8;
+  }
+
+  /* Create an active/current tablink class */
+  .tab button.active {
+    color: #4275D8;
+    font-weight: bold;
+    border-bottom: 1px solid #4275D8;
+  }
+
+  /* Style the tab content */
+  .tabcontent {
+    padding: 20px 20px;
+    border: 2px solid #EEEEEE;
+    border-radius: 8px;
+  }
+  .tabcontent:nth-child(3) {
+    display: none;
+  }
+  .tabcontent:nth-child(4) {
+    display: none;
+  }
+  .tabcontent p{
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 140%;
+    color: #423E48;
+    margin: 8px 0;
+
+  }
+
+  /* Style the close button */
+  .topright {
+    float: right;
+    cursor: pointer;
+    font-size: 28px;
+  }
+
+  .topright:hover {color: red;}
+
+}
+
 </style>
+

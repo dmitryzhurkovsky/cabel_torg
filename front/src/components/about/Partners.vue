@@ -9,6 +9,10 @@
             <swiper
                 :slides-per-view=quantity
                 :space-between="15"
+                :speed="500"
+                :autoplay="{
+                    delay: 5000,
+                }"
                 @swiper="onSwiper"
                 @slideChange="onSlideChange"
             >

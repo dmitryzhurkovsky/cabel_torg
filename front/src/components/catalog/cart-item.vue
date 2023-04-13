@@ -301,6 +301,11 @@
             opacity: 0.4;
             margin-bottom: 5px;
             min-height: 20px;
+          &__row{
+
+
+            }
+
         }
         .current_price{
             font-size: 20px;
