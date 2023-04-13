@@ -33,8 +33,6 @@ export default {
   		About,
       Quick_category,
       News,
-      // Offer
-
     },
 
     methods:{

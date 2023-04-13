@@ -1,6 +1,11 @@
 <template>
   <div class="_container">
     <div class="one-news__block" v-if="oneNewData">
+      <div class="one-news__btns">
+        <div class="btn black" @click.stop="onMoveToAllNews">Все новости</div>
+      </div>
+
+      <News/>
       <a class="one-news__item">
         <div class="one-news__img">
           <CardImage :images = "oneNewData.image" />
@@ -21,6 +26,7 @@
   import axios from 'axios';
   import { mapMutations, mapActions } from 'vuex' 
   import CardImage from '@/components/UI/card-image.vue'
+  import News from "@/components/about/News.vue";
 
   export default {
     name: 'OneNew',
@@ -36,12 +42,18 @@
     },
 
     components: {
-        CardImage,
+      CardImage,
+      News,
     },
 
     methods: {
       ...mapMutations("breadcrumb", ["ADD_BREADCRUMB", ]),
       ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB", ]),
+
+      onMoveToAllNews() {
+        this.$router.push('/news');
+        // console.log('QQQQQ');
+      }
     },
 
     async mounted(){
@@ -98,6 +110,10 @@
     p{
       margin: 5px 0;
     }
+  }
+  &__btns{
+    width: 120px;
+    margin: 10px auto;
   }
 
 }
