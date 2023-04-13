@@ -28,6 +28,9 @@ class ProductSchema(BaseSchema):
     description: str | None
     status: ProductStatus | None
 
+    is_new: bool | None
+    is_popular: bool | None
+
     price: Decimal | None  # without a tax
     discount: int | None
     price_with_discount: Decimal | None  # without a tax

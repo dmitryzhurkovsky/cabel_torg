@@ -4,14 +4,14 @@ from fastapi import HTTPException
 from sqlalchemy import or_, select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload, joinedload
-from sqlalchemy.sql.functions import count
+from sqlalchemy.sql.functions import count, func
 from sqlalchemy.sql.operators import ColumnOperators
 from starlette.datastructures import QueryParams
 
 from src.core.enums import ProductOrderFilterEnum, ProductTypeFilterEnum
 from src.core.utils import calculate_price_with_discount
 from src.rest.managers.base_manager import CRUDManager
-from src.models import Product, Category
+from src.models import Product, Category, ProductOrder
 from src.models.product_model import ProductStatus
 from src.rest.schemas.product_schema import ProductUpdateSchema
 
@@ -55,6 +55,9 @@ class ProductManager(CRUDManager):
                     Product.discount.is_not(None),
                     Product.discount != 0,
                 ))
+            elif type_of_product == ProductTypeFilterEnum.POPULAR:
+                popular_products_ids = await cls.get_the_most_popular_products_ids(session=session)
+                filter_expressions.append(Product.id.in_(popular_products_ids))
 
         if search_letters := filter_fields.get('q'):
             category_ids_query = await session.execute(
@@ -113,6 +116,18 @@ class ProductManager(CRUDManager):
             offset=offset,
             limit=limit
         )
+
+    @classmethod
+    async def get_the_most_popular_products_ids(cls, session: AsyncSession) -> list[int]:
+        result = await session.execute(
+            select(Product.id).
+            join(Product.added_to_orders).
+            group_by(Product.id).
+            order_by(func.count(ProductOrder.product_id).desc()).
+            limit(20)
+        )
+
+        return result.scalars().all()  # noqa
 
     @classmethod
     async def get_count_of_products(
