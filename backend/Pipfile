@@ -21,6 +21,7 @@ requests = "*"
 pdfkit = "*"
 num2words = "*"
 aiofiles = "*"
+python-dateutil = "*"
 
 [dev-packages]
 pytest = "*"
