@@ -127,4 +127,7 @@
     color: #E30044;
 
   }
+  .content__popup .btn{
+      min-width: auto;
+  }
 </style>
