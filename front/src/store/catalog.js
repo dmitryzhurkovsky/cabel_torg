@@ -121,14 +121,13 @@ export default {
       }
     },
 
-    async GET_RECOMENDED_ITEMS({ commit, getters }) {
+    async GET_RECOMENDED_ITEMS({ commit, getters, rootGetters }) {
       try {
         let queryData = 'products?offset=0' +  
         '&limit=' + getters.RECOMENDATION_QUANTITY;
 
         if (getters.RECOMENDATION_TYPE !== 'all') queryData = queryData + '&type_of_product=' + getters.RECOMENDATION_TYPE;
-        if (getters.RECOMENDATION_ORDER) queryData = queryData + '&ordering=' + getters.RECOMENDATION_ORDER;
-
+        if (getters.RECOMENDATION_ORDER) queryData = queryData + '&ordering=' + rootGetters['query/SORT_DIRECTION'] + getters.RECOMENDATION_ORDER;
         const response = await axios.get(process.env.VUE_APP_API_URL + queryData);
         commit("SET_RECOMENDED_ITEMS", response.data);
       } catch (e) {

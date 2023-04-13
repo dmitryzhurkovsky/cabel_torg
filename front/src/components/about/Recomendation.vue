@@ -6,9 +6,9 @@
 
           <h3>Рекомендации для вас</h3>
           <div class="recomendation__nav">
-            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'available', order: 'price' })">Топ продаж</div>
-            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'available', order: 'created_at' })">Новинки</div>
-            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'with_discount', order: 'discount' })">Скидки</div>
+            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'popular', order: 'discount' }, '-')">Топ продаж</div>
+            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'available', order: 'created_at' }, '-')">Новинки</div>
+            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'with_discount', order: 'discount' }, '')">Скидки</div>
           </div>
           <!-- :navigation= "true" -->
           <!-- <div class="recomendation__block" v-if = "DEVICE_VIEW_TYPE === 1 || DEVICE_VIEW_TYPE === 2"> -->
@@ -41,7 +41,7 @@
                 </div>
 
               </swiper>
-              <div class="recomendation__link  _link">Смотреть все
+              <div class="recomendation__link  _link" @click="onOpenCatalog">Смотреть все
                 <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M0.5 3.99935H15.0833M15.0833 3.99935L11.75 0.666016M15.0833 3.99935L11.75 7.33268" stroke="#4275D8"/>
                 </svg>
@@ -108,7 +108,8 @@
     methods:{
       ...mapActions("catalog", ["GET_RECOMENDED_ITEMS"]),
       ...mapMutations("catalog", ["SET_RECOMENDATION_TYPE", "SET_RECOMENDATION_QUANTITY", "SET_RECOMENDATION_ORDER"]),
-      
+      ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_SORT_DIRECTION", "SET_SORT_TYPE"]),
+
       setNewQuantity(){
         const newQuantity = this.RECOMENDED_ITEMS.length > 9 ? 10 : this.RECOMENDED_ITEMS.length;
         this.SET_RECOMENDATION_QUANTITY(newQuantity);
@@ -124,9 +125,29 @@
         }
       },
 
-      setTypeAndOrder(params){
+      setTypeAndOrder(params, sort){
+        console.log(sort);
+        this.SET_SORT_DIRECTION(sort);
         this.SET_RECOMENDATION_ORDER(params.order);
         this.SET_RECOMENDATION_TYPE(params.type);
+      },
+
+      onOpenCatalog(){
+        // console.log(this.RECOMENDATION_TYPE);
+        let name = 'Все товары';
+        if (this.RECOMENDATION_TYPE === 'with_discount') name = 'Акции';
+        if (this.RECOMENDATION_TYPE === 'available') {
+          this.SET_SORT_TYPE({ name: 'По дате добавления', type: 'created_at' });
+          this.SET_SORT_DIRECTION('-');
+          name = 'В наличии';
+        }
+        if (this.RECOMENDATION_TYPE === 'popular') {
+          this.SET_SORT_TYPE({ name: 'Топ продаж', type: 'discount' });
+          this.SET_SORT_DIRECTION('-');
+          name = 'Топ продаж';
+        }
+        this.SET_TYPE_OF_PRODUCT({name, type: this.RECOMENDATION_TYPE, selected: true});
+        this.$router.push('\catalog');
       },
 
       onSlideChange() {
@@ -217,6 +238,7 @@
     right: 0;
     bottom: 43px;
     cursor: pointer;
+    z-index: 90;
     @media (max-width: $md3+px) {
       display: none;
     }

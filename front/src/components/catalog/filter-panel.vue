@@ -88,74 +88,79 @@ import {mapMutations, mapGetters, mapActions} from 'vuex'
 import PriceSlider from '@/components/catalog/price-slider.vue';
 
 export default {
-    name: 'FilterPanel',
+  name: 'FilterPanel',
 
-    components: {
-      PriceSlider,
+  components: {
+    PriceSlider,
+  },
+
+  data(){
+      return {
+          categories: [
+              {name : 'Все товары', type: 'all', selected: true},
+              {name : 'Акции', type: 'with_discount', selected: false}, 
+              {name : 'В наличии', type: 'available', selected: false},
+              {name : 'Топ продаж', type: 'popular', selected: false},
+          ],
+      }
+  },
+
+  computed: {
+      ...mapGetters("header", ["CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
+      ...mapGetters("query", ["TYPE_OF_PRODUCT", "CATEGORY_ID", "SORT_DIRECTION", "SORT_ORDER"]),
+  },
+
+  methods:{
+    ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID"]),
+    ...mapActions("header",["SET_ALL_CURRENT_CATEGORIES"]),
+
+    toggleCategory(item) {
+      item.filterPanel = !item.filterPanel;
     },
 
-    data(){
-        return {
-            categories: [
-                {name : 'Все товары', type: 'all', selected: true},
-                {name : 'Акции', type: 'with_discount', selected: false} , 
-                {name : 'В наличии', type: 'available', selected: false},
-            ],
-        }
+    openMainCategory(category){
+      this.SET_ALL_CURRENT_CATEGORIES({
+        mainCategory: category.id,
+        middleCategory: null,
+        lastCategory: null,
+      });
+      this.SET_CATEGORY_ID(category.id);
+      this.$router.push('/category/' + category.id);
     },
 
-    computed: {
-        ...mapGetters("header", ["CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
-        ...mapGetters("query", ["TYPE_OF_PRODUCT", "CATEGORY_ID"]),
+    openMiddleCategory(mainCategory, middleCategory){
+      this.SET_ALL_CURRENT_CATEGORIES({
+          mainCategory: mainCategory.id,
+          middleCategory: middleCategory.id,
+          lastCategory: null,
+      });
+      this.SET_CATEGORY_ID(middleCategory.id);
+      this.$router.push('/category/' + middleCategory.id);
     },
 
-    methods:{
-        ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID"]),
-        ...mapActions("header",["SET_ALL_CURRENT_CATEGORIES"]),
-
-        toggleCategory(item) {
-          item.filterPanel = !item.filterPanel;
-        },
-
-        openMainCategory(category){
-          this.SET_ALL_CURRENT_CATEGORIES({
-            mainCategory: category.id,
-            middleCategory: null,
-            lastCategory: null,
-          });
-          this.SET_CATEGORY_ID(category.id);
-          this.$router.push('/category/' + category.id);
-        },
-
-        openMiddleCategory(mainCategory, middleCategory){
-          this.SET_ALL_CURRENT_CATEGORIES({
-              mainCategory: mainCategory.id,
-              middleCategory: middleCategory.id,
-              lastCategory: null,
-          });
-          this.SET_CATEGORY_ID(middleCategory.id);
-          this.$router.push('/category/' + middleCategory.id);
-        },
-
-        openLastCategory(mainCategory, middleCategory, lastCategory){
-          this.SET_ALL_CURRENT_CATEGORIES({
-              mainCategory: mainCategory.id,
-              middleCategory: middleCategory.id,
-              lastCategory: lastCategory.id,
-          });
-          this.SET_CATEGORY_ID(lastCategory.id);
-          this.$router.push('/category/' + lastCategory.id);
-        },
-
-        toggleFilterCategory(category){
-          this.categories.forEach(item => {
-            item.selected = false;
-            if (item.name === category.name) item.selected = true;
-          });
-          this.SET_TYPE_OF_PRODUCT(category);
-        },
-
+    openLastCategory(mainCategory, middleCategory, lastCategory){
+      this.SET_ALL_CURRENT_CATEGORIES({
+          mainCategory: mainCategory.id,
+          middleCategory: middleCategory.id,
+          lastCategory: lastCategory.id,
+      });
+      this.SET_CATEGORY_ID(lastCategory.id);
+      this.$router.push('/category/' + lastCategory.id);
     },
+
+    toggleFilterCategory(category){
+      this.categories.forEach(item => {
+        item.selected = false;
+        if (item.name === category.name) item.selected = true;
+      });
+      this.SET_TYPE_OF_PRODUCT(category);
+    },
+  },
+
+  mounted(){
+    // console.log(this.TYPE_OF_PRODUCT);
+    this.toggleFilterCategory(this.TYPE_OF_PRODUCT);
+  },
 }
 </script>
 
