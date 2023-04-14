@@ -105,9 +105,9 @@
   <div v-if="cartItemData && id" class="tab__description _container">
       <!-- Tab links -->
       <div class="tab ">
-          <button class="tablinks" @click="onChangeInfoBlock(0)">Описание</button>
-          <button class="tablinks" @click="onChangeInfoBlock(1)">Характеристики</button>
-          <button class="tablinks" @click="onChangeInfoBlock(2)">Документация</button>
+          <button :class="[infoBlock === 0 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(0)">Описание</button>
+          <button :class="[infoBlock === 1 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(1)">Характеристики</button>
+          <button :class="[infoBlock === 2 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(2)">Документация</button>
       </div>
       <!-- Tab content Описание  -->
       <div v-if="infoBlock === 0" class="tabcontent">
@@ -137,8 +137,6 @@
       </div>
   </div>
 
-
-
   <div class="product__attention flex-center _container">
     <div class="icon"><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M9 7H11V5H9V7ZM9 15H11V9H9V15ZM9.99 20C4.47 20 0 15.52 0 10C0 4.48 4.47 0 9.99 0C15.52 0 20 4.48 20 10C20 15.52 15.52 20 9.99 20ZM10 2C5.58 2 2 5.58 2 10C2 14.42 5.58 18 10 18C14.42 18 18 14.42 18 10C18 5.58 14.42 2 10 2Z" fill="#423E48"/>
@@ -151,12 +149,18 @@
 
 
   </div>
+
+  <Recomendation 
+    :isShowFilter = false
+  />
+  
 </template>
 
 <script>
   import axios from 'axios';
   import { mapGetters, mapMutations, mapActions } from 'vuex' 
   import CardImage from '@/components/UI/card-image.vue'
+  import Recomendation from "@/components/about/Recomendation.vue";
 
   export default {
     name: 'CardProduct',
@@ -177,6 +181,7 @@
 
     components: {
       CardImage,
+      Recomendation,
     },
 
    computed: {
@@ -194,6 +199,9 @@
         this.countQuantity();
         this.checkIsWish();
       },
+      id: function() {
+        this.onGetCartData();
+      }
     },
 
     methods: {
@@ -283,11 +291,9 @@
 
       onChangeInfoBlock(num){
         this.infoBlock = num;
-      }
+      },
 
-    },
-
-    async mounted(){
+      async onGetCartData(){
         this.countQuantity();
         this.checkIsWish();
         this.SET_SEARCH_STRING('');
@@ -343,6 +349,12 @@
           type: "global",
           class: ""
         });
+      },
+
+    },
+
+    async mounted(){
+      this.onGetCartData();
     },
 
   }

@@ -5,7 +5,7 @@
         <div class="recomendation__body">
 
           <h3>Рекомендации для вас</h3>
-          <div class="recomendation__nav">
+          <div class="recomendation__nav" v-if="isShowFilter">
             <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'popular', order: 'discount' }, '-')">Топ продаж</div>
             <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'available', order: 'created_at' }, '-')">Новинки</div>
             <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'with_discount', order: 'discount' }, '')">Скидки</div>
@@ -71,6 +71,10 @@
 
   export default {
     name: 'Recomendation',
+
+    props: {
+      isShowFilter: true,
+    },
 
     components:
     {
