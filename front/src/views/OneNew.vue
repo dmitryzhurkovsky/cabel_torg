@@ -1,21 +1,23 @@
 <template>
   <div class="_container">
     <div class="one-news__block" v-if="oneNewData">
+      <a class="one-news__item">
+          <div class="one-news__img">
+              <CardImage :images = "oneNewData.image" />
+          </div>
+
+          <div class="one-news__title ">{{ oneNewData.title }}</div>
+          <div class="one-news__content">
+              <div v-html = "oneNewData.content"></div>
+          </div>
+      </a>
+
       <div class="one-news__btns">
         <div class="btn black" @click.stop="onMoveToAllNews">Все новости</div>
       </div>
 
       <News/>
-      <a class="one-news__item">
-        <div class="one-news__img">
-          <CardImage :images = "oneNewData.image" />
-        </div>
 
-        <div class="one-news__title ">{{ oneNewData.title }}</div>
-        <div class="one-news__content">
-          <div v-html = "oneNewData.content"></div>
-        </div>
-      </a>
 
     </div>
 

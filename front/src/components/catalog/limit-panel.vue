@@ -51,6 +51,9 @@
   align-items: center;
   gap: 10px;
   margin-right: 20px;
+    @media (max-width: $md3+px){
+        display: none;
+    }
   &__item{
     .active{
       color: #423E48;
