@@ -102,27 +102,36 @@
       </div>
     </div>
   </div>
-  <div class="tab__description _container">
+  <div v-if="cartItemData && id" class="tab__description _container">
       <!-- Tab links -->
       <div class="tab ">
-          <button class="tablinks" onclick="openCity(event, 'London')">Описание</button>
-          <button class="tablinks" onclick="openCity(event, 'Paris')">Характеристики</button>
-          <button class="tablinks" onclick="openCity(event, 'Tokyo')">Документация</button>
+          <button class="tablinks" @click="onChangeInfoBlock(0)">Описание</button>
+          <button class="tablinks" @click="onChangeInfoBlock(1)">Характеристики</button>
+          <button class="tablinks" @click="onChangeInfoBlock(2)">Документация</button>
       </div>
       <!-- Tab content Описание  -->
-      <div id="London" class="tabcontent">
+      <div v-if="infoBlock === 0" class="tabcontent">
           <h3>Описание</h3>
-          <p>Коннекторы NMC-RJ88RZ50SA3-T-100 предназначены для оконцевания одножильных и многожильных 8-ти проводных кабелей связи, также может использоваться для оконцевания 4-х парных кабелей обоих типов проводников.</p>
+          <!-- <p>Коннекторы NMC-RJ88RZ50SA3-T-100 предназначены для оконцевания одножильных и многожильных 8-ти проводных кабелей связи, также может использоваться для оконцевания 4-х парных кабелей обоих типов проводников.</p>
           <p>   Коннектор выполнен в экранированном исполнении и соответствует категории 6а. Коннекторы обладают специально отдельно вынесенным хвостовиком, который позволяет производить обжим экрана снаружи коннектора, тем самым повышая допустимые наружные диаметры вводимых экранированных кабелей. Корпус коннектора изготавливается из поликарбоната, соответствующего стандарту UL 94-V2.</p>
-          <p>  Поставляются в индивидуальной упаковке по 100 штук.</p>
+          <p>  Поставляются в индивидуальной упаковке по 100 штук.</p> -->
+          <p>{{ cartItemData.description }}</p>
       </div>
       <!-- Tab content Характеристики  -->
-      <div id="Paris" class="tabcontent">
+      <div v-if="infoBlock === 1" class="tabcontent">
           <h3>Характеристики</h3>
-          <p>Paris is the capital of France.</p>
+          <p 
+            v-for = "option in cartItemData.attributes"
+            :key = option.id
+          >
+            <div class="tabcontent__row">
+              <span>{{ option?.name?.payload }}</span>
+              <span>{{ option?.value?.payload }}</span>
+            </div>
+          </p>
       </div>
       <!-- Tab content Документация  -->
-      <div id="Tokyo" class="tabcontent">
+      <div v-if="infoBlock === 2" class="tabcontent">
           <h3>Документация</h3>
           <p>Tokyo is the capital of Japan.</p>
       </div>
@@ -144,10 +153,6 @@
   </div>
 </template>
 
-
-
-
-
 <script>
   import axios from 'axios';
   import { mapGetters, mapMutations, mapActions } from 'vuex' 
@@ -166,6 +171,7 @@
         isWish: false,
         quantity: 0,
         quantityLocal: 1,
+        infoBlock: 0
       }
     },
 
@@ -274,6 +280,10 @@
           this.isWish = false;
         }
       },
+
+      onChangeInfoBlock(num){
+        this.infoBlock = num;
+      }
 
     },
 
@@ -741,13 +751,19 @@
     padding: 20px 20px;
     border: 2px solid #EEEEEE;
     border-radius: 8px;
+    &__row{
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+    }
   }
-  .tabcontent:nth-child(3) {
-    display: none;
-  }
-  .tabcontent:nth-child(4) {
-    display: none;
-  }
+  // .tabcontent:nth-child(3) {
+  //   display: none;
+  // }
+  // .tabcontent:nth-child(4) {
+  //   display: none;
+  // }
   .tabcontent p{
     font-weight: 300;
     font-size: 14px;

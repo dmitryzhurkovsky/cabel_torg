@@ -48,41 +48,54 @@
       News,
     },
 
+    watch: {
+      id: async function() {
+        this.onGetNewsData();
+      },
+    },
+
     methods: {
       ...mapMutations("breadcrumb", ["ADD_BREADCRUMB", ]),
       ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB", ]),
 
       onMoveToAllNews() {
         this.$router.push('/news');
-        // console.log('QQQQQ');
-      }
+      },
+
+      async onGetNewsData (){
+        this.CHANGE_BREADCRUMB(0);
+        try {
+            const response = await axios.get(process.env.VUE_APP_API_URL + 'service_entities/articles/' + this.id);
+            this.oneNewData = response.data;
+        } catch (e) {
+            console.log(e);
+            this.ADD_MESSAGE({name: "Не возможно загрузить новость ", icon: "error", id: '1'})
+        }
+
+        const mainBreadCrumb = {
+          name: 'Новости',
+          path: '/news',
+          type: 'global',
+          class: '',
+        }
+        this.ADD_BREADCRUMB(mainBreadCrumb);
+
+        this.ADD_BREADCRUMB({
+          name: this.oneNewData.title,
+          path: this.$router.currentRoute.value.path,
+          type: "global",
+          class: ""
+        });
+      },
     },
+
+    // async onBeforeUpdate(){
+    //   await this.onGetNewsData();
+    // },
 
     async mounted(){
-      this.CHANGE_BREADCRUMB(0);
-      try {
-          const response = await axios.get(process.env.VUE_APP_API_URL + 'service_entities/articles/' + this.id);
-          this.oneNewData = response.data;
-      } catch (e) {
-          console.log(e);
-          this.ADD_MESSAGE({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
-      }
-
-      const mainBreadCrumb = {
-        name: 'Новости',
-        path: '/news',
-        type: 'global',
-        class: '',
-      }
-      this.ADD_BREADCRUMB(mainBreadCrumb);
-
-      this.ADD_BREADCRUMB({
-        name: this.oneNewData.title,
-        path: this.$router.currentRoute.value.path,
-        type: "global",
-        class: ""
-      });
-    },
+      await this.onGetNewsData();
+    }
   }
 </script>
 

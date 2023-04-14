@@ -91,6 +91,7 @@
       ...mapActions("main", ["GET_NEWS"]),
 
       onOpenNew(id) {
+        console.log('QQQQ');
         this.$router.push('/new/' + id);
       },
 
