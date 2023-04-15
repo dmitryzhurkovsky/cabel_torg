@@ -153,6 +153,8 @@
   <Recomendation 
     :isShowFilter = false
   />
+
+  <ShownItems/>
   
 </template>
 
@@ -160,7 +162,8 @@
   import axios from 'axios';
   import { mapGetters, mapMutations, mapActions } from 'vuex' 
   import CardImage from '@/components/UI/card-image.vue'
-  import Recomendation from "@/components/about/Recomendation.vue";
+  import Recomendation from '@/components/about/Recomendation.vue';
+  import ShownItems from '@/components/card/shown_cards.vue';
 
   export default {
     name: 'CardProduct',
@@ -182,12 +185,14 @@
     components: {
       CardImage,
       Recomendation,
+      ShownItems,
     },
 
    computed: {
       ...mapGetters("order", ["ORDERS"]),
       ...mapGetters("favorite", ["FAVORITES"]),
       ...mapGetters("header", ["ALL_CATEGORIES"]),
+      ...mapGetters("catalog", ["SHOWN_ITEMS_LIST"]),
 
       ChangeParameters(){
         return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES);
@@ -212,6 +217,7 @@
       ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
       ...mapMutations("query", ["SET_SEARCH_STRING"]),
       ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA", "SET_REQUEST_CALL_TYPE"]),
+      ...mapMutations("catalog", ["SET_SHOWN_ITEMS_LIST"]),
 
       checkQuantityLocal() {
         if (this.quantityLocal < 1) {
@@ -293,7 +299,25 @@
         this.infoBlock = num;
       },
 
+      updateShowItems(id){
+        if (!id) return
+        let itemsInLocalStorage = [];
+        const isItemsFromLocalStore = localStorage.getItem("shownCards");
+        if (isItemsFromLocalStore) itemsInLocalStorage = JSON.parse(isItemsFromLocalStore);
+        if (!itemsInLocalStorage.length) {
+          itemsInLocalStorage.push({id, time: new Date().getTime()});
+        } else {
+          const filtered = itemsInLocalStorage.filter(item => item.id !== id);
+          filtered.push({id, time: new Date().getTime()});
+          const sorted = filtered.sort((a,b) => b.time - a.time);
+          itemsInLocalStorage = [...sorted];
+        }
+        localStorage.setItem("shownCards", JSON.stringify(itemsInLocalStorage));
+        this.SET_SHOWN_ITEMS_LIST(itemsInLocalStorage);
+      },
+
       async onGetCartData(){
+        this.updateShowItems(this.id);
         this.countQuantity();
         this.checkIsWish();
         this.SET_SEARCH_STRING('');

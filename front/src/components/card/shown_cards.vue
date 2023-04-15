@@ -4,14 +4,7 @@
       <div class="recomendation__content _container">
         <div class="recomendation__body">
 
-          <h3>Рекомендации для вас</h3>
-          <div class="recomendation__nav" v-if="isShowFilter">
-            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'popular', order: 'discount' }, '-')">Топ продаж</div>
-            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'available', order: 'created_at' }, '-')">Новинки</div>
-            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'with_discount', order: 'discount' }, '')">Скидки</div>
-          </div>
-          <!-- :navigation= "true" -->
-          <!-- <div class="recomendation__block" v-if = "DEVICE_VIEW_TYPE === 1 || DEVICE_VIEW_TYPE === 2"> -->
+          <h3>Просмотренные товары</h3>
           <div class="recomendation__block">
               <swiper
                   :slides-per-view="slidersInFrame"
@@ -31,7 +24,7 @@
                   @slideChange="onSlideChange"
               >
 
-                <swiper-slide v-for="item in RECOMENDED_ITEMS" :key="item.id">
+                <swiper-slide v-for="item in sliderItems" :key="item.id">
                   <CardItem
                       :card = "item"
                   />
@@ -60,8 +53,9 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions, mapMutations } from 'vuex'
+  import { mapGetters } from 'vuex'
   import CardItem from '@/components/catalog/card-item.vue'
+  import axios from 'axios';
 
   import { Swiper } from "swiper/vue";
   import { SwiperSlide } from "swiper/vue";
@@ -70,11 +64,7 @@
   SwiperCore.use([Navigation, Pagination]);
 
   export default {
-    name: 'Recomendation',
-
-    props: {
-      isShowFilter: true,
-    },
+    name: 'ShownCards',
 
     components:
     {
@@ -83,16 +73,18 @@
 
     computed: {
       ...mapGetters("header", ["DEVICE_VIEW_TYPE"]),
-      ...mapGetters("catalog", ["RECOMENDED_ITEMS", "RECOMENDATION_QUANTITY", "RECOMENDATION_TYPE", "RECOMENDATION_ORDER"]),
+      ...mapGetters("catalog", ["SHOWN_ITEMS_LIST"]),
 
       ChangeParameters(){
-        return String(this.RECOMENDATION_TYPE) + String(this.RECOMENDATION_ORDER);
+        return JSON.stringify(this.SHOWN_ITEMS_LIST) + String(this.slidersInFrame) + String(this.quantity);
       },
     },
 
     data: function(){
       return{
         slidersInFrame : 4.5,
+        sliderItems: [],
+        quantity: 0,
       }
     },
 
@@ -101,26 +93,17 @@
         this.setSlidersInFrame();
       },
 
-      slidersInFrame: async function() {
-        await this.GET_RECOMENDED_ITEMS();
+      ChangeParameters: async function() {
+        await this.getShownItems();
         this.setNewQuantity();
       },
-
-      ChangeParameters: async function() {
-        this.SET_RECOMENDATION_QUANTITY(10);
-        await this.GET_RECOMENDED_ITEMS();
-        this.setNewQuantity();
-      }
     },
 
     methods:{
-      ...mapActions("catalog", ["GET_RECOMENDED_ITEMS"]),
-      ...mapMutations("catalog", ["SET_RECOMENDATION_TYPE", "SET_RECOMENDATION_QUANTITY", "SET_RECOMENDATION_ORDER"]),
-      ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_SORT_DIRECTION", "SET_SORT_TYPE"]),
 
       setNewQuantity(){
-        const newQuantity = this.RECOMENDED_ITEMS.length > 9 ? 10 : this.RECOMENDED_ITEMS.length;
-        this.SET_RECOMENDATION_QUANTITY(newQuantity);
+        const newQuantity = this.sliderItems.length > 9 ? 10 : this.sliderItems.length;
+        this.quantity = newQuantity;
       },
 
       setSlidersInFrame(){
@@ -133,47 +116,41 @@
         }
       },
 
-      setTypeAndOrder(params, sort){
-        console.log(sort);
-        this.SET_SORT_DIRECTION(sort);
-        this.SET_RECOMENDATION_ORDER(params.order);
-        this.SET_RECOMENDATION_TYPE(params.type);
+      onOpenCatalog(){
+        console.log('QQQQ');
+        this.$router.push('/catalog');
       },
 
-      onOpenCatalog(){
-        // console.log(this.RECOMENDATION_TYPE);
-        let name = 'Все товары';
-        if (this.RECOMENDATION_TYPE === 'with_discount') name = 'Акции';
-        if (this.RECOMENDATION_TYPE === 'available') {
-          this.SET_SORT_TYPE({ name: 'По дате добавления', type: 'created_at' });
-          this.SET_SORT_DIRECTION('-');
-          name = 'В наличии';
-        }
-        if (this.RECOMENDATION_TYPE === 'popular') {
-          this.SET_SORT_TYPE({ name: 'Топ продаж', type: 'discount' });
-          this.SET_SORT_DIRECTION('-');
-          name = 'Топ продаж';
-        }
-        this.SET_TYPE_OF_PRODUCT({name, type: this.RECOMENDATION_TYPE, selected: true});
-        this.$router.push('/catalog');
+      getShownItems(){
+        const fetchedItems = [];
+        this.SHOWN_ITEMS_LIST.forEach(async item => {
+          try {
+            const response = await axios.get(process.env.VUE_APP_API_URL + 'products/' + item.id);
+            fetchedItems.push(response.data);
+            this.sliderItems = [...fetchedItems.reverse()]
+          } catch (e) {
+              console.log(e);
+              this.ADD_MESSAGE({name: "Не возможно загрузить данные товара " + item.id, icon: "error", id: item.id})
+          }
+        });
       },
 
       onSlideChange() {
         //  console.log('slide change');
       },
       nextSlide(){
-          this.swiper.slideNext();
+        this.swiper.slideNext();
       },
       prevSlide(){
-          this.swiper.slidePrev();
+        this.swiper.slidePrev();
       },
       onSwiper(swiper){
-          this.swiper = swiper;
+        this.swiper = swiper;
       },
     },
 
     async mounted(){
-      await this.GET_RECOMENDED_ITEMS();
+      await this.getShownItems();
       this.setNewQuantity();
       this.setSlidersInFrame();
     }
@@ -262,22 +239,12 @@
 
     }
 
-    //@media (max-width: $md3+px) {
-    //  display: flex;
-    //  flex-direction: column;
-    //  align-items: center;
-    //  gap: 20px;
-    //}
 
   }
   &__nav{
     display: grid;
     gap: 10px;
     grid-template-columns: repeat(3, minmax(0, 170px));
-    /*
-    if we did this instead of the template it would be a problem:
-    grid-auto-flow: column;
-    */
     text-align: center;
     padding: 24px 20px 20px 0;
     @media (max-width: $md2+px) {

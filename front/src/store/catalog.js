@@ -12,6 +12,7 @@ export default {
     recomendationType: 'all',
     recomendationOrder: '',
     recomendationQuantity: 10,
+    shownItemslist: [],
   },
 
   getters: {
@@ -38,7 +39,10 @@ export default {
     },
     RECOMENDATION_QUANTITY(state) {
       return state.recomendationQuantity;
-    }
+    },
+    SHOWN_ITEMS_LIST(state){
+      return state.shownItemslist;
+    },
   },
 
   mutations: {
@@ -74,6 +78,10 @@ export default {
 
     SET_RECOMENDATION_QUANTITY(state, quantity) {
       state.recomendationQuantity = quantity;
+    },
+
+    SET_SHOWN_ITEMS_LIST(state, list) {
+      state.shownItemslist = [...list];
     }
   },
 
