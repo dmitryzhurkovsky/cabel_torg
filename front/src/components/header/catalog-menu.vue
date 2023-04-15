@@ -135,6 +135,10 @@ export default {
         color: #4275D8;
       }
     }
+    .active .menu__link{
+
+      color:#4275D8;
+    }
   }
 
   &__item{
