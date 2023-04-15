@@ -111,29 +111,25 @@
       </div>
       <!-- Tab content Описание  -->
       <div v-if="infoBlock === 0" class="tabcontent">
-          <h3>Описание</h3>
-          <!-- <p>Коннекторы NMC-RJ88RZ50SA3-T-100 предназначены для оконцевания одножильных и многожильных 8-ти проводных кабелей связи, также может использоваться для оконцевания 4-х парных кабелей обоих типов проводников.</p>
-          <p>   Коннектор выполнен в экранированном исполнении и соответствует категории 6а. Коннекторы обладают специально отдельно вынесенным хвостовиком, который позволяет производить обжим экрана снаружи коннектора, тем самым повышая допустимые наружные диаметры вводимых экранированных кабелей. Корпус коннектора изготавливается из поликарбоната, соответствующего стандарту UL 94-V2.</p>
-          <p>  Поставляются в индивидуальной упаковке по 100 штук.</p> -->
+<!--          <h3>Описание</h3>-->
           <p>{{ cartItemData.description }}</p>
       </div>
       <!-- Tab content Характеристики  -->
       <div v-if="infoBlock === 1" class="tabcontent">
-          <h3>Характеристики</h3>
-          <p 
+<!--          <h3>Характеристики</h3>-->
+          <div class="tabcontent__row table__items"
             v-for = "option in cartItemData.attributes"
             :key = option.id
           >
-            <div class="tabcontent__row">
+            <div class="table__item">
               <span>{{ option?.name?.payload }}</span>
               <span>{{ option?.value?.payload }}</span>
             </div>
-          </p>
+          </div>
       </div>
       <!-- Tab content Документация  -->
       <div v-if="infoBlock === 2" class="tabcontent">
           <h3>Документация</h3>
-          <p>Tokyo is the capital of Japan.</p>
       </div>
   </div>
 
@@ -727,6 +723,8 @@
   /* Style the tab */
   .tab {
     overflow: hidden;
+    margin-bottom: -2px;
+    margin-left: 12px;
 
   }
 
@@ -754,31 +752,34 @@
   /* Create an active/current tablink class */
   .tab button.active {
     color: #4275D8;
-    font-weight: bold;
-    border-bottom: 1px solid #4275D8;
+    font-weight: 500;
+    border-bottom: 2px solid #4275D8;
   }
 
   /* Style the tab content */
-  .tabcontent {
+  .tabcontent{
     padding: 20px 20px;
     border: 2px solid #EEEEEE;
     border-radius: 8px;
+    min-height: 200px;
     &__row{
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      justify-content: space-between;
+      border: 1px solid #eee;
+      .table__item{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        padding: 7px 10px;
+      }
+      &:nth-child(2n+1){
+        background: #fbfbfb;
+      }
     }
+
   }
-  // .tabcontent:nth-child(3) {
-  //   display: none;
-  // }
-  // .tabcontent:nth-child(4) {
-  //   display: none;
-  // }
   .tabcontent p{
     font-weight: 300;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 140%;
     color: #423E48;
     margin: 8px 0;
