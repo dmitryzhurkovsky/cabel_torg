@@ -52,8 +52,8 @@ class ProductManager(CRUDManager):
                 filter_expressions.append(Product.status == ProductStatus.AVAILABLE.value)
             elif type_of_product == ProductTypeFilterEnum.WITH_DISCOUNT:
                 filter_expressions.append(and_(
-                    Product.discount.is_not(None),
-                    Product.discount != 0,
+                    Product.price_with_discount.is_not(None),
+                    Product.price > Product.price_with_discount,  # noqa
                 ))
             elif type_of_product == ProductTypeFilterEnum.POPULAR:
                 popular_products_ids = await cls.get_the_most_popular_products_ids(session=session)
