@@ -92,6 +92,7 @@ export default {
 
   li{
     white-space: nowrap;
+    overflow: hidden;
     &:last-child{
       a{
         opacity: 0.6;

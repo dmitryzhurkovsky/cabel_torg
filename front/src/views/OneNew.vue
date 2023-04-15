@@ -13,7 +13,7 @@
       </a>
 
       <div class="one-news__btns">
-        <div class="btn black" @click.stop="onMoveToAllNews">Все новости</div>
+        <div class="btn empty" @click.stop="onMoveToAllNews">Все новости</div>
       </div>
 
       <News/>
@@ -127,8 +127,12 @@
     }
   }
   &__btns{
-    width: 120px;
-    margin: 10px auto;
+    width: 100%;
+    margin: 10px 0;
+    .empty{
+      width: 120px;
+      margin: 0 auto;
+    }
   }
 
 }
@@ -137,5 +141,6 @@
 <style lang="scss">
 .one-news__img img{
   width: 100%;
+
 }
 </style>

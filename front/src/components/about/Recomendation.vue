@@ -234,6 +234,10 @@
   margin-top: 30px;
   position: relative;
 
+  h3{
+    margin-bottom: 20px;
+  }
+
   &__wrapper{
 
   }
