@@ -29,9 +29,16 @@ class UserService:
     @classmethod
     def send_confirmation_url(cls, user: User):
         confirmation_url = cls.generate_confirmation_url(user_id=user.id)
-        payload = template.render({
+        message = f"""
+        Добрый день {user.full_name}. Регистрация прошла успешно. 
+        Чтобы активировать аккаунт перейдите по ссылке {confirmation_url}.
+        Желаем Вам приятных покупок!
+        """
+        html_message = template.render({
             'name': user.full_name,
             'confirmation_url': confirmation_url,
             'static_url': f'{settings.STATIC_PATH}/registration'
         })
-        EmailService.send_email(receiver=user.email, message=payload, subject='Confirmation url')
+        EmailService.send_email(
+            receiver=user.email, message=message, html_message=html_message, subject='Confirmation url'
+        )
