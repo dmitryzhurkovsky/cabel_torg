@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.core import settings
 from src.models import User
 from src.rest.managers.user_manager import UserManager
 from src.services.auth_service import AuthService
@@ -10,7 +11,7 @@ class UserService:
     @staticmethod
     def generate_confirmation_url(user_id: int) -> str:
         token = AuthService.create_token(user_id=user_id, token_type='access')
-        return f'/api/v1/confirm/{token}'
+        return f'{settings.SITE_HOST}/api/v1/confirm/{token}'
 
     @classmethod
     async def confirm_user(cls, token: str, session: AsyncSession):
