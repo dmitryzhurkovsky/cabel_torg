@@ -1,31 +1,25 @@
 import locale
-import pathlib
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
 from sys import platform
-from num2words import num2words
 
-import jinja2
 import pdfkit
+from num2words import num2words
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core import settings
 from src.core.db.db import engine
-from src.rest.managers.order_manager import OrderManager
 from src.models import Order
-
-root_directory = pathlib.Path(__file__).parent.resolve()
+from src.rest.managers.order_manager import OrderManager
 
 if platform == 'darwin':  # OS X(Apple)
     wkhtmltopdf_executor = '/usr/local/bin/wkhtmltopdf'
 else:
     wkhtmltopdf_executor = '/usr/bin/wkhtmltopdf'
 
-template_loader = jinja2.FileSystemLoader(root_directory)
-template_env = jinja2.Environment(loader=template_loader)
-template = template_env.get_template('invoice_template.html')
-styles = f'{root_directory}/style.css'
+template = settings.templates.get_template('invoice.html')
+styles = f'{settings.STATIC_PATH}/invoice/style.css'
 pdf_kit_config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_executor)
 pdf_kit_options = {
     'page-size': 'Letter',
@@ -106,7 +100,7 @@ class InvoiceGenerator:
                 'products_tax_sum': num2words(round(products_tax_sum, 2), lang='ru'),
                 'products_price_with_tax': num2words(round(products_price_with_tax, 2), lang='ru'),
 
-                'static_url': settings.STATIC_PATH
+                'static_url': f'{settings.STATIC_PATH}/invoice'
             }
 
     @staticmethod

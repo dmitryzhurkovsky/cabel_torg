@@ -6,6 +6,8 @@ from src.rest.managers.user_manager import UserManager
 from src.services.auth_service import AuthService
 from src.services.email_service import EmailService
 
+template = settings.templates.get_template('registration.html')
+
 
 class UserService:
     @staticmethod
@@ -26,6 +28,10 @@ class UserService:
 
     @classmethod
     def send_confirmation_url(cls, user: User):
-        # todo prepare a beautiful message
         confirmation_url = cls.generate_confirmation_url(user_id=user.id)
-        EmailService.send_email(receiver=user.email, message=confirmation_url, subject='Confirmation url')
+        payload = template.render({
+            'name': user.full_name,
+            'confirmation_url': confirmation_url,
+            'static_url': f'{settings.STATIC_PATH}/registration'
+        })
+        EmailService.send_email(receiver=user.email, message=payload, subject='Confirmation url')
