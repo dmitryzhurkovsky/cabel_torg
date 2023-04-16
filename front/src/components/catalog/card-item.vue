@@ -200,7 +200,7 @@ export default {
   border: 2px solid #EEEEEE;
   box-sizing: border-box;
   border-radius: 8px;
-  padding: 20px 22px 30px 22px;
+  padding: 20px 20px 30px 20px;
   @media (max-width: $md3+px){
     padding: 5px 15px 10px 15px;
 
@@ -298,7 +298,7 @@ export default {
   }
 
   .old_price__row{
-    min-height: 30px;
+    min-height: 34px;
     flex-direction: column-reverse;
     align-items: flex-start;
   }
@@ -309,6 +309,9 @@ export default {
     text-decoration-line: line-through;
     opacity: 0.4;
     white-space: nowrap;
+    span{
+      font-size: 14px;
+    }
 
   }
 
@@ -321,6 +324,7 @@ export default {
     }
     span{
       font-weight: 300;
+      font-size: 16px;
       @media (max-width: $md3+px){
         font-size: 15px;
       }

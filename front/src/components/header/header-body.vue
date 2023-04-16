@@ -95,6 +95,9 @@
     }
 
     &__logo {
+      &:active{
+        margin-top: 1px;
+      };
     }
   .burger-menu{
     display: None;
