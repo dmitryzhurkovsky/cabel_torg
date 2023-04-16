@@ -27,4 +27,4 @@ class UserService:
     def send_confirmation_url(cls, user: User):
         # todo prepare a beautiful message
         confirmation_url = cls.generate_confirmation_url(user_id=user.id)
-        EmailService.send_email(receiver=user.email, message=confirmation_url)
+        EmailService.send_email(receiver=user.email, message=confirmation_url, subject='Confirmation url')
