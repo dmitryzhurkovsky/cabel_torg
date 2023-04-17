@@ -38,11 +38,11 @@
                 </div>
 
               </swiper>
-              <div class="recomendation__link  _link" @click="onOpenCatalog">Смотреть все
+              <!-- <div class="recomendation__link  _link" @click="onOpenCatalog">Смотреть все
                 <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M0.5 3.99935H15.0833M15.0833 3.99935L11.75 0.666016M15.0833 3.99935L11.75 7.33268" stroke="#4275D8"/>
                 </svg>
-              </div>
+              </div> -->
 
           </div>
 
@@ -127,12 +127,13 @@
           try {
             const response = await axios.get(process.env.VUE_APP_API_URL + 'products/' + item.id);
             fetchedItems.push(response.data);
-            this.sliderItems = [...fetchedItems.reverse()]
+            this.sliderItems = [...fetchedItems]
           } catch (e) {
-              console.log(e);
-              this.ADD_MESSAGE({name: "Не возможно загрузить данные товара " + item.id, icon: "error", id: item.id})
+            console.log(e);
+            this.ADD_MESSAGE({name: "Не возможно загрузить данные товара " + item.id, icon: "error", id: item.id})
           }
         });
+        setTimeout(() => window.scrollTo(0, 0), 0);
       },
 
       onSlideChange() {

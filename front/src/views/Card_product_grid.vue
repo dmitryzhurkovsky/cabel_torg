@@ -148,6 +148,7 @@
 
   <Recomendation 
     :isShowFilter = false
+    :isShowFollow = false
   />
 
   <ShownItems/>

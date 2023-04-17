@@ -61,6 +61,7 @@ export default {
       return top;
     },
     SUB_CATEGORIES(state){
+      console.log('QQQQQQQ', state.topCategoriesItemActive);
       const sub = [];
       state.categories.forEach(item => {
         if (item.parent_category_id == state.topCategoriesItemActive){
@@ -220,7 +221,6 @@ export default {
           }
         }
       }
-
     }
   },
 

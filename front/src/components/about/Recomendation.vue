@@ -45,7 +45,7 @@
                 </div>
 
               </swiper>
-              <div class="recomendation__link  _link" @click="onOpenCatalog">Смотреть все
+              <div v-if="isShowFollow" class="recomendation__link  _link" @click="onOpenCatalog">Смотреть все
                 <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M0.5 3.99935H15.0833M15.0833 3.99935L11.75 0.666016M15.0833 3.99935L11.75 7.33268" stroke="#4275D8"/>
                 </svg>
@@ -74,6 +74,7 @@
 
     props: {
       isShowFilter: true,
+      isShowFollow: true,
     },
 
     components:
@@ -104,12 +105,14 @@
       slidersInFrame: async function() {
         await this.GET_RECOMENDED_ITEMS();
         this.setNewQuantity();
+        setTimeout(() => window.scrollTo(0, 0), 0);
       },
 
       ChangeParameters: async function() {
         this.SET_RECOMENDATION_QUANTITY(10);
         await this.GET_RECOMENDED_ITEMS();
         this.setNewQuantity();
+        setTimeout(() => window.scrollTo(0, 0), 0);
       }
     },
 
@@ -176,6 +179,7 @@
       await this.GET_RECOMENDED_ITEMS();
       this.setNewQuantity();
       this.setSlidersInFrame();
+      setTimeout(() => window.scrollTo(0, 0), 0);
     }
   }
 </script>

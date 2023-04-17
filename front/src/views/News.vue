@@ -14,10 +14,6 @@
         <div v-if = "NEWS.length > itemsInPage" class="news__pagination">
           <a 
               :class="[pageNumber > 1 ? 'news__link active' : 'news__link']"
-              @click="onChangePage(1)"
-          >{{ '<<' }}</a>
-          <a 
-              :class="[pageNumber > 1 ? 'news__link active' : 'news__link']"
               @click="onChangePage(pageNumber - 1)"
           >{{ '<' }}</a>
           <a class="news__link news__pagenumber">{{ pageNumber }}</a>
@@ -25,10 +21,6 @@
               :class="[pageNumber < totalPages ? 'news__link active' : 'news__link']"
               @click="onChangePage(pageNumber + 1)"
           >{{ '>' }}</a>
-          <a 
-              :class="[pageNumber < totalPages ? 'news__link active' : 'news__link']"
-              @click="onChangePage(totalPages)"
-          >{{ '>>' }}</a>
         </div>   
       </div>
     </div>
@@ -74,6 +66,7 @@
         if (page < 1) return
         if (page > this.totalPages) return
         this.pageNumber = page;
+        setTimeout(() => window.scrollTo(0, 0), 0);
       }
     },
 

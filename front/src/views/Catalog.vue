@@ -80,6 +80,13 @@
 
     props: {
       id: null,
+      price_gte: 0,
+      price_lte: 10000,
+      type_of_product: '',
+      q: '',
+      ordering: '',
+      offset: 0,
+      limit: 20,
     },
 
     components:
@@ -95,6 +102,9 @@
 
     watch: {
       ChangeParameters: async function() {
+        this.SET_CATEGORY_ID(this.$props.id);
+        this.setBreabcrumbs();
+        // await this.getData(this.$props.id);
         await this.getData(this.CATEGORY_ID);
       },
 
@@ -180,6 +190,7 @@
         const categoryStack = [];
         categoryStack.push(Number(this.$props.id));
         let curLevel = this.ALL_CATEGORIES.filter(item => item.id == this.$props.id)[0];
+        // console.log('CurLevel ', this.$props.id);
         while (curLevel.parent_category_id) {
           const parent_category_id = curLevel.parent_category_id;
           categoryStack.push(parent_category_id);
@@ -209,13 +220,14 @@
       },
     },
 
-    async beforeUpdate(){
-      this.SET_CATEGORY_ID(this.$props.id);
-      // await this.getData(this.$props.id);
-      this.setBreabcrumbs();
-    },
+    // async beforeUpdate(){
+    //   this.SET_CATEGORY_ID(this.$props.id);
+    //   // await this.getData(this.$props.id);
+    //   this.setBreabcrumbs();
+    // },
 
     async mounted() {
+      console.log(this.$route.query);
       this.SET_CATEGORY_ID(this.$props.id);
       this.setBreabcrumbs();
       await this.getData(this.$props.id);

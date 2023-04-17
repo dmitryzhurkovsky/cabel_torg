@@ -49,6 +49,7 @@ const routes = [
     path: '/catalog',
     name: 'Catalog',
     meta: {name: 'Каталог'}, 
+    props: true,
     component: () =>
         import("../views/Catalog.vue")
   },
