@@ -19,11 +19,8 @@ class UserManager(CRUDManager):
             input_data: UserCreateSchema,
             session: AsyncSession,
     ) -> TableType:
-        from src.services.user_service import UserService
-
         input_data.password = hash_password(password=input_data.password)  # make it better
         user = await super().create(input_data, session)
-        # await UserService.send_confirmation_url(user)
         return user
 
     @classmethod

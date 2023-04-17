@@ -76,7 +76,7 @@
             </div>
             <div class="group">
               <label for="unp" class="label">УНП</label>
-              <input id="unp" type="number" class="input" :class="{ 'is-invalid': ERRORS.unp }" v-model="unp" autocomplete=off>
+              <input id="unp" type="text" class="input" :class="{ 'is-invalid': ERRORS.unp }" v-model="unp" autocomplete=off>
               <div class="error-message" v-if="ERRORS.unp"> {{ ERRORS.unp }} </div>
             </div>
             <div class="">

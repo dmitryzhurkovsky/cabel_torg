@@ -22,7 +22,7 @@ class User(BaseModel):
     serving_bank = Column(String(128))
 
     # service fields
-    is_active = Column(Boolean, default=True)
+    is_active = Column(Boolean, default=False)
     is_admin = Column(Boolean, default=False)
 
     products_in_cart = relationship('Cart', back_populates='user')

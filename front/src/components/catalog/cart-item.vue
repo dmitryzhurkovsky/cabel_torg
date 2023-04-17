@@ -203,7 +203,7 @@
         }
     }
     &__info{
-      width: 100%;
+      width: 100%;padding-left: 10px;
 
     .icon{
         font-size: 10px;
@@ -287,6 +287,12 @@
         border: none;
         margin: 0 10px;
         text-align: center;
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button
+      {
+        -webkit-appearance: none;
+        margin: 0;
+      }
     }
 
     &__price{

@@ -560,6 +560,11 @@ input{
   .wrapper__show{
     display: block;
   }
+  .wrapper__show:hover,
+  .wrapper__show:focus
+  .wrapper__show:active{
+    display: block;
+  }
 
   &__content{
     background: #FFFFFF;
