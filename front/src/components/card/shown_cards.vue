@@ -211,6 +211,10 @@
   margin-top: 30px;
   position: relative;
 
+  h3{
+    margin-bottom: 20px;
+  }
+
   &__wrapper{
 
   }
@@ -235,6 +239,7 @@
       width: 100%;
       max-width: 272px;
       margin: 0 auto;
+      max-height: 368px;
 
 
     }
