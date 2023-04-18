@@ -42,6 +42,9 @@ class Product(Base1CModel):
 
     # Service fields
     is_visible = Column(Boolean, default=True)
+    site_link = Column(String)
+    site_page_title = Column(String)
+    site_page_description = Column(String)
 
     # Relationship fields
     attributes = relationship(

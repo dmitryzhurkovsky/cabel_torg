@@ -170,6 +170,12 @@ class GoodsMixin(BaseMixin, ABC):
                 return 'tax', int(raw_field[0][1].text)
             case 'Вес':
                 return 'weight', Decimal(raw_field.text)
+            case 'СсылкаНаСайт':
+                return 'site_link', raw_field.text
+            case 'ЗаголовокСтраницы':
+                return 'site_page_title', raw_field.text
+            case 'ОписаниеСтраницы':
+                return 'site_page_description', raw_field.text
             case 'Артикул':
                 field_name, field_value = 'vendor_code', raw_field.text
             case 'Описание':

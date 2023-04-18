@@ -5,6 +5,7 @@ from src.core import settings
 from src.models.category_model import Category
 from src.parser.mixins.base_mixin import BaseMixin
 from src.parser.servers import database_service
+from src.parser.utils import get_tag_name
 
 
 class CategoryMixin(BaseMixin, ABC):
@@ -62,9 +63,22 @@ class CategoryMixin(BaseMixin, ABC):
                     parent_category_id=int(db_category.id)
                 )
 
-    def clean_category_field(self, raw_field: Element) -> tuple[str, int | str]:
+    def clean_category_field(self, raw_field: Element) -> tuple[str, int | str] | tuple[None, None]:
         """A category contains common fields that why we call the clean_common_fields function."""
-        return self.clean_common_field(raw_field)
+        field_name, field_value = self.clean_common_field(raw_field=raw_field)
+
+        if field_name and field_value:
+            return field_name, field_value
+
+        match get_tag_name(raw_field):
+            case 'СсылкаНаСайте':
+                return 'site_link', raw_field.text
+            case 'ЗаголовокСтраницыСайта':
+                return 'site_page_title', raw_field.text
+            case 'ОписаниеСтраницыСайта':
+                return 'site_page_description', raw_field.text
+            case _:
+                return None, None
 
     def clean_category_element(self, element: Element) -> dict:
         """
