@@ -41,6 +41,9 @@ class ProductSchema(BaseSchema):
     count: int | None
     weight: Decimal | None
 
+    site_link: str | None
+    site_page_title: str | None
+    site_page_description: str | None
     created_at: datetime | None
     updated_at: datetime | None
 

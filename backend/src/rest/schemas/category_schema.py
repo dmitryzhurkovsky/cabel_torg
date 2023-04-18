@@ -24,5 +24,9 @@ class CategorySchema(BaseSchema):
     order: int | None
     discount: int | None
 
+    site_link: str | None
+    site_page_title: str | None
+    site_page_description: str | None
+
     class Config:
         orm_mode = True
