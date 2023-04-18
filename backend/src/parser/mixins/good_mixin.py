@@ -197,7 +197,7 @@ class GoodsMixin(BaseMixin, ABC):
         code = raw_field.attrib.get('Код')
         full_name: str = raw_field.attrib.get('НаименованиеПолное')
         if full_name.lower() == 'штука':
-            full_name = 'Шт.'
+            full_name = 'шт.'
         international_abbreviated = raw_field.attrib.get('МеждународноеСокращение')
 
         fields = clean_fields({
