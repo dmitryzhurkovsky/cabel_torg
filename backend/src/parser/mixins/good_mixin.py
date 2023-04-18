@@ -195,8 +195,8 @@ class GoodsMixin(BaseMixin, ABC):
         transform its fields to "ready to write to a database" state.
         """
         code = raw_field.attrib.get('Код')
-        full_name = raw_field.attrib.get('НаименованиеПолное')
-        if full_name == 'Штука':
+        full_name: str = raw_field.attrib.get('НаименованиеПолное')
+        if full_name.lower() == 'штука':
             full_name = 'Шт.'
         international_abbreviated = raw_field.attrib.get('МеждународноеСокращение')
 
