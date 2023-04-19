@@ -53,6 +53,7 @@ export default {
     ._block{
       flex-basis: 50%;
       height: 189px;
+
       &:nth-child(1){
         img{
           width: 100%;
@@ -102,5 +103,12 @@ export default {
     cursor: pointer;
   }
 
+}
+</style>
+
+<style lang="scss">
+
+.news__item img{
+  height: 100%;
 }
 </style>
