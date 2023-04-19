@@ -170,6 +170,12 @@ class GoodsMixin(BaseMixin, ABC):
                 return 'tax', int(raw_field[0][1].text)
             case 'Вес':
                 return 'weight', Decimal(raw_field.text)
+            case 'СсылкаНаСайт':
+                return 'site_link', raw_field.text
+            case 'ЗаголовокСтраницы':
+                return 'site_page_title', raw_field.text
+            case 'ОписаниеСтраницы':
+                return 'site_page_description', raw_field.text
             case 'Артикул':
                 field_name, field_value = 'vendor_code', raw_field.text
             case 'Описание':
@@ -189,9 +195,9 @@ class GoodsMixin(BaseMixin, ABC):
         transform its fields to "ready to write to a database" state.
         """
         code = raw_field.attrib.get('Код')
-        full_name = raw_field.attrib.get('НаименованиеПолное')
-        if full_name == 'Штука':
-            full_name = 'Шт.'
+        full_name: str = raw_field.attrib.get('НаименованиеПолное')
+        if full_name.lower() == 'штука':
+            full_name = 'шт.'
         international_abbreviated = raw_field.attrib.get('МеждународноеСокращение')
 
         fields = clean_fields({

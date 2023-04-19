@@ -107,6 +107,9 @@ export default {
       text-align: center;
       color: #423E48;
       cursor: pointer;
+      @media (max-width: $md3+px){
+        font-size: 8px;
+      }
     }
 
   }
