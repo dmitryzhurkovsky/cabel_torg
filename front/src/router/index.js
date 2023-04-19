@@ -20,6 +20,7 @@ const routes = [
   {
     path: "/login",
     name: "Login",
+    meta: {name: 'Вход'},
     beforeEnter: guest,
     component: () =>
       import("../views/Auth/Login.vue")

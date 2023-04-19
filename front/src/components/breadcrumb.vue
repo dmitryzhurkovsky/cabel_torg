@@ -27,6 +27,8 @@ export default {
 
   computed: {
     ...mapGetters("breadcrumb", ["STACK"]),
+    ...mapGetters("query", ["LIMIT", "OFFSET", "TYPE_OF_PRODUCT", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE",  "SORT_DIRECTION", "LIMIT_ITEMS"]),
+    ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
 
     // watch: {
     //   STACK: function() {
@@ -62,11 +64,29 @@ export default {
     ...mapMutations("query", ["SET_SEARCH_STRING"]),
     
     changePage(item){
-      this.SET_SEARCH_STRING('');
-      this.MOVE_TO_SELECT_PATH(item.index);
-      this.$router.push(item.path);
-    }
-  }
+      console.log('BreadCrumb-   ', item);
+      let url = '';
+      if (item.path.includes('category') || item.path.includes('catalog')) {
+        url = url + "?offset=" + this.OFFSET + 
+        "&limit=" + this.LIMIT + 
+        "&price_gte=" + this.MIN_PRICE + 
+        "&price_lte=" + this.MAX_PRICE;
+        url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+        url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
+        url = url + "&q=" + this.CATALOG_SEARCH_STRING;
+        this.SET_SEARCH_STRING('');
+        this.MOVE_TO_SELECT_PATH(item.index);
+        console.log('Url   ', item.path + url);
+        this.$router.push(item.path + url);
+      } else {
+        this.SET_SEARCH_STRING('');
+        this.MOVE_TO_SELECT_PATH(item.index);
+        this.$router.push(item.path);
+      }
+      // this.MOVE_TO_SELECT_PATH(item.index);
+      // this.$router.push(item.path);
+    },
+  },
 }
 </script>
 

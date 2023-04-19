@@ -8,7 +8,7 @@
         <div class="burger__menu_item flex-center">
           <label
               :class = "{'active' : mainItem.mobileMenu}"
-              @click.stop  = "changeMainCategory(mainItem)"
+              @click.stop  = "changeCategory(mainItem.id)"
           >
             {{ mainItem.name }}
           </label>
@@ -29,7 +29,7 @@
               <label
                   :class = "{'active' : middleItem.mobileMenu}"
 
-                  @click.stop  = "changeSubCategory(mainItem, middleItem)"
+                  @click.stop  = "changeCategory(middleItem.id)"
               >
                 {{ middleItem.name }}
               </label>
@@ -50,7 +50,7 @@
                 :key  = "lastItem.id"
               >
                 <label for="sub-group-level-3"
-                  @click.stop = "changeLastCategory(mainItem, middleItem, lastItem)"
+                  @click.stop = "changeCategory(lastItem.id)"
                 >
                   {{ lastItem.name }}
                 </label>
@@ -132,6 +132,7 @@ export default {
 
   computed: {
     ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "CATALOG", "IS_CATALOG_OPEN"]),
+    ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION"]),
   },
 
   methods:{
@@ -144,40 +145,33 @@ export default {
       item.mobileMenu = !item.mobileMenu;
     },
     
-    changeMainCategory(category){
-      this.SET_ALL_CURRENT_CATEGORIES({
-        mainCategory: category.id,
-        middleCategory: null,
-        lastCategory: null,
-      });
-      this.SET_CATEGORY_ID(category.id);
-      this.openCatalog();
+    getCatalogUrl(){
+      let url = "/catalog?";
+      url = url + this.getLastPartOfUrl();
+      return url;
     },
 
-    changeSubCategory(mainCategory, middleCategory){
-      this.SET_ALL_CURRENT_CATEGORIES({
-          mainCategory: mainCategory.id,
-          middleCategory: middleCategory.id,
-          lastCategory: null,
-      });
-      this.SET_CATEGORY_ID(middleCategory.id);
-      this.openCatalog();
+    getCategoryUrl(id){
+      let url = "/category/";
+      if (id) url = url + id + "?";
+      url = url + this.getLastPartOfUrl();
+      return url;
     },
 
-    changeLastCategory(mainCategory, middleCategory, lastCategory){
-      this.SET_ALL_CURRENT_CATEGORIES({
-          mainCategory: mainCategory.id,
-          middleCategory: middleCategory.id,
-          lastCategory: lastCategory.id,
-      });
-      this.SET_CATEGORY_ID(lastCategory.id);
-      this.openCatalog();
+    getLastPartOfUrl(){
+      let url = "offset=" + this.OFFSET + 
+        "&limit=" + this.LIMIT + 
+        "&price_gte=" + this.MIN_PRICE + 
+        "&price_lte=" + this.MAX_PRICE;
+      url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+      url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
+      url = url + "&q=";
+      return url;        
     },
 
-    openCatalog() {
+    changeCategory(id){
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      const category = this.LAST_CATEGORIES_ITEM_ACTIVE || this.SUB_CATEGORIES_ITEM_ACTIVE || this.TOP_CATEGORIES_ITEM_ACTIVE + '12';
-      this.$router.push('/category/' + category);
+      this.$router.push(this.getCategoryUrl(id));
     },
 
     openPage(page) {

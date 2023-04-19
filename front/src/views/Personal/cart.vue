@@ -277,7 +277,7 @@
       },
 
       checkPickUp(){
-        console.log(this.isEnablePickup);
+        // console.log(this.isEnablePickup);
         return !this.isEnablePickup;
       },
 
@@ -288,7 +288,7 @@
       },
 
       onChangeDeliveryType(type){
-        console.log(type);
+        // console.log(type);
         this.isEnablePickup = Boolean(type)
       },
 
@@ -328,13 +328,19 @@
             errorsInData.phone_number = 'Укажите номер телефона'
         }
         if (!this.city) {
+          if (!this.checkPickUp()) {
             errorsInData.city = 'Укажите название города'
+          }
         }
         if (!this.address) {
+          if (!this.checkPickUp()) {
             errorsInData.address = 'Укажите название улицы'
+          }
         }
         if (!this.house) {
+          if (!this.checkPickUp()) {
             errorsInData.house = 'Укажите номер дома'
+          }
         }
         if (!isValidEmail(this.email)) {
             errorsInData.email = 'Укажите валидный адрес эл. почты'

@@ -109,16 +109,16 @@ export default {
   name: "UserActions",
 
   data: function() {
-      return {
-          email     : '',
-          password  : '',
-          confirm: '',
-          username: '',
-          phone: '',
-          company: '',
-          unp: null,
-          isLoading: false,
-      }
+    return {
+      email     : '',
+      password  : '',
+      confirm: '',
+      username: '',
+      phone: '',
+      company: '',
+      unp: null,
+      isLoading: false,
+    }
   },
 
   computed: {
@@ -126,12 +126,19 @@ export default {
   },
 
   async mounted() {
-      this.SET_IS_OPEN_MAIN_LOGIN(false);
+    this.SET_IS_OPEN_MAIN_LOGIN(false);
+    this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
+    this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
+      name: this.$router.currentRoute.value.meta.name,
+      path: this.$router.currentRoute.value.path,
+      type: "global",
+      class: ""
+    });
   },
 
   async beforeUnmount() {
-      this.SET_ERRORS({});
-      this.SET_IS_OPEN_MAIN_LOGIN(true);
+    this.SET_ERRORS({});
+    this.SET_IS_OPEN_MAIN_LOGIN(true);
   },
 
   methods: {

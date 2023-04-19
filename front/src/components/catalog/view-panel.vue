@@ -1,19 +1,19 @@
 <template>
-    <ul class="tools-view">
-      <!-- list, grid -->
-        <li class="tools-view__item">
-            <a href="" 
-              :class="['table' === VIEW_TYPE ? 'tools-view__link icon-catalog-table active' : 'tools-view__link icon-catalog-table']"
-              @click.prevent="changeView('table')"
-            ></a>
-        </li>
-        <li class="tools-view__item">
-            <a href="" 
-              :class="['row' === VIEW_TYPE ? 'tools-view__link icon-catalog-row active' : 'tools-view__link icon-catalog-row']"
-              @click.prevent="changeView('row')"
-            ></a>
-        </li>
-    </ul>
+  <ul class="tools-view">
+    <!-- list, grid -->
+    <li class="tools-view__item">
+      <a href="" 
+        :class="['table' === VIEW_TYPE ? 'tools-view__link icon-catalog-table active' : 'tools-view__link icon-catalog-table']"
+        @click.prevent="changeView('table')"
+      ></a>
+    </li>
+    <li class="tools-view__item">
+      <a href="" 
+        :class="['row' === VIEW_TYPE ? 'tools-view__link icon-catalog-row active' : 'tools-view__link icon-catalog-row']"
+        @click.prevent="changeView('row')"
+      ></a>
+    </li>
+  </ul>
 </template>
 
 <script>
@@ -24,7 +24,7 @@
     name: 'ViewPanel',
 
     computed: {
-        ...mapGetters("query", ["VIEW_TYPE"]),
+      ...mapGetters("query", ["VIEW_TYPE"]),
     },
 
     methods: {

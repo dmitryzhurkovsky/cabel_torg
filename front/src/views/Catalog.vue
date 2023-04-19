@@ -12,7 +12,7 @@
             </div>
 <!--        # CONTENT-->
             <div class="content-block">
-              <div class="content-block__subcategory recomendation__nav" v-if = "LastCategory.length">
+              <div class="content-block__subcategory recomendation__nav" v-if = "LastCategory.length && !isMobileVersion">
                   <div 
                     :class="[category.id == this.CATEGORY_ID ? 'recomendation__nav__item active' : 'recomendation__nav__item']"
                     v-for = "category in LastCategory[0].subItems"
@@ -22,6 +22,32 @@
                     {{ category.name }}
                   </div>
               </div>
+              <div v-if = "LastCategory.length && isMobileVersion">
+                <swiper
+                  :slides-per-view="1.7"
+                  :space-between="12"
+                  :speed="500"
+                  :autoplay="{
+                      delay: 5000,
+                  }"
+                  :pagination= "{
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    type: 'bullets',
+                    bulletClass: 'swiper-pagination-bullet',
+                    bulletElement: 'span'
+                  }"
+                >
+
+                  <swiper-slide v-for="category in LastCategory[0].subItems" :key="category.id">
+                    <div class="recomendation__nav__item" @click=setActiveCategory(category.id)>
+                      {{ category.name }}
+                    </div>
+                  </swiper-slide>
+
+                  <div class="swiper-pagination"></div>
+                </swiper>
+              </div>  
               <div v-if = "isMobileVersion" class="btn mobile-filter mb-20" @click.stop="setIsFilterPanelOpen(!isFilterPanelOpen)">Фильтры</div>
               <div v-if ="isMobileVersion&&isFilterPanelOpen">
                 <PriceSlider />
@@ -73,6 +99,12 @@
   import SortPanel from '@/components/catalog/sort-panel.vue';
   import PriceSlider from '@/components/catalog/price-slider.vue';
 
+  import { Swiper } from "swiper/vue";
+  import { SwiperSlide } from "swiper/vue";
+  import SwiperCore, { Pagination, Navigation } from "swiper";
+  import "swiper/swiper.min.css";
+  SwiperCore.use([Navigation, Pagination]);
+
   import { mapGetters, mapActions, mapMutations } from 'vuex'
 
   export default {
@@ -84,7 +116,7 @@
 
     components:
     {
-      FilterPanel, ListItem, CardItem, LimitPanel, ViewPanel, PaginationPanel, SortPanel, PriceSlider,
+      FilterPanel, ListItem, CardItem, LimitPanel, ViewPanel, PaginationPanel, SortPanel, PriceSlider, Swiper, SwiperSlide,
     },
 
     data(){
@@ -99,9 +131,12 @@
         this.setBreabcrumbs();
       },
 
-      // CATEGORY_ID: function() {
-      //   this.SET_SEARCH_STRING('');
-      // },
+      DEVICE_VIEW_TYPE: function(){
+        console.log('View pannel ', this.DEVICE_VIEW_TYPE);
+        if (this.DEVICE_VIEW_TYPE !== 1) {
+          this.SET_VIEW_TYPE('table');
+        }
+      }
     },
 
     computed: {
@@ -137,7 +172,7 @@
       ...mapActions("catalog", ["GET_CATALOG_ITEMS", "GET_ALL_CATALOG_ITEMS"]),
       ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
       ...mapMutations("query", ["SET_SEARCH_STRING", "SET_CATEGORY_ID", "SET_OFFSET", "SET_LIMIT", "SET_MIN_PRICE", "SET_MAX_PRICE", "SET_TYPE_OF_PRODUCT", "SET_SORT_TYPE", 
-        "SET_SORT_DIRECTION"]),
+        "SET_SORT_DIRECTION", "SET_VIEW_TYPE"]),
       ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING"]),
       ...mapMutations("notification", ["SET_IS_LOADING"]),
 
@@ -281,6 +316,27 @@
 </script>
 
 <style scoped lang="scss">
+
+.swiper-pagination, .swiper-pagination-clickable, .swiper-pagination-bullets, .swiper-pagination-horizontal {
+  display: flex;
+  position: inherit;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+
+  span {
+    //background: #7700AF;
+    background:red;
+  }
+}
+.swiper-pagination-bullet, .swiper-pagination-bullet-active{
+  background: black!important
+
+}
+.swiper-pagination-bullet-active{
+  background: red!important;
+}
 
 .catalog {
 

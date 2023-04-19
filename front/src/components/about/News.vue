@@ -91,6 +91,7 @@
       ...mapActions("main", ["GET_NEWS"]),
 
       onOpenNew(id) {
+        setTimeout(() => window.scrollTo(0, 0), 0);
         this.$router.push('/new/' + id);
       },
 
@@ -113,8 +114,6 @@
 <style scoped lang="scss">
 
 .swiper-pagination, .swiper-pagination-clickable, .swiper-pagination-bullets, .swiper-pagination-horizontal {
-  //position: unset;
-  //margin-bottom: 3%;
   display: flex;
   position: inherit;
   align-items: center;

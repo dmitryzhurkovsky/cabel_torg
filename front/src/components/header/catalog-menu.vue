@@ -60,7 +60,6 @@ export default {
   computed: {
     ...mapGetters("header", ["CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "ALL_CATEGORIES", "TOP_CATEGORIES", "SUB_CATEGORIES", "IS_CATALOG_OPEN"]),
     ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION"]),
-
 },
 
   methods:{

@@ -1,18 +1,18 @@
 <template>
-    <div class="tools-pages">
-        <div class="tools-pages__header">Показывать по: </div>
-        <ul class="tools-pages__body">
-            <li class="tools-pages__item" 
-                v-for = "limitItem in LIMIT_ITEMS" 
-                :key = limitItem
-            >
-                <a href=""  
-                  :class="[limitItem == LIMIT ? 'tools-pages__link active' : 'tools-pages__link']"
-                  @click.prevent="setLimit(limitItem)"
-                >{{ limitItem }}</a>
-            </li>
-        </ul>
-    </div>    
+  <div class="tools-pages">
+    <div class="tools-pages__header">Показывать по: </div>
+    <ul class="tools-pages__body">
+      <li class="tools-pages__item" 
+        v-for = "limitItem in LIMIT_ITEMS" 
+        :key = limitItem
+      >
+        <a href=""  
+          :class="[limitItem == LIMIT ? 'tools-pages__link active' : 'tools-pages__link']"
+          @click.prevent="setLimit(limitItem)"
+        >{{ limitItem }}</a>
+      </li>
+    </ul>
+  </div>    
 </template>
 
 <script>
