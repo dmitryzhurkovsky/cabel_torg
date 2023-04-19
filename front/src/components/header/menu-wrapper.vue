@@ -15,11 +15,23 @@
       ...mapGetters("header", ["IS_CATALOG_OPEN"]),
     },
 
+    watch: {
+      IS_CATALOG_OPEN: function(){
+        if (this.IS_CATALOG_OPEN) {
+          window.scrollTo(0, 0);
+          document.body.style.overflow = 'hidden';
+          document.body.style.paddingRight = '16px';
+        } else {
+          document.body.style.overflow = '';
+          document.body.style.paddingRight = '0';
+        }
+      }
+    },
+
     methods: {
       ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
 
       closeMenu() {
-        // console.log(e);
         this.UPDATE_IS_CATALOG_OPEN(false);
       }
     }
