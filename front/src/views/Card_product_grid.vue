@@ -382,6 +382,10 @@
     .if_status_on_the_way{
       font-size: 12px;
       margin-left: 25px;
+      @media (max-width: $md3+px) {
+        font-size: 11px;
+        margin:0 0 10px 0;
+      }
     }
   }
   &__box{
@@ -389,7 +393,7 @@
     margin-bottom: 40px;
     @media (max-width: $md3+px) {
       flex-direction: column;
-      font-size: 10px;
+      font-size: 11px;
       margin-bottom: 10px;
     }
 
@@ -496,7 +500,7 @@
   &__link{
     opacity: 0.7;
     @media (max-width: $md3+px) {
-      font-size: 10px;
+      font-size: 11px;
     }
   }
   &__action{
@@ -522,7 +526,7 @@
     margin-bottom: 16px;
      @media (max-width: $md2+px) {
        margin-bottom: 5px;
-       font-size: 10px;
+       font-size: 11px;
     }
 
   }
@@ -533,7 +537,7 @@
     }
     @media (max-width: $md3+px) {
       order: -1;
-      font-size: 10px;
+      font-size: 11px;
       margin-top: 10px;
 
     }
@@ -564,7 +568,7 @@
       flex-direction: column-reverse;
       align-items: stretch;
       padding: 22px 18px 0 0;
-      font-size: 10px;
+      font-size: 11px;
       background: none;
       .price__left{
         margin-top: 20px;
@@ -675,6 +679,7 @@
     max-width: 60%;
     @media (max-width: $md3+px) {
       max-width: 100%;
+      font-size: 11px;
     }
   }
   p{
@@ -725,6 +730,9 @@
     border: 2px solid #EEEEEE;
     border-radius: 8px;
     min-height: 200px;
+    @media (max-width: $md3+px) {
+      font-size: 14px;
+    }
     &__row{
       border: 1px solid #eee;
       .table__item{
@@ -746,6 +754,9 @@
     line-height: 140%;
     color: #423E48;
     margin: 8px 0;
+    @media (max-width: $md3+px) {
+      font-size: 14px;
+    }
 
   }
 
