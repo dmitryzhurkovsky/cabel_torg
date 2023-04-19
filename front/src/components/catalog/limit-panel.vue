@@ -3,12 +3,12 @@
         <div class="tools-pages__header">Показывать по: </div>
         <ul class="tools-pages__body">
             <li class="tools-pages__item" 
-                v-for = "limitItem in limitItems" 
+                v-for = "limitItem in LIMIT_ITEMS" 
                 :key = limitItem
             >
                 <a href=""  
-                  :class="[limitItem === LIMIT ? 'tools-pages__link active' : 'tools-pages__link']"
-                  @click="setLimit($event, limitItem)"
+                  :class="[limitItem == LIMIT ? 'tools-pages__link active' : 'tools-pages__link']"
+                  @click.prevent="setLimit(limitItem)"
                 >{{ limitItem }}</a>
             </li>
         </ul>
@@ -23,22 +23,45 @@
   export default {
     name: 'LimitPanel',
 
-    data() {
-      return {
-        limitItems : [10, 30, 60],
-      }
-    },
-
     computed: {
-        ...mapGetters("query", ["LIMIT"]),
+      ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE",  "SORT_DIRECTION", "LIMIT_ITEMS"]),
+      ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
     },
 
     methods: {
       ...mapMutations("query", ["SET_LIMIT"]),
 
-      setLimit(event, limit) {
-        event.preventDefault();
+      getCatalogUrl(){
+        let url = "/catalog?";
+        url = url + this.getLastPartOfUrl();
+        return url;
+      },
+
+      getCategoryUrl(id){
+        let url = "/category/";
+        if (id) url = url + id + "?";
+        url = url + this.getLastPartOfUrl();
+        return url;
+      },
+
+      getLastPartOfUrl(){
+        let url = "offset=" + this.OFFSET + 
+          "&limit=" + this.LIMIT + 
+          "&price_gte=" + this.MIN_PRICE + 
+          "&price_lte=" + this.MAX_PRICE;
+        url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+        url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
+        url = url + "&q=" + this.CATALOG_SEARCH_STRING;
+        return url;        
+      },
+
+      setLimit(limit) {
         this.SET_LIMIT(limit);
+        if (this.CATEGORY_ID) {
+          this.$router.push(this.getCategoryUrl(this.CATEGORY_ID));
+        } else {
+          this.$router.push(this.getCatalogUrl());
+        }
       },
     },
   }

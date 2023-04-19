@@ -5,16 +5,28 @@ export default {
 
   state: {
     categoryId: null,
-    typeOfProduct: {name : 'Все товары', type: 'all'},
+    typeOfProduct: 'all',
     offset: 0,
     limit: 10,
-    sort: {name: 'По дате добавления', type: 'created_at'},
+    sort: 'created_at',
     direction: '',
     view: 'table',
     minPrice: 0.1,
     maxPrice: 10000,
     searchString: '',
     findedElements: [],
+    allTypesOfProduct: [
+      {name : 'Все товары', type: 'all'},
+      {name : 'Акции', type: 'with_discount'}, 
+      {name : 'В наличии', type: 'available'},
+      {name : 'Топ продаж', type: 'popular'},
+    ],
+    allSortsOfProduct: [
+      {name: 'По дате добавления', type: 'created_at'},
+      {name: 'цене', type: 'price'},
+      {name: 'скидке', type: 'discount'},
+    ],
+    limitItems : [10, 30, 60],
   },
 
     getters: {
@@ -31,7 +43,7 @@ export default {
         return state.limit;
       },
       SORT_TYPE(state){
-        return state.sort.type;
+        return state.sort;
       },
       SORT_DIRECTION(state){
         return state.direction;
@@ -50,7 +62,16 @@ export default {
       },
       FINDED_ELEMENTS(state){
         return state.findedElements;
-      }
+      },
+      ALL_TYPE_OF_PRODUCTS(state){
+        return state.allTypesOfProduct;
+      },
+      ALL_SORT_OF_PRODUCTS(state){
+        return state.allSortsOfProduct;
+      },
+      LIMIT_ITEMS(state){
+        return state.limitItems;
+      },
     },
 
     mutations: {
@@ -59,11 +80,11 @@ export default {
           state.offset = 0;
         }
         state.categoryId = category;
-        state.searchString = '';
+        // state.searchString = '';
       },
 
       SET_TYPE_OF_PRODUCT(state, newTypeOfProduct) {
-        state.offset = 0;
+        if (state.typeOfProduct !== newTypeOfProduct) state.offset = 0;
         state.typeOfProduct = newTypeOfProduct;
       },
 
@@ -102,7 +123,7 @@ export default {
 
       SET_FINDED_ELEMENTS(state, items) {
         state.findedElements = items.data;
-      }
+      },
     },
 
     actions: {

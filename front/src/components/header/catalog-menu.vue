@@ -35,7 +35,7 @@
                           v-for = "subItem in sub.subItems"
                           :key  = "subItem.id"
                       >
-                        <div @click.stop = "subItemCategoryClick(subItem.id)" class="menu__linksub">{{subItem.name}}</div>
+                        <div @click.stop = "subCategoryClick(subItem.id)" class="menu__linksub">{{subItem.name}}</div>
                       </li>
                     </ul>
                   </div>
@@ -59,21 +59,17 @@ export default {
 
   computed: {
     ...mapGetters("header", ["CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "ALL_CATEGORIES", "TOP_CATEGORIES", "SUB_CATEGORIES", "IS_CATALOG_OPEN"]),
-    ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SEARCH_STRING", "SORT_TYPE", "SORT_DIRECTION"]),
-    ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
+    ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION"]),
 
 },
 
   methods:{
     ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
     ...mapMutations("query", ["SET_CATEGORY_ID"]),
-    ...mapActions("catalog", ["GET_CATALOG_ITEMS"]),
-    ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
 
     getCatalogUrl(){
       let url = "/catalog?";
       url = url + this.getLastPartOfUrl();
-      console.log('Catalog URL: ', url);
       return url;
     },
 
@@ -81,7 +77,6 @@ export default {
       let url = "/category/";
       if (id) url = url + id + "?";
       url = url + this.getLastPartOfUrl();
-      console.log('Category URL: ', url);
       return url;
     },
 
@@ -90,45 +85,19 @@ export default {
         "&limit=" + this.LIMIT + 
         "&price_gte=" + this.MIN_PRICE + 
         "&price_lte=" + this.MAX_PRICE;
-      if (this.SORT_DIRECTION) url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
-      if (this.TYPE_OF_PRODUCT.type !== 'all') url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT.type;
-      url = url + "&q=" + this.CATALOG_SEARCH_STRING;
+      url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+      url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
+      url = url + "&q=";
+      //  + this.SEARCH_STRING;
       return url;        
     },
 
     changeCategory(id){
-      // this.SET_CATEGORY_ID(id);
-      // this.SET_ALL_CURRENT_CATEGORIES({
-      //     mainCategory: id,
-      //     middleCategory: null,
-      //     lastCategory: null,
-      // });
-
       this.$router.push(this.getCategoryUrl(id));
     },
 
     subCategoryClick(id){
-      // this.SET_CATEGORY_ID(id);
-      // this.SET_ALL_CURRENT_CATEGORIES({
-      //       mainCategory: this.TOP_CATEGORIES_ITEM_ACTIVE,
-      //       middleCategory: id,
-      //       lastCategory: null,
-      // });
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      // this.$router.push('/category/' + id);
-      this.$router.push(this.getCategoryUrl(id));
-    },
-
-    subItemCategoryClick(id){
-      // console.log('кликнули по итему подкатегории ', id, event);
-      // this.SET_CATEGORY_ID(id);
-      // this.SET_ALL_CURRENT_CATEGORIES({
-      //       mainCategory: this.TOP_CATEGORIES_ITEM_ACTIVE,
-      //       middleCategory: this.ALL_CATEGORIES.filter(item => item.id === id)[0].parent_category_id,
-      //       lastCategory: id,
-      // });
-      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      // this.$router.push('/category/' + id);
       this.$router.push(this.getCategoryUrl(id));
     },
 

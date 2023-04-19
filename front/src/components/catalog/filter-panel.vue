@@ -6,7 +6,7 @@
         >
             <div class="sidebar_menu__title">
               <div :class = "{'active' : mainItem.filterPanel}"
-                  @click.stop = "openMainCategory(mainItem)"
+                  @click.stop = "openCategory(mainItem)"
               >
                 {{mainItem.name}}
               </div>
@@ -25,7 +25,7 @@
                     >
                       <div class="subtitle__row">
                         <div :class = "{'active' : middleItem.filterPanel}"
-                            @click.stop  = "openMiddleCategory(mainItem, middleItem)"
+                            @click.stop  = "openCategory(middleItem)"
                         >
                           {{middleItem.name}}
                         </div>
@@ -41,7 +41,7 @@
                         <div class="sidebar_menu__subtitle-child"
                             v-for = "lastItem in middleItem.childrens"
                             :key  = "lastItem.id"
-                            @click.stop = "openLastCategory(mainItem, middleItem, lastItem)"
+                            @click.stop = "openCategory(lastItem)"
                         >
                             <div class="">
                               <div :class = "{'active' : LAST_CATEGORIES_ITEM_ACTIVE === lastItem.id}">
@@ -62,12 +62,12 @@
             <div class="filter__checkbox__list">
 
               <label class="checkbox__container"
-                v-for = "category in categories"
+                v-for = "category in ALL_TYPE_OF_PRODUCTS"
                 :key = "category"
               >
                 {{ category.name }}
-                <input type="checkbox" v-if = "category.selected" checked>
-                <input type="checkbox" v-if = "!category.selected" @click.prevent = toggleFilterCategory(category)>
+                <input type="checkbox" v-if = "category.type === TYPE_OF_PRODUCT" checked>
+                <input type="checkbox" v-if = "category.type !== TYPE_OF_PRODUCT" @click.prevent = toggleFilterCategory(category.type)>
                 <span class="checkmark"></span>
               </label>
 
@@ -94,73 +94,67 @@ export default {
     PriceSlider,
   },
 
-  data(){
-      return {
-          categories: [
-              {name : 'Все товары', type: 'all', selected: true},
-              {name : 'Акции', type: 'with_discount', selected: false}, 
-              {name : 'В наличии', type: 'available', selected: false},
-              {name : 'Топ продаж', type: 'popular', selected: false},
-          ],
-      }
-  },
-
   computed: {
-      ...mapGetters("header", ["CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
-      ...mapGetters("query", ["TYPE_OF_PRODUCT", "CATEGORY_ID", "SORT_DIRECTION", "SORT_ORDER"]),
+    ...mapGetters("header", ["CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
+    ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", 
+      "SORT_DIRECTION", "SORT_ORDER", "ALL_TYPE_OF_PRODUCTS"
+    ]),
+    // ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
   },
 
   methods:{
     ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID"]),
     ...mapActions("header",["SET_ALL_CURRENT_CATEGORIES"]),
 
+    getCatalogUrl(){
+      let url = "/catalog?";
+      url = url + this.getLastPartOfUrl();
+      return url;
+    },
+
+    getCategoryUrl(id){
+      let url = "/category/";
+      if (id) url = url + id + "?";
+      url = url + this.getLastPartOfUrl();
+      return url;
+    },
+
+    getTypeOfProduct(type) {
+      return '&type_of_product=' + type;
+    },
+
+    getLastPartOfUrl(){
+      let url = "offset=" + this.OFFSET + 
+        "&limit=" + this.LIMIT + 
+        "&price_gte=" + this.MIN_PRICE + 
+        "&price_lte=" + this.MAX_PRICE;
+      url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+      url = url + "&q=";
+      //  + this.CATALOG_SEARCH_STRING;
+      return url;        
+    },
+
     toggleCategory(item) {
       item.filterPanel = !item.filterPanel;
     },
 
-    openMainCategory(category){
-      this.SET_ALL_CURRENT_CATEGORIES({
-        mainCategory: category.id,
-        middleCategory: null,
-        lastCategory: null,
-      });
-      this.SET_CATEGORY_ID(category.id);
-      this.$router.push('/category/' + category.id);
-    },
-
-    openMiddleCategory(mainCategory, middleCategory){
-      this.SET_ALL_CURRENT_CATEGORIES({
-          mainCategory: mainCategory.id,
-          middleCategory: middleCategory.id,
-          lastCategory: null,
-      });
-      this.SET_CATEGORY_ID(middleCategory.id);
-      this.$router.push('/category/' + middleCategory.id);
-    },
-
-    openLastCategory(mainCategory, middleCategory, lastCategory){
-      this.SET_ALL_CURRENT_CATEGORIES({
-          mainCategory: mainCategory.id,
-          middleCategory: middleCategory.id,
-          lastCategory: lastCategory.id,
-      });
-      this.SET_CATEGORY_ID(lastCategory.id);
-      this.$router.push('/category/' + lastCategory.id);
+    openCategory(category){
+      let url = this.getCategoryUrl(category.id);
+      url = url + this.getTypeOfProduct(this.TYPE_OF_PRODUCT);
+      this.$router.push(url);
     },
 
     toggleFilterCategory(category){
-      this.categories.forEach(item => {
-        item.selected = false;
-        if (item.name === category.name) item.selected = true;
-      });
-      this.SET_TYPE_OF_PRODUCT(category);
+      let url = this.getCategoryUrl(this.CATEGORY_ID);
+      url = url + this.getTypeOfProduct(category);
+      this.$router.push(url);
     },
   },
 
-  mounted(){
-    // console.log(this.TYPE_OF_PRODUCT);
-    this.toggleFilterCategory(this.TYPE_OF_PRODUCT);
-  },
+  // mounted(){
+  //   console.log(this.TYPE_OF_PRODUCT);
+  //   this.toggleFilterCategory(this.TYPE_OF_PRODUCT);
+  // },
 }
 </script>
 

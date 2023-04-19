@@ -6,14 +6,14 @@
           <circle cx="16.6619" cy="16.911" r="3.08088" fill="white" stroke="#423E48" stroke-width="1.25"/>
           <circle cx="8.33806" cy="7.70623" r="3.08088" transform="rotate(-180 8.33806 7.70623)" fill="white" stroke="#423E48" stroke-width="1.25"/>
         </svg>
-        <div class= "tools-sort__direction" v-if = "!SORT_DIRECTION" @click.prevent="SET_SORT_DIRECTION('-')">А-Я</div>
-        <div class= "tools-sort__direction" v-if = "SORT_DIRECTION"  @click.prevent="SET_SORT_DIRECTION('')">Я-А</div>
+        <div class= "tools-sort__direction" v-if = "!SORT_DIRECTION" @click.prevent="changeDirection('-')">А-Я</div>
+        <div class= "tools-sort__direction" v-if = "SORT_DIRECTION"  @click.prevent="changeDirection('')">Я-А</div>
         <li 
             :class="[item.type === SORT_TYPE ? 'tools-sort__item active' : 'tools-sort__item']"
-            v-for = "item in sortItems"
+            v-for = "item in ALL_SORT_OF_PRODUCTS"
             :key = "item.type"
         >
-            <a href="" class="tools-sort_link" @click="changeSort($event, item)">{{ item.name }}</a>
+            <a href="" class="tools-sort_link" @click.prevent="changeSort(item.type)">{{ item.name }}</a>
         </li>
     </ul>
 </template>
@@ -26,27 +26,54 @@
     name: 'SortPanel',
 
     computed: {
-        ...mapGetters("query", ["SORT_TYPE", "SORT_DIRECTION"]),
-    },
-
-    data() {
-        return {
-            sortItems: [
-                {name: 'По дате добавления', type: 'created_at'},
-                {name: 'цене', type: 'price'},
-                {name: 'скидке', type: 'discount'},
-            ],
-        };
+      ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION", "ALL_SORT_OF_PRODUCTS"]),
+      ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
     },
 
     methods: {
-        ...mapMutations("query", ["SET_SORT_TYPE", "SET_SORT_DIRECTION"]),
+      ...mapMutations("query", ["SET_SORT_TYPE", "SET_SORT_DIRECTION"]),
 
-        changeSort(e, type) {
-            e.preventDefault();
-            this.SET_SORT_TYPE(type);
-        },
+      getCatalogUrl(){
+        let url = "/catalog?";
+        url = url + this.getLastPartOfUrl();
+        return url;
+      },
 
+      getCategoryUrl(id){
+        let url = "/category/";
+        if (id) url = url + id + "?";
+        url = url + this.getLastPartOfUrl();
+        return url;
+      },
+
+      getLastPartOfUrl(){
+        let url = "offset=" + this.OFFSET + 
+          "&limit=" + this.LIMIT + 
+          "&price_gte=" + this.MIN_PRICE + 
+          "&price_lte=" + this.MAX_PRICE;
+        url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+        url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
+        url = url + "&q=" + this.CATALOG_SEARCH_STRING;
+        return url;        
+      },
+
+      changeSort(type) {
+        this.SET_SORT_TYPE(type);
+        if (this.CATEGORY_ID) {
+          this.$router.push(this.getCategoryUrl(this.CATEGORY_ID));
+        } else {
+          this.$router.push(this.getCatalogUrl());
+        }
+      },
+
+      changeDirection(direction) {
+        this.SET_SORT_DIRECTION(direction);
+        if (this.CATEGORY_ID) {
+          this.$router.push(this.getCategoryUrl(this.CATEGORY_ID));
+        } else {
+          this.$router.push(this.getCatalogUrl());
+        }
+      },
     },
   }
 </script>

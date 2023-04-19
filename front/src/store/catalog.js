@@ -82,7 +82,7 @@ export default {
 
     SET_SHOWN_ITEMS_LIST(state, list) {
       state.shownItemslist = [...list];
-    }
+    },
   },
 
   actions: {
@@ -96,7 +96,7 @@ export default {
         '&ordering=' + rootGetters['query/SORT_DIRECTION'] + rootGetters['query/SORT_TYPE'] +
         '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING'];
 
-        if (rootGetters['query/TYPE_OF_PRODUCT'].type !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type;
+        if (rootGetters['query/TYPE_OF_PRODUCT'] !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'];
 
         const response = await axios.get(process.env.VUE_APP_API_URL + queryData);
         commit("SET_CATALOG_ITEMS", response.data);
@@ -118,7 +118,7 @@ export default {
         '&ordering=' + rootGetters['query/SORT_DIRECTION'] + rootGetters['query/SORT_TYPE'] +
         '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING'];
 
-        if (rootGetters['query/TYPE_OF_PRODUCT'].type !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'].type
+        if (rootGetters['query/TYPE_OF_PRODUCT'] !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT']
         
         const response = await axios.get(process.env.VUE_APP_API_URL + queryData);
         commit("SET_CATALOG_ITEMS", response.data);

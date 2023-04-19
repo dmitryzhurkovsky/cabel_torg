@@ -14,7 +14,7 @@
             <div class="content-block">
               <div class="content-block__subcategory recomendation__nav" v-if = "LastCategory.length">
                   <div 
-                    class="recomendation__nav__item"
+                    :class="[category.id == this.CATEGORY_ID ? 'recomendation__nav__item active' : 'recomendation__nav__item']"
                     v-for = "category in LastCategory[0].subItems"
                     :key = "category.id"
                     @click.stop = setActiveCategory(category.id)
@@ -80,13 +80,6 @@
 
     props: {
       id: null,
-      price_gte: 0,
-      price_lte: 10000,
-      type_of_product: '',
-      q: '',
-      ordering: '',
-      offset: 0,
-      limit: 20,
     },
 
     components:
@@ -102,21 +95,19 @@
 
     watch: {
       ChangeParameters: async function() {
-        this.SET_CATEGORY_ID(this.$props.id);
-        this.setBreabcrumbs();
-        // await this.getData(this.$props.id);
         await this.getData(this.CATEGORY_ID);
+        this.setBreabcrumbs();
       },
 
-      CATEGORY_ID: function() {
-        this.SET_CATALOG_SEARCH_STRING('');
-      },
+      // CATEGORY_ID: function() {
+      //   this.SET_SEARCH_STRING('');
+      // },
     },
 
     computed: {
         ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES", "DEVICE_VIEW_TYPE", "ALL_CATEGORIES"]),
         ...mapGetters("catalog", ["ITEMS_LIST", "CATALOG_SEARCH_STRING"]),
-        ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SEARCH_STRING", "SORT_TYPE", "SORT_DIRECTION"]),
+        ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION"]),
         ...mapGetters("breadcrumb", ["STACK"]),
 
         LastCategory(){
@@ -128,9 +119,10 @@
         },
 
         ChangeParameters(){
-          return String(this.LIMIT) + String(this.OFFSET) + JSON.stringify(this.TYPE_OF_PRODUCT) + String(this.MIN_PRICE) + String(this.SORT_DIRECTION) + 
-                  String(this.MAX_PRICE) + String(this.CATEGORY_ID) + this.CATALOG_SEARCH_STRING + this.VIEW_TYPE + JSON.stringify(this.SORT_TYPE) +
-                  JSON.stringify(this.STACK);
+          return String(this.LIMIT) + String(this.OFFSET) + String(this.TYPE_OF_PRODUCT) + String(this.MIN_PRICE) + String(this.SORT_DIRECTION) + 
+                  String(this.MAX_PRICE) + String(this.CATEGORY_ID) + this.CATALOG_SEARCH_STRING + this.VIEW_TYPE + String(this.SORT_TYPE);
+                  //  +
+                  // JSON.stringify(this.STACK);
         },
 
         isMobileVersion(){
@@ -144,14 +136,13 @@
     methods: {
       ...mapActions("catalog", ["GET_CATALOG_ITEMS", "GET_ALL_CATALOG_ITEMS"]),
       ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
-      ...mapMutations("query", ["SET_CATEGORY_ID", "SET_OFFSET"]),
-      ...mapMutations("query", ["SET_SEARCH_STRING"]),
+      ...mapMutations("query", ["SET_SEARCH_STRING", "SET_CATEGORY_ID", "SET_OFFSET", "SET_LIMIT", "SET_MIN_PRICE", "SET_MAX_PRICE", "SET_TYPE_OF_PRODUCT", "SET_SORT_TYPE", 
+        "SET_SORT_DIRECTION"]),
       ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING"]),
       ...mapMutations("notification", ["SET_IS_LOADING"]),
 
-      async getData(category) {
+      async getData() {
         this.SET_IS_LOADING(true);
-        this.SET_CATEGORY_ID(category);
         if (this.CATEGORY_ID) {
           if (this.CATALOG_SEARCH_STRING) {
             await this.GET_ALL_CATALOG_ITEMS();
@@ -164,14 +155,43 @@
         this.SET_IS_LOADING(false);
       },
 
+      getCatalogUrl(){
+        let url = "/catalog?";
+        url = url + this.getLastPartOfUrl();
+        return url;
+      },
+
+      getCategoryUrl(id){
+        let url = "/category/";
+        if (id) url = url + id + "?";
+        url = url + this.getLastPartOfUrl();
+        return url;
+      },
+
+      getLastPartOfUrl(){
+        let url = "offset=" + this.OFFSET + 
+          "&limit=" + this.LIMIT + 
+          "&price_gte=" + this.MIN_PRICE + 
+          "&price_lte=" + this.MAX_PRICE;
+        url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+        url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
+        url = url + "&q=" + this.CATALOG_SEARCH_STRING;
+        return url;        
+      },
+
+
       setActiveCategory(id){
-        this.SET_CATEGORY_ID(id);
-        this.setBreabcrumbs();
-        this.$router.push('/category/' + id);
+        this.SET_CATALOG_SEARCH_STRING('');
+        if (id) {
+          this.$router.push(this.getCategoryUrl(id));
+        } else {
+          this.$router.push(this.getCatalogUrl());
+        }  
       },
 
       clearSearchString(){
         this.SET_SEARCH_STRING('');
+        this.SET_CATALOG_SEARCH_STRING('');
       },
 
       setIsFilterPanelOpen(data) {
@@ -190,7 +210,6 @@
         const categoryStack = [];
         categoryStack.push(Number(this.$props.id));
         let curLevel = this.ALL_CATEGORIES.filter(item => item.id == this.$props.id)[0];
-        // console.log('CurLevel ', this.$props.id);
         while (curLevel.parent_category_id) {
           const parent_category_id = curLevel.parent_category_id;
           categoryStack.push(parent_category_id);
@@ -218,19 +237,45 @@
           });
         }; 
       },
+
+      setParametersFromURL(){
+        // console.log('Set parameters ', this.id);
+        if (this.CATEGORY_ID !== this.id) this.SET_CATEGORY_ID(this.id);
+        if (this.$route.query.limit && this.LIMIT !== this.$route.query.limit) this.SET_LIMIT(this.$route.query.limit);
+        if (this.$route.query.offset && this.OFFSET !== this.$route.query.offset) this.SET_OFFSET(this.$route.query.offset);
+        if (this.$route.query.price_gte && this.MIN_PRICE !== this.$route.query.price_gte) this.SET_MIN_PRICE(this.$route.query.price_gte);
+        if (this.$route.query.price_lte && this.MAX_PRICE !== this.$route.query.price_lte) this.SET_MAX_PRICE(this.$route.query.price_lte);
+        if (this.CATALOG_SEARCH_STRING !== this.$route.query.q) {
+          this.SET_CATALOG_SEARCH_STRING(this.$route.query.q);
+          this.SET_SEARCH_STRING(this.$route.query.q);
+        }
+        if (this.$route.query.type_of_product && this.TYPE_OF_PRODUCT !== this.$route.query.type_of_product) this.SET_TYPE_OF_PRODUCT(this.$route.query.type_of_product);
+        if (this.$route.query.ordering) {
+          const total = this.$route.query.ordering;
+          let direction = '';
+          let type = ''
+          if (total[0] === '-') {
+            direction = '-';
+            type = total.slice(1);
+          } else {
+            direction = '';
+            type = total;
+          }
+          // console.log('Set parameters ', direction, '  -   ', type);
+          if (this.SORT_TYPE !== type) this.SET_SORT_TYPE(type)
+          if (this.SORT_DIRECTION !== direction) this.SET_SORT_DIRECTION(direction);
+        };
+      }
     },
 
-    // async beforeUpdate(){
-    //   this.SET_CATEGORY_ID(this.$props.id);
-    //   // await this.getData(this.$props.id);
-    //   this.setBreabcrumbs();
-    // },
+    async beforeUpdate(){
+      console.log('BeforeUpdate', this.$route.query);
+      this.setParametersFromURL();
+    },
 
     async mounted() {
-      console.log(this.$route.query);
-      this.SET_CATEGORY_ID(this.$props.id);
-      this.setBreabcrumbs();
-      await this.getData(this.$props.id);
+      console.log('Mount', this.$route.query,);
+      this.setParametersFromURL();
     }    
   }
 </script>

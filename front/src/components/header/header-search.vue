@@ -12,7 +12,7 @@
 
       </div>
       
-      <div class="dropdown" v-if = "FINDED_ELEMENTS.length">
+      <div class="dropdown" v-if = "FINDED_ELEMENTS.length && SEARCH_STRING !== CATALOG_SEARCH_STRING">
         <div class="dropdown__wrapper">
           <div class="dropdown__content popup-cart">
               <h3 class="">Найденые товары</h3>
@@ -25,7 +25,7 @@
                       :item = item
                       @click.stop = "openCardItem(item.id)"
                   />
-                  <div class="search__footer" @click = "openFindedElementInCatalg">
+                  <div class="search__footer" @click = "openFindedElementsInCatalg">
                     Показать все
                   </div>
                 </div>
@@ -54,7 +54,8 @@ export default {
   },
 
   computed:{
-    ...mapGetters("query", ["SEARCH_STRING", "FINDED_ELEMENTS"]),
+    ...mapGetters("query", ["SEARCH_STRING", "FINDED_ELEMENTS", "SORT_DIRECTION", "SORT_TYPE"]),
+    ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
     ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
   },
 
@@ -71,7 +72,7 @@ export default {
 
   methods: {
     ...mapMutations("query", ["SET_SEARCH_STRING", "SET_FINDED_ELEMENTS", "SET_CATEGORY_ID"]),
-    ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING", ""]),
+    ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING"]),
     ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY"]),
     ...mapActions("query", ["FIND_ELEMENTS"]),
 
@@ -86,19 +87,30 @@ export default {
     },
 
     clearString(){
-        this.queryString = '';
-        this.SET_SEARCH_STRING('');
-        this.SET_CATALOG_SEARCH_STRING('');
+      this.queryString = '';
+      this.SET_SEARCH_STRING('');
+      this.SET_CATALOG_SEARCH_STRING('');
+      let url = "/catalog?";
+      url = url + "offset=0&limit=10&price_gte=0&price_lte=10000";
+      url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+      url = url + '&type_of_product=all';
+      url = url + "&q=" + this.CATALOG_SEARCH_STRING;
+      this.$router.push(url);
     },
 
-    openFindedElementInCatalg(){
+    openFindedElementsInCatalg(){
       this.SET_CATALOG_SEARCH_STRING(this.SEARCH_STRING);
-      this.SET_SEARCH_STRING('');
-      this.SET_CURRENT_TOP_CATEGORY(null);
-      this.SET_CURRENT_SUB_CATEGORY(null);
-      this.SET_CURRENT_LAST_CATEGORY(null);
+      // this.SET_SEARCH_STRING('');
+      // this.SET_CURRENT_TOP_CATEGORY(null);
+      // this.SET_CURRENT_SUB_CATEGORY(null);
+      // this.SET_CURRENT_LAST_CATEGORY(null);
       // const category = this.LAST_CATEGORIES_ITEM_ACTIVE || this.SUB_CATEGORIES_ITEM_ACTIVE || this.TOP_CATEGORIES_ITEM_ACTIVE + '12';
-      this.$router.push('/catalog');
+      let url = "/catalog?";
+      url = url + "offset=0&limit=10&price_gte=0&price_lte=10000";
+      url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+      url = url + '&type_of_product=all';
+      url = url + "&q=" + this.CATALOG_SEARCH_STRING;
+      this.$router.push(url);
     }
 
   },

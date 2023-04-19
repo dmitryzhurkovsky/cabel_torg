@@ -20,7 +20,9 @@
 
     computed: {
       ...mapGetters("catalog", ["TOTAL_PAGES", "ACTIVE_PAGE"]),
-      ...mapGetters("query", ["LIMIT", "OFFSET"]),
+      ...mapGetters("query", 
+        ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SEARCH_STRING", "SORT_TYPE",  "SORT_DIRECTION", "LIMIT_ITEMS"
+      ]),
 
       watch: {
         OFFSET: function(){
@@ -93,10 +95,40 @@
     methods: {
       ...mapMutations("query", ["SET_OFFSET"]),
 
+      getCatalogUrl(offset){
+        let url = "/catalog?";
+        url = url + this.getLastPartOfUrl(offset);
+        return url;
+      },
+
+      getCategoryUrl(id, offset){
+        let url = "/category/";
+        if (id) url = url + id + "?";
+        url = url + this.getLastPartOfUrl(offset);
+        return url;
+      },
+
+      getLastPartOfUrl(offset){
+        let url = "offset=" + offset + 
+          "&limit=" + this.LIMIT + 
+          "&price_gte=" + this.MIN_PRICE + 
+          "&price_lte=" + this.MAX_PRICE;
+        url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+        url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
+        url = url + "&q=" + this.SEARCH_STRING;
+        return url;        
+      },
+
       onChangePage(data) {
         if (data.pageNumber && data.isAvailable) {
           const newOffset = (data.pageNumber - 1) * this.LIMIT;
-          this.SET_OFFSET(newOffset);
+          // this.SET_OFFSET(newOffset);
+          console.log('Pagination ', this.CATEGORY_ID);
+          if (this.CATEGORY_ID) {
+            this.$router.push(this.getCategoryUrl(this.CATEGORY_ID, newOffset));
+          } else {
+            this.$router.push(this.getCatalogUrl(newOffset));
+          }
         }
       }
     }
