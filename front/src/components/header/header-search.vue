@@ -5,9 +5,7 @@
           <input type="text" name="focus" required class="search-box" placeholder="Поиск товаров"
             v-model = "queryString" @input="onInput()"
           />
-          <button class="icon-close" type="reset" v-if ="queryString.length"
-                  @click = "clearString"
-          ></button>
+          <button class="icon-close" type="reset" v-if ="queryString" @click = "clearString"></button>
         </div>
 
       </div>

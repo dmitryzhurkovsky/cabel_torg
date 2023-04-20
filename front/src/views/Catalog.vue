@@ -275,16 +275,48 @@
 
       setParametersFromURL(){
         // console.log('Set parameters ', this.id);
+        let isFailInParams = false;
         if (this.CATEGORY_ID !== this.id) this.SET_CATEGORY_ID(this.id);
-        if (this.$route.query.limit && this.LIMIT !== this.$route.query.limit) this.SET_LIMIT(this.$route.query.limit);
-        if (this.$route.query.offset && this.OFFSET !== this.$route.query.offset) this.SET_OFFSET(this.$route.query.offset);
-        if (this.$route.query.price_gte && this.MIN_PRICE !== this.$route.query.price_gte) this.SET_MIN_PRICE(this.$route.query.price_gte);
-        if (this.$route.query.price_lte && this.MAX_PRICE !== this.$route.query.price_lte) this.SET_MAX_PRICE(this.$route.query.price_lte);
-        if (this.CATALOG_SEARCH_STRING !== this.$route.query.q) {
-          this.SET_CATALOG_SEARCH_STRING(this.$route.query.q);
-          this.SET_SEARCH_STRING(this.$route.query.q);
+        if (this.$route.query.limit) {
+          if (this.LIMIT !== this.$route.query.limit) this.SET_LIMIT(this.$route.query.limit);
+        } else {
+          this.SET_LIMIT(this.LIMIT);
+          isFailInParams = true;
         }
-        if (this.$route.query.type_of_product && this.TYPE_OF_PRODUCT !== this.$route.query.type_of_product) this.SET_TYPE_OF_PRODUCT(this.$route.query.type_of_product);
+        if (this.$route.query.offset) {
+          if (this.OFFSET !== this.$route.query.offset) this.SET_OFFSET(this.$route.query.offset);
+        } else {
+          this.SET_OFFSET(this.LIMIT);
+          isFailInParams = true;
+        }
+        if (this.$route.query.price_gte) {
+          if (this.MIN_PRICE !== this.$route.query.price_gte) this.SET_MIN_PRICE(this.$route.query.price_gte);
+        } else {
+          this.SET_MIN_PRICE(this.MIN_PRICE);
+          isFailInParams = true;
+        }
+        if (this.$route.query.price_lte) {
+          if (this.MAX_PRICE !== this.$route.query.price_lte) this.SET_MAX_PRICE(this.$route.query.price_lte);
+        } else {
+          this.SET_MAX_PRICE(this.MAX_PRICE);
+          isFailInParams = true;
+        }
+        if (this.$route.query.q) {
+          if (this.CATALOG_SEARCH_STRING !== this.$route.query.q) {
+            this.SET_CATALOG_SEARCH_STRING(this.$route.query.q);
+            this.SET_SEARCH_STRING(this.$route.query.q);
+          } 
+        } else {
+          this.SET_CATALOG_SEARCH_STRING("");
+          this.SET_SEARCH_STRING("");
+          isFailInParams = true;
+        }
+        if (this.$route.query.type_of_product) {
+          if (this.TYPE_OF_PRODUCT !== this.$route.query.type_of_product) this.SET_TYPE_OF_PRODUCT(this.$route.query.type_of_product);
+        } else {
+          this.SET_TYPE_OF_PRODUCT(this.TYPE_OF_PRODUCT);
+          isFailInParams = true;
+        }
         if (this.$route.query.ordering) {
           const total = this.$route.query.ordering;
           let direction = '';
@@ -296,10 +328,21 @@
             direction = '';
             type = total;
           }
-          // console.log('Set parameters ', direction, '  -   ', type);
-          if (this.SORT_TYPE !== type) this.SET_SORT_TYPE(type)
+          if (this.SORT_TYPE !== type) this.SET_SORT_TYPE(type);
           if (this.SORT_DIRECTION !== direction) this.SET_SORT_DIRECTION(direction);
-        };
+        } else {
+          this.SET_SORT_TYPE(this.SORT_TYPE);
+          this.SET_SORT_DIRECTION(this.SORT_DIRECTION);
+          isFailInParams = true;
+        }
+
+        if (isFailInParams) {
+          if (this.id) {
+            this.$router.push(this.getCategoryUrl(this.id));
+          } else {
+            this.$router.push(this.getCatalogUrl());
+          }  
+        }
       }
     },
 

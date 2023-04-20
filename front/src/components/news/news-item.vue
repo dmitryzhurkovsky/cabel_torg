@@ -34,6 +34,7 @@ export default {
 
   methods: {
     onOpenOneNew(id){
+      setTimeout(() => window.scrollTo(0, 0), 0);
       this.$router.push('/new/' + id);
     }
   }
