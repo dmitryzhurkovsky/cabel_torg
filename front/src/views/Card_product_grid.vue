@@ -400,6 +400,7 @@
   }
   &__main-img{
     flex-basis: 40%;
+    text-align: center;
   }
   &__info{
     flex-basis: 60%;
@@ -731,7 +732,7 @@
     border-radius: 8px;
     min-height: 200px;
     @media (max-width: $md3+px) {
-      font-size: 14px;
+      font-size: 12px;
     }
     &__row{
       border: 1px solid #eee;
@@ -755,7 +756,7 @@
     color: #423E48;
     margin: 8px 0;
     @media (max-width: $md3+px) {
-      font-size: 14px;
+      font-size: 12px;
     }
 
   }
