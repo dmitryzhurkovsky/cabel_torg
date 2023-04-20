@@ -11,9 +11,9 @@
               <FilterPanel />
             </div>
 <!--        # CONTENT-->
-            <div class="content-block">
+            <div class="content-block slider_subcategory__block">
               <div class="content-block__subcategory recomendation__nav" v-if = "LastCategory.length && !isMobileVersion">
-                  <div 
+                  <div class="slider_subcategory__row"
                     :class="[category.id == this.CATEGORY_ID ? 'recomendation__nav__item active' : 'recomendation__nav__item']"
                     v-for = "category in LastCategory[0].subItems"
                     :key = "category.id"
@@ -32,10 +32,10 @@
                   }"
                   :pagination= "{
                     el: '.swiper-pagination',
-                    clickable: true,
+                    clickable: false,
                     type: 'bullets',
                     bulletClass: 'swiper-pagination-bullet',
-                    bulletElement: 'span'
+                    bulletElement: 'span',
                   }"
                 >
 
@@ -45,7 +45,7 @@
                     </div>
                   </swiper-slide>
 
-                  <div class="swiper-pagination"></div>
+
                 </swiper>
               </div>  
               <div v-if = "isMobileVersion" class="btn mobile-filter mb-20" @click.stop="setIsFilterPanelOpen(!isFilterPanelOpen)">Фильтры</div>
@@ -515,20 +515,28 @@
     //min-width: 270px;
   }
 }
+
+.slider_subcategory__block{
+  max-width: 100%;
+}
+
+.slider_subcategory__row{
+  margin: 10px 0;
+}
 .recomendation__nav__item{
   background: #FFFFFF;
   border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 50px;
-  font-size: 12px;
+  font-size: 11px;
   line-height: 24px;
   text-align: center;
   opacity: 0.5;
   margin-right: 10px;
-  padding: 5px 20px;
+  padding: 0px 20px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  max-width: 200px;
+  max-width: 180px;
   transition: all 0.5s ease;
   cursor: pointer;
 }
