@@ -371,21 +371,6 @@
   }
 
 }
-
-// filter{
-//   &__box{
-//         font-weight: 400;
-//         position: relative;
-//       .icon-arrow-l:before{
-//         transform: rotate(90deg);
-//         cursor: pointer;
-//       }
-//       .icon-arrow-r:before{
-//         transform: rotate(-90deg);
-//         cursor: pointer;
-//       }
-//     }
-// }
 .content-block{
 
   &__subcategory{
@@ -487,5 +472,21 @@
     //min-width: 270px;
   }
 }
-
+.recomendation__nav__item{
+  background: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 50px;
+  font-size: 12px;
+  line-height: 24px;
+  text-align: center;
+  opacity: 0.5;
+  margin-right: 10px;
+  padding: 5px 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 200px;
+  transition: all 0.5s ease;
+  cursor: pointer;
+}
 </style>

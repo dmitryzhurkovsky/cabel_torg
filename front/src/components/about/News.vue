@@ -217,6 +217,7 @@
 <style lang="scss">
 .news__item__box img{
   width: 100%;
+  height: 100%;
 }
 
 </style>

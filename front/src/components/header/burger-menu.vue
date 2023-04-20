@@ -1,5 +1,11 @@
 <template lang="html">
   <div class="burger__menu__open">
+      <div class="burger__close">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 1L15 15" stroke="#4275D8" stroke-width="2"/>
+              <path d="M15 1L1 15" stroke="#4275D8" stroke-width="2"/>
+          </svg>
+      </div>
     <ul class="burger__menu_list animated" v-if="CATALOG.length">
       <li 
         v-for   = "mainItem in CATALOG"
@@ -188,7 +194,7 @@ export default {
 
 .burger__menu__open{
   position: absolute;
-  top: 125px;
+  top: 0;
   width: 100%;
   height: 100%;
   background-color: #fff;
@@ -294,5 +300,9 @@ div[class="active"]{
   transform: rotate(180deg);
 }
 
-
+.burger{
+  &__close{
+    padding: 16px 0 0 16px;
+  }
+}
 </style>
