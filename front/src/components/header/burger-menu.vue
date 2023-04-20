@@ -81,11 +81,11 @@
           </div>
         </div>
         <ul class="second" v-if = "activeMenuItem === 'Покупателям'">
-          <li><a @click.prevent="openPage('how_to_work')">Как оформит заказ</a></li>        
-          <li><a @click.prevent="openPage('shipping')">Оплата и доставка</a></li>        
-          <li><a @click.prevent="openPage('wholesale')">Оптовым клиентам</a></li>        
-          <li><a @click.prevent="openPage('warranty')">Гарантийное обслуживание</a></li>        
-          <li><a @click.prevent="openPage('hoffer')">Публичная оферта</a></li>        
+          <li><a @click.prevent="openPage('/how_to_work')">Как оформит заказ</a></li>        
+          <li><a @click.prevent="openPage('/shipping')">Оплата и доставка</a></li>        
+          <li><a @click.prevent="openPage('/wholesale')">Оптовым клиентам</a></li>        
+          <li><a @click.prevent="openPage('/warranty')">Гарантийное обслуживание</a></li>        
+          <li><a @click.prevent="openPage('/hoffer')">Публичная оферта</a></li>        
         </ul>  
       </li>
       <li>
@@ -101,9 +101,9 @@
           </div>
         </div>
         <ul class="second" v-if = "activeMenuItem === 'О нас'">
-          <li><a @click.prevent="openPage('about')">О компании</a></li>        
-          <li><a @click.prevent="openPage('contacts')">Контактная информация</a></li>        
-          <li><a @click.prevent="openPage('news')">Новости</a></li>        
+          <li><a @click.prevent="openPage('/about')">О компании</a></li>        
+          <li><a @click.prevent="openPage('/contacts')">Контактная информация</a></li>        
+          <li><a @click.prevent="openPage('/news')">Новости</a></li>        
         </ul>  
       </li>
       <!-- <li>
@@ -182,8 +182,9 @@ export default {
 
     openPage(page) {
       this.UPDATE_IS_CATALOG_OPEN(false);
-      if (this.$router.path != page) {
-          this.$router.push(page);
+      console.log('Burger', page, this.$route.path);
+      if (this.$route.path != page) {
+        this.$router.push(page);
       }
     }
   }
