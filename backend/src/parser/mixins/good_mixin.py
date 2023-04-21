@@ -314,7 +314,7 @@ class GoodsMixin(BaseMixin, ABC):
         await self.db.execute(
             text(f"""
             update products
-            set is_visible = True
+            set is_visible = False
             from products p
             join product_attribute pa on p.id = pa.product_id
             where pa.attribute_id in ({", ".join((str(el) for el in self.do_not_upload_to_the_site_attribute_cache))})
