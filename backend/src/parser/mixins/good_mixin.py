@@ -319,7 +319,7 @@ class GoodsMixin(BaseMixin, ABC):
               SELECT 1
               FROM product_attribute pa
               WHERE p.id = pa.product_id
-                AND pa.attribute_id in {", ".join((str(el) for el in self.do_not_upload_to_the_site_attribute_cache))})
+                AND pa.attribute_id in ({", ".join((str(el) for el in self.do_not_upload_to_the_site_attribute_cache))})
             );
             """)
         )
