@@ -122,8 +122,7 @@
       onChangePage(data) {
         if (data.pageNumber && data.isAvailable) {
           const newOffset = (data.pageNumber - 1) * this.LIMIT;
-          // this.SET_OFFSET(newOffset);
-          console.log('Pagination ', this.CATEGORY_ID);
+          setTimeout(() => window.scrollTo(0, 0), 0);
           if (this.CATEGORY_ID) {
             this.$router.push(this.getCategoryUrl(this.CATEGORY_ID, newOffset));
           } else {

@@ -274,7 +274,6 @@
       },
 
       setParametersFromURL(){
-        // console.log('Set parameters ', this.id);
         let isFailInParams = false;
         if (this.CATEGORY_ID !== this.id) this.SET_CATEGORY_ID(this.id);
         if (this.$route.query.limit) {
@@ -347,12 +346,12 @@
     },
 
     async beforeUpdate(){
-      console.log('BeforeUpdate', this.$route.query);
+      // console.log('BeforeUpdate', this.$route.query);
       this.setParametersFromURL();
     },
 
     async mounted() {
-      console.log('Mount', this.$route.query,);
+      // console.log('Mount', this.$route.query,);
       this.setParametersFromURL();
     }    
   }

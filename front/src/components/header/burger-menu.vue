@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="burger__menu__open">
-      <div class="burger__close">
+      <div class="burger__close" @click="closeMenu">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M1 1L15 15" stroke="#4275D8" stroke-width="2"/>
               <path d="M15 1L1 15" stroke="#4275D8" stroke-width="2"/>
@@ -186,6 +186,10 @@ export default {
       if (this.$route.path != page) {
         this.$router.push(page);
       }
+    },
+
+    closeMenu() {
+      this.UPDATE_IS_CATALOG_OPEN(false);
     }
   }
 }

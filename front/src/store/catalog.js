@@ -59,7 +59,6 @@ export default {
         state.activePage = 1;
       } else {
         state.activePage =  Math.floor(data.offset / data.limit) + 1;
-        console.log('Active page',state.activePage);
       }
       state.tatalPages =  data.back.total % data.limit === 0 ? data.back.total / data.limit: Math.floor(data.back.total / data.limit) + 1;
     },

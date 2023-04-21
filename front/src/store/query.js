@@ -11,7 +11,7 @@ export default {
     sort: 'created_at',
     direction: '',
     view: 'table',
-    minPrice: 0.1,
+    minPrice: 0,
     maxPrice: 10000,
     searchString: '',
     findedElements: [],
