@@ -23,7 +23,7 @@ class GoodsMixin(BaseMixin, ABC):
 
     # It's a special attribute to find goods that shouldn't be uploaded.
     # It's initialized in cache_attribute__do_not_upload_to_site function.
-    do_not_upload_to_site_attribute_id = None
+    do_not_upload_to_site_attribute_name_id = None
 
     # Service methods
     @property
@@ -48,7 +48,7 @@ class GoodsMixin(BaseMixin, ABC):
         """
         if not self.CACHE.get('attributes'):
             self.CACHE['attributes'] = dict()
-        if not self.CACHE['attributes'].get('do_not_upload_to_the_site'):
+        if not isinstance(self.CACHE['attributes'].get('do_not_upload_to_the_site'), set):
             self.CACHE['attributes']['do_not_upload_to_the_site'] = set()
 
         return self.CACHE['attributes']['do_not_upload_to_the_site']
@@ -61,7 +61,7 @@ class GoodsMixin(BaseMixin, ABC):
         """
         if not self.CACHE.get('attributes'):
             self.CACHE['attributes'] = dict()
-        if not self.CACHE['attributes'].get('under_the_order'):
+        if not isinstance(self.CACHE['attributes'].get('under_the_order', None), set):
             self.CACHE['attributes']['under_the_order'] = set()
 
         return self.CACHE['attributes']['under_the_order']
@@ -84,7 +84,7 @@ class GoodsMixin(BaseMixin, ABC):
         query_result = await database_service.get_object(
             db=self.db, model=AttributeName, fields={'payload': 'Не выгружать товар на сайт'}
         )
-        self.do_not_upload_to_site_attribute_id = query_result.id
+        self.do_not_upload_to_site_attribute_name_id = query_result.id
 
     def is_on_the_way_to_the_warehouse(self, attributes: list) -> bool:
         """Check whether a product is on the way to the warehouse."""
@@ -255,7 +255,7 @@ class GoodsMixin(BaseMixin, ABC):
                 })
 
             attributes.append(db_attribute)
-            if name_id_db == self.do_not_upload_to_site_attribute_id:
+            if name_id_db == self.do_not_upload_to_site_attribute_name_id:
                 self.do_not_upload_to_the_site_attribute_cache.add(db_attribute.id)
             if name_id_db == self.under_the_order_attribute_id:
                 self.under_the_order_attribute_cache.add(db_attribute.id)
@@ -313,10 +313,13 @@ class GoodsMixin(BaseMixin, ABC):
 
         await self.db.execute(
             text(f"""
-            update products
-            set is_visible = False
-            from products p
-            join product_attribute pa on p.id = pa.product_id
-            where pa.attribute_id in ({", ".join((str(el) for el in self.do_not_upload_to_the_site_attribute_cache))})
+            UPDATE products p
+            SET is_visible = false
+            WHERE EXISTS (
+              SELECT 1
+              FROM product_attribute pa
+              WHERE p.id = pa.product_id
+                AND pa.attribute_id in {", ".join((str(el) for el in self.do_not_upload_to_the_site_attribute_cache))})
+            );
             """)
         )
