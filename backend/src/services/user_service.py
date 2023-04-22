@@ -30,9 +30,9 @@ class UserService:
     def send_confirmation_url(cls, user: User):
         confirmation_url = cls.generate_confirmation_url(user_id=user.id)
         message = f"""
-        Добрый день {user.full_name}. Регистрация прошла успешно. 
-        Чтобы активировать аккаунт перейдите по ссылке {confirmation_url}.
-        Желаем Вам приятных покупок!
+            Добрый день {user.full_name}. Регистрация прошла успешно. 
+            Чтобы активировать аккаунт перейдите по ссылке {confirmation_url}.
+            Желаем Вам приятных покупок!
         """
         html_message = template.render({
             'name': user.full_name,
