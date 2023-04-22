@@ -150,17 +150,32 @@ import { getters } from '../store/getters'
   <div class="discount-container">
     <div class="filter__block" v-if="categories.length">
         <div class="filter__discount" v-if="activeCategory">
-          <div class="filter__dbox" style="margin-bottom: 30px;">{{ activeCategory.name }}</div>
-          <div class="filter__dbox">
-            <Input
-              name="categoryDiscount"
-              width="100px"
-              v-model:value="v.categoryDiscount.$model"
-            />
+          <div class="filter__attention flex-center">
+              <div class="icon">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 7H11V5H9V7ZM9 15H11V9H9V15ZM9.99 20C4.47 20 0 15.52 0 10C0 4.48 4.47 0 9.99 0C15.52 0 20 4.48 20 10C20 15.52 15.52 20 9.99 20ZM10 2C5.58 2 2 5.58 2 10C2 14.42 5.58 18 10 18C14.42 18 18 14.42 18 10C18 5.58 14.42 2 10 2Z" fill="#423E48"/>
+              </svg>
+              </div>
+              <div class="attention__text">
+                  <p>Ниже устанавливается скидка для целого раздела либо подраздела. Достаточно ввести размер дисконта и нажать "Установить", как все товары указанной категории получат установленную скидку</p>
+              </div>
+
+
           </div>
-          <div class="filter__dbox" style="margin-bottom: 30px;">
-            <Button label="Установить" color="primary" @click="onSetDiscountForCategory()"></Button>
+          <div class="filter__setup_discount">
+              <div class="filter__dbox" style="">{{ activeCategory.name }}</div>
+              <div class="filter__dbox">
+                  <Input
+                          name="categoryDiscount"
+                          width="100px"
+                          v-model:value="v.categoryDiscount.$model"
+                  />
+              </div>
+              <div class="filter__dbox" style="">
+                  <Button label="Установить" color="primary" @click="onSetDiscountForCategory()"></Button>
+              </div>
           </div>
+
         </div>
         <br>
         <div class="filter__box" 
@@ -220,17 +235,31 @@ import { getters } from '../store/getters'
     </div>
     <div class="goods__block">
       <div class="filter__discount" v-if="activeGood">
-          <div class="filter__dbox" style="margin-bottom: 30px;">{{ activeGood.name }}</div>
-          <div class="filter__dbox">
-            <Input
-              name="goodDiscount"
-              width="100px"
-              v-model:value="v.goodDiscount.$model"
-            />
+          <div class="filter__attention flex-center">
+              <div class="icon">
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9 7H11V5H9V7ZM9 15H11V9H9V15ZM9.99 20C4.47 20 0 15.52 0 10C0 4.48 4.47 0 9.99 0C15.52 0 20 4.48 20 10C20 15.52 15.52 20 9.99 20ZM10 2C5.58 2 2 5.58 2 10C2 14.42 5.58 18 10 18C14.42 18 18 14.42 18 10C18 5.58 14.42 2 10 2Z" fill="#423E48"/>
+                  </svg>
+              </div>
+              <div class="attention__text">
+                  <p>Для установки скидки на отдельный товар достаточно выбрать товар снизу и ввести необходимый размер ссылки</p>
+                  <p>Обращаем внимание, что <b>приоритетной</b> является всегда скидка на единичный товар, и изменение скидки на (под)категорию не влечет изменение скидки на товар с уже установленной скидкой</p>
+              </div>
           </div>
-          <div class="filter__dbox" style="margin-bottom: 30px;">
-            <Button label="Установить" color="primary" @click="onSetDiscountForGood()"></Button>
+          <div class="filter__setup_discount">
+              <div class="filter__dbox" style="">{{ activeGood.name }}</div>
+              <div class="filter__dbox">
+                  <Input
+                          name="goodDiscount"
+                          width="100px"
+                          v-model:value="v.goodDiscount.$model"
+                  />
+              </div>
+              <div class="filter__dbox" style="">
+                  <Button label="Установить" color="primary" @click="onSetDiscountForGood()"></Button>
+              </div>
           </div>
+
         </div>
         <br>
         <div class="content-block__list">
@@ -266,20 +295,29 @@ import { getters } from '../store/getters'
                     <Img :image=card.images />
                 </a>
                 <div class="product__action">
-                    <div class="product__article  _label mb-20">Артикул: <span>{{ card.vendor_code }}</span></div>
-                    <div class="product__price">
-                        <span class="product__oldprice old_price">{{ card.price_with_tax }}</span>
-                        <span class="product__oldprice current_price">{{ cardPriceWithDiscount(card) }}</span> 
-                        <span> BYN / {{ card.base_unit.full_name }}</span>
+                    <div class="product__article  _label mb-20"><span>{{ card.vendor_code }}</span></div>
+                    <div class="product__col current_price">
+                        <span class="_label">Цена, BYN / {{ card.base_unit.full_name }}</span>
+                        {{ card.price_with_tax }}
                     </div>
-                    <div class="notice">* Цена указана с учетом НДС.</div>
-                </div>
+                    <div class="product__col discount_price">
+                        <span class="_label">Цена со скидкой, BYN / {{ card.base_unit.full_name }}</span>
+                        {{ cardPriceWithDiscount(card) }}</div>
+                    <div class="product__col product__discount" >
+                        <span class="_label">Размер скидки, %</span>
+                       14
+                    </div>
+
+
+                 </div> <!--  product__action-->
+
+                </div><!--  product-->
             </div>
 
           </div>  
         </div>
     </div>
-  </div>
+
 </template>
 
 <style lang="scss" scoped>
@@ -292,16 +330,65 @@ import { getters } from '../store/getters'
 
   &__block{
     flex-basis: 40%;
+    width: 100%;
+    .icon-arrow-l,
+    .icon-arrow-r{
+      font-weight: bold;
+      margin-left: 15px;
+
+    }
+
   }
   &__discount{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: nowrap;
     align-items: center;
   }
+  &__attention {
+    width: 100%;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 20px;
+    color: #423E48;
+    opacity: 0.4;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-height: 60px;
+    .icon {}
+    .attention__text {
+      padding-left: 20px;
+      p{
+        margin: 0;
+      }
+    }
+  }
+  &__setup_discount{
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 20px 0 0 0;
+
+  }
   &__dbox{
-    flex-basis: 33%;
+
     height: 100%;
+    &:nth-child(1){
+      flex-basis: 50%;
+    }
+    &:nth-child(2){
+      flex-basis: 25%;
+      padding: 0 10px;
+      .form-input{
+        margin-bottom: 0;
+      }
+
+    }
+    &:nth-child(3){
+      flex-basis: 25%;
+
+    }
   }
   &__checkbox{
 
@@ -385,7 +472,7 @@ import { getters } from '../store/getters'
   &__title{
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    //justify-content: space-between;
     padding: 10px 10px 10px 0;
     line-height: 1.8;
     div:first-child {
@@ -394,6 +481,7 @@ import { getters } from '../store/getters'
     .active{
       color:#4275D8;
     }
+
   }
   &__subtitle{
     .subtitle__row{
@@ -405,7 +493,7 @@ import { getters } from '../store/getters'
       }
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      //justify-content: space-between;
       padding: 10px 10px 10px 5px;
       font-size: 14px;
     }
@@ -456,7 +544,7 @@ import { getters } from '../store/getters'
   border: 2px solid #EEEEEE;
   box-sizing: border-box;
   border-radius: 8px;
-  padding: 20px 22px 20px 22px;
+  padding: 10px 12px 10px 12px;
   justify-content: space-between;
 
   &:hover{
@@ -466,10 +554,37 @@ import { getters } from '../store/getters'
     width: 100%;
     flex-basis: 20%;
     text-align: center;
+    max-width: 120px;
     img{
         max-width: 100%;
         object-fit: fill;
     }
+  }
+  &__action{
+    flex-basis: 80%;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+  &__col{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    ._label{
+      margin-bottom: 10px;
+      font-size: 12px;
+      color: #423e48;
+      opacity: 0.6;
+    }
+  }
+  &__discount{
+
+  }
+
+  .discount_price{
+    color: red;
+    font-weight: 500;
   }
 
   &__price{
@@ -535,6 +650,18 @@ import { getters } from '../store/getters'
     background-color: var(--primary-hover);
     color: var(--background-content);
   }
+}
+
+.goods__block{
+  flex-basis: 60%;
+  width: 100%;
+
+  .table-pagination{
+    padding-top: 0;
+    justify-content: right;
+
+  }
+
 }
 
 </style>

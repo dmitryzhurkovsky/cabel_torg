@@ -31,6 +31,9 @@
   column-gap: 10px;
   align-items: center;
   padding: 0 16px;
+  &:nth-child(odd){
+    background: #EEEFF4;
+  }
   @media screen and (max-width: 767px) {
     display: block;
   }

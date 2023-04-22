@@ -42,7 +42,7 @@ const props = defineProps({
   padding: 15px 0;
   position: relative;
   &-image {
-    max-width: 400px;
+    max-width: 100px;
     @media screen and (max-width: 767px) {
       max-width: 200px;
     }
@@ -55,4 +55,8 @@ const props = defineProps({
     }
   }
 }
+.table-row:nth-child(odd){
+  background: red;
+}
+
 </style>

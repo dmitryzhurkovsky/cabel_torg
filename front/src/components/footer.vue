@@ -14,7 +14,7 @@
 
                     <div class="footer__col footer__subrow">
                       <div class="footer__logo">
-                        <img cla src="../assets/logo.svg" alt="CabelTorg">
+                        <img  src="../assets/logo.svg" alt="CabelTorg">
                       </div>
                       <div class="footer__social social">
                         <a :href = SETTINGS.instagram_url class="social__item icon-instagram" target="_blank"></a>
