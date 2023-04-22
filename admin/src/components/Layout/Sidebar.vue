@@ -45,6 +45,10 @@ const links = ref([
 </template>
 
 <style lang="scss" scoped>
+.router-link-active{
+  color:#4275d8;
+  text-decoration: underline;
+}
 .sidebar {
   left: 0;
   top: 62px;
