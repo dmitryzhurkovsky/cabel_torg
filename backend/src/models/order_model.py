@@ -49,7 +49,7 @@ class Order(BaseModel):
     street = Column(String(128))
     house = Column(String(12))
     flat = Column(String(12))
-    delivery_type = relationship('DeliveryType', back_populates='orders')
+    delivery_type = relationship('DeliveryType', back_populates='orders', lazy='joined')
     delivery_type_id = Column(ForeignKey('service__delivery_types.id'))
 
     # relations

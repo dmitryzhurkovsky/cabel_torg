@@ -4,12 +4,14 @@ from starlette import status
 
 from src.core.db.db import get_session
 from src.rest.managers.order_manager import OrderManager
+from src.rest.managers.services_managers import DeliveryTypeManager
 from src.rest.schemas.order_schema import (
     OrderSchema,
     OrderCreateInputSchema,
     OrderUpdateInputSchema
 )
 from src.services.auth_service import AuthService
+from src.services.order_service import OrderService
 
 order_router = APIRouter(tags=['orders'])
 
@@ -45,14 +47,17 @@ async def create_order(
         user=Depends(AuthService.get_current_user),
         session: AsyncSession = Depends(get_session)
 ) -> OrderSchema:
-    # todo add validating delivery type
-    return await OrderManager.create(
+    await DeliveryTypeManager.retrieve(id=order_info.delivery_type_id, session=session)  # check if delivery_type exists
+
+    order = await OrderManager.create(
         input_data={
             'user_id': user.id,
             **order_info.__dict__
         },
         session=session
     )
+    OrderService.send_order_confirmation(user=user, order=order)
+    return order
 
 
 @order_router.delete(

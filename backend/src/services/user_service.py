@@ -40,5 +40,8 @@ class UserService:
             'static_url': f'{settings.STATIC_PATH}/registration'
         })
         EmailService.send_email(
-            receiver=user.email, message=message, html_message=html_message, subject='Confirmation url'
+            receiver=user.email,
+            message=message,
+            html_message=html_message,
+            subject='Закончите регистрацию'
         )
