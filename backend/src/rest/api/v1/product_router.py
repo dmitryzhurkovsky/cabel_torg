@@ -59,10 +59,12 @@ async def get_products(
     )  # todo it better
 
 
-@product_router.get('/products/{product_id}', response_model=ProductSchema)
-async def get_product(product_id: int, session: AsyncSession = Depends(get_session)):
+@product_router.get('/products/{product_id:path}', response_model=ProductSchema)
+async def get_product(product_id: int | str, session: AsyncSession = Depends(get_session)):
     return await ProductManager.retrieve(
         id=product_id,
+        site_link=product_id,
+        use_or_condition=True,
         session=session,
     )
 

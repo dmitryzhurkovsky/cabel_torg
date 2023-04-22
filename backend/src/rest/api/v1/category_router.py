@@ -29,6 +29,19 @@ async def get_categories(
     )
 
 
+@category_router.get('/categories/{category_id:path}', response_model=CategorySchema)
+async def get_category(
+        category_id: int | str,
+        session: AsyncSession = Depends(get_session)
+):
+    return await CategoryManager.retrieve(
+        id=category_id,
+        site_link=category_id,
+        use_or_condition=True,
+        session=session
+    )
+
+
 @category_router.patch('/categories/{category_id}', response_model=CategorySchema)
 async def update_category(
         category_id: int,
