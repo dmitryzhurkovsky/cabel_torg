@@ -2,10 +2,11 @@ from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.mixins.base_mixin import TableType
-from src.rest.managers.base_manager import CRUDManager
-from src.core.utils import hash_password
+from src.core.utils import hash_password, generate_random_password
 from src.models.user_model import User
+from src.rest.managers.base_manager import CRUDManager
 from src.rest.schemas.user_schema import UserCreateSchema, UserUpdateSchema
+from src.services.user_service import UserService
 
 
 class UserManager(CRUDManager):
@@ -19,8 +20,13 @@ class UserManager(CRUDManager):
             input_data: UserCreateSchema,
             session: AsyncSession,
     ) -> TableType:
+        if not input_data.password:
+            input_data.password = generated_password = generate_random_password()
         input_data.password = hash_password(password=input_data.password)  # make it better
+
         user = await super().create(input_data, session)
+        UserService.send_confirmation_url(user=user, generated_password=generated_password)
+
         return user
 
     @classmethod
