@@ -22,7 +22,8 @@ class OrderService:
             'phone_number': user.phone_number,
             'pick_up_point': order.delivery_type.payload,
             'delivery date': order.created_at + relativedelta(days=3),
-            'static_url': f'{settings.STATIC_PATH}'
+
+            'static_url': settings.STATIC_PATH
         })
         EmailService.send_email(
             receiver=user.email, message=message, html_message=html_message, subject='Ващ заказ создан!'

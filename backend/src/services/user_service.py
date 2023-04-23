@@ -37,7 +37,7 @@ class UserService:
         html_message = template.render({
             'name': user.full_name,
             'confirmation_url': confirmation_url,
-            'static_url': f'{settings.STATIC_PATH}/registration'
+            'static_url': settings.STATIC_PATH
         })
         EmailService.send_email(
             receiver=user.email,

@@ -11,9 +11,9 @@ DEBUG = int(os.getenv('DEBUG', 0))
 CORS_ALLOWED_HEADERS = os.environ.get('CORS_ALLOWED_HEADERS', '').split(',')
 ORIGINS = os.environ.get('ORIGINS', '').split(',')
 REDIS_URL = os.getenv('REDIS_URL')
-IMAGES_PATH = os.getenv('IMAGES_PATH', '/images')
-STATIC_PATH = os.getenv('STATIC_PATH', '/static')
-SITE_HOST = os.getenv('SITE_HOST', 'localhost')
+IMAGES_PATH = os.getenv('IMAGES_PATH', '/images')  # it's used for uploading images.
+STATIC_PATH = os.getenv('STATIC_PATH', '/static')  # It's used for generating templates and populate statics files.
+SITE_HOST = os.getenv('SITE_HOST', 'localhost')  # it's used for creating links to sites.
 TEMPLATES_PATH = pathlib.Path(__file__).parent.parent.joinpath('templates')
 template_loader = jinja2.FileSystemLoader(TEMPLATES_PATH)
 templates = jinja2.Environment(loader=template_loader)

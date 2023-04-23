@@ -100,7 +100,7 @@ class InvoiceGenerator:
                 'products_tax_sum': num2words(round(products_tax_sum, 2), lang='ru'),
                 'products_price_with_tax': num2words(round(products_price_with_tax, 2), lang='ru'),
 
-                'static_url': f'{settings.STATIC_PATH}/invoice'
+                'static_url': settings.STATIC_PATH
             }
 
     @staticmethod
