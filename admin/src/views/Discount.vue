@@ -129,7 +129,7 @@
   }
 
   const cardDiscount = (card: IDeliveryType) => {
-    return card.total_discount_percent ? String(card.total_discount_percent) : '-'
+    return card.actual_discount ? String(card.actual_discount) : '-'
   }
 
   const onChangePageNumber = (page: number) => {
@@ -289,7 +289,7 @@
               </div>
           </div>
           <div class="content-block__item product-row" v-if = "goods">
-            <div :class="[card.total_discount_percent ? 'product active' : 'product']"
+            <div :class="[card.actual_discount ? 'product active' : 'product']"
               v-for   = "card in goods"
               :key    = "card.id"
               @click = "onSetAciveGood(card)"
