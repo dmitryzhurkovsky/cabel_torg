@@ -1,4 +1,5 @@
 import locale
+import pathlib
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
@@ -19,7 +20,7 @@ else:
     wkhtmltopdf_executor = '/usr/bin/wkhtmltopdf'
 
 template = settings.templates.get_template('invoice.html')
-styles = f'{settings.STATIC_PATH}/invoice/style.css'
+styles = f'{pathlib.Path(__file__).parent.resolve()}/style.css'
 pdf_kit_config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_executor)
 pdf_kit_options = {
     'page-size': 'Letter',
@@ -100,7 +101,7 @@ class InvoiceGenerator:
                 'products_tax_sum': num2words(round(products_tax_sum, 2), lang='ru'),
                 'products_price_with_tax': num2words(round(products_price_with_tax, 2), lang='ru'),
 
-                'static_url': f'{settings.STATIC_PATH}/invoice'
+                'static_url': settings.STATIC_PATH
             }
 
     @staticmethod

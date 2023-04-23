@@ -91,6 +91,12 @@
                   <div class="input__box">
                     <input id="address" type="text" class="input">
                     <i class="icon-pen input__icon"></i>
+                    <div class="icon_ input__icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 7H11V5H9V7ZM9 15H11V9H9V15ZM9.99 20C4.47 20 0 15.52 0 10C0 4.48 4.47 0 9.99 0C15.52 0 20 4.48 20 10C20 15.52 15.52 20 9.99 20ZM10 2C5.58 2 2 5.58 2 10C2 14.42 5.58 18 10 18C14.42 18 18 14.42 18 10C18 5.58 14.42 2 10 2Z" fill="#423E48"/>
+                        </svg>
+                    </div>
+
                   </div>
                 </div>
 
@@ -306,6 +312,9 @@
   .acc-settings{
     text-align: center;
     margin: 0 auto;
+    .group{
+      margin-bottom: 20px;
+    }
   }
 
   h3{

@@ -6,8 +6,6 @@ from src.rest.managers.user_manager import UserManager
 from src.services.auth_service import AuthService
 from src.services.email_service import EmailService
 
-template = settings.templates.get_template('registration.html')
-
 
 class UserService:
     @staticmethod
@@ -27,18 +25,30 @@ class UserService:
         )
 
     @classmethod
-    def send_confirmation_url(cls, user: User):
-        confirmation_url = cls.generate_confirmation_url(user_id=user.id)
+    def send_confirmation_url(cls, user: User, generated_password: str = None):
+        context = {
+            'static_url': settings.STATIC_PATH,
+            'name': user.full_name
+        }
         message = f"""
-        Добрый день {user.full_name}. Регистрация прошла успешно. 
-        Чтобы активировать аккаунт перейдите по ссылке {confirmation_url}.
-        Желаем Вам приятных покупок!
+            Добрый день {user.full_name}. Регистрация прошла успешно. 
+            Желаем Вам приятных покупок!
         """
-        html_message = template.render({
-            'name': user.full_name,
-            'confirmation_url': confirmation_url,
-            'static_url': f'{settings.STATIC_PATH}/registration'
-        })
+        if generated_password:
+            template_path = 'email/registration_with_generated_password.html'
+            context |= {
+                'generated_password': generated_password,
+                'email': user.email
+            }
+            message += f'Логин {user.email}, пароль {generated_password}'
+        else:
+            template_path = 'email/registration.html'
+
+        template = settings.templates.get_template(template_path)
+        html_message = template.render(context)
         EmailService.send_email(
-            receiver=user.email, message=message, html_message=html_message, subject='Confirmation url'
+            receiver=user.email,
+            message=message,
+            html_message=html_message,
+            subject='Регистрация прошла успешно'
         )

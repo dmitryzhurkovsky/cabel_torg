@@ -130,6 +130,9 @@
                     <div class="group">
                       <label for="IBAN" class="label">Расчетный счет IBAN</label>
                       <input id="IBAN" type="text" :class="{ 'is-invalid': ERRORS.IBAN }" v-model="IBAN" autocomplete=off>
+                      <div id="anim" class="icon_info input__icon">
+                          <div class="tooltip flex-center" data-tooltip="Новые счета IBAN записываются в таком формате: ААВВ ССС DDDD ЕЕЕЕ ЕЕЕЕ ЕЕЕЕ ЕЕЕЕ.">!</div>
+                      </div>
                       <div class="error-message" v-if="ERRORS.IBAN"> {{ ERRORS.IBAN }} </div>
                     </div>
                   </div>
@@ -647,6 +650,8 @@
     .group{
       width: 100%;
       position: relative;
+      margin-bottom: 10px;
+
     }
   }
 
@@ -719,5 +724,88 @@
   background-color: #fff;
   color: #E30044;
 
+}
+
+// tooltip style
+
+.tooltip {
+  position: relative;
+  border: 2px solid #8c8b8e;
+  //padding: 5px 12px;
+  width: 20px;
+  height: 20px;
+  margin: 5px;
+  color: #8c8b8e;
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 50%;
+  opacity: 0.5;
+  padding-top: 2px;
+  justify-content: center;
+}
+
+.tooltip:before,
+.tooltip:after {
+  position: absolute;
+  content: '';
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+.tooltip:before {
+  border-width: 10px 8px 0 8px;
+  border-style: solid;
+  border-color:#423E48 transparent transparent transparent;
+  top: -15px;
+  transform: translateY(20px);
+}
+
+.tooltip:after {
+  content: attr(data-tooltip);
+  background: #423E48;
+  border: 1px solid #423E48;
+  color: #fff;
+  width: 330px;
+  height: 40px;
+  font-size: 12px;
+  line-height: 1.3;
+  font-weight: 300;
+  top: -50px;
+  right: 0;
+
+  padding: 5px 10px;
+  border: 1px solid #423E48;
+  border-radius: 5px;
+  transform: translateY(20px);
+}
+
+.tooltip:hover::before,
+.tooltip:hover::after {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+@keyframes shake {
+  0% {
+    transform: rotate(2deg);
+  }
+  50% {
+    transform: rotate(-3deg);
+  }
+  70% {
+    transform: rotate(3deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+#anim:hover {
+  animation: shake 500ms ease-in-out forwards;
+}
+.icon_info{
+  right: 3px;
+  top: 23px;
 }
 </style>

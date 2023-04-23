@@ -535,8 +535,16 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  max-width: 180px;
+  //max-width: 180px;
   transition: all 0.5s ease;
   cursor: pointer;
+
+}
+.recomendation__nav .active {
+  color: #4275D8;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
+  opacity: 1;
+  font-weight: 600;
+
 }
 </style>

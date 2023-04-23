@@ -19,7 +19,7 @@ class UserBaseSchema(BaseModel):
 
 class UserCreateSchema(UserBaseSchema):
     email: EmailStr
-    password: str
+    password: str | None
     full_name: str
     phone_number: str
     company_name: str

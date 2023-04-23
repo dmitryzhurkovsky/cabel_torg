@@ -2,6 +2,7 @@ from typing import TypeVar, Type
 
 from fastapi import HTTPException
 from pydantic import BaseModel
+from sqlalchemy import or_
 from sqlalchemy.orm import selectinload
 
 from src.core.db.db import Base
@@ -24,10 +25,15 @@ class BaseMixin:
     def init_filtered_fields(cls, filter_fields: dict) -> list:
         """Initiate filter fields for a query."""
         initiated_filter_fields = []
+        use_or_conditions = filter_fields.pop('use_or_condition', False)
 
         for name, value in filter_fields.items():
-            initiated_filter_fields.append(getattr(cls.table, name) == value)
+            model_attribute = getattr(cls.table, name)
+            if model_attribute.type.python_type == type(value):  # To escape situations when we try to filter integer firld by string.
+                initiated_filter_fields.append(model_attribute == value)
 
+        if use_or_conditions:
+            initiated_filter_fields = (or_(*initiated_filter_fields),)
         return initiated_filter_fields
 
     @classmethod

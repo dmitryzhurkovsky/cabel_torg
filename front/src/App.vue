@@ -603,5 +603,8 @@ input{
 
 }
 
+.user-acc__content-block{
+  min-height: 400px;
+}
 
 </style>

@@ -1,6 +1,8 @@
 <template>
   <header class="header">
-    <a href="http://localhost:8080">CabelTorg</a>
+    <a href="http://localhost:8080">
+        <img src="@/assets/logo.svg" alt="CabelTorg">
+    </a>
   </header>
 </template>
 
@@ -18,3 +20,5 @@
   position: fixed;
 }
 </style>
+<script setup lang="ts">
+</script>

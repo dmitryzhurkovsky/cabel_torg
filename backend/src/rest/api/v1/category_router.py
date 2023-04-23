@@ -13,7 +13,7 @@ from src.rest.schemas.category_schema import (
 category_router = APIRouter(tags=['categories'])
 
 
-@category_router.get('/categories', response_model=list[CategorySchema])
+@category_router.get('/categories/', response_model=list[CategorySchema])
 async def get_categories(
         request: Request,
         session: AsyncSession = Depends(get_session),
@@ -26,6 +26,19 @@ async def get_categories(
         session=session,
         limit=limit,
         offset=offset
+    )
+
+
+@category_router.get('/categories/{category_id:path}', response_model=CategorySchema)
+async def get_category(
+        category_id: int | str,
+        session: AsyncSession = Depends(get_session)
+):
+    return await CategoryManager.retrieve(
+        id=category_id,
+        site_link=category_id,
+        use_or_condition=True,
+        session=session
     )
 
 
