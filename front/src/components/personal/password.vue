@@ -119,6 +119,9 @@ export default {
   }
   .acc-settings{
     max-width: 400px;
+    .group{
+      margin-bottom: 20px;
+    }
   }
 }
 
