@@ -26,5 +26,5 @@ class OrderService:
             'static_url': settings.STATIC_PATH
         })
         EmailService.send_email(
-            receiver=user.email, message=message, html_message=html_message, subject='Ващ заказ создан!'
+            receiver=user.email, message=message, html_message=html_message, subject='Ваш заказ создан!'
         )
