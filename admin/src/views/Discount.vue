@@ -10,7 +10,6 @@
   import { helpers, required } from '@vuelidate/validators'
   import { useVuelidate } from '@vuelidate/core'
   import Img from '@/components/UI/Img.vue'
-import { getters } from '../store/getters'
 
   const store = useStore()
   const categories = ref([] as Array<IDeliveryType>)
@@ -127,6 +126,10 @@ import { getters } from '../store/getters'
     return card.price_with_discount_and_tax && card.price_with_discount_and_tax !== card.price_with_tax 
       ? card.price_with_discount_and_tax 
       : card.price_with_tax
+  }
+
+  const cardDiscount = (card: IDeliveryType) => {
+    return card.total_discount_percent ? String(card.total_discount_percent) : '-'
   }
 
   const onChangePageNumber = (page: number) => {
@@ -286,7 +289,7 @@ import { getters } from '../store/getters'
               </div>
           </div>
           <div class="content-block__item product-row" v-if = "goods">
-            <div class="product"
+            <div :class="[card.total_discount_percent ? 'product active' : 'product']"
               v-for   = "card in goods"
               :key    = "card.id"
               @click = "onSetAciveGood(card)"
@@ -302,10 +305,11 @@ import { getters } from '../store/getters'
                     </div>
                     <div class="product__col discount_price">
                         <span class="_label">Цена со скидкой, BYN / {{ card.base_unit.full_name }}</span>
-                        {{ cardPriceWithDiscount(card) }}</div>
+                        {{ cardPriceWithDiscount(card) }}
+                    </div>
                     <div class="product__col product__discount" >
                         <span class="_label">Размер скидки, %</span>
-                       14
+                       {{ cardDiscount(card) }}
                     </div>
 
 
