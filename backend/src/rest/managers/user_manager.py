@@ -21,6 +21,7 @@ class UserManager(CRUDManager):
     ) -> TableType:
         from src.services.user_service import UserService
 
+        generated_password = None
         if not input_data.password:
             input_data.password = generated_password = generate_random_password()
         input_data.password = hash_password(password=input_data.password)  # make it better
