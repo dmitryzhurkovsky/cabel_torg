@@ -85,8 +85,8 @@ class Product(Base1CModel):
         """
         if self.price_with_discount_and_tax:
             return round(
-                (self.price_with_discount_and_tax - self.price_with_discount)
-                / self.price_with_discount_and_tax * 100, 2
+                (self.price_with_tax - self.price_with_discount_and_tax)
+                / self.price_with_tax * 100, 2
             )
         return 0
 
