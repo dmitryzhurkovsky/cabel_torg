@@ -225,7 +225,7 @@ export default {
   actions: {
     async GET_CATEGORIES({ commit }){
       try {
-        const response = await axios.get(process.env.VUE_APP_API_URL + 'categories');
+        const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'categories');
         commit("UPDATE_CATEGORIES", response.data);
         commit("CREATE_MENU_ITEMS", response.data);
       } catch (e) {
@@ -289,7 +289,7 @@ export default {
 
     async SEND_REQUEST_CALL({ commit }, data){
       try {
-        await axios.post(process.env.VUE_APP_API_URL + 'service_entities/request_calls', data);
+        await axios.post(useRuntimeConfig().public.NUXT_APP_API_URL + 'service_entities/request_calls', data);
         commit("SET_POPUP_ACTION", 'ShowCompleteMsg');
         const msg ={};
         msg.main = 'Наш менеджер свяжется с вами в ближайшее время.';
@@ -307,7 +307,7 @@ export default {
 
     async SEND_REQUEST_FEEDBACK({ commit }, data){
       try {
-        await axios.post(process.env.VUE_APP_API_URL + 'service_entities/feedbacks', data);
+        await axios.post(useRuntimeConfig().public.NUXT_APP_API_URL + 'service_entities/feedbacks', data);
         commit("SET_POPUP_ACTION", 'ShowCompleteMsg');
         const msg ={};
         msg.main = 'Наш менеджер свяжется с вами в ближайшее время.';

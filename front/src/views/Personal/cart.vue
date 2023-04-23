@@ -394,10 +394,10 @@
               } else if (response.data.message === 'False') {
                 console.log('прльзователя нет создаем с нуля');
                 let password = '';
-                for (let i = 0; i < 8; i++){
-                  let rand = Math.random() * 10 - 0.5;
-                  password = password + String(Math.round(rand))
-                }
+                // for (let i = 0; i < 8; i++){
+                //   let rand = Math.random() * 10 - 0.5;
+                //   password = password + String(Math.round(rand))
+                // }
                 const userData = {
                   email: this.email,
                   full_name: this.full_name,
