@@ -6,7 +6,6 @@ from src.core.utils import hash_password, generate_random_password
 from src.models.user_model import User
 from src.rest.managers.base_manager import CRUDManager
 from src.rest.schemas.user_schema import UserCreateSchema, UserUpdateSchema
-from src.services.user_service import UserService
 
 
 class UserManager(CRUDManager):
@@ -20,6 +19,8 @@ class UserManager(CRUDManager):
             input_data: UserCreateSchema,
             session: AsyncSession,
     ) -> TableType:
+        from src.services.user_service import UserService
+
         if not input_data.password:
             input_data.password = generated_password = generate_random_password()
         input_data.password = hash_password(password=input_data.password)  # make it better
