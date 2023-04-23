@@ -89,7 +89,7 @@ class CategoryManager(CRUDManager):
         return categories_ids
 
     @classmethod
-    async def get_categories_ids_without_discount(cls, pk: int, session: AsyncSession):
+    async def get_categories_ids_without_discount(cls, pk: int, session: AsyncSession) -> list[int]:
         """
         Get all categories' ids with discounts.
         """
@@ -104,7 +104,7 @@ class CategoryManager(CRUDManager):
                 Category.discount == 0
             ))
         )
-        return query_result.scalars().all()
+        return query_result.scalars().all()  # noqa
 
     @classmethod
     async def update_discount(

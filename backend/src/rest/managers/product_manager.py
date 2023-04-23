@@ -167,7 +167,7 @@ class ProductManager(CRUDManager):
     @classmethod
     async def bulk_update_discounts(
             cls, session: AsyncSession,
-            categories_ids: tuple,
+            categories_ids: tuple[int] | list[int],
             discount: int
     ):
         products = await cls.list(session=session, where=(
