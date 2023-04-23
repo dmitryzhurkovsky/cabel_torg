@@ -27,17 +27,24 @@ class UserService:
         )
 
     @classmethod
-    def send_confirmation_url(cls, user: User):
+    def send_confirmation_url(cls, user: User, generated_password: str = None):
         confirmation_url = cls.generate_confirmation_url(user_id=user.id)
         message = f"""
             Добрый день {user.full_name}. Регистрация прошла успешно. 
             Чтобы активировать аккаунт перейдите по ссылке {confirmation_url}.
             Желаем Вам приятных покупок!
         """
+        if generated_password:
+            message += (
+                f'Сгенерированный паспорт {generated_password}. '
+                f'Сгенерированный пароль может быть изменен в личном кабинете'
+            )
+
         html_message = template.render({
             'name': user.full_name,
             'confirmation_url': confirmation_url,
-            'static_url': settings.STATIC_PATH
+            'static_url': settings.STATIC_PATH,
+            'generated_password': generated_password
         })
         EmailService.send_email(
             receiver=user.email,
