@@ -30,7 +30,7 @@ class OrderService:
             'order_number': order.number,
             'phone_number': user.phone_number,
             'pick_up_point': order.delivery_type.payload,
-            'delivery date': order.created_at + relativedelta(days=3),
+            'delivery_date': order.created_at + relativedelta(days=3),
 
             'static_url': settings.STATIC_PATH
         })

@@ -8,18 +8,15 @@
     <p style="font-size:30px; text-align: left; font-weight:bold;padding: 0  20px;">
         Заказ принят!
     </p>
-
     <p style="font-size:18px; text-align: left;padding: 0  20px ">
         Добрый день, <b>{{ name }}</b>!</p>
     <p style="font-size:18px; text-align: left;padding: 0  20px ">
         Заказанные товары уже готовятся к отправке, с вами свяжется специалист для уточнения. </p>
     <p style="font-size:18px; text-align: left;padding: 0  20px ">
         Отслеживать статус заказа в реальном времени можно в Личном кабинете. </p>
-
     <p style="font-size:18px; text-align: left;padding: 0  20px ">
         Команда <span style="color:#4275D8; font-weight: bold">CabelTorg</span>
-    </p>
-
+    </p>¬
     <div style="background-color: #fff; position: relative; padding: 10px 0 40px 20px">
         <div style="border-radius: 5px; width: 220px; padding-top: 15px; height: 37px; background: #4275D8; border: 1px solid #F4F5F6; opacity: 1; text-align: center;margin:0 auto">
             <a href="cabeltorg.by"
@@ -32,48 +29,55 @@
 <div style="padding: 15px 20px 40px 20px; position: relative;">
     <div style="padding: 0 25px ; width: auto; font-size: 18px; line-height: 24px; color: #000000; text-align: left; background: #F8FAFF;">
         <div style="padding:15px 25px 0 40px; margin-bottom: 10px;">
-            <div style="
-                    background: url('{{ static_url }}/order_number.svg') no-repeat left top;
-                    height: 50px;
-                    padding-left: 45px;
-                    margin-bottom: 20px;"
-            >
-                <span style="color: #000; font-size: 18px; line-height: 25px; font-weight: 700;  display: inline-block">Номер зазаза</span>
-                <br>
-                <span style="color:#4275D8; font-size: 18px; line-height: 25px;  display: inline-block;">{{ order_number }}</span>
+            <div style="height: 50px; padding-left: 0;margin-bottom: 20px; display: table; width: 100%;">
+                <div style="display: table-cell; text-align: left; width: 45px">
+                    <img src="{{ static_url }}/order_number.svg" alt=""
+                         style="vertical-align: middle; padding-top: 5px">
+                </div>
+                <div style="display: table-cell; text-align: left; ">
+                    <span style="color: #000; font-size: 18px; line-height: 25px; font-weight: 700;  display: inline-block">Номер заказа</span>
+                    <br>
+                    <span style="color:#4275D8; font-size: 18px; line-height: 25px;  display: inline-block;">{{ order_number }}</span>
+                </div>
             </div>
         </div>
         <div style="padding:  0 25px 0 40px; margin-bottom: 10px;">
-            <div style="
-                    background: url('{{ static_url }}/time.svg') no-repeat left top;
-                    height: 50px;
-                    padding-left: 45px;
-                    margin-bottom: 20px;"
-            >
-                <span style="color: #000; font-size: 18px; line-height: 25px; font-weight: 700;  display: inline-block">Дата доставки</span>
-                <br>
-                <span style="color:#4275D8; font-size: 18px; line-height: 25px;  display: inline-block;">23 ноября 2023</span>
+            <div style="height: 50px; padding-left: 0;margin-bottom: 20px; display: table; width: 100%;">
+                <div style="display: table-cell; text-align: left; width: 45px">
+                    <img src="{{ static_url }}/delivery_time.svg" alt=""
+                         style="vertical-align: middle; padding-top: 5px">
+                </div>
+                <div style="display: table-cell; text-align: left; ">
+                    <span style="color: #000; font-size: 18px; line-height: 25px; font-weight: 700;  display: inline-block">Дата доставки</span>
+                    <br>
+                    <span style="color:#4275D8; font-size: 18px; line-height: 25px;  display: inline-block;">{{ delivery_date }}</span>
+                </div>
             </div>
         </div>
         <div style="padding:  0 25px 0 40px; margin-bottom: 10px;">
-            <div style="background: url('{{ static_url }}/store.svg') no-repeat left top; height: 50px; padding-left: 45px;margin-bottom: 20px;">
-                <span style="color: #000; font-size: 18px; line-height: 25px; font-weight: 700;  display: inline-block">Адрес пункта выдачи</span>
-                <br>
-                <span style="color:#4275D8; font-size: 18px; line-height: 25px; display: inline-block;">{{ pick_up_point }}</span>
+            <div style="height: 50px; padding-left: 0;margin-bottom: 20px; display: table; width: 100%;">
+                <div style="display: table-cell; text-align: left; width: 45px">
+                    <img src="{{ static_url }}/warehouse.svg" alt="" style="vertical-align: middle; padding-top: 5px">
+                </div>
+                <div style="display: table-cell; text-align: left; ">
+                    <span style="color: #000; font-size: 18px; line-height: 25px; font-weight: 700;  display: inline-block">Адрес пункта выдачи</span>
+                    <br>
+                    <span style="color:#4275D8; font-size: 18px; line-height: 25px;  display: inline-block;">{{ pick_up_point }}</span>
+                </div>
             </div>
         </div>
         <div style="padding:  0 25px 0 40px; margin-bottom: 10px;">
-            <div style="
-                    background: url('{{ static_url }}/client.svg') no-repeat left top;
-                    height: 50px;
-                    padding-left: 45px;
-                    padding-bottom: 30px;"
-            >
-                <span style="color: #000; font-size: 18px; line-height: 25px; font-weight: 700;  display: inline-block">Получатель</span>
-                <br>
-                <span style="color:#4275D8; font-size: 18px; line-height: 25px; display: inline-block;">{{ name }}</span>
-                <br>
-                <span style="color:#4275D8; font-size: 18px; line-height: 25px; display: inline-block;">{{ phone_number }}</span>
+            <div style="height: 50px; padding-left: 0;margin-bottom: 20px; display: table; width: 100%;">
+                <div style="display: table-cell; text-align: left; width: 45px">
+                    <img src="{{ static_url }}/client.svg" alt="" style="vertical-align: middle; padding-top: 5px">
+                </div>
+                <div style="display: table-cell; text-align: left; ">
+                    <span style="color: #000; font-size: 18px; line-height: 25px; font-weight: 700;  display: inline-block">{{ name }}</span>
+                    <br>
+                    <span style="color:#4275D8; font-size: 18px; line-height: 25px; display: inline-block;">{{ phone_number }}</span>
+                    <br>
+                    <span style="color:#4275D8; font-size: 18px; line-height: 25px; display: inline-block;">{{  }}</span>
+                </div>
             </div>
         </div>
     </div>
