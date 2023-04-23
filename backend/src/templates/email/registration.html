@@ -1,0 +1,30 @@
+{% extends "email/base.html" %}
+{% block header %}
+<img src="{{static_url}}/header_image_2.png" alt="" style="display: block; width: 100%;">
+{% endblock %}
+
+{% block body %}
+<div style="padding: 15px 0; position: relative;">
+
+    <p style="font-size:30px; text-align: left; font-weight:bold;padding: 0  20px;">
+        Добро пожаловать на CabelTorg!</p>
+        <div style="background:url('{{ static_url }}/store.svg') no-repeat left top; height: 50px; padding-left: 45px;margin-bottom: 20px;">
+                <span style="color: #000; font-size: 18px; line-height: 25px; font-weight: 700;  display: inline-block">Адрес пункта выдачи</span>
+                <br>
+                <span style="color:#4275D8; font-size: 18px; line-height: 25px; display: inline-block;">{{ pick_up_point }}</span>
+            </div>
+    <p style="font-size:18px; text-align: left;padding: 0  20px ">
+        Добрый день, <b>{{ name }}</b>!</p>
+    <p style="font-size:18px; text-align: left;padding: 0  20px ">
+        Регистрация прошла успешно. Желаем Вам приятных покупок.
+    </p>
+
+    <div style="background-color: #fff; position: relative; padding: 10px 0 40px 20px">
+        <div style="border-radius: 5px; width: 220px; padding-top: 15px; height: 37px; background: #4275D8; border: 1px solid #F4F5F6; opacity: 1; text-align: center;margin:0 auto">
+            <a href="cabeltorg.by"
+               style="color: #fff; font-size: 18px; text-decoration: none; vertical-align: top;">Перейти на сайт</a>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

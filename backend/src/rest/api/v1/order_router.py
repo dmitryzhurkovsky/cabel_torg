@@ -56,7 +56,7 @@ async def create_order(
         },
         session=session
     )
-    OrderService.send_order_confirmation(user=user, order=order)
+    await OrderService.send_create_order(user=user, order=order)
     return order
 
 
@@ -90,7 +90,7 @@ async def update_product_amount_in_cart(
         session: AsyncSession = Depends(get_session)
 ) -> OrderSchema:
     # todo add validation and permissions. An order can be changed only admin or onwer.
-    return await OrderManager.update(
+    order = await OrderManager.update(
         pk=order_id,
         input_data={
             'user_id': user.id,
@@ -98,3 +98,6 @@ async def update_product_amount_in_cart(
         },
         session=session,
     )
+    await OrderService.send_change_order_status(user=user, order=order)
+
+    return order

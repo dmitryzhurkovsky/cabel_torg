@@ -17,6 +17,7 @@ SITE_HOST = os.getenv('SITE_HOST', 'localhost')  # it's used for creating links 
 TEMPLATES_PATH = pathlib.Path(__file__).parent.parent.joinpath('templates')
 template_loader = jinja2.FileSystemLoader(TEMPLATES_PATH)
 templates = jinja2.Environment(loader=template_loader)
+ADMINISTRATOR_EMAIL = os.getenv('ADMINISTRATOR_EMAIL')  # it's admin
 
 # Database's settings
 DB_NAME = os.getenv('DATABASE_NAME')
