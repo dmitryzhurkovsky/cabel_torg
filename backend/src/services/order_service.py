@@ -9,10 +9,10 @@ from src.services.email_service import EmailService
 
 class OrderService:
     ORDER_VERBOSE_NAMES = {
-        OrderStatus.IN_PROCESSING: 'В процессе',
+        OrderStatus.IN_PROCESSING: 'В обработке',
         OrderStatus.SENT: 'Отправлен',
         OrderStatus.CANCELED: 'Отменен',
-        OrderStatus.COMPLETED: 'Завершен',
+        OrderStatus.COMPLETED: 'Выполнен',
     }
 
     @classmethod
