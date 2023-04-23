@@ -50,5 +50,5 @@ class UserService:
             receiver=user.email,
             message=message,
             html_message=html_message,
-            subject='Закончите регистрацию'
+            subject='Регистрация прошла успешно'
         )
