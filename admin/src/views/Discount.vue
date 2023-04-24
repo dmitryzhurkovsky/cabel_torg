@@ -132,6 +132,17 @@
     return card.actual_discount ? String(card.actual_discount) : '-'
   }
 
+  const cardSyles = (card: IDeliveryType) => {
+    console.log(card.id, '    -    ', activeGood.value?.id);
+    
+    let style = 'product '
+    if (card.actual_discount) style = style + 'active'
+    if (activeGood.value) {
+      if (card.id === activeGood.value.id) style = 'product selected'
+    }
+    return style
+  }
+
   const onChangePageNumber = (page: number) => {
     if (page === 0) return
     if (page > store.getters.totalPages) return
@@ -289,7 +300,7 @@
               </div>
           </div>
           <div class="content-block__item product-row" v-if = "goods">
-            <div :class="[card.actual_discount ? 'product active' : 'product']"
+            <div :class = cardSyles(card)
               v-for   = "card in goods"
               :key    = "card.id"
               @click = "onSetAciveGood(card)"
