@@ -19,17 +19,8 @@ class UserManager(CRUDManager):
             input_data: UserCreateSchema,
             session: AsyncSession,
     ) -> TableType:
-        from src.services.user_service import UserService
-
-        generated_password = None
-        if not input_data.password:
-            input_data.password = generated_password = generate_random_password()
         input_data.password = hash_password(password=input_data.password)  # make it better
-
-        user = await super().create(input_data, session)
-        UserService.send_confirmation_url(user=user, generated_password=generated_password)
-
-        return user
+        return await super().create(input_data, session)
 
     @classmethod
     async def update(

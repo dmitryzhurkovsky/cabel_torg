@@ -25,6 +25,8 @@ class UserCreateSchema(UserBaseSchema):
     company_name: str
     unp: str
 
+    isGenerated: bool | None = False
+
 
 class UserUpdateSchema(UserBaseSchema):
     pass
