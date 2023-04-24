@@ -37,6 +37,7 @@ class ProductSchema(BaseSchema):
     price_with_tax: Decimal | None  # with a tax
     price_with_discount_and_tax: Decimal | None  # with a tax
     discount: int | None
+    actual_discount: Decimal | None
 
     count: int | None
     weight: Decimal | None

@@ -15,7 +15,7 @@
                     <div class="menu__link">{{item.name}}</div>
                   </li>
                 </ul>
-                <a class="menu__mass-lnk`"
+                <a class="_link"
                   :href = getCatalogUrl()
                 >
                   Перейти в каталог

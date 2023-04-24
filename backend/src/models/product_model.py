@@ -77,6 +77,20 @@ class Product(Base1CModel):
     )
 
     @property
+    def actual_discount(self) -> float | int | DECIMAL:
+        """
+        It's an actulal dsicount. It's used for admin panel.
+        Since we calculate price depending on discount in cateogries and products and
+        in its case we change only price.
+        """
+        if self.price_with_discount_and_tax:
+            return round(
+                (self.price_with_tax - self.price_with_discount_and_tax)
+                / self.price_with_tax * 100, 2
+            )
+        return 0
+
+    @property
     def price_with_tax(self) -> float:
         if self.price and self.tax:
             return round(self.price + (self.price * self.tax / 100), 2)

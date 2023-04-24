@@ -203,9 +203,13 @@
                 {{mainItem.name}}
               </div>
               <div v-if="mainItem.childrens.length"
-                  :class="[ mainItem.filterPanel ? 'sidebar_menu__open  icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
+                  :class="[ mainItem.filterPanel ? 'sidebar_menu__open  icon-arrow-up' : 'sidebar_menu__close icon-arrow-down']"
                   @click.stop = "toggleCategory(mainItem)"
               >
+                  <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M4.7 6.1L0 1.4L1.4 0L4.7 3.3L8 0L9.4 1.4L4.7 6.1Z" fill="#423E48"/>
+                  </svg>
+
               </div>
             </div >
 
@@ -222,9 +226,12 @@
                           {{middleItem.name}}
                         </div>
                         <div v-if="middleItem.childrens.length"
-                            :class="[ middleItem.filterPanel ? 'sidebar_menu__open icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
+                            :class="[ middleItem.filterPanel ? 'sidebar_menu__open icon-arrow-up' : 'sidebar_menu__close icon-arrow-down']"
                             @click.stop = "toggleCategory(middleItem)"
                         >
+                            <svg width="10" height="7" viewBox="0 0 10 7" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4.7 6.1L0 1.4L1.4 0L4.7 3.3L8 0L9.4 1.4L4.7 6.1Z" fill="#423E48"/>
+                            </svg>
                         </div>
                       </div>
 
@@ -420,16 +427,16 @@
   &__box{
     font-weight: 400;
     position: relative;
-    .icon-arrow-l:before{
-      content: ">";
-      transform: rotate(90deg);
-      cursor: pointer;
-    }
-    .icon-arrow-r:before{
-      content: ">";
-      transform: rotate(-90deg);
-      cursor: pointer;
-    }
+    //.icon-arrow-l:before{
+    //  content: ">";
+    //  transform: rotate(90deg);
+    //  cursor: pointer;
+    //}
+    //.icon-arrow-r:before{
+    //  content: ">";
+    //  transform: rotate(-90deg);
+    //  cursor: pointer;
+    //}
   }
 
   &__title{
@@ -529,18 +536,24 @@
 }
 .sidebar_menu{
 
-  transition: all 0.3s ease;
   &__open {
     font-size: 12px;
-    transform: rotate(-90deg);
+    margin-left: 15px;
+    transform: rotate(180deg);
     color:#4275D8;
+    cursor: pointer;
+    svg path{
+      fill:#4275D8;
+    }
     > div{
       color: red;
     }
   }
   &__close {
     font-size: 12px;
-    transform: rotate(90deg);
+    margin-left: 15px;
+    cursor: pointer;
+
   }
 }
 
@@ -562,8 +575,17 @@
   padding: 10px 12px 10px 12px;
   justify-content: space-between;
 
+  &.active{
+    border:2px solid #c87878;
+  }
+  &.selected{
+   background: #EEEEEE;
+  }
+
+
   &:hover{
     cursor: pointer;
+    background: #EEEEEE;
   }
   &__img {
     width: 100%;
@@ -661,10 +683,7 @@
 
 .active {
   cursor: pointer;
-  &:hover{
-    background-color: var(--primary-hover);
-    color: var(--background-content);
-  }
+
 }
 
 .goods__block{
