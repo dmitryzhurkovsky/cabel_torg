@@ -53,7 +53,7 @@ async def create_user(
         user_info = user_info.dict()
         password_is_generated = user_info.pop('isGenerated', None)
         user_db = await UserManager.create(input_data=UserCreateSchema(**user_info), session=session)
-        generated_password = user_info.password if password_is_generated else None
+        generated_password = user_info.get('password') if password_is_generated else None
         UserService.send_confirmation_url(user=user_db, generated_password=generated_password)
 
         return user_db
