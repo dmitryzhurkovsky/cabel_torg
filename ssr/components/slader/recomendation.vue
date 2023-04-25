@@ -32,7 +32,7 @@
               >
 
                 <swiper-slide v-for="item in RECOMENDED_ITEMS" :key="item.id">
-                  <CardItem
+                  <CatalogCardItem
                       :card = "item"
                   />
                 </swiper-slide>
@@ -61,7 +61,7 @@
 
 <script>
   import { mapGetters, mapActions, mapMutations } from 'vuex'
-  import CardItem from '@/components/catalog/card-item.vue'
+  // import CardItem from '@/components/catalog/card-item.vue'8
 
   import { Swiper } from "swiper/vue";
   import { SwiperSlide } from "swiper/vue";
@@ -79,7 +79,7 @@
 
     components:
     {
-      CardItem, Swiper, SwiperSlide,
+      Swiper, SwiperSlide,
     },
 
     computed: {
