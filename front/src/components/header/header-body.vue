@@ -1,10 +1,8 @@
 <template lang="html">
-  <!-- <BurgerMenu v-if = "IS_MENU_OPEN"/> -->
   <BurgerMenu v-if = "IS_CATALOG_OPEN&&DEVICE_VIEW_TYPE>1"/>
   <div class="header__wrapper">
     <div class="header__content _container">
         <div class="header__body ">
-      <!--  # BURGER Appears from tablet version-->
             <div  @click="toggleMenu()" class="burger-menu burger-menu--closed">
               <div class="bar"></div>
               <div class="bar"></div>
@@ -22,12 +20,10 @@
                   <div class="info-header__item">
                     <a :href="'mailto:' + SETTINGS.email">{{ SETTINGS.email }}</a>
                   </div>
-<!--                  <div class="info-header__item">BYN</div>-->
-            </div> <!--     header__info-->
+            </div>
             <TopMenuActions />
-       <!-- # CLIENT-BAR -  Appears from tablet version -->
 
-        </div>  <!--header__body -->
+        </div>
     </div>
   </div>
 

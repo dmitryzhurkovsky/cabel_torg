@@ -8,4 +8,13 @@ export default defineNuxtConfig({
       NUXT_APP_IMAGES: process.env.NUXT_APP_IMAGES
     }
   },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@use "@/assets/styles/main.scss" as *;'
+        }
+      }
+    }
+  }
 });

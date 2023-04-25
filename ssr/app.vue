@@ -1,7 +1,8 @@
 <template>
   <div id="app__component">
-    <p>Hello from App</p>
-
+    <HeaderWrapper />
+    <UiLoader/>
+    <MyHeader />
     <NuxtPage />
 
     <MyFooter />
@@ -10,13 +11,9 @@
 
 <script>
   import { mapActions, mapGetters, mapMutations } from "vuex";
-  // import Header from '@/components/header.vue';
   // import Breadcrumb from '@/components/breadcrumb.vue';
-  // import Footer from "@/components/footer.vue";
   // import vNotification from '@/components/notifications/v-notification.vue';
-  // import MenuWrapper from '@/components/header/menu-wrapper.vue';
   // import PopUp from '@/components/notifications/pop-up.vue';
-  // import Loader from '@/components/UI/loader.vue';
 
   export default {
 
@@ -60,7 +57,6 @@
 </script>
 
 <style lang="scss">
-@import '@/assets/styles/main.scss';
 * {
     padding: 0px;
     margin: 0px;
@@ -161,18 +157,17 @@ h6 {
 
 //<ШРИФТЫ>===============================================================================================
 
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
+@import 'https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap';
 
-@font-face {
-  font-family: 'icomoon';
-  src: url('../src/assets/icons/fonts/icomoon.ttf?4vw17d') format('truetype'),
-  url('../src/assets/icons/fonts/icomoon.woff?4vw17d') format('woff'),
-  url('../src/assets/icons/fonts/icomoon.svg?4vw17d#icomoon') format('svg');
-  font-weight: normal;
-  font-style: normal;
-  font-display: block;
-}
-
+// @font-face {
+//   font-family: 'icomoon';
+//   src: url('@/assets/icons/fonts/icomoon.ttf?4vw17d') format('truetype'),
+//   url('@/assets/icons/fonts/icomoon.woff?4vw17d') format('woff'),
+//   url('@/assets/icons/fonts/icomoon.svg?4vw17d#icomoon') format('svg');
+//   font-weight: normal;
+//   font-style: normal;
+//   font-display: block;
+// }
 
 //<Подключаем шрифты>=======================================================================================
 //&display=swap&subset=cyrillic-ext
