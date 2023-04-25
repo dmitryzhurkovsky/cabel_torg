@@ -19,12 +19,14 @@ class UserBaseSchema(BaseModel):
 
 class UserCreateSchema(UserBaseSchema):
     email: EmailStr
-    password: str | None
+    password: str
     full_name: str
     phone_number: str
     company_name: str
     unp: str
 
+
+class UserInputCreateSchema(UserCreateSchema):
     isGenerated: bool | None = False
 
 
