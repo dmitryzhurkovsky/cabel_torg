@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.db.db import get_session
 from src.core.exception.base_exception import BadRequestError, ObjectNotFoundError
 from src.rest.managers.user_manager import UserManager
-from src.rest.schemas.user_schema import UserSchema, UserCreateSchema, UserUpdateSchema
+from src.rest.schemas.user_schema import UserSchema, UserCreateSchema, UserUpdateSchema, UserInputCreateSchema
 from src.services.auth_service import AuthService
 from src.services.user_service import UserService
 
@@ -43,15 +43,17 @@ async def get_current_user(
 
 @user_router.post('/users/', response_model=UserSchema, status_code=status.HTTP_201_CREATED)
 async def create_user(
-        user: UserCreateSchema, session: AsyncSession = Depends(get_session)
+        user_info: UserInputCreateSchema, session: AsyncSession = Depends(get_session)
 ) -> UserSchema:
     try:
-        user_db = await UserManager.retrieve(email=user.email, session=session)
+        user_db = await UserManager.retrieve(email=user_info.email, session=session)
         if user_db:
             raise BadRequestError(detail='User with such email exists')
     except ObjectNotFoundError:
-        user_db = await UserManager.create(input_data=user, session=session)
-        generated_password = user.password if user.isGenerated else None
+        user_info = user_info.dict()
+        password_is_generated = user_info.pop('isGenerated', None)
+        user_db = await UserManager.create(input_data=UserCreateSchema(**user_info), session=session)
+        generated_password = user_info.password if password_is_generated else None
         UserService.send_confirmation_url(user=user_db, generated_password=generated_password)
 
         return user_db
