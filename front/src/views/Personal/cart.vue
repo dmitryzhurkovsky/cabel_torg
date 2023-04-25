@@ -412,7 +412,7 @@
                   IBAN: this.IBAN,
                   BIC: this.BIC,
                   serving_bank: this.serving_bank,
-                  isGenerate: true,
+                  isGenerated: true,
                 };
 
                 await this.SEND_REGISTER_REQUEST(userData);
