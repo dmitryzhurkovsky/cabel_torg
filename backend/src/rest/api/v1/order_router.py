@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
+from starlette.background import BackgroundTasks
 
 from src.core.db.db import get_session
 from src.rest.managers.order_manager import OrderManager
@@ -44,6 +45,7 @@ async def get_order(
 @order_router.post('/orders', response_model=OrderSchema, status_code=status.HTTP_201_CREATED)
 async def create_order(
         order_info: OrderCreateInputSchema,
+        background_tasks: BackgroundTasks,
         user=Depends(AuthService.get_current_user),
         session: AsyncSession = Depends(get_session)
 ) -> OrderSchema:
@@ -56,7 +58,7 @@ async def create_order(
         },
         session=session
     )
-    await OrderService.send_create_order(user=user, order=order)
+    background_tasks.add_task(func=OrderService.send_create_order, user=user, order=order)
     return order
 
 
