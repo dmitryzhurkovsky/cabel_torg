@@ -92,10 +92,7 @@ async def update_product_amount_in_cart(
     # todo add validation and permissions. An order can be changed only admin or onwer.
     order = await OrderManager.update(
         pk=order_id,
-        input_data={
-            'user_id': user.id,
-            **order_info.dict(exclude_unset=True)
-        },
+        input_data={**order_info.dict(exclude_unset=True)},
         session=session,
     )
     await OrderService.send_change_order_status(user=user, order=order)
