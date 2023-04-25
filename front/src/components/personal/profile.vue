@@ -69,7 +69,7 @@
       <div class="group">
         <label for="user" class="label">Расчетный счет IBAN</label>
         <div class="input__box">
-          <input id="IBAN" type="text" class="input" :class="{ 'is-invalid': ERRORS.userIBAN }" v-model = "userIBAN" autocomplete=off>
+          <input id="IBAN" type="text" class="input"  :class="{ 'is-invalid': ERRORS.userIBAN }" v-model = "userIBAN" autocomplete=off>
 <!--          <i class="icon-pen input__icon"></i>-->
           <div id="anim" class="icon_info input__icon">
               <div class="tooltip flex-center" data-tooltip="Новые счета IBAN записываются в таком формате: ААВВ ССС DDDD ЕЕЕЕ ЕЕЕЕ ЕЕЕЕ ЕЕЕЕ.">!</div>

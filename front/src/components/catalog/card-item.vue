@@ -22,7 +22,7 @@
 
       <div class="item-card__row flex-center">
         <div class="current_price">{{ cardPriceWithDiscount }}
-          <span>BYN / {{ card.base_unit.full_name }}</span>
+          <span>BYN/{{ card.base_unit.full_name }}</span>
         </div>
         <div v-if = "quantity !== 0" @click.stop="onOperationWithCartItem(card)"
           :class="[quantity === 0 ? 'item-card__buy flex-center icon-cart' : 'item-card__buy flex-center icon-cart-chosen']"
