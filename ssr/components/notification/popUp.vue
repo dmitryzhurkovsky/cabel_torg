@@ -1,16 +1,17 @@
 <template>
-    <transition-group class="popup__animation">
+    <transition-group>
       <div 
         @click.stop="closePopUp(false)"
         ref="popup" 
         :class="[IS_POPUP_OPEN === true ? 'popup__wrapper': 'popup__wrapper disabled']"
+        :key="1"
       >
         <div class="popup__body" @click.stop="">
             <div class="icon-close popup__close" @click.stop="closePopUp(false)"></div>
             <div class="popup__content" >
-              <PopUpMsg v-if = "POPUP_ACTION === 'ShowCompleteMsg'" />
-              <RequestCall v-if = "POPUP_ACTION === 'RequestCall'"/>
-              <UserLogin v-if = "POPUP_ACTION === 'UserLogin'"/>
+              <NotificationMsg v-if = "POPUP_ACTION === 'ShowCompleteMsg'" />
+              <NotificationRequestCall v-if = "POPUP_ACTION === 'RequestCall'"/>
+              <NotificationUserLogin v-if = "POPUP_ACTION === 'UserLogin'"/>
             </div>
         </div>
       </div>
@@ -21,16 +22,8 @@
 <script>
   import { mapGetters, mapMutations } from "vuex";
 
-  import PopUpMsg from '@/components/notifications/pop-up-msg.vue'
-  import RequestCall from '@/components/notifications/request-call.vue'
-  import UserLogin from '@/components/notifications/user-login.vue'
-
   export default {
     name: "PopUp",
-
-    components: {
-        PopUpMsg, RequestCall, UserLogin
-    },
 
     watch: {
       IS_POPUP_OPEN: function(){

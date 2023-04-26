@@ -19,6 +19,6 @@ export default defineNuxtConfig({
   },
   build: {
     transpile: ['swiper']
-  }
-
+  },
+  // pages: true
 });

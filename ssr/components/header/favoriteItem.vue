@@ -43,7 +43,7 @@ export default {
 
   async mounted(){
     try {
-        const response = await axios.get(process.env.VUE_APP_API_URL + 'products/' + this.favoriteItem.product.id);
+        const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'products/' + this.favoriteItem.product.id);
         this.favoriteItemData = response.data;
     } catch (e) {
         console.log(e);

@@ -125,9 +125,17 @@
     background:red;
   }
 }
+
+.swiper-pagination-bullet{
+  width: 8px;
+  height: 8px;
+  display: inline-block;
+  border-radius: 50%;
+  background: red;
+  // opacity: var(--swiper-pagination-bullet-inactive-opacity, .2);
+}
 .swiper-pagination-bullet, .swiper-pagination-bullet-active{
   background: black!important
-
 }
 .swiper-pagination-bullet-active{
   background: red!important;

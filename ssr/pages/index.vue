@@ -1,10 +1,10 @@
 <template>
   <div class="main" @click.stop = "SET_SEARCH_STRING('')">
-    <SladerBanner />
-    <SladerRecomendation />
+    <SliderBanner />
+    <SliderRecomendation />
     <AboutQuickCategory />
-    <SladerNews />
-    <SladerPartners />
+    <SliderNews />
+    <SliderPartners />
     <AboutInfo />
   </div>
 </template>

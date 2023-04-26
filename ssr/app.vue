@@ -1,19 +1,18 @@
 <template>
   <div id="app__component">
     <HeaderWrapper />
-    <UiLoader/>
+    <NotificationMain />
+    <UiLoader />
+    <NotificationPopUp/>
     <MyHeader />
+    <Breadcrumb/>
     <NuxtPage />
-
     <MyFooter />
   </div>
 </template>
 
 <script>
   import { mapActions, mapGetters, mapMutations } from "vuex";
-  // import Breadcrumb from '@/components/breadcrumb.vue';
-  // import vNotification from '@/components/notifications/v-notification.vue';
-  // import PopUp from '@/components/notifications/pop-up.vue';
 
   export default {
 
@@ -23,10 +22,6 @@
       ...mapGetters("header", ["ALL_CATEGORIES"])
     },
 
-    // components:{
-    //   Header, Breadcrumb, Footer, vNotification, MenuWrapper, PopUp, Loader
-    // },
-
     methods: {
       ...mapMutations("header", ["UPDATE_VIEW_PARAMETERS"]),
       ...mapActions("header", ["GET_CATEGORIES"]),
@@ -34,13 +29,16 @@
       ...mapActions("order", ["GET_USER_ORDER", "GET_ORDER_DELIVERY_TYPES"]),
       ...mapActions("favorite", ["GET_USER_FAVORITE"]),
       ...mapActions("main", ["GET_SETTINGS"]),
+      ...mapMutations("notification", ["SET_IS_LOADING"]),
 
       setViewParametrs(){
           this.UPDATE_VIEW_PARAMETERS(window.innerWidth);
-      }
+      },
+
     },
 
     async mounted() {
+      this.SET_IS_LOADING(true);
       this.setViewParametrs();
       window.addEventListener('resize', this.setViewParametrs);
       await this.GET_CATEGORIES();
@@ -51,6 +49,7 @@
       }
       await this.GET_ORDER_DELIVERY_TYPES();
       await this.GET_SETTINGS();
+      this.SET_IS_LOADING(false);
     },
 
   };

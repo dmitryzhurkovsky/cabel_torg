@@ -8,9 +8,11 @@ axios.interceptors.response.use(
   response => response,
   error => {
     if (typeof error.response === 'undefined') {
-        store.commit("notification/ADD_MESSAGE", {id: 'Err500', icon: 'error', name: 'Ошибка авторизации. Сервер не отвечает'});
+        console.log(error);
+        store.commit("notification/ADD_MESSAGE", {id: JSON.stringify(error), icon: 'error', name: 'Ошибка авторизации. Сервер не отвечает'});
         store.commit("auth/SET_USER_DATA", null);
         localStorage.removeItem("authToken");
+        localStorage.removeItem("refreshToken");
         return Promise.reject(error);
     } else if (error.response.status === 422 || error.response.status === 500) {
         console.log( error.response.data.detail);
@@ -20,10 +22,12 @@ axios.interceptors.response.use(
         }
         store.commit("auth/SET_USER_DATA", null);
         localStorage.removeItem("authToken");
+        localStorage.removeItem("refreshToken");
         return Promise.reject(error);
     } else if (error.response.status === 401) {
         store.commit("auth/SET_USER_DATA", null);
         localStorage.removeItem("authToken");
+        localStorage.removeItem("refreshToken");
         return Promise.reject(error);
     } else {
         return Promise.reject(error);

@@ -2,7 +2,7 @@
   <div class="recomendation__block__item item-card" v-if = "card">
     <div v-if = "InfoCardBlock === 'Хит'" class="item-card__taghit">{{ InfoCardBlock }}</div>
     <div v-if = "InfoCardBlock === '%'" class="item-card__tagdiscount">
-      <img class="" src="../../assets/catalog/discount.svg" alt="">
+      <img class="" src="@/assets/catalog/discount.svg" alt="">
     </div>
     <div v-if = "InfoCardBlock === 'New'" class="item-card__tagnew">{{ InfoCardBlock }}</div>
     <div 
