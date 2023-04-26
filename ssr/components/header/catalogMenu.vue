@@ -130,6 +130,7 @@ grid-template-columns: 290px 1fr;
 min-width: 250px;
 max-height: 100%;
 position: static;
+
 &-lnk{
   padding-left: 15px;
   font-size: 14px;

@@ -123,7 +123,9 @@ h3{
 }
 .quick-category__list{
   font-weight: 500;
-  font-size: 20px;
+  font-size: calc(18 + 2 * ((100vw - 320px) / 1560));
+  //@include adaptiv-font(20, 18, 20);
+
   line-height: 24px;
   color: #423E48;
   @media (max-width: $md3+px) {
