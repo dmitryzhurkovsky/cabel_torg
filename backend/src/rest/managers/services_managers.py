@@ -6,8 +6,8 @@ from sqlalchemy.orm import selectinload
 from starlette.datastructures import QueryParams
 
 from src.core.db.mixins.upload_file_mixin import FileMixin
-from src.rest.managers.base_manager import CRUDManager
 from src.models.service_entities import *
+from src.rest.managers.base_manager import CRUDManager
 
 
 class ArticleManager(CRUDManager, FileMixin):
@@ -57,7 +57,7 @@ class RequestCallManager(CRUDManager):
             custom_preloaded_fields: tuple | list = (),
             offset: int = 0,
             limit: int = 100
-    ) -> Sequence[Row | RowMapping | Any]:
+    ) -> Sequence[Row | RowMapping | Any] | list:
         """Get filtered list of objects with pagination."""
         filter_expressions = cls.get_filter_expressions(filters)
 

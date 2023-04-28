@@ -6,16 +6,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.db.db import get_session
 from src.core.enums import ProductTypeFilterEnum, ProductOrderFilterEnum
 from src.rest.managers.product_manager import ProductManager
+from src.rest.permissions import is_admin_permissions
 from src.rest.schemas.product_schema import (
     ProductSchema,
     PaginatedProductSchema,
     ProductUpdateSchema
 )
 
-product_router = APIRouter(tags=['products'])
+product_router = APIRouter(tags=['products'], prefix='/products')
 
 
-@product_router.get('/products', response_model=PaginatedProductSchema)
+@product_router.get(
+    '/',
+    response_model=PaginatedProductSchema,
+)
 async def get_products(
         request: Request,
         category_id: int | None = Query(None, description=(
@@ -59,7 +63,10 @@ async def get_products(
     )  # todo it better
 
 
-@product_router.get('/products/{product_id:path}', response_model=ProductSchema)
+@product_router.get(
+    '/{product_id:path}',
+    response_model=ProductSchema,
+)
 async def get_product(product_id: int | str, session: AsyncSession = Depends(get_session)):
     return await ProductManager.retrieve(
         id=product_id,
@@ -69,7 +76,11 @@ async def get_product(product_id: int | str, session: AsyncSession = Depends(get
     )
 
 
-@product_router.patch('/products/{product_id}', response_model=ProductSchema)
+@product_router.patch(
+    '/{product_id}',
+    response_model=ProductSchema,
+    dependencies=[Depends(is_admin_permissions)]
+)
 async def update_product(
         product_id: int,
         product_info: ProductUpdateSchema,

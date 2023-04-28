@@ -2,18 +2,19 @@ from fastapi import APIRouter, Depends, status, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
+from src.models.service_entities.request_call_model import RequestCallType
 from src.rest.managers.product_manager import ProductManager
 from src.rest.managers.services_managers import RequestCallManager
-from src.models.service_entities.request_call_model import RequestCallType
+from src.rest.permissions import is_admin_permissions
 from src.rest.schemas.service_entities.request_call_schema import (
     RequestCallInputSchema,
     RequestCallSchema
 )
 
-request_call_router = APIRouter(tags=['request_calls'])
+request_call_router = APIRouter(tags=['request_calls'], prefix='/request_calls')
 
 
-@request_call_router.get('/request_calls', response_model=list[RequestCallSchema])
+@request_call_router.get('/', response_model=list[RequestCallSchema])
 async def get_request_calls(
         request: Request,
         type_of_request_call: RequestCallType | None = Query(
@@ -25,7 +26,7 @@ async def get_request_calls(
 
 
 @request_call_router.post(
-    '/request_calls',
+    '/',
     response_model=RequestCallSchema,
     status_code=status.HTTP_201_CREATED)
 async def create_request_call(
@@ -42,7 +43,7 @@ async def create_request_call(
 
 
 @request_call_router.patch(
-    '/request_calls/{request_call_id}',
+    '/{request_call_id}',
     response_model=RequestCallSchema)
 async def update_info_about_feedback(
         request_call_id: int,
@@ -57,8 +58,10 @@ async def update_info_about_feedback(
 
 
 @request_call_router.delete(
-    '/request_calls/{request_call_id}',
-    status_code=status.HTTP_204_NO_CONTENT)
+    '/{request_call_id}',
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(is_admin_permissions)]
+)
 async def delete_request_call(
         request_call_id: int,
         session: AsyncSession = Depends(get_session)

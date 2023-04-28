@@ -4,16 +4,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.db.db import get_session
 from src.core.enums import CategoryTypeFilterEnum
 from src.rest.managers.category_manager import CategoryManager
+from src.rest.permissions import is_admin_permissions
 from src.rest.schemas.category_schema import (
     CategorySchema,
     CategoryUpdateSchema,
     QuickCategoryCreateSchema
 )
 
-category_router = APIRouter(tags=['categories'])
+category_router = APIRouter(tags=['categories'], prefix='/categories')
 
 
-@category_router.get('/categories/', response_model=list[CategorySchema])
+@category_router.get('/', response_model=list[CategorySchema])
 async def get_categories(
         request: Request,
         session: AsyncSession = Depends(get_session),
@@ -29,7 +30,7 @@ async def get_categories(
     )
 
 
-@category_router.get('/categories/{category_id:path}', response_model=CategorySchema)
+@category_router.get('/{category_id:path}', response_model=CategorySchema)
 async def get_category(
         category_id: int | str,
         session: AsyncSession = Depends(get_session)
@@ -42,7 +43,11 @@ async def get_category(
     )
 
 
-@category_router.patch('/categories/{category_id}', response_model=CategorySchema)
+@category_router.patch(
+    '/{category_id}',
+    response_model=CategorySchema,
+    dependencies=[Depends(is_admin_permissions)]
+)
 async def update_category(
         category_id: int,
         category_info: CategoryUpdateSchema,
@@ -58,9 +63,10 @@ async def update_category(
 
 
 @category_router.post(
-    '/categories/set_quick_categories',
+    '/set_quick_categories',
     response_model=CategorySchema,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(is_admin_permissions)]
 )
 async def update_category(
         quick_categories_info: QuickCategoryCreateSchema,
