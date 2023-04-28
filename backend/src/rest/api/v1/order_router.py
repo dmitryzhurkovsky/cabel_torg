@@ -21,7 +21,7 @@ order_router = APIRouter(tags=['orders'], prefix='/orders')
 @order_router.get(
     '/mine',
     response_model=list[OrderSchema],
-    dependencies=[Depends(is_owner_permissions)]  # todo check it
+    dependencies=[Depends(is_authenticated_permissions)]
 )
 async def get_my_orders(
         request: Request,
@@ -33,7 +33,7 @@ async def get_my_orders(
 @order_router.get(
     '/{order_id}',
     response_model=OrderSchema,
-    dependencies=[Depends()]  # todo make it is_owner or is_admin
+    dependencies=[Depends(is_admin_permissions)]
 )
 async def get_order(
         order_id: int,
@@ -79,13 +79,12 @@ async def create_order(
 @order_router.delete(
     '/{order_id}',
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(is_admin_permissions)]  # todo clarify requirememnts and think about this.
+    dependencies=[Depends(is_admin_permissions)]
 )
 async def delete_order(
         order_id: int,
         session: AsyncSession = Depends(get_session)
 ):
-    # todo add checking permissions
     await OrderManager.retrieve(
         id=order_id,
         session=session
@@ -100,7 +99,7 @@ async def delete_order(
     '/{order_id}',
     response_model=OrderSchema,
     status_code=status.HTTP_200_OK,
-    dependencies=[Depends(is_owner_permissions)]  # todo make it is_owner or is_admin. owner can changed special fields
+    dependencies=[Depends(is_admin_permissions)]
 )
 async def update_product_amount_in_cart(
         order_id: int,

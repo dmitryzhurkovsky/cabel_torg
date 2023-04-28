@@ -4,6 +4,7 @@ from starlette.requests import Request
 
 from src.core.db.db import get_session
 from src.rest.managers.watch_list_manager import WatchListManager
+from src.rest.permissions import is_authenticated_permissions
 from src.rest.schemas.watchlist_schema import (
     WatchListSchema,
     WatchListInputSchema,
@@ -15,7 +16,8 @@ watchlist_router = APIRouter(tags=['watch_lists'], prefix='/watch_lists')
 
 @watchlist_router.get(
     '/mine/products',
-    response_model=list[WatchListWithProductSchema]  # todo is_owner
+    response_model=list[WatchListWithProductSchema],
+    dependencies=[Depends(is_authenticated_permissions)]
 )
 async def get_product(
         request: Request,
@@ -27,7 +29,8 @@ async def get_product(
 @watchlist_router.post(
     '/mine/products',
     response_model=WatchListSchema,
-    status_code=status.HTTP_201_CREATED
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(is_authenticated_permissions)]
 )
 async def add_product_to_watchlist(
         product_info: WatchListInputSchema,
@@ -45,7 +48,8 @@ async def add_product_to_watchlist(
 
 @watchlist_router.delete(
     '/mine/products/{product_id}',
-    status_code=status.HTTP_204_NO_CONTENT  # todo add is_owner
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(is_authenticated_permissions)]
 )
 async def delete_product_from_watchlist(
         product_id: int,

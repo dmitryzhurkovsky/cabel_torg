@@ -6,7 +6,7 @@ from starlette.requests import Request
 from src.core.db.db import get_session
 from src.core.exception.base_exception import BadRequestError, ObjectNotFoundError
 from src.rest.managers.user_manager import UserManager
-from src.rest.permissions import is_admin_permissions, is_owner_permissions
+from src.rest.permissions import is_admin_permissions, is_authenticated_permissions
 from src.rest.schemas.user_schema import (
     UserSchema,
     UserCreateSchema,
@@ -46,9 +46,7 @@ async def get_user(
 @user_router.get(
     '/mine',
     response_model=UserSchema,
-    dependencies=[
-        Depends(is_owner_permissions),  # todo add owner permissioins or admin
-    ]
+    dependencies=[Depends(is_authenticated_permissions)]
 )
 async def get_current_user(
         request: Request,
@@ -84,7 +82,7 @@ async def create_user(
 @user_router.patch(
     '/mine',
     response_model=UserSchema,
-    dependencies=[Depends(is_owner_permissions)]  # todo is_owner or is_admin permissions
+    dependencies=[Depends(is_authenticated_permissions)]
 )
 async def update_info_about_current_user(
         user_info: UserUpdateSchema,

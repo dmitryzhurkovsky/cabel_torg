@@ -6,6 +6,7 @@ from starlette.requests import Request
 from src.core.db.db import get_session
 from src.rest.managers.cart_manager import CartManager
 from src.rest.managers.product_manager import ProductManager
+from src.rest.permissions import is_authenticated_permissions
 from src.rest.schemas.cart_schema import (
     CartSchema,
     CartCreateInputSchema,
@@ -16,10 +17,14 @@ from src.rest.schemas.cart_schema import (
 cart_router = APIRouter(tags=['carts'], prefix='/carts')
 
 
-@cart_router.get('/mine/products', response_model=list[CartWithProductSchema])
+@cart_router.get(
+    '/mine/products',
+    response_model=list[CartWithProductSchema],
+    dependencies=[Depends(is_authenticated_permissions)]
+)
 async def get_product(
         request: Request,
-        session: AsyncSession = Depends(get_session),
+        session: AsyncSession = Depends(get_session)
 ) -> list[CartWithProductSchema]:
     return await CartManager.list(session=session, filter_by={'user_id': request.user.id})
 
@@ -28,6 +33,7 @@ async def get_product(
     '/mine/products',
     response_model=CartSchema,
     status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(is_authenticated_permissions)]
 )
 async def add_product_to_cart(
         product_info: CartCreateInputSchema,
@@ -46,9 +52,9 @@ async def add_product_to_cart(
 
 @cart_router.delete(
     '/mine/products/{product_id}',
-    status_code=status.HTTP_204_NO_CONTENT
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(is_authenticated_permissions)]
 )
-# todo add is_owner
 async def delete_product_from_cart(
         product_id: int,
         request: Request,
@@ -65,9 +71,9 @@ async def delete_product_from_cart(
 @cart_router.patch(
     '/mine/products/{product_id}',
     response_model=CartSchema,
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
+    dependencies=[Depends(is_authenticated_permissions)]
 )
-# todo add is_owner
 async def update_product_amount_in_cart(
         product_id: int,
         product_info: CartUpdateInputSchema,
