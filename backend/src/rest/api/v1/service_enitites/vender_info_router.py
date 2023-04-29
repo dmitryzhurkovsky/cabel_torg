@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.db.db import get_session
 from src.core.exception.base_exception import BadRequestError
 from src.rest.managers.services_managers import VendorInfoManager, AddressManager
-from src.rest.permissions import is_admin_permissions
+from src.rest.permissions import is_admin_permission
 from src.rest.schemas.service_entities.vendor_info_schema import (
     VendorInfoSchema,
     VendorInfoInputSchema,
@@ -30,7 +30,7 @@ async def get_vendor_info(
     '/',
     response_model=VendorInfoSchema,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def create_vendor_info(
         vendor_info: VendorInfoInputSchema,
@@ -50,7 +50,7 @@ async def create_vendor_info(
     '/1/logos/',
     response_model=VendorInfoSchema,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def create_vendor_info(
         file: UploadFile,
@@ -71,7 +71,7 @@ async def create_vendor_info(
 @vendor_info_router.patch(
     '/1/',
     response_model=VendorInfoSchema,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def update_info_about_delivery_type(
         delivery_type_info: VendorInfoInputSchema,
@@ -107,7 +107,7 @@ async def get_addresses(
     '/1/addresses',
     response_model=AddressSchema,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def create_address(
         vendor_info: AddressInputSchema,
@@ -131,7 +131,7 @@ async def create_address(
 @vendor_info_router.patch(
     '/1/addresses/{address_id}',
     response_model=AddressSchema,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def update_info_about_address(
         address_id: int,
@@ -148,7 +148,7 @@ async def update_info_about_address(
 @vendor_info_router.delete(
     '/1/addresses/{address_id}',
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def delete_addresses(
         address_id: int,

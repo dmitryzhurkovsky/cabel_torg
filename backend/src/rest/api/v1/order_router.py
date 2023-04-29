@@ -7,7 +7,7 @@ from starlette.requests import Request
 from src.core.db.db import get_session
 from src.rest.managers.order_manager import OrderManager
 from src.rest.managers.services_managers import DeliveryTypeManager
-from src.rest.permissions import is_owner_permissions, is_admin_permissions, is_authenticated_permissions
+from src.rest.permissions import is_admin_permission, is_authenticated_permission
 from src.rest.schemas.order_schema import (
     OrderSchema,
     OrderCreateInputSchema,
@@ -21,7 +21,7 @@ order_router = APIRouter(tags=['orders'], prefix='/orders')
 @order_router.get(
     '/mine',
     response_model=list[OrderSchema],
-    dependencies=[Depends(is_authenticated_permissions)]
+    dependencies=[Depends(is_authenticated_permission)]
 )
 async def get_my_orders(
         request: Request,
@@ -33,7 +33,7 @@ async def get_my_orders(
 @order_router.get(
     '/{order_id}',
     response_model=OrderSchema,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def get_order(
         order_id: int,
@@ -45,7 +45,7 @@ async def get_order(
 @order_router.get(
     '/orders',
     response_model=list[OrderSchema],
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def get_order(session: AsyncSession = Depends(get_session)) -> list[OrderSchema]:
     return await OrderManager.list(session=session)
@@ -55,7 +55,7 @@ async def get_order(session: AsyncSession = Depends(get_session)) -> list[OrderS
     '/',
     response_model=OrderSchema,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(is_authenticated_permissions)]
+    dependencies=[Depends(is_authenticated_permission)]
 )
 async def create_order(
         order_info: OrderCreateInputSchema,
@@ -79,7 +79,7 @@ async def create_order(
 @order_router.delete(
     '/{order_id}',
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def delete_order(
         order_id: int,
@@ -99,7 +99,7 @@ async def delete_order(
     '/{order_id}',
     response_model=OrderSchema,
     status_code=status.HTTP_200_OK,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def update_product_amount_in_cart(
         order_id: int,

@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
 from src.rest.managers.services_managers import FeedbackManager
-from src.rest.permissions import is_admin_permissions
+from src.rest.permissions import is_admin_permission
 from src.rest.schemas.service_entities.feedback_schema import (
     FeedbackSchema,
     FeedbackInputSchema
@@ -50,7 +50,7 @@ async def update_info_about_feedback(
 @feedback_router.delete(
     '/{feedback_id}',
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def delete_feedback(
         feedback_id: int,

@@ -6,7 +6,7 @@ from starlette.requests import Request
 from src.core.db.db import get_session
 from src.rest.managers.cart_manager import CartManager
 from src.rest.managers.product_manager import ProductManager
-from src.rest.permissions import is_authenticated_permissions
+from src.rest.permissions import is_authenticated_permission
 from src.rest.schemas.cart_schema import (
     CartSchema,
     CartCreateInputSchema,
@@ -20,7 +20,7 @@ cart_router = APIRouter(tags=['carts'], prefix='/carts')
 @cart_router.get(
     '/mine/products',
     response_model=list[CartWithProductSchema],
-    dependencies=[Depends(is_authenticated_permissions)]
+    dependencies=[Depends(is_authenticated_permission)]
 )
 async def get_product(
         request: Request,
@@ -33,7 +33,7 @@ async def get_product(
     '/mine/products',
     response_model=CartSchema,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(is_authenticated_permissions)]
+    dependencies=[Depends(is_authenticated_permission)]
 )
 async def add_product_to_cart(
         product_info: CartCreateInputSchema,
@@ -53,7 +53,7 @@ async def add_product_to_cart(
 @cart_router.delete(
     '/mine/products/{product_id}',
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(is_authenticated_permissions)]
+    dependencies=[Depends(is_authenticated_permission)]
 )
 async def delete_product_from_cart(
         product_id: int,
@@ -72,7 +72,7 @@ async def delete_product_from_cart(
     '/mine/products/{product_id}',
     response_model=CartSchema,
     status_code=status.HTTP_200_OK,
-    dependencies=[Depends(is_authenticated_permissions)]
+    dependencies=[Depends(is_authenticated_permission)]
 )
 async def update_product_amount_in_cart(
         product_id: int,

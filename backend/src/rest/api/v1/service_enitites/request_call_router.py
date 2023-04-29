@@ -5,7 +5,7 @@ from src.core.db.db import get_session
 from src.models.service_entities.request_call_model import RequestCallType
 from src.rest.managers.product_manager import ProductManager
 from src.rest.managers.services_managers import RequestCallManager
-from src.rest.permissions import is_admin_permissions
+from src.rest.permissions import is_admin_permission
 from src.rest.schemas.service_entities.request_call_schema import (
     RequestCallInputSchema,
     RequestCallSchema
@@ -60,7 +60,7 @@ async def update_info_about_feedback(
 @request_call_router.delete(
     '/{request_call_id}',
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def delete_request_call(
         request_call_id: int,

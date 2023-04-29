@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Response, Depends
 
 from src.invoice_generator.main import InvoiceGenerator
-from src.rest.permissions import is_authenticated_permissions
+from src.rest.permissions import is_owner_permission
 
 invoice_router = APIRouter(tags=['orders'], prefix='/orders')
 

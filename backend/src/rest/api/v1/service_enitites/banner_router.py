@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
 from src.rest.managers.services_managers import BannerManager
-from src.rest.permissions import is_admin_permissions
+from src.rest.permissions import is_admin_permission
 from src.rest.schemas.service_entities.banner_schema import BannerSchema, BannerInputSchema
 
 banner_router = APIRouter(tags=['banners'], prefix='/banners')
@@ -32,7 +32,7 @@ async def get_banners(
     '/',
     response_model=BannerSchema,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def create_banner(
         banner_info: BannerInputSchema,
@@ -48,7 +48,7 @@ async def create_banner(
     '/{banner_id}/images',
     response_model=BannerSchema,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def upload_image_for_banner(
         banner_id: int,
@@ -70,7 +70,7 @@ async def upload_image_for_banner(
 @banner_router.patch(
     '/{banner_id}',
     response_model=BannerSchema,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def update_info_about_banner(
         banner_id: int,
@@ -85,7 +85,7 @@ async def update_info_about_banner(
 @banner_router.delete(
     '/{banner_id}',
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def delete_banner(
         banner_id: int,

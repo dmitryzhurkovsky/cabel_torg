@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.db.db import get_session
 from src.core.enums import CategoryTypeFilterEnum
 from src.rest.managers.category_manager import CategoryManager
-from src.rest.permissions import is_admin_permissions
+from src.rest.permissions import is_admin_permission
 from src.rest.schemas.category_schema import (
     CategorySchema,
     CategoryUpdateSchema,
@@ -46,7 +46,7 @@ async def get_category(
 @category_router.patch(
     '/{category_id}',
     response_model=CategorySchema,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def update_category(
         category_id: int,
@@ -66,7 +66,7 @@ async def update_category(
     '/set_quick_categories',
     response_model=CategorySchema,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def update_category(
         quick_categories_info: QuickCategoryCreateSchema,

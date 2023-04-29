@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.db.db import get_session
 from src.core.enums import ProductTypeFilterEnum, ProductOrderFilterEnum
 from src.rest.managers.product_manager import ProductManager
-from src.rest.permissions import is_admin_permissions
+from src.rest.permissions import is_admin_permission
 from src.rest.schemas.product_schema import (
     ProductSchema,
     PaginatedProductSchema,
@@ -79,7 +79,7 @@ async def get_product(product_id: int | str, session: AsyncSession = Depends(get
 @product_router.patch(
     '/{product_id}',
     response_model=ProductSchema,
-    dependencies=[Depends(is_admin_permissions)]
+    dependencies=[Depends(is_admin_permission)]
 )
 async def update_product(
         product_id: int,

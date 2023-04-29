@@ -9,13 +9,13 @@ from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
 from src.core import settings
+from src.core.backends import BearerTokenAuthBackend
 from src.core.db.db import engine
 from src.parser.xml_bookkeeping_parser import (
     XMLParser,
     OffersParser
 )
 from src.rest.api.router import base_router
-from src.rest.permissions import BearerTokenAuthBackend
 
 logger = logging.getLogger(__name__)
 
