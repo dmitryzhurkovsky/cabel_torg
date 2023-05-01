@@ -15,6 +15,7 @@ services:
       context: backend
       dockerfile: ./build/Dockerfile
     volumes:
+      - site_media:/site_media
       - ./backend:/backend
     expose:
       - 8000
@@ -39,7 +40,10 @@ services:
       - '81:81'  # for images
       - '443:443'  # for https
     volumes:
-      - /root/images:/usr/share/nginx/images/
+      - site_media:/usr/share/nginx/site_media/
 
   redis:
     image: redis:latest
+
+volumes:
+  site_media:
