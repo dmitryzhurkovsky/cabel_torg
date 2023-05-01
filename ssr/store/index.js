@@ -18,13 +18,15 @@ axios.interceptors.response.use(
     return response;
   },
   error => {
-    if (typeof error.response === 'undefined') {
+    if (typeof window !== 'undefined') {
+      console.log('INTERSEPTOR');
+      if (typeof error.response === 'undefined') {
         store.commit("notification/ADD_MESSAGE", {id: 'Err500', icon: 'error', name: 'Ошибка авторизации. Сервер не отвечает'});
         store.commit("auth/SET_USER_DATA", null);
         localStorage.removeItem("authToken");
         localStorage.removeItem("refreshToken");
         return Promise.reject(error);
-    } else if (error.response.status === 422 || error.response.status === 500) {
+      } else if (error.response.status === 422 || error.response.status === 500) {
         console.log( error.response.data.detail);
         const errors = error.response.data.detail;
         for (let i = 0; i < errors.length; i++) {
@@ -34,23 +36,28 @@ axios.interceptors.response.use(
         localStorage.removeItem("authToken");
         localStorage.removeItem("refreshToken");
         return Promise.reject(error);
-    } else if (error.response.status === 401) {
+      } else if (error.response.status === 401) {
         store.commit("auth/SET_USER_DATA", null);
         localStorage.removeItem("authToken");
         localStorage.removeItem("refreshToken");
         return Promise.reject(error);
-    } else {
+      } else {
         return Promise.reject(error);
+      }
+    } else {
+      return Promise.reject(error);
     }
   }
 );
 
 axios.interceptors.request.use(function(config) {
-  config.headers = {
+  if (typeof window !== 'undefined') {
+    config.headers = {
       Authorization: `Bearer ${localStorage.getItem("authToken")}`,
       "Content-Type": "application/json",
       Accept: "application/json"
-  };
+    };
+  }
   return config;
 });
 

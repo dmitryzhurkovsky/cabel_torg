@@ -96,7 +96,6 @@ export default {
         '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING'];
 
         if (rootGetters['query/TYPE_OF_PRODUCT'] !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'];
-
         const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + queryData);
         commit("SET_CATALOG_ITEMS", response.data);
         commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
@@ -109,22 +108,22 @@ export default {
     async GET_ALL_CATALOG_ITEMS({ commit, rootGetters }) {
       try {
         let queryData = 'products?' + 
-        '&offset=' + rootGetters['query/OFFSET'] + 
+        'offset=' + rootGetters['query/OFFSET'] + 
         '&limit=' + rootGetters['query/LIMIT']
           + 
         '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
         '&price_lte=' + rootGetters['query/MAX_PRICE'] +
         '&ordering=' + rootGetters['query/SORT_DIRECTION'] + rootGetters['query/SORT_TYPE'] +
         '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING'];
-
         if (rootGetters['query/TYPE_OF_PRODUCT'] !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT']
-        
         const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + queryData);
         commit("SET_CATALOG_ITEMS", response.data);
         commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
+        return response.data;
       } catch (e) {
         console.log(e);
         commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить весь каталог ", icon: "error", id: '1'}, {root: true})
+        return []
       }
     },
 

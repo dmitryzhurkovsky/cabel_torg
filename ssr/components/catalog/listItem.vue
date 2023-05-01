@@ -16,7 +16,7 @@
             <div class="product__status _label mb-20 if_status_on_the_way" v-if = "card.status === 'W'">Доставим в течение 14 дней</div>
             <div class="product__status icon-out-of-stock _label mb-20" v-if = "card.status === 'O'">Нет в наличии</div>
             <div class="product__title">
-                <a v-if ="card.category">{{ card.category.name }}</a>
+                <a v-if ="card.category">{{ card.category?.name }}</a>
             </div>
             <div class="product__uptitle" @click.stop="openCardItem(card.id)">
                 <a >{{ card.name }}</a>

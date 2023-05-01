@@ -165,6 +165,7 @@ export default {
 
     updateStore(){
       if (this.MIN_PRICE !== this.minValuePrice) {
+        this.SET_MIN_PRICE(this.minValuePrice);
         if (this.CATEGORY_ID) {
           this.$router.push(this.getCategoryUrl(this.CATEGORY_ID, this.minValuePrice, this.MAX_PRICE));
         } else {
@@ -172,6 +173,7 @@ export default {
         }
       } 
       if (this.MAX_PRICE !== this.maxValuePrice) {
+        this.SET_MAX_PRICE(this.maxValuePrice);
         if (this.CATEGORY_ID) {
           this.$router.push(this.getCategoryUrl(this.CATEGORY_ID, this.MIN_PRICE, this.maxValuePrice));
         } else {

@@ -132,12 +132,14 @@ export default {
     },
 
     openCategory(category){
+      this.SET_CATEGORY_ID(category.id);
       let url = this.getCategoryUrl(category.id);
       url = url + this.getTypeOfProduct(this.TYPE_OF_PRODUCT);
       this.$router.push(url);
     },
 
     toggleFilterCategory(category){
+      this.SET_TYPE_OF_PRODUCT(category);
       let url = "";
       if (this.CATEGORY_ID) {
         url = this.getCategoryUrl(this.CATEGORY_ID);

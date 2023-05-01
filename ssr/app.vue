@@ -5,54 +5,51 @@
     <UiLoader />
     <NotificationPopUp/>
     <MyHeader />
-    <Breadcrumb/>
+    <!-- <Breadcrumb/> -->
     <NuxtPage />
     <MyFooter />
   </div>
 </template>
 
-<script>
-  import { mapActions, mapGetters, mapMutations } from "vuex";
+<script setup>
 
-  export default {
+  import store from '@/store'
 
-    name: "App",
+  fetchKey: 'categoriesData'
 
-    computed: {
-      ...mapGetters("header", ["ALL_CATEGORIES"])
-    },
+  const setViewParametrs = () => {
+      store.commit('header/UPDATE_VIEW_PARAMETERS',window.innerWidth)
+  }
 
-    methods: {
-      ...mapMutations("header", ["UPDATE_VIEW_PARAMETERS"]),
-      ...mapActions("header", ["GET_CATEGORIES"]),
-      ...mapActions("auth", ["GET_USER_DATA", "USER"]),
-      ...mapActions("order", ["GET_USER_ORDER", "GET_ORDER_DELIVERY_TYPES"]),
-      ...mapActions("favorite", ["GET_USER_FAVORITE"]),
-      ...mapActions("main", ["GET_SETTINGS"]),
-      ...mapMutations("notification", ["SET_IS_LOADING"]),
+  onMounted(async () => {
+    store.commit('notification/SET_IS_LOADING', true)
+    setViewParametrs();
+    window.addEventListener('resize', setViewParametrs)
+    await store.dispatch('header/GET_CATEGORIES')
+    await store.dispatch('favorite/GET_USER_FAVORITE')
+    await store.dispatch('order/GET_USER_ORDER')
+    if (localStorage.getItem("authToken")) {
+        await store.dispatch('auth/GET_USER_DATA')
+    }
+    await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')
+    await store.dispatch('main/GET_SETTINGS')
+    store.commit('notification/SET_IS_LOADING', false)
+  });
 
-      setViewParametrs(){
-          this.UPDATE_VIEW_PARAMETERS(window.innerWidth);
-      },
-
-    },
-
-    async mounted() {
-      this.SET_IS_LOADING(true);
-      this.setViewParametrs();
-      window.addEventListener('resize', this.setViewParametrs);
-      await this.GET_CATEGORIES();
-      await this.GET_USER_FAVORITE();
-      await this.GET_USER_ORDER();
-      if (localStorage.getItem("authToken")) {
-          await this.GET_USER_DATA();
-      }
-      await this.GET_ORDER_DELIVERY_TYPES();
-      await this.GET_SETTINGS();
-      this.SET_IS_LOADING(false);
-    },
-
-  };
+  // const { data: categoriesData } = await useAsyncData(
+  //   'categories', 
+  //   async () => {
+  //     console.log('App');
+  //     store.commit('notification/SET_IS_LOADING', true)
+  //     // await store.dispatch('header/GET_CATEGORIES')
+  //     await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')
+  //     await store.dispatch('main/GET_SETTINGS')
+  //     store.commit('notification/SET_IS_LOADING', false)
+  //     return store.getters['header/ALL_CATEGORIES']
+  //   }, {
+  //     watch: []
+  //   }
+  // )
 </script>
 
 <style lang="scss">

@@ -21,4 +21,5 @@ export default defineNuxtConfig({
     transpile: ['swiper']
   },
   // pages: true
+  
 });

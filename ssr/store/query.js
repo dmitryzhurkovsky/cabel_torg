@@ -9,7 +9,7 @@ export default {
     offset: 0,
     limit: 10,
     sort: 'created_at',
-    direction: '',
+    direction: '-',
     view: 'table',
     minPrice: 0,
     maxPrice: 10000,

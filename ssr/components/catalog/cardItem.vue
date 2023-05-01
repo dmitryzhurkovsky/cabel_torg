@@ -44,7 +44,7 @@
         <div>{{ card.name }}</div>
       </div>
       <div class="item-card__uptitle">
-        <div>{{ card.category.name }}</div>
+        <div v-if ="card.category">{{ card.category.name }}</div>
       </div>
     </div>
   </div>

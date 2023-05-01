@@ -10,6 +10,39 @@
               <CatalogFilterPanel />
             </div>
             <div class="content-block slider_subcategory__block">
+              <div class="content-block__subcategory recomendation__nav" v-if = "LastCategory?.length && !isMobileVersion">
+                  <div class="slider_subcategory__row"
+                    :class="[category.id == store.getters['query/CATEGORY_ID'] ? 'recomendation__nav__item active' : 'recomendation__nav__item']"
+                    v-for = "category in LastCategory[0].subItems"
+                    :key = "category.id"
+                    @click.stop = setActiveCategory(category.id)
+                  >
+                    {{ category.name }}
+                  </div>
+              </div>
+              <div v-if = "LastCategory?.length && isMobileVersion">
+                <swiper
+                  :slides-per-view="1.7"
+                  :space-between="12"
+                  :speed="500"
+                  :autoplay="{
+                      delay: 5000,
+                  }"
+                  :pagination= "{
+                    el: '.swiper-pagination',
+                    clickable: false,
+                    type: 'bullets',
+                    bulletClass: 'swiper-pagination-bullet',
+                    bulletElement: 'span',
+                  }"
+                >
+                  <swiper-slide v-for="category in LastCategory[0].subItems" :key="category.id">
+                    <div class="recomendation__nav__item" @click=setActiveCategory(category.id)>
+                      {{ category.name }}
+                    </div>
+                  </swiper-slide>
+                </swiper>
+              </div>  
               <div v-if = "isMobileVersion" class="btn mobile-filter mb-20" @click.stop="setIsFilterPanelOpen(!isFilterPanelOpen)">Фильтры</div>
               <div v-if ="isMobileVersion&&isFilterPanelOpen">
                 <CatalogPriceSlider />
@@ -31,7 +64,7 @@
                     :card   = item
                   />
                 </div>  
-                <div class="content-block__item product-table" v-if = "catalogData.length && store.getters['query/VIEW_TYPE'] === 'table'">
+                <div class="content-block__item product-table" v-if = "catalogData?.length && store.getters['query/VIEW_TYPE'] === 'table'">
                   <CatalogCardItem 
                     v-for   = "item in catalogData"
                     :key    = "item.id"
@@ -60,10 +93,11 @@
   SwiperCore.use([Navigation, Pagination])
 
   const route = useRoute()
+  const router = useRouter()
   const { getters } = store
   const isFilterPanelOpen = ref(false)
+  const id = ref(getters['query/CATEGORY_ID'])
   const isMobileVersion = ref(false)
-
   
   const setIsFilterPanelOpen = (data) => {
     isFilterPanelOpen.value = data
@@ -83,44 +117,69 @@
   })
 
   const ChangeParameters = computed(() => {
-    return JSON.stringify(route.query)
+    return JSON.stringify(route.query) + JSON.stringify(route.params);
   })
 
+  const  checkMobileVer = () => {
+    console.log(LastCategory.length)
+    console.log(isMobileVersion)
+    return LastCategory.length && !isMobileVersion
+  } 
   const clearSearchString= () => {
     store.commit("query/SET_SEARCH_STRING", '')
     store.commit("catalog/SET_CATALOG_SEARCH_STRING", '')
   }
 
-  const getData = async () => {
-    store.commit('notification/SET_IS_LOADING', true)
-    await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
-    store.commit('notification/SET_IS_LOADING', false)
+  const getCategoryUrl = (id) => {
+    let url = "/category/";
+    if (id) url = url + id + "?";
+    url = url + getLastPartOfUrl();
+    return url;
   }
 
-  let isFerstRender = true;
+  const getLastPartOfUrl = () => {
+    let url = "offset=" + getters['query/OFFSET'] + 
+      "&limit=" + getters['query/LIMIT'] + 
+      "&price_gte=" + getters['query/MIN_PRICE'] + 
+      "&price_lte=" + getters['query/MAX_PRICE']
+    url = url + "&ordering=" + getters['query/SORT_DIRECTION'] + getters['query/SORT_TYPE']
+    url = url + '&type_of_product=' + getters['query/TYPE_OF_PRODUCT']
+    url = url + "&q=" + getters['query/CATALOG_SEARCH_STRING']
+    return url;        
+  }
+
+  const setActiveCategory = (id) => {
+    store.commit('catalog/SET_CATALOG_SEARCH_STRING','')
+    store.commit('query/SET_CATEGORY_ID', id)
+    router.push(getCategoryUrl(id));
+  }
+
+  let isFirstRender = true;
 
   const setParametersFromURL = () => {
     let isFailInParams = false
     const currRoute = useRoute()
     const { query } = currRoute
+    // console.log(currRoute.params.id);
+    if (getters['query/CATEGORY_ID'] !== currRoute.params.id) store.commit('query/SET_CATEGORY_ID', currRoute.params.id);
     if (query.limit) {
-      if (getters['query/LIMIT'] !== query.limit) store.commit('query/SET_LIMIT', query.limit)
+      if (getters['query/LIMIT'] !== query.limit) store.commit('query/SET_LIMIT', query.limit);
     } 
     else {
       isFailInParams = true
     }
     if (query.offset) {
-      if (getters['query/OFFSET'] !== query.offset) store.commit('query/SET_OFFSET', query.offset)
+      if (getters['query/OFFSET'] !== query.offset) store.commit('query/SET_OFFSET', query.offset);
     } else {
       isFailInParams = true
     }
     if (query.price_gte) {
-      if (getters['query/MIN_PRICE'] !== query.price_gte) store.commit('query/SET_MIN_PRICE', query.price_gte)
+      if (getters['query/MIN_PRICE'] !== query.price_gte) store.commit('query/SET_MIN_PRICE', query.price_gte);
     } else {
       isFailInParams = true
     }
     if (query.price_lte) {
-      if (getters['query/MAX_PRICE'] !== query.price_lte) store.commit('query/SET_MAX_PRICE', query.price_lte)
+      if (getters['query/MAX_PRICE'] !== query.price_lte) store.commit('query/SET_MAX_PRICE', query.price_lte);
     } else {
       isFailInParams = true
     }
@@ -158,47 +217,71 @@
       // store.commit('query/SET_SORT_DIRECTION', getters['query/SORT_DIRECTION'])
       isFailInParams = true
     }
-    isFerstRender = false
+    isFirstRender = false
   }
 
-  
+  const setBreabcrumbs = () => {
+    if (!getters['query/CATEGORY_ID']) {
+      store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
+        mainCategory: null,
+        middleCategory: null,
+        lastCategory: null,
+      });
+      return;
+    }
+    console.log('1')
+    const categoryStack = [];
+    categoryStack.push(Number(getters['query/CATEGORY_ID']));
+    let curLevel = getters['header/ALL_CATEGORIES'].filter(item => item.id == getters['query/CATEGORY_ID'])[0];
+    console.log('2')
+    while (curLevel.parent_category_id) {
+      const parent_category_id = curLevel.parent_category_id;
+      categoryStack.push(parent_category_id);
+      curLevel = getters['header/ALL_CATEGORIES'].filter(item => item.id == parent_category_id)[0];
+    }
+    console.log('3')
+    if (categoryStack.length === 3) {
+      store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
+        mainCategory: categoryStack[2],
+        middleCategory: categoryStack[1],
+        lastCategory: categoryStack[0],
+      });
+    };
+    console.log('4')
+    if (categoryStack.length === 2) {
+      store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
+        mainCategory: categoryStack[1],
+        middleCategory: categoryStack[0],
+        lastCategory: null,
+      });
+    };
+    console.log('5')
+    if (categoryStack.length === 1) {
+      store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
+        mainCategory: categoryStack[0],
+        middleCategory: null,
+        lastCategory: null,
+      });
+    }; 
+    console.log('end')
+  }
 
   const { data: catalogData } = await useAsyncData(
     'posts', 
     async () => {
-      if (isFerstRender) {
+      // console.log('Категория вызов из asyncData: ', getters['query/CATEGORY_ID']);
+      if (isFirstRender) {
         setParametersFromURL()
       }
-      await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
+      // await store.dispatch('header/GET_CATEGORIES')
+      // setBreabcrumbs()
+      // console.log('Категория вызов из asyncData: ', getters['query/CATEGORY_ID']);
+      await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
       return store.getters['catalog/ITEMS_LIST']
     }, {
       watch: [ChangeParameters]
     }
   )
-
-  // onBeforeMount(() => {
-  //   const { query } = route
-  //   // setParametersFromURL()
-  //   console.log('before mount ', catalogData._value.length);
-  // })
-  
-  // onBeforeUpdate(() => {
-  //   const { query } = route
-  //   // setParametersFromURL()
-  //   console.log('before update ', query);
-  // })
-
-  // watch(
-  //   catalogData,
-  //   (curr, prev) => {
-  //     // console.log('Watch');
-  //     catalogItems.value = [...catalogData._value]
-  //     // console.log('Data change', catalogData._value.length);
-  //     // refresh()
-  //   }
-  // )
-    
-  
 
 </script>
 
