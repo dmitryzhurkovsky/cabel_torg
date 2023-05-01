@@ -12,5 +12,4 @@ ENV PORT 800
 
 COPY --from=builder /artefacts  /client_frontend/
 
-#CMD [ "node", ".output/server/index.mjs" ]
-CMD [ "npm", "run", "dev" ]
+CMD [ "node", ".output/server/index.mjs" ]
