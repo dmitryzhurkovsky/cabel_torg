@@ -10,7 +10,8 @@ from src.core.exception.base_exception import (
     AuthenticateError,
     InvalidTokenError,
     BadRequestError,
-    ObjectNotFoundError
+    ObjectNotFoundError,
+    ForbiddenError
 )
 
 
@@ -26,6 +27,14 @@ async def validation_exception_handler(request: Request, exception: ValidationEr
 @app.exception_handler(AuthenticateError)
 async def unauthorized_error_handler(request: Request, exception: AuthenticateError) -> JSONResponse:
     """Handle an unauthorized error"""
+    return JSONResponse(
+        status_code=exception.status_code, content={'detail': exception.detail}, headers=exception.headers
+    )
+
+
+@app.exception_handler(ForbiddenError)
+async def unauthorized_error_handler(request: Request, exception: AuthenticateError) -> JSONResponse:
+    """Handle an forbidden error"""
     return JSONResponse(
         status_code=exception.status_code, content={'detail': exception.detail}, headers=exception.headers
     )

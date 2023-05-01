@@ -2,8 +2,8 @@ import asyncio
 from datetime import timedelta, datetime
 
 import jwt
-from fastapi import HTTPException, Depends
-from fastapi.security import OAuth2PasswordRequestForm, SecurityScopes
+from fastapi import HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
 from jwt import (
     InvalidTokenError as JWTInvalidTokenError,
     DecodeError,
@@ -12,15 +12,14 @@ from jwt import (
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core import settings
-from src.core.db.db import get_session
-from src.core.exception.base_exception import InvalidTokenError, AuthenticateError
-from src.rest.managers.user_manager import UserManager
+from src.core.exception.base_exception import (
+    InvalidTokenError,
+    AuthenticateError
+)
 from src.core.redis import redis
 from src.core.utils import is_valid
 from src.models.user_model import User
-from src.rest.schemas.auth_schema import (
-    auth_schema,
-)
+from src.rest.managers.user_manager import UserManager
 
 
 class AuthService:
@@ -126,19 +125,3 @@ class AuthService:
         access_token, refresh_token = cls.generate_access_and_refresh_tokens(user_id=user_id)
 
         return access_token, refresh_token
-
-    @classmethod
-    async def get_current_user(
-            cls,
-            security_scopes: SecurityScopes,
-            session: AsyncSession = Depends(get_session),
-            access_token: str = Depends(auth_schema),
-    ):
-        """Get a user by access_token."""
-        if security_scopes.scopes:
-            pass
-
-        user_id = cls.decode_token(token=access_token)
-
-        user = await UserManager.retrieve(session=session, id=user_id)
-        return user

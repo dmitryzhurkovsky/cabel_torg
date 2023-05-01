@@ -29,6 +29,7 @@ DATABASE_URL = f'postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT
 
 # JWT settings
 JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
+JWT_TYPE = 'Bearer'
 JWT_ACCESS_TOKEN_EXPIRATION_TIME = 60 * 15  # 15 minutes
 JWT_REFRESH_TOKEN_EXPIRATION_TIME = 60 * 60 * 24 * 7  # 7 days
 

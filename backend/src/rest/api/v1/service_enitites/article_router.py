@@ -3,17 +3,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
 from src.rest.managers.services_managers import ArticleManager
+from src.rest.permissions import is_admin_permission
 from src.rest.schemas.service_entities.article_schema import ArticleSchema, ArticleInputSchema
 
-article_router = APIRouter(tags=['articles'])
+article_router = APIRouter(tags=['articles'], prefix='/articles')
 
 
-@article_router.get('/articles', response_model=list[ArticleSchema])
+@article_router.get('/', response_model=list[ArticleSchema])
 async def get_articles(session: AsyncSession = Depends(get_session)) -> list[ArticleSchema]:
     return await ArticleManager.list(session=session)
 
 
-@article_router.get('/articles/{article_id}', response_model=ArticleSchema)
+@article_router.get('/{article_id}', response_model=ArticleSchema)
 async def get_articles(
         article_id: int,
         session: AsyncSession = Depends(get_session)
@@ -21,7 +22,12 @@ async def get_articles(
     return await ArticleManager.retrieve(id=article_id, session=session)
 
 
-@article_router.post('/articles', response_model=ArticleSchema, status_code=status.HTTP_201_CREATED)
+@article_router.post(
+    '/',
+    response_model=ArticleSchema,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(is_admin_permission)]
+)
 async def create_article(
         article_info: ArticleInputSchema,
         session: AsyncSession = Depends(get_session),
@@ -33,9 +39,11 @@ async def create_article(
 
 
 @article_router.post(
-    '/articles/{article_id}/images',
+    '/{article_id}/images',
     response_model=ArticleSchema,
-    status_code=status.HTTP_201_CREATED)
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(is_admin_permission)]
+)
 async def upload_image_for_article(
         article_id: int,
         file: UploadFile,
@@ -53,7 +61,11 @@ async def upload_image_for_article(
     return article
 
 
-@article_router.patch('/articles/{article_id}', response_model=ArticleSchema)
+@article_router.patch(
+    '/{article_id}',
+    response_model=ArticleSchema,
+    dependencies=[Depends(is_admin_permission)]
+)
 async def update_info_about_article(
         article_id: int,
         article_info: ArticleInputSchema,
@@ -64,7 +76,11 @@ async def update_info_about_article(
     )
 
 
-@article_router.delete('/articles/{article_id}', status_code=status.HTTP_204_NO_CONTENT)
+@article_router.delete(
+    '/{article_id}',
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(is_admin_permission)]
+)
 async def delete_article(
         article_id: int,
         session: AsyncSession = Depends(get_session)

@@ -5,9 +5,11 @@ import time
 import uvicorn
 from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.middleware.authentication import AuthenticationMiddleware
 from starlette.middleware.cors import CORSMiddleware
 
 from src.core import settings
+from src.core.backends import BearerTokenAuthBackend
 from src.core.db.db import engine
 from src.parser.xml_bookkeeping_parser import (
     XMLParser,
@@ -25,6 +27,10 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=("*",),
     allow_headers=settings.CORS_ALLOWED_HEADERS,
+)
+app.add_middleware(
+    AuthenticationMiddleware,
+    backend=BearerTokenAuthBackend()
 )
 
 from src.core.error_handlers import *  # noqa
