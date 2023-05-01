@@ -6,7 +6,7 @@ from src.rest.managers.services_managers import ArticleManager
 from src.rest.permissions import is_admin_permission
 from src.rest.schemas.service_entities.article_schema import ArticleSchema, ArticleInputSchema
 
-article_router = APIRouter(tags=['articles'], prefix='/articles', dependencies=[Depends(is_admin_permission)])
+article_router = APIRouter(tags=['articles'], prefix='/articles')
 
 
 @article_router.get('/', response_model=list[ArticleSchema])
