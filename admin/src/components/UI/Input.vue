@@ -82,13 +82,14 @@ const updateValue = (e: Event) => {
 .input {
   &-text {
   border: 1px solid var(--primary);
-  padding: 0 10px;
+  padding: 10px 10px;
   height: 40px;
   border-radius: 7px;
   font-size: 15px;
   width: 100%;
   position: relative;
   z-index: 1;
+  opacity: 0.8;
     &:focus {
       & + .input-label {
         z-index: 1;

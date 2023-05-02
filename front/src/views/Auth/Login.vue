@@ -325,6 +325,7 @@ export default {
   max-width: 500px;
   margin: 0 auto;
   text-align: center;
+  min-height: 400px;
 }
 .center-text{
   width: 100%;

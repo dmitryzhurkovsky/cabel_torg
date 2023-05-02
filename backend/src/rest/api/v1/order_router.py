@@ -43,7 +43,7 @@ async def get_order(
 
 
 @order_router.get(
-    '/orders',
+    '/',
     response_model=list[OrderSchema],
     dependencies=[Depends(is_admin_permission)]
 )

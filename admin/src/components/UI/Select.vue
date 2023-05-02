@@ -178,6 +178,7 @@ import { IDeliveryType} from "../../types";
       align-items: center;
       cursor: pointer;
       width: 100%;
+      padding-left: 10px;
       input{
         width: 100%;
         color:#9595A0
