@@ -58,7 +58,7 @@
                 <span>Доставка</span>
               </div>
               <div class="about__paragraph__box flex-center">
-                <div class="group table3x">
+                <div :class="[checkPickUp() ? 'group table3x disabled' : 'group table3x']">
                   <label for="city" class="label">Город / населенный пункт</label>
                   <input id="city" type="text" :class="{ 'is-invalid': ERRORS.city }" v-model="city" autocomplete=off :disabled="checkPickUp()">
                   <div class="error-message" v-if="ERRORS.city"> {{ ERRORS.city }} </div>
@@ -70,7 +70,7 @@
                   </div>
                 </div>
 
-                <div class="table3x">
+                <div :class="[checkPickUp() ? 'table3x disabled' : 'table3x']">
                   <div class="group mb-20">
                     <label for="address" class="label">Улица</label>
                     <input id="address" type="text" :class="{ 'is-invalid': ERRORS.address }" v-model="address" autocomplete=off :disabled="checkPickUp()">
@@ -268,6 +268,7 @@
       ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
       ...mapMutations("auth", ["SET_ERRORS", "SET_DESTINATION"]),
       ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA"]),
+      ...mapMutations("notification", ["SET_IS_LOADING"]),
 
       openPage(page) {
           if (this.$router.path != page) {
@@ -355,7 +356,7 @@
           // window.scrollTo(0, scrollY);
           setTimeout(() => window.scrollTo(0, scrollY), 200);
         } else {
-
+          this.SET_IS_LOADING(true);
           const orderData = {
             promo_code: this.promo_code, 
             company_name: this.company_name,
@@ -390,6 +391,7 @@
               console.log(response);
               console.log(response.data.message === 'True');
               if (response.data.message === 'True') {
+                this.SET_IS_LOADING(false);
                 this.SET_IS_POPUP_OPEN(true);
                 this.SET_POPUP_ACTION('UserLogin');
                 this.SET_POPUP_ADDITIONAL_DATA({email: orderData.email});
@@ -419,14 +421,17 @@
                 orderData.user = this.USER.id;
                 await this.SEND_ORDER_REQUEST(orderData);
                 this.isLoading = false;
+                this.SET_IS_LOADING(false);
                 this.$router.push({name: "user-cab"});
               }
             }
             catch (e) {
               console.log(e);
+              this.SET_IS_LOADING(false);
             };
           }
           this.isLoading = false;
+          this.SET_IS_LOADING(false);
         }
       },
     },

@@ -7,7 +7,7 @@
   import Input from '@/components/UI/Input.vue'
   import Button from '@/components/UI/Button.vue'
   import Select from '@/components/UI/Select.vue'
-  import { helpers, required } from '@vuelidate/validators'
+  import { helpers, required, between } from '@vuelidate/validators'
   import { useVuelidate } from '@vuelidate/core'
   import Img from '@/components/UI/Img.vue'
 
@@ -72,7 +72,8 @@
   watch(() => activeCategory.value,
     (curr, prev) => {
       if (curr !== prev) {
-        sendGoodsRequest()
+        onChangePageNumber(1)
+        // sendGoodsRequest()
       }
   });
   
@@ -86,16 +87,22 @@
     store.commit(MutationTypes.SET_IS_LOADING, false)
   };
 
-  const rules = computed(() => ({
+  const rulesCategories = computed(() => ({
     categoryDiscount: {
-      requered:  helpers.withMessage(`Обязательно поле`, required),
-    },
-    goodDiscount: {
-      requered:  helpers.withMessage(`Обязательно поле`, required),
+      requered: helpers.withMessage(`Обязательно`, required),
+      between: helpers.withMessage(`0 - 100`, between(0, 100)),
     },
   }))
 
-  const v = useVuelidate(rules, {categoryDiscount, goodDiscount});
+  const rulesGoods = computed(() => ({
+    goodDiscount: {
+      requered:  helpers.withMessage(`Обязательно`, required),
+      between: helpers.withMessage(`0 - 100`, between(0, 100)),
+    },
+  }))
+
+  const vCat = useVuelidate(rulesCategories, {categoryDiscount});
+  const vGood = useVuelidate(rulesGoods, {goodDiscount});
 
   onMounted(async () => {
     store.commit(MutationTypes.SET_IS_LOADING, true)
@@ -111,7 +118,9 @@
   }
 
   const onSetDiscountForCategory = async () => {
-    await store.dispatch(ActionTypes.EDIT_CATEGORY_DISCOUNT, {category: activeCategory.value, discount: categoryDiscount.value})
+    vCat.value.$touch()
+    if (vCat.value.$error) return
+    await store.dispatch(ActionTypes.EDIT_CATEGORY_DISCOUNT, {category: activeCategory.value, discount: Number(categoryDiscount.value)})
   }
 
   const onSetAciveGood = (card: IDeliveryType) => {
@@ -119,7 +128,9 @@
   }
 
   const onSetDiscountForGood = async () => {
-    await store.dispatch(ActionTypes.EDIT_PRODUCT_DISCOUNT, {product: activeGood.value, discount: goodDiscount.value})
+    vGood.value.$touch()
+    if (vGood.value.$error) return
+    await store.dispatch(ActionTypes.EDIT_PRODUCT_DISCOUNT, {product: activeGood.value, discount: Number(goodDiscount.value)})
   }
 
   const cardPriceWithDiscount = (card: IDeliveryType) => {
@@ -133,8 +144,6 @@
   }
 
   const cardSyles = (card: IDeliveryType) => {
-    console.log(card.id, '    -    ', activeGood.value?.id);
-    
     let style = 'product '
     if (card.actual_discount) style = style + 'active'
     if (activeGood.value) {
@@ -176,19 +185,20 @@
 
 
           </div>
-          <div class="filter__setup_discount">
+          <form class="filter__setup_discount" @submit.prevent="onSetDiscountForCategory">
               <div class="filter__dbox" style="">{{ activeCategory.name }}</div>
               <div class="filter__dbox">
                   <Input
                           name="categoryDiscount"
                           width="100px"
-                          v-model:value="v.categoryDiscount.$model"
+                          v-model:value="vCat.categoryDiscount.$model"
+                          :error="vCat.categoryDiscount.$errors"
                   />
               </div>
               <div class="filter__dbox" style="">
-                  <Button label="Установить" color="primary" @click="onSetDiscountForCategory()"></Button>
+                  <Button label="Установить" color="primary"></Button>
               </div>
-          </div>
+          </form>
 
         </div>
         <br>
@@ -267,19 +277,21 @@
                   <p>Обращаем внимание, что <b>приоритетной</b> является всегда скидка на единичный товар, и изменение скидки на (под)категорию не влечет изменение скидки на товар с уже установленной скидкой</p>
               </div>
           </div>
-          <div class="filter__setup_discount">
+          <form class="filter__setup_discount" @submit.prevent="onSetDiscountForGood">
               <div class="filter__dbox" style="">{{ activeGood.name }}</div>
               <div class="filter__dbox">
                   <Input
                           name="goodDiscount"
                           width="100px"
-                          v-model:value="v.goodDiscount.$model"
+                          v-model:value="vGood.goodDiscount.$model"
+                          :error="vGood.goodDiscount.$errors"
                   />
               </div>
               <div class="filter__dbox" style="">
-                  <Button label="Установить" color="primary" @click="onSetDiscountForGood()"></Button>
+                  <Button label="Установить" color="primary"></Button>
+                  <!-- <Button label="Установить" color="primary" @click="onSetDiscountForGood()"></Button> -->
               </div>
-          </div>
+          </form>
 
         </div>
         <br>
@@ -298,7 +310,7 @@
               >{{ '>' }}</div>
               <div class="pagination-selector">
                 <Select
-                  :text = "10"
+                  text = "10"
                   :id   = String(store.getters.activePage)
                   fieldForSearch = "name"
                   :data = "itemsInPageArray"

@@ -7,7 +7,7 @@ export default {
     categoryId: null,
     typeOfProduct: 'all',
     offset: 0,
-    limit: 10,
+    limit: 12,
     sort: 'created_at',
     direction: '-',
     view: 'table',
@@ -26,7 +26,7 @@ export default {
       {name: 'цене', type: 'price'},
       {name: 'скидке', type: 'discount'},
     ],
-    limitItems : [10, 30, 60],
+    limitItems : [12, 24, 48],
   },
 
     getters: {

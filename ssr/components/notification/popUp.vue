@@ -39,15 +39,16 @@
     },
 
     computed: {
-        ...mapGetters("header", ["IS_POPUP_OPEN", "POPUP_ACTION"]),
+      ...mapGetters("header", ["IS_POPUP_OPEN", "POPUP_ACTION"]),
     },
 
     methods: {
-        ...mapMutations("header", ["SET_IS_POPUP_OPEN"]),
+      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ADDITIONAL_DATA"]),
 
-        closePopUp(status) {
-            this.SET_IS_POPUP_OPEN(status);
-        }
+      closePopUp(status) {
+        this.SET_IS_POPUP_OPEN(status);
+        this.SET_POPUP_ADDITIONAL_DATA({});
+      }
     }
 
   }

@@ -73,7 +73,7 @@ export default {
         commit("SET_BANNERS", response.data);
       } catch (e) {
         console.log(e);
-        commit("notification/ADD_MESSAGE", {name: "Не возможно обновить новости", icon: "error", id: '1'}, {root: true})
+        commit("notification/ADD_MESSAGE", {name: "Не возможно обновить банеры", icon: "error", id: '1'}, {root: true})
       }
     },
 
@@ -83,7 +83,7 @@ export default {
         commit("SET_SETTINGS", response.data);
       } catch (e) {
         console.log(e);
-        commit("notification/ADD_MESSAGE", {name: "Не возможно обновить новости", icon: "error", id: '1'}, {root: true})
+        commit("notification/ADD_MESSAGE", {name: "Не возможно обновить настройки " + e, icon: "error", id: '1'}, {root: true})
       }
     },
   }

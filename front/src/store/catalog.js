@@ -97,6 +97,7 @@ export default {
 
         if (rootGetters['query/TYPE_OF_PRODUCT'] !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'];
 
+        console.log(queryData);
         const response = await axios.get(process.env.VUE_APP_API_URL + queryData);
         commit("SET_CATALOG_ITEMS", response.data);
         commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
@@ -119,6 +120,7 @@ export default {
 
         if (rootGetters['query/TYPE_OF_PRODUCT'] !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT']
         
+        console.log(queryData);
         const response = await axios.get(process.env.VUE_APP_API_URL + queryData);
         commit("SET_CATALOG_ITEMS", response.data);
         commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});

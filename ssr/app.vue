@@ -36,20 +36,20 @@
     store.commit('notification/SET_IS_LOADING', false)
   });
 
-  // const { data: categoriesData } = await useAsyncData(
-  //   'categories', 
-  //   async () => {
-  //     console.log('App');
-  //     store.commit('notification/SET_IS_LOADING', true)
-  //     // await store.dispatch('header/GET_CATEGORIES')
-  //     await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')
-  //     await store.dispatch('main/GET_SETTINGS')
-  //     store.commit('notification/SET_IS_LOADING', false)
-  //     return store.getters['header/ALL_CATEGORIES']
-  //   }, {
-  //     watch: []
-  //   }
-  // )
+  const { data: categoriesData } = await useAsyncData(
+    'categories', 
+    async () => {
+      console.log('App');
+      store.commit('notification/SET_IS_LOADING', true)
+      // await store.dispatch('header/GET_CATEGORIES')
+      await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')
+      // await store.dispatch('main/GET_SETTINGS')
+      store.commit('notification/SET_IS_LOADING', false)
+      return store.getters['header/ALL_CATEGORIES']
+    }, {
+      watch: []
+    }
+  )
 </script>
 
 <style lang="scss">

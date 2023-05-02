@@ -1,7 +1,7 @@
 <template>
   <div class="main" @click.stop = "SET_SEARCH_STRING('')">
     <SliderBanner />
-    <!-- <SliderRecomendation /> -->
+    <SliderRecomendation />
     <AboutQuickCategory />
     <SliderNews />
     <SliderPartners />
