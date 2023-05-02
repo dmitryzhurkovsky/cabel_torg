@@ -1,7 +1,9 @@
 <template>
   <div class="main" @click.stop = "SET_SEARCH_STRING('')">
     <Banner/>
-    <Recomendation/>
+    <Recomendation
+      :isShowFilter = true
+    />
     <Quick_category/>
     <News/>
     <Partners/>
