@@ -8,6 +8,7 @@ import { MutationTypes } from '../store/mutation-types'
 import Input from '@/components/UI/Input.vue'
 import Button from '@/components/UI/Button.vue'
 import { router } from '../router'
+import Header from "../components/Layout/Header.vue";
 
 const emailField = ref('')
 const passwordField = ref('')
@@ -43,7 +44,10 @@ const submitForm = () => {
 
 <template>
   <div class="login-container">
-    <h1 class="heading-1">Авторизация</h1>
+
+    <a href="http://localhost:8080" class="admin__logo">
+        <img src="@/assets/admin_logo.svg" alt="CabelTorg">
+    </a>
 
     <form @submit.prevent="submitForm">
       <Input
@@ -72,8 +76,16 @@ const submitForm = () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-left: -250px;
 }
 .content{
   margin-left: 0;
+}
+.admin__logo{
+  margin-bottom: 40px;
+}
+.btn_primary{
+  width: 100%;
+  margin: 0;
 }
 </style>
