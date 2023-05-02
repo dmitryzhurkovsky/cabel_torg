@@ -186,7 +186,6 @@
   <div class="form-container">
     <h3 class="heading-3">Данные банера</h3>
 
-
     <form @submit.prevent="submitUpload"  v-if="isUploadOpen">
       <PhotoUploader v-model="files" />
       <div class="form-buttons">
@@ -195,58 +194,68 @@
       </div>
     </form>
 
-    <form @submit.prevent="submitForm" v-if="isFormOpen">
-      <TextArea
-        label="Заголовок"
-        name="title"
-        placeholder="Укажите заголовок"
-        v-model:value="v.titleField.$model"
-        :error="v.titleField.$errors"
-        width="1000px"
-        height="200px"
-      />
-      <TextArea
-        label="Контент"
-        name="subtitle"
-        placeholder="Укажите контент"
-        v-model:value="v.subtitleField.$model"
-        :error="v.subtitleField.$errors"
-        width="1000px"
-        height="200px"
-      />
+    <form @submit.prevent="submitForm" v-if="isFormOpen" class="form">
+        <div  class="textarea__block">
+            <TextArea
+                    label="Заголовок"
+                    name="title"
+                    placeholder="Укажите заголовок"
+                    v-model:value="v.titleField.$model"
+                    :error="v.titleField.$errors"
+                    height="200px"
+            />
+            <TextArea
+                    label="Контент"
+                    name="subtitle"
+                    placeholder="Укажите контент"
+                    v-model:value="v.subtitleField.$model"
+                    :error="v.subtitleField.$errors"
+                    height="200px"
+            />
+            <div class="banner__column">
+                <Select
+                        v-if="isActiveData.length"
+                        :text = "isActiveNameField"
+                        :id  = "String(isActiveField)"
+                        fieldForSearch = "name"
+                        :data = "isActiveData"
+                        @onSelectItem="onSetNewStatus"
+                        height="100%"
+                />
+                <Input
+                        label="Название кнопки"
+                        name="buttonNameField"
+                        placeholder="Название кнопки"
+                        v-model:value="v.buttonNameField.$model"
+                        :error="v.buttonNameField.$errors"
+                />
+                <Input
+                        label="Линк кнопки"
+                        name="buttonLinkField"
+                        placeholder="Линк кнопки"
+                        v-model:value="v.buttonLinkField.$model"
+                        :error="v.buttonLinkField.$errors"
+                />
+            </div>
+
+        </div>
+
+
       <!-- <QuillEditor 
         theme="snow" 
         v-model:content = "textField" 
         contentType = "html" 
       /> -->
-      <Input
-        label="Название кнопки"
-        name="buttonNameField"
-        placeholder="Название кнопки"
-        v-model:value="v.buttonNameField.$model"
-        :error="v.buttonNameField.$errors"
-      />
-      <Input
-        label="Линк кнопки"
-        name="buttonLinkField"
-        placeholder="Линк кнопки"
-        v-model:value="v.buttonLinkField.$model"
-        :error="v.buttonLinkField.$errors"
-      />
-      <Select
-        v-if="isActiveData.length"
-        :text = "isActiveNameField"
-        :id  = "String(isActiveField)" 
-        fieldForSearch = "name"
-        :data = "isActiveData"
-        @onSelectItem="onSetNewStatus"
-      />
+
+
       <div class="form-buttons">
         <Button label="Создать" color="primary" v-if="formType"></Button>
         <Button label="Сохранить" color="primary" v-if="!formType"></Button>
         <Button label="Отменить" color="warning" @click="onSetIsFormOpen(false)"></Button>
       </div>
+      <hr class="edit_separator">
     </form>
+
   </div>
 
   <base-table
@@ -262,18 +271,45 @@
 </template>
 
 <style lang="scss" scoped>
-
-  .form{
-    &-container {
-      display: flex;
-      flex-direction: column;
-      align-items: baseline;
-      margin: 15px 0;
-      background-color: var(--background-content);
-    }
-    &-buttons {
-      display: flex;
-      justify-content: space-around;
-    }
+.heading-3{
+  margin-bottom: 20px;
+}
+.form{
+  margin-top: 20px;
+  &-container {
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    margin: 15px 0;
+    background-color: var(--background-content);
   }
+  &-buttons {
+    display: flex;
+    justify-content: flex-start;
+    margin: 20px 0;
+  }
+}
+
+.textarea__block{
+  width: 100%;
+  display: flex;
+  gap: 20px;
+
+}
+.banner__column{
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+
+}
+.form-input{
+  margin-bottom: 0;
+}
+
+.edit_separator{
+  height: 2px;
+  width: 100%;
+  background: #3c3f45;
+}
+
 </style>
