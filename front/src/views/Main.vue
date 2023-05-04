@@ -9,9 +9,6 @@
     <Partners/>
     <About/>
     <!--<Offer/> -->
-
-
-
   </div>
 </template>
 

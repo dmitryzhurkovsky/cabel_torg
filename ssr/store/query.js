@@ -118,7 +118,6 @@ export default {
 
       SET_SEARCH_STRING(state, query) {
         state.searchString = query;
-        // state.categoryId = null;
       },
 
       SET_FINDED_ELEMENTS(state, items) {

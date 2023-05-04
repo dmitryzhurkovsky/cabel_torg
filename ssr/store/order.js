@@ -214,8 +214,9 @@ export default {
                           newItemsFromDB.push({ amount: dbItem.amount, product: dbItem.product});
                       }
                   });
+                  console.log(newItemsFromDB);
                   newItemsFromDB.forEach( async newItem => {
-                      await commit("UPDATE_ITEM_IN_CART", { amount: newItem.amount , product: newItem.product } );
+                      await commit("UPDATE_ITEM_IN_CART", { amount: newItem.amount , product: newItem.product } )
                   });
                   const newItemsFromSite = JSON.parse(localStorage.getItem('carts'));
                   if (newItemsFromSite.length) {

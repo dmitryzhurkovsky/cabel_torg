@@ -30,9 +30,24 @@
 <script>
   import { mapGetters, mapActions } from 'vuex';
 
-  export default {
+  definePageMeta({
+    // middleware: ["auth"],
+    name: 'Новости',
+  });
+
+  export default defineNuxtComponent({
     name: 'News',
 
+    head () {
+      return {
+        title: 'Новости',
+        meta: [{
+          name: 'Новости',
+          content: 'Страница Новости'
+        }]
+      }
+    },
+    
     data: function(){
       return{
         pageNumber : 1,
@@ -76,7 +91,7 @@
       await this.GET_NEWS();
       this.setPages();
     }
-  }
+  })
 </script>
 
 <style scoped lang="scss">

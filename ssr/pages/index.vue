@@ -1,7 +1,9 @@
 <template>
   <div class="main" @click.stop = "SET_SEARCH_STRING('')">
     <SliderBanner />
-    <SliderRecomendation />
+    <SliderRecomendation 
+      :isShowFilter = true
+    />
     <AboutQuickCategory />
     <SliderNews />
     <SliderPartners />
@@ -12,16 +14,31 @@
 <script>
 import { mapActions, mapMutations } from 'vuex'
 
-export default {
-    name: 'Main',
+definePageMeta({
+  // middleware: ["auth"],
+  name: 'Главная',
+});
 
-    methods:{
-      ...mapMutations("query", ["SET_SEARCH_STRING"]),
-      ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
-    },
+export default defineNuxtComponent({
+  name: 'Main',
 
-    mounted(){
-      this.CHANGE_BREADCRUMB(0);
+  head () {
+    return {
+      title: 'CabelTorg',
+      meta: [{
+        name: 'CabelTorg',
+        content: 'Интернет магазин КабельТорг'
+      }]
     }
+  },
+
+  methods:{
+    ...mapMutations("query", ["SET_SEARCH_STRING"]),
+    ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
+  },
+
+  mounted(){
+    this.CHANGE_BREADCRUMB(0);
   }
+})
 </script>

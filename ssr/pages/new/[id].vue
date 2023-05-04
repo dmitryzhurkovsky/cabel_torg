@@ -22,59 +22,75 @@
   </div>
 </template>
 
-<script>
+<script setup>
   import axios from 'axios';
-  import { mapMutations, mapActions } from 'vuex'
+  import store from '@/store'
 
-  export default {
-    name: 'OneNew',
+  // useHead({
+  //   title: oneNewData.value.name,
+  //   name: oneNewData.value.name,
+  //   meta: [{
+  //     name: oneNewData.value.name,
+  //     content: 'Страница ' + oneNewData.value.name,
+  //   }]
+  // })
 
-    data(){
-      return {
-        oneNewData: null,
-        id: null,
-      }
-    },
+  const route = useRoute()
+  const router = useRouter()
 
-    methods: {
-      ...mapMutations("breadcrumb", ["ADD_BREADCRUMB", ]),
-      ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB", ]),
+  const ChangeParameters = computed(() => {
+    return JSON.stringify(route.query) + JSON.stringify(route.params);
+  })
 
-      onMoveToAllNews() {
-        this.$router.push('/news');
-      },
-
-      async onGetNewsData (){
-        this.CHANGE_BREADCRUMB(0);
-        try {
-          const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'service_entities/articles/' + this.id);
-          this.oneNewData = response.data;
-        } catch (e) {
-            console.log(e);
-            this.ADD_MESSAGE({name: "Не возможно загрузить новость ", icon: "error", id: '1'})
-        }
-        const mainBreadCrumb = {
-          name: 'Новости',
-          path: '/news',
-          type: 'global',
-          class: '',
-        }
-        this.ADD_BREADCRUMB(mainBreadCrumb);
-
-        this.ADD_BREADCRUMB({
-          name: this.oneNewData.title,
-          path: this.$router.currentRoute.value.path,
-          type: "global",
-          class: ""
-        });
-      },
-    },
-
-    async mounted(){
-      this.id = this.$route.params.id;
-      await this.onGetNewsData();
-    }
+  const onMoveToAllNews = () => {
+    router.push('/news');
   }
+
+  const onSetBreadCrumbs = () => {
+    store.dispatch('breadcrumb/CHANGE_BREADCRUMB', 0);
+    const mainBreadCrumb = {
+      name: 'Новости',
+      path: '/news',
+      type: 'global',
+      class: '',
+    }
+    store.commit('breadcrumb/ADD_BREADCRUMB', mainBreadCrumb);
+
+    store.commit('breadcrumb/ADD_BREADCRUMB', {
+      name: oneNewData.value.title,
+      path: route.path,
+      type: "global",
+      class: ""
+    });
+  }
+
+  const { data: oneNewData } = await useAsyncData(
+    'oneNewData', 
+    async () => {
+      store.commit('notification/SET_IS_LOADING', true)
+      try {
+        const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'service_entities/articles/' + route.params.id);
+        store.commit('notification/SET_IS_LOADING', false)
+        return response.data;
+      } catch (e) {
+          console.log(e);
+          store.commit('notification/ADD_MESSAGE',{name: "Не возможно загрузить новость ", icon: "error", id: '1'})
+          store.commit('notification/SET_IS_LOADING', false)
+          return null
+      }
+    }, {
+      watch: [ChangeParameters]
+    }
+  )
+
+  onMounted(async () => {
+    onSetBreadCrumbs()
+  })
+
+  onUpdated(() => {
+    onSetBreadCrumbs()
+  })
+
 </script>
 
 <style lang="scss" scoped>

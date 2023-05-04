@@ -5,7 +5,9 @@
     <UiLoader />
     <NotificationPopUp/>
     <MyHeader />
-    <!-- <Breadcrumb/> -->
+    <ClientOnly fallback-tag="div">
+      <Breadcrumb/>
+    </ClientOnly>
     <NuxtPage />
     <MyFooter />
   </div>
@@ -15,7 +17,16 @@
 
   import store from '@/store'
 
-  fetchKey: 'categoriesData'
+  // fetchKey: 'categoriesData'
+
+  // useHead({
+  //   title: 'CabelTorg',
+  //   name: 'CabelTorg',
+  //   meta: [{
+  //     name: 'CabelTorg',
+  //     content: 'Интернет магазин КабельТорг'
+  //   }]
+  // })
 
   const setViewParametrs = () => {
       store.commit('header/UPDATE_VIEW_PARAMETERS',window.innerWidth)
@@ -25,6 +36,9 @@
     store.commit('notification/SET_IS_LOADING', true)
     setViewParametrs();
     window.addEventListener('resize', setViewParametrs)
+    const nullData = []
+    if (!localStorage.getItem("carts")) localStorage.setItem("carts", JSON.stringify(nullData))
+    if (!localStorage.getItem("favorites")) localStorage.setItem("favorites", JSON.stringify(nullData))
     await store.dispatch('header/GET_CATEGORIES')
     await store.dispatch('favorite/GET_USER_FAVORITE')
     await store.dispatch('order/GET_USER_ORDER')
@@ -39,7 +53,6 @@
   const { data: categoriesData } = await useAsyncData(
     'categories', 
     async () => {
-      console.log('App');
       store.commit('notification/SET_IS_LOADING', true)
       // await store.dispatch('header/GET_CATEGORIES')
       await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')

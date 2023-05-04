@@ -66,8 +66,23 @@
 <script>
   import { mapActions, mapGetters, mapMutations } from "vuex";
 
-  export default {
+  definePageMeta({
+    // middleware: ["auth"],
+    name: 'Контакты',
+  });
+
+  export default defineNuxtComponent({
     name: 'Contacts',
+
+    head () {
+      return {
+        title: 'Контакты',
+        meta: [{
+          name: 'Контакты',
+          content: 'Страница Контакты'
+        }]
+      }
+    },
 
     data: function() {
       return {
@@ -138,7 +153,7 @@
       }
     }
 
-  }
+  })
 </script>
 
 <style scoped lang="scss">

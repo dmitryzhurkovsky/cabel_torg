@@ -58,7 +58,7 @@ export default {
       };
     },
 
-    async SEND_LOGIN_REQUEST({ dispatch, commit, getters }, data) {
+    async SEND_LOGIN_REQUEST({ dispatch, commit }, data) {
         commit("SET_ERRORS", {});
         try {
             const response = await axios.post(useRuntimeConfig().public.NUXT_APP_API_URL + "token", data);
@@ -104,6 +104,7 @@ export default {
         commit("order/SET_ORDERS", [], {root: true});
         commit("favorite/SET_FAVORITES", [], {root: true});
         localStorage.removeItem("authToken");
+        localStorage.removeItem("refreshToken");
         commit("order/SET_IS_APPLICATION_OPEN", false, {root: true});
         commit("SET_DESTINATION", '');
     },

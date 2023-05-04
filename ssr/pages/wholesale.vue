@@ -15,15 +15,7 @@
             <div class="wholesale__item _block">
               <img src="@/assets/sertificate.svg" alt="Сертификат">
             </div>
-
-
           </div>
-
-
-
-
-
-
         </div>
       </div>
     </div>
@@ -33,8 +25,23 @@
 <script>
   import { mapGetters } from 'vuex';
 
-  export default {
+  definePageMeta({
+    // middleware: ["auth"],
+    name: 'Оптовым клиентам',
+  });
+
+  export default defineNuxtComponent({
     name: 'Wholesale',
+
+    head () {
+      return {
+        title: 'Оптовым клиентам',
+        meta: [{
+          name: 'Оптовым клиентам',
+          content: 'Страница Оптовым клиентам'
+        }]
+      }
+    },
 
     computed: {
       ...mapGetters("main", ["SETTINGS"]),
@@ -49,7 +56,7 @@
         class: ""
       });
     }
-  }
+  })
 </script>
 
 <style scoped lang="scss">

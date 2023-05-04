@@ -64,7 +64,15 @@
   const isFilterPanelOpen = ref(false)
   const isMobileVersion = ref(false)
 
-  
+  useHead({
+    title: 'Каталог',
+    name: 'Каталог',
+    meta: [{
+      name: 'Каталог',
+      content: 'Каталог товаров'
+    }]
+  })
+
   const setIsFilterPanelOpen = (data) => {
     isFilterPanelOpen.value = data
   };
@@ -125,7 +133,7 @@
       isFailInParams = true
     }
     if (query.q) {
-      if (getters['cataloh/CATALOG_SEARCH_STRING'] !== query.q) {
+      if (getters['catalog/CATALOG_SEARCH_STRING'] !== query.q) {
         store.commit('catalog/SET_CATALOG_SEARCH_STRING', query.q)
         store.commit('query/SET_SEARCH_STRING', query.q)
       } 
@@ -137,7 +145,6 @@
     if (query.type_of_product) {
       if (getters['query/TYPE_OF_PRODUCT'] !== query.type_of_product) store.commit('query/SET_TYPE_OF_PRODUCT', query.type_of_product)
     } else {
-      store.commit('query/SET_TYPE_OF_PRODUCT', query.type_of_product)
       isFailInParams = true
     }
     if (query.ordering) {
@@ -161,7 +168,14 @@
     isFerstRender = false
   }
 
-  
+  const setBreabcrumbs = () => {
+    store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
+      mainCategory: null,
+      middleCategory: null,
+      lastCategory: null,
+    });
+    return;
+  }
 
   const { data: catalogData } = await useAsyncData(
     'posts', 
@@ -176,29 +190,13 @@
     }
   )
 
-  // onBeforeMount(() => {
-  //   const { query } = route
-  //   // setParametersFromURL()
-  //   console.log('before mount ', catalogData._value.length);
-  // })
-  
-  // onBeforeUpdate(() => {
-  //   const { query } = route
-  //   // setParametersFromURL()
-  //   console.log('before update ', query);
-  // })
+  onMounted(() => {
+    setBreabcrumbs()
+  })
 
-  // watch(
-  //   catalogData,
-  //   (curr, prev) => {
-  //     // console.log('Watch');
-  //     catalogItems.value = [...catalogData._value]
-  //     // console.log('Data change', catalogData._value.length);
-  //     // refresh()
-  //   }
-  // )
-    
-  
+  onUpdated(() => {
+    setBreabcrumbs()
+  })
 
 </script>
 

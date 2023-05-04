@@ -14,12 +14,6 @@
             <p class="structure__text _bold">Возврат денег за отрезанную продукцию <span>НЕ ПРОИЗВОДИТСЯ</span></p>.
 
           </div>
-
-
-
-
-
-
         </div>
       </div>
     </div>
@@ -28,8 +22,23 @@
 
 <script>
 
-  export default {
+  definePageMeta({
+    // middleware: ["auth"],
+    name: 'Гарантия',
+  });
+
+  export default defineNuxtComponent({
     name: 'warranty',
+
+    head () {
+      return {
+        title: 'Гарантия',
+        meta: [{
+          name: 'Гарантия',
+          content: 'Страница Гарантия'
+        }]
+      }
+    },
 
     mounted(){
       this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
@@ -40,7 +49,7 @@
         class: ""
       });
     }
-  }
+  })
 </script>
 
 <style scoped lang="scss">

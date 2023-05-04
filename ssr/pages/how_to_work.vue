@@ -4,7 +4,6 @@
       <div class="structure__content _container">
         <div class="structure__body">
           <div class="structure__block">
-
             <h3 class="structure__title">Как совершить покупку?</h3>
             <ol>
               <li class="structure__list__item">Воспользуйтесь поиском или навигацией по каталогу, чтобы выбрать интересующий вас товар.
@@ -17,19 +16,8 @@
               <li class="structure__list__item">Получив заказ, наш оператор свяжется с Вами по указанному телефону для подтверждения принятой информации и уточнения срока доставки.
                 Так же наш оператор выставит Вам счет за выбранные товары, который будет действителен в течение трех банковских дней. Сразу же после оплаты счета, заказ можно будет забрать со склада (при оформлении самовывоза), или Ваш товар будет отправлен курьером по указанному адресу.</li>
             </ol>
-
-
             <p class="structure__text">Подробнее о способах доставки и оплаты товаров — в разделе <a class="_link" href="/shipping">«Доставка и  оплата»</a>.</p>
-
-
-
           </div>
-
-
-
-
-
-
         </div>
       </div>
     </div>
@@ -37,9 +25,23 @@
 </template>
 
 <script>
+  definePageMeta({
+    // middleware: ["auth"],
+    name: 'Как оформить заказ',
+  });
 
-  export default {
+  export default defineNuxtComponent({
     name: 'how_to_work',
+
+    head () {
+      return {
+        title: 'Как оформить заказ',
+        meta: [{
+          name: 'Как оформить заказ',
+          content: 'Страница Как оформить заказ'
+        }]
+      }
+    },
 
     mounted(){
       this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
@@ -50,7 +52,7 @@
         class: ""
       });
     }
-  }
+  })
 </script>
 
 <style scoped lang="scss">

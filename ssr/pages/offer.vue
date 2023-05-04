@@ -90,9 +90,24 @@
 <script>
   import { mapGetters } from 'vuex';
 
-  export default {
+  definePageMeta({
+    // middleware: ["auth"],
+    name: 'Публичная оферта',
+  });
+
+  export default defineNuxtComponent({
     name: 'Offer',
-    
+
+    head () {
+      return {
+        title: 'Публичная оферта',
+        meta: [{
+          name: 'Публичная оферта',
+          content: 'Страница Публичная оферта'
+        }]
+      }
+    },
+
     computed:{
       ...mapGetters("main", ["SETTINGS"]),
     },
@@ -106,7 +121,7 @@
         class: ""
       });
     }
-  }
+  })
 </script>
 
 <style scoped lang="scss">

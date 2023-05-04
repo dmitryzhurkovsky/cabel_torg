@@ -43,22 +43,17 @@ export default {
     ...mapMutations("order", ["SET_IS_APPLICATION_OPEN"]),
 
     onOpenCart() {
-        if (this.$router.path != '/cart') {
-            this.$router.push('/cart');
-        }
+      if (this.$router.path != '/cart') {
+          this.$router.push('/cart');
+      }
     },
 
     onPutApplication() {
-        // if (localStorage.getItem("authToken")) {
-            this.SET_DESTINATION('');
-            this.SET_IS_APPLICATION_OPEN(true);
-            if (this.$router.path != '/cart') {
-                this.$router.push('/cart');
-            }
-        // } else {
-        //     this.SET_DESTINATION('/cart');
-        //     this.$router.push('/login');
-        // }
+      this.SET_DESTINATION('');
+      this.SET_IS_APPLICATION_OPEN(true);
+      if (this.$router.path != '/cart') {
+          this.$router.push('/cart');
+      }
     }
   }
 }

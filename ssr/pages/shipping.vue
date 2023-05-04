@@ -13,10 +13,6 @@
             >
               {{ delivery.payload }}
             </li>
-            <!-- <li class="structure__list__item">Самовывоз со склада Брест с 09:00 до 18:00 (бесплатно)</li>
-            <li class="structure__list__item">Самовывоз со склада Минск с 09:00 до 18:00 (бесплатно)</li>
-            <li class="structure__list__item">Бесплатная доставка по РБ от 500 рублей (бесплатно)</li>
-            <li class="structure__list__item">Доставка по РБ  в любую точку (платно за счет клиента). Обсуждается индивидуально с менеджером.</li> -->
             <h3  class="structure__title">Оплата</h3>
             <p>Для оптовых покупателей из РБ доступен только безналичный расчет.</p>
           </div>
@@ -29,8 +25,23 @@
 <script>
   import { mapGetters } from 'vuex';
 
-  export default {
+  definePageMeta({
+    // middleware: ["auth"],
+    name: 'Оплата и доставка',
+  });
+
+  export default defineNuxtComponent({
     name: 'Shipping',
+
+    head () {
+      return {
+        title: 'Оплата и доставка',
+        meta: [{
+          name: 'Оплата и доставка',
+          content: 'Страница Оплата и доставка'
+        }]
+      }
+    },
 
     computed: {
       ...mapGetters("order", ["ORDER_DELIVERY_TYPES"]),
@@ -44,7 +55,7 @@
         class: ""
       });
     }
-  }
+  })
 </script>
 
 <style lang="scss">

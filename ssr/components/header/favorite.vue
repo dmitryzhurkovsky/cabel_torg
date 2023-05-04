@@ -51,11 +51,12 @@ export default {
       this.CHANGE_SCREEN(1);
       if (this.USER) {
             this.SET_DESTINATION('');
-            if (this.$router.path != '/user-cab') {
-                this.$router.push('/user-cab');
+            if (this.$router.path != '/user_profile') {
+              this.$router.push('/user_profile');
             }
+            this.CHANGE_SCREEN(1);              
         } else {
-            this.SET_DESTINATION('/user-cab');
+            this.SET_DESTINATION('/user_profile');
             this.$router.push('/login');
         }
     }

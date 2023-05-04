@@ -42,13 +42,13 @@
 
           <div class="dropdown__content popup-cart user-login">
             <div class="dropdown__list">
-                <a @click="handleClick('/user-cab', 1)" class="icon-user">
+                <a @click="handleClick('/user_profile', 0)" class="icon-user">
                   Личный кабинет
                 </a>
-                <a @click="handleClick('/user-cab', 1)" class="icon-go-cart">
+                <a @click="handleClick('/user_profile', 0)" class="icon-go-cart">
                   Мои заказы
                 </a>
-                <a @click="handleClick('/user-cab', 1)" class="icon-setting">
+                <a @click="handleClick('/user_profile', 2)" class="icon-setting">
                   Настройки
                 </a>
                 <a @click="userLogout()" class="icon-exit">
@@ -97,10 +97,6 @@ export default {
       }
   },
 
-  // components: {
-  //     HeaderCart, HeaderFavorite, IconQuantity
-  // },
-
   computed: {
       ...mapGetters("auth", ["AUTH_TYPE", "IS_OPEN_MAIN_LOGIN", "USER"]),
       ...mapGetters("order", ["ORDERS"]),
@@ -110,16 +106,25 @@ export default {
     ...mapMutations("auth", ["SET_TYPE"]),
     ...mapActions("auth", ["SEND_LOGOUT_REQUEST"]),
     ...mapMutations("query", ["SET_SEARCH_STRING"]),
+    ...mapMutations("profile", ["CHANGE_SCREEN"]),
     
-    handleClick (URL, auth_type) {
+    handleClick (URL, screen_type) {
         // this.clearSearchString();
         this.cartHover = false;
         this.userHover = false;
         if (this.$route.path != URL) {
-            this.SET_TYPE(auth_type);
-            this.$router.push(URL);
+          if (URL === '/login') {
+            this.SET_TYPE(screen_type);
+          } else {
+            this.CHANGE_SCREEN(screen_type)
+          }
+          this.$router.push(URL);
         } else {
-            this.SET_TYPE(auth_type);
+          if (URL === '/login') {
+            this.SET_TYPE(screen_type);
+          } else {
+            this.CHANGE_SCREEN(screen_type)
+          }
         }
     },
 

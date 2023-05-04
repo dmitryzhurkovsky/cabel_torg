@@ -124,7 +124,8 @@
     console.log(LastCategory.length)
     console.log(isMobileVersion)
     return LastCategory.length && !isMobileVersion
-  } 
+  }
+
   const clearSearchString= () => {
     store.commit("query/SET_SEARCH_STRING", '')
     store.commit("catalog/SET_CATALOG_SEARCH_STRING", '')
@@ -144,7 +145,7 @@
       "&price_lte=" + getters['query/MAX_PRICE']
     url = url + "&ordering=" + getters['query/SORT_DIRECTION'] + getters['query/SORT_TYPE']
     url = url + '&type_of_product=' + getters['query/TYPE_OF_PRODUCT']
-    url = url + "&q=" + getters['query/CATALOG_SEARCH_STRING']
+    url = url + "&q=" + getters['catalog/CATALOG_SEARCH_STRING']
     return url;        
   }
 
@@ -160,7 +161,6 @@
     let isFailInParams = false
     const currRoute = useRoute()
     const { query } = currRoute
-    // console.log(currRoute.params.id);
     if (getters['query/CATEGORY_ID'] !== currRoute.params.id) store.commit('query/SET_CATEGORY_ID', currRoute.params.id);
     if (query.limit) {
       if (getters['query/LIMIT'] !== query.limit) store.commit('query/SET_LIMIT', query.limit);
@@ -183,8 +183,10 @@
     } else {
       isFailInParams = true
     }
+    console.log(query.q, typeof query.q);
     if (query.q) {
-      if (getters['cataloh/CATALOG_SEARCH_STRING'] !== query.q) {
+      console.log('QQQQ');
+      if (getters['catalog/CATALOG_SEARCH_STRING'] !== query.q) {
         store.commit('catalog/SET_CATALOG_SEARCH_STRING', query.q)
         store.commit('query/SET_SEARCH_STRING', query.q)
       } 
@@ -221,25 +223,19 @@
   }
 
   const setBreabcrumbs = () => {
-    if (!getters['query/CATEGORY_ID']) {
-      store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
-        mainCategory: null,
-        middleCategory: null,
-        lastCategory: null,
-      });
-      return;
-    }
-    console.log('1')
-    const categoryStack = [];
-    categoryStack.push(Number(getters['query/CATEGORY_ID']));
-    let curLevel = getters['header/ALL_CATEGORIES'].filter(item => item.id == getters['query/CATEGORY_ID'])[0];
-    console.log('2')
+    const categoryStack = []
+    const currRoute = useRoute()
+    let category = Number(getters['query/CATEGORY_ID'])
+
+    if (!getters['query/CATEGORY_ID']) category = Number(currRoute.params.id)
+    categoryStack.push(category)
+
+    let curLevel = getters['header/ALL_CATEGORIES'].filter(item => item.id == category)[0]
     while (curLevel.parent_category_id) {
-      const parent_category_id = curLevel.parent_category_id;
-      categoryStack.push(parent_category_id);
-      curLevel = getters['header/ALL_CATEGORIES'].filter(item => item.id == parent_category_id)[0];
+      const parent_category_id = curLevel.parent_category_id
+      categoryStack.push(parent_category_id)
+      curLevel = getters['header/ALL_CATEGORIES'].filter(item => item.id == parent_category_id)[0]
     }
-    console.log('3')
     if (categoryStack.length === 3) {
       store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
         mainCategory: categoryStack[2],
@@ -247,7 +243,6 @@
         lastCategory: categoryStack[0],
       });
     };
-    console.log('4')
     if (categoryStack.length === 2) {
       store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
         mainCategory: categoryStack[1],
@@ -255,7 +250,6 @@
         lastCategory: null,
       });
     };
-    console.log('5')
     if (categoryStack.length === 1) {
       store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
         mainCategory: categoryStack[0],
@@ -263,19 +257,14 @@
         lastCategory: null,
       });
     }; 
-    console.log('end')
   }
 
   const { data: catalogData } = await useAsyncData(
     'posts', 
     async () => {
-      // console.log('Категория вызов из asyncData: ', getters['query/CATEGORY_ID']);
       if (isFirstRender) {
         setParametersFromURL()
       }
-      // await store.dispatch('header/GET_CATEGORIES')
-      // setBreabcrumbs()
-      // console.log('Категория вызов из asyncData: ', getters['query/CATEGORY_ID']);
       await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
       return store.getters['catalog/ITEMS_LIST']
     }, {
@@ -283,6 +272,16 @@
     }
   )
 
+  onMounted(async () => {
+    if (!getters['header/ALL_CATEGORIES'].length) {
+      await store.dispatch('header/GET_CATEGORIES')
+    }
+    setBreabcrumbs()
+  })
+
+  onUpdated(() => {
+    setBreabcrumbs()
+  })
 </script>
 
 <style scoped lang="scss">
