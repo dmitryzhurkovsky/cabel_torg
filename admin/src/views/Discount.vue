@@ -69,11 +69,11 @@
       store.commit(MutationTypes.SET_IS_LOADING, false)
    });
 
-  watch(() => activeCategory.value,
+  watch(() => JSON.stringify(activeCategory.value),
     (curr, prev) => {
       if (curr !== prev) {
         onChangePageNumber(1)
-        // sendGoodsRequest()
+        sendGoodsRequest()
       }
   });
   
