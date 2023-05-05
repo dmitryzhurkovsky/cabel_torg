@@ -10,9 +10,9 @@ from starlette.datastructures import QueryParams
 
 from src.core.enums import ProductOrderFilterEnum, ProductTypeFilterEnum
 from src.core.utils import calculate_price_with_discount
-from src.rest.managers.base_manager import CRUDManager
 from src.models import Product, Category, ProductOrder
 from src.models.product_model import ProductStatus
+from src.rest.managers.base_manager import CRUDManager
 from src.rest.schemas.product_schema import ProductUpdateSchema
 
 
@@ -170,10 +170,14 @@ class ProductManager(CRUDManager):
             categories_ids: tuple[int] | list[int],
             discount: int
     ):
-        products = await cls.list(session=session, where=(
-            Product.category_id.in_(categories_ids),
-            Product.discount == 0
-        ))
+        products = await cls.list(
+            session=session,
+            where=(
+                Product.category_id.in_(categories_ids),
+                Product.discount == 0,
+            ),
+            limit=1000000
+        )
         for product in products:
             product.price_with_discount = calculate_price_with_discount(product=product, discount=discount)
         # we don't do commit here because we should also update a category
