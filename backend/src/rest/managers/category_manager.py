@@ -5,9 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.datastructures import QueryParams
 
 from src.core.enums import CategoryTypeFilterEnum
+from src.models.category_model import Category
 from src.rest.managers.base_manager import CRUDManager
 from src.rest.managers.product_manager import ProductManager
-from src.models.category_model import Category
 from src.rest.schemas.category_schema import CategoryUpdateSchema
 
 
