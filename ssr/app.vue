@@ -151,6 +151,12 @@ h6 {
     font-weight: inherit;
     font-size: inherit;
 }
+
+*:disabled {
+  background-color: #dedede;
+  opacity: 1;
+}
+
 //-webkit-overflow-scrolling: touch;
 //animation-play-state: paused !important;
 

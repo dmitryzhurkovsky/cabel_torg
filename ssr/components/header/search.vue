@@ -3,7 +3,7 @@
     <div class="search__box">
       <div class="search__field">
         <input type="text" name="focus" required class="search-box" placeholder="Поиск товаров"
-          v-model = "queryString" @input="onInput()"
+          v-model = "queryString" @input="onInput()" autocomplete="off"
         />
         <button class="icon-close" type="reset" v-if ="queryString" @click = "clearString"></button>
       </div>
@@ -23,7 +23,7 @@
                     :item = item
                     @click.stop = "openCardItem(item.id)"
                 />
-                <div class="search__footer" @click = "openFindedElementsInCatalg">
+                <div class="search__footer" @click = "openFindedElementsInCatalg" autocomplete="off">
                   Показать все
                 </div>
               </div>
