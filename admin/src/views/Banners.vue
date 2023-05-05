@@ -272,7 +272,7 @@
 
 <style lang="scss" scoped>
 .heading-3{
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 .form{
   margin-top: 20px;

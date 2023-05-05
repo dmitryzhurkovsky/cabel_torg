@@ -328,6 +328,7 @@
     display: inline-block;
     padding: 10px;
     border: 1px solid var(--primary);
+    margin-right: 5px;
   }
   &-elem:first-child{
     border-top-left-radius: 7px;

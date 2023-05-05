@@ -294,6 +294,7 @@ h3{
 
 
 .btn {
+
   background: #4275D8;
   border-radius: 6px;
   color:#fff;

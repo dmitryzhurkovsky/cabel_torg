@@ -76,7 +76,7 @@
       ? product.price_with_discount_and_tax 
       : product.price_with_tax
   }
-
+``
   const statusName = (id: string) => {
     const isStatus = store.getters.orderTypes.filter(item => item.id === id)
     return isStatus.length ? isStatus[0].name : 'Не известно'
@@ -216,7 +216,7 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      padding: 24px 20px;
+      padding: 5px 10px;
       background: #FFFFFF;
       border: 2px solid #EEEEEE;
       border-radius: 8px;

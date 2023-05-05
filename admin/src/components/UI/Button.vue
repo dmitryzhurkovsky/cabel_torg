@@ -54,7 +54,7 @@ const clickOnButton = () => {
 
 <style lang="scss" scoped>
 .btn {
-  margin: 5px;
+  margin:5px 5px 5px 0;
   padding: 0 20px;
   height: 40px;
   color: #fff;

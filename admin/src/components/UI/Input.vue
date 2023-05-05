@@ -90,6 +90,7 @@ const updateValue = (e: Event) => {
   position: relative;
   z-index: 1;
   opacity: 0.8;
+  resize: none;
     &:focus {
       & + .input-label {
         z-index: 1;
@@ -108,6 +109,7 @@ const updateValue = (e: Event) => {
   &-label {
     font-weight: bold;
     display: block;
+    margin: 5px 0;
     position: absolute;
     top: 20px;
     opacity: 0;

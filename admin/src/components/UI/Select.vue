@@ -163,6 +163,7 @@ import { IDeliveryType} from "../../types";
       background: var(--background-content);
       border: 1px solid var(--primary);
       border-radius: 6px;
+      margin:5px 0;
       &:enabled:hover {
         background: var(--primary-hover);
       }
@@ -179,6 +180,7 @@ import { IDeliveryType} from "../../types";
       cursor: pointer;
       width: 100%;
       padding-left: 10px;
+
       input{
         width: 100%;
         color:#9595A0
