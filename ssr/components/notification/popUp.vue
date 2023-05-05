@@ -12,6 +12,7 @@
               <NotificationMsg v-if = "POPUP_ACTION === 'ShowCompleteMsg'" />
               <NotificationRequestCall v-if = "POPUP_ACTION === 'RequestCall'"/>
               <NotificationUserLogin v-if = "POPUP_ACTION === 'UserLogin'"/>
+              <NotificationChangePass v-if = "POPUP_ACTION === 'ChangePassword'"/>
             </div>
         </div>
       </div>

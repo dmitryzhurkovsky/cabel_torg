@@ -11,6 +11,7 @@
               <PopUpMsg v-if = "POPUP_ACTION === 'ShowCompleteMsg'" />
               <RequestCall v-if = "POPUP_ACTION === 'RequestCall'"/>
               <UserLogin v-if = "POPUP_ACTION === 'UserLogin'"/>
+              <ChangePass v-if = "POPUP_ACTION === 'ChangePassword'"/>
             </div>
         </div>
       </div>
@@ -24,12 +25,13 @@
   import PopUpMsg from '@/components/notifications/pop-up-msg.vue'
   import RequestCall from '@/components/notifications/request-call.vue'
   import UserLogin from '@/components/notifications/user-login.vue'
+  import ChangePass from '@/components/notifications/change-pass.vue'
 
   export default {
     name: "PopUp",
 
     components: {
-        PopUpMsg, RequestCall, UserLogin
+        PopUpMsg, RequestCall, UserLogin, ChangePass
     },
 
     watch: {

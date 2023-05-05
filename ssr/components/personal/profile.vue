@@ -37,16 +37,16 @@
         </div>
       </div>
 
-      <!-- <div class="group__row flex-center">
+      <div class="group__row flex-center">
         <div class="group">
           <label for="pass" class="label">Пароль</label>
           <div class="input__box">
-            <input id="pass" type="password" class="input" data-type="password">
+            <input id="pass" type="password" class="input" data-type="password" disabled>
             <i class="icon-visible input__icon"></i>
           </div>
         </div>
-        <div class="popup__link foot-lnk">Изменить пароль</div>
-      </div> -->
+        <div class="popup__link foot-lnk" @click="onPasswordChange">Изменить пароль</div>
+      </div>
 
       <div class="group">
         <label for="user" class="label">Название компании</label>
@@ -157,6 +157,12 @@ export default {
     ...mapMutations("auth", ["SET_ERRORS"]),
     // ...mapMutations("notification", ["ADD_MESSAGE"]),
     ...mapActions("auth", ["UPDATE_USER_REQUEST"]),
+    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
+
+    onPasswordChange() {
+      this.SET_IS_POPUP_OPEN(true);
+      this.SET_POPUP_ACTION('ChangePassword');
+    },
 
     async updateUser() {
       if (this.isLoading) return;

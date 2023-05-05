@@ -15,7 +15,6 @@
                      <li class="filter__item icon-order" @click="changeScreen(0)">Мои заказы</li>
                      <li class="filter__item icon-favorite-choosed" @click="changeScreen(1)">Избранные товары</li>
                      <li class="filter__item icon-setting" @click="changeScreen(2)">Настройки аккаунта</li>
-                     <li class="filter__item icon-setting" @click="changeScreen(3)">Сменить пароль</li>
                   </ul>
                   <hr class="hr"/>
                   <div class="icon-exit filter__item" @click="userLogout">Выйти из аккаунта</div>
@@ -28,7 +27,6 @@
                 <PersonalOrderList v-if = "SCREEN === 0"/>
                 <PersonalFavoriteList v-if = "SCREEN === 1"/>
                 <PersonalProfile v-if = "SCREEN === 2"/>
-                <PersonalPassword v-if = "SCREEN === 3"/>
             </div>
 
           </div>
