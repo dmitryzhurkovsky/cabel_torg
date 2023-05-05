@@ -5,7 +5,7 @@
         </div>
         <div class="popup-cart__description">
             <div class="popup-cart__title long_text">{{ favoriteItemData.name }}</div>
-            <div class="popup-cart__uptitle">{{ -favoriteItemData.vendor_code }}</div>
+            <div class="popup-cart__uptitle">{{ favoriteItemData.vendor_code }}</div>
 
         </div>
         <div class="popup-cart__action">

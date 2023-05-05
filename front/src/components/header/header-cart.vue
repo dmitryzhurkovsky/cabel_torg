@@ -5,10 +5,10 @@
       <div class="div">Товары в корзине: <span>{{ TOTAL_ORDER_QUANTITY }}</span></div>
       <div>на сумму <span>{{ TOTAL_ORDER_COST }}</span><span> BYN</span></div>
     </div>
-    <div class="popup-cart__list" v-if = "ORDERS.length">
+    <div class="popup-cart__list" v-if = "ItemsForShow.length">
       <HeaderCartItem 
           class="row" 
-          v-for = "cartItem in ORDERS"
+          v-for = "cartItem in ItemsForShow"
           :key = "cartItem.product.id"
           :cartItem = cartItem
       />
@@ -42,6 +42,16 @@ export default {
   computed: {
     ...mapGetters("order", ["ORDERS", "TOTAL_ORDER_COST", "TOTAL_ORDER_QUANTITY", "IS_APPLICATION_OPEN"]),
     ...mapGetters("auth", ["USER", "REDIRECT_AFTER_LOGIN"]),
+
+    ItemsForShow(){
+      let result = [];
+      if (this.ORDERS.length > 5) {
+        result = this.ORDERS.slice(this.ORDERS.length-5);
+      } else {
+        result = [...this.ORDERS];
+      }
+      return result;
+    },
   },
 
   methods: {

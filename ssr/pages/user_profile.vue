@@ -41,7 +41,12 @@
 
   import { mapGetters, mapActions, mapMutations } from "vuex";
 
-  export default {
+  definePageMeta({
+    // middleware: ["auth"],
+    name: 'Профиль',
+  });
+
+  export default defineNuxtComponent({
     name: "personal",
 
     computed: {
@@ -90,7 +95,7 @@
       });
       this.RENAME_LAST_BREADCRUMB(this.BREADCRUMB[this.SCREEN]);
     }
-  }
+  })
 </script>
 
 <style scoped lang="scss">

@@ -4,10 +4,10 @@
 
     <div class="popup-cart__list">
 
-      <div class="popup-cart__list" v-if = "FAVORITES.length">
+      <div class="popup-cart__list" v-if = "ItemsForShow.length">
         <HeaderFavoriteItem 
             class="row" 
-            v-for = "favoriteItem in FAVORITES"
+            v-for = "favoriteItem in ItemsForShow"
             :key = "favoriteItem.product.id"
             :favoriteItem = favoriteItem
         />
@@ -41,6 +41,16 @@ export default {
   computed: {
     ...mapGetters("favorite", ["FAVORITES"]),
     ...mapGetters("auth", ["USER"]),
+
+    ItemsForShow(){
+      let result = [];
+      if (this.FAVORITES.length > 5) {
+        result = this.FAVORITES.slice(this.FAVORITES.length-5);
+      } else {
+        result = [...this.FAVORITES];
+      }
+      return result;
+    },
   },
 
   methods: {
