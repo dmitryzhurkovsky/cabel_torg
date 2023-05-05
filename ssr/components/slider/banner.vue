@@ -52,6 +52,7 @@
   import { SwiperSlide } from "swiper/vue";
   import SwiperCore, { Pagination } from "swiper";
   import "swiper/swiper.min.css";
+  import "swiper/components/pagination/pagination.min.css"
   SwiperCore.use([Pagination]);
 
   export default {
