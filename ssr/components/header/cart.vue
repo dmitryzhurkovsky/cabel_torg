@@ -40,7 +40,7 @@ export default {
     ItemsForShow(){
       let result = [];
       if (this.ORDERS.length > 5) {
-        result = this.ORDERS.slice(this.ORDERS.length-5);
+        result = this.ORDERS.slice(this.ORDERS.length - 4);
       } else {
         result = [...this.ORDERS];
       }

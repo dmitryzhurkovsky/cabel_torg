@@ -44,7 +44,7 @@ export default {
 
     ItemsForShow(){
       let result = [];
-      if (this.FAVORITES.length > 5) {
+      if (this.FAVORITES.length > 4) {
         result = this.FAVORITES.slice(this.FAVORITES.length-5);
       } else {
         result = [...this.FAVORITES];
