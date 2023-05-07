@@ -76,7 +76,7 @@ class AuthService:
         if is_valid(password=password, password_hash=user.password):
             return user
 
-        raise AuthenticateError()
+        raise AuthenticateError(detail="Password is invalid")
 
     @classmethod
     async def validate_refresh_token(cls, refresh_token: str, user_id: int) -> None:

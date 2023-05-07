@@ -160,6 +160,7 @@ export default defineNuxtComponent({
     ...mapActions("auth", ["SEND_LOGIN_REQUEST", "SEND_REGISTER_REQUEST", "SEND_LOGOUT_REQUEST"]),
     ...mapMutations("auth", ["SET_ERRORS", "SET_TYPE", "SET_IS_OPEN_MAIN_LOGIN"]),
     ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_MESSAGE"]),
+    ...mapMutations("profile", ["CHANGE_SCREEN"]),
 
     changeScreen(auth_type) {
       this.SET_TYPE(auth_type);
@@ -237,6 +238,8 @@ export default defineNuxtComponent({
           password: this.password
         };
         await this.SEND_REGISTER_REQUEST(data);
+        window.scrollTo(0, 0)
+        this.CHANGE_SCREEN(2);
         this.SET_IS_POPUP_OPEN(true);
         this.SET_POPUP_ACTION('ShowCompleteMsg');
         const msg ={};
