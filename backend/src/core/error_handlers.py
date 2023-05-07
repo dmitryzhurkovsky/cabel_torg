@@ -33,7 +33,7 @@ async def unauthorized_error_handler(request: Request, exception: AuthenticateEr
 
 
 @app.exception_handler(ForbiddenError)
-async def unauthorized_error_handler(request: Request, exception: AuthenticateError) -> JSONResponse:
+async def forbidden_error_handler(request: Request, exception: AuthenticateError) -> JSONResponse:
     """Handle an forbidden error"""
     return JSONResponse(
         status_code=exception.status_code, content={'detail': exception.detail}, headers=exception.headers
