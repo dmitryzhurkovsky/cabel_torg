@@ -1,7 +1,7 @@
 <template>
   <div 
     ref="loader"
-    :class="[!IS_LOADING === true ? 'lds_wrapper': 'lds_wrapper show_wrapper']"
+    :class="[IS_LOADING === false ? 'lds_wrapper': 'lds_wrapper show_wrapper']"
   >
       <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
   </div>

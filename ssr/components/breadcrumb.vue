@@ -64,7 +64,7 @@ export default {
     ...mapMutations("query", ["SET_SEARCH_STRING"]),
     
     changePage(item){
-      console.log('BreadCrumb-   ', item);
+      // console.log('BreadCrumb-   ', item);
       let url = '';
       if (item.path.includes('category') || item.path.includes('catalog')) {
         url = url + "?offset=" + this.OFFSET + 
@@ -76,7 +76,7 @@ export default {
         url = url + "&q=" + this.CATALOG_SEARCH_STRING;
         this.SET_SEARCH_STRING('');
         this.MOVE_TO_SELECT_PATH(item.index);
-        console.log('Url   ', item.path + url);
+        // console.log('Url   ', item.path + url);
         this.$router.push(item.path + url);
       } else {
         this.SET_SEARCH_STRING('');

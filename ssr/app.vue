@@ -3,6 +3,7 @@
     <HeaderWrapper />
     <NotificationMain />
     <UiLoader />
+    <!-- <NuxtLoadingIndicator /> -->
     <NotificationPopUp/>
     <MyHeader />
     <ClientOnly fallback-tag="div">
@@ -19,20 +20,20 @@
 
   // fetchKey: 'categoriesData'
 
-  // useHead({
-  //   title: 'CabelTorg',
-  //   name: 'CabelTorg',
-  //   meta: [{
-  //     name: 'CabelTorg',
-  //     content: 'Интернет магазин КабельТорг'
-  //   }]
-  // })
-
   const setViewParametrs = () => {
       store.commit('header/UPDATE_VIEW_PARAMETERS',window.innerWidth)
   }
 
+  store.commit('notification/SET_IS_LOADING', true)
+  console.log('Setup');
+
+  onBeforeUpdate( () => {
+    store.commit('notification/SET_IS_LOADING', true)
+    console.log('BeforeUpdate');
+  })
+
   onMounted(async () => {
+    console.log('Mounted');
     store.commit('notification/SET_IS_LOADING', true)
     setViewParametrs();
     window.addEventListener('resize', setViewParametrs)
@@ -53,6 +54,7 @@
   const { data: categoriesData } = await useAsyncData(
     'categories', 
     async () => {
+      console.log('useAsyncData');
       store.commit('notification/SET_IS_LOADING', true)
       // await store.dispatch('header/GET_CATEGORIES')
       await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')

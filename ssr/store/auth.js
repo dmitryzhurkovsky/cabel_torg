@@ -69,7 +69,12 @@ export default {
             await dispatch("favorite/MERGE_USER_FAVORITES_AND_LOCAL_STORAGE", null, {root: true});
         }
         catch (e) {
-            console.log(e);
+            console.log(e.message);
+            if (e.message === 'Request failed with status code 401') {
+                commit("SET_ERRORS", {password: 'Не верный пароль'})
+            } else if (e.message === 'Request failed with status code 404') {
+                commit("SET_ERRORS", {email: 'пользователь не существует'})
+            }
         };
     },
 
@@ -77,13 +82,17 @@ export default {
       commit("SET_ERRORS", {});
       try {
         const response = await axios.post(useRuntimeConfig().public.NUXT_APP_API_URL + "users", data);
+        console.log('after response ', response);
         const loginData = new FormData();
         loginData.append('username', data.email);
         loginData.append('password', data.password);
         await dispatch("SEND_LOGIN_REQUEST", loginData)
       }
       catch (e) {
-          console.log(e);
+        console.log(e.message);
+        if (e.message === 'Request failed with status code 400') {
+          commit("SET_ERRORS", {email: 'Такой пользоватеьл уже существует в системе'})
+        } 
       };
     },
 

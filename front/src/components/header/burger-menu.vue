@@ -1,11 +1,15 @@
 <template lang="html">
   <div class="burger__menu__open">
-      <div class="burger__close" @click="closeMenu">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1L15 15" stroke="#4275D8" stroke-width="2"/>
-              <path d="M15 1L1 15" stroke="#4275D8" stroke-width="2"/>
-          </svg>
+    <div class="burger__menutop">
+      <div class="burger__close">
+        <svg @click="closeMenu" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1L15 15" stroke="#4275D8" stroke-width="2"/>
+            <path d="M15 1L1 15" stroke="#4275D8" stroke-width="2"/>
+        </svg>
+        <TopMenuActions />
       </div>
+      <HeaderSearch/>
+    </div>
     <ul class="burger__menu_list animated" v-if="CATALOG.length">
       <li 
         v-for   = "mainItem in CATALOG"
@@ -125,9 +129,16 @@
 <script>
 
 import {mapGetters, mapMutations, mapActions} from 'vuex'
+import TopMenuActions  from '@/components/header/header-actions.vue'
+import HeaderSearch from '@/components/header/header-search.vue'
 
 export default {
   name: "BurgerMenu",
+
+  components:
+  {
+    HeaderSearch, TopMenuActions
+  },
 
   data(){
     return {
@@ -217,6 +228,10 @@ a {
 .burger__menu{
   color: #423E48;
 
+  &__menutop{
+    display: flex;
+    flex-direction: column;
+  }
   &__block{
     padding: 16px 20px 16px 30px;
     border: 1px solid #F0F0F1;
@@ -308,6 +323,9 @@ div[class="active"]{
 .burger{
   &__close{
     padding: 16px 0 0 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 }
 </style>

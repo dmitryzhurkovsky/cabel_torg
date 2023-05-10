@@ -225,17 +225,19 @@ export default {
                 password: this.password
             };
             await this.SEND_REGISTER_REQUEST(data);
-            window.scrollTo(0, 0)
-            this.CHANGE_SCREEN(2);
-            this.SET_IS_POPUP_OPEN(true);
-            this.SET_POPUP_ACTION('ShowCompleteMsg');
-            const msg ={};
-                msg.main = 'Спасибо за регистрацию на CabelTorg.';
-                msg.bolt = '';
-                msg.sub = 'Желаем Вам приятных покупок!'
-            this.SET_POPUP_MESSAGE(msg);
+            if (Object.keys(this.ERRORS).length === 0) {
+              window.scrollTo(0, 0)
+              this.CHANGE_SCREEN(2);
+              this.SET_IS_POPUP_OPEN(true);
+              this.SET_POPUP_ACTION('ShowCompleteMsg');
+              const msg ={};
+                  msg.main = 'Спасибо за регистрацию на CabelTorg.';
+                  msg.bolt = '';
+                  msg.sub = 'Желаем Вам приятных покупок!'
+              this.SET_POPUP_MESSAGE(msg);
 
-            this.$router.push({name: "user-cab"});
+              this.$router.push({name: "user-cab"});
+            }
         }
         this.isLoading = false;
     },

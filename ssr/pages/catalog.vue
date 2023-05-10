@@ -99,11 +99,11 @@
     store.commit("catalog/SET_CATALOG_SEARCH_STRING", '')
   }
 
-  const getData = async () => {
-    store.commit('notification/SET_IS_LOADING', true)
-    await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
-    store.commit('notification/SET_IS_LOADING', false)
-  }
+  // const getData = async () => {
+  //   // store.commit('notification/SET_IS_LOADING', true)
+  //   await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
+  //   // store.commit('notification/SET_IS_LOADING', false)
+  // }
 
   let isFerstRender = true;
 
