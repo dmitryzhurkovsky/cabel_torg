@@ -1,5 +1,5 @@
 <template lang="html">
-    <div class="header__search search-wrapper">
+    <div class="search-wrapper burger__search">
       <div class="search__box">
         <div class="search__field">
           <input type="text" name="focus" required class="search-box" autocomplete="off"
@@ -121,22 +121,15 @@ export default {
 .dropdown__wrapper{
   display: block;
 }
-.header{
-    &__search{
-      position: relative;
-      width: 100%;
-      // background: #FFFFFF;
-      // box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
-      // border-radius: 50px;
-      // max-width: 384px;
-      // height: 32px;
-      // width: 100%;
-      @media (max-width: $md2+px) {
-        display: none;
-      }
-    }
-}
+.burger {
+  &__search {
+    position: relative;
+    width: 100%;
+    @media (max-width: $md2+px) {
 
+    }
+  }
+}
 //SEARCH
 .search-box,.close-icon,.search-wrapper {
   position: relative;
@@ -153,6 +146,10 @@ export default {
   .dropdown__wrapper{
     padding: 0 16px 20px 16px;
     margin: 0 10%;
+    @media (max-width: $md2+px){
+      margin: 0 0;
+      padding: 0 16px 10px 16px;
+    }
   }
 }
 .search__box {
@@ -169,6 +166,9 @@ export default {
   //# hide this style when search__result open
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
+  @media (max-width: $md2+px){
+    margin: 0 0;
+  }
 
 
 }

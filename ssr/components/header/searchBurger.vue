@@ -1,5 +1,5 @@
 <template>
-  <div class="header__search search-wrapper">
+  <div class="header__search burger__search">
     <div class="search__box">
       <div class="search__field">
         <input type="text" name="focus" required class="search-box" placeholder="Поиск товаров"
@@ -111,21 +111,21 @@ export default {
 .dropdown__wrapper{
 display: block;
 }
-.header{
+.burger{
   &__search{
     position: relative;
     width: 100%;
     @media (max-width: $md2+px) {
-      display: none;
+
     }
   }
 }
 
 //SEARCH
 .search-box,.close-icon,.search-wrapper {
-position: relative;
-padding: 10px;
-}
+  position: relative;
+  padding: 10px;
+  }
 .search-wrapper {
   .dropdown__box{
     width: 100%;
@@ -137,30 +137,36 @@ padding: 10px;
   .dropdown__wrapper{
     padding: 0 16px 20px 16px;
     margin: 0 10%;
+    @media (max-width: $md2+px){
+      margin: 0 0;
+      padding: 0 16px 10px 16px;
+    }
   }
 }
 .search__box {
-//width: 500px;
-background: #fff;
-height: 32px;
-display: flex;
-padding: 6px 16px;
-margin: 0 10%;
-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
-border-top-right-radius: 10px;
-border-top-left-radius: 10px;
+  background: #fff;
+  height: 32px;
+  display: flex;
+  padding: 6px 16px;
+  margin: 0 10%;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
 
-//# hide this style when search__result open
-border-bottom-right-radius: 10px;
-border-bottom-left-radius: 10px;
+  //# hide this style when search__result open
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  @media (max-width: $md2+px){
+    margin: 0 0;
+  }
 
 
 }
 
 .search__field{
-width: 100%;
-height: 100%;
-position: relative;
+  width: 100%;
+  height: 100%;
+  position: relative;
 
 input{
   width: 100%;
@@ -179,35 +185,31 @@ button{
   right: 0;
   font-size: 16px;
   color: #423E48;
-
-
   cursor: pointer;
 }
 }
 
 .search__result{
-position: absolute;
-top: 40px;
-left: 10px;
-width: 96%;
-background: #fff;
-min-height: 50px;
-padding: 20px 20px;
-border-bottom-left-radius:10px;
-border-bottom-right-radius:10px;
-border-top: 2px solid rgba(0, 0, 0, 0.05) ;
-
-
+  position: absolute;
+  top: 40px;
+  left: 10px;
+  width: 96%;
+  background: #fff;
+  min-height: 50px;
+  padding: 20px 20px;
+  border-bottom-left-radius:10px;
+  border-bottom-right-radius:10px;
+  border-top: 2px solid rgba(0, 0, 0, 0.05) ;
 }
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-color: #9fa3b1;
-}
-::-moz-placeholder { /* Firefox 19+ */
-color: #9fa3b1;
-}
-:-ms-input-placeholder { /* IE 10+ */
-color: #9fa3b1;
-}
+  ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #9fa3b1;
+  }
+  ::-moz-placeholder { /* Firefox 19+ */
+  color: #9fa3b1;
+  }
+  :-ms-input-placeholder { /* IE 10+ */
+  color: #9fa3b1;
+  }
 
 .search__footer{
 background: #4275D8;
@@ -217,9 +219,9 @@ text-align: center;
 border-radius: 6px;
 transition: all 0.3s ease;
 cursor: pointer;
-&:hover{
-  background: #6291ED;
-}
+  &:hover{
+    background: #6291ED;
+  }
 
 }
 
