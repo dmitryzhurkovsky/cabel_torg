@@ -3,7 +3,7 @@
       <h3>Смена пароля</h3>
       <div class="">
           <div class="group">
-              <label class="label">Пороль</label>
+              <label class="label">Новый пароль</label>
               <input type="password" class="input" :class="{ 'is-invalid': ERRORS.password }" v-model="password" autocomplete=off>
               <div class="error-message" v-if="ERRORS.password"> {{ ERRORS.password }} </div>
           </div>

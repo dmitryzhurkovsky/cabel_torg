@@ -275,7 +275,10 @@ export default {
   }
   .acc-settings .group{
       margin-bottom: 10px;
-    }
+  }
+  .acc-settings .group__row .group{
+    width: 100%;
+  }
   }
  .input__box {
   .disabled {

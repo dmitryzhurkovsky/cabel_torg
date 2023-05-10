@@ -287,9 +287,7 @@
   &__title{
 
   }
-  .group{
-    width: 100%;
-  }
+
 
   &__row{
     width: 100%;

@@ -10,7 +10,7 @@
 
     </div>
     
-    <div class="dropdown" v-if = "FINDED_ELEMENTS.length && SEARCH_STRING !== CATALOG_SEARCH_STRING">
+    <div class="dropdown_box" v-if = "FINDED_ELEMENTS.length && SEARCH_STRING !== CATALOG_SEARCH_STRING">
       <div class="dropdown__wrapper">
         <div class="dropdown__content popup-cart">
             <h3 class="">Найденые товары</h3>
@@ -127,15 +127,17 @@ position: relative;
 padding: 10px;
 }
 .search-wrapper {
-.dropdown{
-  width: 100%;
-}
-.dropdown__wrapper{
-  padding: 0 0 20px 0;
-  top: 0;
-  left: 0;
-  margin: 0 10%;
-}
+  .dropdown__box{
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 6px;
+
+  }
+  .dropdown__wrapper{
+    padding: 0 16px 20px 16px;
+    margin: 0 10%;
+  }
 }
 .search__box {
 //width: 500px;
@@ -214,6 +216,7 @@ padding: 8px 5px;
 text-align: center;
 border-radius: 6px;
 transition: all 0.3s ease;
+cursor: pointer;
 &:hover{
   background: #6291ED;
 }
