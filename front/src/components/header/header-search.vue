@@ -132,7 +132,7 @@ export default {
       // height: 32px;
       // width: 100%;
       @media (max-width: $md2+px) {
-        display: none;
+
       }
     }
 }
@@ -153,6 +153,10 @@ export default {
   .dropdown__wrapper{
     padding: 0 16px 20px 16px;
     margin: 0 10%;
+    @media (max-width: $md2+px){
+      margin: 0 0;
+      padding: 0 10px 10px 0;
+    }
   }
 }
 .search__box {
@@ -169,6 +173,10 @@ export default {
   //# hide this style when search__result open
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
+
+  @media (max-width: $md2+px){
+    margin: 0 0;
+  }
 
 
 }

@@ -75,7 +75,7 @@
   &__close {
     position: absolute;
     top:0;
-    right: -30px;
+    right: -25px;
     cursor: pointer;
   }
   &__body {
@@ -91,6 +91,9 @@
     border-radius: 16px;
     max-width: 60%;
     overflow-y: scroll;
+    @media (max-width: $md3+px){
+      width: 85%;
+    }
   }
 }
 .left-menu {
