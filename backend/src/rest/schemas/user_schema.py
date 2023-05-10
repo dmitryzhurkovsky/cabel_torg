@@ -39,3 +39,7 @@ class UserSchema(UserBaseSchema, BaseSchema):
         orm_mode = True
 
         fields = {'password': {'exclude': True}}
+
+
+class RecoveryPasswordSchema(BaseModel):
+    email: EmailStr

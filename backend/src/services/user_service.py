@@ -38,3 +38,28 @@ class UserService:
             html_message=html_message,
             subject='Регистрация прошла успешно'
         )
+
+    @classmethod
+    def send_new_password(cls, user: User, new_password: str):
+        context = {
+            'static_url': settings.STATIC_PATH,
+            'name': user.full_name,
+            'email': user.email,
+            'generated_password': new_password
+        }
+        message = f"""
+            Добрый день {user.full_name}. . 
+            Ваш пароль был изменен на успешно изменен!
+            Новый парль {new_password}
+        """
+
+        template_path = 'email/reset_password.html'
+        template = settings.templates.get_template(template_path)
+        html_message = template.render(context)
+
+        EmailService.send_email(
+            receiver=user.email,
+            message=message,
+            html_message=html_message,
+            subject='Изменение пароля'
+        )
