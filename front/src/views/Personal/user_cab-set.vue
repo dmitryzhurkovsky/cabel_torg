@@ -312,6 +312,9 @@
   .acc-settings{
     text-align: center;
     margin: 0 auto;
+    .group__row .group{
+      width: 100%;
+    }
     .group{
       margin-bottom: 20px;
     }

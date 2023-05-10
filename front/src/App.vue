@@ -388,6 +388,9 @@ h3{
   width: 100%;
   justify-content: space-between;
   gap: 10px;
+  .group{
+    width: 100%;
+  }
 }
 //.group{
 //  width: 100%;
