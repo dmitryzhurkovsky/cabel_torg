@@ -73,7 +73,7 @@ export default {
             if (e.message === 'Request failed with status code 401') {
                 commit("SET_ERRORS", {password: 'Не верный пароль'})
             } else if (e.message === 'Request failed with status code 404') {
-                commit("SET_ERRORS", {email: 'пользователь не существует'})
+                commit("SET_ERRORS", {email: 'Пользователя с таким адресом не существует'})
             }
         };
     },

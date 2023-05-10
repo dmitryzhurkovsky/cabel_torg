@@ -561,6 +561,7 @@ input{
     background: transparent;
     padding: 20px 0;
     z-index: 5;
+
   }
   &:hover{
     color:#4275D8;
@@ -599,8 +600,16 @@ input{
   }
 }
 
-.dropdown.dropdown__wrapper {
+.dropdown .wrapper__show {
   display: block;
+  @media (max-width: $md3+px) {
+    position: fixed;
+    left: 50%!important;
+    top: 50%;
+    right: inherit!important;
+    transform: translate(-50%, -50%);
+
+  }
 }
 
 .long_text{
