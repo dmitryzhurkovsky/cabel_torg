@@ -8,7 +8,7 @@
         </svg>
         <TopMenuActions />
       </div>
-      <HeaderSearch/>
+      <HeaderSearchBurger/>
     </div>
     <ul class="burger__menu_list animated" v-if="CATALOG.length">
       <li 
@@ -130,14 +130,14 @@
 
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 import TopMenuActions  from '@/components/header/header-actions.vue'
-import HeaderSearch from '@/components/header/header-search.vue'
+import HeaderSearchBurger from '@/components/header/header-search-burger.vue'
 
 export default {
   name: "BurgerMenu",
 
   components:
   {
-    HeaderSearch, TopMenuActions
+    HeaderSearchBurger, TopMenuActions
   },
 
   data(){

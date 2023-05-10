@@ -8,7 +8,7 @@
           </svg>
           <HeaderActions />
         </div>
-        <HeaderSearch/>
+        <HeaderSearchBurger/>
       </div>
     <ul class="burger__menu_list animated" v-if="CATALOG.length">
       <li 
