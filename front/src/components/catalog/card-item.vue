@@ -311,6 +311,9 @@ export default {
     white-space: nowrap;
     span{
       font-size: 14px;
+      @media (max-width: $md3 + px){
+        font-size: 12px;
+      }
     }
 
   }
@@ -320,13 +323,13 @@ export default {
     font-size: 20px;
     line-height: 24px;
     @media (max-width: $md3+px){
-      font-size: 18px;
+      font-size: 16px;
     }
     span{
       font-weight: 300;
       font-size: 16px;
       @media (max-width: $md3+px){
-        font-size: 15px;
+        font-size: 12px;
       }
     }
 
