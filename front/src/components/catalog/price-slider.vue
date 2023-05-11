@@ -46,11 +46,11 @@ export default {
   data(){
     return {
       minValueRange: 0,
-      maxValueRange: 10000,
+      maxValueRange: 40000,
       minValuePrice: 0,
-      maxValuePrice: 10000,
+      maxValuePrice: 40000,
       RangeMin: 0,
-      RangeMax: 10000,
+      RangeMax: 40000,
       priceGap: 1000,
       Left: '25%',
       Right: '75%',

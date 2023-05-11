@@ -12,7 +12,7 @@ export default {
     direction: '-',
     view: 'table',
     minPrice: 0,
-    maxPrice: 10000,
+    maxPrice: 40000,
     searchString: '',
     findedElements: [],
     allTypesOfProduct: [

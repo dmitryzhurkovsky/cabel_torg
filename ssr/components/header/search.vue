@@ -85,7 +85,7 @@ export default {
       this.SET_SEARCH_STRING('');
       this.SET_CATALOG_SEARCH_STRING('');
       let url = "/catalog?";
-      url = url + "offset=0&limit=10&price_gte=0&price_lte=10000";
+      url = url + "offset=0&limit=10&price_gte=0&price_lte=40000";
       url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
       url = url + '&type_of_product=all';
       url = url + "&q=" + this.CATALOG_SEARCH_STRING;
@@ -95,7 +95,7 @@ export default {
     openFindedElementsInCatalg(){
       this.SET_CATALOG_SEARCH_STRING(this.SEARCH_STRING);
       let url = "/catalog?";
-      url = url + "offset=0&limit=10&price_gte=0&price_lte=10000";
+      url = url + "offset=0&limit=10&price_gte=0&price_lte=40000";
       url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
       url = url + '&type_of_product=all';
       url = url + "&q=" + this.CATALOG_SEARCH_STRING;
