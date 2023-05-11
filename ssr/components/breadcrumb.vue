@@ -111,12 +111,13 @@ export default {
   }
 
   li{
-    white-space: nowrap;
+    white-space: nowrap;`
     overflow: hidden;
     &:last-child{
-      a{
-        opacity: 0.6;
+      div{
+        opacity: 0.5;
         cursor: auto;
+        color: #423E48!important;
       }
 
     }

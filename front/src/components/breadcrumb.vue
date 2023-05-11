@@ -114,9 +114,10 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     &:last-child{
-      a{
-        opacity: 0.6;
+      div{
+        opacity: 0.5;
         cursor: auto;
+        color: #423E48!important;
       }
 
     }
@@ -127,6 +128,7 @@ export default {
       text-align: center;
       color: #423E48;
       cursor: pointer;
+
       @media (max-width: $md3+px){
         font-size: 8px;
       }

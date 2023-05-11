@@ -44,8 +44,7 @@
                             <div class="retail_price">
                               <div>Первоначальная цена: </div>
                               <div>
-                                  <span class="price__value"> {{ cartItemData.price_with_tax }}</span>
-                                  BYN
+                                  <span class="price__value"> {{ cartItemData.price_with_tax }}</span>BYN
                                   <span>/шт</span>
                               </div>
 
@@ -609,7 +608,7 @@
     font-size: 18px;
   }
   span{
-    margin-right: 10px;
+    margin-right: 5px;
     // &:nth-child(2){
     //   font-weight: 300;
     // }
@@ -757,6 +756,17 @@
 
   .topright:hover {color: red;}
 
+}
+
+.price_w_discount{
+  color: #E30044;
+  .old_price{
+    color: #B3B2B6;
+  }
+  .current_price_item{
+    color: #B3B2B6;
+
+  }
 }
 
 </style>
