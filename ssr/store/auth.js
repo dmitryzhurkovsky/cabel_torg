@@ -71,7 +71,7 @@ export default {
         catch (e) {
             console.log(e.message);
             if (e.message === 'Request failed with status code 401') {
-                commit("SET_ERRORS", {password: 'Не верный пароль'})
+                commit("SET_ERRORS", {password: 'Неверный пароль'})
             } else if (e.message === 'Request failed with status code 404') {
                 commit("SET_ERRORS", {email: 'Пользователя с таким адресом не существует'})
             }
