@@ -91,7 +91,7 @@
     border-radius: 16px;
     max-width: 60%;
     overflow-y: scroll;
-    @media (max-width: $md3+px){
+    @media (max-width: 480px){
       width: 85%;
     }
   }

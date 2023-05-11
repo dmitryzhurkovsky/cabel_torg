@@ -28,10 +28,11 @@
           <div class="reset-pass">
             <div class="group">
               <label for="user" class="label">Электронная почта</label>
-              <input id="user" type="text" class="input">
+              <input type="email" class="input" :class="{ 'is-invalid': ERRORS.email }" id="email" v-model="email">
+              <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>
             </div>
             <div class="center-text">
-              <button @click = "changeScreen(4)" type="submit" class="btn black">Восстановить</button>
+              <button @click = "restorePassword()" type="submit" class="btn black">Восстановить</button>
             </div>
             <div @click = "changeScreen(1)" class="foot-lnk mt-20">
               Войти
@@ -142,7 +143,7 @@ export default {
   },
 
   methods: {
-    ...mapActions("auth", ["SEND_LOGIN_REQUEST", "SEND_REGISTER_REQUEST", "SEND_LOGOUT_REQUEST"]),
+    ...mapActions("auth", ["SEND_LOGIN_REQUEST", "SEND_REGISTER_REQUEST", "SEND_LOGOUT_REQUEST", "SEND_RESTORE_PASSWORD_REQUEST"]),
     ...mapMutations("auth", ["SET_ERRORS", "SET_TYPE", "SET_IS_OPEN_MAIN_LOGIN"]),
     ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_MESSAGE"]),
     ...mapMutations("profile", ["CHANGE_SCREEN"]),
@@ -242,6 +243,36 @@ export default {
         this.isLoading = false;
     },
 
+    async restorePassword() {
+      if (this.isLoading) return;
+
+      this.isLoading = true;
+      const errorsInData = {};
+      this.SET_ERRORS(errorsInData);
+
+      if (!isValidEmail(this.email)) {
+          errorsInData.email = 'Укажите валидный адрес эл. почты'
+      }
+      if (Object.keys(errorsInData).length) {
+        console.log('QQQ', errorsInData);
+        this.SET_ERRORS(errorsInData);
+      } else {
+        const data = {
+          email: this.email,
+        };
+        await this.SEND_RESTORE_PASSWORD_REQUEST(data);
+
+        if (Object.keys(this.ERRORS).length === 0) {
+          this.changeScreen(4);
+          // if (this.REDIRECT_AFTER_LOGIN) {
+          //     this.$router.push(this.REDIRECT_AFTER_LOGIN);
+          // } else {
+          //     this.$router.push({name: "user-cab"});
+          // }
+        }
+      }  
+      this.isLoading = false;
+    },
   }
 
 }

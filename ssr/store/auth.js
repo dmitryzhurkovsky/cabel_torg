@@ -91,7 +91,7 @@ export default {
       catch (e) {
         console.log(e.message);
         if (e.message === 'Request failed with status code 400') {
-          commit("SET_ERRORS", {email: 'Такой пользоватеьл уже существует в системе'})
+          commit("SET_ERRORS", {email: 'Такой пользователь уже существует в системе'})
         } 
       };
     },
@@ -117,6 +117,20 @@ export default {
         commit("order/SET_IS_APPLICATION_OPEN", false, {root: true});
         commit("SET_DESTINATION", '');
     },
+
+    async SEND_RESTORE_PASSWORD_REQUEST({ commit }, data) {
+        commit("SET_ERRORS", {});
+        try {
+            console.log('Restore');
+            const response = await axios.post(useRuntimeConfig().public.NUXT_APP_API_URL + "users/reset_password", data);
+        }
+        catch (e) {
+          console.log(e.message);
+          if (e.message === 'Request failed with status code 404') {
+            commit("SET_ERRORS", {email: 'Такой пользователь не существует в системе'})
+          } 
+        };
+    }
 
     // sendVerifyResendRequest() {
     //   return axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + "email/resend");
