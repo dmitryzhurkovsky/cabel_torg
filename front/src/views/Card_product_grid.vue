@@ -53,8 +53,12 @@
                           <div class="opt_price">
                               <div>Цена со скидкой: </div>
                               <div>
-                                  <span class="price__value">{{
-                                cartItemData.price_with_tax }}</span>BYN
+                                  <span class="price__value">
+                                    {{ cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax
+                                      ? cartItemData.price_with_discount_and_tax
+                                      : cartItemData.price_with_tax
+                                    }}
+                                  </span>BYN
                                   <span>/шт</span>
                               </div>
 
