@@ -50,7 +50,7 @@ export default {
   computed:{
     ...mapGetters("query", ["SEARCH_STRING", "FINDED_ELEMENTS", "SORT_DIRECTION", "SORT_TYPE"]),
     ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
-    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
+    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "UPDATE_IS_CATALOG_OPEN"]),
   },
 
   watch: {
@@ -76,6 +76,7 @@ export default {
 
     openCardItem(id) {
       this.clearString();
+      this.UPDATE_IS_CATALOG_OPEN(false);
       const URL = '/card_product/' + id;
       this.$router.push(URL);
     },

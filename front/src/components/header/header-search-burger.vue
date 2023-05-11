@@ -73,7 +73,7 @@ export default {
   methods: {
     ...mapMutations("query", ["SET_SEARCH_STRING", "SET_FINDED_ELEMENTS", "SET_CATEGORY_ID"]),
     ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING"]),
-    ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY"]),
+    ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY", "UPDATE_IS_CATALOG_OPEN"]),
     ...mapActions("query", ["FIND_ELEMENTS"]),
 
     onInput(){
@@ -82,6 +82,7 @@ export default {
 
     openCardItem(id) {
       this.clearString();
+      this.UPDATE_IS_CATALOG_OPEN(false);
       const URL = '/card_product/' + id;
       this.$router.push(URL);
     },
@@ -100,11 +101,6 @@ export default {
 
     openFindedElementsInCatalg(){
       this.SET_CATALOG_SEARCH_STRING(this.SEARCH_STRING);
-      // this.SET_SEARCH_STRING('');
-      // this.SET_CURRENT_TOP_CATEGORY(null);
-      // this.SET_CURRENT_SUB_CATEGORY(null);
-      // this.SET_CURRENT_LAST_CATEGORY(null);
-      // const category = this.LAST_CATEGORIES_ITEM_ACTIVE || this.SUB_CATEGORIES_ITEM_ACTIVE || this.TOP_CATEGORIES_ITEM_ACTIVE + '12';
       let url = "/catalog?";
       url = url + "offset=0&limit=10&price_gte=0&price_lte=10000";
       url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;

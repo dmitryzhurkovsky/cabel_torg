@@ -6,7 +6,7 @@
     >
       <div class="dropdown icon-favorite">
         <div :class="[!favoriteHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
-          <HeaderFavorite @click.stop = "onIconLeave()" />
+          <HeaderFavorite @click.stop = "onIconLeaveClick()" />
         </div>
 
       </div>
@@ -69,7 +69,7 @@
     >
       <div class="dropdown icon-cart">
         <div :class="[!cartHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
-          <HeaderCart @click.stop = "onIconLeave()" />
+          <HeaderCart @click.stop = "onIconLeaveClick()" />
         </div>
       </div>
       <CatalogIconQuantity 
@@ -107,34 +107,37 @@ export default {
     ...mapActions("auth", ["SEND_LOGOUT_REQUEST"]),
     ...mapMutations("query", ["SET_SEARCH_STRING"]),
     ...mapMutations("profile", ["CHANGE_SCREEN"]),
+    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
     
     handleClick (URL, screen_type) {
-        // this.clearSearchString();
-        this.cartHover = false;
-        this.userHover = false;
-        if (this.$route.path != URL) {
-          if (URL === '/login') {
-            this.SET_TYPE(screen_type);
-          } else {
-            this.CHANGE_SCREEN(screen_type)
-          }
-          this.$router.push(URL);
+      const vm = this;
+      setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
+      this.cartHover = false;
+      this.userHover = false;
+      if (this.$route.path != URL) {
+        if (URL === '/login') {
+          this.SET_TYPE(screen_type);
         } else {
-          if (URL === '/login') {
-            this.SET_TYPE(screen_type);
-          } else {
-            this.CHANGE_SCREEN(screen_type)
-          }
+          this.CHANGE_SCREEN(screen_type)
         }
+        this.$router.push(URL);
+      } else {
+        if (URL === '/login') {
+          this.SET_TYPE(screen_type);
+        } else {
+          this.CHANGE_SCREEN(screen_type)
+        }
+      }
     },
 
     async userLogout() {
-        if (this.isLoading) return;
-        // this.clearSearchString();
-        this.isLoading = true;
-        await this.SEND_LOGOUT_REQUEST();
-        this.isLoading = false;
-        this.$router.push('/');
+      if (this.isLoading) return;
+      const vm = this;
+      setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
+      this.isLoading = true;
+      await this.SEND_LOGOUT_REQUEST();
+      this.isLoading = false;
+      this.$router.push('/');
     },
 
     clearSearchString(){
@@ -162,6 +165,13 @@ export default {
       this.favoriteHover = false;
     },
 
+    onIconLeaveClick() {
+      this.userHover = false;
+      this.cartHover = false;
+      this.favoriteHover = false;
+      const vm = this;
+      setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
+    },
   },
 
 }

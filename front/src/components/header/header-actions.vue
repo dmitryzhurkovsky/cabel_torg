@@ -6,7 +6,7 @@
     >
       <div class="dropdown icon-favorite">
         <div :class="[!favoriteHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
-          <HeaderFavorite @click.stop = "onIconLeave()" />
+          <HeaderFavorite @click.stop = "onIconLeaveClick()" />
         </div>
 
       </div>
@@ -74,7 +74,7 @@
     >
       <div class="dropdown icon-cart">
         <div :class="[!cartHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
-          <HeaderCart @click.stop = "onIconLeave()" />
+          <HeaderCart @click.stop = "onIconLeaveClick()" />
         </div>
       </div>
       <IconQuantity 
@@ -119,11 +119,13 @@ export default {
     ...mapMutations("auth", ["SET_TYPE"]),
     ...mapActions("auth", ["SEND_LOGOUT_REQUEST"]),
     ...mapMutations("query", ["SET_SEARCH_STRING"]),
+    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
     
     handleClick (URL, auth_type) {
-        // this.clearSearchString();
         this.cartHover = false;
         this.userHover = false;
+        const vm = this;
+        setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
         if (this.$route.path != URL) {
             this.SET_TYPE(auth_type);
             this.$router.push(URL);
@@ -134,7 +136,8 @@ export default {
 
     async userLogout() {
         if (this.isLoading) return;
-        // this.clearSearchString();
+        const vm = this;
+        setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
         this.isLoading = true;
         await this.SEND_LOGOUT_REQUEST();
         this.isLoading = false;
@@ -166,6 +169,13 @@ export default {
       this.favoriteHover = false;
     },
 
+    onIconLeaveClick() {
+      this.userHover = false;
+      this.cartHover = false;
+      this.favoriteHover = false;
+      const vm = this;
+      setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
+    }
   },
 
 }
