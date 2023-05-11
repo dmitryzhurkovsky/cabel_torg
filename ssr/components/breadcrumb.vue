@@ -111,7 +111,7 @@ export default {
   }
 
   li{
-    white-space: nowrap;`
+    white-space: nowrap;
     overflow: hidden;
     &:last-child{
       div{

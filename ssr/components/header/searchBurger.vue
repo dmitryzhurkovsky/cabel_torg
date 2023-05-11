@@ -10,7 +10,7 @@
 
     </div>
     
-    <div class="dropdown_box" v-if = "FINDED_ELEMENTS.length && SEARCH_STRING !== CATALOG_SEARCH_STRING">
+    <div class="dropdown__box" v-if = "FINDED_ELEMENTS.length && SEARCH_STRING !== CATALOG_SEARCH_STRING">
       <div class="dropdown__wrapper">
         <div class="dropdown__content popup-cart">
             <h3 class="">Найденые товары</h3>
