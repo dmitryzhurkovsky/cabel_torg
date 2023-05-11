@@ -232,6 +232,7 @@ export default {
       padding-left: 5px;
       font-weight: 500;
       white-space: nowrap;
+      min-width: 110px;
       @media (max-width: $md2+px) {
         font-weight: 600;
         font-size: 14px!important;
