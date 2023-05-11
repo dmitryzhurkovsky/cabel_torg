@@ -31,7 +31,7 @@
                                   class="old_price"
                             >{{ cartItemData.price_with_tax }}
                             </span>
-                            <span>
+                            <span  :class="[cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax ? 'price_w_discount' : '']">
                                 {{ cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax
                                   ? cartItemData.price_with_discount_and_tax
                                   : cartItemData.price_with_tax

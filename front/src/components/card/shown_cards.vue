@@ -5,7 +5,7 @@
         <div class="recomendation__body">
 
           <h3>Просмотренные товары</h3>
-          <div class="recomendation__block">
+          <div class="recomendation__block" v-if="sliderItems">
               <swiper
                   :slides-per-view="slidersInFrame"
                   :space-between="15"
