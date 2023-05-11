@@ -43,6 +43,7 @@ services:
       - '443:443'  # for https
     volumes:
       - site_media:/usr/share/nginx/site_media/
+      - ./nginx/ssl:/ssl
 
   redis:
     image: redis:latest
