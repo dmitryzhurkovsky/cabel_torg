@@ -94,7 +94,7 @@
               <p>Мы отправили ссылку для <b>восстановления пароля</b> к вашей учетной записи.</p>
             </div>
             <div class="">
-              <button @click = "changeScreen(0)" type="submit" class="btn empty">Вернуться на сайт</button>
+              <button @click = "changeScreen(1)" type="submit" class="btn empty">Вернуться на сайт</button>
             </div>
           </div>
         </div>
@@ -147,6 +147,7 @@ export default {
     ...mapMutations("auth", ["SET_ERRORS", "SET_TYPE", "SET_IS_OPEN_MAIN_LOGIN"]),
     ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_MESSAGE"]),
     ...mapMutations("profile", ["CHANGE_SCREEN"]),
+    ...mapMutations("notification", ["SET_IS_LOADING"]),
 
     changeScreen(auth_type) {
         this.SET_TYPE(auth_type);
@@ -155,6 +156,7 @@ export default {
     async userLogin() {
         if (this.isLoading) return;
 
+        this.SET_IS_LOADING(true);
         this.isLoading = true;
         const errorsInData = {};
         this.SET_ERRORS(errorsInData);
@@ -167,11 +169,13 @@ export default {
         }
         if (Object.keys(errorsInData).length) {
             this.SET_ERRORS(errorsInData);
+            this.SET_IS_LOADING(false);
         } else {
           const data = new FormData();
           data.append('username', this.email);
           data.append('password', this.password);
           await this.SEND_LOGIN_REQUEST(data);
+          this.SET_IS_LOADING(false);
 
           if (this.USER) {
               if (this.REDIRECT_AFTER_LOGIN) {
@@ -188,6 +192,7 @@ export default {
       
         if (this.isLoading) return;
 
+        this.SET_IS_LOADING(true);
         this.isLoading = true;
         const errorsInData = {};
         this.SET_ERRORS(errorsInData)
@@ -216,6 +221,7 @@ export default {
         }
         if (Object.keys(errorsInData).length) {
             this.SET_ERRORS(errorsInData);
+            this.SET_IS_LOADING(false);
         } else {
             const data = {
                 email: this.email,
@@ -226,6 +232,7 @@ export default {
                 password: this.password
             };
             await this.SEND_REGISTER_REQUEST(data);
+            this.SET_IS_LOADING(false);
             if (Object.keys(this.ERRORS).length === 0) {
               window.scrollTo(0, 0)
               this.CHANGE_SCREEN(2);
@@ -246,6 +253,7 @@ export default {
     async restorePassword() {
       if (this.isLoading) return;
 
+      this.SET_IS_LOADING(true);
       this.isLoading = true;
       const errorsInData = {};
       this.SET_ERRORS(errorsInData);
@@ -262,6 +270,7 @@ export default {
         };
         await this.SEND_RESTORE_PASSWORD_REQUEST(data);
 
+        this.SET_IS_LOADING(false);
         if (Object.keys(this.ERRORS).length === 0) {
           this.changeScreen(4);
           // if (this.REDIRECT_AFTER_LOGIN) {

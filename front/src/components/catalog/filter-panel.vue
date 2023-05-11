@@ -103,7 +103,7 @@ export default {
   },
 
   methods:{
-    ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID"]),
+    ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID", "SET_OFFSET"]),
     ...mapActions("header",["SET_ALL_CURRENT_CATEGORIES"]),
 
     getCatalogUrl(){
@@ -139,6 +139,7 @@ export default {
     },
 
     openCategory(category){
+      this.SET_OFFSET(0);
       let url = this.getCategoryUrl(category.id);
       url = url + this.getTypeOfProduct(this.TYPE_OF_PRODUCT);
       this.$router.push(url);

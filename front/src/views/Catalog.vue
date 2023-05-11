@@ -217,6 +217,7 @@
 
       setActiveCategory(id){
         this.SET_CATALOG_SEARCH_STRING('');
+        this.SET_OFFSET(0);
         if (id) {
           this.$router.push(this.getCategoryUrl(id));
         } else {
