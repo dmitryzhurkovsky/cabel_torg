@@ -262,7 +262,7 @@ export default {
           errorsInData.email = 'Укажите валидный адрес эл. почты'
       }
       if (Object.keys(errorsInData).length) {
-        console.log('QQQ', errorsInData);
+        this.SET_IS_LOADING(false);
         this.SET_ERRORS(errorsInData);
       } else {
         const data = {

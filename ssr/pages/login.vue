@@ -247,7 +247,7 @@ export default defineNuxtComponent({
         await this.SEND_REGISTER_REQUEST(data)
         this.SET_IS_LOADING(false);
         if (Object.keys(this.ERRORS).length === 0) {
-          window.scrollTo(0, 0)
+          if (typeof window !== 'undefined') window.scrollTo(0, 0)
           this.CHANGE_SCREEN(2);
           this.SET_IS_POPUP_OPEN(true);
           this.SET_POPUP_ACTION('ShowCompleteMsg');
@@ -275,14 +275,13 @@ export default defineNuxtComponent({
           errorsInData.email = 'Укажите валидный адрес эл. почты'
       }
       if (Object.keys(errorsInData).length) {
-        this.SET_ERRORS(errorsInData);
         this.SET_IS_LOADING(false);
+        this.SET_ERRORS(errorsInData);
       } else {
         const data = {
           email: this.email,
         };
         await this.SEND_RESTORE_PASSWORD_REQUEST(data);
-
         this.SET_IS_LOADING(false);
         if (Object.keys(this.ERRORS).length === 0) {
           this.changeScreen(4);

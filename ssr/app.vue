@@ -25,15 +25,15 @@
   }
 
   store.commit('notification/SET_IS_LOADING', true)
-  console.log('Setup');
+  console.log('Setup App ');
 
   onBeforeUpdate( () => {
     store.commit('notification/SET_IS_LOADING', true)
-    console.log('BeforeUpdate');
+    console.log('BeforeUpdate App ');
   })
 
-  onMounted(async () => {
-    console.log('Mounted');
+  onBeforeMount(async () => {
+    console.log('Mounted App ');
     store.commit('notification/SET_IS_LOADING', true)
     setViewParametrs();
     window.addEventListener('resize', setViewParametrs)
@@ -54,7 +54,7 @@
   const { data: categoriesData } = await useAsyncData(
     'categories', 
     async () => {
-      console.log('useAsyncData');
+      console.log('useAsyncData App ');
       store.commit('notification/SET_IS_LOADING', true)
       // await store.dispatch('header/GET_CATEGORIES')
       await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')

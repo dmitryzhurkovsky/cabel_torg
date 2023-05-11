@@ -41,9 +41,9 @@
                   />
                 </div>  
               </div>
-
-              <!-- <CatalogPaginationPanel class="content-block__pagination" /> -->
-
+              <div class="content-block__pagination">
+                <CatalogPaginationPanel />
+              </div>
             </div>
           </div>
         </div>
@@ -54,12 +54,7 @@
 
 <script setup>
 
-  import { Swiper } from "swiper/vue";
-  import { SwiperSlide } from "swiper/vue";
-  import SwiperCore, { Pagination, Navigation } from "swiper"
-  import "swiper/swiper.min.css"
   import store from '@/store'
-  SwiperCore.use([Navigation, Pagination])
 
   const route = useRoute()
   const { getters } = store
@@ -100,12 +95,6 @@
     store.commit("query/SET_SEARCH_STRING", '')
     store.commit("catalog/SET_CATALOG_SEARCH_STRING", '')
   }
-
-  // const getData = async () => {
-  //   // store.commit('notification/SET_IS_LOADING', true)
-  //   await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
-  //   // store.commit('notification/SET_IS_LOADING', false)
-  // }
 
   let isFerstRender = true;
 
@@ -182,6 +171,7 @@
   const { data: catalogData } = await useAsyncData(
     'posts', 
     async () => {
+      console.log('UseAsyncData catalog ');
       if (isFerstRender) {
         setParametersFromURL()
       }
@@ -192,11 +182,15 @@
     }
   )
 
-  onMounted(() => {
+  onBeforeMount(async () => {
+    setParametersFromURL()
+    await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
     setBreabcrumbs()
   })
 
-  onUpdated(() => {
+  onBeforeUpdate(async () => {
+    setParametersFromURL()
+    await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
     setBreabcrumbs()
   })
 

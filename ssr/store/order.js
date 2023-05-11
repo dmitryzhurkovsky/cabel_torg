@@ -312,7 +312,7 @@ export default {
             commit("SET_ORDER_DELIVERY_TYPES", response.data);
         } catch (e) {
             console.log(e);
-            commit("notification/ADD_MESSAGE", {name: "Не возможно обновить способы доставки", icon: "error", id: '1'}, {root: true})
+            commit("notification/ADD_MESSAGE", {name: "Не возможно обновить способы доставки " + e, icon: "error", id: '1'}, {root: true})
         }
       },
       

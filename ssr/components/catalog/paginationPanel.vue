@@ -1,7 +1,7 @@
 <template>
     <div v-if = "Pages" class="content-block__pagination">
       <a 
-          :class="[item.pageNumber === ACTIVE_PAGE ? 'pagination_link active' : 'pagination_link']"
+          :class="[item.pageNumber === getters['catalog/ACTIVE_PAGE'] ? 'pagination_link active' : 'pagination_link']"
           v-for = "item in Pages"
           :key = "item.name"
           @click="onChangePage(item)"
@@ -11,137 +11,121 @@
     </div>   
 </template>
 
-<script>
+<script setup>
+  import store from '@/store'
+  const { getters } = store
+  const router = useRouter()
 
-  import { mapGetters, mapMutations } from 'vuex'
 
-  export default {
-    name: 'PaginationPanel',
+  const ChangeParameters = computed(() => {
+    return String(getters['query/LIMIT']) + String(getters['query/OFFSET'])
+  })
 
-    computed: {
-      ...mapGetters("catalog", ["TOTAL_PAGES", "ACTIVE_PAGE"]),
-      ...mapGetters("query", 
-        ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SEARCH_STRING", "SORT_TYPE",  "SORT_DIRECTION", "LIMIT_ITEMS"
-      ]),
+  watch(() => ChangeParameters,
+    () => {
+      Pages
+  })
 
-      ChangeParameters(){
-        return String(this.LIMIT) + String(this.OFFSET); 
-      },
 
-      Pages() {
-        let result = []
-        const firstLink = { name: '<', pageNumber: this.ACTIVE_PAGE - 1, isAvailable: this.ACTIVE_PAGE !== 1 };
-        result.push(firstLink);
-        if (this.ACTIVE_PAGE !== 1 && this.TOTAL_PAGES >= 5) {
-          const goTopLink = { name: '1', pageNumber: 1, isAvailable: this.ACTIVE_PAGE !== 1 };
-          result.push(goTopLink);
-          const dots = {
-              name: '...',
-              pageNumber: null,
-              isAvailable: false
-            }
-            result.push(dots);
+  const Pages = computed(() => {
+    let result = []
+    const activePage = getters['catalog/ACTIVE_PAGE']
+    const totalPages = getters['catalog/TOTAL_PAGES']
+    const firstLink = { name: '<', pageNumber: activePage - 1, isAvailable: activePage !== 1 }
+    result.push(firstLink)
+    if (activePage !== 1 && totalPages >= 5) {
+      const goTopLink = { name: '1', pageNumber: 1, isAvailable: activePage !== 1 }
+      result.push(goTopLink)
+      const dots = {
+          name: '...',
+          pageNumber: null,
+          isAvailable: false
         }
-        if (this.TOTAL_PAGES >= 5) {
-          if (this.TOTAL_PAGES - this.ACTIVE_PAGE < 5) {
-            for (let i = 4; i >= 0; i--) {
-              const curLink = {
-                name: this.TOTAL_PAGES - i,
-                pageNumber: this.TOTAL_PAGES - i,
-                isAvailable: this.ACTIVE_PAGE !== i
-              }
-              result.push(curLink);
-            }
-          } else {
-            for (let i = 0; i < 3; i++) {
-              const curLink = {
-                name: this.ACTIVE_PAGE + i,
-                pageNumber: this.ACTIVE_PAGE + i,
-                isAvailable: this.ACTIVE_PAGE + i !== this.ACTIVE_PAGE
-              };
-              result.push(curLink);
-            }
-            const dots = {
-              name: '...',
-              pageNumber: null,
-              isAvailable: false
-            }
-            result.push(dots);
-            const afterDots = {
-              name: this.TOTAL_PAGES,
-              pageNumber: this.TOTAL_PAGES,
-              isAvailable: this.TOTAL_PAGES !== this.ACTIVE_PAGE
-            }
-            result.push(afterDots);
+        result.push(dots)
+    }
+    if (totalPages >= 5) {
+      if (totalPages - activePage < 5) {
+        for (let i = 4; i >= 0; i--) {
+          const curLink = {
+            name: totalPages - i,
+            pageNumber: totalPages - i,
+            isAvailable: activePage !== i
           }
-        } else {
-          for (let i = 1; i <= this.TOTAL_PAGES; i++) {
-            const curLink = {
-              name: i,
-              pageNumber: i,
-              isAvailable: this.ACTIVE_PAGE !== i
-            }
-            result.push(curLink);
-          }
+          result.push(curLink)
         }
-        const lastLink = { name: '>', pageNumber: this.ACTIVE_PAGE + 1, isAvailable: this.ACTIVE_PAGE !== this.TOTAL_PAGES };
-        result.push(lastLink);
-        return result;
-      },
-
-    },
-
-    watch: {
-      ChangeParameters: function(){
-        this.Pages;
-      },
-    },
-
-    methods: {
-      ...mapMutations("query", ["SET_OFFSET"]),
-
-      getCatalogUrl(offset){
-        let url = "/catalog?";
-        url = url + this.getLastPartOfUrl(offset);
-        return url;
-      },
-
-      getCategoryUrl(id, offset){
-        let url = "/category/";
-        if (id) url = url + id + "?";
-        url = url + this.getLastPartOfUrl(offset);
-        return url;
-      },
-
-      getLastPartOfUrl(offset){
-        let url = "offset=" + offset + 
-          "&limit=" + this.LIMIT + 
-          "&price_gte=" + this.MIN_PRICE + 
-          "&price_lte=" + this.MAX_PRICE;
-        url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
-        url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
-        url = url + "&q=" + this.SEARCH_STRING;
-        return url;        
-      },
-
-      onChangePage(data) {
-        if (data.pageNumber && data.isAvailable) {
-          const newOffset = (data.pageNumber - 1) * this.LIMIT;
-          setTimeout(() => window.scrollTo(0, 0), 0);
-          if (this.CATEGORY_ID) {
-            this.$router.push(this.getCategoryUrl(this.CATEGORY_ID, newOffset));
-          } else {
-            this.$router.push(this.getCatalogUrl(newOffset));
-          }
+      } else {
+        for (let i = 0; i < 3; i++) {
+          const curLink = {
+            name: activePage + i,
+            pageNumber: activePage + i,
+            isAvailable: activePage + i !== activePage
+          };
+          result.push(curLink);
         }
-      },
-
-      mounted(){
-        console.log(this.OFFSET, this.ACTIVE_PAGE, this.TOTAL_PAGES, '  Pagination');
+        const dots = {
+          name: '...',
+          pageNumber: null,
+          isAvailable: false
+        }
+        result.push(dots);
+        const afterDots = {
+          name: totalPages,
+          pageNumber: totalPages,
+          isAvailable: totalPages !== activePage
+        }
+        result.push(afterDots)
       }
+    } else {
+      for (let i = 1; i <= totalPages; i++) {
+        const curLink = {
+          name: i,
+          pageNumber: i,
+          isAvailable: activePage !== i
+        }
+        result.push(curLink)
+      }
+    }
+    const lastLink = { name: '>', pageNumber: activePage + 1, isAvailable: activePage !== totalPages }
+    result.push(lastLink)
+    return result
+  })
 
+  const getCatalogUrl = (offset) => {
+    let url = "/catalog?"
+    url = url + getLastPartOfUrl(offset)
+    return url
+  }
+
+  const getCategoryUrl = (id, offset) => {
+    let url = "/category/"
+    if (id) url = url + id + "?"
+    url = url + getLastPartOfUrl(offset)
+    return url
+  }
+
+  const getLastPartOfUrl = (offset) => {
+    let url = "offset=" + offset + 
+      "&limit=" + getters['query/LIMIT'] + 
+      "&price_gte=" + getters['query/MIN_PRICE'] + 
+      "&price_lte=" + getters['query/MAX_PRICE']
+    url = url + "&ordering=" + getters['query/SORT_DIRECTION'] + getters['query/SORT_TYPE']
+    url = url + '&type_of_product=' + getters['query/TYPE_OF_PRODUCT']
+    url = url + "&q=" + getters['query/SEARCH_STRING']
+    return url
+  }
+
+  const onChangePage = (data) => {
+    if (data.pageNumber && data.isAvailable) {
+      const newOffset = (data.pageNumber - 1) * getters['query/LIMIT']
+      if (window) setTimeout(() => window.scrollTo(0, 0), 0)
+      if (getters['query/CATEGORY_ID']) {
+        router.push(getCategoryUrl(getters['query/CATEGORY_ID'], newOffset))
+      } else {
+        router.push(getCatalogUrl(newOffset));
+      }
     }
   }
+
 </script>
 
 <style scoped lang="scss">

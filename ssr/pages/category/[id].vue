@@ -74,8 +74,9 @@
                   />
                 </div>  
               </div>
-
-              <!-- <CatalogPaginationPanel class="content-block__pagination" /> -->
+              <div class="content-block__pagination">
+                <CatalogPaginationPanel />
+              </div>
 
             </div>
           </div>
@@ -154,6 +155,7 @@
   const setActiveCategory = (id) => {
     store.commit('catalog/SET_CATALOG_SEARCH_STRING','')
     store.commit('query/SET_CATEGORY_ID', id)
+    store.commit('query/SET_OFFSET', 0)
     router.push(getCategoryUrl(id));
   }
 
@@ -274,16 +276,31 @@
     }
   )
 
-  onMounted(async () => {
-    if (!getters['header/ALL_CATEGORIES'].length) {
-      await store.dispatch('header/GET_CATEGORIES')
-    }
+  onBeforeMount(async () => {
+    setParametersFromURL()
+    // if (!getters['header/ALL_CATEGORIES'].length) {
+    //   await store.dispatch('header/GET_CATEGORIES')
+    // }
+    await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
     setBreabcrumbs()
   })
 
-  onUpdated(() => {
+  onBeforeUpdate(async () => {
+    setParametersFromURL()
+    await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
     setBreabcrumbs()
   })
+
+  // onMounted(async () => {
+  //   if (!getters['header/ALL_CATEGORIES'].length) {
+  //     await store.dispatch('header/GET_CATEGORIES')
+  //   }
+  //   setBreabcrumbs()
+  // })
+
+  // onUpdated(() => {
+  //   setBreabcrumbs()
+  // })
 </script>
 
 <style scoped lang="scss">
