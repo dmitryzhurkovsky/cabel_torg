@@ -30,11 +30,11 @@
                                 class="old_price"
                           >{{ cartItemData.price_with_tax }}
                           </span>
-                              <span>
-                              {{ cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax
-                                  ? cartItemData.price_with_discount_and_tax
-                                  : cartItemData.price_with_tax
-                                  }}
+                          <span :class="[cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax ? 'price_w_discount' : '']">
+                            {{ cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax
+                              ? cartItemData.price_with_discount_and_tax
+                              : cartItemData.price_with_tax
+                            }}
                           </span>BYN
                               <!-- cartItemData.price  -->
                               <span class="current_price_item">/{{ cartItemData.base_unit.full_name }}</span>
@@ -60,10 +60,6 @@
 
                           </div>
                       </div>
-
-
-
-
                   </div>
                   <div class="product__label">*Все цены указаны с учетом НДС.</div>
                   <div class="product__button flex-center">

@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="item-card__title" @click.stop="openCardItem(card.id)">
-        <div>{{ card.name }}</div>
+        <div>{{ card?.name }}</div>
       </div>
       <div class="item-card__uptitle">
         <div>{{ card.category.name }}</div>
