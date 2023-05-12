@@ -286,6 +286,11 @@ export default {
       border-radius: 6px;
       color: #fff;
     }
+    &:active{
+      background: #4275D8;
+      border-radius: 6px;
+      color: #fff;
+    }
 
 
   }

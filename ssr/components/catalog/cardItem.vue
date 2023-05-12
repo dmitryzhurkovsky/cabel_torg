@@ -276,7 +276,7 @@ export default {
       padding: 10px 10px;
       transition: all 0.2s ease;
     }
-    &:hover{
+    &:active{
       background: #4275D8;
       border-radius: 6px;
       color: #fff;
