@@ -15,11 +15,12 @@
             <div class="product__status icon-on-the-way _label mb-20" v-if = "card.status === 'W'">В пути на склад</div>
             <div class="product__status _label mb-20 if_status_on_the_way" v-if = "card.status === 'W'">Доставим в течение 14 дней</div>
             <div class="product__status icon-out-of-stock _label mb-20" v-if = "card.status === 'O'">Нет в наличии</div>
-            <div class="product__title">
-                <a v-if ="card.category">{{ card.category.name }}</a>
-            </div>
-            <div class="product__uptitle" @click.stop="openCardItem(card.id)">
+            <div class="product__title" @click.stop="openCardItem(card.id)">
                 <a >{{ card.name }}</a>
+
+            </div>
+            <div class="product__uptitle" >
+                <a v-if ="card.category">{{ card.category.name }}</a>
             </div>
             <div class="product__count flex-center">
                 <span class="_label">Количество:</span>
@@ -348,7 +349,7 @@ export default {
       a{
         font-weight: 500;
         font-size: 15px;
-
+        cursor: pointer;
         color: #423E48;
       }
 
@@ -360,7 +361,7 @@ export default {
         font-size: 14px;
         line-height: 130%;
         color: #423E48;
-        cursor: pointer;
+
       }
 
     }

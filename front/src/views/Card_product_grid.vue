@@ -774,6 +774,9 @@
   color: #E30044;
   .old_price{
     color: #B3B2B6;
+    @media (max-width: $md3+px) {
+      font-size: 13px;
+    }
   }
   .current_price_item{
     color: #B3B2B6;
