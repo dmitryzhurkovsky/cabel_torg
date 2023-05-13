@@ -30,7 +30,7 @@ class Product(Base1CModel):
     vendor_code = Column(String)
     name = Column(String)
     images = Column(String)  # pictures paths in the following format: picture_1,picture_2,picture_3...
-    tax = Column(Integer)
+    tax = Column(Integer)  # todo change it, because tax is always 20
     description = Column(String)
     count = Column(DECIMAL, default=0)
     weight = Column(DECIMAL, default=0)
