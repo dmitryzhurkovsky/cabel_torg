@@ -281,16 +281,16 @@ export default {
       padding: 10px 10px;
       transition: all 0.2s ease;
     }
-    &:hover{
-      background: #4275D8;
-      border-radius: 6px;
-      color: #fff;
-    }
-    &:active{
-      background: #4275D8;
-      border-radius: 6px;
-      color: #fff;
-    }
+    //&:hover{
+    //  background: #4275D8;
+    //  border-radius: 6px;
+    //  color: #fff;
+    //}
+    //&:active{
+    //  background: #4275D8;
+    //  border-radius: 6px;
+    //  color: #fff;
+    //}
 
 
   }
@@ -376,6 +376,13 @@ export default {
       color: #423E48;
     }
 
+  }
+}
+@media (hover:hover) {
+  .item-card__buy:hover {
+    background: #4275D8;
+    border-radius: 6px;
+    color: #fff;
   }
 }
 
