@@ -79,13 +79,13 @@
       isMobileVersion.value = curr;
   });
 
-  const LastCategory = computed(() => {
-    let result = [];
-    if (getters['header/SUB_CATEGORIES_ITEM_ACTIVE'] && getters['header/SUB_CATEGORIES']) {
-        result = getters['header/SUB_CATEGORIES'].filter(item => item.id === getters['header/SUB_CATEGORIES_ITEM_ACTIVE']);
-    }
-    return result;
-  })
+  // const LastCategory = computed(() => {
+  //   let result = [];
+  //   if (getters['header/SUB_CATEGORIES_ITEM_ACTIVE'] && getters['header/SUB_CATEGORIES']) {
+  //       result = getters['header/SUB_CATEGORIES'].filter(item => item.id === getters['header/SUB_CATEGORIES_ITEM_ACTIVE']);
+  //   }
+  //   return result;
+  // })
 
   const ChangeParameters = computed(() => {
     return JSON.stringify(route.query)

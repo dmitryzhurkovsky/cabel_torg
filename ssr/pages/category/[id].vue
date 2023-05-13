@@ -58,7 +58,7 @@
                   <CatalogViewPanel />
                 </div>
               </div>
-              <div class="content-block__list">
+              <div class="content-block__list" v-if = "catalogData">
                 <div class="content-block__item product-row" v-if = "catalogData?.length && store.getters['query/VIEW_TYPE'] === 'row'">
                   <CatalogListItem 
                     v-for   = "item in catalogData"
@@ -74,6 +74,9 @@
                   />
                 </div>  
               </div>
+              <div class="content-block__list" v-if = "!catalogData">
+                <span>Категоря пуста</span>
+              </div>>
               <div class="content-block__pagination">
                 <CatalogPaginationPanel />
               </div>
@@ -99,8 +102,16 @@
   const router = useRouter()
   const { getters } = store
   const isFilterPanelOpen = ref(false)
-  const id = ref(getters['query/CATEGORY_ID'])
   const isMobileVersion = ref(false)
+  
+  useHead({
+    title: route.params.id,
+    name: route.params.id,
+    meta: [{
+      name: route.params.id,
+      content: route.params.id
+    }]
+  })
   
   const setIsFilterPanelOpen = (data) => {
     isFilterPanelOpen.value = data
@@ -123,11 +134,11 @@
     return JSON.stringify(route.query) + JSON.stringify(route.params);
   })
 
-  const  checkMobileVer = () => {
-    console.log(LastCategory.length)
-    console.log(isMobileVersion)
-    return LastCategory.length && !isMobileVersion
-  }
+  // const checkMobileVer = () => {
+  //   console.log(LastCategory.length)
+  //   console.log(isMobileVersion)
+  //   return LastCategory.length && !isMobileVersion
+  // }
 
   const clearSearchString= () => {
     store.commit("query/SET_SEARCH_STRING", '')
@@ -278,9 +289,6 @@
 
   onBeforeMount(async () => {
     setParametersFromURL()
-    // if (!getters['header/ALL_CATEGORIES'].length) {
-    //   await store.dispatch('header/GET_CATEGORIES')
-    // }
     await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
     setBreabcrumbs()
   })
@@ -291,16 +299,6 @@
     setBreabcrumbs()
   })
 
-  // onMounted(async () => {
-  //   if (!getters['header/ALL_CATEGORIES'].length) {
-  //     await store.dispatch('header/GET_CATEGORIES')
-  //   }
-  //   setBreabcrumbs()
-  // })
-
-  // onUpdated(() => {
-  //   setBreabcrumbs()
-  // })
 </script>
 
 <style scoped lang="scss">
