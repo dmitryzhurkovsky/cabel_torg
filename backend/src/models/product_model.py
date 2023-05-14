@@ -9,8 +9,10 @@ from sqlalchemy import (
     DECIMAL,
     CheckConstraint,
     Boolean,
-    Enum
+    Enum,
+    case,
 )
+from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
 from src.core.enums import BaseEnum
@@ -105,12 +107,19 @@ class Product(Base1CModel):
         """For generating an invoice."""
         return self.actual_price * self.tax / 100
 
-    @property
+    @hybrid_property
     def actual_price(self) -> float:
-        """For generating an invoice."""
+        """For generating an invoice, ordering and sorting."""
         return self.price_with_discount if self.price_with_discount else self.price
 
-    @property
+    @actual_price.expression
+    def actual_price(cls):
+        """For generating an invoice, ordering and sorting."""
+        return case(
+            (Product.price_with_discount > 0, Product.price_with_discount),
+            else_=Product.price
+        )
+
     def actual_price_with_tax(self) -> float:
         """For generating an invoice."""
         return self.tax_sum + self.actual_price
