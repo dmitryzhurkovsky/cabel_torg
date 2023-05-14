@@ -70,7 +70,7 @@ async def get_products(
 async def get_product(product_id: int | str, session: AsyncSession = Depends(get_session)):
     return await ProductManager.retrieve(
         id=product_id,
-        site_link=product_id,
+        vendor_code=product_id,
         use_or_condition=True,
         session=session,
     )
