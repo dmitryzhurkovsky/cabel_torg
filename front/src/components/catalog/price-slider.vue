@@ -155,8 +155,8 @@ export default {
     getLastPartOfUrl(min, max){
       let url = "offset=" + this.OFFSET + 
         "&limit=" + this.LIMIT + 
-        "&price_gte=" + min + 
-        "&price_lte=" + max;
+        "&actual_price_gte=" + min + 
+        "&actual_price_lte=" + max;
       url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
       url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
       url = url + "&q=" + this.CATALOG_SEARCH_STRING;

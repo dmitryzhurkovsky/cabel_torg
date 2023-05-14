@@ -23,7 +23,7 @@ export default {
     ],
     allSortsOfProduct: [
       {name: 'По дате добавления', type: 'created_at'},
-      {name: 'цене', type: 'price'},
+      {name: 'цене', type: 'actual_price'},
       {name: 'скидке', type: 'discount'},
     ],
     limitItems : [12, 24, 48],
@@ -133,7 +133,7 @@ export default {
             const response = await axios.get(process.env.VUE_APP_API_URL + 
                 'products?' + 
                 '&offset=0' +  
-                '&limit=10' + 
+                '&limit=12' + 
                 query
             );
             commit("SET_FINDED_ELEMENTS", response.data);

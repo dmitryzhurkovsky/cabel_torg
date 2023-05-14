@@ -208,8 +208,8 @@
       getLastPartOfUrl(){
         let url = "offset=" + this.OFFSET + 
           "&limit=" + this.LIMIT + 
-          "&price_gte=" + this.MIN_PRICE + 
-          "&price_lte=" + this.MAX_PRICE;
+          "&actual_price_gte=" + this.MIN_PRICE + 
+          "&actual_price_lte=" + this.MAX_PRICE;
         url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
         url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
         url = url + "&q=" + this.CATALOG_SEARCH_STRING;

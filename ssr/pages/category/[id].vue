@@ -105,7 +105,7 @@
   const isMobileVersion = ref(false)
   
   useHead({
-    title: route.params.id,
+    title: 'КабельТорг | '+ route.params.id,
     name: route.params.id,
     meta: [{
       name: route.params.id,
@@ -134,12 +134,6 @@
     return JSON.stringify(route.query) + JSON.stringify(route.params);
   })
 
-  // const checkMobileVer = () => {
-  //   console.log(LastCategory.length)
-  //   console.log(isMobileVersion)
-  //   return LastCategory.length && !isMobileVersion
-  // }
-
   const clearSearchString= () => {
     store.commit("query/SET_SEARCH_STRING", '')
     store.commit("catalog/SET_CATALOG_SEARCH_STRING", '')
@@ -155,8 +149,8 @@
   const getLastPartOfUrl = () => {
     let url = "offset=" + getters['query/OFFSET'] + 
       "&limit=" + getters['query/LIMIT'] + 
-      "&price_gte=" + getters['query/MIN_PRICE'] + 
-      "&price_lte=" + getters['query/MAX_PRICE']
+      "&actual_price_gte=" + getters['query/MIN_PRICE'] + 
+      "&actual_price_lte=" + getters['query/MAX_PRICE']
     url = url + "&ordering=" + getters['query/SORT_DIRECTION'] + getters['query/SORT_TYPE']
     url = url + '&type_of_product=' + getters['query/TYPE_OF_PRODUCT']
     url = url + "&q=" + getters['catalog/CATALOG_SEARCH_STRING']
@@ -167,6 +161,7 @@
     store.commit('catalog/SET_CATALOG_SEARCH_STRING','')
     store.commit('query/SET_CATEGORY_ID', id)
     store.commit('query/SET_OFFSET', 0)
+    // store.commit('query/SET_DEFAULT_PRICES')
     router.push(getCategoryUrl(id));
   }
 
@@ -188,8 +183,13 @@
     } else {
       isFailInParams = true
     }
+    console.log(query.price_gte, '   ', query.price_lte, ' - ', getters['query/MIN_PRICE'], '   ', getters['query/MAX_PRICE']);
     if (query.price_gte) {
-      if (getters['query/MIN_PRICE'] !== query.price_gte) store.commit('query/SET_MIN_PRICE', query.price_gte);
+      if (getters['query/MIN_PRICE'] !== query.price_gte) {
+        console.log('Не равны ', query.price_gte, '   ', getters['query/MIN_PRICE']);
+        store.commit('query/SET_MIN_PRICE', query.price_gte);
+        console.log('SET up MIN_PRICE');
+      }
     } else {
       isFailInParams = true
     }
@@ -198,7 +198,7 @@
     } else {
       isFailInParams = true
     }
-    console.log(query.q, typeof query.q);
+    // console.log(query.q, typeof query.q);
     if (query.q) {
       console.log('QQQQ');
       if (getters['catalog/CATALOG_SEARCH_STRING'] !== query.q) {
@@ -288,13 +288,17 @@
   )
 
   onBeforeMount(async () => {
-    setParametersFromURL()
+    if (isFirstRender) {
+      setParametersFromURL()
+    }
     await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
     setBreabcrumbs()
   })
 
   onBeforeUpdate(async () => {
-    setParametersFromURL()
+    if (isFirstRender) {
+      setParametersFromURL()
+    }
     await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
     setBreabcrumbs()
   })
