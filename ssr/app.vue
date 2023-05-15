@@ -21,7 +21,8 @@
   // fetchKey: 'categoriesData'
 
   const setViewParametrs = () => {
-      store.commit('header/UPDATE_VIEW_PARAMETERS',window.innerWidth)
+    console.log('SET VIEW PARAMETERS', window.innerWidth, window);
+    store.commit('header/UPDATE_VIEW_PARAMETERS', window.innerWidth)
   }
 
   store.commit('notification/SET_IS_LOADING', true)
@@ -35,8 +36,10 @@
   onBeforeMount(async () => {
     console.log('Mounted App ');
     store.commit('notification/SET_IS_LOADING', true)
-    setViewParametrs();
-    window.addEventListener('resize', setViewParametrs)
+    nextTick(() => {
+      window.addEventListener('resize', setViewParametrs)
+      setViewParametrs();
+    })
     const nullData = []
     if (!localStorage.getItem("carts")) localStorage.setItem("carts", JSON.stringify(nullData))
     if (!localStorage.getItem("favorites")) localStorage.setItem("favorites", JSON.stringify(nullData))

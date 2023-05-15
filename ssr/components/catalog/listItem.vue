@@ -31,8 +31,8 @@
         </div>
         <div class="product__action">
             <div class="product__article  _label mb-20">Артикул: <span>{{ card.vendor_code }}</span></div>
-            <div class="product__price" v-if="card.price_with_tax !== cardPriceWithDiscount">
-                <div class="product__oldprice">
+            <div class="product__price">
+                <div class="product__oldprice" v-if="card.price_with_tax !== cardPriceWithDiscount">
                     <span >{{ card.price_with_tax }}</span>
                     <span>BYN</span>
                     <span> / {{ card.base_unit.full_name }}</span>

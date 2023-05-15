@@ -106,8 +106,8 @@
   const getLastPartOfUrl = (offset) => {
     let url = "offset=" + offset + 
       "&limit=" + getters['query/LIMIT'] + 
-      "&price_gte=" + getters['query/MIN_PRICE'] + 
-      "&price_lte=" + getters['query/MAX_PRICE']
+      "&actual_price_gte=" + getters['query/MIN_PRICE'] + 
+      "&actual_price_lte=" + getters['query/MAX_PRICE']
     url = url + "&ordering=" + getters['query/SORT_DIRECTION'] + getters['query/SORT_TYPE']
     url = url + '&type_of_product=' + getters['query/TYPE_OF_PRODUCT']
     url = url + "&q=" + getters['query/SEARCH_STRING']

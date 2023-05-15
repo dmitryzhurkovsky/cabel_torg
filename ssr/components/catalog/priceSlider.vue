@@ -65,6 +65,7 @@ export default {
       this.maxValueRange = this.MAX_PRICE;
       this.Left = ((this.MIN_PRICE / this.RangeMax) * 100) + '%';
       this.Right = 100 - ((this.MAX_PRICE / this.RangeMax) * 100) + '%';
+      console.log('Change parameters');
     }  
   },
 
@@ -81,10 +82,12 @@ export default {
     ...mapMutations("query", ["SET_MIN_PRICE", "SET_MAX_PRICE"]),
 
     setUpMinPrice(){
-      if (this.minValuePrice <= this.RangeMin) this.minValuePrice = this.RangeMin;
-      if (this.minValuePrice >= this.maxValuePrice - this.priceGap) this.minValuePrice = this.maxValuePrice - this.priceGap;
+      console.log('Start update ', this.minValuePrice, '  ', this.RangeMin);
+      // if (this.minValuePrice <= this.RangeMin) this.minValuePrice = this.RangeMin;
+      // if (this.minValuePrice >= this.maxValuePrice - this.priceGap) this.minValuePrice = this.maxValuePrice - this.priceGap;
       const minPrice = this.minValuePrice;
       const maxPrice = this.maxValuePrice;
+      console.log('Set up MIN price ', minPrice, '   ', maxPrice, ' - ', this.maxValueRange);
       if ((maxPrice - minPrice >= this.priceGap) && (maxPrice <= this.maxValueRange)) {
         this.minValueRange = minPrice;
         this.Left = ((minPrice / this.RangeMax) * 100) + '%';
@@ -92,8 +95,8 @@ export default {
     },
 
     setUpMaxPrice(){
-      if (this.maxValuePrice >= this.RangeMax) this.maxValuePrice = this.RangeMax;
-      if (this.maxValuePrice <= this.minValuePrice + this.priceGap) this.maxValuePrice = Number(this.minValuePrice) + Number(this.priceGap);
+      // if (this.maxValuePrice >= this.RangeMax) this.maxValuePrice = this.RangeMax;
+      // if (this.maxValuePrice <= this.minValuePrice + this.priceGap) this.maxValuePrice = Number(this.minValuePrice) + Number(this.priceGap);
       const minPrice = this.minValuePrice;
       const maxPrice = this.maxValuePrice;
       if ((maxPrice - minPrice >= this.priceGap)) {
@@ -155,8 +158,8 @@ export default {
     getLastPartOfUrl(min, max){
       let url = "offset=" + this.OFFSET + 
         "&limit=" + this.LIMIT + 
-        "&price_gte=" + min + 
-        "&price_lte=" + max;
+        "&actual_price_gte=" + min + 
+        "&actual_price_lte=" + max;
       url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
       url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
       url = url + "&q=" + this.CATALOG_SEARCH_STRING;
@@ -181,6 +184,17 @@ export default {
         }
       }
     }
+  },
+
+  beforeMount(){
+    console.log('прайс слайдер ', this);
+    this.minValuePrice = this.MIN_PRICE;
+    this.RangeMin = this.MIN_PRICE;
+    this.maxValuePrice = this.MAX_PRICE;
+    this.RangeMax = this.MAX_PRICE;
+    this.setUpMinPrice();
+    this.setUpMaxPrice();
+    // this.updateStore();
   }
 }
 </script>
