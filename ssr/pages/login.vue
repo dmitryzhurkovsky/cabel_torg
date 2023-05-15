@@ -300,7 +300,6 @@ export default defineNuxtComponent({
 
 <style lang="scss" scoped>
 .popup__reg{
-  po
 
   .sign-in-htm{
     text-align: center;

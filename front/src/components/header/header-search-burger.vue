@@ -2,7 +2,7 @@
     <div class="search-wrapper burger__search">
       <div class="search__box">
         <div class="search__field">
-          <input type="text" name="focus" required class="search-box" autocomplete="off"
+          <input type="text" required class="search-box" autocomplete="off"
                  placeholder="Поиск товаров"
             v-model = "queryString" @input="onInput()"
 
