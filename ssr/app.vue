@@ -615,6 +615,16 @@ input{
   text-overflow: ellipsis;
 
 }
+.dropdown .wrapper__show {
+  display: block;
+  @media (max-width: $md3+px) {
+    position: fixed;
+    left: 50%!important;
+    top: 50%;
+    right: inherit!important;
+    transform: translate(-50%, -50%);
 
+  }
+}
 
 </style>

@@ -95,6 +95,7 @@ text-align: center;
 }
 &__title{
   font-weight: 500;
+  cursor: pointer;
 
 }
 &_action{

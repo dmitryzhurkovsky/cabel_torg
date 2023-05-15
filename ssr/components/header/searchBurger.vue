@@ -1,5 +1,5 @@
 <template>
-  <div class="header__search burger__search">
+  <div class="header__search search-wrapper">
     <div class="search__box">
       <div class="search__field">
         <input type="text" name="focus" required class="search-box" placeholder="Поиск товаров"
