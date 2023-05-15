@@ -36,10 +36,10 @@
   onBeforeMount(async () => {
     console.log('Mounted App ');
     store.commit('notification/SET_IS_LOADING', true)
-    nextTick(() => {
+    setTimeout(() => {
       window.addEventListener('resize', setViewParametrs)
       setViewParametrs();
-    })
+    }, 0)
     const nullData = []
     if (!localStorage.getItem("carts")) localStorage.setItem("carts", JSON.stringify(nullData))
     if (!localStorage.getItem("favorites")) localStorage.setItem("favorites", JSON.stringify(nullData))

@@ -183,18 +183,18 @@
     } else {
       isFailInParams = true
     }
-    console.log(query.price_gte, '   ', query.price_lte, ' - ', getters['query/MIN_PRICE'], '   ', getters['query/MAX_PRICE']);
-    if (query.price_gte) {
-      if (getters['query/MIN_PRICE'] !== query.price_gte) {
-        console.log('Не равны ', query.price_gte, '   ', getters['query/MIN_PRICE']);
-        store.commit('query/SET_MIN_PRICE', query.price_gte);
+    console.log(query.actual_price_gte, '   ', query.actual_price_lte, ' - ', getters['query/MIN_PRICE'], '   ', getters['query/MAX_PRICE']);
+    if (query.actual_price_gte) {
+      if (getters['query/MIN_PRICE'] !== query.actual_price_gte) {
+        console.log('Не равны ', query.actual_price_gte, '   ', getters['query/MIN_PRICE']);
+        store.commit('query/SET_MIN_PRICE', query.actual_price_gte);
         console.log('SET up MIN_PRICE');
       }
     } else {
       isFailInParams = true
     }
-    if (query.price_lte) {
-      if (getters['query/MAX_PRICE'] !== query.price_lte) store.commit('query/SET_MAX_PRICE', query.price_lte);
+    if (query.actual_price_lte) {
+      if (getters['query/MAX_PRICE'] !== query.actual_price_lte) store.commit('query/SET_MAX_PRICE', query.actual_price_lte);
     } else {
       isFailInParams = true
     }

@@ -48,6 +48,6 @@ top: 0;
 bottom: 0;
 z-index: 1;
 background: linear-gradient(180deg, rgba(66, 62, 72, 0.2) 0%, rgba(66, 62, 72, 0) 100%);
-backdrop-filter: blur(2px);
+// backdrop-filter: blur(2px);
 }
 </style>

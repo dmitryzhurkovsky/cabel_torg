@@ -113,13 +113,13 @@
     } else {
       isFailInParams = true
     }
-    if (query.price_gte) {
-      if (getters['query/MIN_PRICE'] !== query.price_gte) store.commit('query/SET_MIN_PRICE', query.price_gte)
+    if (query.actual_price_gte) {
+      if (getters['query/MIN_PRICE'] !== query.actual_price_gte) store.commit('query/SET_MIN_PRICE', query.actual_price_gte)
     } else {
       isFailInParams = true
     }
-    if (query.price_lte) {
-      if (getters['query/MAX_PRICE'] !== query.price_lte) store.commit('query/SET_MAX_PRICE', query.price_lte)
+    if (query.actual_price_lte) {
+      if (getters['query/MAX_PRICE'] !== query.actual_price_lte) store.commit('query/SET_MAX_PRICE', query.actual_price_lte)
     } else {
       isFailInParams = true
     }
