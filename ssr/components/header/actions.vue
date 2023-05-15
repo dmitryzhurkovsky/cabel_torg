@@ -24,9 +24,9 @@
               <div class="avatar icon-user flex-center"></div>
             </div>
 
-            <button @click="handleClick('/login', 1)" class="btn Fblack">
+            <div @click="handleClick('/login', 1)" class="btn Fblack">
               Вход
-            </button>
+            </div>
 
             <div @click="handleClick('/login', 2)" class="foot-lnk">
                 Не помню пароль
@@ -67,11 +67,11 @@
         @mouseenter="onCartIconEnter()"
         @mouseleave="onIconLeave()"
     >
-      <button class="dropdown icon-cart">
+      <div class="dropdown icon-cart">
         <div :class="[!cartHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
           <HeaderCart @click.stop = "onIconLeaveClick()" />
         </div>
-      </button>
+      </div>
       <CatalogIconQuantity 
         :quantity = ORDERS.length 
         :left = '10'
@@ -217,9 +217,6 @@ export default {
   margin: 24px 0;
 }
 
-button{
-  margin-bottom: 20px;
-}
 .hr{
   height:2px;
   margin:44px 0 40px 0;
