@@ -33,33 +33,16 @@ class ProductManager(CRUDManager):
 
         filter_expressions = []
 
-        price_gte = filter_fields.get('price_gte')
+        price_gte = filter_fields.get('actual_price_gte')
         if price_gte and price_gte != '0':
-            filter_expressions.append(or_(
-                Product.price_with_discount >= Decimal(float(price_gte) / (1 + settings.DEFAULT_TAX / 100)),
-                and_(
-                    Product.price >= Decimal(float(price_gte) / (1 + settings.DEFAULT_TAX / 100)),
-                    or_(
-                        Product.price_with_discount == 0,
-                        Product.price_with_discount.is_(None)
-                    )
-                ),
-                )
-            )
+            filter_expressions.append(
+                Product.actual_price >= Decimal(float(price_gte) / (1 + settings.DEFAULT_TAX / 100)))
         else:
             filter_expressions.append(Product.price > Decimal(0))
 
-        if price_lte := filter_fields.get('price_lte'):
-            filter_expressions.append(or_(
-                Product.price_with_discount <= Decimal(float(price_lte) / (1 + settings.DEFAULT_TAX / 100)),
-                and_(
-                    Product.price <= Decimal(float(price_lte) / (1 + settings.DEFAULT_TAX / 100)),
-                    or_(
-                        Product.price_with_discount == 0,
-                        Product.price_with_discount.is_(None)
-                    )
-                )
-            ))
+        if price_lte := filter_fields.get('actual_price_lte'):
+            filter_expressions.append(
+                Product.actual_price <= Decimal(float(price_lte) / (1 + settings.DEFAULT_TAX / 100)))
 
         if category_id := filter_fields.get('category_id'):
             categories_ids = await CategoryManager.get_categories_ids(

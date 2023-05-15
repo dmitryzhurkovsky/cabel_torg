@@ -38,7 +38,7 @@ class ProductOrderFilterEnum(str, Enum):
     """
     CREATED_DATE_ASCENDING = 'created_at'
     CREATED_DATE_DESCENDING = '-created_at'
-    PRICE_ASCENDING = 'price'
-    PRICE_DESCENDING = '-price'
+    PRICE_ASCENDING = 'actual_price'
+    PRICE_DESCENDING = '-actual_price'
     DISCOUNT_ASCENDING = 'discount'
     DISCOUNT_DESCENDING = '-discount'

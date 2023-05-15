@@ -5,22 +5,24 @@ services:
     image: postgres:15.1
     volumes:
       - ./data/postgres:/var/lib/postgresql/data/
-    expose:
-      - 5432
+    ports:
+      - '5434:5432'
     env_file:
-      - backend/.env.prod
+      - backend/.env.dev
 
   backend:
+    container_name: 'backend-test'
     build:
       context: backend
       dockerfile: ./build/Dockerfile
     volumes:
       - site_media:/site_media
       - ./backend:/backend
-    expose:
-      - 8000
+    ports:
+      - '8000:8000'
     depends_on:
       - db
+      - redis
 
   frontend:
     build:
@@ -29,7 +31,7 @@ services:
     ports:
       - '800:800'
 
-  nginx:  # Copy static files during building this container
+  nginx: # Copy static files during building this container
     build:
       context: .
       dockerfile: ./nginx/Dockerfile
@@ -41,9 +43,25 @@ services:
       - '443:443'  # for https
     volumes:
       - site_media:/usr/share/nginx/site_media/
+      - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+
+  certbot:
+    image: certbot/certbot:latest
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email burguyd@gmail.com -d cabel-torg-test-domain.net.by --agree-tos
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    depends_on:
+      - nginx
 
   redis:
     image: redis:latest
+    ports:
+      - '6379:6379'
 
 volumes:
   site_media:

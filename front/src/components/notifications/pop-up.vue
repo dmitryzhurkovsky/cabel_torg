@@ -70,7 +70,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        position: absolute;
+        position: fixed;
         left: 0;
         top: 0;
         //height: 100%;
@@ -79,7 +79,7 @@
         background: linear-gradient(180deg, rgba(66, 62, 72, 0.2) 0%, rgba(66, 62, 72, 0) 100%);
         backdrop-filter: blur(2px);
         z-index: 95;
-        height: 100vh;
+        height: 100%;
         overflow-y: hidden;
     }
 

@@ -67,11 +67,11 @@
         @mouseenter="onCartIconEnter()"
         @mouseleave="onIconLeave()"
     >
-      <div class="dropdown icon-cart">
+      <button class="dropdown icon-cart">
         <div :class="[!cartHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
           <HeaderCart @click.stop = "onIconLeaveClick()" />
         </div>
-      </div>
+      </button>
       <CatalogIconQuantity 
         :quantity = ORDERS.length 
         :left = '10'

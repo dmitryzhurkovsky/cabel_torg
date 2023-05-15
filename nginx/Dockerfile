@@ -21,7 +21,7 @@ COPY --from=build-client-frontend-stage /client_frontend/dist /usr/share/nginx/c
 # Copy files for admin frontend
 COPY --from=build-admin-frontend-stage /admin_frontend/dist /usr/share/nginx/admin_app
 # Copy nginx configruations
-COPY /nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY /nginx/app.conf /etc/nginx/conf.d/app.conf
 # Create a directory for maintaing images and stattic files
 RUN mkdir -p /usr/share/nginx/site_media
 

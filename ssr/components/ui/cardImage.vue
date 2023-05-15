@@ -1,8 +1,6 @@
 <template>
-  <div>
     <img v-if = "images" class="" :src=getImagePath(images) alt="">
     <img v-if = "!images" class="" src="@/assets/no_image.png" alt="">
-  </div>
 </template>
 
 <script>
