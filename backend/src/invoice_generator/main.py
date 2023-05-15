@@ -74,7 +74,7 @@ class InvoiceGenerator:
                 tax_sum = product.product.tax_sum * product.amount
                 products_tax_sum += tax_sum
 
-                price_with_tax = product.product.actual_price_with_tax * product.amount
+                price_with_tax = product.product.actual_price_with_tax() * product.amount
                 products_price_with_tax += price_with_tax
 
                 order_products.append(ProductJinjaSchema(
