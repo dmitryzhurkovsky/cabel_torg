@@ -21,7 +21,7 @@
   // fetchKey: 'categoriesData'
 
   const setViewParametrs = () => {
-    console.log('SET VIEW PARAMETERS', window.innerWidth, window);
+    // console.log('SET VIEW PARAMETERS', window.innerWidth, window);
     store.commit('header/UPDATE_VIEW_PARAMETERS', window.innerWidth)
   }
 

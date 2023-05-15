@@ -6,9 +6,18 @@
 
           <h3>Рекомендации для вас</h3>
           <div class="recomendation__nav" v-if="isShowFilter">
-            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'popular', order: 'discount' }, '-')">Топ продаж</div>
-            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'available', order: 'created_at' }, '-')">Новинки</div>
-            <div class="recomendation__nav__item" @click="setTypeAndOrder({ type: 'with_discount', order: 'discount' }, '')">Скидки</div>
+            <div 
+              :class="[activePiont === 0 ? 'recomendation__nav__item active' : 'recomendation__nav__item']" 
+              @click="setTypeAndOrder({ type: 'popular', order: 'discount', typeRecomendation : 0 }, '-')"
+            >Топ продаж</div>
+            <div 
+            :class="[activePiont === 1 ? 'recomendation__nav__item active' : 'recomendation__nav__item']" 
+              @click="setTypeAndOrder({ type: 'available', order: 'created_at', typeRecomendation : 1 }, '-')"
+            >Новинки</div>
+            <div 
+            :class="[activePiont === 2 ? 'recomendation__nav__item active' : 'recomendation__nav__item']" 
+              @click="setTypeAndOrder({ type: 'with_discount', order: 'discount', typeRecomendation : 2 }, '')"
+            >Скидки</div>
           </div>
           <!-- :navigation= "true" -->
           <!-- <div class="recomendation__block" v-if = "DEVICE_VIEW_TYPE === 1 || DEVICE_VIEW_TYPE === 2"> -->
@@ -95,6 +104,7 @@
     data: function(){
       return{
         slidersInFrame : 4.5,
+        activePiont: 0,
       }
     },
 
@@ -106,14 +116,14 @@
       slidersInFrame: async function() {
         await this.GET_RECOMENDED_ITEMS();
         this.setNewQuantity();
-        setTimeout(() => window.scrollTo(0, 0), 0);
+        if (this.$router.currentRoute._value.path !== '/') setTimeout(() => window.scrollTo(0, 0), 0);
       },
 
       ChangeParameters: async function() {
         this.SET_RECOMENDATION_QUANTITY(10);
         await this.GET_RECOMENDED_ITEMS();
         this.setNewQuantity();
-        setTimeout(() => window.scrollTo(0, 0), 0);
+        if (this.$router.currentRoute._value.path !== '/') setTimeout(() => window.scrollTo(0, 0), 0);
       }
     },
 
@@ -138,10 +148,10 @@
       },
 
       setTypeAndOrder(params, sort){
-        console.log(sort);
         this.SET_SORT_DIRECTION(sort);
         this.SET_RECOMENDATION_ORDER(params.order);
         this.SET_RECOMENDATION_TYPE(params.type);
+        this.activePiont = params.typeRecomendation;
       },
 
       onOpenCatalog(){
@@ -235,6 +245,13 @@
 .swiper-button-prev::after{
   transform: rotate(180deg);
 }
+.active{
+  color:#4275D8;
+  border: 2px solid #4275D8;
+  font-weight: 500;
+  opacity: 1;
+}
+
 .recomendation {
   margin-top: 30px;
   position: relative;
