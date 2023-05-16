@@ -607,6 +607,9 @@
     white-space: nowrap;
     font-weight: 300;
     font-size: 18px;
+    @media (max-width: $md3+px) {
+      font-size: 13px;
+    }
   }
   span{
     margin-right: 5px;

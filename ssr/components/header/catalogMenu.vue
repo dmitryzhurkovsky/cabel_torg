@@ -183,24 +183,25 @@ align-items: flex-start;
 
 }
 .left_sidebar{
-
-
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-justify-content: space-between;
-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 100%;
+  ._link{
+    padding-left: 15px;
+  }
 }
 
 
 &__rubric{
-font-weight: 400;
-font-size: 14px;
-line-height: 20px;
-text-decoration-line: underline;
-color: #423E48;
-transition: all 0.2s ease;
-&:hover{
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  text-decoration-line: underline;
+  color: #423E48;
+  transition: all 0.2s ease;
+  &:hover{
   color:#4275D8;
   opacity: 0.8;
 }

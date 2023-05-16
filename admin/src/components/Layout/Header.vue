@@ -1,6 +1,6 @@
 <template>
   <header class="header">
-    <a href="http://localhost:8080">
+    <a href="/">
         <img src="@/assets/logo.svg" alt="CabelTorg">
     </a>
   </header>

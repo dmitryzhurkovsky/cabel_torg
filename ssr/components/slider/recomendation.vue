@@ -217,9 +217,7 @@
   background: black!important
 
 }
-.swiper-pagination-bullet-active{
-  background: red!important;
-}
+
 :root {
   --swiper-theme-color: red!important;
 }
@@ -247,9 +245,9 @@
 }
 .active{
   color:#4275D8;
-  border: 2px solid #4275D8;
-  font-weight: 500;
-  opacity: 1;
+  border: 2px solid #4275D8!important;;
+  font-weight: 500!important;;
+  opacity: 1!important;
 }
 
 .recomendation {
@@ -331,9 +329,9 @@
 
       &:hover{
         color:#4275D8;
-        border: 2px solid #4275D8;
+        //border: 2px solid #4275D8;
         font-weight: 500;
-        opacity: 1;
+        opacity: 0.8;
       }
 
     }

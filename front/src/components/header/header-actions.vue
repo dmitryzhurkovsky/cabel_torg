@@ -29,7 +29,7 @@
               <div class="avatar icon-user flex-center"></div>
             </div>
 
-            <button @click="handleClick('/login', 1)" class="btn Fblack">
+            <button @click="handleClick('/login', 1)" class="btn black mb-20">
               Вход
             </button>
 
