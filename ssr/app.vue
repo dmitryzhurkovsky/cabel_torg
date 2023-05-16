@@ -615,6 +615,7 @@ input{
   text-overflow: ellipsis;
 
 }
+
 .dropdown .wrapper__show {
   display: block;
   @media (max-width: $md3+px) {
