@@ -19,14 +19,13 @@
 <script setup>
 
   import store from '@/store'
+  const interval = ref(null)
 
   const route = useRoute()
 
   const setViewParametrs = () => {
-    nextTick(() => {
-      console.log('QQQQQ', window.innerWidth);
-      store.commit('header/UPDATE_VIEW_PARAMETERS', window.innerWidth)
-    }, 0)
+    // console.log('Set innerWidth', window.innerWidth);
+    store.commit('header/UPDATE_VIEW_PARAMETERS', window.innerWidth)
   }
 
   watch(() => route.path,
@@ -42,10 +41,15 @@
     // console.log('BeforeUpdate App ');
   })
 
+  onBeforeUnmount( ()=> clearInterval(interval.value))
+
   onBeforeMount(async () => {
     // console.log('Mounted App ');
     store.commit('notification/SET_IS_LOADING', true)
-    window.addEventListener('resize', setViewParametrs)
+    // window.addEventListener('resize', setViewParametrs)
+    interval.value = setInterval(()=> {
+      setViewParametrs()
+    }, 300)
     setViewParametrs();
     const nullData = []
     if (!localStorage.getItem("carts")) localStorage.setItem("carts", JSON.stringify(nullData))
