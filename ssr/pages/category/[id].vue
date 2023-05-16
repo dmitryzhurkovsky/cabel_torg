@@ -1,5 +1,11 @@
 <template>
   <div class="catalog" @click.stop = "clearSearchString()">
+    <Head>
+      <Title>
+        КабельТорг | {{ data?.category?.site_page_title }}
+      </Title>
+      <Meta name="discription" :content="data?.category?.site_page_description" />
+    </Head>
     <div class="catalog__wrapper">
       <div class="catalog__content _container">
         <div class="catalog__body">
@@ -12,12 +18,12 @@
             <div class="content-block slider_subcategory__block">
               <div class="content-block__subcategory recomendation__nav" v-if = "LastCategory?.length && !isMobileVersion">
                   <div class="slider_subcategory__row"
-                    :class="[category.id == store.getters['query/CATEGORY_ID'] ? 'recomendation__nav__item active' : 'recomendation__nav__item']"
-                    v-for = "category in LastCategory[0].subItems"
-                    :key = "category.id"
-                    @click.stop = setActiveCategory(category.id)
+                    :class="[quickCategory.id == store.getters['query/CATEGORY_ID'] ? 'recomendation__nav__item active' : 'recomendation__nav__item']"
+                    v-for = "quickCategory in LastCategory[0].subItems"
+                    :key = "quickCategory.id"
+                    @click.stop = setActiveCategory(quickCategory)
                   >
-                    {{ category.name }}
+                    {{ quickCategory.name }}
                   </div>
               </div>
               <div v-if = "LastCategory?.length && isMobileVersion">
@@ -36,9 +42,9 @@
                     bulletElement: 'span',
                   }"
                 >
-                  <swiper-slide v-for="category in LastCategory[0].subItems" :key="category.id">
-                    <div class="recomendation__nav__item" @click=setActiveCategory(category.id)>
-                      {{ category.name }}
+                  <swiper-slide v-for="quickCategory in LastCategory[0].subItems" :key="quickCategory.id">
+                    <div class="recomendation__nav__item" @click=setActiveCategory(quickCategory)>
+                      {{ quickCategory.name }}
                     </div>
                   </swiper-slide>
                 </swiper>
@@ -58,23 +64,23 @@
                   <CatalogViewPanel />
                 </div>
               </div>
-              <div class="content-block__list" v-if = "catalogData">
-                <div class="content-block__item product-row" v-if = "catalogData?.length && store.getters['query/VIEW_TYPE'] === 'row'">
+              <div class="content-block__list" v-if = "data?.catalogData">
+                <div class="content-block__item product-row" v-if = "data?.catalogData?.length && store.getters['query/VIEW_TYPE'] === 'row'">
                   <CatalogListItem 
-                    v-for   = "item in catalogData"
+                    v-for   = "item in data?.catalogData"
                     :key    = "item.id"
                     :card   = item
                   />
                 </div>  
-                <div class="content-block__item product-table" v-if = "catalogData?.length && store.getters['query/VIEW_TYPE'] === 'table'">
+                <div class="content-block__item product-table" v-if = "data?.catalogData?.length && store.getters['query/VIEW_TYPE'] === 'table'">
                   <CatalogCardItem 
-                    v-for   = "item in catalogData"
+                    v-for   = "item in data?.catalogData"
                     :key    = "item.id"
                     :card   = item
                   />
                 </div>  
               </div>
-              <div class="content-block__list" v-if = "!catalogData">
+              <div class="content-block__list" v-if = "!data?.catalogData">
                 <span>Категоря пуста</span>
               </div>>
               <div class="content-block__pagination">
@@ -103,15 +109,6 @@
   const { getters } = store
   const isFilterPanelOpen = ref(false)
   const isMobileVersion = ref(false)
-  
-  useHead({
-    title: 'КабельТорг | '+ route.params.id,
-    name: route.params.id,
-    meta: [{
-      name: route.params.id,
-      content: route.params.id
-    }]
-  })
   
   const setIsFilterPanelOpen = (data) => {
     isFilterPanelOpen.value = data
@@ -157,12 +154,14 @@
     return url;        
   }
 
-  const setActiveCategory = (id) => {
+  const setActiveCategory = (category) => {
+    console.log('Active category ', category);
     store.commit('catalog/SET_CATALOG_SEARCH_STRING','')
-    store.commit('query/SET_CATEGORY_ID', id)
+    store.commit('query/SET_CATEGORY_ID', category.id)
     store.commit('query/SET_OFFSET', 0)
-    // store.commit('query/SET_DEFAULT_PRICES')
-    router.push(getCategoryUrl(id));
+    const link = getters['header/ALL_CATEGORIES'].filter(item => item.id == category.id)[0].site_link
+
+    router.push(getCategoryUrl(link));
   }
 
   let isFirstRender = true;
@@ -171,36 +170,42 @@
     let isFailInParams = false
     const currRoute = useRoute()
     const { query } = currRoute
-    if (getters['query/CATEGORY_ID'] !== currRoute.params.id) store.commit('query/SET_CATEGORY_ID', currRoute.params.id);
+    
+    if (!currRoute.params.id) {
+      store.commit('query/SET_CATEGORY_ID', null) 
+    } else {
+      const isCategoryByLink = getters['header/ALL_CATEGORIES'].filter(item => item.site_link == currRoute.params.id)
+      if (!isCategoryByLink) {
+        store.commit('query/SET_CATEGORY_ID', null) 
+      } else {
+        store.commit('query/SET_CATEGORY_ID', isCategoryByLink[0].id) 
+      }
+    }
+    // if (getters['query/CATEGORY_ID'] !== currRoute.params.id) store.commit('query/SET_CATEGORY_ID', currRoute.params.id)
     if (query.limit) {
-      if (getters['query/LIMIT'] !== query.limit) store.commit('query/SET_LIMIT', query.limit);
+      if (getters['query/LIMIT'] !== query.limit) store.commit('query/SET_LIMIT', query.limit)
     } 
     else {
       isFailInParams = true
     }
     if (query.offset) {
-      if (getters['query/OFFSET'] !== query.offset) store.commit('query/SET_OFFSET', query.offset);
+      if (getters['query/OFFSET'] !== query.offset) store.commit('query/SET_OFFSET', query.offset)
     } else {
       isFailInParams = true
     }
-    console.log(query.actual_price_gte, '   ', query.actual_price_lte, ' - ', getters['query/MIN_PRICE'], '   ', getters['query/MAX_PRICE']);
     if (query.actual_price_gte) {
       if (getters['query/MIN_PRICE'] !== query.actual_price_gte) {
-        console.log('Не равны ', query.actual_price_gte, '   ', getters['query/MIN_PRICE']);
-        store.commit('query/SET_MIN_PRICE', query.actual_price_gte);
-        console.log('SET up MIN_PRICE');
+        store.commit('query/SET_MIN_PRICE', query.actual_price_gte)
       }
     } else {
       isFailInParams = true
     }
     if (query.actual_price_lte) {
-      if (getters['query/MAX_PRICE'] !== query.actual_price_lte) store.commit('query/SET_MAX_PRICE', query.actual_price_lte);
+      if (getters['query/MAX_PRICE'] !== query.actual_price_lte) store.commit('query/SET_MAX_PRICE', query.actual_price_lte)
     } else {
       isFailInParams = true
     }
-    // console.log(query.q, typeof query.q);
     if (query.q) {
-      console.log('QQQQ');
       if (getters['catalog/CATALOG_SEARCH_STRING'] !== query.q) {
         store.commit('catalog/SET_CATALOG_SEARCH_STRING', query.q)
         store.commit('query/SET_SEARCH_STRING', query.q)
@@ -217,7 +222,7 @@
       isFailInParams = true
     }
     if (query.ordering) {
-      const total = query.ordering;
+      const total = query.ordering
       let direction = ''
       let type = ''
       if (total[0] === '-') {
@@ -240,9 +245,9 @@
   const setBreabcrumbs = () => {
     const categoryStack = []
     const currRoute = useRoute()
-    let category = Number(getters['query/CATEGORY_ID'])
+    let category = null
+    if (currRoute.params.id) category = getters['header/ALL_CATEGORIES'].filter(item => item.site_link == currRoute.params.id)[0].id
 
-    if (!getters['query/CATEGORY_ID']) category = Number(currRoute.params.id)
     categoryStack.push(category)
 
     let curLevel = getters['header/ALL_CATEGORIES'].filter(item => item.id == category)[0]
@@ -274,34 +279,68 @@
     }; 
   }
 
-  const { data: catalogData } = await useAsyncData(
+  const { data } = await useAsyncData(
     'posts', 
     async () => {
+      if (!store.getters['header/ALL_CATEGORIES'].length) {
+        await store.dispatch('header/GET_CATEGORIES')
+      }
       if (isFirstRender) {
         setParametersFromURL()
       }
+
+      const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
+      
+      if (Object.keys(categoryData).length) {
+        store.commit('catalog/SET_CATEGORY', categoryData)
+      } else {
+        store.commit('catalog/SET_CATEGORY', {})
+      }
+
       await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
-      return store.getters['catalog/ITEMS_LIST']
+      
+      return {
+        catalogData: store.getters['catalog/ITEMS_LIST'],
+        category: store.getters['catalog/CATEGORY'],
+      }
     }, {
       watch: [ChangeParameters]
     }
   )
 
   onBeforeMount(async () => {
+    if (!store.getters['header/ALL_CATEGORIES'].length) {
+      await store.dispatch('header/GET_CATEGORIES')
+    }
     if (isFirstRender) {
       setParametersFromURL()
+    }
+    const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
+    if (Object.keys(categoryData).length) {
+      store.commit('catalog/SET_CATEGORY', categoryData)
+    } else {
+      store.commit('catalog/SET_CATEGORY', {})
     }
     await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
     setBreabcrumbs()
   })
 
-  onBeforeUpdate(async () => {
-    if (isFirstRender) {
-      setParametersFromURL()
-    }
-    await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
-    setBreabcrumbs()
-  })
+  // onBeforeUpdate(async () => {
+  //   if (!store.getters['header/ALL_CATEGORIES'].length) {
+  //     await store.dispatch('header/GET_CATEGORIES')
+  //   }
+  //   if (isFirstRender) {
+  //     setParametersFromURL()
+  //   }
+  //   const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
+  //   if (Object.keys(categoryData).length) {
+  //     store.commit('catalog/SET_CATEGORY', categoryData)
+  //   } else {
+  //     store.commit('catalog/SET_CATEGORY', {})
+  //   }
+  //   await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
+  //   setBreabcrumbs()
+  // })
 
 </script>
 

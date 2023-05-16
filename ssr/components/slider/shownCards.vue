@@ -116,7 +116,7 @@
         this.$router.push('/catalog');
       },
 
-      getShownItems(){
+      async getShownItems(){
         const fetchedItems = [];
         this.SHOWN_ITEMS_LIST.forEach(async item => {
           try {
@@ -128,7 +128,7 @@
             this.ADD_MESSAGE({name: "Не возможно загрузить данные товара " + item.id, icon: "error", id: item.id})
           }
         });
-        setTimeout(() => window.scrollTo(0, 0), 0);
+        // setTimeout(() => window.scrollTo(0, 0), 0);
       },
 
       onSlideChange() {

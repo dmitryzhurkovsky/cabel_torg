@@ -30,8 +30,8 @@
       IS_POPUP_OPEN: function(){
         if (this.IS_POPUP_OPEN) {
           this.$refs.popup.style.top = window.pageYOffset + 'px';
-          // document.body.style.overflow = 'hidden';
-          // document.body.style.paddingRight = '16px';
+          document.body.style.overflow = 'hidden';
+          document.body.style.paddingRight = '16px';
         } else {
           document.body.style.overflow = '';
           document.body.style.paddingRight = '0';

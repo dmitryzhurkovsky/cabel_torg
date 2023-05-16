@@ -47,7 +47,7 @@ export default {
         this.favoriteItemData = response.data;
     } catch (e) {
         console.log(e);
-        this.ADD_MESSAGE({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
+        // this.ADD_MESSAGE({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
     }
   },
 

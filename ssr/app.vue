@@ -4,7 +4,9 @@
     <NotificationMain />
     <UiLoader />
     <!-- <NuxtLoadingIndicator /> -->
-    <NotificationPopUp/>
+    <ClientOnly fallback-tag="div">
+      <NotificationPopUp/>
+    </ClientOnly>
     <MyHeader />
     <ClientOnly fallback-tag="div">
       <Breadcrumb/>
@@ -18,28 +20,33 @@
 
   import store from '@/store'
 
-  // fetchKey: 'categoriesData'
+  const route = useRoute()
 
   const setViewParametrs = () => {
-    // console.log('SET VIEW PARAMETERS', window.innerWidth, window);
-    store.commit('header/UPDATE_VIEW_PARAMETERS', window.innerWidth)
+    nextTick(() => {
+      console.log('QQQQQ', window.innerWidth);
+      store.commit('header/UPDATE_VIEW_PARAMETERS', window.innerWidth)
+    }, 0)
   }
 
+  watch(() => route.path,
+    (curr, prev) => {
+      setViewParametrs()
+    });
+
   store.commit('notification/SET_IS_LOADING', true)
-  console.log('Setup App ');
+  // console.log('Setup App ');
 
   onBeforeUpdate( () => {
     store.commit('notification/SET_IS_LOADING', true)
-    console.log('BeforeUpdate App ');
+    // console.log('BeforeUpdate App ');
   })
 
   onBeforeMount(async () => {
-    console.log('Mounted App ');
+    // console.log('Mounted App ');
     store.commit('notification/SET_IS_LOADING', true)
-    setTimeout(() => {
-      window.addEventListener('resize', setViewParametrs)
-      setViewParametrs();
-    }, 0)
+    window.addEventListener('resize', setViewParametrs)
+    setViewParametrs();
     const nullData = []
     if (!localStorage.getItem("carts")) localStorage.setItem("carts", JSON.stringify(nullData))
     if (!localStorage.getItem("favorites")) localStorage.setItem("favorites", JSON.stringify(nullData))
@@ -57,7 +64,7 @@
   const { data: categoriesData } = await useAsyncData(
     'categories', 
     async () => {
-      console.log('useAsyncData App ');
+      // console.log('useAsyncData App ');
       store.commit('notification/SET_IS_LOADING', true)
       // await store.dispatch('header/GET_CATEGORIES')
       await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')

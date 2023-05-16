@@ -1,12 +1,12 @@
 <template>
     <div v-if="cartItemData && quantity !==0">
       <div class="product__wrapper">
-        <a class="product__img" href="" @click.stop.prevent="openCardItem(cartItemData.id)">
+        <a class="product__img" href="" @click.stop.prevent="openCardItem(cartItemData.vendor_code)">
             <UiCardImage :images=cartItemData.images />
         </a>
         <div class="product__info">
             <div class="product__article  _label mb-20">Артикул: <span>{{ cartItemData.vendor_code }}</span></div>
-            <a  class="product__title" href="" @click.stop.prevent="openCardItem(cartItemData.id)"> {{ cartItemData.name }}</a>
+            <a  class="product__title" href="" @click.stop.prevent="openCardItem(cartItemData.vendor_code)"> {{ cartItemData.name }}</a>
             <div class="icon__row mt-20">
                 <span 
                     :class="[isWish === false ? 'icon icon-favorite' : 'icon icon-favorite-choosed']" 
@@ -175,6 +175,7 @@
       },
 
       openCardItem(id) {
+        console.log(id);
         const URL = '/card_product/' + id;
         this.$router.push(URL);
       }
