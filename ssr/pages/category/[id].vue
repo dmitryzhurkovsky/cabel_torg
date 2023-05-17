@@ -80,7 +80,7 @@
                   />
                 </div>  
               </div>
-              <div class="content-block__list" v-if = "!data.catalogData.length">
+              <div class="content-block__list" v-if = "!data.catalogData?.length">
                 <span>Категоря пуста</span>
               </div>
               <div class="content-block__pagination">

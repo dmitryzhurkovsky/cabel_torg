@@ -128,7 +128,7 @@
         result.push(curLink)
       }
     }
-    const lastLink = { name: '>', pageNumber: activePage + 1, isAvailable: activePage !== totalPages }
+    const lastLink = { name: '>', pageNumber: activePage + 1, isAvailable: activePage < totalPages }
     result.push(lastLink)
     return result
   })

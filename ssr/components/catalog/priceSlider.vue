@@ -79,7 +79,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations("query", ["SET_MIN_PRICE", "SET_MAX_PRICE"]),
+    ...mapMutations("query", ["SET_MIN_PRICE", "SET_MAX_PRICE", "SET_OFFSET"]),
 
     setUpMinPrice(){
       // if (this.minValuePrice <= this.RangeMin) this.minValuePrice = this.RangeMin;
@@ -104,11 +104,13 @@ export default {
     },
 
     onChangeMinPrice(){
+      if (String(this.minValuePrice).length === 0) this.minValuePrice = this.minValueRange;
       this.setUpMinPrice();
       this.updateStore();
     },
 
     onChangeMaxPrice() {
+      if (String(this.maxValuePrice).length === 0) this.maxValuePrice = this.maxValueRange;
       this.setUpMaxPrice();
       this.updateStore();
     },
@@ -168,6 +170,7 @@ export default {
     },
 
     updateStore(){
+      this.SET_OFFSET(0);
       if (this.MIN_PRICE !== this.minValuePrice) {
         this.SET_MIN_PRICE(this.minValuePrice);
         if (this.CATEGORY_ID) {
@@ -190,9 +193,9 @@ export default {
   beforeMount(){
     // console.log('прайс слайдер ', this);
     this.minValuePrice = this.MIN_PRICE;
-    this.RangeMin = this.MIN_PRICE;
+    // this.RangeMin = this.MIN_PRICE;
     this.maxValuePrice = this.MAX_PRICE;
-    this.RangeMax = this.MAX_PRICE;
+    // this.RangeMax = this.MAX_PRICE;
     this.setUpMinPrice();
     this.setUpMaxPrice();
     // this.updateStore();
