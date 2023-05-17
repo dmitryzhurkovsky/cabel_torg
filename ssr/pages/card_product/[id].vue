@@ -2,7 +2,7 @@
   <div>
     <Head>
       <Title>
-        КабельТорг | {{cartItemData?.name }}
+        {{cartItemData?.name }} купить в Беларуси
       </Title>
       <Meta name="discription" :content="cartItemData?.name" />
     </Head>
