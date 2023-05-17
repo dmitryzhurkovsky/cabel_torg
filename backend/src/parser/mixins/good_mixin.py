@@ -5,7 +5,7 @@ from abc import ABC
 from sqlalchemy import text
 
 from src.models import Manufacturer, BaseUnit, Category, Attribute
-from src.models.attribute_model import AttributeName, AttributeValue, ProductAttribute
+from src.models.attribute_model import AttributeName, AttributeValue
 from src.models.product_model import Product, ProductStatus
 from src.parser.mixins.base_mixin import BaseMixin
 from src.parser.servers import database_service
@@ -23,35 +23,18 @@ class GoodsMixin(BaseMixin, ABC):
 
     # It's a special attribute to find goods that shouldn't be uploaded.
     # It's initialized in cache_attribute__do_not_upload_to_site function.
-    do_not_upload_to_site_attribute_name_id = None
+    do_not_upload_to_the_site_attribute_name_id = None
 
     # Service methods
     @property
     def names_cache(self) -> dict:
         """It's used to escape extra queries to a database. We keep ids of AttributeName here."""
-        if not self.CACHE.get('names'):
-            self.CACHE['names'] = dict()
         return self.CACHE['names']
 
     @property
     def values_cache(self) -> dict:
         """It's used to escape extra queries to a database. We keep ids of AttributeValue here."""
-        if not self.CACHE.get('values'):
-            self.CACHE['values'] = dict()
         return self.CACHE['values']
-
-    @property
-    def do_not_upload_to_the_site_attribute_cache(self) -> set:
-        """
-        do_not_upload_to_the_site is used to save ProductAttribute with Attribute.name = 'Не выгружать товар на сайт'.
-        We keep ids of ProductAttribute here to check them when we create a product and set is_visible attribute.
-        """
-        if not self.CACHE.get('attributes'):
-            self.CACHE['attributes'] = dict()
-        if not isinstance(self.CACHE['attributes'].get('do_not_upload_to_the_site'), set):
-            self.CACHE['attributes']['do_not_upload_to_the_site'] = set()
-
-        return self.CACHE['attributes']['do_not_upload_to_the_site']
 
     @property
     def under_the_order_attribute_cache(self) -> set:
@@ -59,11 +42,6 @@ class GoodsMixin(BaseMixin, ABC):
         under_the_order is used to save ProductAttribute with Attribute.name = 'Товар под заказ'.
         We keep ids of ProductAttribute here to check them when we create a product and set a suitable status.
         """
-        if not self.CACHE.get('attributes'):
-            self.CACHE['attributes'] = dict()
-        if not isinstance(self.CACHE['attributes'].get('under_the_order', None), set):
-            self.CACHE['attributes']['under_the_order'] = set()
-
         return self.CACHE['attributes']['under_the_order']
 
     async def set_under_the_order_attribute_id(self):
@@ -76,7 +54,7 @@ class GoodsMixin(BaseMixin, ABC):
         )
         self.under_the_order_attribute_id = query_result.id
 
-    async def set_do_not_upload_to_site_attribute_id(self):
+    async def set_do_not_upload_to_site_attribute_name_id(self):
         """
         Get AttributeName with name = 'Не выгружать товар на сайт' and cache its.
         This attribute is used to set a right value for is_visible attribute for a product during parsing of products.
@@ -84,7 +62,7 @@ class GoodsMixin(BaseMixin, ABC):
         query_result = await database_service.get_object(
             db=self.db, model=AttributeName, fields={'payload': 'Не выгружать товар на сайт'}
         )
-        self.do_not_upload_to_site_attribute_name_id = query_result.id
+        self.do_not_upload_to_the_site_attribute_name_id = query_result.id
 
     def is_on_the_way_to_the_warehouse(self, attributes: list) -> bool:
         """Check whether a product is on the way to the warehouse."""
@@ -128,7 +106,9 @@ class GoodsMixin(BaseMixin, ABC):
         Clean a product(it's Товар in a xml tree) and transform its fields
         to "ready to write to a database" state.
         """
-        product = {}
+        product = {
+            "is_visible": True  # set up it True by default and mark products during parsing.
+        }
         product_images = []
 
         for raw_field in element:
@@ -255,8 +235,7 @@ class GoodsMixin(BaseMixin, ABC):
                 })
 
             attributes.append(db_attribute)
-            if name_id_db == self.do_not_upload_to_site_attribute_name_id:
-                self.do_not_upload_to_the_site_attribute_cache.add(db_attribute.id)
+
             if name_id_db == self.under_the_order_attribute_id:
                 self.under_the_order_attribute_cache.add(db_attribute.id)
 
@@ -288,7 +267,7 @@ class GoodsMixin(BaseMixin, ABC):
                 await self.clean_available_options(attribute[3])
 
         await self.set_under_the_order_attribute_id()
-        await self.set_do_not_upload_to_site_attribute_id()
+        await self.set_do_not_upload_to_site_attribute_name_id()
 
     async def clean_available_options(self, available_values: Element):
         """
@@ -310,16 +289,31 @@ class GoodsMixin(BaseMixin, ABC):
 
     async def set_is_visible_attribute(self):
         """Set is_visible attribute after parsing all product's attributes."""
+        test = await self.db.execute(
+            text(f"""
+                    select p.id, attrs_names.payload
+                    from products p
+                             join product_attribute pa on pa.product_id = p.id
+                             join attributes attrs on attrs.id = pa.attribute_id
+                             join attribute_names attrs_names on attrs.name_id = attrs_names.id
+                    where attrs_names.id = 20 and p.id = 5
+                    order by id;
+                    """)
+        )
 
         await self.db.execute(
             text(f"""
-            UPDATE products p
-            SET is_visible = false
-            WHERE EXISTS (
-              SELECT 1
-              FROM product_attribute pa
-              WHERE p.id = pa.product_id
-                AND pa.attribute_id in ({", ".join((str(el) for el in self.do_not_upload_to_the_site_attribute_cache))})
-            );
+            update products
+            set is_visible = false
+            from (
+                select p.id
+                from products p
+                join product_attribute pa on pa.product_id = p.id
+                join attributes attrs on attrs.id = pa.attribute_id
+                join attribute_names attrs_names on attrs.name_id = attrs_names.id
+                where attrs_names.id = {self.do_not_upload_to_the_site_attribute_name_id}
+            ) is_not_visible_products
+            where products.id = is_not_visible_products.id;
             """)
         )
+        await self.db.commit()
