@@ -155,17 +155,23 @@ export default {
 
     onUserIconEnter(){
       this.SET_SEARCH_STRING('');
+      this.favoriteHover = false;
+      this.cartHover = false;
       this.userHover = true;
     },
 
     onCartIconEnter(){
       this.SET_SEARCH_STRING('');
+      this.favoriteHover = false;
       this.cartHover = true;
+      this.userHover = false;
     },
 
     onFavoriteIconEnter() {
       this.SET_SEARCH_STRING('');
       this.favoriteHover = true;
+      this.cartHover = false;
+      this.userHover = false;
     },
 
     onIconLeave() {
