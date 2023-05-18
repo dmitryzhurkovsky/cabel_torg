@@ -321,12 +321,13 @@ export default {
       &:before {
         cursor: pointer;
         padding: 10px 10px;
+          &:hover{
+              background: #4275D8;
+              border-radius: 6px;
+              color: #fff;
+          }
       }
-      &:hover{
-        background: #4275D8;
-        border-radius: 6px;
-        color: #fff;
-      }
+
 
 
     }

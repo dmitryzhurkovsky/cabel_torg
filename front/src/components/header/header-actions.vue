@@ -4,12 +4,12 @@
         @mouseenter="onFavoriteIconEnter()"
         @mouseleave="onIconLeave()"
     >
-      <button class="dropdown icon-favorite">
+      <div class="dropdown icon-favorite">
         <div :class="[!favoriteHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
           <HeaderFavorite @click.stop = "onIconLeaveClick()" />
         </div>
 
-      </button>
+      </div>
       <!-- <IconQuantity 
         :quantity = 0 
         :left = '12'
