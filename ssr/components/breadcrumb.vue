@@ -61,7 +61,7 @@ export default {
 
   methods: {
     ...mapActions("breadcrumb", ["MOVE_TO_SELECT_PATH"]),
-    ...mapMutations("query", ["SET_SEARCH_STRING", "SET_CATEGORY_ID"]),
+    ...mapMutations("query", ["SET_SEARCH_STRING", "SET_CATEGORY_ID", "SET_DEFAULT_PRICES"]),
     
     changePage(item){
       // console.log('BreadCrumb-   ', item);
@@ -71,6 +71,7 @@ export default {
         if (item.path.includes('catalog')) {
           this.SET_CATEGORY_ID(null);
         }
+        this.SET_DEFAULT_PRICES();
         url = url + "?offset=" + this.OFFSET + 
         "&limit=" + this.LIMIT + 
         "&actual_price_gte=" + this.MIN_PRICE + 

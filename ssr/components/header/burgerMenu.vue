@@ -142,7 +142,7 @@ export default {
 
   methods:{
     ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
-    ...mapMutations("query", ["SET_CATEGORY_ID"]),
+    ...mapMutations("query", ["SET_CATEGORY_ID", "SET_DEFAULT_PRICES"]),
     ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
     ...mapActions("catalog", ["GET_CATALOG_ITEMS"]),
 
@@ -179,12 +179,12 @@ export default {
 
     changeCategory(id){
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
+      this.SET_DEFAULT_PRICES();
       this.$router.push(this.getCategoryUrl(id));
     },
 
     openPage(page) {
       this.UPDATE_IS_CATALOG_OPEN(false);
-      console.log('Burger', page, this.$route.path);
       if (this.$route.path != page) {
         this.$router.push(page);
       }

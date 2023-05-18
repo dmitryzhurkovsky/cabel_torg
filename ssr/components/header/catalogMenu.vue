@@ -64,7 +64,7 @@ export default {
 
   methods:{
     ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
-    ...mapMutations("query", ["SET_CATEGORY_ID"]),
+    ...mapMutations("query", ["SET_CATEGORY_ID", "SET_DEFAULT_PRICES"]),
 
     getCatalogUrl(){
       let url = "/catalog?";
@@ -92,11 +92,13 @@ export default {
     },
 
     changeCategory(category){
+      this.SET_DEFAULT_PRICES();
       this.$router.push(this.getCategoryUrl(category.site_link));
     },
 
     subCategoryClick(category){
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
+      this.SET_DEFAULT_PRICES();
       const menuItem = this.ALL_CATEGORIES.filter(item => item.id == category.id)[0];
       this.$router.push(this.getCategoryUrl(menuItem.site_link));
     },

@@ -137,7 +137,7 @@ export default {
     openCategory(category){
       this.SET_CATEGORY_ID(category.id);
       this.SET_OFFSET(0);
-      // this.SET_DEFAULT_PRICES();
+      this.SET_DEFAULT_PRICES();
       let url = this.getCategoryUrl(category.id);
       url = url + this.getTypeOfProduct(this.TYPE_OF_PRODUCT);
       this.$router.push(url);

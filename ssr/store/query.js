@@ -122,6 +122,7 @@ export default {
       SET_DEFAULT_PRICES(state){
         state.minPrice = min;
         state.maxPrice = max;
+        state.typeOfProduct = 'all';
       },
 
       SET_SEARCH_STRING(state, query) {
