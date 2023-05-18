@@ -2,6 +2,7 @@
   <div class="topmenu__right client-bar flex-center">
     <div class="topmenu__item right-direction"
         @click.stop="onFavoriteIconEnter()"
+        @mouseenter="onFavoriteIconEnter()"
         @mouseleave="onIconLeave()"
     >
       <div class="dropdown icon-favorite">
@@ -16,6 +17,7 @@
     </div>
     <div class="topmenu__item right-direction" 
         @click.stop="onUserIconEnter()"
+        @mouseenter="onUserIconEnter()"
         @mouseleave="onIconLeave()"
     >
       <div class="dropdown" 
@@ -71,6 +73,7 @@
     </div>
     <div class="topmenu__item right-direction" 
         @click.stop="onCartIconEnter()"
+        @mouseenter="onCartIconEnter()"
         @mouseleave="onIconLeave()"
     >
       <div class="dropdown icon-cart">
@@ -116,11 +119,12 @@ export default {
     ...mapActions("auth", ["SEND_LOGOUT_REQUEST"]),
     ...mapMutations("query", ["SET_SEARCH_STRING"]),
     ...mapMutations("profile", ["CHANGE_SCREEN"]),
-    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
+    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN", "UPDATE_IS_MENU_ACTIONS_OPEN"]),
     
     handleClick (URL, screen_type) {
       const vm = this;
       setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
+      setTimeout(() => vm.UPDATE_IS_MENU_ACTIONS_OPEN(false), 0);
       this.cartHover = false;
       this.userHover = false;
       if (this.$route.path != URL) {
@@ -143,6 +147,7 @@ export default {
       if (this.isLoading) return;
       const vm = this;
       setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
+      setTimeout(() => vm.UPDATE_IS_MENU_ACTIONS_OPEN(false), 0);
       this.isLoading = true;
       await this.SEND_LOGOUT_REQUEST();
       this.isLoading = false;
@@ -155,6 +160,7 @@ export default {
 
     onUserIconEnter(){
       this.SET_SEARCH_STRING('');
+      this.UPDATE_IS_MENU_ACTIONS_OPEN(true);
       this.favoriteHover = false;
       this.cartHover = false;
       this.userHover = true;
@@ -162,6 +168,7 @@ export default {
 
     onCartIconEnter(){
       this.SET_SEARCH_STRING('');
+      this.UPDATE_IS_MENU_ACTIONS_OPEN(true);
       this.favoriteHover = false;
       this.cartHover = true;
       this.userHover = false;
@@ -169,6 +176,7 @@ export default {
 
     onFavoriteIconEnter() {
       this.SET_SEARCH_STRING('');
+      this.UPDATE_IS_MENU_ACTIONS_OPEN(true);
       this.favoriteHover = true;
       this.cartHover = false;
       this.userHover = false;
@@ -178,14 +186,16 @@ export default {
       this.userHover = false;
       this.cartHover = false;
       this.favoriteHover = false;
+      this.UPDATE_IS_MENU_ACTIONS_OPEN(false);
     },
 
     onIconLeaveClick() {
       this.userHover = false;
       this.cartHover = false;
       this.favoriteHover = false;
-      const vm = this;
-      setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
+      // const vm = this;
+      setTimeout(() => this.UPDATE_IS_CATALOG_OPEN(false), 0);
+      setTimeout(() => this.UPDATE_IS_MENU_ACTIONS_OPEN(false), 0);
     },
   },
 

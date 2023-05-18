@@ -15,6 +15,7 @@ export default {
   state: {
     likes: [],
     isCatalogOpen: false,
+    isMenuActionsOpen: false,
     topCategoriesItemActive: 1,
     subCategoriesItemActive: null,
     lastCategoriesItemActive: null,
@@ -35,6 +36,9 @@ export default {
     },
     IS_CATALOG_OPEN(state){
       return state.isCatalogOpen;
+    },
+    IS_MENU_ACTIONS_OPEN(state){
+      return state.isMenuActionsOpen;
     },
     TOP_CATEGORIES_ITEM_ACTIVE(state){
       return state.topCategoriesItemActive;
@@ -102,6 +106,10 @@ export default {
   mutations: {
     UPDATE_IS_CATALOG_OPEN (state, catalogSatae){
       state.isCatalogOpen = catalogSatae;
+    },
+
+    UPDATE_IS_MENU_ACTIONS_OPEN (state, menuactionsSata){
+      state.isMenuActionsOpen = menuactionsSata;
     },
 
     UPDATE_VIEW_PARAMETERS (state, width){
