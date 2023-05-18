@@ -137,6 +137,7 @@ export default {
   computed: {
     ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "CATALOG", "IS_CATALOG_OPEN"]),
     ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION"]),
+    ...mapGetters("header", ["ALL_CATEGORIES"]),
   },
 
   methods:{
@@ -157,7 +158,10 @@ export default {
 
     getCategoryUrl(id){
       let url = "/category/";
-      if (id) url = url + id + "?";
+      if (id) {
+        const link = this.ALL_CATEGORIES.filter(item => item.id == id)[0].site_link
+        url = url + link + "?";
+      }
       url = url + this.getLastPartOfUrl();
       return url;
     },

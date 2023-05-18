@@ -10,7 +10,7 @@
                   :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"
                   v-for   = "item in TOP_CATEGORIES"
                   :key    = "item.id"
-                  @click.stop  = "changeCategory(item.id)"
+                  @click.stop  = "changeCategory(item)"
               >
                 <div class="menu__link">{{item.name}}</div>
               </li>
@@ -27,7 +27,7 @@
               <div class="menusub__item"
                 v-for   = "sub in SUB_CATEGORIES"
                 :key    = "sub.id"
-                @click.stop  = "subCategoryClick(sub.id)"
+                @click.stop  = "subCategoryClick(sub)"
               >
                 <div v-if = "sub.id" class="menu__rubric">{{sub.name}}</div>
                 <ul v-if = "sub.subItems.length > 0">
@@ -35,7 +35,7 @@
                       v-for = "subItem in sub.subItems"
                       :key  = "subItem.id"
                   >
-                    <div @click.stop = "subCategoryClick(subItem.id)" class="menu__linksub">{{subItem.name}}</div>
+                    <div @click.stop = "subCategoryClick(subItem)" class="menu__linksub">{{subItem.name}}</div>
                   </li>
                 </ul>
               </div>
@@ -91,13 +91,14 @@ export default {
       return url;        
     },
 
-    changeCategory(id){
-      this.$router.push(this.getCategoryUrl(id));
+    changeCategory(category){
+      this.$router.push(this.getCategoryUrl(category.site_link));
     },
 
-    subCategoryClick(id){
+    subCategoryClick(category){
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      this.$router.push(this.getCategoryUrl(id));
+      const menuItem = this.ALL_CATEGORIES.filter(item => item.id == category.id)[0];
+      this.$router.push(this.getCategoryUrl(menuItem.site_link));
     },
 
   },
@@ -182,24 +183,25 @@ align-items: flex-start;
 
 }
 .left_sidebar{
-
-
-display: flex;
-flex-direction: column;
-align-items: flex-start;
-justify-content: space-between;
-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 100%;
+  ._link{
+    padding-left: 15px;
+  }
 }
 
 
 &__rubric{
-font-weight: 400;
-font-size: 14px;
-line-height: 20px;
-text-decoration-line: underline;
-color: #423E48;
-transition: all 0.2s ease;
-&:hover{
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  text-decoration-line: underline;
+  color: #423E48;
+  transition: all 0.2s ease;
+  &:hover{
   color:#4275D8;
   opacity: 0.8;
 }

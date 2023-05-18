@@ -21,8 +21,8 @@ export default {
     IS_LOADING: function(){
       if (this.IS_LOADING) {
         this.$refs.loader.style.top = window.pageYOffset + 'px';
-        document.body.style.overflow = 'hidden';
-        document.body.style.paddingRight = '16px';
+        // document.body.style.overflow = 'hidden';
+        // document.body.style.paddingRight = '16px';
       } else {
         document.body.style.overflow = '';
         document.body.style.paddingRight = '0';

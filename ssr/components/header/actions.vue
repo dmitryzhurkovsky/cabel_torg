@@ -6,7 +6,10 @@
     >
       <div class="dropdown icon-favorite">
         <div :class="[!favoriteHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
-          <HeaderFavorite @click.stop = "onIconLeaveClick()" />
+            <div class="dropdown__inner">
+                <HeaderFavorite @click.stop = "onIconLeaveClick()" />
+            </div>
+
         </div>
 
       </div>
@@ -19,23 +22,26 @@
           :class="[!USER ? 'icon-user' : 'icon-user-login']"
       >
         <div v-if = "IS_OPEN_MAIN_LOGIN && !USER" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
-          <div class="dropdown__content popup-cart">
-            <div class="avatar__box">
-              <div class="avatar icon-user flex-center"></div>
+            <div class="dropdown__inner">
+                <div class="dropdown__content popup-cart">
+                    <div class="avatar__box">
+                        <div class="avatar icon-user flex-center"></div>
+                    </div>
+
+                    <div @click="handleClick('/login', 1)" class="btn black mb-20">
+                        Вход
+                    </div>
+
+                    <div @click="handleClick('/login', 2)" class="foot-lnk">
+                        Не помню пароль
+                    </div>
+                    <hr class="hr">
+                    <div @click="handleClick('/login', 3)" class="foot-reg">
+                        Зарегистрироваться
+                    </div>
+                </div>
             </div>
 
-            <button @click="handleClick('/login', 1)" class="btn Fblack">
-              Вход
-            </button>
-
-            <div @click="handleClick('/login', 2)" class="foot-lnk">
-                Не помню пароль
-            </div>
-            <hr class="hr">
-            <div @click="handleClick('/login', 3)" class="foot-reg">
-              Зарегистрироваться
-            </div>
-          </div>
           <!-- <UserActions/> -->
         </div>
         <div v-if = "IS_OPEN_MAIN_LOGIN && USER" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
@@ -69,7 +75,10 @@
     >
       <div class="dropdown icon-cart">
         <div :class="[!cartHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
-          <HeaderCart @click.stop = "onIconLeaveClick()" />
+            <div class="dropdown__inner">
+                <HeaderCart @click.stop = "onIconLeaveClick()" />
+            </div>
+
         </div>
       </div>
       <CatalogIconQuantity 
@@ -217,9 +226,6 @@ export default {
   margin: 24px 0;
 }
 
-button{
-  margin-bottom: 20px;
-}
 .hr{
   height:2px;
   margin:44px 0 40px 0;

@@ -690,6 +690,7 @@
     font-size: 15px;
     width: 40px;
     text-align: center;
+    cursor: pointer;
   }
 }
 

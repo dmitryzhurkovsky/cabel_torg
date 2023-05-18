@@ -26,7 +26,7 @@ export default {
     ],
     allSortsOfProduct: [
       {name: 'По дате добавления', type: 'created_at'},
-      {name: 'цене', type: 'price'},
+      {name: 'цене', type: 'actual_price'},
       {name: 'скидке', type: 'discount'},
     ],
     limitItems : [12, 24, 48],

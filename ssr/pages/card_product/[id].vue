@@ -1,5 +1,11 @@
 <template>
   <div>
+    <Head>
+      <Title>
+        {{cartItemData?.name }} купить в Беларуси
+      </Title>
+      <Meta name="discription" :content="cartItemData?.name" />
+    </Head>
     <div class="product" v-if="cartItemData && id">
       <div class="product__wrapper">
         <div class="product__content _container">
@@ -131,10 +137,12 @@
 
     </div>
 
-    <SliderRecomendation
-      :isShowFilter = false
-      :isShowFollow = false
-    />
+    <ClientOnly>
+      <SliderRecomendation
+        :isShowFilter = false
+        :isShowFollow = false
+      />
+    </ClientOnly>
 
     <ClientOnly>
       <SliderShownCards/>
@@ -155,17 +163,8 @@
   const infoBlock = ref(0)
   const id = ref(null)
 
-  useHead({
-    title: route.params.id + ' купить в Беларуси',
-    name: route.params.id,
-    meta: [{
-      name: route.params.id,
-      content: route.params.id + ' купить в Беларуси'
-    }]
-  })
-
   const ChangeParameters = computed(() => {
-    return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES);
+    return JSON.stringify(getters['order/ORDERS']) + JSON.stringify(getters['favorite/FAVORITES'])
   })
 
   watch (() => ChangeParameters, 
@@ -233,7 +232,7 @@
 
   const countQuantity = () => {
     if (getters['order/ORDERS'].length) {
-      const filtered = getters['order/ORDERS'].filter(item => String(item.product.id) === String(this.id))
+      const filtered = getters['order/ORDERS'].filter(item => String(item.product.vendor_code) === String(id.value))
       quantity.value =  filtered.length ? filtered[0].amount : 0
     } else {
       quantity.value = 0
@@ -243,7 +242,7 @@
 
   const checkIsWish = () => {
     if (getters['favorite/FAVORITES'].length) {
-      const filtered = getters['favorite/FAVORITES'].filter(item => String(item.product.id) === String(this.id))
+      const filtered = getters['favorite/FAVORITES'].filter(item => String(item.product.vendor_code) === String(id.value))
       isWish.value =  filtered.length ? true : false
     } else {
       isWish.value = false
@@ -278,13 +277,17 @@
     store.commit('query/SET_SEARCH_STRING', '')
     store.dispatch('breadcrumb/CHANGE_BREADCRUMB', 0)
     try {
-        const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'products/' + id.value)
-        cartItemData.value = response.data
+      const url = useRuntimeConfig().public.NUXT_APP_API_URL + 'products/' + id.value
+      const goodUrl = encodeURI(url);  
+      const response = await axios.get(goodUrl)
+      cartItemData.value = response.data
     } catch (e) {
-        console.log(e)
-        store.commit('notification/ADD_MESSAGE', {name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
+      console.log(e)
+      // store.commit('notification/ADD_MESSAGE', {name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
     }
+  }
 
+  const setBreabcrumbs = async () => {
     const mainBreadCrumb = {
       name: 'Каталог',
       path: '/catalog',
@@ -312,10 +315,9 @@
     const level = ['last', 'sub', 'top']
 
     for (let i = 0; i < chein.length; i++) {
-      // console.log(chein[i]);
       const currBreadCrumb  = {
         name: chein[chein.length - 1 - i].name,
-        path: '/category/' + chein[chein.length - 1 - i].id,
+        path: '/category/' + chein[chein.length - 1 - i].site_link,
         type: 'global',
         class: '',
         category: chein[chein.length - 1 - i].id,
@@ -330,18 +332,25 @@
       type: "global",
       class: ""
     })
+    
   }
 
   onBeforeUpdate(async () => {
     updateShowItems(route.params.id)
   })
 
+  onBeforeMount(async () => {
+    id.value = route.params.id
+    await onGetCartData()
+    await setBreabcrumbs()
+  })
+
   const { data } = await useAsyncData(
     'cartData', 
     async () => {
       id.value = route.params.id
-      onGetCartData()
-      return
+      await onGetCartData()
+      return 
     }, {
       watch: [route]
     }
@@ -598,6 +607,9 @@
     white-space: nowrap;
     font-weight: 300;
     font-size: 18px;
+    @media (max-width: $md3+px) {
+      font-size: 13px;
+    }
   }
   span{
     margin-right: 5px;

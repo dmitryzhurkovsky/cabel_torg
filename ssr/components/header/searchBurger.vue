@@ -1,8 +1,8 @@
 <template>
-  <div class="header__search burger__search">
+  <div class="header__search search-wrapper">
     <div class="search__box">
       <div class="search__field">
-        <input type="text" name="focus" required class="search-box" placeholder="Поиск товаров"
+        <input type="text" required class="search-box" placeholder="Поиск товаров"
           v-model = "queryString" @input="onInput()" autocomplete="off"
         />
         <button class="icon-close" type="reset" v-if ="queryString" @click = "clearString"></button>
@@ -85,12 +85,12 @@ export default {
       this.queryString = '';
       this.SET_SEARCH_STRING('');
       this.SET_CATALOG_SEARCH_STRING('');
-      let url = "/catalog?";
-      url = url + "offset=0&limit=12&actual_price_gte=0&actual_price_lte=40000";
-      url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
-      url = url + '&type_of_product=all';
-      url = url + "&q=" + this.CATALOG_SEARCH_STRING;
-      this.$router.push(url);
+      // let url = "/catalog?";
+      // url = url + "offset=0&limit=12&actual_price_gte=0&actual_price_lte=40000";
+      // url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+      // url = url + '&type_of_product=all';
+      // url = url + "&q=" + this.CATALOG_SEARCH_STRING;
+      // this.$router.push(url);
     },
 
     openFindedElementsInCatalg(){

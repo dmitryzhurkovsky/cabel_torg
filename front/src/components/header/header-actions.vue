@@ -4,12 +4,12 @@
         @mouseenter="onFavoriteIconEnter()"
         @mouseleave="onIconLeave()"
     >
-      <div class="dropdown icon-favorite">
+      <button class="dropdown icon-favorite">
         <div :class="[!favoriteHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
           <HeaderFavorite @click.stop = "onIconLeaveClick()" />
         </div>
 
-      </div>
+      </button>
       <!-- <IconQuantity 
         :quantity = 0 
         :left = '12'
@@ -29,7 +29,7 @@
               <div class="avatar icon-user flex-center"></div>
             </div>
 
-            <button @click="handleClick('/login', 1)" class="btn Fblack">
+            <button @click="handleClick('/login', 1)" class="btn black mb-20">
               Вход
             </button>
 
@@ -72,11 +72,11 @@
         @mouseenter="onCartIconEnter()"
         @mouseleave="onIconLeave()"
     >
-      <div class="dropdown icon-cart">
+      <button class="dropdown icon-cart">
         <div :class="[!cartHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
           <HeaderCart @click.stop = "onIconLeaveClick()" />
         </div>
-      </div>
+      </button>
       <IconQuantity 
         :quantity = ORDERS.length 
         :left = '10'

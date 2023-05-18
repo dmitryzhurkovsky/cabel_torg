@@ -13,6 +13,7 @@ export default {
     recomendationOrder: '',
     recomendationQuantity: 10,
     shownItemslist: [],
+    category: {},
   },
 
   getters: {
@@ -43,6 +44,9 @@ export default {
     SHOWN_ITEMS_LIST(state){
       return state.shownItemslist;
     },
+    CATEGORY(state){
+      return state.category;
+    }
   },
 
   mutations: {
@@ -82,6 +86,10 @@ export default {
     SET_SHOWN_ITEMS_LIST(state, list) {
       state.shownItemslist = [...list];
     },
+
+    SET_CATEGORY(state, category) {
+      state.category = category;
+    }
   },
 
   actions: {
@@ -101,7 +109,7 @@ export default {
         commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
       } catch (e) {
         console.log(e);
-        commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить каталог категории", icon: "error", id: '1'}, {root: true})
+        // commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить каталог категории " + data, icon: "error", id: '1'}, {root: true})
       }
     },
 
@@ -123,7 +131,7 @@ export default {
         return response.data;
       } catch (e) {
         console.log(e);
-        commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить весь каталог ", icon: "error", id: '1'}, {root: true})
+        // commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить весь каталог ", icon: "error", id: '1'}, {root: true})
         return []
       }
     },
@@ -139,7 +147,7 @@ export default {
         commit("SET_RECOMENDED_ITEMS", response.data);
       } catch (e) {
         console.log(e);
-        commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'}, {root: true})
+        // commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'}, {root: true})
       }
     },
   }

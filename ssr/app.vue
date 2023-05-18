@@ -4,7 +4,9 @@
     <NotificationMain />
     <UiLoader />
     <!-- <NuxtLoadingIndicator /> -->
-    <NotificationPopUp/>
+    <ClientOnly fallback-tag="div">
+      <NotificationPopUp/>
+    </ClientOnly>
     <MyHeader />
     <ClientOnly fallback-tag="div">
       <Breadcrumb/>
@@ -17,29 +19,38 @@
 <script setup>
 
   import store from '@/store'
+  const interval = ref(null)
 
-  // fetchKey: 'categoriesData'
+  const route = useRoute()
 
   const setViewParametrs = () => {
-    console.log('SET VIEW PARAMETERS', window.innerWidth, window);
+    // console.log('Set innerWidth', window.innerWidth);
     store.commit('header/UPDATE_VIEW_PARAMETERS', window.innerWidth)
   }
 
+  watch(() => route.path,
+    (curr, prev) => {
+      setViewParametrs()
+    });
+
   store.commit('notification/SET_IS_LOADING', true)
-  console.log('Setup App ');
+  // console.log('Setup App ');
 
   onBeforeUpdate( () => {
     store.commit('notification/SET_IS_LOADING', true)
-    console.log('BeforeUpdate App ');
+    // console.log('BeforeUpdate App ');
   })
 
+  onBeforeUnmount( ()=> clearInterval(interval.value))
+
   onBeforeMount(async () => {
-    console.log('Mounted App ');
+    // console.log('Mounted App ');
     store.commit('notification/SET_IS_LOADING', true)
-    nextTick(() => {
-      window.addEventListener('resize', setViewParametrs)
-      setViewParametrs();
-    })
+    // window.addEventListener('resize', setViewParametrs)
+    interval.value = setInterval(()=> {
+      setViewParametrs()
+    }, 300)
+    setViewParametrs();
     const nullData = []
     if (!localStorage.getItem("carts")) localStorage.setItem("carts", JSON.stringify(nullData))
     if (!localStorage.getItem("favorites")) localStorage.setItem("favorites", JSON.stringify(nullData))
@@ -57,7 +68,7 @@
   const { data: categoriesData } = await useAsyncData(
     'categories', 
     async () => {
-      console.log('useAsyncData App ');
+      // console.log('useAsyncData App ');
       store.commit('notification/SET_IS_LOADING', true)
       // await store.dispatch('header/GET_CATEGORIES')
       await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')
@@ -616,5 +627,16 @@ input{
 
 }
 
+.dropdown .wrapper__show {
+  display: block;
+  @media (max-width: $md3+px) {
+    position: fixed;
+    left: 50%!important;
+    top: 50%;
+    right: inherit!important;
+    transform: translate(-50%, -50%);
+
+  }
+}
 
 </style>

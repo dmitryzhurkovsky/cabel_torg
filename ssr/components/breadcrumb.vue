@@ -61,12 +61,16 @@ export default {
 
   methods: {
     ...mapActions("breadcrumb", ["MOVE_TO_SELECT_PATH"]),
-    ...mapMutations("query", ["SET_SEARCH_STRING"]),
+    ...mapMutations("query", ["SET_SEARCH_STRING", "SET_CATEGORY_ID"]),
     
     changePage(item){
       // console.log('BreadCrumb-   ', item);
       let url = '';
       if (item.path.includes('category') || item.path.includes('catalog')) {
+        // console.log('breadcrumb ', item);
+        if (item.path.includes('catalog')) {
+          this.SET_CATEGORY_ID(null);
+        }
         url = url + "?offset=" + this.OFFSET + 
         "&limit=" + this.LIMIT + 
         "&actual_price_gte=" + this.MIN_PRICE + 

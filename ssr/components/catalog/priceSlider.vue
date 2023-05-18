@@ -65,13 +65,13 @@ export default {
       this.maxValueRange = this.MAX_PRICE;
       this.Left = ((this.MIN_PRICE / this.RangeMax) * 100) + '%';
       this.Right = 100 - ((this.MAX_PRICE / this.RangeMax) * 100) + '%';
-      console.log('Change parameters');
     }  
   },
 
   computed: {
     ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE",  "SORT_DIRECTION", "LIMIT_ITEMS"]),
     ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
+    ...mapGetters("header", ["ALL_CATEGORIES"]),
 
     ChangeParameters(){
       return this.MAX_PRICE + this.MIN_PRICE;
@@ -79,15 +79,13 @@ export default {
   },
 
   methods: {
-    ...mapMutations("query", ["SET_MIN_PRICE", "SET_MAX_PRICE"]),
+    ...mapMutations("query", ["SET_MIN_PRICE", "SET_MAX_PRICE", "SET_OFFSET"]),
 
     setUpMinPrice(){
-      console.log('Start update ', this.minValuePrice, '  ', this.RangeMin);
       // if (this.minValuePrice <= this.RangeMin) this.minValuePrice = this.RangeMin;
       // if (this.minValuePrice >= this.maxValuePrice - this.priceGap) this.minValuePrice = this.maxValuePrice - this.priceGap;
       const minPrice = this.minValuePrice;
       const maxPrice = this.maxValuePrice;
-      console.log('Set up MIN price ', minPrice, '   ', maxPrice, ' - ', this.maxValueRange);
       if ((maxPrice - minPrice >= this.priceGap) && (maxPrice <= this.maxValueRange)) {
         this.minValueRange = minPrice;
         this.Left = ((minPrice / this.RangeMax) * 100) + '%';
@@ -106,11 +104,13 @@ export default {
     },
 
     onChangeMinPrice(){
+      if (String(this.minValuePrice).length === 0) this.minValuePrice = this.minValueRange;
       this.setUpMinPrice();
       this.updateStore();
     },
 
     onChangeMaxPrice() {
+      if (String(this.maxValuePrice).length === 0) this.maxValuePrice = this.maxValueRange;
       this.setUpMaxPrice();
       this.updateStore();
     },
@@ -150,7 +150,10 @@ export default {
 
     getCategoryUrl(id, min, max){
       let url = "/category/";
-      if (id) url = url + id + "?";
+      if (id) {
+        const link = this.ALL_CATEGORIES.filter(item => item.id == id)[0].site_link
+        url = url + link + "?";
+      }
       url = url + this.getLastPartOfUrl(min, max);
       return url;
     },
@@ -167,6 +170,7 @@ export default {
     },
 
     updateStore(){
+      this.SET_OFFSET(0);
       if (this.MIN_PRICE !== this.minValuePrice) {
         this.SET_MIN_PRICE(this.minValuePrice);
         if (this.CATEGORY_ID) {
@@ -187,11 +191,11 @@ export default {
   },
 
   beforeMount(){
-    console.log('прайс слайдер ', this);
+    // console.log('прайс слайдер ', this);
     this.minValuePrice = this.MIN_PRICE;
-    this.RangeMin = this.MIN_PRICE;
+    // this.RangeMin = this.MIN_PRICE;
     this.maxValuePrice = this.MAX_PRICE;
-    this.RangeMax = this.MAX_PRICE;
+    // this.RangeMax = this.MAX_PRICE;
     this.setUpMinPrice();
     this.setUpMaxPrice();
     // this.updateStore();

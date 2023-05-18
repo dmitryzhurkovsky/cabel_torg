@@ -32,49 +32,92 @@
     const activePage = getters['catalog/ACTIVE_PAGE']
     const totalPages = getters['catalog/TOTAL_PAGES']
     const firstLink = { name: '<', pageNumber: activePage - 1, isAvailable: activePage !== 1 }
+
     result.push(firstLink)
-    if (activePage !== 1 && totalPages >= 5) {
-      const goTopLink = { name: '1', pageNumber: 1, isAvailable: activePage !== 1 }
-      result.push(goTopLink)
-      const dots = {
-          name: '...',
-          pageNumber: null,
-          isAvailable: false
-        }
-        result.push(dots)
-    }
-    if (totalPages >= 5) {
-      if (totalPages - activePage < 5) {
-        for (let i = 4; i >= 0; i--) {
+    // if (activePage !== 1 && totalPages >= 5) {
+    //   const goTopLink = { name: '1', pageNumber: 1, isAvailable: activePage !== 1 }
+    //   result.push(goTopLink)
+    //   const dots = {
+    //       name: '...',
+    //       pageNumber: null,
+    //       isAvailable: false
+    //     }
+    //     result.push(dots)
+    // }
+    console.log('totalPage - ', totalPages);
+    if (totalPages > 7) {
+      console.log('totalPage >= 7 - ', totalPages, activePage);
+      let left = activePage;
+      let right = totalPages - activePage;
+      
+      if (left < 4) {
+        for (let i = 1; i < left; i++){
           const curLink = {
-            name: totalPages - i,
-            pageNumber: totalPages - i,
+            name: i,
+            pageNumber: i,
             isAvailable: activePage !== i
           }
           result.push(curLink)
         }
       } else {
-        for (let i = 0; i < 3; i++) {
-          const curLink = {
-            name: activePage + i,
-            pageNumber: activePage + i,
-            isAvailable: activePage + i !== activePage
-          };
-          result.push(curLink);
+        const firstLink = {
+          name: 1,
+          pageNumber: 1,
+          isAvailable: activePage !== 1
         }
+        result.push(firstLink)
         const dots = {
           name: '...',
-          pageNumber: null,
-          isAvailable: false
+          pageNumber: activePage - 2,
+          isAvailable: true
         }
-        result.push(dots);
-        const afterDots = {
+        result.push(dots)
+        const curLink = {
+          name: activePage - 1,
+          pageNumber: activePage - 1,
+          isAvailable: true
+        }
+        result.push(curLink)
+      }
+
+      const center = {
+        name: activePage,
+        pageNumber: activePage,
+        isAvailable: false
+      }
+      result.push(center)
+
+
+      if (right > 4) {
+        const firstLink = {
+          name: activePage + 1,
+          pageNumber: activePage + 1,
+          isAvailable: true
+        }
+        result.push(firstLink)
+        const dots = {
+          name: '...',
+          pageNumber: activePage + 2,
+          isAvailable: true
+        }
+        result.push(dots)
+        const curLink = {
           name: totalPages,
           pageNumber: totalPages,
-          isAvailable: totalPages !== activePage
+          isAvailable: true
         }
-        result.push(afterDots)
+        result.push(curLink)
+      } else {
+        for (let i = activePage + 1; i <= right ; i++){
+          const curLink = {
+            name: i,
+            pageNumber: i,
+            isAvailable: activePage !== i
+          }
+          result.push(curLink)
+        }
       }
+
     } else {
       for (let i = 1; i <= totalPages; i++) {
         const curLink = {
@@ -85,7 +128,7 @@
         result.push(curLink)
       }
     }
-    const lastLink = { name: '>', pageNumber: activePage + 1, isAvailable: activePage !== totalPages }
+    const lastLink = { name: '>', pageNumber: activePage + 1, isAvailable: activePage < totalPages }
     result.push(lastLink)
     return result
   })
@@ -98,7 +141,10 @@
 
   const getCategoryUrl = (id, offset) => {
     let url = "/category/"
-    if (id) url = url + id + "?"
+    if (id) {
+      const link = getters['header/ALL_CATEGORIES'].filter(item => item.id == id)[0].site_link
+      url = url + link + "?";
+    }
     url = url + getLastPartOfUrl(offset)
     return url
   }
@@ -118,6 +164,7 @@
     if (data.pageNumber && data.isAvailable) {
       const newOffset = (data.pageNumber - 1) * getters['query/LIMIT']
       if (window) setTimeout(() => window.scrollTo(0, 0), 0)
+      store.commit('query/SET_OFFSET', newOffset)
       if (getters['query/CATEGORY_ID']) {
         router.push(getCategoryUrl(getters['query/CATEGORY_ID'], newOffset))
       } else {

@@ -9,20 +9,20 @@
         :class="[isWish === false ? 'item-card__wishlist icon-favorite' : 'item-card__wishlist icon-favorite-choosed']" 
         @click.stop="onWishClick(card)"
     ></div>
-    <a class="item-card__img" @click.stop="openCardItem(card.id)">
+    <a class="item-card__img" @click.stop="openCardItem(card.vendor_code)">
       <UiCardImage :images=card.images />
     </a>
     <div class="item-card__info">
       <div class="item-card__row old_price__row flex-center">
         <div class="old_price" v-if="card.price_with_tax !== cardPriceWithDiscount">{{ card.price_with_tax }}
-          <span>BYN / {{ card.base_unit.full_name }}</span>
+          <span>BYN/{{ card.base_unit.full_name }}</span>
         </div>
         <div class="notice">* Цена указана с учетом НДС.</div>
       </div>
 
       <div class="item-card__row flex-center">
         <div class="current_price">{{ cardPriceWithDiscount }}
-          <span>BYN / {{ card.base_unit.full_name }}</span>
+          <span>BYN/{{ card.base_unit.full_name }}</span>
         </div>
         <div v-if = "quantity !== 0" @click.stop="onOperationWithCartItem(card)"
           :class="[quantity === 0 ? 'item-card__buy flex-center icon-cart' : 'item-card__buy flex-center icon-cart-chosen']"
@@ -40,7 +40,7 @@
           </svg>
         </div>
       </div>
-      <div class="item-card__title" @click.stop="openCardItem(card.id)">
+      <div class="item-card__title" @click.stop="openCardItem(card.vendor_code)">
         <div>{{ card.name }}</div>
       </div>
       <div class="item-card__uptitle">

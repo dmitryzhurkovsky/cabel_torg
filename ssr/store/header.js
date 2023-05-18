@@ -230,7 +230,7 @@ export default {
         commit("CREATE_MENU_ITEMS", response.data);
       } catch (e) {
         console.log(e);
-        commit("notification/ADD_MESSAGE", {name: "Не возможно обновить каталог товаров", icon: "error", id: '1'}, {root: true})
+        // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить каталог товаров", icon: "error", id: '1'}, {root: true})
       }
     },
 
@@ -242,7 +242,7 @@ export default {
         const currCategory = getters.ALL_CATEGORIES.filter(item => item.id === mainCategory)[0];
         const currBreadCrumb  = {
           name: currCategory.name,
-          path: '/category/' + currCategory.id,
+          path: '/category/' + currCategory.site_link,
           type: 'global',
           class: '',
           category: currCategory.id,
@@ -257,7 +257,7 @@ export default {
         const currCategory = getters.ALL_CATEGORIES.filter(item => item.id === middleCategory)[0];
         const currBreadCrumb  = {
           name: currCategory.name,
-          path: '/category/' + currCategory.id,
+          path: '/category/' + currCategory.site_link,
           type: 'global',
           class: '',
           category: currCategory.id,
@@ -272,7 +272,7 @@ export default {
         const currCategory = getters.ALL_CATEGORIES.filter(item => item.id === lastCategory)[0]
         const currBreadCrumb  = {
           name: currCategory.name,
-          path: '/category/' + currCategory.id,
+          path: '/category/' + currCategory.site_link,
           type: 'global',
           class: '',
           category: currCategory.id,

@@ -24,7 +24,7 @@ export default defineNuxtComponent({
 
   head () {
     return {
-      title: 'CabelTorg',
+      title: 'Кабельторг | Купить  электротехническое оборудовение в Беларуси',
       meta: [{
         name: 'CabelTorg',
         content: 'Интернет магазин КабельТорг'

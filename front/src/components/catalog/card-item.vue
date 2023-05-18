@@ -381,6 +381,7 @@ export default {
 
 </style>
 <style lang="scss">
+
 .item-card__img img{
   max-height: 162px;
 }

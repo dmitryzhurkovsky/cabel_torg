@@ -302,6 +302,7 @@
     padding: 14px 16px;
     resize: vertical;
     position: relative;
+    min-height: 80px;
   }
   button{
 

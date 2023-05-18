@@ -1,5 +1,12 @@
 <template>
   <div class="_container">
+    <Head>
+      <Title>
+        КабельТорг | {{ oneNewData?.title }}
+      </Title>
+      <Meta name="discription" :content="oneNewData?.title" />
+    </Head>
+
     <div class="one-news__block" v-if="oneNewData">
       <a class="one-news__item">
           <div class="one-news__img">
@@ -27,7 +34,7 @@
   import store from '@/store'
 
   // useHead({
-  //   title: oneNewData.value.name,
+  //   title: 'Кабельторг | ' + oneNewData.value.name,
   //   name: oneNewData.value.name,
   //   meta: [{
   //     name: oneNewData.value.name,
