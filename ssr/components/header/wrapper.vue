@@ -1,6 +1,6 @@
 <template>
   <div v-if = "IS_CATALOG_OPEN || IS_MENU_ACTIONS_OPEN"
-      :class="[IS_MENU_ACTIONS_OPEN ? 'menu-wrapper actions-wrapper' : 'menu-wrapper']" 
+      :class="[IS_MENU_ACTIONS_OPEN &&  DEVICE_VIEW_TYPE > 1 ? 'menu-wrapper actions-wrapper' : 'menu-wrapper']" 
       @click="closeMenu"
   >
   </div>
@@ -13,7 +13,7 @@ export default {
   name: "MenuWrapper",
 
   computed: {
-    ...mapGetters("header", ["IS_CATALOG_OPEN", "IS_MENU_ACTIONS_OPEN"]),
+    ...mapGetters("header", ["IS_CATALOG_OPEN", "IS_MENU_ACTIONS_OPEN", "DEVICE_VIEW_TYPE"]),
   },
 
   watch: {
