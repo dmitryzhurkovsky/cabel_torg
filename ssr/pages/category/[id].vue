@@ -81,7 +81,7 @@
                 </div>  
               </div>
               <div class="content-block__list" v-if = "!data.catalogData?.length">
-                <span>Категоря пуста</span>
+                <div class="empty_catalog">По вашему запросу ничего не найдено</div>
               </div>
               <div class="content-block__pagination">
                 <CatalogPaginationPanel />
@@ -472,6 +472,13 @@
 
 
   }
+
+  .empty_catalog{
+    width: 100%;
+    padding: 10px 0;
+    text-align: center;
+  }
+
 
 }
 
