@@ -15,6 +15,10 @@ class BaseMixin:
 
     def __init__(self, db: AsyncSession):
         self.db = db
+        self.CACHE['attributes'] = dict()
+        self.CACHE['attributes']['under_the_order'] = set()
+        self.CACHE['values'] = dict()
+        self.CACHE['names'] = dict()
 
     @property
     def root_element(cls):  # noqa
