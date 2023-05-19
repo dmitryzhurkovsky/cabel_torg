@@ -76,16 +76,17 @@
 
   watch(() => getters['header/DEVICE_VIEW_TYPE'],
     (curr, prev) => {
-      isMobileVersion.value = curr;
+      setViewType(curr);
   });
 
-  // const LastCategory = computed(() => {
-  //   let result = [];
-  //   if (getters['header/SUB_CATEGORIES_ITEM_ACTIVE'] && getters['header/SUB_CATEGORIES']) {
-  //       result = getters['header/SUB_CATEGORIES'].filter(item => item.id === getters['header/SUB_CATEGORIES_ITEM_ACTIVE']);
-  //   }
-  //   return result;
-  // })
+  const setViewType = (curr) => {
+    console.log('isMoblile version ', curr);
+      if (curr > 1) {
+        isMobileVersion.value = true
+      } else {
+        isMobileVersion.value = false
+      }
+  }
 
   const ChangeParameters = computed(() => {
     return JSON.stringify(route.query)
@@ -185,6 +186,7 @@
   onBeforeMount(async () => {
     setParametersFromURL()
     await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
+    setViewType(getters['header/DEVICE_VIEW_TYPE'])
     setBreabcrumbs()
   })
 

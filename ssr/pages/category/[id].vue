@@ -116,8 +116,17 @@
 
   watch(() => getters['header/DEVICE_VIEW_TYPE'],
     (curr, prev) => {
-      isMobileVersion.value = curr;
+      setViewType(curr);
   });
+
+  const setViewType = (curr) => {
+    console.log('isMoblile version ', curr);
+      if (curr > 1) {
+        isMobileVersion.value = true
+      } else {
+        isMobileVersion.value = false
+      }
+  }
 
   const LastCategory = computed(() => {
     let result = [];
@@ -321,6 +330,7 @@
     } else {
       store.commit('catalog/SET_CATEGORY', {})
     }
+    setViewType(getters['header/DEVICE_VIEW_TYPE'])
     await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
     setBreabcrumbs()
   })

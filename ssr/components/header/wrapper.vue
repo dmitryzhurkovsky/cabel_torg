@@ -29,7 +29,6 @@ export default {
     },
 
     IS_MENU_ACTIONS_OPEN: function(){
-      console.log('Actions wrapper ', this.IS_CATALOG_OPEN, this.IS_MENU_ACTIONS_OPEN, this.DEVICE_VIEW_TYPE);
       if (this.IS_MENU_ACTIONS_OPEN) {
         window.scrollTo(0, 0);
         document.body.style.overflow = 'hidden';

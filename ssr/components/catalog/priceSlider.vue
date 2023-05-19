@@ -82,8 +82,8 @@ export default {
     ...mapMutations("query", ["SET_MIN_PRICE", "SET_MAX_PRICE", "SET_OFFSET"]),
 
     setUpMinPrice(){
-      // if (this.minValuePrice <= this.RangeMin) this.minValuePrice = this.RangeMin;
-      // if (this.minValuePrice >= this.maxValuePrice - this.priceGap) this.minValuePrice = this.maxValuePrice - this.priceGap;
+      if (this.minValuePrice <= this.RangeMin) this.minValuePrice = this.RangeMin;
+      if (this.minValuePrice >= this.maxValuePrice - this.priceGap) this.minValuePrice = this.maxValuePrice - this.priceGap;
       const minPrice = this.minValuePrice;
       const maxPrice = this.maxValuePrice;
       if ((maxPrice - minPrice >= this.priceGap) && (maxPrice <= this.maxValueRange)) {
@@ -93,8 +93,8 @@ export default {
     },
 
     setUpMaxPrice(){
-      // if (this.maxValuePrice >= this.RangeMax) this.maxValuePrice = this.RangeMax;
-      // if (this.maxValuePrice <= this.minValuePrice + this.priceGap) this.maxValuePrice = Number(this.minValuePrice) + Number(this.priceGap);
+      if (this.maxValuePrice >= this.RangeMax) this.maxValuePrice = this.RangeMax;
+      if (this.maxValuePrice <= this.minValuePrice + this.priceGap) this.maxValuePrice = Number(this.minValuePrice) + Number(this.priceGap);
       const minPrice = this.minValuePrice;
       const maxPrice = this.maxValuePrice;
       if ((maxPrice - minPrice >= this.priceGap)) {
@@ -111,8 +111,9 @@ export default {
 
     onChangeMaxPrice() {
       if (String(this.maxValuePrice).length === 0) this.maxValuePrice = this.maxValueRange;
-      if (!Number(this.maxValuePrice)) this.maxValuePrice = this.maxValueRange;
-      if (Number(this.maxValuePrice) > this.RangeMax) this.maxValuePrice = this.maxValueRange;
+      // if (!Number(this.maxValuePrice)) this.maxValuePrice = this.maxValueRange;
+      // if (Number(this.maxValuePrice) > this.RangeMax) this.maxValuePrice = this.maxValueRange;
+      // if (Number(this.maxValuePrice) < this.)
       this.setUpMaxPrice();
       this.updateStore();
     },
