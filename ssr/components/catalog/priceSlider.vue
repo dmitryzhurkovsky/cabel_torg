@@ -111,6 +111,8 @@ export default {
 
     onChangeMaxPrice() {
       if (String(this.maxValuePrice).length === 0) this.maxValuePrice = this.maxValueRange;
+      if (!Number(this.maxValuePrice)) this.maxValuePrice = this.maxValueRange;
+      if (Number(this.maxValuePrice) > this.RangeMax) this.maxValuePrice = this.maxValueRange;
       this.setUpMaxPrice();
       this.updateStore();
     },

@@ -68,7 +68,7 @@
   const { data: categoriesData } = await useAsyncData(
     'categories', 
     async () => {
-      // console.log('useAsyncData App ');
+      console.log('useAsyncData App ');
       store.commit('notification/SET_IS_LOADING', true)
       // await store.dispatch('header/GET_CATEGORIES')
       await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')

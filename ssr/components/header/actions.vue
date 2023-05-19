@@ -175,11 +175,13 @@ export default {
     },
 
     onFavoriteIconEnter() {
+      console.log('Favorite click ', this.favoriteHover);
       this.SET_SEARCH_STRING('');
       this.UPDATE_IS_MENU_ACTIONS_OPEN(true);
       this.favoriteHover = true;
       this.cartHover = false;
       this.userHover = false;
+      console.log('Favorite click ', this.favoriteHover);
     },
 
     onIconLeave() {

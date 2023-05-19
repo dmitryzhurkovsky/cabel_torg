@@ -320,4 +320,8 @@ div[class="active"]{
     margin-bottom: 10px;
   }
 }
+
+.burger__menu__open{
+   z-index: 200;
+}
 </style>

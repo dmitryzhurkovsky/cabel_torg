@@ -395,7 +395,7 @@
           } else {
             console.log('Тут проверяем есть ли пользователь');
             try {
-              const response = await axios.get(process.env.VUE_APP_API_URL + "users/check_email/<email>?email=" + this.email);
+              const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + "users/check_email/<email>?email=" + this.email);
               console.log(response);
               console.log(response.data.message === 'True');
               if (response.data.message === 'True') {
