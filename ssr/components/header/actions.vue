@@ -2,7 +2,6 @@
   <div class="topmenu__right client-bar flex-center">
     <div class="topmenu__item right-direction"
         @click.stop="onFavoriteIconEnter()"
-        @mouseenter="onFavoriteIconEnter()"
         @mouseleave="onIconLeave()"
     >
       <div class="dropdown icon-favorite">
@@ -17,7 +16,6 @@
     </div>
     <div class="topmenu__item right-direction" 
         @click.stop="onUserIconEnter()"
-        @mouseenter="onUserIconEnter()"
         @mouseleave="onIconLeave()"
     >
       <div class="dropdown" 
@@ -73,7 +71,6 @@
     </div>
     <div class="topmenu__item right-direction" 
         @click.stop="onCartIconEnter()"
-        @mouseenter="onCartIconEnter()"
         @mouseleave="onIconLeave()"
     >
       <div class="dropdown icon-cart">

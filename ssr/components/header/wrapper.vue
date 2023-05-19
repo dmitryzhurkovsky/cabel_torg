@@ -1,6 +1,6 @@
 <template>
-  <div v-if = "IS_CATALOG_OPEN || IS_MENU_ACTIONS_OPEN"
-      :class="[IS_MENU_ACTIONS_OPEN &&  DEVICE_VIEW_TYPE > 1 ? 'menu-wrapper actions-wrapper' : 'menu-wrapper']" 
+  <div v-if = "IS_CATALOG_OPEN || IS_MENU_ACTIONS_OPEN" id="WRAPPER"
+      :class="[IS_MENU_ACTIONS_OPEN && DEVICE_VIEW_TYPE > 1 ? 'menu-wrapper actions-wrapper' : 'menu-wrapper']" 
       @click="closeMenu"
   >
   </div>
@@ -29,6 +29,7 @@ export default {
     },
 
     IS_MENU_ACTIONS_OPEN: function(){
+      console.log('Actions wrapper ', this.IS_CATALOG_OPEN, this.IS_MENU_ACTIONS_OPEN, this.DEVICE_VIEW_TYPE);
       if (this.IS_MENU_ACTIONS_OPEN) {
         window.scrollTo(0, 0);
         document.body.style.overflow = 'hidden';
@@ -64,6 +65,7 @@ export default {
   //backdrop-filter: blur(2px);
 }
 .actions-wrapper {
+  z-index: 199;
   background: linear-gradient(180deg, rgba(66, 62, 72, 0.2) 0%, rgba(66, 62, 72, 0) 100%);
   backdrop-filter: blur(2px);
 }
