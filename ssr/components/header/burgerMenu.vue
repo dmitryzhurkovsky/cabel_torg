@@ -205,7 +205,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #fff;
-  z-index: 20;
+  z-index: 200;
 }
 
 a {
