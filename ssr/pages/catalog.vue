@@ -246,9 +246,9 @@
     min-width: 260px;
     width: 272px;
     padding-right: 10px;
-    // @media (max-width:$md2+px) {
-    //   display: none;
-    // }
+     @media (max-width:$md2+px) {
+       display: none;
+     }
   }
 
 }
