@@ -583,6 +583,7 @@ input{
   }
   .wrapper__show{
     display: block;
+    z-index: 105;
   }
   .wrapper__show:hover,
   .wrapper__show:focus
