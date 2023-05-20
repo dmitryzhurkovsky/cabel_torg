@@ -85,7 +85,7 @@
           </div>
         </div>
         <ul class="second" v-if = "activeMenuItem === 'Покупателям'">
-          <li><a @click.prevent="openPage('/how_to_work')">Как оформит заказ</a></li>        
+          <li><a @click.prevent="openPage('/how_to_work')">Как оформить заказ</a></li>
           <li><a @click.prevent="openPage('/shipping')">Оплата и доставка</a></li>        
           <li><a @click.prevent="openPage('/wholesale')">Оптовым клиентам</a></li>        
           <li><a @click.prevent="openPage('/warranty')">Гарантийное обслуживание</a></li>        
