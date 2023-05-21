@@ -85,7 +85,7 @@
           </div>
         </div>
         <ul class="second" v-if = "activeMenuItem === 'Покупателям'">
-          <li><a @click.prevent="openPage('/how_to_work')">Как оформит заказ</a></li>        
+          <li><a @click.prevent="openPage('/how_to_work')">Как оформить заказ</a></li>
           <li><a @click.prevent="openPage('/shipping')">Оплата и доставка</a></li>        
           <li><a @click.prevent="openPage('/wholesale')">Оптовым клиентам</a></li>        
           <li><a @click.prevent="openPage('/warranty')">Гарантийное обслуживание</a></li>        
@@ -135,14 +135,13 @@ export default {
   },
 
   computed: {
-    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "CATALOG", "IS_CATALOG_OPEN"]),
+    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "CATALOG", "IS_CATALOG_OPEN", "ALL_CATEGORIES"]),
     ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION"]),
-    ...mapGetters("header", ["ALL_CATEGORIES"]),
   },
 
   methods:{
-    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
     ...mapMutations("query", ["SET_CATEGORY_ID", "SET_DEFAULT_PRICES"]),
+    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
     ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
     ...mapActions("catalog", ["GET_CATALOG_ITEMS"]),
 
@@ -205,7 +204,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #fff;
-  z-index: 200;
+  z-index: 50;
 }
 
 a {
@@ -322,6 +321,6 @@ div[class="active"]{
 }
 
 .burger__menu__open{
-   z-index: 200;
+   z-index: 105;
 }
 </style>

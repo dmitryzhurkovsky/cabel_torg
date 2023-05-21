@@ -50,7 +50,7 @@ export default {
   computed:{
     ...mapGetters("query", ["SEARCH_STRING", "FINDED_ELEMENTS", "SORT_DIRECTION", "SORT_TYPE"]),
     ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
-    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "UPDATE_IS_CATALOG_OPEN"]),
+    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
   },
 
   watch: {
@@ -67,7 +67,7 @@ export default {
   methods: {
     ...mapMutations("query", ["SET_SEARCH_STRING", "SET_FINDED_ELEMENTS", "SET_CATEGORY_ID"]),
     ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING"]),
-    ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY"]),
+    ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY", "UPDATE_IS_CATALOG_OPEN"]),
     ...mapActions("query", ["FIND_ELEMENTS"]),
 
     onInput(){
