@@ -227,7 +227,7 @@
     if (query.type_of_product) {
       if (getters['query/TYPE_OF_PRODUCT'] !== query.type_of_product) store.commit('query/SET_TYPE_OF_PRODUCT', query.type_of_product)
     } else {
-      store.commit('query/SET_TYPE_OF_PRODUCT', query.type_of_product)
+      // store.commit('query/SET_TYPE_OF_PRODUCT', query.type_of_product)
       isFailInParams = true
     }
     if (query.ordering) {
@@ -334,23 +334,6 @@
     await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
     setBreabcrumbs()
   })
-
-  // onBeforeUpdate(async () => {
-  //   if (!store.getters['header/ALL_CATEGORIES'].length) {
-  //     await store.dispatch('header/GET_CATEGORIES')
-  //   }
-  //   if (isFirstRender) {
-  //     setParametersFromURL()
-  //   }
-  //   const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
-  //   if (Object.keys(categoryData).length) {
-  //     store.commit('catalog/SET_CATEGORY', categoryData)
-  //   } else {
-  //     store.commit('catalog/SET_CATEGORY', {})
-  //   }
-  //   await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
-  //   setBreabcrumbs()
-  // })
 
 </script>
 

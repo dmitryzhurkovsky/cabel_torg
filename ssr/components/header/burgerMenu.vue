@@ -135,14 +135,13 @@ export default {
   },
 
   computed: {
-    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "CATALOG", "IS_CATALOG_OPEN"]),
+    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "CATALOG", "IS_CATALOG_OPEN", "ALL_CATEGORIES"]),
     ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION"]),
-    ...mapGetters("header", ["ALL_CATEGORIES"]),
   },
 
   methods:{
-    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
     ...mapMutations("query", ["SET_CATEGORY_ID", "SET_DEFAULT_PRICES"]),
+    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
     ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
     ...mapActions("catalog", ["GET_CATALOG_ITEMS"]),
 
