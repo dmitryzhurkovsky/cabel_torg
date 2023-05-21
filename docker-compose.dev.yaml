@@ -10,7 +10,7 @@ services:
     ports:
       - '5434:5432'
     volumes:
-      - ../data/postgres:/var/lib/postgresql/data/
+      - ./data/postgres:/var/lib/postgresql/data/
 
   backend:
     container_name: 'dev_backend'
@@ -62,4 +62,4 @@ services:
       - '443:443'  # for https
       - '8010:8010'  # for images and static files
     volumes:
-      - ../data/site_media:/usr/share/nginx/site_media/
+      - ./data/site_media:/usr/share/nginx/site_media/

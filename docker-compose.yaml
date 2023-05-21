@@ -10,7 +10,7 @@ services:
     ports:
       - '5434:5432'
     volumes:
-      - ../data/postgres:/var/lib/postgresql/data/
+      - ./data/postgres:/var/lib/postgresql/data/
 
   backend:
     container_name: 'prod_backend'
@@ -23,7 +23,7 @@ services:
       - db
       - redis
     volumes:
-      - ../data/site_media:/site_media
+      - ./data/site_media:/site_media
       - ./backend:/backend
 
   redis:
@@ -62,9 +62,9 @@ services:
       - '443:443'  # for https
       - '8010:8010'  # for images and static files
     volumes:
-      - ../data/site_media:/usr/share/nginx/site_media/
-      - ../data/certbot/www:/var/www/certbot  # certbot
-      - ../data/certbot/conf:/etc/letsencrypt  # certbot
+      - ./data/site_media:/usr/share/nginx/site_media/
+      - ./data/certbot/www:/var/www/certbot  # certbot
+      - ./data/certbot/conf:/etc/letsencrypt  # certbot
 
   certbot:
     image: certbot/certbot:latest
@@ -77,5 +77,5 @@ services:
     depends_on:
       - load_balancer
     volumes:
-      - ../data/certbot/www:/var/www/certbot
-      - ../data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+      - ./data/certbot/conf:/etc/letsencrypt
