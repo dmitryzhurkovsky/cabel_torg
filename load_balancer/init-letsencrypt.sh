@@ -1,5 +1,6 @@
 #!/bin/bash
 # https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71 Use it as a source
+# Launch it script from root folder of project.
 
 if ! [ -x "$(command -v docker-compose)" ]; then
   echo 'Error: docker-compose is not installed.' >&2
@@ -8,7 +9,7 @@ fi
 
 domains=(cabel-torg-test-domain.net.by admin.cabel-torg-test-domain.net.by)
 rsa_key_size=4096
-data_path="../data/certbot"
+data_path="./data/certbot"
 email="dmitryzhurkovsky@gmail.com" # Adding a valid address is strongly recommended
 staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
