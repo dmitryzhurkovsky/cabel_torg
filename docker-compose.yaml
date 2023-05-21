@@ -27,7 +27,7 @@ services:
       - ./backend:/backend
 
   redis:
-    container_name: 'dev_redis'
+    container_name: 'prod_redis'
     image: redis:latest
     ports:
       - '6379:6379'
@@ -43,7 +43,7 @@ services:
       - '8001:8001'
 
   frontend:
-    container_name: 'dev_frontend'
+    container_name: 'prod_frontend'
     build:
       context: ssr
       dockerfile: ./build/Dockerfile
@@ -52,7 +52,7 @@ services:
       - '8002:8002'
 
   load_balancer: # Copy static files during building this container
-    container_name: 'dev_load_balancer'
+    container_name: 'prod_load_balancer'
     build:
       context: .
       dockerfile: ./load_balancer/Dockerfile
@@ -67,6 +67,7 @@ services:
       - ./data/certbot/conf:/etc/letsencrypt  # certbot
 
   certbot:
+    container_name: 'prod_certbot'
     image: certbot/certbot:latest
     # To make sure our certificate is renewed when it’s about to expire.
     # This will check if your certificate is up for renewal every 12 hours
