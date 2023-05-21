@@ -1,67 +1,81 @@
 version: '3.9'
 
 services:
+  #  Backend part
   db:
+    container_name: 'prod_db'
     image: postgres:15.1
-    volumes:
-      - ./data/postgres:/var/lib/postgresql/data/
-    ports:
-      - '5434:5432'
     env_file:
       - backend/.env.dev
+    ports:
+      - '5434:5432'
+    volumes:
+      - ../data/postgres:/var/lib/postgresql/data/
 
   backend:
-    container_name: 'backend-test'
+    container_name: 'prod_backend'
     build:
       context: backend
       dockerfile: ./build/Dockerfile
-    volumes:
-      - site_media:/site_media
-      - ./backend:/backend
     ports:
       - '8000:8000'
     depends_on:
       - db
       - redis
-
-  frontend:
-    build:
-      context: ssr
-      dockerfile: ./build/Dockerfile
-    ports:
-      - '800:800'
-
-  nginx: # Copy static files during building this container
-    build:
-      context: .
-      dockerfile: ./nginx/Dockerfile
-    restart: unless-stopped
-    ports:
-      - '80:80'
-      - '82:82' # for admin panel
-      - '81:81'  # for images
-      - '443:443'  # for https
     volumes:
-      - site_media:/usr/share/nginx/site_media/
-      - ./data/nginx:/etc/nginx/conf.d
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
-
-  certbot:
-    image: certbot/certbot:latest
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email burguyd@gmail.com -d cabel-torg-test-domain.net.by --agree-tos
-    volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-    depends_on:
-      - nginx
+      - ../data/site_media:/site_media
+      - ./backend:/backend
 
   redis:
+    container_name: 'dev_redis'
     image: redis:latest
     ports:
       - '6379:6379'
 
-volumes:
-  site_media:
+  #  Frontend part
+  admin_dashboard:
+    container_name: 'prod_admin_dashboard'
+    build:
+      context: admin
+      dockerfile: ./build/Dockerfile
+    restart: unless-stopped
+    ports:
+      - '8001:8001'
+
+  frontend:
+    container_name: 'dev_frontend'
+    build:
+      context: ssr
+      dockerfile: ./build/Dockerfile
+    restart: unless-stopped
+    ports:
+      - '8002:8002'
+
+  load_balancer: # Copy static files during building this container
+    container_name: 'dev_load_balancer'
+    build:
+      context: .
+      dockerfile: ./load_balancer/Dockerfile
+    restart: always
+    ports:
+      - '80:80'
+      - '443:443'  # for https
+      - '8010:8010'  # for images and static files
+    volumes:
+      - ../data/site_media:/usr/share/nginx/site_media/
+      - ../data/certbot/www:/var/www/certbot  # certbot
+      - ../data/certbot/conf:/etc/letsencrypt  # certbot
+
+  certbot:
+    image: certbot/certbot:latest
+    # To make sure our certificate is renewed when it’s about to expire.
+    # This will check if your certificate is up for renewal every 12 hours
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    # To make sure that nginx reloads the newly obtained certificates. This makes nginx reload its configuration
+    # (and certificates) every six hours in the background and launches nginx in the foreground.
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email dmitryzhurkovsky@gmail.com -d cabel-torg-test-domain.net.by --agree-tos
+    depends_on:
+      - load_balancer
+    volumes:
+      - ../data/certbot/www:/var/www/certbot
+      - ../data/certbot/conf:/etc/letsencrypt
