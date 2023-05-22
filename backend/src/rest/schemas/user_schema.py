@@ -35,6 +35,8 @@ class UserUpdateSchema(UserBaseSchema):
 
 
 class UserSchema(UserBaseSchema, BaseSchema):
+    is_admin: bool
+
     class Config:
         orm_mode = True
 
