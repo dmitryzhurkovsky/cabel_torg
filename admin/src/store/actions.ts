@@ -183,6 +183,7 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "users/mine").
       then((response) => {
+        console.log(response.data);
         commit(MutationTypes.SET_USER, response.data)
         resolve(response.data);
       })

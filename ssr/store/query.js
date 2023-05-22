@@ -147,7 +147,7 @@ export default {
             commit("SET_FINDED_ELEMENTS", response.data);
         } catch (e) {
             console.log(e);
-            commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить искомые товары ", icon: "error", id: '1'}, {root: true})
+            // commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить искомые товары ", icon: "error", id: '1'}, {root: true})
         }
       },
     }

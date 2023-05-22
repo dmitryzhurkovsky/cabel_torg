@@ -6,7 +6,7 @@
               <path d="M1 1L15 15" stroke="#4275D8" stroke-width="2"/>
               <path d="M15 1L1 15" stroke="#4275D8" stroke-width="2"/>
           </svg>
-          <HeaderActions />
+          <!-- <HeaderActions /> -->
         </div>
         <HeaderSearchBurger/>
       </div>

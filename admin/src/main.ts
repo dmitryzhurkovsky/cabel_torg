@@ -28,7 +28,9 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   response => response,
+  
   async error => {
+    // console.log(error.response);
     if (typeof error.response === 'undefined') {
         store.commit("notification/ADD_MESSAGE", {id: 'Err500', icon: 'error', name: 'Ошибка авторизации. Сервер не отвечает'});
         store.commit("auth/SET_USER_DATA", null);
@@ -44,9 +46,12 @@ axios.interceptors.response.use(
         // localStorage.removeItem("authToken");
         return Promise.reject(error);
     } else if (error.response.status === 401) {
-        const originalConfig = error.config;
-        originalConfig._retry = true;
-        const refresh = await axios.post(import.meta.env.VITE_APP_API_URL + "refresh", {refresh_token: localStorage.getItem("refreshToken")}) as IDeliveryType
+      const originalConfig = error.config;
+      originalConfig._retry = true;
+      
+      axios.post(import.meta.env.VITE_APP_API_URL + "refresh", {refresh_token: localStorage.getItem("refreshToken")}).then((refresh) => {
+        console.log('QQQQQ ', refresh);
+      
         if (refresh.status === 201) {
           localStorage.setItem("authToken", refresh.data.access_token);
           localStorage.setItem("refreshToken", refresh.data.refresh_token);
@@ -61,6 +66,14 @@ axios.interceptors.response.use(
           localStorage.removeItem("refreshToken");
           return Promise.reject(error);
         }
+      }).catch((e) => {
+        console.log(e);
+      
+        store.commit("auth/SET_USER_DATA", null);
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("refreshToken");
+        return Promise.reject(error);
+      })
     } else {
         return Promise.reject(error);
     }
