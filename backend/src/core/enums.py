@@ -7,7 +7,7 @@ class BaseEnum(Enum):
         return tuple(el.value for el in cls)
 
 
-class SessionStatusEnum(str, Enum):
+class SessionStatusEnum(str, BaseEnum):
     """
     It's used in queries to a database.
     """
@@ -15,7 +15,7 @@ class SessionStatusEnum(str, Enum):
     FAILURE = 'Failure'
 
 
-class ProductTypeFilterEnum(str, Enum):
+class ProductTypeFilterEnum(str, BaseEnum):
     """
     It's query params for Product.
     """
@@ -25,7 +25,7 @@ class ProductTypeFilterEnum(str, Enum):
     NEW = 'new'
 
 
-class CategoryTypeFilterEnum(str, Enum):
+class CategoryTypeFilterEnum(str, BaseEnum):
     """
     It's query params for Category.
     """
@@ -33,7 +33,7 @@ class CategoryTypeFilterEnum(str, Enum):
     QUICK = 'quick'
 
 
-class ProductOrderFilterEnum(str, Enum):
+class ProductOrderFilterEnum(str, BaseEnum):
     """
     It's query params for ordering of Product.
     """

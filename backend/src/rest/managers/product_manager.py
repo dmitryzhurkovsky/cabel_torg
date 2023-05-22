@@ -53,9 +53,10 @@ class ProductManager(CRUDManager):
             filter_expressions.append(Product.category_id.in_(categories_ids))
 
         if type_of_product := filter_fields.get('type_of_product'):
-            if type_of_product == ProductTypeFilterEnum.AVAILABLE:
+            if type_of_product in ProductTypeFilterEnum.values():
                 filter_expressions.append(Product.status == ProductStatus.AVAILABLE.value)
-            elif type_of_product == ProductTypeFilterEnum.WITH_DISCOUNT:
+
+            if type_of_product == ProductTypeFilterEnum.WITH_DISCOUNT:
                 filter_expressions.append(and_(
                     Product.price_with_discount.is_not(None),
                     Product.price > Product.price_with_discount,  # noqa
@@ -64,15 +65,14 @@ class ProductManager(CRUDManager):
                 popular_products_ids = await cls.get_the_most_popular_products_ids(session=session)
                 filter_expressions.append(Product.id.in_(popular_products_ids))
             elif type_of_product == ProductTypeFilterEnum.NEW:
-                filter_expressions.append(and_(
-                    Product.is_new.is_(True),
-                    Product.status == ProductStatus.AVAILABLE.value
-                ))
+                filter_expressions.append(Product.is_new.is_(True))
 
         if search_letters := filter_fields.get('q'):
             category_ids_query = await session.execute(
                 select(Category.id).
-                where(Category.name.ilike(f'%{search_letters}'))
+                where(
+                    Category.name.ilike(f'%{search_letters}')
+                )
             )
             category_ids = category_ids_query.scalars().all()
 
