@@ -36,6 +36,7 @@ class Product(Base1CModel):
     description = Column(String)
     count = Column(DECIMAL, default=0)
     weight = Column(DECIMAL, default=0)
+    is_new = Column(Boolean, default=False)
 
     # Price fields
     price = Column(DECIMAL)
@@ -123,7 +124,3 @@ class Product(Base1CModel):
     def actual_price_with_tax(self) -> float:
         """For generating an invoice."""
         return self.tax_sum + self.actual_price
-
-    @property
-    def is_new(self) -> bool:
-        return self.created_at > (datetime.now() - relativedelta(months=1))

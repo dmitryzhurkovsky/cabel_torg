@@ -66,7 +66,7 @@ export default {
   //backdrop-filter: blur(2px);
 }
 .actions-wrapper {
-  z-index: 50 ;
+  z-index: 20;
   background: linear-gradient(180deg, rgba(66, 62, 72, 0.2) 0%, rgba(66, 62, 72, 0) 100%);
   backdrop-filter: blur(2px);
 }
