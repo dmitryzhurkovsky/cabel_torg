@@ -156,6 +156,8 @@ class GoodsMixin(BaseMixin, ABC):
                 return 'site_page_title', raw_field.text
             case 'ОписаниеСтраницы':
                 return 'site_page_description', raw_field.text
+            case 'Новинка':
+                return 'is_new', True if raw_field.text == 'true' else False
             case 'Артикул':
                 field_name, field_value = 'vendor_code', raw_field.text
             case 'Описание':

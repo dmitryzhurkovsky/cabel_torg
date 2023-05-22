@@ -61,20 +61,9 @@ services:
       - '80:80'
       - '443:443'  # for https
       - '8010:8010'  # for images and static files
+    depends_on:
+      - frontend
+      - backend
+      - admin_dashboard
     volumes:
       - ./data/site_media:/usr/share/nginx/site_media/
-
-  certbot:
-    container_name: 'dev_certbot'
-    image: certbot/certbot:latest
-    # To make sure our certificate is renewed when it’s about to expire.
-    # This will check if your certificate is up for renewal every 12 hours
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-    # To make sure that nginx reloads the newly obtained certificates. This makes nginx reload its configuration
-    # (and certificates) every six hours in the background and launches nginx in the foreground.
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email dmitryzhurkovsky@gmail.com -d cabel-torg-test-domain.net.by --agree-tos
-    depends_on:
-      - reverse_proxy
-    volumes:
-      - ./data/certbot/www:/var/www/certbot
-      - ./data/certbot/conf:/etc/letsencrypt
