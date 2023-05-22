@@ -12,7 +12,7 @@
             >Топ продаж</div>
             <div 
             :class="[activePiont === 1 ? 'recomendation__nav__item active' : 'recomendation__nav__item']" 
-              @click="setTypeAndOrder({ type: 'available', order: 'created_at', typeRecomendation : 1 }, '-')"
+              @click="setTypeAndOrder({ type: 'new', order: 'created_at', typeRecomendation : 1 }, '-')"
             >Новинки</div>
             <div 
             :class="[activePiont === 2 ? 'recomendation__nav__item active' : 'recomendation__nav__item']" 

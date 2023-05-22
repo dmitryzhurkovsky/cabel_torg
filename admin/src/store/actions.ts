@@ -184,7 +184,12 @@ export const actions: ActionTree<State, State> & Actions = {
       axios.get(import.meta.env.VITE_APP_API_URL + "users/mine").
       then((response) => {
         console.log(response.data);
-        commit(MutationTypes.SET_USER, response.data)
+        if (response.data.is_admin) {
+          commit(MutationTypes.SET_USER, response.data)
+        } else {
+          localStorage.removeItem("authToken")
+          localStorage.removeItem("refreshToken")
+        }
         resolve(response.data);
       })
     })
