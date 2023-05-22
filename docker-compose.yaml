@@ -51,11 +51,11 @@ services:
     ports:
       - '8002:8002'
 
-  load_balancer: # Copy static files during building this container
-    container_name: 'prod_load_balancer'
+  reverse_proxy: # Copy static files during building this container
+    container_name: 'prod_reverse_proxy'
     build:
       context: .
-      dockerfile: ./load_balancer/Dockerfile
+      dockerfile: ./reverse_proxy/Dockerfile
     restart: always
     ports:
       - '80:80'
@@ -77,7 +77,7 @@ services:
     # (and certificates) every six hours in the background and launches nginx in the foreground.
     command: certonly --webroot -w /var/www/certbot --force-renewal --email dmitryzhurkovsky@gmail.com -d cabel-torg-test-domain.net.by --agree-tos
     depends_on:
-      - load_balancer
+      - reverse_proxy
     volumes:
       - ./data/certbot/www:/var/www/certbot
       - ./data/certbot/conf:/etc/letsencrypt

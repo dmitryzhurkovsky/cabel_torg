@@ -41,7 +41,7 @@ echo
 
 
 echo "### Starting nginx ..."
-docker-compose up --force-recreate -d load_balancer
+docker-compose up --force-recreate -d reverse_proxy
 echo
 
 echo "### Deleting dummy certificate for $domains ..."
@@ -78,4 +78,4 @@ docker-compose run --rm --entrypoint "\
 echo
 
 echo "### Reloading nginx ..."
-docker-compose exec load_balancer nginx -s reload
+docker-compose exec reverse_proxy nginx -s reload

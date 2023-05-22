@@ -51,11 +51,11 @@ services:
     ports:
       - '8002:8002'
 
-  load_balancer: # Copy static files during building this container
-    container_name: 'dev_load_balancer'
+  reverse_proxy: # Copy static files during building this container
+    container_name: 'dev_reverse_proxy'
     build:
       context: .
-      dockerfile: ./load_balancer/Dockerfile
+      dockerfile: ./reverse_proxy/Dockerfile
     restart: unless-stopped
     ports:
       - '80:80'
@@ -63,3 +63,18 @@ services:
       - '8010:8010'  # for images and static files
     volumes:
       - ./data/site_media:/usr/share/nginx/site_media/
+
+  certbot:
+    container_name: 'dev_certbot'
+    image: certbot/certbot:latest
+    # To make sure our certificate is renewed when it’s about to expire.
+    # This will check if your certificate is up for renewal every 12 hours
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    # To make sure that nginx reloads the newly obtained certificates. This makes nginx reload its configuration
+    # (and certificates) every six hours in the background and launches nginx in the foreground.
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email dmitryzhurkovsky@gmail.com -d cabel-torg-test-domain.net.by --agree-tos
+    depends_on:
+      - reverse_proxy
+    volumes:
+      - ./data/certbot/www:/var/www/certbot
+      - ./data/certbot/conf:/etc/letsencrypt
