@@ -10,7 +10,9 @@
               <CatalogFilterPanel />
             </div>
             <div class="content-block slider_subcategory__block">
-              <div v-if = "isMobileVersion" class="btn mobile-filter mb-20" @click.stop="setIsFilterPanelOpen(!isFilterPanelOpen)">Фильтры</div>
+              <div v-if = "isMobileVersion" class="mobile-filter" @click.stop="setIsFilterPanelOpen(!isFilterPanelOpen)">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-50a3755b=""><line x1="2" y1="17.1133" x2="23" y2="17.1133" stroke="#423E48" stroke-width="1.25" data-v-50a3755b=""></line><line x1="23" y1="7.50391" x2="2" y2="7.5039" stroke="#423E48" stroke-width="1.25" data-v-50a3755b=""></line><circle cx="16.6619" cy="16.911" r="3.08088" fill="white" stroke="#423E48" stroke-width="1.25" data-v-50a3755b=""></circle><circle cx="8.33806" cy="7.70623" r="3.08088" transform="rotate(-180 8.33806 7.70623)" fill="white" stroke="#423E48" stroke-width="1.25" data-v-50a3755b=""></circle></svg>
+              </div>
               <div v-if ="isMobileVersion&&isFilterPanelOpen">
                 <CatalogPriceSlider />
                 <CatalogSortPanel />
@@ -39,9 +41,9 @@
                   />
                 </div>  
               </div>
-
-              <!-- <CatalogPaginationPanel class="content-block__pagination" /> -->
-
+              <div class="content-block__pagination">
+                <CatalogPaginationPanel />
+              </div>
             </div>
           </div>
         </div>
@@ -52,12 +54,7 @@
 
 <script setup>
 
-  import { Swiper } from "swiper/vue";
-  import { SwiperSlide } from "swiper/vue";
-  import SwiperCore, { Pagination, Navigation } from "swiper"
-  import "swiper/swiper.min.css"
   import store from '@/store'
-  SwiperCore.use([Navigation, Pagination])
 
   const route = useRoute()
   const { getters } = store
@@ -79,16 +76,17 @@
 
   watch(() => getters['header/DEVICE_VIEW_TYPE'],
     (curr, prev) => {
-      isMobileVersion.value = curr;
+      setViewType(curr);
   });
 
-  const LastCategory = computed(() => {
-    let result = [];
-    if (getters['header/SUB_CATEGORIES_ITEM_ACTIVE'] && getters['header/SUB_CATEGORIES']) {
-        result = getters['header/SUB_CATEGORIES'].filter(item => item.id === getters['header/SUB_CATEGORIES_ITEM_ACTIVE']);
-    }
-    return result;
-  })
+  const setViewType = (curr) => {
+    console.log('isMoblile version ', curr);
+      if (curr > 1) {
+        isMobileVersion.value = true
+      } else {
+        isMobileVersion.value = false
+      }
+  }
 
   const ChangeParameters = computed(() => {
     return JSON.stringify(route.query)
@@ -97,12 +95,6 @@
   const clearSearchString= () => {
     store.commit("query/SET_SEARCH_STRING", '')
     store.commit("catalog/SET_CATALOG_SEARCH_STRING", '')
-  }
-
-  const getData = async () => {
-    store.commit('notification/SET_IS_LOADING', true)
-    await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
-    store.commit('notification/SET_IS_LOADING', false)
   }
 
   let isFerstRender = true;
@@ -122,13 +114,13 @@
     } else {
       isFailInParams = true
     }
-    if (query.price_gte) {
-      if (getters['query/MIN_PRICE'] !== query.price_gte) store.commit('query/SET_MIN_PRICE', query.price_gte)
+    if (query.actual_price_gte) {
+      if (getters['query/MIN_PRICE'] !== query.actual_price_gte) store.commit('query/SET_MIN_PRICE', query.actual_price_gte)
     } else {
       isFailInParams = true
     }
-    if (query.price_lte) {
-      if (getters['query/MAX_PRICE'] !== query.price_lte) store.commit('query/SET_MAX_PRICE', query.price_lte)
+    if (query.actual_price_lte) {
+      if (getters['query/MAX_PRICE'] !== query.actual_price_lte) store.commit('query/SET_MAX_PRICE', query.actual_price_lte)
     } else {
       isFailInParams = true
     }
@@ -180,6 +172,7 @@
   const { data: catalogData } = await useAsyncData(
     'posts', 
     async () => {
+      console.log('UseAsyncData catalog ');
       if (isFerstRender) {
         setParametersFromURL()
       }
@@ -190,11 +183,16 @@
     }
   )
 
-  onMounted(() => {
+  onBeforeMount(async () => {
+    setParametersFromURL()
+    await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
+    setViewType(getters['header/DEVICE_VIEW_TYPE'])
     setBreabcrumbs()
   })
 
-  onUpdated(() => {
+  onBeforeUpdate(async () => {
+    setParametersFromURL()
+    await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
     setBreabcrumbs()
   })
 
@@ -250,9 +248,9 @@
     min-width: 260px;
     width: 272px;
     padding-right: 10px;
-    // @media (max-width:$md2+px) {
-    //   display: none;
-    // }
+     @media (max-width:$md2+px) {
+       display: none;
+     }
   }
 
 }
@@ -313,12 +311,18 @@
   }
 
   .mobile-filter{
-    max-width: 100px;
-    background: #FFFFFF;
-    color: #423E48;
-    opacity: 0.5;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    border-radius: 50px;
+    border: 2px solid rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    &:hover{
+      background: #dedede;
+    }
 
 
   }
@@ -362,9 +366,9 @@
   max-width: 100%;
 }
 
-.slider_subcategory__row{
-  margin: 10px 0;
-}
+//.slider_subcategory__row{
+//  margin: 10px 0;
+//}
 .recomendation__nav__item{
   background: #FFFFFF;
   border: 1px solid rgba(0, 0, 0, 0.05);

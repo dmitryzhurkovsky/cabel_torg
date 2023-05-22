@@ -1,10 +1,14 @@
 <template>
   <div class="burger__menu__open">
-      <div class="burger__close" @click="closeMenu">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div class="burger__menutop">
+        <div class="burger__close">
+          <svg @click="closeMenu" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M1 1L15 15" stroke="#4275D8" stroke-width="2"/>
               <path d="M15 1L1 15" stroke="#4275D8" stroke-width="2"/>
           </svg>
+          <HeaderActions />
+        </div>
+        <HeaderSearchBurger/>
       </div>
     <ul class="burger__menu_list animated" v-if="CATALOG.length">
       <li 
@@ -81,7 +85,7 @@
           </div>
         </div>
         <ul class="second" v-if = "activeMenuItem === 'Покупателям'">
-          <li><a @click.prevent="openPage('/how_to_work')">Как оформит заказ</a></li>        
+          <li><a @click.prevent="openPage('/how_to_work')">Как оформить заказ</a></li>
           <li><a @click.prevent="openPage('/shipping')">Оплата и доставка</a></li>        
           <li><a @click.prevent="openPage('/wholesale')">Оптовым клиентам</a></li>        
           <li><a @click.prevent="openPage('/warranty')">Гарантийное обслуживание</a></li>        
@@ -131,13 +135,13 @@ export default {
   },
 
   computed: {
-    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "CATALOG", "IS_CATALOG_OPEN"]),
+    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "CATALOG", "IS_CATALOG_OPEN", "ALL_CATEGORIES"]),
     ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION"]),
   },
 
   methods:{
+    ...mapMutations("query", ["SET_CATEGORY_ID", "SET_DEFAULT_PRICES"]),
     ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
-    ...mapMutations("query", ["SET_CATEGORY_ID"]),
     ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
     ...mapActions("catalog", ["GET_CATALOG_ITEMS"]),
 
@@ -153,7 +157,10 @@ export default {
 
     getCategoryUrl(id){
       let url = "/category/";
-      if (id) url = url + id + "?";
+      if (id) {
+        const link = this.ALL_CATEGORIES.filter(item => item.id == id)[0].site_link
+        url = url + link + "?";
+      }
       url = url + this.getLastPartOfUrl();
       return url;
     },
@@ -161,8 +168,8 @@ export default {
     getLastPartOfUrl(){
       let url = "offset=" + this.OFFSET + 
         "&limit=" + this.LIMIT + 
-        "&price_gte=" + this.MIN_PRICE + 
-        "&price_lte=" + this.MAX_PRICE;
+        "&actual_price_gte=" + this.MIN_PRICE + 
+        "&actual_price_lte=" + this.MAX_PRICE;
       url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
       url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
       url = url + "&q=";
@@ -171,12 +178,12 @@ export default {
 
     changeCategory(id){
       this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
+      this.SET_DEFAULT_PRICES();
       this.$router.push(this.getCategoryUrl(id));
     },
 
     openPage(page) {
       this.UPDATE_IS_CATALOG_OPEN(false);
-      console.log('Burger', page, this.$route.path);
       if (this.$route.path != page) {
         this.$router.push(page);
       }
@@ -197,7 +204,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #fff;
-  z-index: 20;
+  z-index: 50;
 }
 
 a {
@@ -211,6 +218,10 @@ a {
 .burger__menu{
   color: #423E48;
 
+  &__menutop{
+    display: flex;
+    flex-direction: column;
+  }
   &__block{
     padding: 16px 20px 16px 30px;
     border: 1px solid #F0F0F1;
@@ -302,6 +313,14 @@ div[class="active"]{
 .burger{
   &__close{
     padding: 16px 0 0 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
   }
+}
+
+.burger__menu__open{
+   z-index: 105;
 }
 </style>

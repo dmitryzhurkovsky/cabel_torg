@@ -61,22 +61,27 @@ export default {
 
   methods: {
     ...mapActions("breadcrumb", ["MOVE_TO_SELECT_PATH"]),
-    ...mapMutations("query", ["SET_SEARCH_STRING"]),
+    ...mapMutations("query", ["SET_SEARCH_STRING", "SET_CATEGORY_ID", "SET_DEFAULT_PRICES"]),
     
     changePage(item){
-      console.log('BreadCrumb-   ', item);
+      // console.log('BreadCrumb-   ', item);
       let url = '';
       if (item.path.includes('category') || item.path.includes('catalog')) {
+        // console.log('breadcrumb ', item);
+        if (item.path.includes('catalog')) {
+          this.SET_CATEGORY_ID(null);
+        }
+        this.SET_DEFAULT_PRICES();
         url = url + "?offset=" + this.OFFSET + 
         "&limit=" + this.LIMIT + 
-        "&price_gte=" + this.MIN_PRICE + 
-        "&price_lte=" + this.MAX_PRICE;
+        "&actual_price_gte=" + this.MIN_PRICE + 
+        "&actual_price_lte=" + this.MAX_PRICE;
         url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
         url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
         url = url + "&q=" + this.CATALOG_SEARCH_STRING;
         this.SET_SEARCH_STRING('');
         this.MOVE_TO_SELECT_PATH(item.index);
-        console.log('Url   ', item.path + url);
+        // console.log('Url   ', item.path + url);
         this.$router.push(item.path + url);
       } else {
         this.SET_SEARCH_STRING('');
@@ -114,9 +119,10 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     &:last-child{
-      a{
-        opacity: 0.6;
+      div{
+        opacity: 0.5;
         cursor: auto;
+        color: #423E48!important;
       }
 
     }

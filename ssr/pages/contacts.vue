@@ -76,7 +76,7 @@
 
     head () {
       return {
-        title: 'Контакты',
+        title: 'Кабельторг | Контакты',
         meta: [{
           name: 'Контакты',
           content: 'Страница Контакты'
@@ -291,8 +291,10 @@
     width: 100%;
   }
 
+
   &__row{
     width: 100%;
+    gap: 10px;
 
     @media (max-width: $md2+px) {
       flex-direction: column;
@@ -316,6 +318,7 @@
     padding: 14px 16px;
     resize: vertical;
     position: relative;
+    min-height: 80px;
   }
   button{
 

@@ -3,7 +3,10 @@
     <HeaderWrapper />
     <NotificationMain />
     <UiLoader />
-    <NotificationPopUp/>
+    <!-- <NuxtLoadingIndicator /> -->
+    <ClientOnly fallback-tag="div">
+      <NotificationPopUp/>
+    </ClientOnly>
     <MyHeader />
     <ClientOnly fallback-tag="div">
       <Breadcrumb/>
@@ -16,26 +19,38 @@
 <script setup>
 
   import store from '@/store'
+  const interval = ref(null)
 
-  // fetchKey: 'categoriesData'
-
-  // useHead({
-  //   title: 'CabelTorg',
-  //   name: 'CabelTorg',
-  //   meta: [{
-  //     name: 'CabelTorg',
-  //     content: 'Интернет магазин КабельТорг'
-  //   }]
-  // })
+  const route = useRoute()
 
   const setViewParametrs = () => {
-      store.commit('header/UPDATE_VIEW_PARAMETERS',window.innerWidth)
+    // console.log('Set innerWidth', window.innerWidth);
+    store.commit('header/UPDATE_VIEW_PARAMETERS', window.innerWidth)
   }
 
-  onMounted(async () => {
+  watch(() => route.path,
+    (curr, prev) => {
+      setViewParametrs()
+    });
+
+  store.commit('notification/SET_IS_LOADING', true)
+  // console.log('Setup App ');
+
+  onBeforeUpdate( () => {
     store.commit('notification/SET_IS_LOADING', true)
+    // console.log('BeforeUpdate App ');
+  })
+
+  onBeforeUnmount( ()=> clearInterval(interval.value))
+
+  onBeforeMount(async () => {
+    // console.log('Mounted App ');
+    store.commit('notification/SET_IS_LOADING', true)
+    // window.addEventListener('resize', setViewParametrs)
+    interval.value = setInterval(()=> {
+      setViewParametrs()
+    }, 300)
     setViewParametrs();
-    window.addEventListener('resize', setViewParametrs)
     const nullData = []
     if (!localStorage.getItem("carts")) localStorage.setItem("carts", JSON.stringify(nullData))
     if (!localStorage.getItem("favorites")) localStorage.setItem("favorites", JSON.stringify(nullData))
@@ -53,6 +68,7 @@
   const { data: categoriesData } = await useAsyncData(
     'categories', 
     async () => {
+      console.log('useAsyncData App ');
       store.commit('notification/SET_IS_LOADING', true)
       // await store.dispatch('header/GET_CATEGORIES')
       await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')
@@ -567,6 +583,7 @@ input{
   }
   .wrapper__show{
     display: block;
+    z-index: 105;
   }
   .wrapper__show:hover,
   .wrapper__show:focus
@@ -611,5 +628,16 @@ input{
 
 }
 
+.dropdown .wrapper__show {
+  display: block;
+  @media (max-width: $md3+px) {
+    position: fixed;
+    left: 50%!important;
+    top: 50%;
+    right: inherit!important;
+    transform: translate(-50%, -50%);
+
+  }
+}
 
 </style>

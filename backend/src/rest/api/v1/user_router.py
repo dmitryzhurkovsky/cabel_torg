@@ -4,14 +4,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.requests import Request
 
 from src.core.db.db import get_session
+from src.core.enums import SessionStatusEnum
 from src.core.exception.base_exception import BadRequestError, ObjectNotFoundError
+from src.core.utils import generate_random_password
 from src.rest.managers.user_manager import UserManager
 from src.rest.permissions import is_admin_permission, is_authenticated_permission
 from src.rest.schemas.user_schema import (
     UserSchema,
     UserCreateSchema,
     UserUpdateSchema,
-    UserInputCreateSchema
+    UserInputCreateSchema,
+    RecoveryPasswordSchema
 )
 from src.services.user_service import UserService
 
@@ -92,3 +95,20 @@ async def update_info_about_current_user(
     return await UserManager.update(
         session=session, pk=request.user.id, input_data=user_info.dict(exclude_unset=True)
     )
+
+
+@user_router.post(
+    '/reset_password',
+    status_code=status.HTTP_201_CREATED,
+)
+async def reset_user_password(
+        user_info: RecoveryPasswordSchema,
+        session: AsyncSession = Depends(get_session)
+):
+    user = await UserManager.retrieve(email=user_info.email, session=session)
+
+    new_password = generate_random_password()
+    await UserManager.update(pk=user.id, session=session, input_data={'password': new_password})
+    UserService.send_new_password(user=user, new_password=new_password)
+
+    return {'status': SessionStatusEnum.SUCCESS.value}

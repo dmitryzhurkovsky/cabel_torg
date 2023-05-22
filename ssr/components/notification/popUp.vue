@@ -30,8 +30,8 @@
       IS_POPUP_OPEN: function(){
         if (this.IS_POPUP_OPEN) {
           this.$refs.popup.style.top = window.pageYOffset + 'px';
-          document.body.style.overflow = 'hidden';
-          document.body.style.paddingRight = '16px';
+          // document.body.style.overflow = 'hidden';
+          // document.body.style.paddingRight = '16px';
         } else {
           document.body.style.overflow = '';
           document.body.style.paddingRight = '0';
@@ -78,7 +78,7 @@
     &__close {
       position: absolute;
       top:0;
-      right: -30px;
+      right: -25px;
       cursor: pointer;
     }
     &__body {
@@ -92,6 +92,9 @@
         background: #fff;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
         border-radius: 16px;
+      @media (max-width: $md3+px){
+        width: 85%;
+      }
 
     }
 }

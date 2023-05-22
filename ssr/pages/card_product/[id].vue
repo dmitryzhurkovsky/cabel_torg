@@ -1,5 +1,11 @@
 <template>
   <div>
+    <Head>
+      <Title>
+        {{cartItemData?.name }} купить в Беларуси
+      </Title>
+      <Meta name="discription" :content="cartItemData?.name" />
+    </Head>
     <div class="product" v-if="cartItemData && id">
       <div class="product__wrapper">
         <div class="product__content _container">
@@ -31,7 +37,7 @@
                                   class="old_price"
                             >{{ cartItemData.price_with_tax }}
                             </span>
-                            <span>
+                            <span  :class="[cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax ? 'price_w_discount' : '']">
                                 {{ cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax
                                   ? cartItemData.price_with_discount_and_tax
                                   : cartItemData.price_with_tax
@@ -44,8 +50,7 @@
                             <div class="retail_price">
                               <div>Первоначальная цена: </div>
                               <div>
-                                  <span class="price__value"> {{ cartItemData.price_with_tax }}</span>
-                                  BYN
+                                  <span class="price__value"> {{ cartItemData.price_with_tax }}</span>BYN
                                   <span>/шт</span>
                               </div>
 
@@ -53,8 +58,12 @@
                             <div class="opt_price">
                                 <div>Цена со скидкой: </div>
                                 <div>
-                                    <span class="price__value">{{
-                                  cartItemData.price_with_tax }}</span>BYN
+                                    <span class="price__value">
+                                      {{ cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax
+                                        ? cartItemData.price_with_discount_and_tax
+                                        : cartItemData.price_with_tax
+                                      }}
+                                    </span>BYN
                                     <span>/шт</span>
                                 </div>
 
@@ -128,229 +137,224 @@
 
     </div>
 
-    <SliderRecomendation
-      :isShowFilter = false
-      :isShowFollow = false
-    />
+    <ClientOnly>
+      <SliderRecomendation
+        :isShowFilter = false
+        :isShowFollow = false
+      />
+    </ClientOnly>
 
-    <SliderShownCards/>
+    <ClientOnly>
+      <SliderShownCards/>
+    </ClientOnly>
   </div>
 </template>
 
-<script>
+<script setup>
   import axios from 'axios';
-  import { mapGetters, mapMutations, mapActions } from 'vuex' 
+  import store from '@/store'
+  const route = useRoute()
+  const router = useRouter()
+  const { getters } = store
+  const cartItemData = ref(null)
+  const isWish = ref(false)
+  const quantity = ref(0)
+  const quantityLocal = ref(1)
+  const infoBlock = ref(0)
+  const id = ref(null)
 
-  export default {
-    name: 'CardProduct',
+  const ChangeParameters = computed(() => {
+    return JSON.stringify(getters['order/ORDERS']) + JSON.stringify(getters['favorite/FAVORITES'])
+  })
 
-    data(){
-      return {
-        cartItemData: null,
-        isWish: false,
-        quantity: 0,
-        quantityLocal: 1,
-        infoBlock: 0,
-        id: null,
-      }
-    },
+  watch (() => ChangeParameters, 
+  () => {
+    countQuantity();
+    checkIsWish();
+  })
 
-   computed: {
-      ...mapGetters("order", ["ORDERS"]),
-      ...mapGetters("favorite", ["FAVORITES"]),
-      ...mapGetters("header", ["ALL_CATEGORIES"]),
-      ...mapGetters("catalog", ["SHOWN_ITEMS_LIST"]),
-
-      ChangeParameters(){
-        return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES);
-      },
-    },
-
-    watch: {
-      ChangeParameters: function() {
-        this.countQuantity();
-        this.checkIsWish();
-      },
-    },
-
-    methods: {
-      ...mapMutations("notification", ["ADD_MESSAGE"]),
-      ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
-      ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-      ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
-      ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
-      ...mapMutations("query", ["SET_SEARCH_STRING"]),
-      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA", "SET_REQUEST_CALL_TYPE"]),
-      ...mapMutations("catalog", ["SET_SHOWN_ITEMS_LIST"]),
-      ...mapActions("header", ["GET_CATEGORIES"]),
-
-      checkQuantityLocal() {
-        if (this.quantityLocal < 1) {
-          this.quantityLocal = 1;
-        };
-        if (this.quantityLocal > 99) {
-          this.quantityLocal = 99;
-        }
-      },
-
-      minusQuantityLocal() {
-        this.quantityLocal = this.quantityLocal > 1 ? this.quantityLocal - 1 : 1;
-      },
-
-      plusQuantityLocal() {
-        this.quantityLocal = this.quantityLocal < 99 ? this.quantityLocal + 1 : 99;
-      },
-
-      async onOperationWithCartItem(card, type) {
-        const itemData = {
-          amount: 0,
-          product: {
-            id: card.id,
-            vendor_code: card.vendor_code,
-            name: card.name,
-            discont: card.discont,
-            price_with_discount_and_tax: card.price_with_discount_and_tax,
-            price_with_tax: card.price_with_tax,
-          },
-        }
-        if (type === 'set') {
-          itemData.amount = Number(this.quantityLocal);
-        }
-
-        await this.UPDATE_ITEMS_IN_CART({itemData, type});
-        if (this.quantityLocal === 0) this.quantityLocal = 1;
-      },
-
-      onCreatePopUp(status, cardID) {
-        this.SET_IS_POPUP_OPEN(status);
-        this.SET_POPUP_ACTION('RequestCall');
-        this.SET_REQUEST_CALL_TYPE('GR');
-        this.SET_POPUP_ADDITIONAL_DATA({cardID});
-      },
-
-      async onWishClick() {
-        const itemData = {
-          product: {
-            id: this.cartItemData.id,
-            vendor_code: this.cartItemData.vendor_code,
-            name: this.cartItemData.name,
-          },
-        }  
-        const type = this.isWish === false ? 'set' : 'remove';
-        await this.UPDATE_IS_WISH_IN_CART({ itemData, type });
-        this.checkIsWish()
-      },
-
-      countQuantity() {
-        if (this.ORDERS.length) {
-          const filtered = this.ORDERS.filter(item => String(item.product.id) === String(this.id));
-          this.quantity =  filtered.length ? filtered[0].amount : 0;
-        } else {
-          this.quantity = 0;
-        }
-        this.quantityLocal = this.quantity ? this.quantity : this.quantityLocal;
-      },
-
-      checkIsWish() {
-        if (this.FAVORITES.length) {
-          const filtered = this.FAVORITES.filter(item => String(item.product.id) === String(this.id));
-          this.isWish =  filtered.length ? true : false;
-        } else {
-          this.isWish = false;
-        }
-      },
-
-      onChangeInfoBlock(num){
-        this.infoBlock = num;
-      },
-
-      updateShowItems(id){
-        if (!id) return
-        let itemsInLocalStorage = [];
-        const isItemsFromLocalStore = localStorage.getItem("shownCards");
-        if (isItemsFromLocalStore) itemsInLocalStorage = JSON.parse(isItemsFromLocalStore);
-        if (!itemsInLocalStorage.length) {
-          itemsInLocalStorage.push({id, time: new Date().getTime()});
-        } else {
-          const filtered = itemsInLocalStorage.filter(item => item.id !== id);
-          filtered.push({id, time: new Date().getTime()});
-          const sorted = filtered.sort((a,b) => b.time - a.time);
-          itemsInLocalStorage = [...sorted];
-        }
-        localStorage.setItem("shownCards", JSON.stringify(itemsInLocalStorage));
-        this.SET_SHOWN_ITEMS_LIST(itemsInLocalStorage);
-      },
-
-      async onGetCartData(){
-        this.updateShowItems(this.id);
-        this.countQuantity();
-        this.checkIsWish();
-        this.SET_SEARCH_STRING('');
-        this.CHANGE_BREADCRUMB(0);
-        try {
-            const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'products/' + this.id);
-            this.cartItemData = response.data;
-        } catch (e) {
-            console.log(e);
-            this.ADD_MESSAGE({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
-        }
-
-        const mainBreadCrumb = {
-          name: 'Каталог',
-          path: '/catalog',
-          type: 'global',
-          class: '',
-          category: 1,
-          level: 'root',
-        }
-        this.ADD_BREADCRUMB(mainBreadCrumb);
-        const chein = [];
-        const category = this.cartItemData.category;
-        chein.push(category);
-        if (!this.ALL_CATEGORIES.length) {
-          await this.GET_CATEGORIES();
-        }
-        if (category.parent_category_id) {
-          const category1 = this.ALL_CATEGORIES.filter(item => item.id === category.parent_category_id)[0];
-          chein.push(category1);
-          if (category1.parent_category_id) {
-            const category2 = this.ALL_CATEGORIES.filter(item => item.id === category1.parent_category_id )[0];
-            chein.push(category2);
-          }
-        }
-
-        const level = ['last', 'sub', 'top'];
-
-        for (let i = 0; i < chein.length; i++) {
-          // console.log(chein[i]);
-          const currBreadCrumb  = {
-            name: chein[chein.length - 1 - i].name,
-            path: '/category/' + chein[chein.length - 1 - i].id,
-            type: 'global',
-            class: '',
-            category: chein[chein.length - 1 - i].id,
-            level: level[chein.length - 1 - i],
-          };
-          this.ADD_BREADCRUMB(currBreadCrumb);
-        }
-
-        this.ADD_BREADCRUMB({
-          name: this.cartItemData.name,
-          path: this.$router.currentRoute.value.path,
-          type: "global",
-          class: ""
-        });
-      },
-
-    },
-
-    async mounted(){
-      this.id = this.$route.params.id;
-      this.onGetCartData();
-    },
-
+  const checkQuantityLocal = () => {
+    if (quantityLocal.value < 1) {
+      quantityLocal.value = 1
+    };
+    if (quantityLocal.value > 99) {
+      quantityLocal.value = 99
+    }
   }
 
+  const minusQuantityLocal = () => {
+    quantityLocal.value = quantityLocal.value > 1 ? quantityLocal.value - 1 : 1
+  }
+
+  const plusQuantityLocal = () => {
+    quantityLocal.value = quantityLocal.value < 99 ? quantityLocal.value + 1 : 99
+  }
+
+  const onOperationWithCartItem = async (card, type) => {
+    const itemData = {
+      amount: 0,
+      product: {
+        id: card.id,
+        vendor_code: card.vendor_code,
+        name: card.name,
+        discont: card.discont,
+        price_with_discount_and_tax: card.price_with_discount_and_tax,
+        price_with_tax: card.price_with_tax,
+      },
+    }
+    if (type === 'set') {
+      itemData.amount = Number(quantityLocal.value);
+    }
+
+    await store.dispatch('order/UPDATE_ITEMS_IN_CART', {itemData, type})
+    if (quantityLocal.value === 0) quantityLocal.value = 1
+  }
+
+  const onCreatePopUp = (status, cardID) => {
+    store.commit('header/SET_IS_POPUP_OPEN', status)
+    store.commit('header/SET_POPUP_ACTION', 'RequestCall')
+    store.commit('header/SET_REQUEST_CALL_TYPE', 'GR')
+    store.commit('header/SET_POPUP_ADDITIONAL_DATA', {cardID})
+  }
+
+  const onWishClick = async () => {
+    const itemData = {
+      product: {
+        id: cartItemData.value.id,
+        vendor_code: cartItemData.value.vendor_code,
+        name: cartItemData.value.name,
+      },
+    }  
+    const type = isWish.value === false ? 'set' : 'remove'
+    await store.dispatch('favorite/UPDATE_IS_WISH_IN_CART',{ itemData, type })
+    checkIsWish()
+  }
+
+  const countQuantity = () => {
+    if (getters['order/ORDERS'].length) {
+      const filtered = getters['order/ORDERS'].filter(item => String(item.product.vendor_code) === String(id.value))
+      quantity.value =  filtered.length ? filtered[0].amount : 0
+    } else {
+      quantity.value = 0
+    }
+    quantityLocal.value = quantity.value ? quantity.value : quantityLocal.value
+  }
+
+  const checkIsWish = () => {
+    if (getters['favorite/FAVORITES'].length) {
+      const filtered = getters['favorite/FAVORITES'].filter(item => String(item.product.vendor_code) === String(id.value))
+      isWish.value =  filtered.length ? true : false
+    } else {
+      isWish.value = false
+    }
+  }
+
+  const onChangeInfoBlock = (num) => {
+    infoBlock.value = num
+  }
+
+  const updateShowItems = (id) => {
+    if (!id) return
+    let itemsInLocalStorage = []
+    const isItemsFromLocalStore = localStorage.getItem('shownCards')
+    if (isItemsFromLocalStore) itemsInLocalStorage = JSON.parse(isItemsFromLocalStore)
+    if (!itemsInLocalStorage.length) {
+      itemsInLocalStorage.push({id, time: new Date().getTime()})
+    } else {
+      const filtered = itemsInLocalStorage.filter(item => item.id !== id)
+      filtered.push({id, time: new Date().getTime()})
+      const sorted = filtered.sort((a,b) => b.time - a.time)
+      itemsInLocalStorage = [...sorted]
+    }
+    localStorage.setItem("shownCards", JSON.stringify(itemsInLocalStorage))
+    store.commit('catalog/SET_SHOWN_ITEMS_LIST', itemsInLocalStorage)
+  }
+
+  const onGetCartData = async () => {
+    if (typeof window !== 'undefined') updateShowItems(id.value)
+    countQuantity()
+    checkIsWish()
+    store.commit('query/SET_SEARCH_STRING', '')
+    store.dispatch('breadcrumb/CHANGE_BREADCRUMB', 0)
+    try {
+      const url = useRuntimeConfig().public.NUXT_APP_API_URL + 'products/' + id.value
+      const goodUrl = encodeURI(url);  
+      const response = await axios.get(goodUrl)
+      cartItemData.value = response.data
+    } catch (e) {
+      console.log(e)
+      // store.commit('notification/ADD_MESSAGE', {name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
+    }
+  }
+
+  const setBreabcrumbs = async () => {
+    const mainBreadCrumb = {
+      name: 'Каталог',
+      path: '/catalog',
+      type: 'global',
+      class: '',
+      category: 1,
+      level: 'root',
+    }
+    store.commit('breadcrumb/ADD_BREADCRUMB', mainBreadCrumb)
+    const chein = []
+    const category = cartItemData.value.category
+    chein.push(category)
+    if (!getters['header/ALL_CATEGORIES'].length) {
+      await store.dispatch('header/GET_CATEGORIES')
+    }
+    if (category.parent_category_id) {
+      const category1 = getters['header/ALL_CATEGORIES'].filter(item => item.id === category.parent_category_id)[0]
+      chein.push(category1)
+      if (category1.parent_category_id) {
+        const category2 = getters['header/ALL_CATEGORIES'].filter(item => item.id === category1.parent_category_id )[0]
+        chein.push(category2)
+      }
+    }
+
+    const level = ['last', 'sub', 'top']
+
+    for (let i = 0; i < chein.length; i++) {
+      const currBreadCrumb  = {
+        name: chein[chein.length - 1 - i].name,
+        path: '/category/' + chein[chein.length - 1 - i].site_link,
+        type: 'global',
+        class: '',
+        category: chein[chein.length - 1 - i].id,
+        level: level[chein.length - 1 - i],
+      }
+      store.commit('breadcrumb/ADD_BREADCRUMB', currBreadCrumb)
+    }
+
+    store.commit('breadcrumb/ADD_BREADCRUMB', {
+      name: cartItemData.value.name,
+      path: router.currentRoute.value.path,
+      type: "global",
+      class: ""
+    })
+    
+  }
+
+  onBeforeUpdate(async () => {
+    updateShowItems(route.params.id)
+  })
+
+  onBeforeMount(async () => {
+    id.value = route.params.id
+    await onGetCartData()
+    await setBreabcrumbs()
+  })
+
+  const { data } = await useAsyncData(
+    'cartData', 
+    async () => {
+      id.value = route.params.id
+      await onGetCartData()
+      return 
+    }, {
+      watch: [route]
+    }
+  )
 
 </script>
 
@@ -603,9 +607,12 @@
     white-space: nowrap;
     font-weight: 300;
     font-size: 18px;
+    @media (max-width: $md3+px) {
+      font-size: 13px;
+    }
   }
   span{
-    margin-right: 10px;
+    margin-right: 5px;
     // &:nth-child(2){
     //   font-weight: 300;
     // }
@@ -753,6 +760,20 @@
 
   .topright:hover {color: red;}
 
+}
+
+.price_w_discount{
+  color: #E30044;
+  .old_price{
+    color: #B3B2B6;
+    @media (max-width: $md3+px) {
+      font-size: 13px;
+    }
+  }
+  .current_price_item{
+    color: #B3B2B6;
+
+  }
 }
 
 </style>

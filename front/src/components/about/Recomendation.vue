@@ -12,7 +12,7 @@
           </div>
           <!-- :navigation= "true" -->
           <!-- <div class="recomendation__block" v-if = "DEVICE_VIEW_TYPE === 1 || DEVICE_VIEW_TYPE === 2"> -->
-          <div class="recomendation__block">
+          <div class="recomendation__block" v-if="RECOMENDED_ITEMS">
               <swiper
                   :slides-per-view="slidersInFrame"
                   :space-between="15"

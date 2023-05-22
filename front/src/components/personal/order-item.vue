@@ -193,6 +193,7 @@ export default {
       padding: 0 5px;
       @media (max-width: $md2+px) {
         order: 1;
+        padding-right: 0;
       }
     }
 
@@ -201,6 +202,8 @@ export default {
       max-width: 250px;
       @media (max-width: $md2+px) {
         order: 2;
+        text-align: end;
+        padding-right: 0;
       }
     }
     &__invoice{
@@ -214,6 +217,7 @@ export default {
 
       @media (max-width: $md2+px) {
         order: 3;
+        padding-right: 0;
       }
     }
     &__details{
@@ -232,6 +236,7 @@ export default {
       padding-left: 5px;
       font-weight: 500;
       white-space: nowrap;
+      min-width: 110px;
       @media (max-width: $md2+px) {
         font-weight: 600;
         font-size: 14px!important;

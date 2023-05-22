@@ -1,11 +1,15 @@
 <template lang="html">
   <div class="burger__menu__open">
-      <div class="burger__close" @click="closeMenu">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M1 1L15 15" stroke="#4275D8" stroke-width="2"/>
-              <path d="M15 1L1 15" stroke="#4275D8" stroke-width="2"/>
-          </svg>
+    <div class="burger__menutop">
+      <div class="burger__close">
+        <svg @click="closeMenu" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M1 1L15 15" stroke="#4275D8" stroke-width="2"/>
+            <path d="M15 1L1 15" stroke="#4275D8" stroke-width="2"/>
+        </svg>
+        <TopMenuActions />
       </div>
+      <HeaderSearchBurger/>
+    </div>
     <ul class="burger__menu_list animated" v-if="CATALOG.length">
       <li 
         v-for   = "mainItem in CATALOG"
@@ -81,7 +85,7 @@
           </div>
         </div>
         <ul class="second" v-if = "activeMenuItem === 'Покупателям'">
-          <li><a @click.prevent="openPage('/how_to_work')">Как оформит заказ</a></li>        
+          <li><a @click.prevent="openPage('/how_to_work')">Как оформить заказ</a></li>
           <li><a @click.prevent="openPage('/shipping')">Оплата и доставка</a></li>        
           <li><a @click.prevent="openPage('/wholesale')">Оптовым клиентам</a></li>        
           <li><a @click.prevent="openPage('/warranty')">Гарантийное обслуживание</a></li>        
@@ -125,9 +129,16 @@
 <script>
 
 import {mapGetters, mapMutations, mapActions} from 'vuex'
+import TopMenuActions  from '@/components/header/header-actions.vue'
+import HeaderSearchBurger from '@/components/header/header-search-burger.vue'
 
 export default {
   name: "BurgerMenu",
+
+  components:
+  {
+    HeaderSearchBurger, TopMenuActions
+  },
 
   data(){
     return {
@@ -167,8 +178,8 @@ export default {
     getLastPartOfUrl(){
       let url = "offset=" + this.OFFSET + 
         "&limit=" + this.LIMIT + 
-        "&price_gte=" + this.MIN_PRICE + 
-        "&price_lte=" + this.MAX_PRICE;
+        "&actual_price_gte=" + this.MIN_PRICE + 
+        "&actual_price_lte=" + this.MAX_PRICE;
       url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
       url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
       url = url + "&q=";
@@ -217,6 +228,10 @@ a {
 .burger__menu{
   color: #423E48;
 
+  &__menutop{
+    display: flex;
+    flex-direction: column;
+  }
   &__block{
     padding: 16px 20px 16px 30px;
     border: 1px solid #F0F0F1;
@@ -308,6 +323,10 @@ div[class="active"]{
 .burger{
   &__close{
     padding: 16px 0 0 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom:10px ;
   }
 }
 </style>

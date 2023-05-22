@@ -14,8 +14,8 @@
       
       if (status) {
         popup.value.style.top = window.pageYOffset + 'px';
-        document.body.style.overflow = 'hidden';
-        document.body.style.paddingRight = '16px';
+        // document.body.style.overflow = 'hidden';
+        // document.body.style.paddingRight = '16px';
       } else {
         document.body.style.overflow = '';
         document.body.style.paddingRight = '0';
@@ -59,7 +59,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     //height: 100%;
@@ -68,14 +68,14 @@
     background: linear-gradient(180deg, rgba(66, 62, 72, 0.2) 0%, rgba(66, 62, 72, 0) 100%);
     backdrop-filter: blur(2px);
     z-index: 95;
-    height: 100vh;
+    height: 100%;
     overflow-y: hidden;
   }
 
   &__close {
     position: absolute;
     top:0;
-    right: -30px;
+    right: -25px;
     cursor: pointer;
   }
   &__body {
@@ -91,6 +91,9 @@
     border-radius: 16px;
     max-width: 60%;
     overflow-y: scroll;
+    @media (max-width: 480px){
+      width: 85%;
+    }
   }
 }
 .left-menu {

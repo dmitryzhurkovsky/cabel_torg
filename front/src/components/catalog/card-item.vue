@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class="item-card__title" @click.stop="openCardItem(card.id)">
-        <div>{{ card.name }}</div>
+        <div>{{ card?.name }}</div>
       </div>
       <div class="item-card__uptitle">
         <div>{{ card.category.name }}</div>
@@ -286,6 +286,11 @@ export default {
       border-radius: 6px;
       color: #fff;
     }
+    &:active{
+      background: #4275D8;
+      border-radius: 6px;
+      color: #fff;
+    }
 
 
   }
@@ -311,6 +316,9 @@ export default {
     white-space: nowrap;
     span{
       font-size: 14px;
+      @media (max-width: $md3 + px){
+        font-size: 12px;
+      }
     }
 
   }
@@ -320,13 +328,13 @@ export default {
     font-size: 20px;
     line-height: 24px;
     @media (max-width: $md3+px){
-      font-size: 18px;
+      font-size: 16px;
     }
     span{
       font-weight: 300;
       font-size: 16px;
       @media (max-width: $md3+px){
-        font-size: 15px;
+        font-size: 12px;
       }
     }
 
@@ -373,6 +381,7 @@ export default {
 
 </style>
 <style lang="scss">
+
 .item-card__img img{
   max-height: 162px;
 }

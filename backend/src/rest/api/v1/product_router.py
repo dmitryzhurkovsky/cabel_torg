@@ -30,8 +30,8 @@ async def get_products(
                 'Explanation: If user choose "Category" and them "Subcategory" endpoint expects '
                 'to get a "subcategory" instead of a category'
         )),
-        price_gte: Decimal | None = Query(default=None, description='Start value in range of price'),
-        price_lte: Decimal | None = Query(default=None, description='End value in range of price'),
+        actual_price_gte: Decimal | None = Query(default=None, description='Start value in range of price'),
+        actual_price_lte: Decimal | None = Query(default=None, description='End value in range of price'),
         type_of_product: ProductTypeFilterEnum | None = Query(
             default=None,
             description='The last parameter in the lef column/This parameter set that products will be downloaded'
@@ -70,7 +70,7 @@ async def get_products(
 async def get_product(product_id: int | str, session: AsyncSession = Depends(get_session)):
     return await ProductManager.retrieve(
         id=product_id,
-        site_link=product_id,
+        vendor_code=product_id,
         use_or_condition=True,
         session=session,
     )

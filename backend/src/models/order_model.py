@@ -62,9 +62,9 @@ class Order(BaseModel):
     def number(self) -> int:
         return self.id + 100000
 
-    @hybrid_property
+    @property
     def total_price(self):
-        return sum([product.amount * product.product.actual_price_with_tax for product in self.products])
+        return sum([product.amount * product.product.actual_price_with_tax() for product in self.products])
 
 
 class ProductOrder(Base):

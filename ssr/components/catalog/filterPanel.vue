@@ -90,14 +90,14 @@ export default {
   name: 'FilterPanel',
 
   computed: {
-    ...mapGetters("header", ["CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
+    ...mapGetters("header", ["ALL_CATEGORIES", "CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
     ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", 
       "SORT_DIRECTION", "SORT_ORDER", "ALL_TYPE_OF_PRODUCTS"
     ]),
   },
 
   methods:{
-    ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID"]),
+    ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID", "SET_OFFSET", "SET_DEFAULT_PRICES"]),
     ...mapActions("header",["SET_ALL_CURRENT_CATEGORIES"]),
 
     getCatalogUrl(){
@@ -108,7 +108,10 @@ export default {
 
     getCategoryUrl(id){
       let url = "/category/";
-      if (id) url = url + id + "?";
+      if (id) {
+        const link = this.ALL_CATEGORIES.filter(item => item.id == id)[0].site_link
+        url = url + link + "?";
+      }
       url = url + this.getLastPartOfUrl();
       return url;
     },
@@ -120,8 +123,8 @@ export default {
     getLastPartOfUrl(){
       let url = "offset=" + this.OFFSET + 
         "&limit=" + this.LIMIT + 
-        "&price_gte=" + this.MIN_PRICE + 
-        "&price_lte=" + this.MAX_PRICE;
+        "&actual_price_gte=" + this.MIN_PRICE + 
+        "&actual_price_lte=" + this.MAX_PRICE;
       url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
       url = url + "&q=";
       return url;        
@@ -133,6 +136,8 @@ export default {
 
     openCategory(category){
       this.SET_CATEGORY_ID(category.id);
+      this.SET_OFFSET(0);
+      this.SET_DEFAULT_PRICES();
       let url = this.getCategoryUrl(category.id);
       url = url + this.getTypeOfProduct(this.TYPE_OF_PRODUCT);
       this.$router.push(url);

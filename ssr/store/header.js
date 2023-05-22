@@ -15,6 +15,7 @@ export default {
   state: {
     likes: [],
     isCatalogOpen: false,
+    isMenuActionsOpen: false,
     topCategoriesItemActive: 1,
     subCategoriesItemActive: null,
     lastCategoriesItemActive: null,
@@ -35,6 +36,9 @@ export default {
     },
     IS_CATALOG_OPEN(state){
       return state.isCatalogOpen;
+    },
+    IS_MENU_ACTIONS_OPEN(state){
+      return state.isMenuActionsOpen;
     },
     TOP_CATEGORIES_ITEM_ACTIVE(state){
       return state.topCategoriesItemActive;
@@ -102,6 +106,10 @@ export default {
   mutations: {
     UPDATE_IS_CATALOG_OPEN (state, catalogSatae){
       state.isCatalogOpen = catalogSatae;
+    },
+
+    UPDATE_IS_MENU_ACTIONS_OPEN (state, menuactionsSata){
+      state.isMenuActionsOpen = menuactionsSata;
     },
 
     UPDATE_VIEW_PARAMETERS (state, width){
@@ -230,7 +238,7 @@ export default {
         commit("CREATE_MENU_ITEMS", response.data);
       } catch (e) {
         console.log(e);
-        commit("notification/ADD_MESSAGE", {name: "Не возможно обновить каталог товаров", icon: "error", id: '1'}, {root: true})
+        // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить каталог товаров", icon: "error", id: '1'}, {root: true})
       }
     },
 
@@ -242,7 +250,7 @@ export default {
         const currCategory = getters.ALL_CATEGORIES.filter(item => item.id === mainCategory)[0];
         const currBreadCrumb  = {
           name: currCategory.name,
-          path: '/category/' + currCategory.id,
+          path: '/category/' + currCategory.site_link,
           type: 'global',
           class: '',
           category: currCategory.id,
@@ -257,7 +265,7 @@ export default {
         const currCategory = getters.ALL_CATEGORIES.filter(item => item.id === middleCategory)[0];
         const currBreadCrumb  = {
           name: currCategory.name,
-          path: '/category/' + currCategory.id,
+          path: '/category/' + currCategory.site_link,
           type: 'global',
           class: '',
           category: currCategory.id,
@@ -272,7 +280,7 @@ export default {
         const currCategory = getters.ALL_CATEGORIES.filter(item => item.id === lastCategory)[0]
         const currBreadCrumb  = {
           name: currCategory.name,
-          path: '/category/' + currCategory.id,
+          path: '/category/' + currCategory.site_link,
           type: 'global',
           class: '',
           category: currCategory.id,

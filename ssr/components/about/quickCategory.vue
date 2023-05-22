@@ -6,28 +6,26 @@
           <h3>Каталог товаров</h3>
           <div class="quick-category__grid">
             <div class="quick-category__item quick-category__big">
-            <!-- <div class="quick-category__item quick-category__big" :style = "{backgroundImage : 'url(' + getPath('cat1.png') + ')'}"> -->
               <ul class="quick-category__list">Сетевое оборудование
-                <li class="quick-category__link">
-                  <a href="">Коммутаторы </a> </li>
-                <li class="quick-category__link"><a href="">Маршрутизаторы</a></li>
-                <li class="quick-category__link"><a href="">Медиаконвекторы</a></li>
+                <li class="quick-category__link"><a href = "/category/kommutatory">Коммутаторы </a> </li>
+                <li class="quick-category__link"><a href = "/category/marshrutizatory">Маршрутизаторы</a></li>
+                <li class="quick-category__link"><a href = "/category/marshrutizatory">Медиаконвекторы</a></li>
                 <li class="quick-category__link"><a href="">Сервисные шлюзы</a></li>
                 <li class="quick-category__link"><a href="">Сетевые ПО</a></li>
               </ul>
-              <a href="" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
+              <a href="/category/setevoe-oborudovanie" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
             </div>
             <div class="quick-category__item quick-category__big-row">
               <div class="quick-category__list">Кабели и провода</div>
-              <a href="" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
+              <a href="/category/kabel-provod" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
             </div>
             <div class="quick-category__item">
               <div class="quick-category__list">Оптическое оборудование</div>
-              <a href="" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
+              <a href="/category/oborudovanie-dlya-opticheskih-setej" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
             </div>
             <div class="quick-category__item">
               <div class="quick-category__list">Оборудование для ТВ</div>
-              <a href="" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
+              <a href="/category/oborudovanie-dlya-televideniya" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
 
             </div>
           </div>
@@ -45,11 +43,10 @@
 
     methods: {
       getPath: function(item){
-        console.log(process.env.BASE_URL);
-        console.log(process.env.VUE_APP_IMAGES);
-        let path = process.env.VUE_APP_IMAGES + item;
-        // return path;
-        return item;
+        console.log(item);
+        let path = useRuntimeConfig().public.NUXT_APP_API_URL + '/category/' + item;
+        console.log(path);
+        return path;
       },
 
     }

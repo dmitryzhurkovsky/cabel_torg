@@ -103,7 +103,7 @@ export default {
   },
 
   methods:{
-    ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID"]),
+    ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID", "SET_OFFSET"]),
     ...mapActions("header",["SET_ALL_CURRENT_CATEGORIES"]),
 
     getCatalogUrl(){
@@ -126,8 +126,8 @@ export default {
     getLastPartOfUrl(){
       let url = "offset=" + this.OFFSET + 
         "&limit=" + this.LIMIT + 
-        "&price_gte=" + this.MIN_PRICE + 
-        "&price_lte=" + this.MAX_PRICE;
+        "&actual_price_gte=" + this.MIN_PRICE + 
+        "&actual_price_lte=" + this.MAX_PRICE;
       url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
       url = url + "&q=";
       //  + this.CATALOG_SEARCH_STRING;
@@ -139,6 +139,7 @@ export default {
     },
 
     openCategory(category){
+      this.SET_OFFSET(0);
       let url = this.getCategoryUrl(category.id);
       url = url + this.getTypeOfProduct(this.TYPE_OF_PRODUCT);
       this.$router.push(url);

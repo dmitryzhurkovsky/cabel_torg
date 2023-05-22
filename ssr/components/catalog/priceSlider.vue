@@ -46,11 +46,11 @@ export default {
   data(){
     return {
       minValueRange: 0,
-      maxValueRange: 10000,
+      maxValueRange: 40000,
       minValuePrice: 0,
-      maxValuePrice: 10000,
+      maxValuePrice: 40000,
       RangeMin: 0,
-      RangeMax: 10000,
+      RangeMax: 40000,
       priceGap: 1000,
       Left: '25%',
       Right: '75%',
@@ -71,6 +71,7 @@ export default {
   computed: {
     ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE",  "SORT_DIRECTION", "LIMIT_ITEMS"]),
     ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
+    ...mapGetters("header", ["ALL_CATEGORIES"]),
 
     ChangeParameters(){
       return this.MAX_PRICE + this.MIN_PRICE;
@@ -78,7 +79,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations("query", ["SET_MIN_PRICE", "SET_MAX_PRICE"]),
+    ...mapMutations("query", ["SET_MIN_PRICE", "SET_MAX_PRICE", "SET_OFFSET"]),
 
     setUpMinPrice(){
       if (this.minValuePrice <= this.RangeMin) this.minValuePrice = this.RangeMin;
@@ -103,11 +104,13 @@ export default {
     },
 
     onChangeMinPrice(){
+      if (String(this.minValuePrice).length === 0) this.minValuePrice = this.minValueRange;
       this.setUpMinPrice();
       this.updateStore();
     },
 
     onChangeMaxPrice() {
+      if (String(this.maxValuePrice).length === 0) this.maxValuePrice = this.maxValueRange;
       this.setUpMaxPrice();
       this.updateStore();
     },
@@ -147,7 +150,10 @@ export default {
 
     getCategoryUrl(id, min, max){
       let url = "/category/";
-      if (id) url = url + id + "?";
+      if (id) {
+        const link = this.ALL_CATEGORIES.filter(item => item.id == id)[0].site_link
+        url = url + link + "?";
+      }
       url = url + this.getLastPartOfUrl(min, max);
       return url;
     },
@@ -155,8 +161,8 @@ export default {
     getLastPartOfUrl(min, max){
       let url = "offset=" + this.OFFSET + 
         "&limit=" + this.LIMIT + 
-        "&price_gte=" + min + 
-        "&price_lte=" + max;
+        "&actual_price_gte=" + min + 
+        "&actual_price_lte=" + max;
       url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
       url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
       url = url + "&q=" + this.CATALOG_SEARCH_STRING;
@@ -164,6 +170,7 @@ export default {
     },
 
     updateStore(){
+      this.SET_OFFSET(0);
       if (this.MIN_PRICE !== this.minValuePrice) {
         this.SET_MIN_PRICE(this.minValuePrice);
         if (this.CATEGORY_ID) {
@@ -181,6 +188,17 @@ export default {
         }
       }
     }
+  },
+
+  beforeMount(){
+    // console.log('прайс слайдер ', this);
+    this.minValuePrice = this.MIN_PRICE;
+    // this.RangeMin = this.MIN_PRICE;
+    this.maxValuePrice = this.MAX_PRICE;
+    // this.RangeMax = this.MAX_PRICE;
+    this.setUpMinPrice();
+    this.setUpMaxPrice();
+    // this.updateStore();
   }
 }
 </script>

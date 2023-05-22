@@ -90,8 +90,8 @@ export default {
         let queryData = 'products?category_id=' + data + 
         '&offset=' + rootGetters['query/OFFSET'] + 
         '&limit=' + rootGetters['query/LIMIT'] + 
-        '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
-        '&price_lte=' + rootGetters['query/MAX_PRICE'] +
+        '&actual_price_gte=' + rootGetters['query/MIN_PRICE'] + 
+        '&actual_price_lte=' + rootGetters['query/MAX_PRICE'] +
         '&ordering=' + rootGetters['query/SORT_DIRECTION'] + rootGetters['query/SORT_TYPE'] +
         '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING'];
 
@@ -113,8 +113,8 @@ export default {
         '&offset=' + rootGetters['query/OFFSET'] + 
         '&limit=' + rootGetters['query/LIMIT']
           + 
-        '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
-        '&price_lte=' + rootGetters['query/MAX_PRICE'] +
+        '&actual_price_gte=' + rootGetters['query/MIN_PRICE'] + 
+        '&actual_price_lte=' + rootGetters['query/MAX_PRICE'] +
         '&ordering=' + rootGetters['query/SORT_DIRECTION'] + rootGetters['query/SORT_TYPE'] +
         '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING'];
 

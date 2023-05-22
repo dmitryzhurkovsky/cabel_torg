@@ -1,5 +1,8 @@
 import axios from "axios";
 
+const min = 0
+const max = 40000
+
 export default {
   namespaced: true,
 
@@ -11,8 +14,8 @@ export default {
     sort: 'created_at',
     direction: '-',
     view: 'table',
-    minPrice: 0,
-    maxPrice: 10000,
+    minPrice: min,
+    maxPrice: max,
     searchString: '',
     findedElements: [],
     allTypesOfProduct: [
@@ -23,8 +26,8 @@ export default {
     ],
     allSortsOfProduct: [
       {name: 'По дате добавления', type: 'created_at'},
-      {name: 'цене', type: 'price'},
-      {name: 'скидке', type: 'discount'},
+      {name: 'цене', type: 'actual_price'},
+      // {name: 'скидке', type: 'discount'},
     ],
     limitItems : [12, 24, 48],
   },
@@ -116,6 +119,12 @@ export default {
         state.maxPrice = price;
       },
 
+      SET_DEFAULT_PRICES(state){
+        state.minPrice = min;
+        state.maxPrice = max;
+        state.typeOfProduct = 'all';
+      },
+
       SET_SEARCH_STRING(state, query) {
         state.searchString = query;
       },
@@ -132,7 +141,7 @@ export default {
             const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 
                 'products?' + 
                 '&offset=0' +  
-                '&limit=10' + 
+                '&limit=12' + 
                 query
             );
             commit("SET_FINDED_ELEMENTS", response.data);

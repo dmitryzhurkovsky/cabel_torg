@@ -28,10 +28,11 @@
           <div class="reset-pass">
             <div class="group">
               <label for="user" class="label">Электронная почта</label>
-              <input id="user" type="text" class="input">
+              <input type="email" class="input" :class="{ 'is-invalid': ERRORS.email }" id="email" v-model="email">
+              <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>
             </div>
             <div class="center-text">
-              <button @click = "changeScreen(4)" type="submit" class="btn black">Восстановить</button>
+              <button @click = "restorePassword()" type="submit" class="btn black">Восстановить</button>
             </div>
             <div @click = "changeScreen(1)" class="foot-lnk mt-20">
               Войти
@@ -93,7 +94,7 @@
               <p>Мы отправили ссылку для <b>восстановления пароля</b> к вашей учетной записи.</p>
             </div>
             <div class="">
-              <button @click = "changeScreen(0)" type="submit" class="btn empty">Вернуться на сайт</button>
+              <button @click = "changeScreen(1)" type="submit" class="btn empty">Вернуться на сайт</button>
             </div>
           </div>
         </div>
@@ -142,10 +143,11 @@ export default {
   },
 
   methods: {
-    ...mapActions("auth", ["SEND_LOGIN_REQUEST", "SEND_REGISTER_REQUEST", "SEND_LOGOUT_REQUEST"]),
+    ...mapActions("auth", ["SEND_LOGIN_REQUEST", "SEND_REGISTER_REQUEST", "SEND_LOGOUT_REQUEST", "SEND_RESTORE_PASSWORD_REQUEST"]),
     ...mapMutations("auth", ["SET_ERRORS", "SET_TYPE", "SET_IS_OPEN_MAIN_LOGIN"]),
     ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_MESSAGE"]),
     ...mapMutations("profile", ["CHANGE_SCREEN"]),
+    ...mapMutations("notification", ["SET_IS_LOADING"]),
 
     changeScreen(auth_type) {
         this.SET_TYPE(auth_type);
@@ -154,6 +156,7 @@ export default {
     async userLogin() {
         if (this.isLoading) return;
 
+        this.SET_IS_LOADING(true);
         this.isLoading = true;
         const errorsInData = {};
         this.SET_ERRORS(errorsInData);
@@ -166,11 +169,13 @@ export default {
         }
         if (Object.keys(errorsInData).length) {
             this.SET_ERRORS(errorsInData);
+            this.SET_IS_LOADING(false);
         } else {
           const data = new FormData();
           data.append('username', this.email);
           data.append('password', this.password);
           await this.SEND_LOGIN_REQUEST(data);
+          this.SET_IS_LOADING(false);
 
           if (this.USER) {
               if (this.REDIRECT_AFTER_LOGIN) {
@@ -187,6 +192,7 @@ export default {
       
         if (this.isLoading) return;
 
+        this.SET_IS_LOADING(true);
         this.isLoading = true;
         const errorsInData = {};
         this.SET_ERRORS(errorsInData)
@@ -215,6 +221,7 @@ export default {
         }
         if (Object.keys(errorsInData).length) {
             this.SET_ERRORS(errorsInData);
+            this.SET_IS_LOADING(false);
         } else {
             const data = {
                 email: this.email,
@@ -225,21 +232,56 @@ export default {
                 password: this.password
             };
             await this.SEND_REGISTER_REQUEST(data);
-            window.scrollTo(0, 0)
-            this.CHANGE_SCREEN(2);
-            this.SET_IS_POPUP_OPEN(true);
-            this.SET_POPUP_ACTION('ShowCompleteMsg');
-            const msg ={};
-                msg.main = 'Спасибо за регистрацию на CabelTorg.';
-                msg.bolt = '';
-                msg.sub = 'Желаем Вам приятных покупок!'
-            this.SET_POPUP_MESSAGE(msg);
+            this.SET_IS_LOADING(false);
+            if (Object.keys(this.ERRORS).length === 0) {
+              window.scrollTo(0, 0)
+              this.CHANGE_SCREEN(2);
+              this.SET_IS_POPUP_OPEN(true);
+              this.SET_POPUP_ACTION('ShowCompleteMsg');
+              const msg ={};
+                  msg.main = 'Спасибо за регистрацию на CabelTorg.';
+                  msg.bolt = '';
+                  msg.sub = 'Желаем Вам приятных покупок!'
+              this.SET_POPUP_MESSAGE(msg);
 
-            this.$router.push({name: "user-cab"});
+              this.$router.push({name: "user-cab"});
+            }
         }
         this.isLoading = false;
     },
 
+    async restorePassword() {
+      if (this.isLoading) return;
+
+      this.SET_IS_LOADING(true);
+      this.isLoading = true;
+      const errorsInData = {};
+      this.SET_ERRORS(errorsInData);
+
+      if (!isValidEmail(this.email)) {
+          errorsInData.email = 'Укажите валидный адрес эл. почты'
+      }
+      if (Object.keys(errorsInData).length) {
+        this.SET_IS_LOADING(false);
+        this.SET_ERRORS(errorsInData);
+      } else {
+        const data = {
+          email: this.email,
+        };
+        await this.SEND_RESTORE_PASSWORD_REQUEST(data);
+
+        this.SET_IS_LOADING(false);
+        if (Object.keys(this.ERRORS).length === 0) {
+          this.changeScreen(4);
+          // if (this.REDIRECT_AFTER_LOGIN) {
+          //     this.$router.push(this.REDIRECT_AFTER_LOGIN);
+          // } else {
+          //     this.$router.push({name: "user-cab"});
+          // }
+        }
+      }  
+      this.isLoading = false;
+    },
   }
 
 }

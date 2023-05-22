@@ -70,7 +70,7 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        position: absolute;
+        position: fixed;
         left: 0;
         top: 0;
         //height: 100%;
@@ -79,14 +79,14 @@
         background: linear-gradient(180deg, rgba(66, 62, 72, 0.2) 0%, rgba(66, 62, 72, 0) 100%);
         backdrop-filter: blur(2px);
         z-index: 95;
-        height: 100vh;
+        height: 100%;
         overflow-y: hidden;
     }
 
     &__close {
       position: absolute;
       top:0;
-      right: -30px;
+      right: -25px;
       cursor: pointer;
     }
     &__body {
@@ -100,6 +100,9 @@
         background: #fff;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
         border-radius: 16px;
+        @media (max-width: $md3+px){
+          width: 85%;
+        }
 
     }
 }

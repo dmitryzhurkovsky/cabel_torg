@@ -114,6 +114,7 @@
   &__block{
     display: flex;
     align-items: flex-start;
+    min-height: 400px;
 
   }
   &__sidebar{

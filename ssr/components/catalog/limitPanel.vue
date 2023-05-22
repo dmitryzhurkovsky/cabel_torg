@@ -26,6 +26,7 @@
     computed: {
       ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE",  "SORT_DIRECTION", "LIMIT_ITEMS"]),
       ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
+      ...mapGetters("header", ["ALL_CATEGORIES"]),
     },
 
     methods: {
@@ -39,7 +40,10 @@
 
       getCategoryUrl(id){
         let url = "/category/";
-        if (id) url = url + id + "?";
+        if (id) {
+          const link = this.ALL_CATEGORIES.filter(item => item.id == id)[0].site_link
+          url = url + link + "?";
+        }
         url = url + this.getLastPartOfUrl();
         return url;
       },
@@ -47,8 +51,8 @@
       getLastPartOfUrl(){
         let url = "offset=" + this.OFFSET + 
           "&limit=" + this.LIMIT + 
-          "&price_gte=" + this.MIN_PRICE + 
-          "&price_lte=" + this.MAX_PRICE;
+          "&actual_price_gte=" + this.MIN_PRICE + 
+          "&actual_price_lte=" + this.MAX_PRICE;
         url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
         url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
         url = url + "&q=" + this.CATALOG_SEARCH_STRING;

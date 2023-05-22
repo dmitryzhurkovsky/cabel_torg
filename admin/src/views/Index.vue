@@ -22,7 +22,7 @@
     {db: '', name: ''},
   ]
 
-  const orederType = ref('')
+  const orederType = ref('P')
   const orderID = ref(null as unknown as string)
   const newStatus = ref(null as unknown as string)
   const orderData = ref()
@@ -183,7 +183,7 @@
     <div class="parameters-block">
       <Select
         v-if="store.getters.orderTypes.length"
-        text = "Все заказы"
+        text = "В обработке"
         :id   = orederType
         fieldForSearch = "name"
         :data = "store.getters.orderTypes"

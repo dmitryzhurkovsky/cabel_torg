@@ -1,7 +1,7 @@
 <template>
     <div class="content__popup">
-        <h3 v-if = "POPUP_ADDITONAL_DATA?.cardID">Узнать о поступлении</h3>
-        <h3 v-else>Заказать звонок</h3>
+        <h3 v-if = "POPUP_ADDITONAL_DATA?.cardID" class="mb-20">Узнать о поступлении</h3>
+        <h3 v-else class="mb-20">Заказать звонок</h3>
         <div class="">
             <div class="group">
                 <label class="label">Ваше имя</label>

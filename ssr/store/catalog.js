@@ -13,6 +13,7 @@ export default {
     recomendationOrder: '',
     recomendationQuantity: 10,
     shownItemslist: [],
+    category: {},
   },
 
   getters: {
@@ -43,6 +44,9 @@ export default {
     SHOWN_ITEMS_LIST(state){
       return state.shownItemslist;
     },
+    CATEGORY(state){
+      return state.category;
+    }
   },
 
   mutations: {
@@ -82,6 +86,10 @@ export default {
     SET_SHOWN_ITEMS_LIST(state, list) {
       state.shownItemslist = [...list];
     },
+
+    SET_CATEGORY(state, category) {
+      state.category = category;
+    }
   },
 
   actions: {
@@ -90,8 +98,8 @@ export default {
         let queryData = 'products?category_id=' + data + 
         '&offset=' + rootGetters['query/OFFSET'] + 
         '&limit=' + rootGetters['query/LIMIT'] + 
-        '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
-        '&price_lte=' + rootGetters['query/MAX_PRICE'] +
+        '&actual_price_gte=' + rootGetters['query/MIN_PRICE'] + 
+        '&actual_price_lte=' + rootGetters['query/MAX_PRICE'] +
         '&ordering=' + rootGetters['query/SORT_DIRECTION'] + rootGetters['query/SORT_TYPE'] +
         '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING'];
 
@@ -101,7 +109,7 @@ export default {
         commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
       } catch (e) {
         console.log(e);
-        commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить каталог категории", icon: "error", id: '1'}, {root: true})
+        // commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить каталог категории " + data, icon: "error", id: '1'}, {root: true})
       }
     },
 
@@ -111,18 +119,19 @@ export default {
         'offset=' + rootGetters['query/OFFSET'] + 
         '&limit=' + rootGetters['query/LIMIT']
           + 
-        '&price_gte=' + rootGetters['query/MIN_PRICE'] + 
-        '&price_lte=' + rootGetters['query/MAX_PRICE'] +
+        '&actual_price_gte=' + rootGetters['query/MIN_PRICE'] + 
+        '&actual_price_lte=' + rootGetters['query/MAX_PRICE'] +
         '&ordering=' + rootGetters['query/SORT_DIRECTION'] + rootGetters['query/SORT_TYPE'] +
         '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING'];
         if (rootGetters['query/TYPE_OF_PRODUCT'] !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT']
         const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + queryData);
         commit("SET_CATALOG_ITEMS", response.data);
+        // console.log('GET_ALL_CATALOG_ITEMS ', rootGetters['query/OFFSET'], rootGetters['query/LIMIT'])
         commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
         return response.data;
       } catch (e) {
         console.log(e);
-        commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить весь каталог ", icon: "error", id: '1'}, {root: true})
+        // commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить весь каталог ", icon: "error", id: '1'}, {root: true})
         return []
       }
     },
@@ -138,7 +147,7 @@ export default {
         commit("SET_RECOMENDED_ITEMS", response.data);
       } catch (e) {
         console.log(e);
-        commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'}, {root: true})
+        // commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'}, {root: true})
       }
     },
   }

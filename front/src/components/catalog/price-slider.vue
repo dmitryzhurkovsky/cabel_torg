@@ -46,11 +46,11 @@ export default {
   data(){
     return {
       minValueRange: 0,
-      maxValueRange: 10000,
+      maxValueRange: 40000,
       minValuePrice: 0,
-      maxValuePrice: 10000,
+      maxValuePrice: 40000,
       RangeMin: 0,
-      RangeMax: 10000,
+      RangeMax: 40000,
       priceGap: 1000,
       Left: '25%',
       Right: '75%',
@@ -155,8 +155,8 @@ export default {
     getLastPartOfUrl(min, max){
       let url = "offset=" + this.OFFSET + 
         "&limit=" + this.LIMIT + 
-        "&price_gte=" + min + 
-        "&price_lte=" + max;
+        "&actual_price_gte=" + min + 
+        "&actual_price_lte=" + max;
       url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
       url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
       url = url + "&q=" + this.CATALOG_SEARCH_STRING;

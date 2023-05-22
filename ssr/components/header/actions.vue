@@ -1,41 +1,47 @@
 <template>
   <div class="topmenu__right client-bar flex-center">
     <div class="topmenu__item right-direction"
-        @mouseenter="onFavoriteIconEnter()"
+        @click.stop="onFavoriteIconEnter()"
         @mouseleave="onIconLeave()"
     >
       <div class="dropdown icon-favorite">
         <div :class="[!favoriteHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
-          <HeaderFavorite @click.stop = "onIconLeave()" />
+            <div class="dropdown__inner">
+                <HeaderFavorite @click.stop = "onIconLeaveClick()" />
+            </div>
+
         </div>
 
       </div>
     </div>
     <div class="topmenu__item right-direction" 
-        @mouseenter="onUserIconEnter()"
+        @click.stop="onUserIconEnter()"
         @mouseleave="onIconLeave()"
     >
       <div class="dropdown" 
           :class="[!USER ? 'icon-user' : 'icon-user-login']"
       >
         <div v-if = "IS_OPEN_MAIN_LOGIN && !USER" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
-          <div class="dropdown__content popup-cart">
-            <div class="avatar__box">
-              <div class="avatar icon-user flex-center"></div>
+            <div class="dropdown__inner">
+                <div class="dropdown__content popup-cart">
+                    <div class="avatar__box">
+                        <div class="avatar icon-user flex-center"></div>
+                    </div>
+
+                    <div @click="handleClick('/login', 1)" class="btn black mb-20">
+                        Вход
+                    </div>
+
+                    <div @click="handleClick('/login', 2)" class="foot-lnk">
+                        Не помню пароль
+                    </div>
+                    <hr class="hr">
+                    <div @click="handleClick('/login', 3)" class="foot-reg">
+                        Зарегистрироваться
+                    </div>
+                </div>
             </div>
 
-            <button @click="handleClick('/login', 1)" class="btn Fblack">
-              Вход
-            </button>
-
-            <div @click="handleClick('/login', 2)" class="foot-lnk">
-                Не помню пароль
-            </div>
-            <hr class="hr">
-            <div @click="handleClick('/login', 3)" class="foot-reg">
-              Зарегистрироваться
-            </div>
-          </div>
           <!-- <UserActions/> -->
         </div>
         <div v-if = "IS_OPEN_MAIN_LOGIN && USER" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
@@ -64,12 +70,15 @@
 
     </div>
     <div class="topmenu__item right-direction" 
-        @mouseenter="onCartIconEnter()"
+        @click.stop="onCartIconEnter()"
         @mouseleave="onIconLeave()"
     >
       <div class="dropdown icon-cart">
         <div :class="[!cartHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
-          <HeaderCart @click.stop = "onIconLeave()" />
+            <div class="dropdown__inner">
+                <HeaderCart @click.stop = "onIconLeaveClick()" />
+            </div>
+
         </div>
       </div>
       <CatalogIconQuantity 
@@ -107,34 +116,39 @@ export default {
     ...mapActions("auth", ["SEND_LOGOUT_REQUEST"]),
     ...mapMutations("query", ["SET_SEARCH_STRING"]),
     ...mapMutations("profile", ["CHANGE_SCREEN"]),
+    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN", "UPDATE_IS_MENU_ACTIONS_OPEN"]),
     
     handleClick (URL, screen_type) {
-        // this.clearSearchString();
-        this.cartHover = false;
-        this.userHover = false;
-        if (this.$route.path != URL) {
-          if (URL === '/login') {
-            this.SET_TYPE(screen_type);
-          } else {
-            this.CHANGE_SCREEN(screen_type)
-          }
-          this.$router.push(URL);
+      const vm = this;
+      setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
+      setTimeout(() => vm.UPDATE_IS_MENU_ACTIONS_OPEN(false), 0);
+      this.cartHover = false;
+      this.userHover = false;
+      if (this.$route.path != URL) {
+        if (URL === '/login') {
+          this.SET_TYPE(screen_type);
         } else {
-          if (URL === '/login') {
-            this.SET_TYPE(screen_type);
-          } else {
-            this.CHANGE_SCREEN(screen_type)
-          }
+          this.CHANGE_SCREEN(screen_type)
         }
+        this.$router.push(URL);
+      } else {
+        if (URL === '/login') {
+          this.SET_TYPE(screen_type);
+        } else {
+          this.CHANGE_SCREEN(screen_type)
+        }
+      }
     },
 
     async userLogout() {
-        if (this.isLoading) return;
-        // this.clearSearchString();
-        this.isLoading = true;
-        await this.SEND_LOGOUT_REQUEST();
-        this.isLoading = false;
-        this.$router.push('/');
+      if (this.isLoading) return;
+      const vm = this;
+      setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
+      setTimeout(() => vm.UPDATE_IS_MENU_ACTIONS_OPEN(false), 0);
+      this.isLoading = true;
+      await this.SEND_LOGOUT_REQUEST();
+      this.isLoading = false;
+      this.$router.push('/');
     },
 
     clearSearchString(){
@@ -143,25 +157,43 @@ export default {
 
     onUserIconEnter(){
       this.SET_SEARCH_STRING('');
+      this.UPDATE_IS_MENU_ACTIONS_OPEN(true);
+      this.favoriteHover = false;
+      this.cartHover = false;
       this.userHover = true;
     },
 
     onCartIconEnter(){
       this.SET_SEARCH_STRING('');
+      this.UPDATE_IS_MENU_ACTIONS_OPEN(true);
+      this.favoriteHover = false;
       this.cartHover = true;
+      this.userHover = false;
     },
 
     onFavoriteIconEnter() {
       this.SET_SEARCH_STRING('');
+      this.UPDATE_IS_MENU_ACTIONS_OPEN(true);
       this.favoriteHover = true;
+      this.cartHover = false;
+      this.userHover = false;
     },
 
     onIconLeave() {
       this.userHover = false;
       this.cartHover = false;
       this.favoriteHover = false;
+      this.UPDATE_IS_MENU_ACTIONS_OPEN(false);
     },
 
+    onIconLeaveClick() {
+      this.userHover = false;
+      this.cartHover = false;
+      this.favoriteHover = false;
+      // const vm = this;
+      setTimeout(() => this.UPDATE_IS_CATALOG_OPEN(false), 0);
+      setTimeout(() => this.UPDATE_IS_MENU_ACTIONS_OPEN(false), 0);
+    },
   },
 
 }
@@ -178,6 +210,7 @@ export default {
   &__item{
     // padding: 0 10px 0 10px;
     position: relative;
+    z-index: 20;
   }
 }
 
@@ -207,9 +240,6 @@ export default {
   margin: 24px 0;
 }
 
-button{
-  margin-bottom: 20px;
-}
 .hr{
   height:2px;
   margin:44px 0 40px 0;

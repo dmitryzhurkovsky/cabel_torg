@@ -16,7 +16,7 @@ const state = {
     {id: 'S', name: 'Отправлен'},
     {id: 'c', name: 'Отменен'},
     {id: 'C', name: 'Выполнен'},
-    {id: '', name: 'Все заказы'},
+    // {id: '', name: 'Все заказы'},
   ],
   isPopUpOpen: false, 
   categories: [] as Array<IDeliveryType>,

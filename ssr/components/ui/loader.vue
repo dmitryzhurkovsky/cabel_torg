@@ -1,7 +1,7 @@
 <template>
   <div 
     ref="loader"
-    :class="[!IS_LOADING === true ? 'lds_wrapper': 'lds_wrapper show_wrapper']"
+    :class="[IS_LOADING === false ? 'lds_wrapper': 'lds_wrapper show_wrapper']"
   >
       <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
   </div>
@@ -21,8 +21,8 @@ export default {
     IS_LOADING: function(){
       if (this.IS_LOADING) {
         this.$refs.loader.style.top = window.pageYOffset + 'px';
-        document.body.style.overflow = 'hidden';
-        document.body.style.paddingRight = '16px';
+        // document.body.style.overflow = 'hidden';
+        // document.body.style.paddingRight = '16px';
       } else {
         document.body.style.overflow = '';
         document.body.style.paddingRight = '0';
