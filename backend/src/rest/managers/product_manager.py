@@ -36,13 +36,15 @@ class ProductManager(CRUDManager):
         price_gte = filter_fields.get('actual_price_gte')
         if price_gte and price_gte != '0':
             filter_expressions.append(
-                Product.actual_price >= Decimal(float(price_gte) / (1 + settings.DEFAULT_TAX / 100)))
+                Product.actual_price >= Decimal(float(price_gte) / (1 + settings.DEFAULT_TAX / 100))
+            )
         else:
             filter_expressions.append(Product.price > Decimal(0))
 
         if price_lte := filter_fields.get('actual_price_lte'):
             filter_expressions.append(
-                Product.actual_price <= Decimal(float(price_lte) / (1 + settings.DEFAULT_TAX / 100)))
+                Product.actual_price <= Decimal(float(price_lte) / (1 + settings.DEFAULT_TAX / 100))
+            )
 
         if category_id := filter_fields.get('category_id'):
             categories_ids = await CategoryManager.get_categories_ids(
@@ -61,6 +63,11 @@ class ProductManager(CRUDManager):
             elif type_of_product == ProductTypeFilterEnum.POPULAR:
                 popular_products_ids = await cls.get_the_most_popular_products_ids(session=session)
                 filter_expressions.append(Product.id.in_(popular_products_ids))
+            elif type_of_product == ProductTypeFilterEnum.NEW:
+                filter_expressions.append(and_(
+                    Product.is_new.is_(True),
+                    Product.status == ProductStatus.AVAILABLE.value
+                ))
 
         if search_letters := filter_fields.get('q'):
             category_ids_query = await session.execute(

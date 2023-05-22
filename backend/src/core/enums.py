@@ -22,6 +22,7 @@ class ProductTypeFilterEnum(str, Enum):
     WITH_DISCOUNT = 'with_discount'
     AVAILABLE = 'available'
     POPULAR = 'popular'
+    NEW = 'new'
 
 
 class CategoryTypeFilterEnum(str, Enum):
