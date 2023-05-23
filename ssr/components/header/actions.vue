@@ -210,7 +210,7 @@ export default {
   &__item{
     // padding: 0 10px 0 10px;
     position: relative;
-    z-index: 20;
+    z-index: 51;
   }
 }
 

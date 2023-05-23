@@ -448,7 +448,7 @@
       text-align: right;
       margin-bottom: 20px;
       @media (max-width: $md3+px) {
-        font-size: 8px;
+        font-size: 10px;
         margin-bottom: 5px;
       }
   }

@@ -1,59 +1,63 @@
 <template>
     <div class="filter__block" v-if="CATALOG.length">
-        <div class="filter__box" 
-            v-for   = "mainItem in CATALOG"
-            :key    = "mainItem.id"
+        <div
+          v-if    = "!isMobileVersion"
         >
-            <div class="sidebar_menu__title">
-              <div :class = "{'active' : mainItem.filterPanel}"
-                  @click.stop = "openCategory(mainItem)"
-              >
-                {{mainItem.name}}
-              </div>
-              <div v-if="mainItem.childrens.length"
-                   :class="[ mainItem.filterPanel ? 'sidebar_menu__open  icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
-                   @click.stop = "toggleCategory(mainItem)"
-              >
-              </div>
-            </div >
-
-            <div class="filter__block"  v-if = "mainItem.childrens.length && mainItem.filterPanel">
-
-                    <div class="sidebar_menu__subtitle"
-                        v-for   = "middleItem in mainItem.childrens"
-                        :key    = "middleItem.id"
-                    >
-                      <div class="subtitle__row">
-                        <div :class = "{'active' : middleItem.filterPanel}"
-                            @click.stop  = "openCategory(middleItem)"
-                        >
-                          {{middleItem.name}}
-                        </div>
-                        <div v-if="middleItem.childrens.length"
-                             :class="[ middleItem.filterPanel ? 'sidebar_menu__open icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
-                             @click.stop = "toggleCategory(middleItem)"
-                        >
-                        </div>
-                      </div>
-
-
-                    <div class="subtitle__list "  v-if = "middleItem.childrens.length &&  middleItem.filterPanel">
-                        <div class="sidebar_menu__subtitle-child"
-                            v-for = "lastItem in middleItem.childrens"
-                            :key  = "lastItem.id"
-                            @click.stop = "openCategory(lastItem)"
-                        >
-                            <div class="">
-                              <div :class = "{'active' : LAST_CATEGORIES_ITEM_ACTIVE === lastItem.id}">
-                                {{lastItem.name}}
-                              </div>
-
-                            </div>
-                        </div>
-                    </div>
+          <div class="filter__box" 
+              v-for   = "mainItem in CATALOG"
+              :key    = "mainItem.id"
+          >
+              <div class="sidebar_menu__title">
+                <div :class = "{'active' : mainItem.filterPanel}"
+                    @click.stop = "openCategory(mainItem)"
+                >
+                  {{mainItem.name}}
                 </div>
-            </div>
+                <div v-if="mainItem.childrens.length"
+                    :class="[ mainItem.filterPanel ? 'sidebar_menu__open  icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
+                    @click.stop = "toggleCategory(mainItem)"
+                >
+                </div>
+              </div >
 
+              <div class="filter__block"  v-if = "mainItem.childrens.length && mainItem.filterPanel">
+
+                      <div class="sidebar_menu__subtitle"
+                          v-for   = "middleItem in mainItem.childrens"
+                          :key    = "middleItem.id"
+                      >
+                        <div class="subtitle__row">
+                          <div :class = "{'active' : middleItem.filterPanel}"
+                              @click.stop  = "openCategory(middleItem)"
+                          >
+                            {{middleItem.name}}
+                          </div>
+                          <div v-if="middleItem.childrens.length"
+                              :class="[ middleItem.filterPanel ? 'sidebar_menu__open icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
+                              @click.stop = "toggleCategory(middleItem)"
+                          >
+                          </div>
+                        </div>
+
+
+                      <div class="subtitle__list "  v-if = "middleItem.childrens.length &&  middleItem.filterPanel">
+                          <div class="sidebar_menu__subtitle-child"
+                              v-for = "lastItem in middleItem.childrens"
+                              :key  = "lastItem.id"
+                              @click.stop = "openCategory(lastItem)"
+                          >
+                              <div class="">
+                                <div :class = "{'active' : LAST_CATEGORIES_ITEM_ACTIVE === lastItem.id}">
+                                  {{lastItem.name}}
+                                </div>
+
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+          </div>
         </div>
 
         <div class="filter__box">
@@ -89,16 +93,38 @@ import {mapMutations, mapGetters, mapActions} from 'vuex'
 export default {
   name: 'FilterPanel',
 
+  data(){
+    return {
+      isMobileVersion: false,
+    }
+  },
+
   computed: {
-    ...mapGetters("header", ["ALL_CATEGORIES", "CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
+    ...mapGetters("header", ["ALL_CATEGORIES", "CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "DEVICE_VIEW_TYPE"]),
     ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", 
       "SORT_DIRECTION", "SORT_ORDER", "ALL_TYPE_OF_PRODUCTS"
     ]),
   },
 
+  watch: {
+    DEVICE_VIEW_TYPE: async function() {
+      setViewType(this.DEVICE_VIEW_TYPE);
+    }  
+  },
+
   methods:{
     ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID", "SET_OFFSET", "SET_DEFAULT_PRICES"]),
     ...mapActions("header",["SET_ALL_CURRENT_CATEGORIES"]),
+
+
+    setViewType(curr) {
+        console.log(curr);
+        if (curr > 1) {
+          this.isMobileVersion = true
+        } else {
+          this.isMobileVersion = false
+        }
+    },
 
     getCatalogUrl(){
       let url = "/catalog?";
@@ -154,6 +180,11 @@ export default {
       url = url + this.getTypeOfProduct(category);
       this.$router.push(url);
     },
+
+  },
+
+  beforeMount(){
+    this.setViewType(this.DEVICE_VIEW_TYPE);
   },
 
 }

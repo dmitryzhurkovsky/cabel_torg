@@ -91,7 +91,7 @@ export default {
                 commit("SET_ORDERS", response.data);
               } catch (e) {
                 console.log(e);
-                commit("notification/ADD_MESSAGE", {name: "Не возможно обновить корзину", icon: "error", id: '1'}, {root: true})
+                // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить корзину", icon: "error", id: '1'}, {root: true})
               }
           } else {
               const isCartsInStore = localStorage.getItem('carts');
@@ -229,7 +229,7 @@ export default {
                   }  
               } catch (e) {
                 console.log(e);
-                commit("notification/ADD_MESSAGE", {name: "Не возможно обновить корзину", icon: "error", id: '1'}, {root: true})
+                // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить корзину", icon: "error", id: '1'}, {root: true})
               }
           }
       },
@@ -241,7 +241,7 @@ export default {
                   commit("REMOVE_ITEM_FROM_CART", {amount : itemData.amount, product: itemData.product});
               } catch (e) {
                   console.log(e);
-                  commit("notification/ADD_MESSAGE", {name: "Не возможно обновить в корзине " + itemData.product.name, icon: "error", id: '1'}, {root: true})
+                  // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить в корзине " + itemData.product.name, icon: "error", id: '1'}, {root: true})
               }
           }
       },
@@ -253,7 +253,7 @@ export default {
                   commit("UPDATE_ITEM_IN_CART", {amount : response.data.amount, product: itemData.product});
               } catch (e) {
                   console.log(e);
-                  commit("notification/ADD_MESSAGE", {name: "Не возможно обновить в корзине " + itemData.product.name, icon: "error", id: '1'}, {root: true})
+                  // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить в корзине " + itemData.product.name, icon: "error", id: '1'}, {root: true})
               }
           }
       },
@@ -265,7 +265,7 @@ export default {
                   commit("UPDATE_ITEM_IN_CART", { amount : response.data.amount, product: itemData.product });
               } catch (e) {
                   console.log(e);
-                  commit("notification/ADD_MESSAGE", {name: "Не возможно обновить в корзине " + itemData.product.name, icon: "error", id: '1'}, {root: true})
+                  // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить в корзине " + itemData.product.name, icon: "error", id: '1'}, {root: true})
               }
           }
       },
@@ -291,7 +291,7 @@ export default {
                 commit("profile/CHANGE_SCREEN", 0, {root: true});
             } catch (e) {
                 console.log(e);
-                commit("notification/ADD_MESSAGE", {name: "Не возможно отправить заказ", icon: "error", id: '1'}, {root: true})
+                // commit("notification/ADD_MESSAGE", {name: "Не возможно отправить заказ", icon: "error", id: '1'}, {root: true})
             }
         // }
       },
@@ -302,7 +302,7 @@ export default {
             commit("SET_ORDER_DOCUMENTS", response.data);
         } catch (e) {
             console.log(e);
-            commit("notification/ADD_MESSAGE", {name: "Не возможно обновить заказы", icon: "error", id: '1'}, {root: true})
+            // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить заказы", icon: "error", id: '1'}, {root: true})
         }
       },
 
@@ -312,7 +312,7 @@ export default {
             commit("SET_ORDER_DELIVERY_TYPES", response.data);
         } catch (e) {
             console.log(e);
-            commit("notification/ADD_MESSAGE", {name: "Не возможно обновить способы доставки " + e, icon: "error", id: '1'}, {root: true})
+            // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить способы доставки " + e, icon: "error", id: '1'}, {root: true})
         }
       },
       

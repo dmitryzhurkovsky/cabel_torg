@@ -306,7 +306,7 @@ export default {
         commit("SET_POPUP_MESSAGE", msg);
       } catch (e) {
         console.log(e);
-        commit("notification/ADD_MESSAGE", {name: "Не возможно обновить каталог товаров", icon: "error", id: '1'}, {root: true})
+        // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить каталог товаров", icon: "error", id: '1'}, {root: true})
         commit("SET_POPUP_MESSAGE", {});
         commit("SET_IS_POPUP_OPEN", false);
         commit("SET_POPUP_ACTION", '');
@@ -325,7 +325,7 @@ export default {
         commit("SET_IS_POPUP_OPEN", true);
       } catch (e) {
         console.log(e);
-        commit("notification/ADD_MESSAGE", {name: "Не возможно обновить каталог товаров", icon: "error", id: '1'}, {root: true})
+        // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить каталог товаров", icon: "error", id: '1'}, {root: true})
         commit("SET_POPUP_MESSAGE", {});
         commit("SET_IS_POPUP_OPEN", false);
         commit("SET_POPUP_ACTION", '');

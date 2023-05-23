@@ -36,13 +36,15 @@ class ProductManager(CRUDManager):
         price_gte = filter_fields.get('actual_price_gte')
         if price_gte and price_gte != '0':
             filter_expressions.append(
-                Product.actual_price >= Decimal(float(price_gte) / (1 + settings.DEFAULT_TAX / 100)))
+                Product.actual_price >= Decimal(float(price_gte) / (1 + settings.DEFAULT_TAX / 100))
+            )
         else:
             filter_expressions.append(Product.price > Decimal(0))
 
         if price_lte := filter_fields.get('actual_price_lte'):
             filter_expressions.append(
-                Product.actual_price <= Decimal(float(price_lte) / (1 + settings.DEFAULT_TAX / 100)))
+                Product.actual_price <= Decimal(float(price_lte) / (1 + settings.DEFAULT_TAX / 100))
+            )
 
         if category_id := filter_fields.get('category_id'):
             categories_ids = await CategoryManager.get_categories_ids(
@@ -51,9 +53,14 @@ class ProductManager(CRUDManager):
             filter_expressions.append(Product.category_id.in_(categories_ids))
 
         if type_of_product := filter_fields.get('type_of_product'):
-            if type_of_product == ProductTypeFilterEnum.AVAILABLE:
+            if type_of_product in (
+                    ProductTypeFilterEnum.WITH_DISCOUNT,
+                    ProductTypeFilterEnum.NEW,
+                    ProductTypeFilterEnum.AVAILABLE
+            ):
                 filter_expressions.append(Product.status == ProductStatus.AVAILABLE.value)
-            elif type_of_product == ProductTypeFilterEnum.WITH_DISCOUNT:
+
+            if type_of_product == ProductTypeFilterEnum.WITH_DISCOUNT:
                 filter_expressions.append(and_(
                     Product.price_with_discount.is_not(None),
                     Product.price > Product.price_with_discount,  # noqa
@@ -61,11 +68,15 @@ class ProductManager(CRUDManager):
             elif type_of_product == ProductTypeFilterEnum.POPULAR:
                 popular_products_ids = await cls.get_the_most_popular_products_ids(session=session)
                 filter_expressions.append(Product.id.in_(popular_products_ids))
+            elif type_of_product == ProductTypeFilterEnum.NEW:
+                filter_expressions.append(Product.is_new.is_(True))
 
         if search_letters := filter_fields.get('q'):
             category_ids_query = await session.execute(
                 select(Category.id).
-                where(Category.name.ilike(f'%{search_letters}'))
+                where(
+                    Category.name.ilike(f'%{search_letters}')
+                )
             )
             category_ids = category_ids_query.scalars().all()
 

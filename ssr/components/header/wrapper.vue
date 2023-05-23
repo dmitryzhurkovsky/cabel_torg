@@ -1,7 +1,7 @@
 <template>
   <div v-if = "IS_CATALOG_OPEN || IS_MENU_ACTIONS_OPEN" id="WRAPPER"
       :class="[IS_MENU_ACTIONS_OPEN && DEVICE_VIEW_TYPE > 1 ? 'menu-wrapper actions-wrapper' : 'menu-wrapper']" 
-      @click="closeMenu"
+      @click.capture.self="closeMenu"
   >
   </div>
 </template>
@@ -66,7 +66,7 @@ export default {
   //backdrop-filter: blur(2px);
 }
 .actions-wrapper {
-  z-index: 100;
+  z-index: 20;
   background: linear-gradient(180deg, rgba(66, 62, 72, 0.2) 0%, rgba(66, 62, 72, 0) 100%);
   backdrop-filter: blur(2px);
 }
