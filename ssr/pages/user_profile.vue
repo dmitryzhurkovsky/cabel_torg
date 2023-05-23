@@ -43,16 +43,8 @@
   import { useStore } from "../../admin/src/store";
 
   definePageMeta({
-    // middleware: ["auth"],
+    middleware: ["auth"],
     name: 'Профиль',
-    middleware: function() {
-      const store = useStore();
-
-      if (!Boolean(store.getters['auth/USER'])) {
-        return navigateTo('/login');
-      }
-    },
-
   });
 
   export default defineNuxtComponent({
@@ -60,6 +52,7 @@
 
     computed: {
       ...mapGetters("profile", ["SCREEN", "BREADCRUMB"]),
+      ...mapGetters("auth", ["USER"]),
     },
 
     data() {
@@ -87,12 +80,7 @@
       }
     },
 
-    // beforeCreate(){
-    //   if (!this.USER) this.$router.push("/login");
-    // },
-
     mounted(){
-      console.log('user_profile');
       this.screen = this.SCREEN;
       this.CHANGE_BREADCRUMB(0);
       this.ADD_BREADCRUMB({

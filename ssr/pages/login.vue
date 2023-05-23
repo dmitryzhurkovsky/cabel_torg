@@ -194,9 +194,9 @@ export default defineNuxtComponent({
 
         if (this.USER) {
           if (this.REDIRECT_AFTER_LOGIN) {
-              this.$router.push(this.REDIRECT_AFTER_LOGIN);
+            this.$router.push(this.REDIRECT_AFTER_LOGIN);
           } else {
-              this.$router.push("/user_profile");
+            this.$router.push("/user_profile");
           }
         }
       }  
@@ -256,7 +256,6 @@ export default defineNuxtComponent({
             msg.bolt = '';
             msg.sub = 'Желаем Вам приятных покупок!'
           this.SET_POPUP_MESSAGE(msg);
-
           this.$router.push("/user_profile");
         }
       }

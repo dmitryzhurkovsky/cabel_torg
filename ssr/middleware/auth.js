@@ -1,6 +1,8 @@
 import store from '@/store'
 
-export default defineNuxtRouteMiddleware(() => {
+export default defineNuxtRouteMiddleware((to, from) => {
   const isLogin = Boolean(store.getters['auth/USER'])
-  return isLogin
+  if (!isLogin) {
+    return navigateTo('/login');
+  }
 });

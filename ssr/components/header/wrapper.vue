@@ -67,7 +67,7 @@ export default {
 }
 .actions-wrapper {
   z-index: 20;
-  background: linear-gradient(180deg, rgba(66, 62, 72, 0.2) 0%, rgba(66, 62, 72, 0) 100%);
-  backdrop-filter: blur(2px);
+  // background: linear-gradient(180deg, rgba(66, 62, 72, 0.2) 0%, rgba(66, 62, 72, 0) 100%);
+  // backdrop-filter: blur(2px);
 }
 </style>

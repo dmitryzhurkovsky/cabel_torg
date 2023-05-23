@@ -248,15 +248,15 @@
 
     watch:{
       changeParameters: function() {
-        this.company_name = this.USER.company_name;
-        this.unp = this.USER.unp;
-        this.legal_address = this.USER.legal_address;
-        this.IBAN = this.USER.IBAN;
-        this.BIC = this.USER.BIC;
-        this.serving_bank = this.USER.serving_bank;
-        this.full_name = this.USER.full_name;
-        this.phone_number = this.USER.phone_number;
-        this.email = this.USER.email;
+        this.company_name = this.USER?.company_name;
+        this.unp = this.USER?.unp;
+        this.legal_address = this.USER?.legal_address;
+        this.IBAN = this.USER?.IBAN;
+        this.BIC = this.USER?.BIC;
+        this.serving_bank = this.USER?.serving_bank;
+        this.full_name = this.USER?.full_name;
+        this.phone_number = this.USER?.phone_number;
+        this.email = this.USER?.email;
       }
     },
 
@@ -391,7 +391,7 @@
             orderData.user = this.USER.id;
             await this.SEND_ORDER_REQUEST(orderData);
             this.isLoading = false;
-            this.$router.push({name: "user-cab"});
+            this.$router.push('/user_profile');
           } else {
             console.log('Тут проверяем есть ли пользователь');
             try {
@@ -430,7 +430,7 @@
                 await this.SEND_ORDER_REQUEST(orderData);
                 this.isLoading = false;
                 this.SET_IS_LOADING(false);
-                this.$router.push({name: "user-cab"});
+                this.$router.push('/user_profile');
               }
             }
             catch (e) {
