@@ -155,7 +155,7 @@
       },
 
       onOpenCatalog(){
-        // console.log(this.RECOMENDATION_TYPE);
+        console.log(this.RECOMENDATION_TYPE);
         let name = 'Все товары';
         if (this.RECOMENDATION_TYPE === 'with_discount') name = 'Акции';
         if (this.RECOMENDATION_TYPE === 'available') {
@@ -168,7 +168,11 @@
           this.SET_SORT_DIRECTION('-');
           name = 'Топ продаж';
         }
-        this.SET_TYPE_OF_PRODUCT({name, type: this.RECOMENDATION_TYPE, selected: true});
+        if (this.RECOMENDATION_TYPE === 'new') {
+          this.SET_TYPE_OF_PRODUCT('all');
+        } else {
+          this.SET_TYPE_OF_PRODUCT(this.RECOMENDATION_TYPE);
+        }
         this.$router.push('/catalog');
       },
 
