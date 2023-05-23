@@ -29,9 +29,11 @@
     watch: {
       IS_POPUP_OPEN: function(){
         if (this.IS_POPUP_OPEN) {
-          this.$refs.popup.style.top = window.pageYOffset + 'px';
-          // document.body.style.overflow = 'hidden';
-          // document.body.style.paddingRight = '16px';
+          setTimeout(() => {
+            this.$refs.popup.style.top = window.pageYOffset + 'px';
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = '16px';
+          }, 200);
         } else {
           document.body.style.overflow = '';
           document.body.style.paddingRight = '0';
@@ -41,14 +43,21 @@
 
     computed: {
       ...mapGetters("header", ["IS_POPUP_OPEN", "POPUP_ACTION"]),
+      ...mapGetters("auth", ["REDIRECT_AFTER_LOGIN"])
     },
 
     methods: {
       ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ADDITIONAL_DATA"]),
+      ...mapMutations("auth", ["SET_DESTINATION"]),
 
       closePopUp(status) {
         this.SET_IS_POPUP_OPEN(status);
         this.SET_POPUP_ADDITIONAL_DATA({});
+        if (this.REDIRECT_AFTER_LOGIN) {
+          const path = this.REDIRECT_AFTER_LOGIN;
+          this.SET_DESTINATION('');
+          this.$router.push(path);
+        }
       }
     }
 

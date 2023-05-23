@@ -275,13 +275,6 @@ export default {
             try {
                 const response = await axios.post(useRuntimeConfig().public.NUXT_APP_API_URL + 'orders', itemData);
                 // commit("UPDATE_ITEM_IN_CART", { amount : response.data.amount, product: itemData.product });
-                commit("header/SET_POPUP_ACTION", 'ShowCompleteMsg', {root: true});
-                const msg ={};
-                msg.main = 'Наш менеджер свяжется с вами в ближайшее время.';
-                msg.bolt = 'Время работы:';
-                msg.sub = ' Пн-Пт - 9:00 - 17:00'
-                commit("header/SET_POPUP_MESSAGE", msg, {root: true});
-                commit("header/SET_IS_POPUP_OPEN", true, {root: true});
                 getters.ORDERS.forEach(async item => {
                   await dispatch("DELETE_ITEM_FROM_DB", item );
                   commit("REMOVE_ITEM_FROM_CART", item);
@@ -289,6 +282,13 @@ export default {
                 // commit("SET_ORDERS", []);
                 commit("SET_IS_APPLICATION_OPEN", false);
                 commit("profile/CHANGE_SCREEN", 0, {root: true});
+                commit("header/SET_POPUP_ACTION", 'ShowCompleteMsg', {root: true});
+                const msg ={};
+                msg.main = 'Наш менеджер свяжется с вами в ближайшее время.';
+                msg.bolt = 'Время работы:';
+                msg.sub = ' Пн-Пт - 9:00 - 17:00'
+                commit("header/SET_POPUP_MESSAGE", msg, {root: true});
+                commit("header/SET_IS_POPUP_OPEN", true, {root: true});
             } catch (e) {
                 console.log(e);
                 // commit("notification/ADD_MESSAGE", {name: "Не возможно отправить заказ", icon: "error", id: '1'}, {root: true})
@@ -299,6 +299,9 @@ export default {
       async GET_ORDER_DOCUMENTS({ commit } ){
         try {
             const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'orders/mine');
+            const sorted = response.data.sort((a,b) => {
+              return (Number(b.id) - Number(a.id))
+            })
             commit("SET_ORDER_DOCUMENTS", response.data);
         } catch (e) {
             console.log(e);

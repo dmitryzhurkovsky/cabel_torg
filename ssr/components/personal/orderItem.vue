@@ -108,7 +108,12 @@ export default {
       .then((response) => response.blob())
       .then((blob) => {
           const _url = window.URL.createObjectURL(blob);
-          window.open(_url, '_blank');
+          const link = document.createElement('a');
+          link.href = _url;
+          link.download = _url;
+          link.click();
+          // URL.revokeObjectURL(link.href);
+          // window.open(_url, '_blank');
           this.SET_IS_LOADING(false);
       }).catch((err) => {
           console.log(err);

@@ -386,18 +386,18 @@
           };
 
           if (localStorage.getItem("authToken")) {
-            // this.SET_DESTINATION('/cart');
+            this.SET_DESTINATION('/user_profile');
             // this.$router.push('/login');
             orderData.user = this.USER.id;
             await this.SEND_ORDER_REQUEST(orderData);
             this.isLoading = false;
-            this.SET_IS_LOADING(true);
-            this.$router.push('/user_profile');
+            // this.SET_IS_LOADING(true);
+            // this.$router.push('/user_profile');
           } else {
             try {
               const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + "users/check_email/<email>?email=" + this.email);
-              console.log(response);
-              console.log(response.data.message === 'True');
+              // console.log(response);
+              // console.log(response.data.message === 'True');
               if (response.data.message === 'True') {
                 this.SET_IS_LOADING(false);
                 this.SET_IS_POPUP_OPEN(true);
