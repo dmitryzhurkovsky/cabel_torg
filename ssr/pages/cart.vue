@@ -391,9 +391,9 @@
             orderData.user = this.USER.id;
             await this.SEND_ORDER_REQUEST(orderData);
             this.isLoading = false;
+            this.SET_IS_LOADING(true);
             this.$router.push('/user_profile');
           } else {
-            console.log('Тут проверяем есть ли пользователь');
             try {
               const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + "users/check_email/<email>?email=" + this.email);
               console.log(response);
@@ -403,9 +403,7 @@
                 this.SET_IS_POPUP_OPEN(true);
                 this.SET_POPUP_ACTION('UserLogin');
                 this.SET_POPUP_ADDITIONAL_DATA({email: orderData.email});
-                console.log('Пользователь существует. Требуем залогиниться');
               } else if (response.data.message === 'False') {
-                console.log('прльзователя нет создаем с нуля');
                 let password = '';
                 for (let i = 0; i < 8; i++){
                   let rand = Math.random() * 10 - 0.5;

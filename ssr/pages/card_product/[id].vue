@@ -254,7 +254,7 @@
   }
 
   const updateShowItems = (id) => {
-    if (!id) return
+    if (!id && cartItemData.value) return
     let itemsInLocalStorage = []
     const isItemsFromLocalStore = localStorage.getItem('shownCards')
     if (isItemsFromLocalStore) itemsInLocalStorage = JSON.parse(isItemsFromLocalStore)
@@ -271,19 +271,22 @@
   }
 
   const onGetCartData = async () => {
-    if (typeof window !== 'undefined') updateShowItems(id.value)
-    countQuantity()
-    checkIsWish()
     store.commit('query/SET_SEARCH_STRING', '')
-    store.dispatch('breadcrumb/CHANGE_BREADCRUMB', 0)
     try {
       const url = useRuntimeConfig().public.NUXT_APP_API_URL + 'products/' + id.value
       const goodUrl = encodeURI(url);  
       const response = await axios.get(goodUrl)
       cartItemData.value = response.data
     } catch (e) {
-      console.log(e)
+      console.log( e)
+      navigateTo('/404');
       // store.commit('notification/ADD_MESSAGE', {name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
+    }
+    if (cartItemData.value) {
+      if (typeof window !== 'undefined') updateShowItems(id.value)
+      countQuantity()
+      checkIsWish()
+      store.dispatch('breadcrumb/CHANGE_BREADCRUMB', 0)
     }
   }
 

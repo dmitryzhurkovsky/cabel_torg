@@ -104,7 +104,7 @@ export default {
           method  : 'POST',
           headers : myHeaders,
       };
-      fetch(process.env.VUE_APP_API_URL + "orders/" + this.card.id + '/invoices', requestOptions)
+      fetch(useRuntimeConfig().public.NUXT_APP_API_URL + "orders/" + this.card.id + '/invoices', requestOptions)
       .then((response) => response.blob())
       .then((blob) => {
           const _url = window.URL.createObjectURL(blob);
