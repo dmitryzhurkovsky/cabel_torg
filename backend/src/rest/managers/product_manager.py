@@ -53,7 +53,11 @@ class ProductManager(CRUDManager):
             filter_expressions.append(Product.category_id.in_(categories_ids))
 
         if type_of_product := filter_fields.get('type_of_product'):
-            if type_of_product in ProductTypeFilterEnum.values():
+            if type_of_product in (
+                    ProductTypeFilterEnum.WITH_DISCOUNT,
+                    ProductTypeFilterEnum.NEW,
+                    ProductTypeFilterEnum.AVAILABLE
+            ):
                 filter_expressions.append(Product.status == ProductStatus.AVAILABLE.value)
 
             if type_of_product == ProductTypeFilterEnum.WITH_DISCOUNT:
