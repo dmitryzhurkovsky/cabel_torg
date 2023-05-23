@@ -11,6 +11,22 @@ services:
       - '5434:5432'
     volumes:
       - ./data/postgres:/var/lib/postgresql/data/
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  parser:
+    container_name: 'prod_parser'
+    build:
+      context: backend
+      dockerfile: ./build/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend:/backend
 
   backend:
     container_name: 'prod_backend'
@@ -20,8 +36,10 @@ services:
     ports:
       - '8000:8000'
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
     volumes:
       - ./data/site_media:/site_media
       - ./backend:/backend
@@ -61,6 +79,13 @@ services:
       - '80:80'
       - '443:443'  # for https
       - '8010:8010'  # for images and static files
+    depends_on:
+      backend:
+        condition: service_started
+      frontend:
+        condition: service_started
+      admin_dashboard:
+        condition: service_started
     volumes:
       - ./data/site_media:/usr/share/nginx/site_media/
       - ./data/nginx:/etc/nginx/conf.d/
@@ -77,7 +102,8 @@ services:
     # (and certificates) every six hours in the background and launches nginx in the foreground.
     command: certonly --webroot -w /var/www/certbot --force-renewal --email dmitryzhurkovsky@gmail.com -d cabel-torg-test-domain.net.by --agree-tos
     depends_on:
-      - reverse_proxy
+      reverse_proxy:
+        condition: service_started
     volumes:
       - ./data/certbot/www:/var/www/certbot
       - ./data/certbot/conf:/etc/letsencrypt

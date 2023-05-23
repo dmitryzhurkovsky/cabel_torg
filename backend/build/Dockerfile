@@ -1,4 +1,4 @@
-FROM python:3.10.2-slim-buster
+FROM python:3.10.2-slim-buster as base
 
 ENV LANG ru_RU.UTF-8
 ENV LC_ALL ru_RU.UTF-8
@@ -18,6 +18,10 @@ RUN pipenv install --system --deploy --ignore-pipfile
 
 COPY . /backend/
 
-RUN chmod +x /backend/build/entrypoint.sh
+RUN chmod +x /backend/build/backend_entrypoint.sh
 
-ENTRYPOINT ["sh", "/backend/build/entrypoint.sh"]
+FROM base as backend
+ENTRYPOINT ["sh", "/backend/build/backend_entrypoint.sh"]
+
+FROM base as parser
+ENTRYPOINT ["sh", "/backend/build/parser_entrypoint.sh"]

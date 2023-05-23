@@ -1,6 +1,3 @@
-from datetime import datetime
-
-from dateutil.relativedelta import relativedelta
 from sqlalchemy import (
     Column,
     ForeignKey,
@@ -15,8 +12,11 @@ from sqlalchemy import (
 from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
+from src.core import settings
 from src.core.enums import BaseEnum
 from src.models.abstract_model import Base1CModel
+
+tax = settings.DEFAULT_TAX
 
 
 class ProductStatus(str, BaseEnum):
@@ -95,18 +95,18 @@ class Product(Base1CModel):
 
     @property
     def price_with_tax(self) -> float:
-        if self.price and self.tax:
-            return round(self.price + (self.price * self.tax / 100), 2)
+        if self.price:
+            return round(self.price + (self.price * tax / 100), 2)
 
     @property
     def price_with_discount_and_tax(self) -> float | None:
-        if self.price_with_discount and self.tax:
-            return round(self.price_with_discount + (self.price_with_discount * self.tax / 100), 2)
+        if self.price_with_discount:
+            return round(self.price_with_discount + (self.price_with_discount * tax / 100), 2)
 
     @property
     def tax_sum(self) -> float:
         """For generating an invoice."""
-        return self.actual_price * self.tax / 100
+        return self.actual_price * tax / 100
 
     @hybrid_property
     def actual_price(self) -> float:
