@@ -53,7 +53,7 @@ export default {
               commit("SET_FAVORITES", response.data);
             } catch (e) {
               console.log(e);
-              commit('notification/ADD_MESSAGE', {name: 'Не возможно обновить избранное', icon: "error", id: '1'}, {root: true})
+              // commit('notification/ADD_MESSAGE', {name: 'Не возможно обновить избранное', icon: "error", id: '1'}, {root: true})
             }
         } else {
             const isFavoritesInStore = localStorage.getItem('favorites');
@@ -69,7 +69,7 @@ export default {
           commit("ADD_TO_FULL_FAVORITES", response.data);
         } catch (e) {
           console.log(e);
-          commit('notification/ADD_MESSAGE', {name: 'Не возможно обновить избранное', icon: "error", id: '1'}, {root: true})
+          // commit('notification/ADD_MESSAGE', {name: 'Не возможно обновить избранное', icon: "error", id: '1'}, {root: true})
         }  
       }) 
     },
@@ -143,7 +143,7 @@ export default {
             }  
         } catch (e) {
           console.log(e);
-          commit("notification/ADD_MESSAGE", {name: "Не возможно обновить корзину", icon: "error", id: '1'}, {root: true})
+          // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить корзину", icon: "error", id: '1'}, {root: true})
         }
       }
     },
@@ -155,7 +155,7 @@ export default {
               commit("REMOVE_ITEM_FROM_FAVORITE", { product: itemData.product});
           } catch (e) {
               console.log(e);
-              commit("notification/ADD_MESSAGE", {name: "Не возможно обновить в корзине " + itemData.product.name, icon: "error", id: '1'}, {root: true})
+              // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить в корзине " + itemData.product.name, icon: "error", id: '1'}, {root: true})
           }
       }
     },
@@ -167,7 +167,7 @@ export default {
               commit("ADD_ITEM_TO_FAVORITE", { product: itemData.product });
           } catch (e) {
               console.log(e);
-              commit("notification/ADD_MESSAGE", {name: "Не возможно обновить в корзине " + itemData.product.name, icon: "error", id: '1'}, {root: true})
+              // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить в корзине " + itemData.product.name, icon: "error", id: '1'}, {root: true})
           }
       }
     },

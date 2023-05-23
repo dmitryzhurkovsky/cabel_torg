@@ -40,9 +40,10 @@
 <script>
 
   import { mapGetters, mapActions, mapMutations } from "vuex";
+  import { useStore } from "../../admin/src/store";
 
   definePageMeta({
-    // middleware: ["auth"],
+    middleware: ["auth"],
     name: 'Профиль',
   });
 
@@ -51,6 +52,7 @@
 
     computed: {
       ...mapGetters("profile", ["SCREEN", "BREADCRUMB"]),
+      ...mapGetters("auth", ["USER"]),
     },
 
     data() {

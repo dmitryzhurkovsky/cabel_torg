@@ -29,15 +29,22 @@
 
     computed: {
       ...mapGetters("header", ["POPUP_MESSAGE"]),
+      ...mapGetters("auth", ["REDIRECT_AFTER_LOGIN"])
     },
 
     methods:{
       ...mapMutations("header", ["SET_POPUP_MESSAGE", "SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
+      ...mapMutations("auth", ["SET_DESTINATION"]),
 
       returnToApp(){
         this.SET_POPUP_MESSAGE({});
         this.SET_IS_POPUP_OPEN(false);
         this.SET_POPUP_ACTION('');
+        if (this.REDIRECT_AFTER_LOGIN) {
+          const path = this.REDIRECT_AFTER_LOGIN;
+          this.SET_DESTINATION('');
+          this.$router.push(path);
+        }
       }
     },
   }

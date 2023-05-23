@@ -18,7 +18,7 @@
         <div class="details-order" v-if ="card.products.length">
           <div class="details-order__item flex-center"
               v-for   = "orderProduct in card.products"
-              :key    = "orderProduct.id + card.id"
+              :key    = "String(orderProduct.id) + String(card.id)"
           >
             <div class="details-order__title long_text">{{ orderProduct.product.name }}</div>
             <div class="details-order__article"><span>{{ orderProduct.product.vendor_code }}</span></div>
@@ -104,11 +104,16 @@ export default {
           method  : 'POST',
           headers : myHeaders,
       };
-      fetch(process.env.VUE_APP_API_URL + "orders/" + this.card.id + '/invoices', requestOptions)
+      fetch(useRuntimeConfig().public.NUXT_APP_API_URL + "orders/" + this.card.id + '/invoices', requestOptions)
       .then((response) => response.blob())
       .then((blob) => {
           const _url = window.URL.createObjectURL(blob);
-          window.open(_url, '_blank');
+          const link = document.createElement('a');
+          link.href = _url;
+          link.download = 'invoise' + this.card.id;
+          link.click();
+          // URL.revokeObjectURL(link.href);
+          // window.open(_url, '_blank');
           this.SET_IS_LOADING(false);
       }).catch((err) => {
           console.log(err);

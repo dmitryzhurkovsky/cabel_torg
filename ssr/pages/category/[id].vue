@@ -54,6 +54,7 @@
               </div>
               <div v-if ="isMobileVersion&&isFilterPanelOpen">
                 <CatalogPriceSlider />
+                <CatalogFilterPanel />
                 <CatalogSortPanel />
                 <CatalogLimitPanel />
               </div>

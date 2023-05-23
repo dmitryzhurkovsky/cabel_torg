@@ -12,7 +12,7 @@
             >Топ продаж</div>
             <div 
             :class="[activePiont === 1 ? 'recomendation__nav__item active' : 'recomendation__nav__item']" 
-              @click="setTypeAndOrder({ type: 'available', order: 'created_at', typeRecomendation : 1 }, '-')"
+              @click="setTypeAndOrder({ type: 'new', order: 'created_at', typeRecomendation : 1 }, '-')"
             >Новинки</div>
             <div 
             :class="[activePiont === 2 ? 'recomendation__nav__item active' : 'recomendation__nav__item']" 
@@ -95,6 +95,7 @@
     computed: {
       ...mapGetters("header", ["DEVICE_VIEW_TYPE"]),
       ...mapGetters("catalog", ["RECOMENDED_ITEMS", "RECOMENDATION_QUANTITY", "RECOMENDATION_TYPE", "RECOMENDATION_ORDER"]),
+      ...mapGetters("query", ["SORT_TYPE"]),
 
       ChangeParameters(){
         return String(this.RECOMENDATION_TYPE) + String(this.RECOMENDATION_ORDER);
@@ -155,20 +156,20 @@
       },
 
       onOpenCatalog(){
-        // console.log(this.RECOMENDATION_TYPE);
+        console.log(this.RECOMENDATION_TYPE);
         let name = 'Все товары';
         if (this.RECOMENDATION_TYPE === 'with_discount') name = 'Акции';
         if (this.RECOMENDATION_TYPE === 'available') {
-          this.SET_SORT_TYPE({ name: 'По дате добавления', type: 'created_at' });
+          this.SET_SORT_TYPE('created_at');
           this.SET_SORT_DIRECTION('-');
           name = 'В наличии';
         }
         if (this.RECOMENDATION_TYPE === 'popular') {
-          this.SET_SORT_TYPE({ name: 'Топ продаж', type: 'discount' });
+          this.SET_SORT_TYPE('discount');
           this.SET_SORT_DIRECTION('-');
           name = 'Топ продаж';
         }
-        this.SET_TYPE_OF_PRODUCT({name, type: this.RECOMENDATION_TYPE, selected: true});
+        this.SET_TYPE_OF_PRODUCT(this.RECOMENDATION_TYPE);
         this.$router.push('/catalog');
       },
 
@@ -268,9 +269,10 @@
   &__link{
     position: absolute;
     right: 0;
-    bottom: 43px;
+    bottom: 53px;
     cursor: pointer;
     z-index: 90;
+    font-size: 14px;
     @media (max-width: $md3+px) {
       display: none;
     }

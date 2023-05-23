@@ -248,15 +248,15 @@
 
     watch:{
       changeParameters: function() {
-        this.company_name = this.USER.company_name;
-        this.unp = this.USER.unp;
-        this.legal_address = this.USER.legal_address;
-        this.IBAN = this.USER.IBAN;
-        this.BIC = this.USER.BIC;
-        this.serving_bank = this.USER.serving_bank;
-        this.full_name = this.USER.full_name;
-        this.phone_number = this.USER.phone_number;
-        this.email = this.USER.email;
+        this.company_name = this.USER?.company_name;
+        this.unp = this.USER?.unp;
+        this.legal_address = this.USER?.legal_address;
+        this.IBAN = this.USER?.IBAN;
+        this.BIC = this.USER?.BIC;
+        this.serving_bank = this.USER?.serving_bank;
+        this.full_name = this.USER?.full_name;
+        this.phone_number = this.USER?.phone_number;
+        this.email = this.USER?.email;
       }
     },
 
@@ -386,26 +386,24 @@
           };
 
           if (localStorage.getItem("authToken")) {
-            // this.SET_DESTINATION('/cart');
+            this.SET_DESTINATION('/user_profile');
             // this.$router.push('/login');
             orderData.user = this.USER.id;
             await this.SEND_ORDER_REQUEST(orderData);
             this.isLoading = false;
-            this.$router.push({name: "user-cab"});
+            // this.SET_IS_LOADING(true);
+            // this.$router.push('/user_profile');
           } else {
-            console.log('Тут проверяем есть ли пользователь');
             try {
               const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + "users/check_email/<email>?email=" + this.email);
-              console.log(response);
-              console.log(response.data.message === 'True');
+              // console.log(response);
+              // console.log(response.data.message === 'True');
               if (response.data.message === 'True') {
                 this.SET_IS_LOADING(false);
                 this.SET_IS_POPUP_OPEN(true);
                 this.SET_POPUP_ACTION('UserLogin');
                 this.SET_POPUP_ADDITIONAL_DATA({email: orderData.email});
-                console.log('Пользователь существует. Требуем залогиниться');
               } else if (response.data.message === 'False') {
-                console.log('прльзователя нет создаем с нуля');
                 let password = '';
                 for (let i = 0; i < 8; i++){
                   let rand = Math.random() * 10 - 0.5;
@@ -430,7 +428,7 @@
                 await this.SEND_ORDER_REQUEST(orderData);
                 this.isLoading = false;
                 this.SET_IS_LOADING(false);
-                this.$router.push({name: "user-cab"});
+                this.$router.push('/user_profile');
               }
             }
             catch (e) {

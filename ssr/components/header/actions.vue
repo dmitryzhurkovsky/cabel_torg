@@ -21,22 +21,22 @@
       <div class="dropdown" 
           :class="[!USER ? 'icon-user' : 'icon-user-login']"
       >
-        <div v-if = "IS_OPEN_MAIN_LOGIN && !USER" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
+        <div v-if = "userHover && !USER" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
             <div class="dropdown__inner">
                 <div class="dropdown__content popup-cart">
                     <div class="avatar__box">
                         <div class="avatar icon-user flex-center"></div>
                     </div>
 
-                    <div @click="handleClick('/login', 1)" class="btn black mb-20">
+                    <div @click.stop="handleClick('/login', 1)" class="btn black mb-20">
                         Вход
                     </div>
 
-                    <div @click="handleClick('/login', 2)" class="foot-lnk">
+                    <div @click.stop="handleClick('/login', 2)" class="foot-lnk">
                         Не помню пароль
                     </div>
                     <hr class="hr">
-                    <div @click="handleClick('/login', 3)" class="foot-reg">
+                    <div @click.stop="handleClick('/login', 3)" class="foot-reg">
                         Зарегистрироваться
                     </div>
                 </div>
@@ -44,20 +44,20 @@
 
           <!-- <UserActions/> -->
         </div>
-        <div v-if = "IS_OPEN_MAIN_LOGIN && USER" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
+        <div v-if = "userHover && USER" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
 
           <div class="dropdown__content popup-cart user-login">
             <div class="dropdown__list">
-                <a @click="handleClick('/user_profile', 0)" class="icon-user">
+                <h3>
                   Личный кабинет
-                </a>
-                <a @click="handleClick('/user_profile', 0)" class="icon-go-cart">
+                </h3>
+                <a @click.stop="handleClick('/user_profile', 0)" class="icon-go-cart">
                   Мои заказы
                 </a>
-                <a @click="handleClick('/user_profile', 2)" class="icon-setting">
+                <a @click.stop="handleClick('/user_profile', 2)" class="icon-setting">
                   Настройки
                 </a>
-                <a @click="userLogout()" class="icon-exit">
+                <a @click.stop="userLogout()" class="icon-exit">
                   Выйти из аккаунта
                 </a>
             </div>
@@ -122,8 +122,10 @@ export default {
       const vm = this;
       setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
       setTimeout(() => vm.UPDATE_IS_MENU_ACTIONS_OPEN(false), 0);
+      // this.SET_IS_OPEN_MAIN_LOGIN(false);
       this.cartHover = false;
       this.userHover = false;
+      this.favoriteHover = false;
       if (this.$route.path != URL) {
         if (URL === '/login') {
           this.SET_TYPE(screen_type);
@@ -142,6 +144,7 @@ export default {
 
     async userLogout() {
       if (this.isLoading) return;
+      this.userHover = false;
       const vm = this;
       setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
       setTimeout(() => vm.UPDATE_IS_MENU_ACTIONS_OPEN(false), 0);
@@ -158,6 +161,7 @@ export default {
     onUserIconEnter(){
       this.SET_SEARCH_STRING('');
       this.UPDATE_IS_MENU_ACTIONS_OPEN(true);
+      // this.SET_IS_OPEN_MAIN_LOGIN(true)
       this.favoriteHover = false;
       this.cartHover = false;
       this.userHover = true;
@@ -210,7 +214,7 @@ export default {
   &__item{
     // padding: 0 10px 0 10px;
     position: relative;
-    z-index: 20;
+    z-index: 51;
   }
 }
 

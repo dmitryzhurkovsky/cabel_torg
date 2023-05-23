@@ -132,17 +132,5 @@ export default {
         };
     }
 
-    // sendVerifyResendRequest() {
-    //   return axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + "email/resend");
-    // },
-    //
-    // sendVerifyRequest({ dispatch }, hash) {
-    //   return axios
-    //     .get(useRuntimeConfig().public.NUXT_APP_API_URL + "email/verify/" + hash)
-    //     .then(() => {
-    //       dispatch("GET_USER_DATA");
-    //     });
-    // },
-
   }
 };

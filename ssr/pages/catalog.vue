@@ -15,6 +15,7 @@
               </div>
               <div v-if ="isMobileVersion&&isFilterPanelOpen">
                 <CatalogPriceSlider />
+                <CatalogFilterPanel />
                 <CatalogSortPanel />
                 <CatalogLimitPanel />
               </div>
@@ -80,7 +81,6 @@
   });
 
   const setViewType = (curr) => {
-    console.log('isMoblile version ', curr);
       if (curr > 1) {
         isMobileVersion.value = true
       } else {

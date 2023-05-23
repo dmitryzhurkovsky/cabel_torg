@@ -3,6 +3,7 @@
     <SliderBanner />
     <SliderRecomendation 
       :isShowFilter = true
+      :isShowFollow = true
     />
     <AboutQuickCategory />
     <SliderNews />
