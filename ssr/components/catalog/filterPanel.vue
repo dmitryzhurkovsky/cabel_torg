@@ -80,7 +80,7 @@
 
         </div>
   
-        <CatalogPriceSlider class="filter__box" />
+        <CatalogPriceSlider v-if = "!isMobileVersion" class="filter__box" />
 
     </div>
 

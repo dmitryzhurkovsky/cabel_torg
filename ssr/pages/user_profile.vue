@@ -40,10 +40,19 @@
 <script>
 
   import { mapGetters, mapActions, mapMutations } from "vuex";
+  import { useStore } from "../../admin/src/store";
 
   definePageMeta({
     // middleware: ["auth"],
     name: 'Профиль',
+    middleware: function() {
+      const store = useStore();
+
+      if (!Boolean(store.getters['auth/USER'])) {
+        return navigateTo('/login');
+      }
+    },
+
   });
 
   export default defineNuxtComponent({
@@ -78,7 +87,12 @@
       }
     },
 
+    // beforeCreate(){
+    //   if (!this.USER) this.$router.push("/login");
+    // },
+
     mounted(){
+      console.log('user_profile');
       this.screen = this.SCREEN;
       this.CHANGE_BREADCRUMB(0);
       this.ADD_BREADCRUMB({
