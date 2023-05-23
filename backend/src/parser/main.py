@@ -18,16 +18,15 @@ async def parse_bookkeeping_file():
 
     async with AsyncSession(engine) as db:
         start_parsing = time.time()
-        # with db.begin():
         xml_parser = XMLParser(db=db)
         price_parser = OffersParser(db=db)
 
         await asyncio.wait([event_loop.create_task(xml_parser.parse_categories())])
-        # await asyncio.wait([event_loop.create_task(xml_parser.parse_attributes())])
-        #
-        # await event_loop.create_task(xml_parser.parse_products())
-        # await event_loop.create_task(xml_parser.set_is_visible_attribute())
-        # await event_loop.create_task(price_parser.parse_offers())
+        await asyncio.wait([event_loop.create_task(xml_parser.parse_attributes())])
+
+        await event_loop.create_task(xml_parser.parse_products())
+        await event_loop.create_task(xml_parser.set_is_visible_attribute())
+        await event_loop.create_task(price_parser.parse_offers())
         logger.info(f'Parsing has been finished. It took {time.time() - start_parsing}')
 
 
