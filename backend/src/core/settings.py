@@ -18,6 +18,7 @@ TEMPLATES_PATH = pathlib.Path(__file__).parent.parent.joinpath('templates')
 template_loader = jinja2.FileSystemLoader(TEMPLATES_PATH)
 templates = jinja2.Environment(loader=template_loader)
 ADMINISTRATOR_EMAIL = os.getenv('ADMINISTRATOR_EMAIL')  # it's admin
+DEFAULT_TAX = 20
 
 # Database's settings
 DB_NAME = os.getenv('DATABASE_NAME')
@@ -38,7 +39,6 @@ SMTP_EMAIL_SENDER = os.getenv('SMTP_EMAIL_SENDER')
 SMTP_HOST = os.getenv('SMTP_HOST')
 
 # Parsers' settings
-DEFAULT_TAX = 20
 LAUNCH_PARSER_EACH_N_MINUTES = int(os.getenv('PARSING_SHOULD_BE_DONE_EACH_N_MINUTES', 0)) * 60
 BOOKKEEPING_FILE_PATH = os.getenv('BOOKKEEPING_FILE_PATH')
 FILE_WITH_PRICES_PATH = os.getenv('FILE_WITH_PRICES_PATH')
