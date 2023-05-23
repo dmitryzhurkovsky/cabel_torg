@@ -15,13 +15,13 @@ uvicorn = "*"
 pyjwt = "*"
 bcrypt = "*"
 python-multipart = "*"
-aioredis = "*"
 sqladmin = "*"
 requests = "*"
 pdfkit = "*"
 num2words = "*"
 aiofiles = "*"
 python-dateutil = "*"
+redis = "*"
 
 [dev-packages]
 pytest = "*"
@@ -30,4 +30,4 @@ faker = "*"
 httpx = "*"
 
 [requires]
-python_version = "3.10"
+python_version = "3.11"
