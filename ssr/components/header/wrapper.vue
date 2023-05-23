@@ -21,8 +21,8 @@ export default {
       if (this.IS_CATALOG_OPEN) {
         window.scrollTo(0, 0);
         if (this.DEVICE_VIEW_TYPE > 1) {
-          document.body.style.overflow = 'hidden';
-          document.body.style.paddingRight = '16px';
+          // document.body.style.overflow = 'hidden';
+          // document.body.style.paddingRight = '16px';
         }
       } else {
         document.body.style.overflow = '';
@@ -33,8 +33,8 @@ export default {
     IS_MENU_ACTIONS_OPEN: function(){
       if (this.IS_MENU_ACTIONS_OPEN) {
         window.scrollTo(0, 0);
-        // document.body.style.overflow = 'hidden';
-        // document.body.style.paddingRight = '16px';
+        document.body.style.overflow = 'hidden';
+        document.body.style.paddingRight = '16px';
       } else {
         document.body.style.overflow = '';
         document.body.style.paddingRight = '0';
@@ -67,7 +67,7 @@ export default {
 }
 .actions-wrapper {
   z-index: 20;
-  // background: linear-gradient(180deg, rgba(66, 62, 72, 0.2) 0%, rgba(66, 62, 72, 0) 100%);
-  // backdrop-filter: blur(2px);
+  background: linear-gradient(180deg, rgba(66, 62, 72, 0.2) 0%, rgba(66, 62, 72, 0) 100%);
+  backdrop-filter: blur(2px);
 }
 </style>

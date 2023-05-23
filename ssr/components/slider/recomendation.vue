@@ -168,11 +168,11 @@
           this.SET_SORT_DIRECTION('-');
           name = 'Топ продаж';
         }
-        if (this.RECOMENDATION_TYPE === 'new') {
-          this.SET_TYPE_OF_PRODUCT('all');
-        } else {
+        // if (this.RECOMENDATION_TYPE === 'new') {
+        //   this.SET_TYPE_OF_PRODUCT('all');
+        // } else {
           this.SET_TYPE_OF_PRODUCT(this.RECOMENDATION_TYPE);
-        }
+        // }
         this.$router.push('/catalog');
       },
 
