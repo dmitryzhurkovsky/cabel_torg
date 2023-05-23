@@ -272,9 +272,10 @@
   &__link{
     position: absolute;
     right: 0;
-    bottom: 43px;
+    bottom: 53px;
     cursor: pointer;
     z-index: 90;
+    font-size: 14px;
     @media (max-width: $md3+px) {
       display: none;
     }

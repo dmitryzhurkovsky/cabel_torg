@@ -388,7 +388,6 @@ h3{
 
 ._link{
   font-weight: 400;
-  font-size: 14px;
   line-height: 130%;
   color: #4275D8;
 }

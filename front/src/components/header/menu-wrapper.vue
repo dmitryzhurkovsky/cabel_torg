@@ -19,8 +19,8 @@
       IS_CATALOG_OPEN: function(){
         if (this.IS_CATALOG_OPEN) {
           window.scrollTo(0, 0);
-          document.body.style.overflow = 'hidden';
-          document.body.style.paddingRight = '16px';
+          // document.body.style.overflow = 'hidden';
+          // document.body.style.paddingRight = '16px';
         } else {
           document.body.style.overflow = '';
           document.body.style.paddingRight = '0';
