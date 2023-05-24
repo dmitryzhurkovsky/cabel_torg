@@ -159,7 +159,7 @@ class GoodsMixin(BaseMixin, ABC):
             case 'Новинка':
                 return 'is_new', True if raw_field.text == 'true' else False
             case 'Артикул':
-                field_name, field_value = 'vendor_code', raw_field.text
+                field_name, field_value = 'vendor_code', raw_field.text.split('УТ-')[-1]
             case 'Описание':
                 field_name, field_value = 'description', raw_field.text
             case 'Картинка':
