@@ -8,7 +8,7 @@
       </div>
       <div class="flex-center order__row">
         <div class="order__invoice" @click.stop = "dowwnloadInvoice"> Счет </div>
-        <div class="order__date">{{ card.created_at.slice(0, 10) }}</div>
+        <div class="order__date">{{ order_date }}</div>
         <div class="order__delivery">{{ delivery_type }}</div>
         <div :class="['order__status', `_status-color-${order_color}`]">{{ order_status }}</div>
         <div class="order__price">{{ order_price }}<span> BYN</span></div>
@@ -74,6 +74,14 @@ export default {
       if (this.card.status === 'S') return 'send';
       if (this.card.status === 'c') return 'cancel';
       if (this.card.status === 'C') return 'complete';
+    },
+
+    order_date(){
+      const dirtyDate = this.card.created_at.slice(0, 10);
+      const year = dirtyDate.slice(0, 4);
+      const month = dirtyDate.slice(5, 7);
+      const date = dirtyDate.slice(8);
+      return date + '/' + month + '/' + year;
     },
 
     delivery_type(){
