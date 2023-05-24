@@ -65,7 +65,7 @@
     store.commit('notification/SET_IS_LOADING', false)
   });
 
-  const { data: categoriesData } = await useAsyncData(
+  await useAsyncData(
     'categories', 
     async () => {
       console.log('useAsyncData App ');
@@ -74,7 +74,7 @@
       await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')
       // await store.dispatch('main/GET_SETTINGS')
       store.commit('notification/SET_IS_LOADING', false)
-      return store.getters['header/ALL_CATEGORIES']
+      // return store.getters['header/ALL_CATEGORIES']
     }, {
       watch: []
     }

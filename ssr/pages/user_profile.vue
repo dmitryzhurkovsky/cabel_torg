@@ -40,7 +40,6 @@
 <script>
 
   import { mapGetters, mapActions, mapMutations } from "vuex";
-  import { useStore } from "../../admin/src/store";
 
   definePageMeta({
     middleware: ["auth"],
