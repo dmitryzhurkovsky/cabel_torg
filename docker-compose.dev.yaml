@@ -92,3 +92,4 @@ services:
         condition: service_started
     volumes:
       - ./data/site_media:/usr/share/nginx/site_media/
+      - ./reverse_proxy/dev.conf:/etc/nginx/conf.d/dev.conf

@@ -90,7 +90,7 @@ services:
         condition: service_started
     volumes:
       - ./data/site_media:/usr/share/nginx/site_media/
-      - ./data/nginx:/etc/nginx/conf.d/
+      - ./reverse_proxy/prod.conf:/etc/nginx/conf.d/prod.conf
       - ./data/certbot/www:/var/www/certbot  # certbot
       - ./data/certbot/conf:/etc/letsencrypt  # certbot
 
@@ -102,7 +102,7 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     # To make sure that nginx reloads the newly obtained certificates. This makes nginx reload its configuration
     # (and certificates) every six hours in the background and launches nginx in the foreground.
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email dmitryzhurkovsky@gmail.com -d cabel-torg-test-domain.net.by --agree-tos
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email dmitryzhurkovsky@gmail.com -d cabel-torg-test-domain.net.by -d admin.cabel-torg-test-domain.net.by --agree-tos
     depends_on:
       reverse_proxy:
         condition: service_started
