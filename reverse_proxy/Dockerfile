@@ -1,3 +1,3 @@
 FROM nginx:stable-alpine as production-stage
-COPY /reverse_proxy/default.conf /etc/nginx/conf.d/default.conf
+COPY /reverse_proxy/prod.conf /etc/nginx/conf.d/prod.conf
 CMD ["nginx", "-g", "daemon off;"]

@@ -11,17 +11,37 @@ services:
       - '5434:5432'
     volumes:
       - ./data/postgres:/var/lib/postgresql/data/
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  parser:
+    container_name: 'dev_parser'
+    build:
+      context: backend
+      dockerfile: ./build/Dockerfile
+      target: parser
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   backend:
     container_name: 'dev_backend'
     build:
       context: backend
       dockerfile: ./build/Dockerfile
+      target: backend
     ports:
       - '8000:8000'
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     volumes:
       - ../data/site_media:/site_media
       - ./backend:/backend
@@ -31,6 +51,8 @@ services:
     image: redis:latest
     ports:
       - '6379:6379'
+    healthcheck:
+      test: [ "CMD", "redis-cli","ping" ]
 
   #  Frontend part
   admin_dashboard:
@@ -62,8 +84,12 @@ services:
       - '443:443'  # for https
       - '8010:8010'  # for images and static files
     depends_on:
-      - frontend
-      - backend
-      - admin_dashboard
+      backend:
+        condition: service_started
+      frontend:
+        condition: service_started
+      admin_dashboard:
+        condition: service_started
     volumes:
       - ./data/site_media:/usr/share/nginx/site_media/
+      - ./reverse_proxy/dev.conf:/etc/nginx/conf.d/dev.conf

@@ -3,6 +3,7 @@
 
 # Static files
 backend/src/static/
+backend/build/*.xml
 
 /data
 
