@@ -18,7 +18,7 @@ async def get_feedbacks(session: AsyncSession = Depends(get_session)) -> list[Fe
 
 
 @feedback_router.post(
-    '/',
+    '',
     response_model=FeedbackSchema,
     status_code=status.HTTP_201_CREATED
 )

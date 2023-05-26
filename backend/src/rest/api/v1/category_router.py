@@ -14,7 +14,7 @@ from src.rest.schemas.category_schema import (
 category_router = APIRouter(tags=['categories'], prefix='/categories')
 
 
-@category_router.get('/', response_model=list[CategorySchema])
+@category_router.get('', response_model=list[CategorySchema])
 async def get_categories(
         request: Request,
         session: AsyncSession = Depends(get_session),

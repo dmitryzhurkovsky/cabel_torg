@@ -15,7 +15,7 @@ from src.rest.schemas.service_entities.vendor_info_schema import (
 vendor_info_router = APIRouter(tags=['vendor_info'], prefix='/vendor_info')
 
 
-@vendor_info_router.get('/1/', response_model=VendorInfoSchema)
+@vendor_info_router.get('/1', response_model=VendorInfoSchema)
 async def get_vendor_info(
         session: AsyncSession = Depends(get_session)
 ) -> VendorInfoSchema | list:
@@ -27,7 +27,7 @@ async def get_vendor_info(
 
 
 @vendor_info_router.post(
-    '/',
+    '',
     response_model=VendorInfoSchema,
     status_code=status.HTTP_201_CREATED,
     dependencies=[Depends(is_admin_permission)]
@@ -47,7 +47,7 @@ async def create_vendor_info(
 
 
 @vendor_info_router.post(
-    '/1/logos/',
+    '/1/logos',
     response_model=VendorInfoSchema,
     status_code=status.HTTP_201_CREATED,
     dependencies=[Depends(is_admin_permission)]
@@ -69,7 +69,7 @@ async def create_vendor_info(
 
 
 @vendor_info_router.patch(
-    '/1/',
+    '/1',
     response_model=VendorInfoSchema,
     dependencies=[Depends(is_admin_permission)]
 )

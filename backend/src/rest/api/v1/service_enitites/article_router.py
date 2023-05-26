@@ -9,7 +9,7 @@ from src.rest.schemas.service_entities.article_schema import ArticleSchema, Arti
 article_router = APIRouter(tags=['articles'], prefix='/articles')
 
 
-@article_router.get('/', response_model=list[ArticleSchema])
+@article_router.get('', response_model=list[ArticleSchema])
 async def get_articles(session: AsyncSession = Depends(get_session)) -> list[ArticleSchema]:
     return await ArticleManager.list(session=session)
 
@@ -23,7 +23,7 @@ async def get_articles(
 
 
 @article_router.post(
-    '/',
+    '',
     response_model=ArticleSchema,
     status_code=status.HTTP_201_CREATED,
     dependencies=[Depends(is_admin_permission)]

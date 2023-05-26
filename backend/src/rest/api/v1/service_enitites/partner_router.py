@@ -9,13 +9,13 @@ from src.rest.schemas.service_entities.partner_schema import PartnerSchema
 partner_router = APIRouter(tags=['partners'], prefix='/partners')
 
 
-@partner_router.get('/', response_model=list[PartnerSchema])
+@partner_router.get('', response_model=list[PartnerSchema])
 async def get_partners(session: AsyncSession = Depends(get_session)) -> list[PartnerSchema]:
     return await PartnerManager.list(session=session)
 
 
 @partner_router.post(
-    '/',
+    '',
     response_model=PartnerSchema,
     status_code=status.HTTP_201_CREATED,
     dependencies=[Depends(is_admin_permission)]

@@ -59,7 +59,7 @@ async def get_current_user(
 
 
 @user_router.post(
-    '/',
+    '',
     response_model=UserSchema,
     status_code=status.HTTP_201_CREATED,
 )

@@ -43,7 +43,7 @@ async def get_order(
 
 
 @order_router.get(
-    '/',
+    '',
     response_model=list[OrderSchema],
     dependencies=[Depends(is_admin_permission)]
 )
@@ -52,7 +52,7 @@ async def get_order(session: AsyncSession = Depends(get_session)) -> list[OrderS
 
 
 @order_router.post(
-    '/',
+    '',
     response_model=OrderSchema,
     status_code=status.HTTP_201_CREATED,
     dependencies=[Depends(is_authenticated_permission)]
