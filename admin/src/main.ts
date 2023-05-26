@@ -8,8 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faHeart, faHand, faAddressBook, faTrashCan, faPenToSquare, faFile, faSquareCaretDown, faSquareCaretUp } from '@fortawesome/free-regular-svg-icons'
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
-import { IDeliveryType } from './types';
-import { request } from 'http';
+import { MutationTypes } from './store/mutation-types'
+
 
 library.add([faHeart, faHand, faAddressBook, faTrashCan, faPenToSquare, faFile, faSquareCaretDown, faSquareCaretUp] as any)
 
@@ -32,17 +32,16 @@ axios.interceptors.response.use(
   async error => {
     // console.log(error.response);
     if (typeof error.response === 'undefined') {
-        store.commit("notification/ADD_MESSAGE", {id: 'Err500', icon: 'error', name: 'Ошибка авторизации. Сервер не отвечает'});
-        store.commit("auth/SET_USER_DATA", null);
+        store.commit(MutationTypes.SET_USER, null);
         // localStorage.removeItem("authToken");
         return Promise.reject(error);
     } else if (error.response.status === 422) {
         console.log( error.response.data.detail);
         const errors = error.response.data.detail;
-        for (let i = 0; i < errors.length; i++) {
-          store.commit("notification/ADD_MESSAGE", {id: i, icon: 'error', name: errors[i].msg});
-        }
-        store.commit("auth/SET_USER_DATA", null);
+        // for (let i = 0; i < errors.length; i++) {
+        //   store.commit("notification/ADD_MESSAGE", {id: i, icon: 'error', name: errors[i].msg});
+        // }
+        store.commit(MutationTypes.SET_USER, null);
         // localStorage.removeItem("authToken");
         return Promise.reject(error);
     } else if (error.response.status === 401) {
@@ -61,7 +60,7 @@ axios.interceptors.response.use(
           }
           return axios(originalConfig)
         } else {
-          store.commit("auth/SET_USER_DATA", null);
+          store.commit(MutationTypes.SET_USER, null);
           localStorage.removeItem("authToken");
           localStorage.removeItem("refreshToken");
           return Promise.reject(error);
@@ -69,7 +68,7 @@ axios.interceptors.response.use(
       }).catch((e) => {
         console.log(e);
       
-        store.commit("auth/SET_USER_DATA", null);
+        store.commit(MutationTypes.SET_USER, null);
         localStorage.removeItem("authToken");
         localStorage.removeItem("refreshToken");
         return Promise.reject(error);

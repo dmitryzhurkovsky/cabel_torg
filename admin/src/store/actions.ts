@@ -183,7 +183,6 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "users/mine").
       then((response) => {
-        console.log(response.data);
         if (response.data.is_admin) {
           commit(MutationTypes.SET_USER, response.data)
         } else {
@@ -452,7 +451,6 @@ export const actions: ActionTree<State, State> & Actions = {
 
   [ActionTypes.EDIT_STOCK]({ commit }, data) {
     return new Promise((resolve) => {
-      console.log('data: ', data);
       axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses/" + String(data.id), data).
       then((response) => {
         commit(MutationTypes.UPDATE_STOCK, response.data)

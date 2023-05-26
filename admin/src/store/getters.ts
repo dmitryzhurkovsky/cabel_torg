@@ -38,6 +38,9 @@ export const getters: GetterTree<State, State> & Getters = {
     return state.deliveryTypesData
   },
   isLogin: (state) => {
+    if (!state.user) {
+      return false
+    } 
     return Boolean(Object.keys(state.user).length)
   },
   articlesData: (state) => {

@@ -26,9 +26,13 @@ const rules = computed(() => ({
 const v = useVuelidate(rules, {emailField, passwordField})
 
 const sendLoginRequest = async (data: FormData) => {
-  const result = await store.dispatch(ActionTypes.SEND_USER_REQUEST, data)
-  store.commit(MutationTypes.SET_IS_LOADING, false)
-  router.push('/')
+  try{
+    const result = await store.dispatch(ActionTypes.SEND_USER_REQUEST, data)
+    store.commit(MutationTypes.SET_IS_LOADING, false)
+    router.push('/')
+  } catch(e) {
+    store.commit(MutationTypes.SET_IS_LOADING, false)
+  }
 }
 
 const submitForm = () => {
@@ -45,7 +49,7 @@ const submitForm = () => {
 <template>
   <div class="login-container">
 
-    <a href="http://localhost:8080" class="admin__logo">
+    <a href="/" class="admin__logo">
         <img src="@/assets/admin_logo.svg" alt="CabelTorg">
     </a>
 
