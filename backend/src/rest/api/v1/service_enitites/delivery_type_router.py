@@ -12,13 +12,13 @@ from src.rest.schemas.service_entities.delivery_type_schema import (
 delivery_type_router = APIRouter(tags=['delivery_types'], prefix='/delivery_types')
 
 
-@delivery_type_router.get('/', response_model=list[DeliveryTypeSchema])
+@delivery_type_router.get('', response_model=list[DeliveryTypeSchema])
 async def get_delivery_types(session: AsyncSession = Depends(get_session)) -> list[DeliveryTypeSchema]:
     return await DeliveryTypeManager.list(session=session)
 
 
 @delivery_type_router.post(
-    '/',
+    '',
     response_model=DeliveryTypeSchema,
     status_code=status.HTTP_201_CREATED,
     dependencies=[Depends(is_admin_permission)]

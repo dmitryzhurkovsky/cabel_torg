@@ -9,7 +9,7 @@ from src.rest.schemas.service_entities.banner_schema import BannerSchema, Banner
 banner_router = APIRouter(tags=['banners'], prefix='/banners')
 
 
-@banner_router.get('/', response_model=list[BannerSchema])
+@banner_router.get('', response_model=list[BannerSchema])
 async def get_banners(
         is_active: bool = Query(default=True),
         session: AsyncSession = Depends(get_session)
@@ -29,7 +29,7 @@ async def get_banners(
 
 
 @banner_router.post(
-    '/',
+    '',
     response_model=BannerSchema,
     status_code=status.HTTP_201_CREATED,
     dependencies=[Depends(is_admin_permission)]

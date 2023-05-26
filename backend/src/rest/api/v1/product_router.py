@@ -17,7 +17,7 @@ product_router = APIRouter(tags=['products'], prefix='/products')
 
 
 @product_router.get(
-    '/',
+    '',
     response_model=PaginatedProductSchema,
 )
 async def get_products(

@@ -14,7 +14,7 @@ from src.rest.schemas.service_entities.request_call_schema import (
 request_call_router = APIRouter(tags=['request_calls'], prefix='/request_calls')
 
 
-@request_call_router.get('/', response_model=list[RequestCallSchema])
+@request_call_router.get('', response_model=list[RequestCallSchema])
 async def get_request_calls(
         request: Request,
         type_of_request_call: RequestCallType | None = Query(
@@ -26,7 +26,7 @@ async def get_request_calls(
 
 
 @request_call_router.post(
-    '/',
+    '',
     response_model=RequestCallSchema,
     status_code=status.HTTP_201_CREATED)
 async def create_request_call(
