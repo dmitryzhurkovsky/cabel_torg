@@ -16,11 +16,13 @@ class ListMixin(BaseMixin):
             offset: int = 0,
             limit: int = 100,
     ) -> list:
-        """Get list of objects"""
+        """
+        todo add documentation
+        """
 
         preloaded_fields = cls.init_preloaded_fields(preloaded_fields=custom_preloaded_fields)
 
-        objects = await session.execute(
+        query_result = await session.execute(
             select(cls.table).
             filter_by(**filter_by).
             where(*where).
@@ -31,4 +33,4 @@ class ListMixin(BaseMixin):
             offset(offset)
         )
 
-        return objects.scalars().all()
+        return query_result.scalars().all()
