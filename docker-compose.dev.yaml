@@ -75,9 +75,7 @@ services:
 
   reverse_proxy: # Copy static files during building this container
     container_name: 'dev_reverse_proxy'
-    build:
-      context: .
-      dockerfile: ./reverse_proxy/Dockerfile
+    image: nginx:stable-alpine
     restart: unless-stopped
     ports:
       - '80:80'
