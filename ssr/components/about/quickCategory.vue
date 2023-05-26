@@ -24,7 +24,7 @@
               <a href="/category/oborudovanie-dlya-opticheskih-setej" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
             </div>
             <div class="quick-category__item">
-              <div class="quick-category__list">Оборудование для ТВ</div>
+              <div class="quick-category__list">Оборудование для ТВ</div>
               <a href="/category/oborudovanie-dlya-televideniya" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
 
             </div>

@@ -558,7 +558,7 @@
     @media (max-width: $md3+px) {
       flex-direction: column-reverse;
       align-items: stretch;
-      padding: 22px 18px 0 0;
+      padding: 22px 0 0 0;
       font-size: 11px;
       background: none;
       .price__left{
