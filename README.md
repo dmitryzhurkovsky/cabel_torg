@@ -33,3 +33,5 @@ To generate an SSL certificate for a new domain, follow these steps:
     ```nginx
     #return 301 https://cabel-torg.by$request_uri; 
     ```
+To get more information about it use the following source:
+https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
