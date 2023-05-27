@@ -31,8 +31,8 @@
         if (this.IS_POPUP_OPEN) {
           setTimeout(() => {
             this.$refs.popup.style.top = window.pageYOffset + 'px';
-            document.body.style.overflow = 'hidden';
-            document.body.style.paddingRight = '16px';
+            // document.body.style.overflow = 'hidden';
+            // document.body.style.paddingRight = '16px';
           }, 200);
         } else {
           document.body.style.overflow = '';

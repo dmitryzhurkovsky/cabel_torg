@@ -20,7 +20,7 @@
         <div class="notice">* Цена указана с учетом НДС.</div>
       </div>
 
-      <div class="item-card__row flex-center">
+      <div class="item-card__row current_price__row flex-center">
         <div class="current_price">{{ cardPriceWithDiscount }}
           <span>BYN/{{ card.base_unit.full_name }}</span>
         </div>
@@ -298,6 +298,10 @@ export default {
     flex-direction: column-reverse;
     align-items: flex-start;
   }
+  .current_price__row{
+    min-height: 40px;
+    align-items: center;
+  }
 
   .old_price {
     font-size: 16px;
@@ -317,7 +321,7 @@ export default {
   .current_price {
     font-weight: 500;
     font-size: 20px;
-    line-height: 24px;
+    //line-height: 24px;
     @media (max-width: $md3+px){
       font-size: 16px;
     }

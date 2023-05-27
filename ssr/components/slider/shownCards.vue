@@ -261,7 +261,7 @@
 
     &__item{
 
-      background: #FFFFFF;
+      background: #dedede;
       border: 2px solid #EEEEEE;
       border-radius: 50px;
       font-size: 14px;

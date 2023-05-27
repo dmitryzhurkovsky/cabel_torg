@@ -275,8 +275,11 @@
     cursor: pointer;
     z-index: 90;
     font-size: 14px;
-    @media (max-width: $md3+px) {
-      display: none;
+    @media (max-width: $md2+px) {
+      right: auto;
+      left: 256px;
+      top: -110px;
+      bottom: auto;
     }
   }
 
