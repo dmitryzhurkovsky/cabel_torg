@@ -170,7 +170,12 @@
 
   watch (() => JSON.stringify(getters['order/ORDERS']), 
   () => {
-    console.log('QQQQQQ');
+    countQuantity();
+    checkIsWish();
+  })
+
+  watch (() => JSON.stringify(getters['favorite/FAVORITES']), 
+  () => {
     countQuantity();
     checkIsWish();
   })
