@@ -114,10 +114,10 @@ export default {
 
     UPDATE_VIEW_PARAMETERS (state, width){
       state.windowWidth = width;
-      if (width > 767.98) {
+      if (width > 768.5) {
         // XXXX - 768
         state.viewType = 1;
-      } else if (width > 479.98) {
+      } else if (width > 480.5) {
         // 768 - 480
         state.viewType = 2;
       } else {

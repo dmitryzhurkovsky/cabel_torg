@@ -74,7 +74,7 @@
 
     computed: {
       ...mapGetters("main", ["NEWS"]),
-      ...mapGetters("header", ["DEVICE_VIEW_TYPE"]),
+      ...mapGetters("header", ["WINDOW_WIDTH"]),
 
       filteredNews() {
         return this.NEWS.slice(-10);
@@ -82,7 +82,7 @@
     },
 
     watch: {
-      DEVICE_VIEW_TYPE: function() {
+      WINDOW_WIDTH: function() {
         this.setQuantityInSlider();
       },
     },
@@ -96,9 +96,15 @@
       },
 
       setQuantityInSlider() {
-        if (this.DEVICE_VIEW_TYPE === 1) this.slidersInFrame = 4.5
-        if (this.DEVICE_VIEW_TYPE === 2) this.slidersInFrame = 2.5
-        if (this.DEVICE_VIEW_TYPE === 3) this.slidersInFrame = 1.5
+        if (this.WINDOW_WIDTH > 768.5) {
+          this.slidersInFrame = 4.5;
+        } else if (this.WINDOW_WIDTH > 540.5) {
+          this.slidersInFrame = 3.5;
+        } else if (this.WINDOW_WIDTH > 480.5) {
+          this.slidersInFrame = 2.5;
+        } else {
+          this.slidersInFrame = 1.5;
+        }
       }
     },
 

@@ -163,7 +163,7 @@ export default {
     async ADD_FAVORITE_TO_DB({ commit, rootGetters }, itemData ) {
       if (rootGetters['auth/USER']) {
           try {
-              await axios.post(useRuntimeConfig().public.NUXT_APP_API_URL + 'watch_lists/mine/products/', { product_id: itemData.product.id });
+              await axios.post(useRuntimeConfig().public.NUXT_APP_API_URL + 'watch_lists/mine/products', { product_id: itemData.product.id });
               commit("ADD_ITEM_TO_FAVORITE", { product: itemData.product });
           } catch (e) {
               console.log(e);

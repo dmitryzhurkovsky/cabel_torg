@@ -163,12 +163,14 @@
   const infoBlock = ref(0)
   const id = ref(null)
 
-  const ChangeParameters = computed(() => {
-    return JSON.stringify(getters['order/ORDERS']) + JSON.stringify(getters['favorite/FAVORITES'])
-  })
+  // const ChangeParameters = computed(() => {
+  //   console.log('QQQQQQ');
+  //   return JSON.stringify(getters['order/ORDERS']) + JSON.stringify(getters['favorite/FAVORITES'])
+  // })
 
-  watch (() => ChangeParameters, 
+  watch (() => JSON.stringify(getters['order/ORDERS']), 
   () => {
+    console.log('QQQQQQ');
     countQuantity();
     checkIsWish();
   })

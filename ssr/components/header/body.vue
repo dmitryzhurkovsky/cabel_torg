@@ -1,7 +1,7 @@
 <template>
   <div class="header__wrapper">
-    <HeaderBurgerMenu v-if = "IS_CATALOG_OPEN&&DEVICE_VIEW_TYPE>1"/>
-    <div class="header__content _container">
+    <HeaderBurgerMenu v-if = "IS_CATALOG_OPEN && DEVICE_VIEW_TYPE > 1"/>
+    <div v-else class="header__content _container">
         <div class="header__body ">
             <div  @click="toggleMenu()" class="burger-menu burger-menu--closed">
               <div class="bar"></div>

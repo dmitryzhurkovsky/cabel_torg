@@ -261,7 +261,7 @@ export default {
       async ADD_ITEM_TO_DB({ commit, rootGetters }, itemData ) {
           if (rootGetters['auth/USER']) {
               try {
-                  const response = await axios.post(useRuntimeConfig().public.NUXT_APP_API_URL + 'carts/mine/products/', { product_id: itemData.product.id, amount: itemData.amount });
+                  const response = await axios.post(useRuntimeConfig().public.NUXT_APP_API_URL + 'carts/mine/products', { product_id: itemData.product.id, amount: itemData.amount });
                   commit("UPDATE_ITEM_IN_CART", { amount : response.data.amount, product: itemData.product });
               } catch (e) {
                   console.log(e);

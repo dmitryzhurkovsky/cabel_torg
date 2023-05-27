@@ -24,7 +24,7 @@
                   @slideChange="onSlideChange"
               >
 
-                <swiper-slide v-for="item in sliderItems" :key="item.id">
+                <swiper-slide v-for="item in ItemsForSlider" :key="item.id">
                   <CatalogCardItem
                       :card = "item"
                   />
@@ -67,12 +67,17 @@
     },
 
     computed: {
-      ...mapGetters("header", ["DEVICE_VIEW_TYPE"]),
+      ...mapGetters("header", ["WINDOW_WIDTH"]),
       ...mapGetters("catalog", ["SHOWN_ITEMS_LIST"]),
 
       ChangeParameters(){
         return JSON.stringify(this.SHOWN_ITEMS_LIST) + String(this.slidersInFrame) + String(this.quantity);
       },
+
+      ItemsForSlider(){
+        const sliders = this.sliderItems.slice(0, 10);
+        return sliders;
+      }
     },
 
     data: function(){
@@ -84,7 +89,7 @@
     },
 
     watch: {
-      DEVICE_VIEW_TYPE: function() {
+      WINDOW_WIDTH: function() {
         this.setSlidersInFrame();
       },
 
@@ -102,17 +107,18 @@
       },
 
       setSlidersInFrame(){
-        if (this.DEVICE_VIEW_TYPE === 1) {
+        if (this.WINDOW_WIDTH > 768.5) {
           this.slidersInFrame = 4.5;
-        } else if (this.DEVICE_VIEW_TYPE === 2) {
+        } else if (this.WINDOW_WIDTH > 540.5) {
           this.slidersInFrame = 3.5;
+        } else if (this.WINDOW_WIDTH > 480.5) {
+          this.slidersInFrame = 2.5;
         } else {
           this.slidersInFrame = 1.5;
         }
       },
 
       onOpenCatalog(){
-        console.log('QQQQ');
         this.$router.push('/catalog');
       },
 
@@ -151,11 +157,6 @@
       this.setSlidersInFrame();
     },
 
-    // async mounted(){
-    //   this.getShownItems();
-    //   this.setNewQuantity();
-    //   this.setSlidersInFrame();
-    // }
   }
 </script>
 

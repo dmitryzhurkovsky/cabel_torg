@@ -93,7 +93,7 @@
     },
 
     computed: {
-      ...mapGetters("header", ["DEVICE_VIEW_TYPE"]),
+      ...mapGetters("header", ["WINDOW_WIDTH"]),
       ...mapGetters("catalog", ["RECOMENDED_ITEMS", "RECOMENDATION_QUANTITY", "RECOMENDATION_TYPE", "RECOMENDATION_ORDER"]),
       ...mapGetters("query", ["SORT_TYPE"]),
 
@@ -110,7 +110,7 @@
     },
 
     watch: {
-      DEVICE_VIEW_TYPE: function() {
+      WINDOW_WIDTH: function() {
         this.setSlidersInFrame();
       },
 
@@ -139,10 +139,12 @@
       },
 
       setSlidersInFrame(){
-        if (this.DEVICE_VIEW_TYPE === 1) {
+        if (this.WINDOW_WIDTH > 768.5) {
           this.slidersInFrame = 4.5;
-        } else if (this.DEVICE_VIEW_TYPE === 2) {
+        } else if (this.WINDOW_WIDTH > 540.5) {
           this.slidersInFrame = 3.5;
+        } else if (this.WINDOW_WIDTH > 480.5) {
+          this.slidersInFrame = 2.5;
         } else {
           this.slidersInFrame = 1.5;
         }
