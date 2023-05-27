@@ -103,7 +103,7 @@ services:
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     # To make sure that nginx reloads the newly obtained certificates. This makes nginx reload its configuration
     # (and certificates) every six hours in the background and launches nginx in the foreground.
-    command: certonly --webroot -w /var/www/certbot --force-renewal --email dmitryzhurkovsky@gmail.com -d cabel-torg-test-domain.net.by -d admin.cabel-torg-test-domain.net.by --agree-tos
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email dmitryzhurkovsky@gmail.com -d cabel-torg.by -d admin.cabel-torg.by --agree-tos
     depends_on:
       reverse_proxy:
         condition: service_started

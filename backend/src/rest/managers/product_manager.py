@@ -1,10 +1,10 @@
 from decimal import Decimal
 
 from fastapi import HTTPException
-from sqlalchemy import or_, select, and_
+from sqlalchemy import or_, select, and_, case
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload, joinedload
-from sqlalchemy.sql.functions import count, func
+from sqlalchemy.sql.functions import count
 from sqlalchemy.sql.operators import ColumnOperators
 from starlette.datastructures import QueryParams
 
@@ -123,13 +123,35 @@ class ProductManager(CRUDManager):
 
         order_by = cls.get_order_expressions(filters)
 
-        return await cls.list(
-            session=session,
-            where=filter_expressions,
-            order_by=order_by,
-            offset=offset,
-            limit=limit
+        products = []
+
+        # todo add description of a flow
+        popular_products = (
+            select(Product.id).
+            join(Product.added_to_orders).
+            group_by(Product.id).
+            order_by(count(ProductOrder.product_id).desc()).
+            limit(20)
+        ).subquery()
+
+        query_result = await session.execute(
+            select(
+                cls.table,
+                case((Product.id.in_(popular_products), True), else_=False).label('is_popular'),
+            ).
+            where(*filter_expressions).
+            options(*cls.preloaded_fields).
+            order_by(*order_by).
+            limit(limit).
+            offset(offset)
         )
+        objects = query_result.all()
+
+        for product, is_popular in objects:
+            product.is_popular = is_popular
+            products.append(product)
+
+        return products
 
     @classmethod
     async def get_the_most_popular_products_ids(cls, session: AsyncSession) -> list[int]:
@@ -137,7 +159,7 @@ class ProductManager(CRUDManager):
             select(Product.id).
             join(Product.added_to_orders).
             group_by(Product.id).
-            order_by(func.count(ProductOrder.product_id).desc()).
+            order_by(count(ProductOrder.product_id).desc()).
             limit(20)
         )
 

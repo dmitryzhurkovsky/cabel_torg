@@ -56,28 +56,16 @@ class Product(Base1CModel):
         back_populates='products',
         lazy='joined'
     )  # m2m
-
     base_unit_id = Column(Integer, ForeignKey('base_units.id'))  # o2m
     base_unit = relationship('BaseUnit', back_populates='products', lazy='joined')
-
     category_id = Column(Integer, ForeignKey('categories.id'))  # o2m
     category = relationship('Category', back_populates='products', lazy='joined')
-
     manufacturer_id = Column(Integer, ForeignKey('manufacturers.id'))  # o2m
     manufacturer = relationship('Manufacturer', back_populates='products', lazy='joined')
-
     added_to_carts = relationship('Cart', back_populates='product', lazy='noload')  # m2m
-
     added_to_watchlist_for = relationship('WatchList', back_populates='product', lazy='noload')
-
     added_to_orders = relationship('ProductOrder', back_populates='product', lazy='noload')
-
     request_calls = relationship('RequestCall', back_populates='product', lazy='noload')
-
-    __tableargs__ = (
-        CheckConstraint(discount < 100, name='check_discount_lt_100'),
-        CheckConstraint(discount >= 0, name='check_discount_gte_0'),
-    )
 
     @property
     def actual_discount(self) -> float | int | DECIMAL:
@@ -124,3 +112,16 @@ class Product(Base1CModel):
     def actual_price_with_tax(self) -> float:
         """For generating an invoice."""
         return self.tax_sum + self.actual_price
+
+    @property
+    def is_popular(self) -> bool:
+        return self._is_popular
+
+    @is_popular.setter
+    def is_popular(self, value):
+        self._is_popular = value
+
+    __tableargs__ = (
+        CheckConstraint(discount < 100, name='check_discount_lt_100'),
+        CheckConstraint(discount >= 0, name='check_discount_gte_0'),
+    )

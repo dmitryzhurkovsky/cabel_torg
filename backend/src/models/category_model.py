@@ -21,21 +21,18 @@ class Category(Base1CModel):
 
     # Service fields
     order = Column(Integer, unique=True)
-
+    quick_order = Column(Integer, unique=True)  # It's a special attribute that defines categories on the main page.
+    site_link = Column(String)
+    site_page_title = Column(String)
+    site_page_description = Column(String)
     is_visible = Column(Boolean, default=True)
     # An idea of ordering is:
     # an oder attribute of parent categories is 1000, 2000, 3000;
     # an oder attribute of subcategories is 1100, 1200, 1300
     # an oder attribute of subcategories' subcategories is 1101, 1102, 1103
 
-    quick_order = Column(Integer, unique=True) # It's a special attribute that defines categories on the main page.
-    site_link = Column(String)
-    site_page_title = Column(String)
-    site_page_description = Column(String)
-
     # Relationship fields
     products = relationship('Product', back_populates='category', lazy='noload')
-
     parent_category_id = Column(Integer, ForeignKey('categories.id'))
     subcategories = relationship(
         'Category',
