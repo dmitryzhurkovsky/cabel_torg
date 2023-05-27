@@ -138,7 +138,8 @@
   })
 
   const ChangeParameters = computed(() => {
-    return JSON.stringify(route.query) + JSON.stringify(route.params);
+    console.log('QQQQQ');
+    return JSON.stringify(route.query) + JSON.stringify(route.params) + JSON.stringify(store.getters['catalog/ITEMS_LIST']);
   })
 
   const clearSearchString= () => {
@@ -314,7 +315,7 @@
         category: store.getters['catalog/CATEGORY'],
       }
     }, {
-      watch: [ChangeParameters]
+      watch: [ChangeParameters, ]
     }
   )
 
