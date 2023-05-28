@@ -14,11 +14,11 @@
       
       if (status) {
         popup.value.style.top = window.pageYOffset + 'px';
-        // document.body.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden';
         // document.body.style.paddingRight = '16px';
       } else {
         document.body.style.overflow = '';
-        document.body.style.paddingRight = '0';
+        // document.body.style.paddingRight = '0';
       }
       isPopUpOpen.value = store.getters.isPopUpOpen
     }

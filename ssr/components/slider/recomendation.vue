@@ -273,7 +273,7 @@
     right: 0;
     bottom: 53px;
     cursor: pointer;
-    z-index: 90;
+    z-index: 20;
     font-size: 14px;
     @media (max-width: $md2+px) {
       right: auto;
