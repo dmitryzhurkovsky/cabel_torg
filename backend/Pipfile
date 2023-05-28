@@ -22,6 +22,7 @@ num2words = "*"
 aiofiles = "*"
 python-dateutil = "*"
 redis = "*"
+transliterate = "*"
 
 [dev-packages]
 pytest = "*"

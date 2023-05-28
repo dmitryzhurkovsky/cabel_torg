@@ -3,6 +3,7 @@ from _elementtree import Element
 from abc import ABC
 
 from sqlalchemy import text
+from transliterate import translit
 
 from src.models import Manufacturer, BaseUnit, Category, Attribute
 from src.models.attribute_model import AttributeName, AttributeValue
@@ -116,6 +117,9 @@ class GoodsMixin(BaseMixin, ABC):
             if field_name and field_value:
                 if field_name == 'image_path':
                     product_images.append(field_value)
+                elif field_value == 'vendor_code_ru':
+                    product['vendor_code'] = translit(field_value, language_code='ru', reversed=True)
+                    product[field_name] = field_value
                 else:
                     product[field_name] = field_value
 
@@ -159,7 +163,7 @@ class GoodsMixin(BaseMixin, ABC):
             case 'Новинка':
                 return 'is_new', True if raw_field.text == 'true' else False
             case 'Артикул':
-                field_name, field_value = 'vendor_code', raw_field.text.split('УТ-')[-1]
+                field_name, field_value = 'vendor_code_ru', raw_field.text
             case 'Описание':
                 field_name, field_value = 'description', raw_field.text
             case 'Картинка':

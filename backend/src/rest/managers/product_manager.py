@@ -83,6 +83,7 @@ class ProductManager(CRUDManager):
             filter_expressions.append(or_(
                 Product.name.ilike(f'%{search_letters}%'),
                 Product.vendor_code.ilike(f'%{search_letters}%'),
+                Product.vendor_code_ru.ilike(f'%{search_letters}%'),
                 Product.description.ilike(f'%{search_letters}%'),
                 Product.category_id.in_(category_ids),
             ))

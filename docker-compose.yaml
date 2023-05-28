@@ -26,8 +26,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      redis:
-        condition: service_healthy
 
   backend:
     container_name: 'prod_backend'
@@ -40,19 +38,17 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      redis:
-        condition: service_healthy
     volumes:
       - ./data/site_media:/site_media
       - ./backend:/backend
 
-  redis:
-    container_name: 'prod_redis'
-    image: redis:latest
-    ports:
-      - '6379:6379'
-    healthcheck:
-      test: [ "CMD", "redis-cli","ping" ]
+#  redis:
+#    container_name: 'prod_redis'
+#    image: redis:latest
+#    ports:
+#      - '6379:6379'
+#    healthcheck:
+#      test: [ "CMD", "redis-cli","ping" ]
 
   #  Frontend part
   admin_dashboard:

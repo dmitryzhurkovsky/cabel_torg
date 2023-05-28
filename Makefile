@@ -24,4 +24,4 @@ migrate-create: ## Create migrations using alembic
 	docker-compose -f $(DEV_COMPOSE_FILE) exec backend alembic revision --autogenerate -m "$(m)"
 
 test: ## Run tests
-	docker exec -i backend-test pytest src/tests/.
+	docker exec -i backend pytest src/tests/.
