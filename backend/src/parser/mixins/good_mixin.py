@@ -295,18 +295,6 @@ class GoodsMixin(BaseMixin, ABC):
 
     async def set_is_visible_attribute(self):
         """Set is_visible attribute after parsing all product's attributes."""
-        test = await self.db.execute(
-            text(f"""
-                    select p.id, attrs_names.payload
-                    from products p
-                             join product_attribute pa on pa.product_id = p.id
-                             join attributes attrs on attrs.id = pa.attribute_id
-                             join attribute_names attrs_names on attrs.name_id = attrs_names.id
-                    where attrs_names.id = 20 and p.id = 5
-                    order by id;
-                    """)
-        )
-
         await self.db.execute(
             text(f"""
             update products
