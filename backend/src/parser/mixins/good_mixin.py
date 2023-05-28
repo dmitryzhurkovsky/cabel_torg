@@ -81,6 +81,11 @@ class GoodsMixin(BaseMixin, ABC):
             clean_product = await self.clean_product(element=product)
             attributes = clean_product.pop('attributes', None)
 
+            if not clean_product.get('vendor_code_ru'):
+                # Some products don't have vendor_code.
+                # It required field that's why we skip a product without this field.
+                continue
+
             product_db, _ = await database_service.update_or_create_object(
                 db=self.db,
                 model=Product,
@@ -117,7 +122,7 @@ class GoodsMixin(BaseMixin, ABC):
             if field_name and field_value:
                 if field_name == 'image_path':
                     product_images.append(field_value)
-                elif field_value == 'vendor_code_ru':
+                elif field_name == 'vendor_code_ru':
                     product['vendor_code'] = translit(field_value, language_code='ru', reversed=True)
                     product[field_name] = field_value
                 else:
