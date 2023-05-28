@@ -166,6 +166,8 @@ export default defineNuxtComponent({
 
     changeScreen(auth_type) {
       this.SET_TYPE(auth_type);
+      const errorsInData = {};
+      this.SET_ERRORS(errorsInData);
     },
 
     async userLogin() {

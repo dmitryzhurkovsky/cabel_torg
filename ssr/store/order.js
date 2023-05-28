@@ -214,7 +214,7 @@ export default {
                           newItemsFromDB.push({ amount: dbItem.amount, product: dbItem.product});
                       }
                   });
-                  console.log(newItemsFromDB);
+                  // console.log(newItemsFromDB);
                   newItemsFromDB.forEach( async newItem => {
                       await commit("UPDATE_ITEM_IN_CART", { amount: newItem.amount , product: newItem.product } )
                   });
