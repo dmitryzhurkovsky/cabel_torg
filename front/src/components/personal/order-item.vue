@@ -214,11 +214,15 @@ export default {
     }
     &__status{
       padding: 0 5px;
+      white-space: nowrap;
 
       @media (max-width: $md2+px) {
         order: 3;
         padding-right: 0;
       }
+    }
+    &_invoice{
+
     }
     &__details{
         background: #fff;

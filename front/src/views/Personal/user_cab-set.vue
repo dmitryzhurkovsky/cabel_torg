@@ -265,6 +265,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
     padding: 30px 18px 30px 28px;
     background: #FFFFFF;
     border: 2px solid #EEEEEE;
