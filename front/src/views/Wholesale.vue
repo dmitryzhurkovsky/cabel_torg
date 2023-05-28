@@ -75,9 +75,13 @@
   &__block{
     align-items: flex-start;
     padding: 20px 0 30px 0;
-    @media (max-width: $md3+px) {
+    @media (max-width: $md2+px) {
      flex-direction: column;
+      &:nth-child(2){
+        text-align: center;
+      }
     }
+
 
     h3 {
       margin-bottom: 30px;

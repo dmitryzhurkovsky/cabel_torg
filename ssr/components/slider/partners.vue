@@ -102,6 +102,10 @@
     h3{
       text-align: center;
       margin-bottom: 36px;
+      @media (max-width: $md2+px) {
+        text-align: left;
+
+      }
     }
   }
 

@@ -564,7 +564,7 @@
     padding: 22px 18px 20px 18px;
     font-size: 14px;
     font-weight: 300;
-    @media (max-width: $md3+px) {
+    @media (max-width: $md2+px) {
       flex-direction: column-reverse;
       align-items: stretch;
       padding: 22px 18px 0 0;

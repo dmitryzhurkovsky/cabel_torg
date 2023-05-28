@@ -52,7 +52,7 @@
               <div v-if = "isMobileVersion" class="mobile-filter" @click.stop="setIsFilterPanelOpen(!isFilterPanelOpen)">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" data-v-50a3755b=""><line x1="2" y1="17.1133" x2="23" y2="17.1133" stroke="#423E48" stroke-width="1.25" data-v-50a3755b=""></line><line x1="23" y1="7.50391" x2="2" y2="7.5039" stroke="#423E48" stroke-width="1.25" data-v-50a3755b=""></line><circle cx="16.6619" cy="16.911" r="3.08088" fill="white" stroke="#423E48" stroke-width="1.25" data-v-50a3755b=""></circle><circle cx="8.33806" cy="7.70623" r="3.08088" transform="rotate(-180 8.33806 7.70623)" fill="white" stroke="#423E48" stroke-width="1.25" data-v-50a3755b=""></circle></svg>
               </div>
-              <div v-if ="isMobileVersion&&isFilterPanelOpen">
+              <div v-if ="isMobileVersion&&isFilterPanelOpen" class="mobile-filter__block">
                 <CatalogPriceSlider />
                 <CatalogFilterPanel />
                 <CatalogSortPanel />
@@ -463,6 +463,9 @@
     margin: 20px 0;
     &:hover{
       background: #dedede;
+    }
+    &__block{
+      margin-bottom: 15px;
     }
 
 

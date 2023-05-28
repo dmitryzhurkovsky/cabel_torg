@@ -608,7 +608,7 @@
 
 .about__paragraph {
   margin-bottom: 60px;
-  @media (max-width: $md3+px) {
+  @media (max-width: $md2+px) {
     margin-bottom: 30px;
     &:last-child {
       .about__paragraph__box {
@@ -647,7 +647,7 @@
   &__box {
     padding: 24px 0 30px 0;
     align-items: flex-start;
-    @media (max-width: $md3+px) {
+    @media (max-width: $md2+px) {
       flex-direction: column;
 
       .group__row{
@@ -655,7 +655,7 @@
       }
     }
     .table3x{
-      @media (max-width: $md3+px) {
+      @media (max-width: $md2+px) {
         width: 100%;
       }
     }
@@ -678,7 +678,7 @@
 
   .radio__list {
     padding: 0 10px;
-    @media (max-width: $md3+px) {
+    @media (max-width: $md2+px) {
       order: -1;
     }
     p {

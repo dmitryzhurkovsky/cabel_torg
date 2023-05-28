@@ -81,7 +81,7 @@ export default {
       const year = dirtyDate.slice(0, 4);
       const month = dirtyDate.slice(5, 7);
       const date = dirtyDate.slice(8);
-      return date + '/' + month + '/' + year;
+      return date + '.' + month + '.' + year;
     },
 
     delivery_type(){
@@ -155,6 +155,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      position: relative;
       padding: 30px 18px 30px 28px;
       background: #FFFFFF;
       border: 2px solid #EEEEEE;
@@ -217,6 +218,11 @@ export default {
       }
     }
     &__invoice{
+        position: absolute;
+        right: 23px;
+        bottom: 10px;
+        font-size: 12px;
+
       &:hover{
         color: #4275D8;
         cursor: pointer;
@@ -224,6 +230,7 @@ export default {
     }
     &__status{
       padding: 0 5px;
+
 
       @media (max-width: $md2+px) {
         order: 3;

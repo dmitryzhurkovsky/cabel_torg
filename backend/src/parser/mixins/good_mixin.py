@@ -3,6 +3,7 @@ from _elementtree import Element
 from abc import ABC
 
 from sqlalchemy import text
+from transliterate import translit
 
 from src.models import Manufacturer, BaseUnit, Category, Attribute
 from src.models.attribute_model import AttributeName, AttributeValue
@@ -80,6 +81,11 @@ class GoodsMixin(BaseMixin, ABC):
             clean_product = await self.clean_product(element=product)
             attributes = clean_product.pop('attributes', None)
 
+            if not clean_product.get('vendor_code_ru'):
+                # Some products don't have vendor_code.
+                # It required field that's why we skip a product without this field.
+                continue
+
             product_db, _ = await database_service.update_or_create_object(
                 db=self.db,
                 model=Product,
@@ -116,6 +122,9 @@ class GoodsMixin(BaseMixin, ABC):
             if field_name and field_value:
                 if field_name == 'image_path':
                     product_images.append(field_value)
+                elif field_name == 'vendor_code_ru':
+                    product['vendor_code'] = translit(field_value, language_code='ru', reversed=True)
+                    product[field_name] = field_value
                 else:
                     product[field_name] = field_value
 
@@ -159,7 +168,7 @@ class GoodsMixin(BaseMixin, ABC):
             case 'Новинка':
                 return 'is_new', True if raw_field.text == 'true' else False
             case 'Артикул':
-                field_name, field_value = 'vendor_code', raw_field.text.split('УТ-')[-1]
+                field_name, field_value = 'vendor_code_ru', raw_field.text
             case 'Описание':
                 field_name, field_value = 'description', raw_field.text
             case 'Картинка':
@@ -291,18 +300,6 @@ class GoodsMixin(BaseMixin, ABC):
 
     async def set_is_visible_attribute(self):
         """Set is_visible attribute after parsing all product's attributes."""
-        test = await self.db.execute(
-            text(f"""
-                    select p.id, attrs_names.payload
-                    from products p
-                             join product_attribute pa on pa.product_id = p.id
-                             join attributes attrs on attrs.id = pa.attribute_id
-                             join attribute_names attrs_names on attrs.name_id = attrs_names.id
-                    where attrs_names.id = 20 and p.id = 5
-                    order by id;
-                    """)
-        )
-
         await self.db.execute(
             text(f"""
             update products

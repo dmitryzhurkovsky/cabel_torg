@@ -56,6 +56,7 @@ export default {
   }
 }
 .content-block{
+  min-height: 350px;
   &__title{
     font-weight: 500;
     font-size: 20px;

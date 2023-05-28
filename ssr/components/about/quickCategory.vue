@@ -58,16 +58,14 @@
 h3{
   margin-bottom: 20px;
 }
+.quick-category__grid{
+  display: grid;
+      gap:10px;
+      grid-template: minmax(180px, 1fr) minmax(180px, 1fr) / 2fr 1fr 1fr ;
 
-@media (min-width: $md2+px){
-  .quick-category__grid{
-    display: grid;
-    gap:10px;
-    grid-template: minmax(180px, 1fr) minmax(180px, 1fr) / 2fr 1fr 1fr ;
-  }
 }
 
-@media (max-width: $md3+px){
+@media (max-width: $md2+px){
   .quick-category__grid {
     display: flex;
     flex-direction: column;
