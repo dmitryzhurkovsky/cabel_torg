@@ -127,6 +127,7 @@
     width: 100%;
     padding-left: 20px;
     padding-bottom: 20px;
+    min-height: 350px;
     @media (max-width: $md2+px){
       padding-left: 0px;
     }
