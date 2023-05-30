@@ -199,10 +199,12 @@ export default {
 <style lang="scss" scoped>
 
 .burger__menu__open{
-  position: absolute;
+  position: relative;
   top: 0;
   width: 100%;
-  height: 100%;
+  max-height: 100%;
+  height: 100vh;
+
   background-color: #fff;
   z-index: 50;
 }
