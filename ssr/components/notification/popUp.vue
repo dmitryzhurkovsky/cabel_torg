@@ -34,6 +34,8 @@
             document.body.style.overflowY = 'hidden';
             document.body.style.paddingRight = '16px';
           }, 200);
+          document.body.style.overflowY = 'hidden';
+          document.body.style.paddingRight = '16px';
         } else {
           document.body.style.overflowY = '';
           document.body.style.paddingRight = '0';
@@ -76,7 +78,7 @@
         top: 0;
         //height: 100%;
         // max-height:100vh;
-        width: 100%;
+        width: calc(100% - 16px);
         background: linear-gradient(180deg, rgba(66, 62, 72, 0.2) 0%, rgba(66, 62, 72, 0) 100%);
         backdrop-filter: blur(2px);
         z-index: 95;

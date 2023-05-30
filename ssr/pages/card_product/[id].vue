@@ -51,7 +51,7 @@
                               <div>Первоначальная цена: </div>
                               <div>
                                   <span class="price__value"> {{ cartItemData.price_with_tax }}</span>BYN
-                                  <span>/шт</span>
+                                  <span>/{{ cartItemData.base_unit.full_name }}</span>
                               </div>
 
                             </div>
@@ -64,7 +64,7 @@
                                         : cartItemData.price_with_tax
                                       }}
                                     </span>BYN
-                                    <span>/шт</span>
+                                    <span>/{{ cartItemData.base_unit.full_name }}</span>
                                 </div>
 
                             </div>
