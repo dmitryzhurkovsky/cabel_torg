@@ -199,7 +199,8 @@ export default {
 <style lang="scss" scoped>
 
 .burger__menu__open{
-  position: relative;
+  position: fixed;
+  overflow-y: scroll;
   top: 0;
   width: 100%;
   max-height: 100%;
