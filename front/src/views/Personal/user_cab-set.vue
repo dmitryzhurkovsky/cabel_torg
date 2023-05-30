@@ -303,6 +303,7 @@
 
   &__price{
     font-weight: 500;
+    text-align: right;
     span{
       font-weight: 400;
     }

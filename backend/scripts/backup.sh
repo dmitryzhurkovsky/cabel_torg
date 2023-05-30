@@ -1,20 +1,28 @@
 #!/bin/bash
-date=$(date '+%Y-%m-%d')
-source backend/env.prod
+PROJECT_DIR=/root/cabel_torg
+DATA_DIR=$PROJECT_DIR/data
+LOGS_DIR=$DATA_DIR/logs
+BACKUPS_DIR=$DATA_DIR/backups
+DOCKER_BACKUPS_DIR=/backups
+LOG_FILE=$LOGS_DIR/cabel_torg_backup_process.log
 
-echo "Start logging process in $date" >/var/log/cabel_torg_backup.log
+# Create the backup and logs directories.
+mkdir -p $BACKUPS_DIR
+mkdir -p $LOGS_DIR
 
-BACKUP_FILE="${date}_backup.sql"
-BACKUP_DIR="/root/db_backups"
+# Get env variables
+source $PROJECT_DIR/backend/.env
 
-# Create the backup directory if it doesn't exist
-mkdir -p "$BACKUP_DIR"
+# Get current datetime
+date=$(date "+%Y-%m-%d")
 
-pg_dump -U $DB_USERNAME -W $DB_NAME > "$BACKUP_DIR/$BACKUP_FILE"
-echo "Database backup has been created on ${date}" >>/var/log/cabel_torg_backup.log
+#echo "Start logging process in $date" > $LOG_FILE
+PGPASSWORD=$POSTGRES_PASSWORD docker-compose exec -T db mkdir -p $DOCKER_BACKUPS_DIR
+PGPASSWORD=$POSTGRES_PASSWORD docker-compose exec -T db pg_dump -U $POSTGRES_USER -d $POSTGRES_DB -f "$DOCKER_BACKUPS_DIR/${date}_backup.sql"
+echo "Database backup has been created on ${date}" >> $LOG_FILE
 
-cp -r /root/cabel_torg/data/* /root/dumped_data/
-echo "Data was copied on ${date}" >>/var/log/cabel_torg_backup.log
+rsync -a --stats --exclude="backups" --exclude="logs" "$DATA_DIR/" "$BACKUPS_DIR/"
+echo "Data was copied on ${date}" >> $LOG_FILE
 
-find "$BACKUP_DIR" -name '*_backup.sql' -type f -mtime +5 -delete
-echo "Old backup files were deleted" >>/var/log/cabel_torg_backup.log
+find $BACKUPS_DIR -name '*_backup.sql' -type f -mtime +5 -delete
+echo "Old backup files were deleted" >> $LOG_FILE

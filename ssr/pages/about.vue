@@ -64,10 +64,8 @@
               <br>
               <p class="text_paragraph__item"><b>Банк:</b> {{ SETTINGS.serving_bank }}</p>
               <p class="text_paragraph__item"><b>р/с в формате IBAN:</b> {{ SETTINGS.IBAN }}</p>
-              <!-- <p class="text_paragraph__item"><b>(RUR)</b> {{ SETTINGS.RUR }}</p> -->
               <p class="text_paragraph__item">{{ SETTINGS.serving_bank_short }}</p>
               <br>
-              <!-- <p class="text_paragraph__item"><b>Директор:</b> {{ SETTINGS.director_fullname }}</p> -->
             </div>
           </div>
 

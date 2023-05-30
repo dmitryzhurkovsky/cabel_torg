@@ -215,6 +215,7 @@ export default {
       max-width: 250px;
       @media (max-width: $md2+px) {
         order: 2;
+        text-align: right;
       }
     }
     &__invoice{
@@ -222,92 +223,99 @@ export default {
         right: 23px;
         bottom: 10px;
         font-size: 12px;
-
-      &:hover{
-        color: #4275D8;
-        cursor: pointer;
-      }
-    }
-    &__status{
-      padding: 0 5px;
-
-
       @media (max-width: $md2+px) {
-        order: 3;
-      }
-    }
-    &__details{
-        background: #fff;
-        padding: 28px 28px;
-        border: 2px solid #EEEEEE;
-        border-bottom-right-radius: 8px;
-        border-bottom-left-radius: 8px;
-        margin-bottom: 16px;
-
-    }
-
-
-
-    &__price{
-      padding-left: 5px;
-      font-weight: 500;
-      white-space: nowrap;
-      min-width: 110px;
-      @media (max-width: $md2+px) {
-        font-weight: 600;
-        font-size: 14px!important;
-        line-height: 20px;
-        margin-bottom: 10px!important;
-        order: 0;
-      }
-      span{
-        font-weight: 400;
-      }
-    }
+        right: auto;
+        bottom: 7px;
+        left: 17px;
   }
+
+  &:hover{
+    color: #4275D8;
+    cursor: pointer;
+  }
+}
+&__status{
+  padding: 0 5px;
+
+
+  @media (max-width: $md2+px) {
+    order: 3;
+  }
+}
+&__details{
+    background: #fff;
+    padding: 28px 28px;
+    border: 2px solid #EEEEEE;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    margin-bottom: 16px;
+    border-top:none;
+
+}
+
+
+
+&__price{
+  padding-left: 5px;
+  font-weight: 500;
+  white-space: nowrap;
+  min-width: 110px;
+  text-align: right;
+  @media (max-width: $md2+px) {
+    font-weight: 600;
+    font-size: 14px!important;
+    line-height: 20px;
+    margin-bottom: 10px!important;
+    order: 0;
+  }
+  span{
+    font-weight: 400;
+  }
+}
+}
 
 
 .details-order{
-  font-size: 14px;
+font-size: 14px;
 
-  &__item{
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-  &__title{
-    padding-right: 5px;
-    flex-basis: 55%;
-    font-weight: 300;
-    font-size: 14px;
-    text-decoration-line: underline;
-  }
-  &__article{
-    padding: 0 5px;
-    flex-basis: 15%;
-    opacity: 0.4;
-    text-align: center;
-  }
-  &__count{
-    padding:5px;
-    flex-basis: 15%;
-    text-align: center;
-    span{
-      margin-left: 5px;
-    }
+&__item{
+justify-content: space-between;
+margin-bottom: 10px;
+}
+&__title{
+padding-right: 5px;
+flex-basis: 55%;
+font-weight: 300;
+font-size: 14px;
+text-decoration-line: underline;
+}
+&__article{
+padding: 0 5px;
+flex-basis: 15%;
+opacity: 0.4;
+text-align: center;
+}
+&__count{
+padding:5px;
+flex-basis: 15%;
+text-align: center;
+span{
+  margin-left: 5px;
+}
 
-  }
-  &__price{
-    padding-left: 5px;
-    flex-basis: 20%;
-    text-align: right;
-    white-space: nowrap;
+}
+&__price{
+padding-left: 5px;
+flex-basis: 20%;
+text-align: right;
+white-space: nowrap;
 
-  }
+}
 }
 ._open{
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-  margin-bottom: 0;
+border-bottom-right-radius: 0;
+border-bottom-left-radius: 0;
+margin-bottom: 0;
 
 }
 </style>
