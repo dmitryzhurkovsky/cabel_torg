@@ -22,6 +22,8 @@ class OfferMixin(BaseMixin, ABC):
                 fields={'bookkeeping_id': product_bookkeeping_id},
                 prefetch_fields=(Product.attributes,)
             )
+            if not product_db:
+                continue
 
             product_db.price = product_price
             product_db.count = product_count
