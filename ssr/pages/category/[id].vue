@@ -315,7 +315,7 @@
         category: store.getters['catalog/CATEGORY'],
       }
     }, {
-      watch: [ChangeParameters, ]
+      watch: [ChangeParameters]
     }
   )
 

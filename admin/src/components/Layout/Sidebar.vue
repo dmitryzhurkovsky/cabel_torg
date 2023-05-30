@@ -1,18 +1,31 @@
 <script setup lang='ts'>
 import { ref } from "vue";
+import { useStore } from '../../store';
+import { MutationTypes } from '../../store/mutation-types'
+import { router } from '../../router'
 
 const props = defineProps({
   openSidebar: {
     type: Boolean,
     required: true,
   },
-});
+})
 
+const store = useStore()
 const emit = defineEmits(['onToggleMenu']);
 
 const toggleMenu = (): void => {
   emit('onToggleMenu');
-};
+}
+
+const exitFromAdmin = () => {
+  store.commit(MutationTypes.SET_USER, null)
+  localStorage.removeItem("authToken")
+  localStorage.removeItem("refreshToken")
+  console.log(store.getters['user']);
+  
+  router.push('/login')
+}
 
 const links = ref([
   { name: "Скидки", href: "/discount" },
@@ -39,6 +52,7 @@ const links = ref([
       >{{ link.name }}
     </router-link
     >
+    <div class="sidebar__link link__hover" @click="exitFromAdmin">Выход</div>
   </div>
   <div v-if = "!openSidebar" class="sidebar-marker" @click="toggleMenu">&#5125;</div>
   <div v-else class="sidebar-marker sidebar-marker_isopen" @click="toggleMenu">&#5130;</div>
@@ -48,6 +62,9 @@ const links = ref([
 .router-link-active{
   color:#4275d8;
   text-decoration: underline;
+}
+.link__hover:hover{
+  cursor: pointer;  
 }
 .sidebar {
   left: 0;

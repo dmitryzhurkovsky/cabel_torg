@@ -33,11 +33,11 @@ export default {
     IS_MENU_ACTIONS_OPEN: function(){
       if (this.IS_MENU_ACTIONS_OPEN) {
         window.scrollTo(0, 0);
-        document.body.style.overflow = 'hidden';
-        // document.body.style.paddingRight = '16px';
+        document.body.style.overflowY = 'hidden';
+        document.body.style.paddingRight = '16px';
       } else {
-        document.body.style.overflow = '';
-        // document.body.style.paddingRight = '0';
+        document.body.style.overflowY = '';
+        document.body.style.paddingRight = '0';
       }
     }
   },

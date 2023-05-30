@@ -89,7 +89,7 @@
   }
 
   const ChangeParameters = computed(() => {
-    return JSON.stringify(route.query)
+    return JSON.stringify(route.query) + JSON.stringify(store.getters['catalog/ITEMS_LIST'])
   })
 
   const clearSearchString= () => {

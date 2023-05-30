@@ -65,7 +65,7 @@
       if (typeSort.value === 'desc') modifier = -1
       const param = sortField.value;
       let sortAs = 'string'
-      console.log('param ', param);
+      // console.log('param ', param);
       
       if (typeof a[param] === 'number') {
         sortAs = 'number'
@@ -80,7 +80,7 @@
         sortAs = 'date'
       }
       
-      console.log('sortAs ', sortAs);
+      // console.log('sortAs ', sortAs);
       if (sortAs === 'string') {
         if (Number(a[param]) < Number(b[param])) return -1 * modifier
         if (Number(a[param]) > Number(b[param])) return 1 * modifier
