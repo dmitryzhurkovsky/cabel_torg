@@ -40,7 +40,6 @@ services:
         condition: service_healthy
     volumes:
       - ../data/site_media:/site_media
-      - ./backend:/backend
 
 #  redis:
 #    container_name: 'dev_redis'

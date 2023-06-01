@@ -2,12 +2,15 @@ import asyncio
 import os
 import time
 
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.orm import sessionmaker
 
 from src.app import logger
 from src.core import settings
 from src.core.db.db import engine
 from src.parser.xml_bookkeeping_parser import XMLParser, OffersParser
+
+parser_async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 bookkeeping_last_modified_time = None
 offers_last_modified_time = None
@@ -16,7 +19,7 @@ offers_last_modified_time = None
 async def parse_bookkeeping_file():
     event_loop = asyncio.get_running_loop()
 
-    async with AsyncSession(engine) as db:
+    async with parser_async_session() as db:
         start_parsing = time.time()
         xml_parser = XMLParser(db=db)
         price_parser = OffersParser(db=db)
@@ -50,7 +53,8 @@ def parsing_files_are_changed() -> bool:
 
 
 if __name__ == '__main__':
-    event_loop = asyncio.get_event_loop()
+    event_loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(event_loop)
 
     while True:
         if parsing_files_are_changed():
