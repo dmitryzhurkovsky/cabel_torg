@@ -35,3 +35,24 @@ To generate an SSL certificate for a new domain, follow these steps:
     ```
 To get more information about it use the following source:
 https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
+
+
+## Backups
+
+`Crontab` and `backend/scripts/backup.sh` script are used to backup all data.
+To configurate it follow the following instruction:
+
+```text
+0 0 * * * /root/cabel_torg/backend/scripts/backup.sh
+```
+
+
+## CI/CD processes
+
+Github actions and a self-hosted runner are used for this purpose. 
+The config file is kept in `.github/workflows/main.yaml` and there is deploy stage only there.
+
+To get more detail about self-hosted runners follow this links 
+https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners
+
+
