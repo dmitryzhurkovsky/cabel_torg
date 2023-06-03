@@ -1,4 +1,4 @@
-name: Deploy with Docker Compose
+name: Deploy with Docker Compose test
 
 on:
   push:
