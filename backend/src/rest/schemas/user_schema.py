@@ -15,6 +15,7 @@ class UserBaseSchema(BaseModel):
     IBAN: str | None
     BIC: str | None
     serving_bank: str | None
+    is_admin: bool | None = False
 
 
 class UserCreateSchema(UserBaseSchema):
@@ -35,8 +36,6 @@ class UserUpdateSchema(UserBaseSchema):
 
 
 class UserSchema(UserBaseSchema, BaseSchema):
-    is_admin: bool
-
     class Config:
         orm_mode = True
 

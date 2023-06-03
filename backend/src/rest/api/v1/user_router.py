@@ -5,7 +5,7 @@ from starlette.requests import Request
 
 from src.core.db.db import get_session
 from src.core.enums import SessionStatusEnum
-from src.core.exception.base_exception import BadRequestError, ObjectNotFoundError
+from src.core.exception.base_exception import BadRequestError, ObjectNotFoundError, ForbiddenError
 from src.core.utils import generate_random_password
 from src.rest.managers.user_manager import UserManager
 from src.rest.permissions import is_admin_permission, is_authenticated_permission
@@ -65,14 +65,21 @@ async def get_current_user(
 )
 async def create_user(
         user_info: UserInputCreateSchema,
+        request: Request,
         session: AsyncSession = Depends(get_session)
 ) -> UserSchema:
+    if (
+            user_info.is_admin and
+            not request.user or
+            not request.user.is_admin
+    ):
+        raise ForbiddenError('Only a user with admin role can create new admin users.')
+
     try:
         user_db = await UserManager.retrieve(email=user_info.email, session=session)
         if user_db:
             raise BadRequestError(detail='User with such email exists')
     except ObjectNotFoundError:
-        # todo check that user isn't admin
         user_info = user_info.dict()
         password_is_generated = user_info.pop('isGenerated', None)
         user_db = await UserManager.create(input_data=UserCreateSchema(**user_info), session=session)
