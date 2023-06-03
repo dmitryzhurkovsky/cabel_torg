@@ -10,11 +10,7 @@ from src.models.attribute_model import AttributeName, AttributeValue
 from src.models.product_model import Product, ProductStatus
 from src.parser.mixins.base_mixin import BaseMixin
 from src.parser.servers import database_service
-from src.parser.utils import (
-    clean_string_from_spaces_and_redundant_symbols,
-    clean_fields,
-    get_tag_name
-)
+from src.parser.utils import clean_fields, get_tag_name
 
 
 class GoodsMixin(BaseMixin, ABC):
@@ -168,17 +164,13 @@ class GoodsMixin(BaseMixin, ABC):
             case 'Новинка':
                 return 'is_new', True if raw_field.text == 'true' else False
             case 'Артикул':
-                field_name, field_value = 'vendor_code_ru', raw_field.text
+                return 'vendor_code_ru', raw_field.text
             case 'Описание':
-                field_name, field_value = 'description', raw_field.text
+                return 'description', raw_field.text
             case 'Картинка':
-                field_name, field_value = 'image_path', raw_field.text[12:]
+                return 'image_path', raw_field.text[12:]
             case _:
                 return None, None
-
-        if field_name and field_value:
-            return field_name, clean_string_from_spaces_and_redundant_symbols(field_value)
-        return None, None
 
     async def clean_product_base_unit(self, raw_field: Element) -> tuple[str, int | None] | tuple[None, None]:
         """
