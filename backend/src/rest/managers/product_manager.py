@@ -1,4 +1,5 @@
 from decimal import Decimal
+from typing import Generator
 
 from fastapi import HTTPException
 from sqlalchemy import or_, select, and_, case
@@ -25,6 +26,12 @@ class ProductManager(CRUDManager):
         joinedload(Product.category),
         selectinload(Product.attributes)  # todo change it and use joinedload instead of this one
     )
+
+    @staticmethod
+    def process_records_with_is_popular_field(query) -> Generator:
+        for obj, is_popular in query:
+            obj.is_popular = is_popular
+            yield obj
 
     @classmethod
     async def get_filter_expressions(cls, filter_fields: QueryParams, session: AsyncSession) -> list[ColumnOperators]:
@@ -117,14 +124,12 @@ class ProductManager(CRUDManager):
             session: AsyncSession,
             offset: int = 0,
             limit: int = 12
-    ) -> list:
+    ) -> list | Generator:
         """Get filtered list of objects with pagination."""
         filter_expressions = await cls.get_filter_expressions(filters, session=session)
         filter_expressions.append(Product.is_visible.is_not(False))
 
         order_by = cls.get_order_expressions(filters)
-
-        products = []
 
         # todo add description of a flow
         popular_products = (
@@ -146,13 +151,8 @@ class ProductManager(CRUDManager):
             limit(limit).
             offset(offset)
         )
-        objects = query_result.all()
 
-        for product, is_popular in objects:
-            product.is_popular = is_popular
-            products.append(product)
-
-        return products
+        return cls.process_records_with_is_popular_field(query=query_result.all())
 
     @classmethod
     async def get_the_most_popular_products_ids(cls, session: AsyncSession) -> list[int]:
