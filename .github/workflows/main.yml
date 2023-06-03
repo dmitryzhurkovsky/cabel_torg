@@ -1,4 +1,4 @@
-name: Deploy with Docker Compose test
+name: Deploy with Docker Compose
 
 on:
   push:
@@ -11,9 +11,11 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v2
       - name: Go to root dir of project
         run: cd /root/cabel_torg/
+
+      - name: Get actual version of master branch
+        run: git pull
 
       - name: Rebuild and restart containers
         run: docker-compose up --build -d
