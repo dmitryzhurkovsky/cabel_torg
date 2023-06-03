@@ -4,6 +4,9 @@ on:
   push:
     branches: [ "master" ]
 
+env:
+  ACTIONS_RUNNER_DEBUG: true
+
 jobs:
   deploy:
     runs-on: self-hosted
