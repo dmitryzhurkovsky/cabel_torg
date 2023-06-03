@@ -7,9 +7,6 @@ on:
 jobs:
   deploy:
     runs-on: self-hosted
-
-  build:
-    runs-on: ubuntu-latest
     steps:
       - name: Go to root dir of project
         run: cd /root/cabel_torg/
