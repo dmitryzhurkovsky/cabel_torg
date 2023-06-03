@@ -4,19 +4,41 @@ on:
   push:
     branches: [ "master" ]
 
+  workflow_dispatch:
+
+
 jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Go to root dir of project.
+      - name: Going to root dir of project.
         run: cd /root/cabel_torg/
 
-      - name: Get actual version of master branch.
+      - name: Getting actual version of master branch.
         run: git pull
 
       - name: Waiting until git pull command is finished ...
         run: sleep 5s
         shell: bash
 
-      - name: Rebuild and restart containers.
+      - name: Rebuilding and restarting containers.
         run: docker-compose up --build -d
+
+  rebuild-without-cache:
+    runs-on: self-hosted
+    steps:
+      - name: Going to root dir of project.
+        run: cd /root/cabel_torg/
+
+      - name: Getting actual version of master branch.
+        run: git pull
+
+      - name: Waiting until git pull command is finished ...
+        run: sleep 5s
+        shell: bash
+
+      - name: Rebuilding containers without cache.
+        run: docker-compose build --no-cache
+
+      - name: Restarting containers.
+        run: docker-compose up -d
