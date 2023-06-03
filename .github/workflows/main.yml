@@ -4,18 +4,19 @@ on:
   push:
     branches: [ "master" ]
 
-env:
-  ACTIONS_RUNNER_DEBUG: true
-
 jobs:
   deploy:
     runs-on: self-hosted
     steps:
-      - name: Go to root dir of project
+      - name: Go to root dir of project.
         run: cd /root/cabel_torg/
 
-      - name: Get actual version of master branch
+      - name: Get actual version of master branch.
         run: git pull
 
-      - name: Rebuild and restart containers
+      - name: Waiting until git pull command is finished ...
+        run: sleep 5s
+        shell: bash
+
+      - name: Rebuild and restart containers.
         run: docker-compose up --build -d
