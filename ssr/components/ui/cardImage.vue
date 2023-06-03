@@ -10,6 +10,7 @@ export default {
 
   props: {
     images:  null,
+    num: 0,
   },
 
   methods:{
@@ -17,7 +18,7 @@ export default {
       let path = null;
       if (item) {
         const allPath = item.split(',');
-        path = useRuntimeConfig().public.NUXT_APP_IMAGES + allPath[0];
+        path = useRuntimeConfig().public.NUXT_APP_IMAGES + allPath[this.num];
       }
       return path;
     },

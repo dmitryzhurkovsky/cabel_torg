@@ -148,11 +148,15 @@ export default {
 
     getLastPartOfUrl(){
       let url = "offset=" + this.OFFSET + 
-        "&limit=" + this.LIMIT + 
+        "&limit=" + this.LIMIT;
+      if (this.MIN_PRICE != 0 || this.MAX_PRICE != 40000) {
+        url = url + "&actual_price_gte=" + this.MIN_PRICE;
+        url = url + "&actual_price_lte=" + this.MAX_PRICE;
+      }
         "&actual_price_gte=" + this.MIN_PRICE + 
         "&actual_price_lte=" + this.MAX_PRICE;
       url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
-      url = url + "&q=";
+      // url = url + "&q=";
       return url;        
     },
 

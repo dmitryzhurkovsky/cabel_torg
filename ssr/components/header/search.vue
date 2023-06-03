@@ -84,21 +84,19 @@ export default {
       this.queryString = '';
       this.SET_SEARCH_STRING('');
       this.SET_CATALOG_SEARCH_STRING('');
-      // let url = "/catalog?";
-      // url = url + "offset=0&limit=12&actual_price_gte=0&actual_price_lte=40000";
-      // url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
-      // url = url + '&type_of_product=all';
-      // url = url + "&q=" + this.CATALOG_SEARCH_STRING;
-      // this.$router.push(url);
+      let url = "/catalog?";
+      url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+      url = url + '&type_of_product=all';
+      this.$router.push(url);
     },
 
     openFindedElementsInCatalg(){
       this.SET_CATALOG_SEARCH_STRING(this.SEARCH_STRING);
       let url = "/catalog?";
-      url = url + "offset=0&limit=12&actual_price_gte=0&actual_price_lte=40000";
+      if (this.CATALOG_SEARCH_STRING) url = url + "offset=0&limit=12&actual_price_gte=0&actual_price_lte=40000";
       url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
       url = url + '&type_of_product=all';
-      url = url + "&q=" + this.CATALOG_SEARCH_STRING;
+      if (this.CATALOG_SEARCH_STRING) url = url + "&q=" + this.CATALOG_SEARCH_STRING;
       this.$router.push(url);
     }
 

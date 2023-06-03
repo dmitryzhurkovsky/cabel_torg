@@ -160,12 +160,15 @@ export default {
 
     getLastPartOfUrl(min, max){
       let url = "offset=" + this.OFFSET + 
-        "&limit=" + this.LIMIT + 
-        "&actual_price_gte=" + min + 
-        "&actual_price_lte=" + max;
+        "&limit=" + this.LIMIT;
+      if (min != 0 || max != 40000) {
+        url = url + "&actual_price_gte=" + min
+        url = url + "&actual_price_lte=" + max
+      }
       url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
       url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
-      url = url + "&q=" + this.CATALOG_SEARCH_STRING;
+      // url = url + "&q=" + this.CATALOG_SEARCH_STRING;
+      console.log(url);
       return url;        
     },
 

@@ -31,13 +31,14 @@ export default {
     },
 
     IS_MENU_ACTIONS_OPEN: function(){
+      console.log(this.DEVICE_VIEW_TYPE);
       if (this.IS_MENU_ACTIONS_OPEN) {
         window.scrollTo(0, 0);
         document.body.style.overflowY = 'hidden';
-        document.body.style.paddingRight = '16px';
+        if (this.DEVICE_VIEW_TYPE === 1) document.body.style.paddingRight = '16px';
       } else {
         document.body.style.overflowY = '';
-        document.body.style.paddingRight = '0';
+        if (this.DEVICE_VIEW_TYPE === 1) document.body.style.paddingRight = '0';
       }
     }
   },

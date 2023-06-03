@@ -73,12 +73,14 @@ export default {
         }
         this.SET_DEFAULT_PRICES();
         url = url + "?offset=" + this.OFFSET + 
-        "&limit=" + this.LIMIT + 
-        "&actual_price_gte=" + this.MIN_PRICE + 
-        "&actual_price_lte=" + this.MAX_PRICE;
+        "&limit=" + this.LIMIT;
+        if (this.MIN_PRICE != 0 || this.MAX_PRICE != 40000) {
+          url = url + "&actual_price_gte=" + this.MIN_PRICE; 
+          url = url + "&actual_price_lte=" + this.MAX_PRICE;
+        }
         url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
         url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
-        url = url + "&q=" + this.CATALOG_SEARCH_STRING;
+        // url = url + "&q=" + this.CATALOG_SEARCH_STRING;
         this.SET_SEARCH_STRING('');
         this.MOVE_TO_SELECT_PATH(item.index);
         // console.log('Url   ', item.path + url);

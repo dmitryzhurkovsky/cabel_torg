@@ -105,8 +105,7 @@
     const { query } = currRoute
     if (query.limit) {
       if (getters['query/LIMIT'] !== query.limit) store.commit('query/SET_LIMIT', query.limit)
-    } 
-    else {
+    } else {
       isFailInParams = true
     }
     if (query.offset) {
@@ -118,11 +117,13 @@
       if (getters['query/MIN_PRICE'] !== query.actual_price_gte) store.commit('query/SET_MIN_PRICE', query.actual_price_gte)
     } else {
       isFailInParams = true
+      store.commit('query/SET_MIN_PRICE', 0)
     }
     if (query.actual_price_lte) {
       if (getters['query/MAX_PRICE'] !== query.actual_price_lte) store.commit('query/SET_MAX_PRICE', query.actual_price_lte)
     } else {
       isFailInParams = true
+      store.commit('query/SET_MAX_PRICE', 40000)
     }
     if (query.q) {
       if (getters['catalog/CATALOG_SEARCH_STRING'] !== query.q) {
@@ -172,7 +173,6 @@
   const { data: catalogData } = await useAsyncData(
     'posts', 
     async () => {
-      console.log('UseAsyncData catalog ');
       if (isFerstRender) {
         setParametersFromURL()
       }

@@ -156,12 +156,14 @@
 
   const getLastPartOfUrl = () => {
     let url = "offset=" + getters['query/OFFSET'] + 
-      "&limit=" + getters['query/LIMIT'] + 
-      "&actual_price_gte=" + getters['query/MIN_PRICE'] + 
-      "&actual_price_lte=" + getters['query/MAX_PRICE']
+      "&limit=" + getters['query/LIMIT'];
+    if (getters['query/MIN_PRICE'] != 0 || getters['query/MAX_PRICE'] != 40000) {
+      url = url + "&actual_price_gte=" + getters['query/MIN_PRICE'];
+      url = url + "&actual_price_lte=" + getters['query/MAX_PRICE']
+    }  
     url = url + "&ordering=" + getters['query/SORT_DIRECTION'] + getters['query/SORT_TYPE']
     url = url + '&type_of_product=' + getters['query/TYPE_OF_PRODUCT']
-    url = url + "&q=" + getters['catalog/CATALOG_SEARCH_STRING']
+    // url = url + "&q=" + getters['catalog/CATALOG_SEARCH_STRING']
     return url;        
   }
 
@@ -210,12 +212,13 @@
       }
     } else {
       isFailInParams = true
+      store.commit('query/SET_MIN_PRICE', 0)
     }
     if (query.actual_price_lte) {
       if (getters['query/MAX_PRICE'] !== query.actual_price_lte) store.commit('query/SET_MAX_PRICE', query.actual_price_lte)
     } else {
       isFailInParams = true
-    }
+      store.commit('query/SET_MAX_PRICE', 40000)    }
     if (query.q) {
       if (getters['catalog/CATALOG_SEARCH_STRING'] !== query.q) {
         store.commit('catalog/SET_CATALOG_SEARCH_STRING', query.q)

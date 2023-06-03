@@ -12,7 +12,15 @@
           <div class="product__body">
             <div class="product__box flex-center">
                 <div class="product__main-img">
-                    <UiCardImage :images=cartItemData.images />
+                    <UiCardImage 
+                      :images=cartItemData.images 
+                      :num="imgNumber"
+                    />
+                </div>
+                <div class="product__swaper-img">
+                  <SliderCardImage 
+                    @onSliderChanged(id) = "changeNumber(id)"
+                  />
                 </div>
                 <div class="product__info">
                     <div class="desc-product__title"> {{ cartItemData.name }}</div>
@@ -162,6 +170,7 @@
   const quantityLocal = ref(1)
   const infoBlock = ref(0)
   const id = ref(null)
+  const imgNumber = ref(0)
 
   // const ChangeParameters = computed(() => {
   //   console.log('QQQQQQ');
@@ -179,6 +188,10 @@
     countQuantity();
     checkIsWish();
   })
+
+  const changeNumber = (id) => {
+    console.log(id)
+  }
 
   const checkQuantityLocal = () => {
     if (quantityLocal.value < 1) {

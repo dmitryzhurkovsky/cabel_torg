@@ -17,14 +17,14 @@
   const router = useRouter()
 
 
-  const ChangeParameters = computed(() => {
-    return String(getters['query/LIMIT']) + String(getters['query/OFFSET'])
-  })
+  // const ChangeParameters = computed(() => {
+  //   return String(getters['query/LIMIT']) + String(getters['query/OFFSET']);
+  // })
 
-  watch(() => ChangeParameters,
-    () => {
-      Pages
-  })
+  // watch(() => ChangeParameters,
+  //   () => {
+  //     Pages
+  // })
 
 
   const Pages = computed(() => {
@@ -151,12 +151,14 @@
 
   const getLastPartOfUrl = (offset) => {
     let url = "offset=" + offset + 
-      "&limit=" + getters['query/LIMIT'] + 
-      "&actual_price_gte=" + getters['query/MIN_PRICE'] + 
-      "&actual_price_lte=" + getters['query/MAX_PRICE']
+      "&limit=" + getters['query/LIMIT']
+    if (getters['query/MIN_PRICE'] != 0 || getters['query/MAX_PRICE'] != 40000) {
+      url = url + "&actual_price_gte=" + getters['query/MIN_PRICE'] 
+      url = url + "&actual_price_lte=" + getters['query/MAX_PRICE']
+    }  
     url = url + "&ordering=" + getters['query/SORT_DIRECTION'] + getters['query/SORT_TYPE']
     url = url + '&type_of_product=' + getters['query/TYPE_OF_PRODUCT']
-    url = url + "&q=" + getters['query/SEARCH_STRING']
+    if (getters['query/SEARCH_STRING']) url = url + "&q=" + getters['query/SEARCH_STRING']
     return url
   }
 

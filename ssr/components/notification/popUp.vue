@@ -1,6 +1,22 @@
 <template>
     <transition-group>
-      <div 
+      <div v-if="DEVICE_VIEW_TYPE === 1"
+        @click.stop="closePopUp(false)"
+        ref="popup" 
+        :class="[IS_POPUP_OPEN === true ? 'popup__wrapper popup__desktop': 'popup__wrapper popup__desktop disabled']"
+        :key="1"
+      >
+        <div class="popup__body" @click.stop="">
+            <div class="icon-close popup__close" @click.stop="closePopUp(false)"></div>
+            <div class="popup__content" >
+              <NotificationMsg v-if = "POPUP_ACTION === 'ShowCompleteMsg'" />
+              <NotificationRequestCall v-if = "POPUP_ACTION === 'RequestCall'"/>
+              <NotificationUserLogin v-if = "POPUP_ACTION === 'UserLogin'"/>
+              <NotificationChangePass v-if = "POPUP_ACTION === 'ChangePassword'"/>
+            </div>
+        </div>
+      </div>
+      <div v-if="DEVICE_VIEW_TYPE !== 1"
         @click.stop="closePopUp(false)"
         ref="popup" 
         :class="[IS_POPUP_OPEN === true ? 'popup__wrapper': 'popup__wrapper disabled']"
@@ -28,23 +44,24 @@
 
     watch: {
       IS_POPUP_OPEN: function(){
+        console.log(this.DEVICE_VIEW_TYPE);
         if (this.IS_POPUP_OPEN) {
           setTimeout(() => {
             this.$refs.popup.style.top = window.pageYOffset + 'px';
             document.body.style.overflowY = 'hidden';
-            document.body.style.paddingRight = '16px';
+            if (this.DEVICE_VIEW_TYPE === 1) document.body.style.paddingRight = '16px';
           }, 200);
           document.body.style.overflowY = 'hidden';
-          document.body.style.paddingRight = '16px';
+          if (this.DEVICE_VIEW_TYPE === 1) document.body.style.paddingRight = '16px';
         } else {
           document.body.style.overflowY = '';
-          document.body.style.paddingRight = '0';
+          if (this.DEVICE_VIEW_TYPE === 1) document.body.style.paddingRight = '0';
         }
       }
     },
 
     computed: {
-      ...mapGetters("header", ["IS_POPUP_OPEN", "POPUP_ACTION"]),
+      ...mapGetters("header", ["IS_POPUP_OPEN", "POPUP_ACTION", "DEVICE_VIEW_TYPE"]),
       ...mapGetters("auth", ["REDIRECT_AFTER_LOGIN"])
     },
 
@@ -78,12 +95,16 @@
         top: 0;
         //height: 100%;
         // max-height:100vh;
-        width: calc(100% - 16px);
+        width: 100%;
         background: linear-gradient(180deg, rgba(66, 62, 72, 0.2) 0%, rgba(66, 62, 72, 0) 100%);
         backdrop-filter: blur(2px);
         z-index: 95;
         height: 100vh;
         overflow-y: hidden;
+    }
+
+    &__desktop {
+      width: calc(100% - 16px);
     }
 
     &__close {
