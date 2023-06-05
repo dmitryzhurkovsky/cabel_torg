@@ -29,21 +29,11 @@ export default {
       let path = null;
       if (item) {
         const allPath = item.split(',');
-        path = useRuntimeConfig().public.NUXT_APP_IMAGES + allPath[this.imageNumber];
+        path = useRuntimeConfig().public.NUXT_APP_IMAGES + allPath[this.$props.num];
       }
       return path;
     },
   },
-
-  beforeMout() {
-    console.log('Рисуем mount ', this.$props.num);
-    this.imageNumber = this.$props.num;
-  },
-
-  onBeforeUpdate(){
-    console.log('Рисуем update', this.$props.num);
-    this.imageNumber = this.$props.num;
-  }
 }
 </script>
 
