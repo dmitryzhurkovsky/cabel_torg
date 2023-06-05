@@ -124,7 +124,7 @@
             v-for = "option in cartItemData.attributes"
             :key = option.id
           >
-            <div class="table__item">
+            <div class="table__item" v-if = "option?.name?.payload !== 'Товар под заказ'">
               <span>{{ option?.name?.payload }}</span>
               <span>{{ option?.value?.payload }}</span>
             </div>

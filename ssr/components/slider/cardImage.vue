@@ -91,19 +91,17 @@
       },
 
       nextSlide(){
-        if (this.activeItem < this.swiperImages.length) {
+        if (this.activeItem < this.swiperImages.length - 1) {
           this.activeItem++;
+          this.$emit('changeSliderTo', this.activeItem);
         }
-        console.log('next ', this.activeItem);
-        this.$emit('changeSliderTo', this.activeItem);
       },
 
       prevSlide(){
         if (this.activeItem) {
           this.activeItem--;          
+          this.$emit('changeSliderTo', this.activeItem);
         }
-        console.log('prev ', this.activeItem);
-        this.$emit('changeSliderTo', this.activeItem);
       },
     },
 
