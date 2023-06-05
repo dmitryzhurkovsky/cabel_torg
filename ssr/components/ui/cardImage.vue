@@ -18,18 +18,14 @@ export default {
     active: false,
   },
 
-  data(){
-    return {
-      imageNumber : 0,
-    }
-  },
-
   methods:{
     getImagePath(item) {
+      let itemNumber = 0;
+      if (this.$props.num) itemNumber = this.$props.num;
       let path = null;
       if (item) {
         const allPath = item.split(',');
-        path = useRuntimeConfig().public.NUXT_APP_IMAGES + allPath[this.$props.num];
+        path = useRuntimeConfig().public.NUXT_APP_IMAGES + allPath[itemNumber];
       }
       return path;
     },
