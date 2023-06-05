@@ -27,6 +27,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    volumes:
+      - ./data/parser_files:/parser_files
 
   backend:
     container_name: 'prod_backend'
