@@ -26,6 +26,7 @@ jobs:
 
   rebuild-without-cache:
     runs-on: self-hosted
+    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: Going to root dir of project.
         run: cd /root/cabel_torg/
