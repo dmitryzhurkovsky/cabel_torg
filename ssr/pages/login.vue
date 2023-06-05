@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="app__content">
       <div class="_container">
         <div v-if = "AUTH_TYPE === 1" class="popup__reg full-open">
           <h3>Вход</h3>

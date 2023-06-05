@@ -1,5 +1,5 @@
 <template>
-  <div class="catalog" @click.stop = "clearSearchString()">
+  <div class="catalog app__content" @click.stop = "clearSearchString()">
     <div class="catalog__wrapper">
       <div class="catalog__content _container">
         <div class="catalog__body">
@@ -255,6 +255,7 @@
 
 }
 .content-block{
+  width: 100%;
 
   &__subcategory{
     display: grid;

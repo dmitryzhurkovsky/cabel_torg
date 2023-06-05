@@ -1,5 +1,5 @@
 <template>
-  <div class="wholesale">
+  <div class="wholesale app__content">
     <div class="wholesale__wrapper">
       <div class="wholesale__content _container">
         <div class="wholesale__body">

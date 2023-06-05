@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="catalog">
+  <div class="catalog app__content">
     <div class="catalog__wrapper">
       <div class="catalog__content _container">
         <div class="catalog__body">

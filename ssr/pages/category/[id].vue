@@ -1,5 +1,5 @@
 <template>
-  <div class="catalog" @click.stop = "clearSearchString()">
+  <div class="catalog app__content" @click.stop = "clearSearchString()">
     <Head>
       <Title>
         КабельТорг | {{ data?.category?.site_page_title }}
@@ -399,6 +399,7 @@
 
 }
 .content-block{
+  width: 100%;
 
   &__subcategory{
     display: grid;
