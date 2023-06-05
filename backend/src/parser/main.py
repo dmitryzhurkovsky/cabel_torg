@@ -30,7 +30,7 @@ async def parse_bookkeeping_file():
         await event_loop.create_task(xml_parser.parse_products())
         await event_loop.create_task(xml_parser.set_is_visible_attribute())
         await event_loop.create_task(price_parser.parse_offers())
-        logger.info(f'Parsing has been finished. It took {time.time() - start_parsing}')
+        print(f'Parsing has been finished. It took {time.time() - start_parsing}')
 
 
 def parsing_files_are_changed() -> bool:
