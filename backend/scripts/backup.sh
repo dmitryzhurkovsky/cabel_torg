@@ -1,9 +1,9 @@
 #!/bin/bash
 PROJECT_DIR=/root/cabel_torg
-DATA_DIR=$PROJECT_DIR/data
+DATA_DIR=/data
 LOGS_DIR=$DATA_DIR/logs
 BACKUPS_DIR=$DATA_DIR/backups
-DOCKER_BACKUPS_DIR=/backups
+DOCKER_BACKUPS_DIR=/backups  # It's used for indicating a folder in a ocker container.
 LOG_FILE=$LOGS_DIR/cabel_torg_backup_process.log
 
 # Create the backup and logs directories.
