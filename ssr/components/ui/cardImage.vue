@@ -1,6 +1,10 @@
 <template>
-    <img v-if = "images" class="" :src=getImagePath(images) alt="">
-    <img v-if = "!images" class="" src="@/assets/no_image.png" alt="">
+    <img v-if = "images" 
+      :class="[active === true ? 'active' : '']"
+      :src=getImagePath(images) 
+      alt=""
+    >
+    <img v-else class="" src="@/assets/no_image.png" alt="">
 </template>
 
 <script>
@@ -11,6 +15,13 @@ export default {
   props: {
     images:  null,
     num: 0,
+    active: false,
+  },
+
+  data(){
+    return {
+      imageNumber : 0,
+    }
   },
 
   methods:{
@@ -18,21 +29,32 @@ export default {
       let path = null;
       if (item) {
         const allPath = item.split(',');
-        path = useRuntimeConfig().public.NUXT_APP_IMAGES + allPath[this.num];
+        path = useRuntimeConfig().public.NUXT_APP_IMAGES + allPath[this.imageNumber];
       }
       return path;
     },
+  },
+
+  beforeMout() {
+    console.log('Рисуем mount ', this.$props.num);
+    this.imageNumber = this.$props.num;
+  },
+
+  onBeforeUpdate(){
+    console.log('Рисуем update', this.$props.num);
+    this.imageNumber = this.$props.num;
   }
 }
 </script>
 
 <style lang="scss" scoped>
 img{
-max-width: 100%;
-max-height: 100%;
-//height: 100%;
-object-fit: cover;
-
-
+  max-width: 100%;
+  max-height: 100%;
+  //height: 100%;
+  object-fit: cover;
+}
+.active {
+  border: 2px solid blue;
 }
 </style>

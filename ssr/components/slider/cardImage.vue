@@ -1,36 +1,40 @@
 <template>
-  <div class="images">
-    <swiper
-      :slides-per-view = 1
-      :space-between="15"
-      :speed="500"
-      :autoplay="{
-        delay: 5000,
+  <div class="images" v-if="swiperImages.length > 1">
+    <div class="images__wrapper">
+      <div class="images__content _container">
+        <div class="images__body">
+
+          <div class="images__items flex-center">
+            <swiper
+                :slides-per-view=2
+                :space-between="15"
+                :navigation = "{
+                  nextEl: '.btn-next_',
+                  prevEl: '.btn-prev_',
                 }"
-      :pagination= "{
-        el: '.swiper-pagination',
-        clickable: true,
-        type: 'bullets',
-        bulletClass: 'swiper-pagination-bullet',
-        bulletElement: 'span'
-      }"
-      @slideChange="onSlideChange"
-    >
+                @slideChange="onSlideChange"
+            >
 
-      <swiper-slide v-for="banner in filteredBanners" :key = "banner.id">
-        <div class="images__wrapper" 
-          :style = "{
-            backgroundImage     : 'url(' + getPath(banner.image) + ')',
-            backgroundRepeat    : 'no-repeat',
-            backgroundPosition  : 'center',
-            backgroundSize      : 'cover',
-          }"
-        >
+              <swiper-slide v-for="(image, index) in swiperImages" :key = "image">
+                <div class="images__item">
+                  <UiCardImage 
+                    :images = "allImages" 
+                    :num = "index"
+                    :active = "index == activeItem"
+                  />
+                </div>
+              </swiper-slide>
+              <div class="swiper-navigation">
+                <div class="btn-prev" @click="prevSlide">
+                </div>
+                <div class="btn-next" @click="nextSlide">
+                </div>
+              </div>
+              </swiper>
+          </div>
         </div>
-      </swiper-slide>
-      <div class="swiper-pagination"></div>
-    </swiper>
-
+      </div>
+    </div>
   </div>
 </template>
 
@@ -38,14 +42,25 @@
   import { mapGetters, mapActions } from 'vuex';
   import { Swiper } from "swiper/vue";
   import { SwiperSlide } from "swiper/vue";
-  import SwiperCore, { Pagination } from "swiper";
+  import SwiperCore, { Pagination, Navigation } from "swiper";
   import "swiper/swiper.min.css";
-  import "swiper/components/pagination/pagination.min.css"
-  SwiperCore.use([Pagination]);
+  import "swiper/components/navigation/navigation.min.css"
+  SwiperCore.use([Navigation, Pagination]);
 
   export default {
     name: 'Images',
+
+    props: {
+      allImages: '',
+    },
   
+    data(){
+      return {
+        activeSlider: 0,
+        swiperImages: [],
+        activeItem: 0,
+      }
+    },
     components: {
       Swiper, SwiperSlide,
     },
@@ -62,18 +77,37 @@
       ...mapActions("main", ["GET_BANNERS"]),
 
       getPath: function(item){
+        console.log('getPath ', item);
         let path = useRuntimeConfig().public.NUXT_APP_IMAGES + item;
         return path;
       },
 
-      onSlideChange() {
-        console.log('slide change');
+      onSlideChange(swiper) {
+        console.log('Slider changed', swiper.realIndex);
+        // this.activeSlider = swiper.realIndex
+        // this.$emit('onSliderChanged', this.activeSlider);
       },
 
+      nextSlide(){
+        if (this.activeItem < this.swiperImages.length) {
+          this.activeItem++;
+        }
+        console.log('next ', this.activeItem);
+        this.$emit('changeSliderTo', this.activeItem);
+      },
+
+      prevSlide(){
+        if (this.activeItem) {
+          this.activeItem--;          
+        }
+        console.log('prev ', this.activeItem);
+        this.$emit('changeSliderTo', this.activeItem);
+      },
     },
 
     async mounted(){
-      await this.GET_BANNERS();
+      this.swiperImages = this.$props.allImages.split(',');
+      this.activeSlider = 0;
     },
 
   }
@@ -81,11 +115,12 @@
 
 <style scoped lang="scss">
 
-.swiper-pagination, .swiper-pagination-clickable, .swiper-pagination-bullets, .swiper-pagination-horizontal {
-  //position: unset;
-  //margin-bottom: 3%;
+.swiper-navigation, .swiper-navigation-horizontal {
+  // position: unset;
+  // margin-bottom: 3%;
   display: flex;
   position: inherit;
+  width: 100%;
   align-items: center;
   justify-content: center;
   gap: 10px;
@@ -96,15 +131,46 @@
     background:red;
   }
 }
-.swiper-pagination-bullet, .swiper-pagination-bullet-active{
-  background: black!important
 
+.btn-next{
+  background-color: blue;
+  width: 20px;
+  height: 20px;
 }
-.swiper-pagination-bullet-active{
-  background: red!important;
+.btn-prev{
+  background-color: blue;
+  width: 20px;
+  height: 20px;
 }
-
 .images {
+  &__wrapper{
+    padding: 20px 0;
+
+  }
+  &__content{
+
+  }
+
+  &__body{
+    h3{
+      text-align: center;
+      margin-bottom: 36px;
+      @media (max-width: $md2+px) {
+        text-align: left;
+
+      }
+    }
+  }
+
+
+  &__items{
+  justify-content: space-around;
+  }
+  &__item{
+    text-align: center;
+
+
+  }
 }
 
 </style>
