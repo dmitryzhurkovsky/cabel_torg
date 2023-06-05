@@ -65,7 +65,10 @@ class ProductManager(CRUDManager):
                     ProductTypeFilterEnum.NEW,
                     ProductTypeFilterEnum.AVAILABLE
             ):
-                filter_expressions.append(Product.status == ProductStatus.AVAILABLE.value)
+                filter_expressions.append(or_(
+                    Product.status == ProductStatus.AVAILABLE.value,
+                    Product.status == ProductStatus.ON_THE_WAY_TO_THE_WAREHOUSE.value
+                ))
 
             if type_of_product == ProductTypeFilterEnum.WITH_DISCOUNT:
                 filter_expressions.append(and_(
