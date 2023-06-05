@@ -21,7 +21,7 @@
                     v-for = "item in FINDED_ELEMENTS"
                     :key = "item.id"
                     :item = item
-                    @click.stop = "openCardItem(item.id)"
+                    @click.stop = "openCardItem(item.vendor_code)"
                 />
                 <div class="search__footer" @click = "openFindedElementsInCatalg" autocomplete="off">
                   Показать все
@@ -87,7 +87,7 @@ export default {
       this.SET_CATALOG_SEARCH_STRING('');
       this.UPDATE_IS_CATALOG_OPEN(false);
       let url = "/catalog?";
-      if (this.CATALOG_SEARCH_STRING) url = url + "offset=0&limit=12&actual_price_gte=0&actual_price_lte=40000";
+      if (this.CATALOG_SEARCH_STRING) url = url + "offset=0&limit=12";
       url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
       url = url + '&type_of_product=all';
       if (this.CATALOG_SEARCH_STRING) url = url + "&q=" + this.CATALOG_SEARCH_STRING;

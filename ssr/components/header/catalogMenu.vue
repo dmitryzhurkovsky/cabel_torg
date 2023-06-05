@@ -16,7 +16,7 @@
               </li>
             </ul>
             <a class="_link"
-              :href = getCatalogUrl()
+              href = "/catalog?offset=0&limit=12&type_of_product=all"
             >
               Перейти в каталог
             </a>

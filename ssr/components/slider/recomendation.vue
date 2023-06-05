@@ -48,10 +48,7 @@
 
                 <div class="swiper-pagination"></div>
 
-                <div class="swiper-navigation-container">
-                 <!-- <div class="swiper-button-next" @click="nextSlide"></div>
-                 <div class="swiper-button-prev" @click="prevSlide"></div> -->
-                </div>
+                <div class="swiper-navigation-container"></div>
 
               </swiper>
               <div v-if="isShowFollow" class="recomendation__link  _link" @click="onOpenCatalog">Смотреть все
@@ -95,7 +92,7 @@
     computed: {
       ...mapGetters("header", ["WINDOW_WIDTH"]),
       ...mapGetters("catalog", ["RECOMENDED_ITEMS", "RECOMENDATION_QUANTITY", "RECOMENDATION_TYPE", "RECOMENDATION_ORDER"]),
-      ...mapGetters("query", ["SORT_TYPE"]),
+      ...mapGetters("query", ["SORT_TYPE", "TYPE_OF_PRODUCT", "SORT_DIRECTION"]),
 
       ChangeParameters(){
         return String(this.RECOMENDATION_TYPE) + String(this.RECOMENDATION_ORDER);
@@ -158,7 +155,7 @@
       },
 
       onOpenCatalog(){
-        console.log(this.RECOMENDATION_TYPE);
+        // console.log(this.RECOMENDATION_TYPE);
         let name = 'Все товары';
         if (this.RECOMENDATION_TYPE === 'with_discount') name = 'Акции';
         if (this.RECOMENDATION_TYPE === 'available') {
@@ -172,7 +169,7 @@
           name = 'Топ продаж';
         }
         this.SET_TYPE_OF_PRODUCT(this.RECOMENDATION_TYPE);
-        this.$router.push('/catalog');
+        this.$router.push('/catalog?offset=0&limit=12&type_of_product=' + this.TYPE_OF_PRODUCT + '&ordering=' + this.SORT_DIRECTION + this.SORT_TYPE);
       },
 
       onSlideChange() {

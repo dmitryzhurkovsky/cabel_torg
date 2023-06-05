@@ -12,15 +12,18 @@
           <div class="product__body">
             <div class="product__box flex-center">
                 <div class="product__main-img">
-                    <UiCardImage 
-                      :images=cartItemData.images 
-                      :num="imgNumber"
-                    />
-                </div>
-                <div class="product__swaper-img">
-                  <SliderCardImage 
-                    @onSliderChanged(id) = "changeNumber(id)"
+                  <UiCardImage 
+                    :images=cartItemData.images 
+                    :num="imgNumber"
                   />
+                  <div class="product__swaper-img">
+                    <ClientOnly>
+                      <SliderCardImage 
+                        :allImages = cartItemData.images
+                        @changeSliderTo = "changeNumber"
+                      />
+                    </ClientOnly>
+                  </div>
                 </div>
                 <div class="product__info">
                     <div class="desc-product__title"> {{ cartItemData.name }}</div>
@@ -172,11 +175,6 @@
   const id = ref(null)
   const imgNumber = ref(0)
 
-  // const ChangeParameters = computed(() => {
-  //   console.log('QQQQQQ');
-  //   return JSON.stringify(getters['order/ORDERS']) + JSON.stringify(getters['favorite/FAVORITES'])
-  // })
-
   watch (() => JSON.stringify(getters['order/ORDERS']), 
   () => {
     countQuantity();
@@ -189,8 +187,9 @@
     checkIsWish();
   })
 
-  const changeNumber = (id) => {
-    console.log(id)
+  const changeNumber = (newItem) => {
+    // console.log('Card ', newItem)
+    imgNumber.value = newItem
   }
 
   const checkQuantityLocal = () => {
