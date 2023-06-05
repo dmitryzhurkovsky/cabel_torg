@@ -4,7 +4,7 @@ import pathlib
 import jinja2
 from dotenv import load_dotenv
 
-load_dotenv('.env.dev')
+load_dotenv('.env')
 
 # Service's settings
 DEBUG = int(os.getenv('DEBUG', 0))
