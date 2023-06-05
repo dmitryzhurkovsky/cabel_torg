@@ -7,7 +7,7 @@
       <Meta name="discription" :content="oneNewData?.title" />
     </Head>
 
-    <div class="one-news__block" v-if="oneNewData">
+    <div class="one-news__block app__content" v-if="oneNewData">
       <a class="one-news__item">
           <div class="one-news__img">
               <UiCardImage :images = "oneNewData.image" />

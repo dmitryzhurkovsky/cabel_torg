@@ -1,13 +1,10 @@
 <template>
   <div class="images" v-if="swiperImages.length > 1">
-    <div class="images__wrapper">
-      <div class="images__content _container">
-        <div class="images__body">
 
           <div class="images__items flex-center">
             <swiper
-                :slides-per-view=2
-                :space-between="15"
+                :slides-per-view=3
+                :space-between="5"
                 :navigation = "{
                   nextEl: '.btn-next_',
                   prevEl: '.btn-prev_',
@@ -26,16 +23,21 @@
               </swiper-slide>
               <div class="swiper-navigation">
                 <div class="btn-prev" @click="prevSlide">
+                  <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M7.41 1.41L2.83 6L7.41 10.59L6 12L-2.62268e-07 6L6 2.62268e-07L7.41 1.41Z" fill="#423E48"/>
+                  </svg>
+
                 </div>
                 <div class="btn-next" @click="nextSlide">
+                  <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.59 10.59L5.17 6L0.590001 1.41L2 -2.62268e-07L8 6L2 12L0.59 10.59Z" fill="#423E48"/>
+                  </svg>
+
                 </div>
               </div>
               </swiper>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script>
@@ -133,16 +135,22 @@
 }
 
 .btn-next{
-  background-color: blue;
+
   width: 20px;
   height: 20px;
+  cursor: pointer;
 }
 .btn-prev{
-  background-color: blue;
+
   width: 20px;
   height: 20px;
+  cursor: pointer;
+
 }
 .images {
+  .swiper-container{
+    width: 100%;
+  }
   &__wrapper{
     padding: 20px 0;
 
@@ -168,6 +176,11 @@
   }
   &__item{
     text-align: center;
+    width: 100px;
+    height: 100px;
+    .active{
+      border: 2px solid #dedede;
+    }
 
 
   }

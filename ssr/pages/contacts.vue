@@ -1,5 +1,5 @@
 <template>
-  <div class="contacts">
+  <div class="contacts app__content">
     <div class="contacts__wrapper">
       <div class="contacts__content _container">
         <div class="contacts__body">

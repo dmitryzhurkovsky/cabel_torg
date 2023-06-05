@@ -1,5 +1,5 @@
 <template>
-  <div class="structure">
+  <div class="structure app__content">
     <div class="structure__wrapper">
       <div class="structure__content _container">
         <div class="structure__body">

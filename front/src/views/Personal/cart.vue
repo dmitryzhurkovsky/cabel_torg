@@ -1,5 +1,5 @@
 <template>
-  <div class="cart">
+  <div class="cart app__content">
     <div class="cart__wrapper">
       <div class="cart__content _container">
         <div class="cart__body">

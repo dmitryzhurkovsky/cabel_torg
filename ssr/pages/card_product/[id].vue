@@ -754,6 +754,11 @@
         flex-wrap: nowrap;
         justify-content: space-between;
         padding: 7px 10px;
+        span{
+          &:nth-child(2){
+            text-align: right;
+          }
+        }
       }
       &:nth-child(2n+1){
         background: #fbfbfb;
