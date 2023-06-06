@@ -602,6 +602,7 @@
     border-radius: 2px;
     border: none;
     margin: 0 10px;
+    text-align: center;
   }
 
   &__favorive{

@@ -409,16 +409,18 @@ export default {
 .product__img img{
       object-fit: contain;
 }
-
+.desc-product__input::-webkit-outer-spin-button,
 .product__input::-webkit-outer-spin-button{
     -webkit-appearance: none;
     margin: 0;
 }
+.desc-product__input::-webkit-inner-spin-button,
 .product__input::-webkit-inner-spin-button{
     -webkit-appearance: none;
     margin: 0;
 }
 /* Firefox */
+.desc-product__input[type=number],
 .product__input[type=number] {
     -moz-appearance: textfield;
 }

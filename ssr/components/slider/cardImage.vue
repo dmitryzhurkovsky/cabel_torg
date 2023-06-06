@@ -188,6 +188,7 @@
     text-align: center;
     width: 100px;
     height: 100px;
+    cursor: pointer;
     .active{
       border: 2px solid #dedede;
     }
