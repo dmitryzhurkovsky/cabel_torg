@@ -109,7 +109,7 @@ class GoodsMixin(BaseMixin, ABC):
         to "ready to write to a database" state.
         """
         product = {
-            "is_visible": True  # set up it True by default and mark products during parsing.
+            'is_visible': True  # set up it True by default and mark products during parsing.
         }
         product_images = []
 

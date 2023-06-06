@@ -42,7 +42,7 @@
   import { mapGetters, mapActions, mapMutations } from "vuex";
 
   definePageMeta({
-    middleware: ["auth"],
+    // middleware: ["auth"],
     name: 'Профиль',
   });
 
@@ -80,6 +80,7 @@
     },
 
     mounted(){
+      if (!localStorage.getItem("authToken")) this.$router.push('/login');
       this.screen = this.SCREEN;
       this.CHANGE_BREADCRUMB(0);
       this.ADD_BREADCRUMB({
