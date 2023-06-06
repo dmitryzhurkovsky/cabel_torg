@@ -12,10 +12,12 @@
           <div class="product__body">
             <div class="product__box flex-center">
                 <div class="product__main-img">
+                  <div class="product__main-img--container">
                   <UiCardImage 
                     :images=cartItemData.images 
                     :num="imgNumber"
                   />
+                  </div>
                   <div class="product__swaper-img">
                     <ClientOnly>
                       <SliderCardImage 
@@ -24,6 +26,7 @@
                       />
                     </ClientOnly>
                   </div>
+
                 </div>
                 <div class="product__info">
                     <div class="desc-product__title"> {{ cartItemData.name }}</div>
@@ -411,6 +414,15 @@
     flex-basis: 40%;
     text-align: center;
     width:100%;
+    display: flex;
+    flex-direction: column;
+    height: 480px;
+    &--container{
+      flex:1;
+      display: flex;
+      height: calc(100% - 100px);
+
+    }
   }
   &__info{
     flex-basis: 60%;
@@ -445,6 +457,9 @@
         }
       }
     }
+  }
+  &__swaper-img{
+    flex:0
   }
   &__block {
     display: flex;

@@ -7,7 +7,7 @@
         </div>
         <div v-if = "InfoCardBlock === 'New'" class="product__tagnew">{{ InfoCardBlock }}</div>
 
-        <a class="product__img" @click.stop="openCardItem(card.vendor_code)">
+        <a href="" class="product__img" @click.stop="openCardItem(card.vendor_code)">
             <UiCardImage :images=card.images />
         </a>
         <div class="product__info">
@@ -15,9 +15,9 @@
             <div class="product__status icon-on-the-way _label mb-20" v-if = "card.status === 'W'">В пути на склад</div>
             <div class="product__status _label mb-20 if_status_on_the_way" v-if = "card.status === 'W'">Доставим в течение 14 дней</div>
             <div class="product__status icon-out-of-stock _label mb-20" v-if = "card.status === 'O'">Нет в наличии</div>
-            <div class="product__title" @click.stop="openCardItem(card.vendor_code)">
-                <a >{{ card.name }}</a>
-            </div>
+            <a href="" class="product__title" @click.stop="openCardItem(card.vendor_code)">
+                <span >{{ card.name }}</span>
+            </a>
             <div class="product__uptitle" >
                 <a v-if ="card.category">{{ card.category?.name }}</a>
 
@@ -341,6 +341,8 @@ export default {
 
     &__title {
       margin-bottom: 10px;
+      display: inline-block;
+      cursor: pointer;
 
       a{
         font-weight: 500;

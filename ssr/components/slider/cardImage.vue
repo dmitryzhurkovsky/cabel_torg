@@ -160,6 +160,8 @@
 .images {
   .swiper-container{
     width: 100%;
+    padding: 0 30px;
+    position: relative;
   }
   &__wrapper{
     padding: 20px 0;
@@ -185,15 +187,25 @@
   justify-content: space-around;
   }
   &__item{
+    display: flex;
     text-align: center;
     width: 100px;
     height: 100px;
     cursor: pointer;
+    img{
+      object-fit: contain;
+    }
     .active{
       border: 2px solid #dedede;
     }
 
 
+  }
+  .swiper-navigation{
+    justify-content: space-between;
+    position: absolute;
+    bottom:42px;
+    left: 0;
   }
 }
 

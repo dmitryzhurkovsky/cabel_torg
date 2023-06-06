@@ -9,7 +9,7 @@
         :class="[isWish === false ? 'item-card__wishlist icon-favorite' : 'item-card__wishlist icon-favorite-choosed']" 
         @click.stop="onWishClick(card)"
     ></div>
-    <a class="item-card__img" @click.stop="openCardItem(card.vendor_code)">
+    <a href="" class="item-card__img" @click.stop="openCardItem(card.vendor_code)">
       <UiCardImage :images=card.images />
     </a>
     <div class="item-card__info">
@@ -40,9 +40,9 @@
           </svg>
         </div>
       </div>
-      <div class="item-card__title" @click.stop="openCardItem(card.vendor_code)">
-        <div>{{ card.name }}</div>
-      </div>
+      <a href="" class="item-card__title" @click.stop="openCardItem(card.vendor_code)">
+        <span>{{ card.name }}</span>
+      </a>
       <div class="item-card__uptitle">
         <div v-if ="card.category">{{ card.category.name }}</div>
       </div>
@@ -336,11 +336,13 @@ export default {
   }
 
   &__title {
+    display: inline-block;
     margin-bottom: 10px;
     height: 40px;
     overflow: hidden;
     line-height: 1.26;
     font-weight: 400;
+    color: black;
     cursor: pointer;
     @media (max-width: $md3+px){
       font-size: 13px;

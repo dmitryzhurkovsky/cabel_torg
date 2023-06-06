@@ -1,7 +1,7 @@
 <template>
   <div class="news app__content">
     <div class="news__wrapper">
-      <div class="news__content ">
+      <div class="news__content _container">
         <div class="news__body">
 
           <h3>Новости CabelTorg</h3>

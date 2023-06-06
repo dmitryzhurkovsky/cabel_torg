@@ -6,13 +6,13 @@
           :key="element.id"
           :class="element.class"
       >
-        <div
-            v-if="element.type !=='service'"
+        <a class="breadcrumb__link"
+            v-if="element.type !=='service'" href=""
             @click="changePage(element)"
             :style = "[ ELEMENTS.length -1 === index ? 'color : #4275D8' : '']"
         >
           {{ element.name }}
-        </div>
+        </a>
       </li>
     </ul>
   </div>
@@ -121,14 +121,14 @@ export default {
     white-space: nowrap;
     overflow: hidden;
     &:last-child{
-      div{
+      a{
         opacity: 0.5;
         cursor: auto;
         color: #423E48!important;
       }
 
     }
-    div{
+    a{
       font-weight: 300;
       font-size: 12px;
       line-height: 2;
