@@ -7,7 +7,8 @@
           :class="element.class"
       >
         <a class="breadcrumb__link"
-            v-if="element.type !=='service'" href=""
+            v-if="element.type !=='service'"
+            :href="createHref(element)"
             @click="changePage(element)"
             :style = "[ ELEMENTS.length -1 === index ? 'color : #4275D8' : '']"
         >
@@ -92,6 +93,23 @@ export default {
       }
       // this.MOVE_TO_SELECT_PATH(item.index);
       // this.$router.push(item.path);
+    },
+
+    createHref(item){
+      let url = ''
+      if (item.path.includes('category') || item.path.includes('catalog')) {
+        url = url = item.path + "?offset=" + this.OFFSET + 
+          "&limit=" + this.LIMIT;
+          if (this.MIN_PRICE != 0 || this.MAX_PRICE != 40000) {
+            url = url + "&actual_price_gte=" + this.MIN_PRICE; 
+            url = url + "&actual_price_lte=" + this.MAX_PRICE;
+          }
+          url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+          url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
+      } else {
+        url = url + item.path;
+      }
+      return url;
     },
   },
 }

@@ -7,7 +7,7 @@
         </div>
         <div v-if = "InfoCardBlock === 'New'" class="product__tagnew">{{ InfoCardBlock }}</div>
 
-        <a href="" class="product__img" @click.stop="openCardItem(card.vendor_code)">
+        <a :href="createHref(card.vendor_code)" class="product__img" @click.stop="openCardItem(card.vendor_code)">
             <UiCardImage :images=card.images />
         </a>
         <div class="product__info">
@@ -15,7 +15,7 @@
             <div class="product__status icon-on-the-way _label mb-20" v-if = "card.status === 'W'">В пути на склад</div>
             <div class="product__status _label mb-20 if_status_on_the_way" v-if = "card.status === 'W'">Доставим в течение 14 дней</div>
             <div class="product__status icon-out-of-stock _label mb-20" v-if = "card.status === 'O'">Нет в наличии</div>
-            <a href="" class="product__title" @click.stop="openCardItem(card.vendor_code)">
+            <a :href="createHref(card.vendor_code)" class="product__title" @click.stop="openCardItem(card.vendor_code)">
                 <span >{{ card.name }}</span>
             </a>
             <div class="product__uptitle" >
@@ -148,6 +148,11 @@ export default {
 
       plusQuantityLocal() {
         this.quantityLocal = this.quantityLocal < 99 ? this.quantityLocal + 1 : 99;
+      },
+
+      createHref(card) {
+        const URL = '/card_product/' + card;
+        return URL;
       },
 
       async onOperationWithCartItem(card, type) {
