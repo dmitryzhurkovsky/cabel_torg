@@ -391,7 +391,7 @@
     .if_status_on_the_way{
       font-size: 12px;
       margin-left: 25px;
-      @media (max-width: $md3+px) {
+      @media (max-width: $md2+px) {
         font-size: 11px;
         margin:0 0 10px 0;
       }
@@ -400,7 +400,7 @@
   &__box{
     display: flex;
     margin-bottom: 40px;
-    @media (max-width: $md3+px) {
+    @media (max-width: $md2+px) {
       flex-direction: column;
       font-size: 11px;
       margin-bottom: 10px;
@@ -410,6 +410,7 @@
   &__main-img{
     flex-basis: 40%;
     text-align: center;
+    width:100%;
   }
   &__info{
     flex-basis: 60%;
@@ -690,7 +691,7 @@
   .attention__text{
     padding-left: 20px;
     max-width: 60%;
-    @media (max-width: $md3+px) {
+    @media (max-width: $md2+px) {
       max-width: 100%;
       font-size: 11px;
     }
