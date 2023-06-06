@@ -3,9 +3,11 @@
       <div v-if="DEVICE_VIEW_TYPE === 1"
         @click.stop="closePopUp(false)"
         ref="popup" 
-        :class="[IS_POPUP_OPEN === true ? 'popup__wrapper popup__desktop': 'popup__wrapper popup__desktop disabled']"
+        class="popup__wrapper"
+        :class="{ 'disabled' : !IS_POPUP_OPEN }"
         :key="1"
       >
+        <!-- :class="[IS_POPUP_OPEN === true ? 'popup__wrapper popup__desktop': 'popup__wrapper popup__desktop disabled']" -->
         <div class="popup__body" @click.stop="">
             <div class="icon-close popup__close" @click.stop="closePopUp(false)"></div>
             <div class="popup__content" >
@@ -16,11 +18,11 @@
             </div>
         </div>
       </div>
-      <div v-if="DEVICE_VIEW_TYPE !== 1"
+      <div v-else
         @click.stop="closePopUp(false)"
         ref="popup" 
         :class="[IS_POPUP_OPEN === true ? 'popup__wrapper': 'popup__wrapper disabled']"
-        :key="1"
+        :key="2"
       >
         <div class="popup__body" @click.stop="">
             <div class="icon-close popup__close" @click.stop="closePopUp(false)"></div>
@@ -47,15 +49,21 @@
         console.log(this.DEVICE_VIEW_TYPE);
         if (this.IS_POPUP_OPEN) {
           setTimeout(() => {
-            this.$refs.popup.style.top = window.pageYOffset + 'px';
             document.body.style.overflowY = 'hidden';
-            if (this.DEVICE_VIEW_TYPE === 1) document.body.style.paddingRight = '16px';
+            this.$refs.popup.style.top = window.pageYOffset + 'px';
+            if (this.DEVICE_VIEW_TYPE === 1) {
+              if (document.body.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
+            }
           }, 200);
           document.body.style.overflowY = 'hidden';
-          if (this.DEVICE_VIEW_TYPE === 1) document.body.style.paddingRight = '16px';
+          if (this.DEVICE_VIEW_TYPE === 1) {
+            if (document.body.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
+          }
         } else {
           document.body.style.overflowY = '';
-          if (this.DEVICE_VIEW_TYPE === 1) document.body.style.paddingRight = '0';
+          if (this.DEVICE_VIEW_TYPE === 1) {
+            document.body.style.paddingRight = '';
+          }
         }
       }
     },
