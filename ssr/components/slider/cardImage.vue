@@ -18,6 +18,7 @@
                     :images = "allImages" 
                     :num = "index"
                     :active = "index == activeItem"
+                    @click="changeSlideByClick(index)"
                   />
                 </div>
               </swiper-slide>
@@ -90,9 +91,17 @@
         // this.$emit('onSliderChanged', this.activeSlider);
       },
 
+      changeSlideByClick(index){
+        this.activeItem = index;
+        this.$emit('changeSliderTo', this.activeItem);
+      },
+
       nextSlide(){
         if (this.activeItem < this.swiperImages.length - 1) {
           this.activeItem++;
+          this.$emit('changeSliderTo', this.activeItem);
+        } else {
+          this.activeItem = 0;
           this.$emit('changeSliderTo', this.activeItem);
         }
       },
@@ -100,6 +109,9 @@
       prevSlide(){
         if (this.activeItem) {
           this.activeItem--;          
+          this.$emit('changeSliderTo', this.activeItem);
+        } else {
+          this.activeItem = this.swiperImages.length - 1;
           this.$emit('changeSliderTo', this.activeItem);
         }
       },
