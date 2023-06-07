@@ -143,6 +143,8 @@
 <style lang="scss">
 .one-news__img img{
   width: 100%;
-
+}
+.one-news__block .news__content{
+  padding: 0 0;
 }
 </style>

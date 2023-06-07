@@ -65,7 +65,7 @@ export default {
       return top;
     },
     SUB_CATEGORIES(state){
-      const sub = [];
+      let sub = [];
       state.categories.forEach(item => {
         if (item.parent_category_id == state.topCategoriesItemActive){
           sub.push({id : item.id, name: item.name, subItems : []});
@@ -77,7 +77,15 @@ export default {
             sub[i].subItems.push({id : item.id, name : item.name});
           }
         });
+        sub[i].subItems = sub[i].subItems.sort((a, b) => {
+          if (a.name < b.name) return -1;
+          return 1
+        })
       };
+      sub = sub.sort((a, b) => { 
+        if (a.name - b.name) return -1
+        return 1
+      });
       return sub;
     },
     ALL_CATEGORIES(state){
@@ -151,7 +159,13 @@ export default {
       let menuItems = [];
       const mainLevel = categories.filter(item => item.parent_category_id === null);
       let otherItems = categories.filter(item => item.parent_category_id !== null);
+
+      console.log('WWWWWWWW', mainLevel);
+
       menuItems = [...mainLevel];
+
+      console.log('QQQQQQQQ', menuItems);
+
       menuItems.forEach(item => {
         item.selected = false;
         item.filterPanel = false;
@@ -159,7 +173,10 @@ export default {
         item.childrens = [];
       });
       menuItems.forEach(mainItem => {
-        const mainItemChildrens = otherItems.filter( item => item.parent_category_id === mainItem.id);
+        const mainItemChildrens = otherItems.filter( item => item.parent_category_id === mainItem.id).sort((a, b) => {
+          if (a.name < b.name) return -1
+          return 1  
+        });;
         otherItems = otherItems.filter(item => item.parent_category_id !== mainItem.id);
         mainItemChildrens.forEach(item => {
           item.selected = false;
@@ -168,7 +185,10 @@ export default {
           item.childrens = [];
         });
         mainItemChildrens.forEach(middleItem => {
-          const lastChildrens = otherItems.filter( item => item.parent_category_id === middleItem.id);
+          const lastChildrens = otherItems.filter( item => item.parent_category_id === middleItem.id).sort((a, b) => {
+            if (a.name < b.name) return -1
+            return 1  
+          });;
           otherItems = otherItems.filter(item => item.parent_category_id !== middleItem.id);
           lastChildrens.forEach(item => {
             item.selected = false;
@@ -181,6 +201,7 @@ export default {
         mainItem.childrens = [...mainItemChildrens];
       });
       state.catalog = menuItems;
+      console.log(menuItems);
     },
 
     SET_IS_POPUP_OPEN(state, status) {

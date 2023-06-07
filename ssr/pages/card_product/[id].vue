@@ -12,10 +12,12 @@
           <div class="product__body">
             <div class="product__box flex-center">
                 <div class="product__main-img">
+                  <div class="product__main-img--container">
                   <UiCardImage 
                     :images=cartItemData.images 
                     :num="imgNumber"
                   />
+                  </div>
                   <div class="product__swaper-img">
                     <ClientOnly>
                       <SliderCardImage 
@@ -24,6 +26,7 @@
                       />
                     </ClientOnly>
                   </div>
+
                 </div>
                 <div class="product__info">
                     <div class="desc-product__title"> {{ cartItemData.name }}</div>
@@ -391,7 +394,7 @@
     .if_status_on_the_way{
       font-size: 12px;
       margin-left: 25px;
-      @media (max-width: $md3+px) {
+      @media (max-width: $md2+px) {
         font-size: 11px;
         margin:0 0 10px 0;
       }
@@ -400,7 +403,7 @@
   &__box{
     display: flex;
     margin-bottom: 40px;
-    @media (max-width: $md3+px) {
+    @media (max-width: $md2+px) {
       flex-direction: column;
       font-size: 11px;
       margin-bottom: 10px;
@@ -410,6 +413,16 @@
   &__main-img{
     flex-basis: 40%;
     text-align: center;
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    height: 480px;
+    &--container{
+      flex:1;
+      display: flex;
+      height: calc(100% - 100px);
+
+    }
   }
   &__info{
     flex-basis: 60%;
@@ -444,6 +457,9 @@
         }
       }
     }
+  }
+  &__swaper-img{
+    flex:0
   }
   &__block {
     display: flex;
@@ -601,6 +617,7 @@
     border-radius: 2px;
     border: none;
     margin: 0 10px;
+    text-align: center;
   }
 
   &__favorive{
@@ -690,7 +707,7 @@
   .attention__text{
     padding-left: 20px;
     max-width: 60%;
-    @media (max-width: $md3+px) {
+    @media (max-width: $md2+px) {
       max-width: 100%;
       font-size: 11px;
     }
