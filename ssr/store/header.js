@@ -159,13 +159,7 @@ export default {
       let menuItems = [];
       const mainLevel = categories.filter(item => item.parent_category_id === null);
       let otherItems = categories.filter(item => item.parent_category_id !== null);
-
-      console.log('WWWWWWWW', mainLevel);
-
       menuItems = [...mainLevel];
-
-      console.log('QQQQQQQQ', menuItems);
-
       menuItems.forEach(item => {
         item.selected = false;
         item.filterPanel = false;
@@ -201,7 +195,6 @@ export default {
         mainItem.childrens = [...mainItemChildrens];
       });
       state.catalog = menuItems;
-      console.log(menuItems);
     },
 
     SET_IS_POPUP_OPEN(state, status) {

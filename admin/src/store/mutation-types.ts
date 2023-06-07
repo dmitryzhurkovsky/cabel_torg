@@ -37,5 +37,6 @@ const enum MutationTypes {
   SET_TOTAL_PAGES = 'SET_TOTAL_PAGES',
   SET_ITEMS_IN_PAGE = 'SET_ITEMS_IN_PAGE',
   UPDATE_PRODUCT = 'UPDATE_PRODUCT',
+  SET_USERS_LIST = 'SET_USERS_LIST',
 }
 export { MutationTypes }

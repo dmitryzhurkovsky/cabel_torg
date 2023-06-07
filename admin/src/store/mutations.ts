@@ -42,6 +42,7 @@ export type Mutations<S = State> = {
   [MutationTypes.SET_TOTAL_PAGES](state: S, payload: number): void,
   [MutationTypes.SET_ITEMS_IN_PAGE](state: S, payload: number): void,
   [MutationTypes.UPDATE_PRODUCT](state: S, payload: IDeliveryType): void,
+  [MutationTypes.SET_USERS_LIST](state: S, payload: Array<IDeliveryType>): void,
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -169,5 +170,7 @@ export const mutations: MutationTree<State> & Mutations = {
     state.goods = state.goods.filter(item => item.id !== payload.id)
     state.goods.push(payload)
   },
-
+  [MutationTypes.SET_USERS_LIST](state, payload: Array<IDeliveryType>) {
+    state.users = payload
+  },
 }

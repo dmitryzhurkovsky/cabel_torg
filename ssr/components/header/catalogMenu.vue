@@ -12,7 +12,7 @@
                   :key    = "item.id"
                   @click.stop  = "changeCategory(item)"
               >
-                <a class="menu__link" href="">{{item.name}}</a>
+                <a class="menu__link" :href="createHref(item.site_link)">{{item.name}}</a>
               </li>
             </ul>
             <a class="_link"
@@ -29,13 +29,13 @@
                 :key    = "sub.id"
                 @click.stop  = "subCategoryClick(sub)"
               >
-                <a href="" v-if = "sub.id" class="menu__rubric">{{sub.name}}</a>
+                <a :href="createHref(sub.site_link)" v-if = "sub.id" class="menu__rubric">{{sub.name}}</a>
                 <ul v-if = "sub.subItems.length > 0">
                   <li
                       v-for = "subItem in sub.subItems"
                       :key  = "subItem.id"
                   >
-                    <a href="" @click.stop = "subCategoryClick(subItem)" class="menu__linksub">{{subItem.name}}</a>
+                    <a :href="createHref(subItem.site_link)" @click.stop = "subCategoryClick(subItem)" class="menu__linksub">{{subItem.name}}</a>
                   </li>
                 </ul>
               </div>
@@ -77,6 +77,11 @@ export default {
       if (id) url = url + id + "?";
       url = url + this.getLastPartOfUrl();
       return url;
+    },
+
+    createHref(category) {
+      const URL = '/category/' + category;
+      return URL;
     },
 
     getLastPartOfUrl(){

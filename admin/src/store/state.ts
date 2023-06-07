@@ -27,7 +27,8 @@ const state = {
   goodsOfset: 0,
   activePage: 1,
   totalPages: 1,
-  itemsInPage: 10
+  itemsInPage: 10,
+  users: [] as Array<IDeliveryType>
 }
 
 export type State = typeof state

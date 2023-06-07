@@ -25,6 +25,7 @@ export type Getters = {
   activePage(state: State): number 
   totalPages(state: State): number 
   itemsInPage(state: State): number 
+  usersList(state: State): Array<IDeliveryType>
 }
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -112,5 +113,8 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   itemsInPage: (state) => {
     return state.itemsInPage
+  },
+  usersList: (state) => {
+    return state.users
   },
 }

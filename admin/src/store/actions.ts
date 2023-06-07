@@ -154,6 +154,10 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: IDeliveryType
   ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.GET_USERS_LIST_DATA](
+    { commit }: AugmentedActionContext,
+    payload: null
+  ): Promise<Array<IDeliveryType>>,
   
 }
 
@@ -183,13 +187,18 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "users/mine").
       then((response) => {
-        if (response.data.is_admin) {
+        // console.log('Actions ', response.data);
+        
+        if (response?.data?.is_admin) {
+          console.log('Это админ');
           commit(MutationTypes.SET_USER, response.data)
         } else {
+          console.log('Это НЕ админ');
+          commit(MutationTypes.SET_USER, null)
           localStorage.removeItem("authToken")
           localStorage.removeItem("refreshToken")
         }
-        resolve(response.data);
+        resolve(response?.data);
       })
     })
   },
@@ -532,4 +541,15 @@ export const actions: ActionTree<State, State> & Actions = {
       })
     })
   },
+
+  [ActionTypes.GET_USERS_LIST_DATA]({ commit }, payload) {
+    return new Promise((resolve) => {
+      // axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses").
+      // then((response) => {
+        commit(MutationTypes.SET_USERS_LIST, [])
+        resolve([]);
+      // })
+    })
+  },
+
 }
