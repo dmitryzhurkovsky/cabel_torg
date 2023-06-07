@@ -43,3 +43,10 @@ class ProductOrderFilterEnum(str, BaseEnum):
     PRICE_DESCENDING = '-actual_price'
     DISCOUNT_ASCENDING = 'discount'
     DISCOUNT_DESCENDING = '-discount'
+
+
+class UserTypeFilterEnum(str, BaseEnum):
+    """
+    It's query params for getting type of User.
+    """
+    ADMIN = 'admin'

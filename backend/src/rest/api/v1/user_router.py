@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Query
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.requests import Request
 
 from src.core.db.db import get_session
-from src.core.enums import SessionStatusEnum
+from src.core.enums import SessionStatusEnum, UserTypeFilterEnum
 from src.core.exception.base_exception import BadRequestError, ObjectNotFoundError, ForbiddenError
 from src.core.utils import generate_random_password
 from src.rest.managers.user_manager import UserManager
@@ -34,8 +34,24 @@ async def get_users(
     return {'message': 'True'}
 
 
+@user_router.get('', response_model=list[UserSchema])
+async def get_categories(
+        request: Request,
+        session: AsyncSession = Depends(get_session),
+        type_of_user: UserTypeFilterEnum | None = Query(default=None),
+        offset: int = 0, limit: int = Query(default=150, lte=150)
+        # todo add norm pagonation
+) -> list[UserSchema]:
+    return await UserManager.filter_list(
+        filters=request.query_params,
+        session=session,
+        limit=limit,
+        offset=offset
+    )
+
+
 @user_router.get(
-    '/<user_id>',
+    '/{user_id}',
     response_model=UserSchema,
     dependencies=[Depends(is_admin_permission)]
 )
@@ -89,21 +105,6 @@ async def create_user(
         return user_db
 
 
-@user_router.patch(
-    '/mine',
-    response_model=UserSchema,
-    dependencies=[Depends(is_authenticated_permission)]
-)
-async def update_info_about_current_user(
-        user_info: UserUpdateSchema,
-        request: Request,
-        session: AsyncSession = Depends(get_session)
-):
-    return await UserManager.update(
-        session=session, pk=request.user.id, input_data=user_info.dict(exclude_unset=True)
-    )
-
-
 @user_router.post(
     '/reset_password',
     status_code=status.HTTP_201_CREATED,
@@ -119,3 +120,53 @@ async def reset_user_password(
     UserService.send_new_password(user=user, new_password=new_password)
 
     return {'status': SessionStatusEnum.SUCCESS.value}
+
+
+@user_router.patch(
+    '/{user_id}',
+    response_model=UserSchema,
+    dependencies=[Depends(is_admin_permission)]
+)
+async def update_info_about_user(
+        user_id: int,
+        user_info: UserUpdateSchema,
+        session: AsyncSession = Depends(get_session)
+):
+    await UserManager.retrieve(id=user_id, session=session)
+    return await UserManager.update(
+        session=session, pk=user_id, input_data=user_info.dict(exclude_unset=True)
+    )
+
+
+@user_router.patch(
+    '/mine',
+    response_model=UserSchema,
+    dependencies=[Depends(is_authenticated_permission)]
+)
+async def update_info_about_current_user(
+        user_info: UserUpdateSchema,
+        request: Request,
+        session: AsyncSession = Depends(get_session)
+):
+    return await UserManager.update(
+        session=session, pk=request.user.id, input_data=user_info.dict(exclude_unset=True)
+    )
+
+
+@user_router.delete(
+    '/{user_id}',
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(is_admin_permission)]
+)
+async def delete_user(
+        user_id: int,
+        session: AsyncSession = Depends(get_session)
+):
+    await UserManager.retrieve(
+        session=session,
+        id=user_id
+    )
+    return await UserManager.delete(
+        session=session,
+        id=user_id
+    )
