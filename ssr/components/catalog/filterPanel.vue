@@ -8,11 +8,12 @@
               :key    = "mainItem.id"
           >
               <div class="sidebar_menu__title">
-                <div :class = "{'active' : mainItem.filterPanel}"
+                <a :class = "{'active' : mainItem.filterPanel}"
+                   href=""
                     @click.stop = "openCategory(mainItem)"
                 >
                   {{mainItem.name}}
-                </div>
+                </a>
                 <div v-if="mainItem.childrens.length"
                     :class="[ mainItem.filterPanel ? 'sidebar_menu__open  icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
                     @click.stop = "toggleCategory(mainItem)"
@@ -27,11 +28,12 @@
                           :key    = "middleItem.id"
                       >
                         <div class="subtitle__row">
-                          <div :class = "{'active' : middleItem.filterPanel}"
+                          <a :class = "{'active' : middleItem.filterPanel}"
+                             href=""
                               @click.stop  = "openCategory(middleItem)"
                           >
                             {{middleItem.name}}
-                          </div>
+                          </a>
                           <div v-if="middleItem.childrens.length"
                               :class="[ middleItem.filterPanel ? 'sidebar_menu__open icon-arrow-r' : 'sidebar_menu__close icon-arrow-l']"
                               @click.stop = "toggleCategory(middleItem)"
@@ -47,9 +49,9 @@
                               @click.stop = "openCategory(lastItem)"
                           >
                               <div class="">
-                                <div :class = "{'active' : LAST_CATEGORIES_ITEM_ACTIVE === lastItem.id}">
+                                <a :class = "{'active' : LAST_CATEGORIES_ITEM_ACTIVE === lastItem.id}">
                                   {{lastItem.name}}
-                                </div>
+                                </a>
 
                               </div>
                           </div>
@@ -306,14 +308,20 @@ export default {
     justify-content: space-between;
     padding: 10px 10px 10px 0;
     line-height: 1.8;
+    color: #423E48;
     div:first-child {
       cursor: pointer;
     }
     .active{
       color:#4275D8;
     }
+    a{
+    color: #423E48;;
+    }
+
   }
   &__subtitle{
+    color: #423E48;
     .subtitle__row{
       div:first-child {
         cursor: pointer;
@@ -327,6 +335,9 @@ export default {
       padding: 10px 10px 10px 5px;
       font-size: 14px;
     }
+    a{
+      color: #423E48;
+    }
     .subtitle__list{
       padding-left: 10px;
     }
@@ -339,6 +350,10 @@ export default {
       .active{
         color:#4275D8;
       }
+      a{
+        color: #423E48;
+      }
+
     }
   }
 }

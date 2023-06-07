@@ -12,7 +12,7 @@
                   :key    = "item.id"
                   @click.stop  = "changeCategory(item)"
               >
-                <div class="menu__link">{{item.name}}</div>
+                <a class="menu__link" href="">{{item.name}}</a>
               </li>
             </ul>
             <a class="_link"
@@ -29,13 +29,13 @@
                 :key    = "sub.id"
                 @click.stop  = "subCategoryClick(sub)"
               >
-                <div v-if = "sub.id" class="menu__rubric">{{sub.name}}</div>
+                <a href="" v-if = "sub.id" class="menu__rubric">{{sub.name}}</a>
                 <ul v-if = "sub.subItems.length > 0">
                   <li
                       v-for = "subItem in sub.subItems"
                       :key  = "subItem.id"
                   >
-                    <div @click.stop = "subCategoryClick(subItem)" class="menu__linksub">{{subItem.name}}</div>
+                    <a href="" @click.stop = "subCategoryClick(subItem)" class="menu__linksub">{{subItem.name}}</a>
                   </li>
                 </ul>
               </div>
@@ -197,28 +197,30 @@ align-items: flex-start;
 
 
 &__rubric{
+  display: inline-block;
   font-weight: 400;
   font-size: 14px;
   line-height: 20px;
   text-decoration-line: underline;
   color: #423E48;
   transition: all 0.2s ease;
-  &:hover{
-  color:#4275D8;
-  opacity: 0.8;
+    &:hover{
+    color:#4275D8;
+    opacity: 0.8;
 }
 
 }
 
 &__linksub{
-font-weight: 300;
-font-size: 14px;
-color: #423E48;
-margin-top: 8px;
-opacity: 0.5;
-&:hover{
-  opacity: 0.7;
-}
+  display: inline-block;
+  font-weight: 300;
+  font-size: 14px;
+  color: #423E48;
+  margin-top: 8px;
+  opacity: 0.5;
+  &:hover{
+    opacity: 0.7;
+  }
 }
 }
 
