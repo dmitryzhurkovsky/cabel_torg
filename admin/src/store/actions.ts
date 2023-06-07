@@ -544,11 +544,13 @@ export const actions: ActionTree<State, State> & Actions = {
 
   [ActionTypes.GET_USERS_LIST_DATA]({ commit }, payload) {
     return new Promise((resolve) => {
-      // axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses").
-      // then((response) => {
-        commit(MutationTypes.SET_USERS_LIST, [])
-        resolve([]);
-      // })
+      axios.get(import.meta.env.VITE_APP_API_URL + "users").
+      then((response) => {
+        console.log(response.data);
+        
+        commit(MutationTypes.SET_USERS_LIST, response.data)
+        resolve(response.data);
+      })
     })
   },
 
