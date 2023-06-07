@@ -51,18 +51,6 @@ async def get_categories(
 
 
 @user_router.get(
-    '/{user_id}',
-    response_model=UserSchema,
-    dependencies=[Depends(is_admin_permission)]
-)
-async def get_user(
-        user_id: int,
-        session: AsyncSession = Depends(get_session)
-) -> UserSchema:
-    return await UserManager.retrieve(id=user_id, session=session)
-
-
-@user_router.get(
     '/mine',
     response_model=UserSchema,
     dependencies=[Depends(is_authenticated_permission)]
@@ -72,6 +60,19 @@ async def get_current_user(
         session: AsyncSession = Depends(get_session)
 ) -> UserSchema:
     return await UserManager.retrieve(id=request.user.id, session=session)
+
+
+
+@user_router.get(
+    '/{user_id}',
+    response_model=UserSchema,
+    dependencies=[Depends(is_admin_permission)]
+)
+async def get_user(
+        user_id: int,
+        session: AsyncSession = Depends(get_session)
+) -> UserSchema:
+    return await UserManager.retrieve(id=user_id, session=session)
 
 
 @user_router.post(
@@ -123,6 +124,21 @@ async def reset_user_password(
 
 
 @user_router.patch(
+    '/mine',
+    response_model=UserSchema,
+    dependencies=[Depends(is_authenticated_permission)]
+)
+async def update_info_about_current_user(
+        user_info: UserUpdateSchema,
+        request: Request,
+        session: AsyncSession = Depends(get_session)
+):
+    return await UserManager.update(
+        session=session, pk=request.user.id, input_data=user_info.dict(exclude_unset=True)
+    )
+
+
+@user_router.patch(
     '/{user_id}',
     response_model=UserSchema,
     dependencies=[Depends(is_admin_permission)]
@@ -135,21 +151,6 @@ async def update_info_about_user(
     await UserManager.retrieve(id=user_id, session=session)
     return await UserManager.update(
         session=session, pk=user_id, input_data=user_info.dict(exclude_unset=True)
-    )
-
-
-@user_router.patch(
-    '/mine',
-    response_model=UserSchema,
-    dependencies=[Depends(is_authenticated_permission)]
-)
-async def update_info_about_current_user(
-        user_info: UserUpdateSchema,
-        request: Request,
-        session: AsyncSession = Depends(get_session)
-):
-    return await UserManager.update(
-        session=session, pk=request.user.id, input_data=user_info.dict(exclude_unset=True)
     )
 
 
