@@ -28,7 +28,7 @@
               </div>
               <div v-if = "LastCategory?.length && isMobileVersion">
                 <swiper
-                  :slides-per-view="1.7"
+                  :slides-per-view="2.7"
                   :space-between="12"
                   :speed="500"
                   :autoplay="{
@@ -430,8 +430,15 @@
       white-space: nowrap;
       overflow: hidden;
       transition: all 0.5s ease;
-
       cursor: pointer;
+      a{
+        color: #423E48;
+      }
+      @media (max-width: $md2+px) {
+        background: #dedede;
+        opacity: 0.6;
+      }
+
       &:hover{
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
         color:#4275D8;
@@ -547,6 +554,10 @@
   //max-width: 180px;
   transition: all 0.5s ease;
   cursor: pointer;
+  @media (max-width: $md2+px) {
+    background: #dedede;
+    opacity: 0.6;
+  }
 
 }
 .recomendation__nav .active {
