@@ -23,7 +23,7 @@
                     :key = "quickCategory.id"
                     @click.stop = setActiveCategory(quickCategory)
                   >
-                    {{ quickCategory.name }}
+                    <a :href="createHref(quickCategory)">{{ quickCategory.name }}</a>
                   </div>
               </div>
               <div v-if = "LastCategory?.length && isMobileVersion">
@@ -146,6 +146,13 @@
     store.commit("query/SET_SEARCH_STRING", '')
     store.commit("catalog/SET_CATALOG_SEARCH_STRING", '')
   }
+
+  const createHref = (category) => {
+    const fullCategoryData = getters['header/ALL_CATEGORIES'].filter(item => item.id == category.id)[0];
+    const URL = '/category/' + fullCategoryData.site_link;
+    return URL;
+  }
+
 
   const getCategoryUrl = (id) => {
     let url = "/category/";

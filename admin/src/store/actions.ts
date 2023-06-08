@@ -158,7 +158,11 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: null
   ): Promise<Array<IDeliveryType>>,
-  
+  [ActionTypes.EDIT_USER](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -174,10 +178,8 @@ export const actions: ActionTree<State, State> & Actions = {
           resolve(response.data)
         })
       }).catch((err) => {
-        if (err.response.status = 404) {
-          resolve({});
-        }
-        console.log('Send login request ', err)
+        console.log('action SEND_USER_REQUEST ', err);
+        resolve(err);
         
       });
     }) 
@@ -546,12 +548,21 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "users").
       then((response) => {
-        console.log(response.data);
-        
         commit(MutationTypes.SET_USERS_LIST, response.data)
         resolve(response.data);
       })
     })
   },
+  
+  [ActionTypes.EDIT_USER]({ commit }, data) {
+    return new Promise((resolve) => {
+      axios.patch(import.meta.env.VITE_APP_API_URL + "users/" + String(data.id), data).
+      then((response) => {
+        commit(MutationTypes.UPDATE_USER, response.data)
+        resolve(response.data);
+      })
+    })
+  },
+
 
 }

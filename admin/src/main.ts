@@ -9,6 +9,7 @@ import { faHeart, faHand, faAddressBook, faTrashCan, faPenToSquare, faFile, faSq
 import { QuillEditor } from '@vueup/vue-quill'
 import '@vueup/vue-quill/dist/vue-quill.snow.css';
 import { MutationTypes } from './store/mutation-types'
+import { request } from 'http';
 
 
 library.add([faHeart, faHand, faAddressBook, faTrashCan, faPenToSquare, faFile, faSquareCaretDown, faSquareCaretUp] as any)
@@ -33,21 +34,17 @@ axios.interceptors.response.use(
     // console.log(error.response);
     if (typeof error.response === 'undefined') {
         store.commit(MutationTypes.SET_USER, null);
-        // localStorage.removeItem("authToken");
+        store.commit(MutationTypes.SET_IS_LOADING, false)
         return Promise.reject(error);
     } else if (error.response.status === 422) {
-        console.log( error.response.data.detail);
-        const errors = error.response.data.detail;
-        // for (let i = 0; i < errors.length; i++) {
-        //   store.commit("notification/ADD_MESSAGE", {id: i, icon: 'error', name: errors[i].msg});
-        // }
-        store.commit(MutationTypes.SET_USER, null);
-        // localStorage.removeItem("authToken");
-        return Promise.reject(error);
+      const errors = error.response.data.detail;
+      store.commit(MutationTypes.SET_USER, null);
+      store.commit(MutationTypes.SET_IS_LOADING, false)
+      return Promise.reject(error);
     } else if (error.response.status === 401) {
       const originalConfig = error.config;
-      originalConfig._retry = true;
-      
+      // originalConfig._retry = true;
+
       axios.post(import.meta.env.VITE_APP_API_URL + "refresh", {refresh_token: localStorage.getItem("refreshToken")}).then((refresh) => {
         console.log('QQQQQ ', refresh);
       
@@ -60,11 +57,14 @@ axios.interceptors.response.use(
             Authorization: `Bearer ${refresh.data.access_token}`,
             Accept: "application/json"
           }
+          // console.log('OriginalConfig', originalConfig);
+          
           return axios(originalConfig)
         } else {
           store.commit(MutationTypes.SET_USER, null);
           localStorage.removeItem("authToken");
           localStorage.removeItem("refreshToken");
+          store.commit(MutationTypes.SET_IS_LOADING, false)
           return Promise.reject(error);
         }
       }).catch((e) => {
@@ -73,10 +73,12 @@ axios.interceptors.response.use(
         store.commit(MutationTypes.SET_USER, null);
         localStorage.removeItem("authToken");
         localStorage.removeItem("refreshToken");
+        store.commit(MutationTypes.SET_IS_LOADING, false)
         return Promise.reject(error);
       })
     } else {
-        return Promise.reject(error);
+      store.commit(MutationTypes.SET_IS_LOADING, false)
+      return Promise.reject(error);
     }
   }
 );

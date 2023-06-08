@@ -12,7 +12,7 @@
                   :key    = "item.id"
                   @click.stop  = "changeCategory(item)"
               >
-                <a class="menu__link" :href="createHref(item.site_link)">{{item.name}}</a>
+                <a class="menu__link" :href="createHref(item)" @click.prevent>{{item.name}}</a>
               </li>
             </ul>
             <a class="_link"
@@ -29,13 +29,13 @@
                 :key    = "sub.id"
                 @click.stop  = "subCategoryClick(sub)"
               >
-                <a :href="createHref(sub.site_link)" v-if = "sub.id" class="menu__rubric">{{sub.name}}</a>
+                <a :href="createHref(sub)" v-if = "sub.id" class="menu__rubric">{{sub.name}}</a>
                 <ul v-if = "sub.subItems.length > 0">
                   <li
                       v-for = "subItem in sub.subItems"
                       :key  = "subItem.id"
                   >
-                    <a :href="createHref(subItem.site_link)" @click.stop = "subCategoryClick(subItem)" class="menu__linksub">{{subItem.name}}</a>
+                    <a :href="createHref(subItem)" @click.stop = "subCategoryClick(subItem)" class="menu__linksub">{{subItem.name}}</a>
                   </li>
                 </ul>
               </div>
@@ -58,7 +58,7 @@ export default {
   name: "CatalogMenu",
 
   computed: {
-    ...mapGetters("header", ["CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "ALL_CATEGORIES", "TOP_CATEGORIES", "SUB_CATEGORIES", "IS_CATALOG_OPEN"]),
+    ...mapGetters("header", ["CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "ALL_CATEGORIES", "TOP_CATEGORIES", "SUB_CATEGORIES", "IS_CATALOG_OPEN", "ALL_CATEGORIES"]),
     ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION"]),
   },
 
@@ -80,7 +80,9 @@ export default {
     },
 
     createHref(category) {
-      const URL = '/category/' + category;
+      // console.log('.site_link', category);
+      const fullCategoryData = this.ALL_CATEGORIES.filter(item => item.id == category.id)[0];
+      const URL = '/category/' + fullCategoryData.site_link;
       return URL;
     },
 

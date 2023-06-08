@@ -14,8 +14,8 @@
 
   const tableHeads = [
     {db: 'id', name: 'N'},
-    {db: 'title', name: 'заголовок'},
-    {db: 'payload', name: 'описание'}, 
+    {db: 'full_name', name: 'Имя'},
+    {db: 'email', name: 'EMail'}, 
     {db: '', name: ''},
     {db: '', name: ''},
   ]
@@ -23,22 +23,22 @@
   const tableSizeColumns = '30px 1fr 1fr 40px 40px'
 
   const isFormOpen = ref(false)
-  const payloadField = ref('')
-  const titleField = ref('')
+  const emailField = ref('')
+  const nameField = ref('')
   const vendorField = 1
   const idField = ref()
   const formType = ref(true)
 
   const rules = computed(() => ({
-    payloadField: {
+    emailField: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
     },
-    titleField: {
+    nameField: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
     },
   }))
 
-  const v = useVuelidate(rules, {payloadField, titleField});
+  const v = useVuelidate(rules, {emailField, nameField});
 
   const sendDataRequest = async () => {
     await store.dispatch(ActionTypes.GET_USERS_LIST_DATA, null)
@@ -46,8 +46,6 @@
 
   watch(() => store.getters.usersList,
     (curr, prev) => {
-      console.log('Watch ', curr);
-      
       tableData.value = [...curr];
       store.commit(MutationTypes.SET_IS_LOADING, false)
   });
@@ -63,8 +61,8 @@
 
   const onEditButtonClick = (rowData: IDeliveryType) => {
     idField.value = rowData.id
-    payloadField.value = rowData.payload as string
-    titleField.value = rowData.title as string
+    emailField.value = rowData.email as string
+    nameField.value = rowData.full_name as string
     formType.value = false
     onSetIsFormOpen(true)
     setTimeout(() => window.scrollTo(0, 0), 0);
@@ -72,14 +70,14 @@
 
   const onAddButtonClick = () => {
     idField.value = null
-    payloadField.value = '' as string
-    titleField.value = '' as string
+    emailField.value = '' as string
+    nameField.value = '' as string
     formType.value = true
     onSetIsFormOpen(true)
     setTimeout(() => window.scrollTo(0, 0), 0);
   }
 
-  const onDeleteDeliveryType = async (rowData: IDeliveryType) => {
+  const onDeleteButtonClick = async (rowData: IDeliveryType) => {
     store.commit(MutationTypes.SET_IS_LOADING, true)
     // await store.dispatch(ActionTypes.DELETE_STOCK, rowData.id as number)
     isFormOpen.value = false
@@ -89,17 +87,40 @@
     v.value.$touch()
     if (v.value.$error) return
     const data = {
-      payload: payloadField.value,
-      title: titleField.value,
-      vendor_info_id: vendorField,
+      email: emailField.value,
+      full_name: nameField.value,
     } as IDeliveryType
     if (formType.value) {
       store.commit(MutationTypes.SET_IS_LOADING, true)
-      // await store.dispatch(ActionTypes.ADD_STOCK, data)
+
+      // // let password = '';
+      // //   for (let i = 0; i < 8; i++){
+      // //     let rand = Math.random() * 10 - 0.5;
+      // //     password = password + String(Math.round(rand))
+      // //   }
+      // //   const userData = {
+      // //     email: this.email,
+      // //     full_name: this.full_name,
+      // //     phone_number: this.phone_number,
+      // //     company_name: this.company_name,
+      // //     unp: this.unp,
+      // //     password: password,
+      // //     legal_address: this.legal_address,
+      // //     IBAN: this.IBAN,
+      // //     BIC: this.BIC,
+      // //     serving_bank: this.serving_bank,
+      // //     isGenerated: true,
+      // //   };
+
+      //   await this.SEND_REGISTER_REQUEST(userData);
+
+      // await store.dispatch(ActionTypes.ADD_USER, data)
     } else {
       store.commit(MutationTypes.SET_IS_LOADING, true)
       data.id = idField.value
-      // await store.dispatch(ActionTypes.EDIT_STOCK, data)
+      console.log(data);
+      
+      await store.dispatch(ActionTypes.EDIT_USER, data)
     }
     isFormOpen.value = false
     store.commit(MutationTypes.SET_IS_LOADING, false)
@@ -111,22 +132,22 @@
   <h2 class="heading-2">Администраторы магазина</h2>
 
   <div class="form-container" v-if="isFormOpen">
-    <h3 class="heading-3">Новый администратор</h3>
+    <h3 class="heading-3">Администратор</h3>
 
     <form @submit.prevent="submitForm">
       <Input
-        label="Название"
-        name="title"
-        placeholder="Укажите название"
-        v-model:value="v.titleField.$model"
-        :error="v.titleField.$errors"
+        label="Имя"
+        name="name"
+        placeholder="Укажите имя"
+        v-model:value="v.nameField.$model"
+        :error="v.nameField.$errors"
       />
       <Input
-        label="Адрес склада"
-        name="payload"
-        placeholder="Адрес склада"
-        v-model:value="v.payloadField.$model"
-        :error="v.payloadField.$errors"
+        label="EMail"
+        name="email"
+        placeholder="EMail"
+        v-model:value="v.emailField.$model"
+        :error="v.emailField.$errors"
       />
       <div class="form-buttons">
         <Button label="Создать" color="primary" v-if="formType"></Button>
@@ -142,7 +163,7 @@
     :tableData="tableData"
     @openForm="onAddButtonClick"
     @editRow="onEditButtonClick"
-    @deleteRow="onDeleteDeliveryType"
+    @deleteRow="onDeleteButtonClick"
   />
 </template>
 

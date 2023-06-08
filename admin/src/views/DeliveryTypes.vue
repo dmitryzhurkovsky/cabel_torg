@@ -116,7 +116,7 @@
   <h2 class="heading-2">Способы доставки</h2>
 
   <div class="form-container" v-if="isFormOpen">
-    <h3 class="heading-3">Новый тип доставки</h3>
+    <h3 class="heading-3">Тип доставки</h3>
 
     <form @submit.prevent="submitForm">
       <Input
