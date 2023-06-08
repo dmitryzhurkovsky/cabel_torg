@@ -43,9 +43,10 @@ axios.interceptors.response.use(
       return Promise.reject(error);
     } else if (error.response.status === 401) {
       const originalConfig = error.config;
-      // originalConfig._retry = true;
+      originalConfig._retry = true;
 
-      axios.post(import.meta.env.VITE_APP_API_URL + "refresh", {refresh_token: localStorage.getItem("refreshToken")}).then((refresh) => {
+      let isRefresh = false;
+      await axios.post(import.meta.env.VITE_APP_API_URL + "refresh", {refresh_token: localStorage.getItem("refreshToken")}).then((refresh) => {
         console.log('QQQQQ ', refresh);
       
         if (refresh.status === 201) {
@@ -57,9 +58,7 @@ axios.interceptors.response.use(
             Authorization: `Bearer ${refresh.data.access_token}`,
             Accept: "application/json"
           }
-          // console.log('OriginalConfig', originalConfig);
-          
-          return axios(originalConfig)
+          isRefresh = true;
         } else {
           store.commit(MutationTypes.SET_USER, null);
           localStorage.removeItem("authToken");
@@ -75,7 +74,10 @@ axios.interceptors.response.use(
         localStorage.removeItem("refreshToken");
         store.commit(MutationTypes.SET_IS_LOADING, false)
         return Promise.reject(error);
-      })
+      });
+
+      if (isRefresh) return axios(originalConfig);
+
     } else {
       store.commit(MutationTypes.SET_IS_LOADING, false)
       return Promise.reject(error);

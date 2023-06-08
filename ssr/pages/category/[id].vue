@@ -23,7 +23,7 @@
                     :key = "quickCategory.id"
                     @click.stop = setActiveCategory(quickCategory)
                   >
-                    <a :href="createHref(quickCategory)">{{ quickCategory.name }}</a>
+                    {{ quickCategory.name }}
                   </div>
               </div>
               <div v-if = "LastCategory?.length && isMobileVersion">

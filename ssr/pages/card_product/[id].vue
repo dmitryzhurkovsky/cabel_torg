@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if = "isRenderFinish">
     <Head>
       <Title>
         {{cartItemData?.name }} купить в Беларуси
@@ -156,9 +156,6 @@
         :isShowFilter = false
         :isShowFollow = false
       />
-    </ClientOnly>
-
-    <ClientOnly>
       <SliderShownCards/>
     </ClientOnly>
   </div>
@@ -177,6 +174,7 @@
   const infoBlock = ref(0)
   const id = ref(null)
   const imgNumber = ref(0)
+  const isRenderFinish = ref(false)
 
   watch (() => JSON.stringify(getters['order/ORDERS']), 
   () => {
@@ -190,13 +188,18 @@
     checkIsWish();
   })
 
+  // watch(() => JSON.stringify(cartItemData.value),
+  // () => {
+  //   isRenderFinish.value = true
+  // })
+
   const rebuildText = (text) => {
-    let newText = text.replace('<br>', '&nbsp')
+    let newText = ''
+    if (text) newText = text.replace('<br>', '&nbsp')
     return newText
   }
 
   const changeNumber = (newItem) => {
-    // console.log('Card ', newItem)
     imgNumber.value = newItem
   }
 
@@ -313,12 +316,13 @@
       if (typeof window !== 'undefined') updateShowItems(id.value)
       countQuantity()
       checkIsWish()
-      store.dispatch('breadcrumb/CHANGE_BREADCRUMB', 0)
+      // store.dispatch('breadcrumb/CHANGE_BREADCRUMB', 0)
     }
   }
 
   const setBreabcrumbs = async () => {
-    const mainBreadCrumb = {
+      store.dispatch('breadcrumb/CHANGE_BREADCRUMB', 0)
+      const mainBreadCrumb = {
       name: 'Каталог',
       path: '/catalog',
       type: 'global',
@@ -365,14 +369,19 @@
     
   }
 
-  onBeforeUpdate(async () => {
-    updateShowItems(route.params.id)
-  })
+  // onBeforeUpdate(() => {
+  //   console.log('Update product');
+  //   updateShowItems(route.params.id)
+  // })
 
-  onMounted(async () => {
+  onBeforeMount(async () => {
+    isRenderFinish.value = false
+    console.log('Mount product');
     id.value = route.params.id
     await onGetCartData()
+    updateShowItems(route.params.id)
     await setBreabcrumbs()
+    isRenderFinish.value = true
   })
 
   const { data } = await useAsyncData(
@@ -380,7 +389,7 @@
     async () => {
       id.value = route.params.id
       await onGetCartData()
-      return 
+      return data
     }, {
       watch: [route]
     }

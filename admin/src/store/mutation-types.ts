@@ -39,5 +39,7 @@ const enum MutationTypes {
   UPDATE_PRODUCT = 'UPDATE_PRODUCT',
   SET_USERS_LIST = 'SET_USERS_LIST',
   UPDATE_USER = 'UPDATE_USER',
+  ADD_TO_USERS = 'ADD_TO_USERS',
+  DELETE_FROM_USERS = 'DELETE_FROM_USERS',
 }
 export { MutationTypes }

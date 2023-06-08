@@ -2,9 +2,10 @@
   import LayoutHeader from "@/components/Layout/Header.vue";
   import LayoutSidebar from "@/components/Layout/Sidebar.vue";
   import Loader from '@/components/UI/Loader.vue';
-  import { onMounted, ref, watch } from "vue";
+  import { onBeforeUpdate, onMounted, ref, watch } from "vue";
   import { useStore } from './store';
   import { ActionTypes } from './store/action-types';
+  import { router } from './router'
 
   const isOpenMenu = ref(true);
   const isLogin = ref(false)
@@ -19,6 +20,12 @@
       isLogin.value = curr
     }
   )
+
+  onBeforeUpdate(() => {
+    if (!store.getters.usersList) {
+      router.push('/login')
+    }
+  })
 
   onMounted( async () => {
     if (localStorage.getItem("authToken")) {
