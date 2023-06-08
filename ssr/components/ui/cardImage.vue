@@ -38,7 +38,7 @@ img{
   max-width: 100%;
   max-height: 100%;
   //height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 .active {
   border: 2px solid blue;
