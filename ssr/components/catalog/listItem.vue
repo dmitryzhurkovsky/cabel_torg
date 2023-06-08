@@ -348,6 +348,8 @@ export default {
       margin-bottom: 10px;
       display: inline-block;
       cursor: pointer;
+      color: #423E48;
+      font-weight: 400;
 
       a{
         font-weight: 500;
