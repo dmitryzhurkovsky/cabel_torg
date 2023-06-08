@@ -21,7 +21,7 @@ class Attribute(Base):
     value = relationship('AttributeValue', back_populates='attribute', lazy='joined')
 
     name_id = Column(Integer, ForeignKey('attribute_names.id', ondelete='CASCADE'))
-    name = relationship('AttributeName', back_populates='attribute', lazy='joined')
+    name = relationship('AttributeName', back_populates='attribute', lazy='joined', order_by='AttributeName.payload')
 
     products = relationship('Product', secondary='product_attribute', back_populates='attributes', lazy='noload')
 

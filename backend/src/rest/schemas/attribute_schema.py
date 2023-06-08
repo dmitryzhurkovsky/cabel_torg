@@ -7,7 +7,10 @@ class AttributeValueSchema(BaseSchema):
     class Config:
         orm_mode = True
 
-        fields = {'id': {'exclude': True}}
+        fields = {
+            'id': {'exclude': True},
+            'attribute': {'exclude': True}
+        }
 
 
 class AttributeNameSchema(BaseSchema):
@@ -16,7 +19,10 @@ class AttributeNameSchema(BaseSchema):
     class Config:
         orm_mode = True
 
-        fields = {'id': {'exclude': True}}
+        fields = {
+            'id': {'exclude': True},
+            'attribute': {'exclude': True}
+        }
 
 
 class AttributeSchema(BaseSchema):
