@@ -6,7 +6,6 @@ from sqlalchemy import (
     String,
     Enum
 )
-from sqlalchemy.ext.hybrid import hybrid_property
 from sqlalchemy.orm import relationship
 
 from src.core.db.db import Base
