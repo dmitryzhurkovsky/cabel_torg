@@ -6,7 +6,7 @@ services:
     container_name: 'dev_db'
     image: postgres:15.1
     env_file:
-      - backend/.env.dev
+      - backend/.env
     ports:
       - '5434:5432'
     volumes:
@@ -42,6 +42,7 @@ services:
         condition: service_healthy
     volumes:
       - ../data/site_media:/site_media
+      - ./backend:/backend
 
 #  redis:
 #    container_name: 'dev_redis'
