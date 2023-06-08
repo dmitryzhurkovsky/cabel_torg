@@ -430,8 +430,11 @@
       white-space: nowrap;
       overflow: hidden;
       transition: all 0.5s ease;
-
       cursor: pointer;
+      a{
+        color: #423E48;
+      }
+
       &:hover{
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
         color:#4275D8;

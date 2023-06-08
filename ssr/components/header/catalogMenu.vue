@@ -232,12 +232,13 @@ align-items: flex-start;
 }
 
 .menusub{
-display: flex;
-align-items: center;
-padding: 15px;
-width: 100%;
-max-height: 100%;
-position: static;
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  width: 100%;
+  max-height: 100%;
+  position: static;
+  min-height: 350px;
 
 &__box{
 display: grid;
