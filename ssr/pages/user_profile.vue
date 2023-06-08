@@ -79,6 +79,10 @@
       }
     },
 
+    beforeUpdate(){
+      if (!localStorage.getItem("authToken")) this.$router.push('/login');
+    },
+
     mounted(){
       if (!localStorage.getItem("authToken")) this.$router.push('/login');
       this.screen = this.SCREEN;

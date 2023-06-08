@@ -154,7 +154,15 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: IDeliveryType
   ): Promise<Array<IDeliveryType>>,
-  
+  [ActionTypes.GET_USERS_LIST_DATA](
+    { commit }: AugmentedActionContext,
+    payload: null
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.EDIT_USER](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -170,10 +178,8 @@ export const actions: ActionTree<State, State> & Actions = {
           resolve(response.data)
         })
       }).catch((err) => {
-        if (err.response.status = 404) {
-          resolve({});
-        }
-        console.log('Send login request ', err)
+        console.log('action SEND_USER_REQUEST ', err);
+        resolve(err);
         
       });
     }) 
@@ -183,13 +189,18 @@ export const actions: ActionTree<State, State> & Actions = {
     return new Promise((resolve) => {
       axios.get(import.meta.env.VITE_APP_API_URL + "users/mine").
       then((response) => {
-        if (response.data.is_admin) {
+        // console.log('Actions ', response.data);
+        
+        if (response?.data?.is_admin) {
+          console.log('Это админ');
           commit(MutationTypes.SET_USER, response.data)
         } else {
+          console.log('Это НЕ админ');
+          commit(MutationTypes.SET_USER, null)
           localStorage.removeItem("authToken")
           localStorage.removeItem("refreshToken")
         }
-        resolve(response.data);
+        resolve(response?.data);
       })
     })
   },
@@ -532,4 +543,26 @@ export const actions: ActionTree<State, State> & Actions = {
       })
     })
   },
+
+  [ActionTypes.GET_USERS_LIST_DATA]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.get(import.meta.env.VITE_APP_API_URL + "users").
+      then((response) => {
+        commit(MutationTypes.SET_USERS_LIST, response.data)
+        resolve(response.data);
+      })
+    })
+  },
+  
+  [ActionTypes.EDIT_USER]({ commit }, data) {
+    return new Promise((resolve) => {
+      axios.patch(import.meta.env.VITE_APP_API_URL + "users/" + String(data.id), data).
+      then((response) => {
+        commit(MutationTypes.UPDATE_USER, response.data)
+        resolve(response.data);
+      })
+    })
+  },
+
+
 }

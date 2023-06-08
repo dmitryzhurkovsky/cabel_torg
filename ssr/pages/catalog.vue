@@ -281,6 +281,11 @@
       transition: all 0.5s ease;
 
       cursor: pointer;
+
+      @media (max-width: $md2+px) {
+          background: #dedede;
+          padding: 2px 0;
+      }
       &:hover{
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
         color:#4275D8;

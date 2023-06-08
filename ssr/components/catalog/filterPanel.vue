@@ -9,8 +9,8 @@
           >
               <div class="sidebar_menu__title">
                 <a :class = "{'active' : mainItem.filterPanel}"
-                   href=""
-                    @click.stop = "openCategory(mainItem)"
+                  :href="createHref(mainItem.site_link)"
+                  @click.stop = "openCategory(mainItem)"
                 >
                   {{mainItem.name}}
                 </a>
@@ -29,8 +29,8 @@
                       >
                         <div class="subtitle__row">
                           <a :class = "{'active' : middleItem.filterPanel}"
-                             href=""
-                              @click.stop  = "openCategory(middleItem)"
+                            :href="createHref(middleItem.site_link)"
+                            @click.stop  = "openCategory(middleItem)"
                           >
                             {{middleItem.name}}
                           </a>
@@ -49,7 +49,9 @@
                               @click.stop = "openCategory(lastItem)"
                           >
                               <div class="">
-                                <a :class = "{'active' : LAST_CATEGORIES_ITEM_ACTIVE === lastItem.id}">
+                                <a :class = "{'active' : LAST_CATEGORIES_ITEM_ACTIVE === lastItem.id}"
+                                  :href="createHref(lastItem.site_link)"
+                                >
                                   {{lastItem.name}}
                                 </a>
 
@@ -132,6 +134,11 @@ export default {
       let url = "/catalog?";
       url = url + this.getLastPartOfUrl();
       return url;
+    },
+
+    createHref(category) {
+      const URL = '/category/' + category;
+      return URL;
     },
 
     getCategoryUrl(id){

@@ -120,7 +120,7 @@
           <button :class="[infoBlock === 2 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(2)">Документация</button>
       </div>
       <div v-if="infoBlock === 0" class="tabcontent">
-          <p>{{ cartItemData.description }}</p>
+          <p v-html = "rebuildText(cartItemData.description)"></p>
       </div>
       <div v-if="infoBlock === 1" class="tabcontent">
           <div class="tabcontent__row table__items"
@@ -189,6 +189,11 @@
     countQuantity();
     checkIsWish();
   })
+
+  const rebuildText = (text) => {
+    let newText = text.replace('<br>', '&nbsp')
+    return newText
+  }
 
   const changeNumber = (newItem) => {
     // console.log('Card ', newItem)
@@ -364,7 +369,7 @@
     updateShowItems(route.params.id)
   })
 
-  onBeforeMount(async () => {
+  onMounted(async () => {
     id.value = route.params.id
     await onGetCartData()
     await setBreabcrumbs()
