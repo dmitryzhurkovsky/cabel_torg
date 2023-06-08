@@ -22,8 +22,6 @@ const exitFromAdmin = () => {
   store.commit(MutationTypes.SET_USER, null)
   localStorage.removeItem("authToken")
   localStorage.removeItem("refreshToken")
-  console.log(store.getters['user']);
-  
   router.push('/login')
 }
 

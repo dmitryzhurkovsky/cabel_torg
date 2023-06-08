@@ -7,7 +7,7 @@
   import Button from '@/components/UI/Button.vue'
   import Input from '@/components/UI/Input.vue';
   import { IDeliveryType } from '../types';
-  import { helpers, minLength, numeric, required } from '@vuelidate/validators';
+  import { helpers, minLength, email, required } from '@vuelidate/validators';
   import { useVuelidate } from '@vuelidate/core';
 
   const store = useStore()
@@ -25,20 +25,25 @@
   const isFormOpen = ref(false)
   const emailField = ref('')
   const nameField = ref('')
-  const vendorField = 1
+  const passwordField = ref('')
   const idField = ref()
   const formType = ref(true)
 
   const rules = computed(() => ({
     emailField: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
+      email: helpers.withMessage(`укажите валидный E-Mail`, email),
     },
     nameField: {
       requered:  helpers.withMessage(`Обязательно поле`, required),
     },
+    passwordField: {
+      requered:  helpers.withMessage(`Обязательно поле`, required),
+      minLength: helpers.withMessage(`Длина поля 8 символов`, minLength(8)),
+    },
   }))
 
-  const v = useVuelidate(rules, {emailField, nameField});
+  const v = useVuelidate(rules, {emailField, nameField, passwordField});
 
   const sendDataRequest = async () => {
     await store.dispatch(ActionTypes.GET_USERS_LIST_DATA, null)
@@ -72,6 +77,7 @@
     idField.value = null
     emailField.value = '' as string
     nameField.value = '' as string
+    passwordField.value = '' as string
     formType.value = true
     onSetIsFormOpen(true)
     setTimeout(() => window.scrollTo(0, 0), 0);
@@ -79,7 +85,7 @@
 
   const onDeleteButtonClick = async (rowData: IDeliveryType) => {
     store.commit(MutationTypes.SET_IS_LOADING, true)
-    // await store.dispatch(ActionTypes.DELETE_STOCK, rowData.id as number)
+    await store.dispatch(ActionTypes.DELETE_USER, rowData.id as number)
     isFormOpen.value = false
   }
 
@@ -92,29 +98,12 @@
     } as IDeliveryType
     if (formType.value) {
       store.commit(MutationTypes.SET_IS_LOADING, true)
-
-      // // let password = '';
-      // //   for (let i = 0; i < 8; i++){
-      // //     let rand = Math.random() * 10 - 0.5;
-      // //     password = password + String(Math.round(rand))
-      // //   }
-      // //   const userData = {
-      // //     email: this.email,
-      // //     full_name: this.full_name,
-      // //     phone_number: this.phone_number,
-      // //     company_name: this.company_name,
-      // //     unp: this.unp,
-      // //     password: password,
-      // //     legal_address: this.legal_address,
-      // //     IBAN: this.IBAN,
-      // //     BIC: this.BIC,
-      // //     serving_bank: this.serving_bank,
-      // //     isGenerated: true,
-      // //   };
-
-      //   await this.SEND_REGISTER_REQUEST(userData);
-
-      // await store.dispatch(ActionTypes.ADD_USER, data)
+      data.password = passwordField.value
+      data.is_admin = true
+      data.phone_number = '+375 162 54-54-07'
+      data.company_name = 'CabelTorg'
+      data.unp = '291132270'
+      await store.dispatch(ActionTypes.ADD_USER, data)
     } else {
       store.commit(MutationTypes.SET_IS_LOADING, true)
       data.id = idField.value
@@ -143,11 +132,18 @@
         :error="v.nameField.$errors"
       />
       <Input
-        label="EMail"
+        label="Email"
         name="email"
-        placeholder="EMail"
+        placeholder="Укажите EMail"
         v-model:value="v.emailField.$model"
         :error="v.emailField.$errors"
+      />
+      <Input v-if = "formType"
+        label="Password"
+        name="password"
+        placeholder="Password"
+        v-model:value="v.passwordField.$model"
+        :error="v.passwordField.$errors"
       />
       <div class="form-buttons">
         <Button label="Создать" color="primary" v-if="formType"></Button>
