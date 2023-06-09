@@ -101,7 +101,7 @@ export default {
           method  : 'POST',
           headers : myHeaders,
       };
-      fetch(useRuntimeConfig().public.NUXT_APP_API_URL + this.SETTINGS.price_document, requestOptions)
+      fetch(useRuntimeConfig().public.NUXT_APP_IMAGES + this.SETTINGS.price_document, requestOptions)
       .then((response) => response.blob())
       .then((blob) => {
           const _url = window.URL.createObjectURL(blob);
