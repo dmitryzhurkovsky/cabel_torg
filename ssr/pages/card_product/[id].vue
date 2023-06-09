@@ -1,5 +1,5 @@
 <template>
-  <div v-if = "isRenderFinish">
+  <div v-if = "isRenderFinish" class="app__content">
     <Head>
       <Title>
         {{cartItemData?.name }} купить в Беларуси
