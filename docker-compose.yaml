@@ -5,6 +5,7 @@ services:
   db:
     container_name: 'prod_db'
     image: postgres:15.1
+    restart: unless-stopped
     env_file:
       - backend/.env
     ports:
@@ -24,12 +25,13 @@ services:
       context: backend
       dockerfile: ./build/Dockerfile
       target: parser
+    restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
     volumes:
-      - /data/parser_files:/parser_files
-      - /data/site_media/images:/data/site_media/images
+      - /data:/data
+      - ./backend:/backend
 
   backend:
     container_name: 'prod_backend'
@@ -37,6 +39,7 @@ services:
       context: backend
       dockerfile: ./build/Dockerfile
       target: backend
+    restart: unless-stopped
     ports:
       - '8000:8000'
     depends_on:
@@ -97,6 +100,7 @@ services:
   certbot:
     container_name: 'prod_certbot'
     image: certbot/certbot:latest
+    restart: always
     # To make sure our certificate is renewed when it’s about to expire.
     # This will check if your certificate is up for renewal every 12 hours
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"

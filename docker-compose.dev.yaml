@@ -27,7 +27,8 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ./data/parser_files:/parser_files
+      - ./data:/data
+      - ./backend:/backend
 
   backend:
     container_name: 'dev_backend'
@@ -41,7 +42,7 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ../data/site_media:/site_media
+      - /data:/data
       - ./backend:/backend
 
 #  redis:

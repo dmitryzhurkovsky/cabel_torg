@@ -7,10 +7,13 @@ from sqlalchemy.orm import sessionmaker
 
 from src.core import settings
 from src.core.db.db import engine
+from src.log import create_logger
 from src.parser.utils import set_permissions_recursive
 from src.parser.xml_bookkeeping_parser import XMLParser, OffersParser
+from src.services.email_service import EmailService
 
 parser_async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+parser_logger = create_logger(log_file_name='parser')
 
 bookkeeping_last_modified_time = None
 offers_last_modified_time = None
@@ -51,18 +54,29 @@ def parsing_files_are_changed() -> bool:
 
 
 if __name__ == '__main__':
+    if settings.LAUNCH_PARSER_EACH_N_MINUTES == 0:
+        exit()
+
     event_loop = asyncio.new_event_loop()
     asyncio.set_event_loop(event_loop)
 
     while True:
         if parsing_files_are_changed():
             start_parsing = time.time()
-            event_loop.run_until_complete(parse_bookkeeping_file())
-            bookkeeping_last_modified_time = os.path.getmtime(filename=settings.BOOKKEEPING_FILE_PATH)
-            offers_last_modified_time = os.path.getmtime(filename=settings.FILE_WITH_PRICES_PATH)
-            set_permissions_recursive(path=settings.IMAGES_PATH, mode=0o777)
+            try:
+                event_loop.run_until_complete(parse_bookkeeping_file())
+            except Exception as e:
+                parser_logger.info(f'Exception has happened:\n{e}\n')
+                EmailService.send_email(
+                    message=f'Exception is {e}.',
+                    subject='SITE: cabel-trog.by. ERROR: Parsing has failed.',
+                    send_to_service=True
+                )
+                time.sleep(60 * 60 * 24)  # notify service personal each 24 hours about errors.
+            else:
+                bookkeeping_last_modified_time = os.path.getmtime(filename=settings.BOOKKEEPING_FILE_PATH)
+                offers_last_modified_time = os.path.getmtime(filename=settings.FILE_WITH_PRICES_PATH)
+                set_permissions_recursive(path=settings.IMAGES_PATH, mode=0o777)
 
-            print(f'Parsing has been finished. It took {time.time() - start_parsing}')
         else:
-            print(f'Files haven\'t changed.')
             time.sleep(settings.LAUNCH_PARSER_EACH_N_MINUTES)

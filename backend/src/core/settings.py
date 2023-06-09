@@ -10,16 +10,19 @@ load_dotenv('.env')
 DEBUG = int(os.getenv('DEBUG', 0))
 CORS_ALLOWED_HEADERS = os.environ.get('CORS_ALLOWED_HEADERS', '').split(',')
 ORIGINS = os.environ.get('ORIGINS', '').split(',')
-REDIS_URL = os.getenv('REDIS_URL')
-IMAGES_PATH = os.getenv('IMAGES_PATH', pathlib.Path(__file__).parent.parent.parent.parent)
+REDIS_URL = os.getenv('REDIS_URL')  # deprecated
+DATA_DIR = os.getenv('DATA_DIR')
+IMAGES_PATH = f'{DATA_DIR}/site_media/images'
+LOG_PATH = f'{DATA_DIR}/logs'
 IMAGES_URL = os.getenv('IMAGES_URL', '/images')  # it's used for uploading images.
 STATIC_URL = os.getenv('STATIC_URL', '/static')  # It's used for generating templates and populate statics files.
 SITE_HOST = os.getenv('SITE_HOST', 'localhost')  # it's used for creating links to sites.
 TEMPLATES_PATH = pathlib.Path(__file__).parent.parent.joinpath('templates')
 template_loader = jinja2.FileSystemLoader(TEMPLATES_PATH)
 templates = jinja2.Environment(loader=template_loader)
-ADMINISTRATOR_EMAIL = os.getenv('ADMINISTRATOR_EMAIL')  # it's admin
-DEFAULT_TAX = 20
+ADMINISTRATOR_EMAIL = os.getenv('ADMINISTRATOR_EMAIL', 'admin@admin.com')  # it's admin
+SERVICE_EMAIL = os.getenv('SERVICE_EMAIL', 'service@service.com')  # it's admin
+DEFAULT_TAX = int(os.getenv('DEFAULT_TAX')) if os.getenv('DEFAULT_TAX') else 20
 
 # Database's settings
 DB_NAME = os.getenv('DATABASE_NAME')
