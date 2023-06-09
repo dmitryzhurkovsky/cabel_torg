@@ -36,6 +36,7 @@ const links = ref([
   { name: "Варианты доставки", href: "/delivery_types" },
   { name: "Настройки", href: "/settings" },
   { name: "Склады", href: "/stocks" },
+  { name: "Прайс", href: "/price" },
   { name: "Пользователи", href: "/users" },
 ]);
 

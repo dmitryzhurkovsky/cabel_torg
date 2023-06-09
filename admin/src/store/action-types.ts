@@ -38,6 +38,7 @@ const enum ActionTypes {
   EDIT_USER = 'EDIT_USER',
   ADD_USER = 'ADD_USER',
   DELETE_USER = 'DELETE_USER',
+  UPLOAD_PRICE = 'UPLOAD_PRICE',
 }
 
 export { ActionTypes }

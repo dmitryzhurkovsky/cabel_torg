@@ -50,7 +50,7 @@
                         <li @click = "linkClick('/how_to_work')" class="footer__menu_link">
                           <span>Оптовым покупателям</span>
                         </li>
-                        <li @click = "linkClick('/')" class="footer__menu_link">
+                        <li @click = "linkClick(SETTINGS.price_document)" class="footer__menu_link">
                           <span >Скачать прайс-лист</span>
                         </li>
                       </ul>
@@ -89,6 +89,10 @@ export default {
           this.$router.push(URL);
       }
     },
+
+    // downLoadPrice(){
+
+    // },
 
     onMadeCall(status){
       this.SET_IS_POPUP_OPEN(status);
