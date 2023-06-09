@@ -98,7 +98,7 @@ export default {
       myHeaders.append("Authorization", "Bearer " + localStorage.getItem("authToken"));
       const urlencoded = new URLSearchParams();
       const requestOptions = {
-          method  : 'POST',
+          method  : 'GET',
           headers : myHeaders,
       };
       fetch(useRuntimeConfig().public.NUXT_APP_IMAGES + this.SETTINGS.price_document, requestOptions)
@@ -107,7 +107,7 @@ export default {
           const _url = window.URL.createObjectURL(blob);
           const link = document.createElement('a');
           link.href = _url;
-          link.download = 'invoise' + this.card.id;
+          link.download = 'price';
           link.click();
           // URL.revokeObjectURL(link.href);
           // window.open(_url, '_blank');
