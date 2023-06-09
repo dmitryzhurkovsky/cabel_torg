@@ -17,6 +17,11 @@ export default defineComponent({
       type: Number,
       required: false,
       default: 1,
+    },
+    isNotFoto: {
+      type: String,
+      required: false,
+      default: 'false',
     }
   },
 
@@ -50,13 +55,17 @@ export default defineComponent({
 
     const getSrc = (photo: File) => URL.createObjectURL(photo);
 
+    // const getName = (photo: File) => {
+    //   return
+    // }
+
     const needToUpload = computed(() => {
       return props.quantity - modelValue.value.length
     });
 
     const uploadText = computed(() => {
       if (needToUpload.value > 0) {
-        return `Загрузите ${needToUpload.value} ${needToUpload.value === 1 ? 'вашу фотографию' : 'ваши фотографии'}`;
+        return `Загрузите ${needToUpload.value} ${needToUpload.value === 1 ? 'вашу фотографию (файл)' : 'ваши фотографии'}`;
       }
 
       if (needToUpload.value === 0) {
@@ -74,6 +83,7 @@ export default defineComponent({
       removePhoto,
       needToUpload,
       getSrc,
+      // getName,
     };
   },
 });
@@ -96,7 +106,7 @@ export default defineComponent({
         @dragleave="isDragStarted = false"
       >
       {{ isDragStarted ? '' : uploadText }}
-      <img
+      <img 
         v-show="isDragStarted"
         src="../../assets/upload.svg"
         class="photo-uploader__icon"
@@ -113,10 +123,11 @@ export default defineComponent({
           class="photo-uploader__remove"
           @click="removePhoto(index)"
         />
-        <img
+        <img v-if = "isNotFoto == 'false'"
           :src="getSrc(photo)"
           :alt="`Фотография ${index + 1}`"
         >
+        <div v-if = "isNotFoto == 'true'">{{ photo?.name }}</div>
       </div>
     </div>
   </div>
@@ -168,6 +179,14 @@ export default defineComponent({
       width: 100%;
       max-width: 300px;
     }
+
+    div {
+      border-radius: 10px;
+      width: 100px;
+      height: 30px;
+      max-width: 300px;
+    }
+    
   }
 
   &__remove {

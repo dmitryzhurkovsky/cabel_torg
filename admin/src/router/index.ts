@@ -91,6 +91,12 @@ const router = createRouter({
       name: 'Users',
       component: () => import('@/views/Users.vue')
     },
+    {
+      beforeEnter: auth,
+      path: '/price',
+      name: 'Price',
+      component: () => import('@/views/Price.vue')
+    },
   ]
 })
 

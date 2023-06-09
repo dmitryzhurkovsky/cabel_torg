@@ -55,7 +55,8 @@ class Product(Base1CModel):
         'Attribute',
         secondary='product_attribute',
         back_populates='products',
-        lazy='joined'
+        lazy='joined',
+        order_by='Attribute.name_id'
     )  # m2m
     base_unit_id = Column(Integer, ForeignKey('base_units.id'))  # o2m
     base_unit = relationship('BaseUnit', back_populates='products', lazy='joined')

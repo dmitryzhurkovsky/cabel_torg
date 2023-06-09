@@ -26,6 +26,7 @@ class VendorInfo(Base):
     phone = Column(String(255))
     email = Column(String(255))
     logo = Column(String(255))
+    price_document = Column(String(255))
 
     director_fullname = Column(String(255))
 

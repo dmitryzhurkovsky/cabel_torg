@@ -141,7 +141,7 @@ class ProductManager(CRUDManager):
             group_by(Product.id).
             order_by(count(ProductOrder.product_id).desc()).
             limit(20)
-        ).subquery()
+        )
 
         query_result = await session.execute(
             select(

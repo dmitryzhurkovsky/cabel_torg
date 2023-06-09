@@ -10,10 +10,10 @@ from src.core.db.mixins.base_mixin import BaseMixin
 
 class FileMixin(BaseMixin):
     @classmethod
-    async def upload_file(cls, pk: int, input_file: UploadFile) -> str:
+    async def upload_file(cls, pk: int, input_file: UploadFile, custom_folder_path: str = None) -> str:
         """Upload a file on a disk and return file's path."""
         file_extension = input_file.filename.split('.')[-1]
-        file_name = f'{cls.table.__tablename__}/{pk}.{file_extension}'
+        file_name = f'{custom_folder_path if custom_folder_path else cls.table.__tablename__}/{pk}.{file_extension}'
         file_name_with_path = f'{settings.IMAGES_PATH}/{file_name}'
         os.makedirs(os.path.dirname(file_name_with_path), exist_ok=True)
 

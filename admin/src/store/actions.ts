@@ -158,9 +158,21 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: null
   ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.DELETE_USER](
+    { commit }: AugmentedActionContext,
+    payload: number
+  ): Promise<Array<IDeliveryType>>,
   [ActionTypes.EDIT_USER](
     { commit }: AugmentedActionContext,
     payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.ADD_USER](
+    { commit }: AugmentedActionContext,
+    payload: IDeliveryType
+  ): Promise<Array<IDeliveryType>>,
+  [ActionTypes.UPLOAD_PRICE](
+    { commit }: AugmentedActionContext,
+    payload: any
   ): Promise<Array<IDeliveryType>>,
 
 }
@@ -564,5 +576,33 @@ export const actions: ActionTree<State, State> & Actions = {
     })
   },
 
+  [ActionTypes.ADD_USER]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.post(import.meta.env.VITE_APP_API_URL + "users", payload).
+      then((response) => {
+        commit(MutationTypes.ADD_TO_USERS, response.data)
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.DELETE_USER]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.delete(import.meta.env.VITE_APP_API_URL + "users/" + String(payload)).
+      then((response) => {
+        commit(MutationTypes.DELETE_FROM_USERS, payload)
+        resolve(response.data);
+      })
+    })
+  },
+
+  [ActionTypes.UPLOAD_PRICE]({ commit } ,payload) {
+    return new Promise((resolve) => {
+      axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/price_documents", payload).
+      then((response) => {
+        resolve(response.data);
+      })
+    })
+  },
 
 }

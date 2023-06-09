@@ -22,8 +22,6 @@ const exitFromAdmin = () => {
   store.commit(MutationTypes.SET_USER, null)
   localStorage.removeItem("authToken")
   localStorage.removeItem("refreshToken")
-  console.log(store.getters['user']);
-  
   router.push('/login')
 }
 
@@ -38,6 +36,7 @@ const links = ref([
   { name: "Варианты доставки", href: "/delivery_types" },
   { name: "Настройки", href: "/settings" },
   { name: "Склады", href: "/stocks" },
+  { name: "Прайс", href: "/price" },
   { name: "Пользователи", href: "/users" },
 ]);
 

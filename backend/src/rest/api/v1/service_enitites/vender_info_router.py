@@ -52,7 +52,7 @@ async def create_vendor_info(
     status_code=status.HTTP_201_CREATED,
     dependencies=[Depends(is_admin_permission)]
 )
-async def create_vendor_info(
+async def upload_logo(
         file: UploadFile,
         session: AsyncSession = Depends(get_session),
 ) -> VendorInfoSchema:
@@ -162,3 +162,29 @@ async def delete_addresses(
         id=address_id,
         session=session
     )
+
+
+@vendor_info_router.post(
+    '/1/price_documents',
+    response_model=VendorInfoSchema,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(is_admin_permission)]
+)
+async def upload_price_document(
+        file: UploadFile,
+        session: AsyncSession = Depends(get_session),
+) -> VendorInfoSchema:
+    vendor_info = await VendorInfoManager.retrieve(id=1, session=session)
+    file_name = await VendorInfoManager.upload_file(
+        pk=1,
+        input_file=file,
+        custom_folder_path='service__vendor_info-price_documents'
+    )
+    await VendorInfoManager.update(
+        input_data={'price_document': file_name},
+        pk=1,
+        session=session
+    )
+    await session.refresh(vendor_info)
+
+    return vendor_info
