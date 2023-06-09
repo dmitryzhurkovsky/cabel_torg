@@ -1,3 +1,4 @@
+import os
 import re
 
 from xml.etree.ElementTree import Element
@@ -26,3 +27,21 @@ def clean_fields(fields: dict) -> dict:
             prepared_fields[key] = value
 
     return prepared_fields
+
+
+def set_permissions_recursive(path: str, mode: int):
+    """
+    Set permissions recursively for a folder and its subfolders and files.
+    :param path: The path to the folder.
+    :param mode: The permissions mode to set (e.g., 0o777 for chmod 777).
+    """
+    for root, dirs, files in os.walk(path):
+        # Set permissions for directories
+        for d in dirs:
+            dir_path = os.path.join(root, d)
+            os.chmod(dir_path, mode)
+
+        # Set permissions for files
+        for f in files:
+            file_path = os.path.join(root, f)
+            os.chmod(file_path, mode)

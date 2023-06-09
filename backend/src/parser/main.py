@@ -5,9 +5,9 @@ import time
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.orm import sessionmaker
 
-from src.app import logger
 from src.core import settings
 from src.core.db.db import engine
+from src.parser.utils import set_permissions_recursive
 from src.parser.xml_bookkeeping_parser import XMLParser, OffersParser
 
 parser_async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -20,7 +20,6 @@ async def parse_bookkeeping_file():
     event_loop = asyncio.get_running_loop()
 
     async with parser_async_session() as db:
-        start_parsing = time.time()
         xml_parser = XMLParser(db=db)
         price_parser = OffersParser(db=db)
 
@@ -30,7 +29,6 @@ async def parse_bookkeeping_file():
         await event_loop.create_task(xml_parser.parse_products())
         await event_loop.create_task(xml_parser.set_is_visible_attribute())
         await event_loop.create_task(price_parser.parse_offers())
-        print(f'Parsing has been finished. It took {time.time() - start_parsing}')
 
 
 def parsing_files_are_changed() -> bool:
@@ -58,9 +56,13 @@ if __name__ == '__main__':
 
     while True:
         if parsing_files_are_changed():
-            # todo add logs
+            start_parsing = time.time()
             event_loop.run_until_complete(parse_bookkeeping_file())
             bookkeeping_last_modified_time = os.path.getmtime(filename=settings.BOOKKEEPING_FILE_PATH)
             offers_last_modified_time = os.path.getmtime(filename=settings.FILE_WITH_PRICES_PATH)
+            set_permissions_recursive(path=settings.IMAGES_PATH, mode=0o777)
+
+            print(f'Parsing has been finished. It took {time.time() - start_parsing}')
         else:
+            print(f'Files haven\'t changed.')
             time.sleep(settings.LAUNCH_PARSER_EACH_N_MINUTES)
