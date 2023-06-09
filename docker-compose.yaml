@@ -29,6 +29,7 @@ services:
         condition: service_healthy
     volumes:
       - /data/parser_files:/parser_files
+      - /data/site_media/images:/data/site_media/images
 
   backend:
     container_name: 'prod_backend'
