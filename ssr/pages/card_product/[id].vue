@@ -435,6 +435,7 @@
       flex:1;
       display: flex;
       height: calc(100% - 100px);
+      justify-content: center;
 
     }
   }
