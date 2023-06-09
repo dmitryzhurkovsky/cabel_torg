@@ -49,8 +49,8 @@
                     <div class="error-message" v-if="ERRORS.phone_number"> {{ ERRORS.phone_number }} </div>
                   </div>
                 </div>
-                <div class="group">
-                  <textarea class="textarea mb-20" placeholder="Сообщение" v-model="message"></textarea>
+                <div class="group mb-20">
+                  <textarea class="textarea " placeholder="Сообщение" v-model="message"></textarea>
                   <div class="error-message" v-if="ERRORS.message"> {{ ERRORS.message }} </div>
                 </div>
                 <button class="btn" @click = "sendRequest($event)">Отправить</button>
@@ -208,6 +208,7 @@
       align-items: center;
       padding: 14px 16px;
       color: #423E48;
+      position: relative;
     }
 
 
@@ -289,6 +290,7 @@
   }
   .group{
     width: 100%;
+    position: relative;
   }
 
 
