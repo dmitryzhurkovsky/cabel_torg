@@ -360,7 +360,7 @@ export const actions: ActionTree<State, State> & Actions = {
 
   [ActionTypes.GET_FEEDBACK_REQUESTS_DATA]({ commit }, payload) {
     return new Promise((resolve) => {
-      axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/feedbacks").
+      axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/feedbacks/").
       then((response) => {
         commit(MutationTypes.SET_FEEDBACK_REQUESTS, response.data)
         resolve(response.data);

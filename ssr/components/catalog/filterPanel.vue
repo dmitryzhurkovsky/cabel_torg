@@ -10,7 +10,7 @@
               <div class="sidebar_menu__title">
                 <a :class = "{'active' : mainItem.filterPanel}"
                   :href="createHref(mainItem.site_link)"
-                  @click.stop = "openCategory(mainItem)"
+                  @click.stop.prevent = "openCategory(mainItem)"
                 >
                   {{mainItem.name}}
                 </a>
@@ -30,7 +30,7 @@
                         <div class="subtitle__row">
                           <a :class = "{'active' : middleItem.filterPanel}"
                             :href="createHref(middleItem.site_link)"
-                            @click.stop  = "openCategory(middleItem)"
+                            @click.stop.prevent  = "openCategory(middleItem)"
                           >
                             {{middleItem.name}}
                           </a>
@@ -46,7 +46,7 @@
                           <div class="sidebar_menu__subtitle-child"
                               v-for = "lastItem in middleItem.childrens"
                               :key  = "lastItem.id"
-                              @click.stop = "openCategory(lastItem)"
+                              @click.stop.prevent = "openCategory(lastItem)"
                           >
                               <div class="">
                                 <a :class = "{'active' : LAST_CATEGORIES_ITEM_ACTIVE === lastItem.id}"
