@@ -10,7 +10,7 @@
                   :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"
                   v-for   = "item in TOP_CATEGORIES"
                   :key    = "item.id"
-                  @click.stop  = "changeCategory(item)"
+                  @click.stop.prevent  = "changeCategory(item)"
               >
                 <a class="menu__link" :href="createHref(item)" @click.prevent>{{item.name}}</a>
               </li>
@@ -27,7 +27,7 @@
               <div class="menusub__item"
                 v-for   = "sub in SUB_CATEGORIES"
                 :key    = "sub.id"
-                @click.stop  = "subCategoryClick(sub)"
+                @click.stop.prevent  = "subCategoryClick(sub)"
               >
                 <a :href="createHref(sub)" v-if = "sub.id" class="menu__rubric">{{sub.name}}</a>
                 <ul v-if = "sub.subItems.length > 0">
@@ -35,7 +35,7 @@
                       v-for = "subItem in sub.subItems"
                       :key  = "subItem.id"
                   >
-                    <a :href="createHref(subItem)" @click.stop = "subCategoryClick(subItem)" class="menu__linksub">{{subItem.name}}</a>
+                    <a :href="createHref(subItem)" @click.stop.prevent = "subCategoryClick(subItem)" class="menu__linksub">{{subItem.name}}</a>
                   </li>
                 </ul>
               </div>

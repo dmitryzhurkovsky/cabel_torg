@@ -19,7 +19,7 @@
       await store.dispatch(ActionTypes.UPLOAD_PRICE, data)
     } 
     files.value = []
-    store.commit(MutationTypes.SET_IS_LOADING, true)
+    store.commit(MutationTypes.SET_IS_LOADING, false)
   }
 
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if = "isRenderFinish">
+  <div v-if = "isRenderFinish" class="app__content">
     <Head>
       <Title>
         {{cartItemData?.name }} купить в Беларуси
@@ -435,6 +435,7 @@
       flex:1;
       display: flex;
       height: calc(100% - 100px);
+      justify-content: center;
 
     }
   }

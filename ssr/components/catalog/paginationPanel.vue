@@ -18,6 +18,7 @@
 
 
   // const ChangeParameters = computed(() => {
+  //   console.log(router);
   //   return String(getters['query/LIMIT']) + String(getters['query/OFFSET']);
   // })
 
@@ -28,6 +29,7 @@
 
 
   const Pages = computed(() => {
+    console.log('Pages');
     let result = []
     const activePage = getters['catalog/ACTIVE_PAGE']
     const totalPages = getters['catalog/TOTAL_PAGES']
