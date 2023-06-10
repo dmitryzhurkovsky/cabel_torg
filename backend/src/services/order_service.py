@@ -32,7 +32,7 @@ class OrderService:
             'pick_up_point': order.delivery_type.payload,
             'delivery_date': order.created_at + relativedelta(days=3),
 
-            'static_url': settings.STATIC_PATH
+            'static_url': settings.STATIC_URL
         })
 
         EmailService.send_email(
@@ -56,7 +56,7 @@ class OrderService:
             'name': user.full_name,
             'order_number': order.number,
             'order_status': order_status_verbose_name,
-            'static_url': settings.STATIC_PATH
+            'static_url': settings.STATIC_URL
         })
 
         EmailService.send_email(

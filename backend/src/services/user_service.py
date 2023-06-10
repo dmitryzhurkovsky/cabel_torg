@@ -13,7 +13,7 @@ class UserService:
     @classmethod
     def send_confirmation_url(cls, user: User, generated_password: str = None):
         context = {
-            'static_url': settings.STATIC_PATH,
+            'static_url': settings.STATIC_URL,
             'name': user.full_name
         }
         message = f"""
@@ -42,7 +42,7 @@ class UserService:
     @classmethod
     def send_new_password(cls, user: User, new_password: str):
         context = {
-            'static_url': settings.STATIC_PATH,
+            'static_url': settings.STATIC_URL,
             'name': user.full_name,
             'email': user.email,
             'generated_password': new_password
