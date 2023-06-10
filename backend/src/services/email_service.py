@@ -36,12 +36,12 @@ class EmailService:
 
             send_to = []
             if receiver:
-                send_to += receiver
+                send_to.append(receiver)
             else:
                 if send_to_service:
-                    send_to += settings.SERVICE_EMAIL
+                    send_to.append(ettings.SERVICE_EMAIL)
                 if send_to_admin:
-                    send_to += settings.ADMINISTRATOR_EMAIL
+                    send_to.append(settings.ADMINISTRATOR_EMAIL)
 
             if html_message:
                 msg.attach(MIMEText(html_message, 'html'))

@@ -5,6 +5,7 @@ from starlette.background import BackgroundTasks
 from starlette.requests import Request
 
 from src.core.db.db import get_session
+from src.core.exception.base_exception import ObjectNotFoundError
 from src.rest.managers.order_manager import OrderManager
 from src.rest.managers.services_managers import DeliveryTypeManager
 from src.rest.permissions import is_admin_permission, is_authenticated_permission
@@ -112,6 +113,8 @@ async def update_product_amount_in_cart(
         input_data={**order_info.dict(exclude_unset=True)},
         session=session,
     )
+    if not order:
+        raise ObjectNotFoundError
     await OrderService.send_change_order_status(user=request.user, order=order)
 
     return order
