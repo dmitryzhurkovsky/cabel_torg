@@ -80,7 +80,6 @@ export default {
     },
 
     createHref(category) {
-      // console.log('.site_link', category);
       const fullCategoryData = this.ALL_CATEGORIES.filter(item => item.id == category.id)[0];
       const URL = '/category/' + fullCategoryData.site_link;
       return URL;

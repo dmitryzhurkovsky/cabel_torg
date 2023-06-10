@@ -94,7 +94,6 @@ export default {
     downLoadPrice(){
       this.SET_IS_LOADING(true);
       const _url = useRuntimeConfig().public.NUXT_APP_IMAGES + this.SETTINGS.price_document;
-      // const _url = 'https://cabel-torg.by/site_media/images/service__vendor_info-price_documents/1.xlsx'
       window.open(_url, '_blank');
       this.SET_IS_LOADING(false);
     },
