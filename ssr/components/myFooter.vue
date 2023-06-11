@@ -93,29 +93,9 @@ export default {
 
     downLoadPrice(){
       this.SET_IS_LOADING(true);
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-      myHeaders.append("Authorization", "Bearer " + localStorage.getItem("authToken"));
-      const urlencoded = new URLSearchParams();
-      const requestOptions = {
-          method  : 'GET',
-          headers : myHeaders,
-      };
-      fetch(useRuntimeConfig().public.NUXT_APP_IMAGES + this.SETTINGS.price_document, requestOptions)
-      .then((response) => response.blob())
-      .then((blob) => {
-          const _url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = _url;
-          link.download = 'price';
-          link.click();
-          // URL.revokeObjectURL(link.href);
-          // window.open(_url, '_blank');
-          this.SET_IS_LOADING(false);
-      }).catch((err) => {
-          console.log(err);
-          this.SET_IS_LOADING(false);
-      });
+      const _url = useRuntimeConfig().public.NUXT_APP_IMAGES + this.SETTINGS.price_document;
+      window.open(_url, '_blank');
+      this.SET_IS_LOADING(false);
     },
 
     onMadeCall(status){

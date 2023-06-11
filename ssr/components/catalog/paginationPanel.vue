@@ -4,7 +4,8 @@
           :class="[item.pageNumber === getters['catalog/ACTIVE_PAGE'] ? 'pagination_link active' : 'pagination_link']"
           v-for = "item in Pages"
           :key = "item.name"
-          @click="onChangePage(item)"
+          @click.prevent="onChangePage(item)"
+          :href = createHref(item)
       >
         {{ item.name }}
       </a>
@@ -15,18 +16,6 @@
   import store from '@/store'
   const { getters } = store
   const router = useRouter()
-
-
-  // const ChangeParameters = computed(() => {
-  //   console.log(router);
-  //   return String(getters['query/LIMIT']) + String(getters['query/OFFSET']);
-  // })
-
-  // watch(() => ChangeParameters,
-  //   () => {
-  //     Pages
-  // })
-
 
   const Pages = computed(() => {
     console.log('Pages');
@@ -134,6 +123,18 @@
     result.push(lastLink)
     return result
   })
+
+  const createHref = (item) =>{
+    let URL = ''
+    const newOffset = (item.pageNumber === 0 ? 0 : (item.pageNumber - 1)) * getters['query/LIMIT']
+    console.log('href', item, newOffset);
+    if (getters['query/CATEGORY_ID']) {
+      URL = getCategoryUrl(getters['query/CATEGORY_ID'], newOffset)
+    } else {
+      URL = getCatalogUrl(newOffset)
+    }
+    return URL
+  }
 
   const getCatalogUrl = (offset) => {
     let url = "/catalog?"
