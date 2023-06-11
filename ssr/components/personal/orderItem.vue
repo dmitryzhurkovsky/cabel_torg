@@ -127,8 +127,7 @@ export default {
           console.log(err);
           this.SET_IS_LOADING(false);
       });
-
-    }
+    },
   }
 }
 </script>

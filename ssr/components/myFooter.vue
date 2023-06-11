@@ -14,7 +14,7 @@
 
                     <div class="footer__col footer__subrow">
                       <div class="footer__logo">
-                        <img cla src="@/assets/logo.svg" alt="CabelTorg">
+                        <img src="@/assets/logo.svg" alt="CabelTorg">
                       </div>
                       <div class="footer__social social">
                         <a :href = SETTINGS.instagram_url class="social__item icon-instagram" target="_blank"></a>
@@ -50,7 +50,7 @@
                         <li @click = "linkClick('/how_to_work')" class="footer__menu_link">
                           <span>Оптовым покупателям</span>
                         </li>
-                        <li @click = "linkClick(SETTINGS.price_document)" class="footer__menu_link">
+                        <li @click = "downLoadPrice" class="footer__menu_link">
                           <span >Скачать прайс-лист</span>
                         </li>
                       </ul>
@@ -81,6 +81,7 @@ export default {
 
   methods: {
     ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_REQUEST_CALL_TYPE"]),
+    ...mapMutations("notification", ["SET_IS_LOADING"]),
 
     linkClick(URL, name){
       if (this.$route.path != URL) {
@@ -90,9 +91,32 @@ export default {
       }
     },
 
-    // downLoadPrice(){
-
-    // },
+    downLoadPrice(){
+      this.SET_IS_LOADING(true);
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+      myHeaders.append("Authorization", "Bearer " + localStorage.getItem("authToken"));
+      const urlencoded = new URLSearchParams();
+      const requestOptions = {
+          method  : 'GET',
+          headers : myHeaders,
+      };
+      fetch(useRuntimeConfig().public.NUXT_APP_IMAGES + this.SETTINGS.price_document, requestOptions)
+      .then((response) => response.blob())
+      .then((blob) => {
+          const _url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = _url;
+          link.download = 'price';
+          link.click();
+          // URL.revokeObjectURL(link.href);
+          // window.open(_url, '_blank');
+          this.SET_IS_LOADING(false);
+      }).catch((err) => {
+          console.log(err);
+          this.SET_IS_LOADING(false);
+      });
+    },
 
     onMadeCall(status){
       this.SET_IS_POPUP_OPEN(status);

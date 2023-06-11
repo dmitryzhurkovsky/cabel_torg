@@ -139,7 +139,10 @@
 
   const ChangeParameters = computed(() => {
     console.log('QQQQQ');
-    return JSON.stringify(route.query) + JSON.stringify(route.params) + JSON.stringify(store.getters['catalog/ITEMS_LIST']);
+    return JSON.stringify(route.query) + JSON.stringify(route.params) + String(getters['query/CATEGORY_ID']) + JSON.stringify(getters['query/TYPE_OF_PRODUCT']) + 
+      JSON.stringify(getters['query/SORT_TYPE']) + JSON.stringify(getters['query/SORT_DIRECTION']) + String(getters['query/MIN_PRICE']) + String(getters['query/MAX_PRICE']) +
+      String(getters['query/OFFSET']) + String(getters['query/LIMIT']);
+    //  + JSON.stringify(store.getters['catalog/ITEMS_LIST']);
   })
 
   const clearSearchString= () => {
@@ -147,12 +150,11 @@
     store.commit("catalog/SET_CATALOG_SEARCH_STRING", '')
   }
 
-  const createHref = (category) => {
-    const fullCategoryData = getters['header/ALL_CATEGORIES'].filter(item => item.id == category.id)[0];
-    const URL = '/category/' + fullCategoryData.site_link;
-    return URL;
-  }
-
+  // const createHref = (category) => {
+  //   const fullCategoryData = getters['header/ALL_CATEGORIES'].filter(item => item.id == category.id)[0];
+  //   const URL = '/category/' + fullCategoryData.site_link;
+  //   return URL;
+  // }
 
   const getCategoryUrl = (id) => {
     let url = "/category/";
@@ -328,6 +330,22 @@
       watch: [ChangeParameters]
     }
   )
+
+  onBeforeUpdate(async () => {
+    if (!store.getters['header/ALL_CATEGORIES'].length) {
+      await store.dispatch('header/GET_CATEGORIES')
+    }
+    setParametersFromURL()
+    const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
+    if (Object.keys(categoryData).length) {
+      store.commit('catalog/SET_CATEGORY', categoryData)
+    } else {
+      store.commit('catalog/SET_CATEGORY', {})
+    }
+    setViewType(getters['header/DEVICE_VIEW_TYPE'])
+    await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
+    setBreabcrumbs()
+  })
 
   onBeforeMount(async () => {
     if (!store.getters['header/ALL_CATEGORIES'].length) {
@@ -523,7 +541,7 @@
   grid-template-columns: repeat(3, minmax(242px, 272px));
   grid-template-rows: auto;
   gap: 10px;
-  @media (max-width: $md2+px) {
+  @media (max-width: 1089px) {
     grid-template-columns: repeat(2, minmax(142px, 272px));
   }
   .item-card{

@@ -182,7 +182,7 @@ export default {
   grid-template-columns: repeat(3, minmax(242px, 272px));
   grid-template-rows: auto;
   gap: 10px;
-  @media (max-width: $md2+px) {
+  @media (max-width: 1089px) {
     grid-template-columns: repeat(2, minmax(142px, 272px));
   }
   .item-card{
