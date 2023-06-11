@@ -46,6 +46,8 @@ To configurate it follow the following instruction:
 0 0 * * * /root/cabel_torg/backend/scripts/backup.sh
 ```
 
+All backups are kept in /backups.
+
 
 ## CI/CD processes
 
@@ -55,4 +57,6 @@ The config file is kept in `.github/workflows/main.yaml` and there is deploy sta
 To get more detail about self-hosted runners follow this links 
 https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners
 
-
+There are 2 actions:
+* deploy - is used after each merge in main.
+* rebuild-without-cache - can be launched manually and build containers without a cache

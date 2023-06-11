@@ -87,7 +87,7 @@ async def create_user(
 ) -> UserSchema:
     if (
             user_info.is_admin and
-            not request.user or
+            not request.user and
             not request.user.is_admin
     ):
         raise ForbiddenError('Only a user with admin role can create new admin users.')
