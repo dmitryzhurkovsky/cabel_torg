@@ -115,7 +115,7 @@ class GoodsMixin(BaseMixin, ABC):
 
         for raw_field in element:
             field_name, field_value = await self.clean_product_field(raw_field=raw_field)
-            if field_name and field_value:
+            if field_name and field_value is not None:
                 if field_name == 'image_path' and field_value not in product_images:
                     product_images.append(field_value)
                 elif field_name == 'vendor_code_ru':

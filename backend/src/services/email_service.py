@@ -39,7 +39,7 @@ class EmailService:
                 send_to.append(receiver)
             else:
                 if send_to_service:
-                    send_to.append(ettings.SERVICE_EMAIL)
+                    send_to.append(settings.SERVICE_EMAIL)
                 if send_to_admin:
                     send_to.append(settings.ADMINISTRATOR_EMAIL)
 
