@@ -94,6 +94,7 @@ services:
     volumes:
       - /data/site_media:/usr/share/nginx/site_media/
       - ./reverse_proxy/prod.conf:/etc/nginx/conf.d/prod.conf
+      - ./reverse_proxy/robots.txt:/usr/share/nginx/robots.txt
       - /data/certbot/www:/var/www/certbot  # certbot
       - /data/certbot/conf:/etc/letsencrypt  # certbot
 
