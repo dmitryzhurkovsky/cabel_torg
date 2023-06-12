@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, validator
 
 from src.rest.schemas.base_schema import BaseSchema
 
@@ -16,6 +16,10 @@ class UserBaseSchema(BaseModel):
     BIC: str | None
     serving_bank: str | None
     is_admin: bool | None = False
+
+    @validator('email')
+    def transform_to_lowercase(cls, v: str):
+        return v.lower()
 
 
 class UserCreateSchema(UserBaseSchema):
