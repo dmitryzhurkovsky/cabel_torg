@@ -1,12 +1,12 @@
 <template>
-  <div v-if = "isRenderFinish" class="app__content">
+  <div class="app__content">
     <Head>
       <Title>
-        {{cartItemData?.name }} купить в Беларуси
+        {{data?.name }} купить в Беларуси
       </Title>
-      <Meta name="discription" :content="cartItemData?.name" />
+      <Meta name="discription" :content="data?.name" />
     </Head>
-    <div class="product" v-if="cartItemData && id">
+    <div class="product" v-if="data && id">
       <div class="product__wrapper">
         <div class="product__content _container">
           <div class="product__body">
@@ -14,14 +14,14 @@
                 <div class="product__main-img">
                   <div class="product__main-img--container">
                   <UiCardImage 
-                    :images=cartItemData.images 
+                    :images=data.images 
                     :num="imgNumber"
                   />
                   </div>
                   <div class="product__swaper-img">
                     <ClientOnly>
                       <SliderCardImage 
-                        :allImages = cartItemData.images
+                        :allImages = data.images
                         @changeSliderTo = "changeNumber"
                       />
                     </ClientOnly>
@@ -29,12 +29,12 @@
 
                 </div>
                 <div class="product__info">
-                    <div class="desc-product__title"> {{ cartItemData.name }}</div>
-                    <div class="desc-product__article  _label">Артикул: <span>{{ cartItemData.vendor_code }}</span></div>
-                    <div class="desc-product__status icon-done-color _label" v-if = "cartItemData.status === 'A'">В наличии</div>
-                    <div class="desc-product__status icon-on-the-way " v-if = "cartItemData.status === 'W'">В пути на склад</div>
-                    <div class="desc-product__status if_status_on_the_way _label" v-if = "cartItemData.status === 'W'">Доставим в течение 14 дней</div>
-                    <div class="desc-product__status icon-out-of-stock _label" v-if = "cartItemData.status === 'O'">Нет в наличии</div>
+                    <div class="desc-product__title"> {{ data.name }}</div>
+                    <div class="desc-product__article  _label">Артикул: <span>{{ data.vendor_code }}</span></div>
+                    <div class="desc-product__status icon-done-color _label" v-if = "data.status === 'A'">В наличии</div>
+                    <div class="desc-product__status icon-on-the-way " v-if = "data.status === 'W'">В пути на склад</div>
+                    <div class="desc-product__status if_status_on_the_way _label" v-if = "data.status === 'W'">Доставим в течение 14 дней</div>
+                    <div class="desc-product__status icon-out-of-stock _label" v-if = "data.status === 'O'">Нет в наличии</div>
 
                     <div class="desc-product__count">
                         <span class="_label">Количество</span>
@@ -47,25 +47,25 @@
                         <div class="price__left">
                             <div class="_label">Ваша цена:</div>
                             <div class="current_price">
-                            <span v-if="cartItemData.price_with_discount_and_tax && cartItemData.price_with_tax !== cartItemData.price_with_discount_and_tax"
+                            <span v-if="data.price_with_discount_and_tax && data.price_with_tax !== data.price_with_discount_and_tax"
                                   class="old_price"
-                            >{{ cartItemData.price_with_tax }}
+                            >{{ data.price_with_tax }}
                             </span>
-                            <span  :class="[cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax ? 'price_w_discount' : '']">
-                                {{ cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax
-                                  ? cartItemData.price_with_discount_and_tax
-                                  : cartItemData.price_with_tax
+                            <span  :class="[data.price_with_discount_and_tax && data.price_with_discount_and_tax !== data.price_with_tax ? 'price_w_discount' : '']">
+                                {{ data.price_with_discount_and_tax && data.price_with_discount_and_tax !== data.price_with_tax
+                                  ? data.price_with_discount_and_tax
+                                  : data.price_with_tax
                                 }}
                             </span>BYN
-                            <span class="current_price_item">/{{ cartItemData.base_unit.full_name }}</span>
+                            <span class="current_price_item">/{{ data.base_unit.full_name }}</span>
                             </div>
                         </div>
                         <div class="price__right">
                             <div class="retail_price">
                               <div>Первоначальная цена: </div>
                               <div>
-                                  <span class="price__value"> {{ cartItemData.price_with_tax }}</span>BYN
-                                  <span>/{{ cartItemData.base_unit.full_name }}</span>
+                                  <span class="price__value"> {{ data.price_with_tax }}</span>BYN
+                                  <span>/{{ data.base_unit.full_name }}</span>
                               </div>
 
                             </div>
@@ -73,12 +73,12 @@
                                 <div>Цена со скидкой: </div>
                                 <div>
                                     <span class="price__value">
-                                      {{ cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax
-                                        ? cartItemData.price_with_discount_and_tax
-                                        : cartItemData.price_with_tax
+                                      {{ data.price_with_discount_and_tax && data.price_with_discount_and_tax !== data.price_with_tax
+                                        ? data.price_with_discount_and_tax
+                                        : data.price_with_tax
                                       }}
                                     </span>BYN
-                                    <span>/{{ cartItemData.base_unit.full_name }}</span>
+                                    <span>/{{ data.base_unit.full_name }}</span>
                                 </div>
 
                             </div>
@@ -90,9 +90,9 @@
                     </div>
                     <div class="product__label">*Все цены указаны с учетом НДС.</div>
                     <div class="product__button flex-center">
-                        <div v-if="quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(cartItemData, 'set')">В корзине</div>
-                        <div v-if="quantity === 0 && cartItemData.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(cartItemData, 'set')">В корзину</div>
-                        <div v-if="quantity === 0 && cartItemData.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, cartItemData.id)">Узнать о поступлении</div>
+                        <div v-if="quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(data, 'set')">В корзине</div>
+                        <div v-if="quantity === 0 && data.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(data, 'set')">В корзину</div>
+                        <div v-if="quantity === 0 && data.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, data.id)">Узнать о поступлении</div>
 
                         <div
                                 @click.stop="onWishClick()"
@@ -113,18 +113,18 @@
         </div>
       </div>
     </div>
-    <div v-if="cartItemData && id" class="tab__description _container">
+    <div v-if="data && id" class="tab__description _container">
       <div class="tab ">
           <button :class="[infoBlock === 0 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(0)">Описание</button>
           <button :class="[infoBlock === 1 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(1)">Характеристики</button>
           <button :class="[infoBlock === 2 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(2)">Документация</button>
       </div>
       <div v-if="infoBlock === 0" class="tabcontent">
-          <p v-html = "rebuildText(cartItemData.description)"></p>
+          <p v-html = "rebuildText(data.description)"></p>
       </div>
       <div v-if="infoBlock === 1" class="tabcontent">
           <div class="tabcontent__row table__items"
-            v-for = "option in cartItemData.attributes"
+            v-for = "option in data.attributes"
             :key = option.id
           >
             <div class="table__item" v-if = "option?.name?.payload !== 'Товар под заказ'">
@@ -151,11 +151,11 @@
 
     </div>
 
+    <SliderRecomendation
+      :isShowFilter = false
+      :isShowFollow = false
+    />
     <ClientOnly>
-      <SliderRecomendation
-        :isShowFilter = false
-        :isShowFollow = false
-      />
       <SliderShownCards/>
     </ClientOnly>
   </div>
@@ -174,7 +174,6 @@
   const infoBlock = ref(0)
   const id = ref(null)
   const imgNumber = ref(0)
-  const isRenderFinish = ref(false)
 
   watch (() => JSON.stringify(getters['order/ORDERS']), 
   () => {
@@ -187,11 +186,6 @@
     countQuantity();
     checkIsWish();
   })
-
-  // watch(() => JSON.stringify(cartItemData.value),
-  // () => {
-  //   isRenderFinish.value = true
-  // })
 
   const rebuildText = (text) => {
     let newText = ''
@@ -250,9 +244,9 @@
   const onWishClick = async () => {
     const itemData = {
       product: {
-        id: cartItemData.value.id,
-        vendor_code: cartItemData.value.vendor_code,
-        name: cartItemData.value.name,
+        id: data.value.id,
+        vendor_code: data.value.vendor_code,
+        name: data.value.name,
       },
     }  
     const type = isWish.value === false ? 'set' : 'remove'
@@ -284,7 +278,7 @@
   }
 
   const updateShowItems = (id) => {
-    if (!id && cartItemData.value) return
+    if (!id && data.value) return
     let itemsInLocalStorage = []
     const isItemsFromLocalStore = localStorage.getItem('shownCards')
     if (isItemsFromLocalStore) itemsInLocalStorage = JSON.parse(isItemsFromLocalStore)
@@ -332,7 +326,7 @@
     }
     store.commit('breadcrumb/ADD_BREADCRUMB', mainBreadCrumb)
     const chein = []
-    const category = cartItemData.value.category
+    const category = data.value.category
     chein.push(category)
     if (!getters['header/ALL_CATEGORIES'].length) {
       await store.dispatch('header/GET_CATEGORIES')
@@ -361,7 +355,7 @@
     }
 
     store.commit('breadcrumb/ADD_BREADCRUMB', {
-      name: cartItemData.value.name,
+      name: data.value.name,
       path: router.currentRoute.value.path,
       type: "global",
       class: ""
@@ -369,19 +363,31 @@
     
   }
 
-  // onBeforeUpdate(() => {
+  // onBeforeUpdate(async () => {
+  //   isRenderFinish.value = false
   //   console.log('Update product');
-  //   updateShowItems(route.params.id)
+  //   if (id.value !== route.params.id) {
+  //     console.log('Update id changed');
+  //     id.value = route.params.id
+  //     await onGetCartData()
+  //     updateShowItems(route.params.id)
+  //     setBreabcrumbs()
+  //   }
+  //   isRenderFinish.value = true
+  //   console.log('After update ', isRenderFinish);
   // })
 
   onBeforeMount(async () => {
-    isRenderFinish.value = false
-    console.log('Mount product');
-    id.value = route.params.id
-    await onGetCartData()
-    updateShowItems(route.params.id)
-    await setBreabcrumbs()
-    isRenderFinish.value = true
+    console.log('Mount product ' ,id.value, route.params.id);
+    // if (id.value !== route.params.id) {
+      // console.log('Mount id changed');
+      id.value = route.params.id
+      await onGetCartData()
+      updateShowItems(route.params.id)
+      setBreabcrumbs()
+    // }  
+    // isRenderFinish.value = true
+    // console.log('After mount ', isRenderFinish);
   })
 
   const { data } = await useAsyncData(
@@ -389,7 +395,8 @@
     async () => {
       id.value = route.params.id
       await onGetCartData()
-      return data
+      return cartItemData.value
+      
     }, {
       watch: [route]
     }
@@ -425,7 +432,8 @@
 
   }
   &__main-img{
-    flex-basis: 40%;
+    // flex-basis: 40%;
+    max-width: 40%;
     text-align: center;
     width:100%;
     display: flex;

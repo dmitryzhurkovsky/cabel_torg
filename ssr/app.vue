@@ -36,16 +36,16 @@
   store.commit('notification/SET_IS_LOADING', true)
   // console.log('Setup App ');
 
-  onBeforeUpdate( () => {
-    store.commit('notification/SET_IS_LOADING', true)
-    // console.log('BeforeUpdate App ');
-  })
+  // onBeforeUpdate( () => {
+  //   // store.commit('notification/SET_IS_LOADING', true)
+  //   // console.log('BeforeUpdate App ');
+  // })
 
   onBeforeUnmount( ()=> clearInterval(interval.value))
 
   onBeforeMount(async () => {
     // console.log('Mounted App ');
-    store.commit('notification/SET_IS_LOADING', true)
+    // store.commit('notification/SET_IS_LOADING', true)
     // window.addEventListener('resize', setViewParametrs)
     interval.value = setInterval(()=> {
       setViewParametrs()
@@ -62,13 +62,13 @@
     }
     await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')
     await store.dispatch('main/GET_SETTINGS')
-    store.commit('notification/SET_IS_LOADING', false)
+    // store.commit('notification/SET_IS_LOADING', false)
   });
 
   await useAsyncData(
     'categories', 
     async () => {
-      console.log('useAsyncData App ');
+      // console.log('useAsyncData App ');
       store.commit('notification/SET_IS_LOADING', true)
       // await store.dispatch('header/GET_CATEGORIES')
       await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')

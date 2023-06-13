@@ -53,7 +53,7 @@
                   <textarea class="textarea " placeholder="Сообщение" v-model="message"></textarea>
                   <div class="error-message" v-if="ERRORS.message"> {{ ERRORS.message }} </div>
                 </div>
-                <button class="btn" @click = "sendRequest($event)">Отправить</button>
+                <button class="btn" @click.prevent = "sendRequest($event)">Отправить</button>
               </form>
             </div>
           </div>
@@ -65,6 +65,7 @@
 
 <script>
   import { mapActions, mapGetters, mapMutations } from "vuex";
+  import { isValidEmail } from "@/common/validation";
 
   definePageMeta({
     // middleware: ["auth"],
@@ -127,7 +128,7 @@
         if (!this.phone_number) {
           errorsInData.phone_number = 'Укажите номер телефона'
         }
-        if (!this.email) {
+        if (!isValidEmail(this.email)) {
           errorsInData.email = 'Укажите email'
         }
         if (!this.message) {
@@ -147,6 +148,7 @@
           this.fullname = '';
           this.phone_number = '';
           this.fullnaemailme = '';
+          this.email = '';
           this.message = '';
         }
         this.isLoading = false;

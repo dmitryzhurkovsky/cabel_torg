@@ -57,6 +57,7 @@
 
   import store from '@/store'
 
+  const router = useRouter()
   const route = useRoute()
   const { getters } = store
   const isFilterPanelOpen = ref(false)
@@ -89,7 +90,10 @@
   }
 
   const ChangeParameters = computed(() => {
-    return JSON.stringify(route.query) + JSON.stringify(store.getters['catalog/ITEMS_LIST'])
+    return JSON.stringify(route.query)  + JSON.stringify(getters['query/TYPE_OF_PRODUCT']) + 
+      JSON.stringify(getters['query/SORT_TYPE']) + JSON.stringify(getters['query/SORT_DIRECTION']) + String(getters['query/MIN_PRICE']) + String(getters['query/MAX_PRICE']) +
+      String(getters['query/OFFSET']) + String(getters['query/LIMIT']) + getters['catalog/ACTIVE_PAGE'] + getters['catalog/TOTAL_PAGES'];
+      // + JSON.stringify(store.getters['catalog/ITEMS_LIST'])
   })
 
   const clearSearchString= () => {
@@ -103,24 +107,33 @@
     let isFailInParams = false
     const currRoute = useRoute()
     const { query } = currRoute
+
+    store.commit('query/SET_CATEGORY_ID', null) 
+
     if (query.limit) {
       if (getters['query/LIMIT'] !== query.limit) store.commit('query/SET_LIMIT', query.limit)
     } else {
+      store.commit('query/SET_LIMIT', 12)
       isFailInParams = true
     }
     if (query.offset) {
       if (getters['query/OFFSET'] !== query.offset) store.commit('query/SET_OFFSET', query.offset)
     } else {
+      store.commit('query/SET_OFFSET', 0)
       isFailInParams = true
     }
     if (query.actual_price_gte) {
-      if (getters['query/MIN_PRICE'] !== query.actual_price_gte) store.commit('query/SET_MIN_PRICE', query.actual_price_gte)
+      if (getters['query/MIN_PRICE'] != query.actual_price_gte) {
+        store.commit('query/SET_MIN_PRICE', Number(query.actual_price_gte))
+      }
     } else {
       isFailInParams = true
       store.commit('query/SET_MIN_PRICE', 0)
     }
     if (query.actual_price_lte) {
-      if (getters['query/MAX_PRICE'] !== query.actual_price_lte) store.commit('query/SET_MAX_PRICE', query.actual_price_lte)
+      if (getters['query/MAX_PRICE'] != query.actual_price_lte) {
+        store.commit('query/SET_MAX_PRICE', Number(query.actual_price_lte))
+      }
     } else {
       isFailInParams = true
       store.commit('query/SET_MAX_PRICE', 40000)
@@ -138,6 +151,7 @@
     if (query.type_of_product) {
       if (getters['query/TYPE_OF_PRODUCT'] !== query.type_of_product) store.commit('query/SET_TYPE_OF_PRODUCT', query.type_of_product)
     } else {
+      store.commit('query/SET_TYPE_OF_PRODUCT', 'all')
       isFailInParams = true
     }
     if (query.ordering) {
@@ -154,8 +168,8 @@
       if (getters['query/SORT_TYPE'] !== type) store.commit('query/SET_SORT_TYPE', type)
       if (getters['query/SORT_DIRECTION'] !== direction) store.commit('query/SET_SORT_DIRECTION', direction)
     } else {
-      // store.commit('query/SET_SORT_TYPE', getters['query/SORT_TYPE'])
-      // store.commit('query/SET_SORT_DIRECTION', getters['query/SORT_DIRECTION'])
+      store.commit('query/SET_SORT_TYPE', 'created_at')
+      store.commit('query/SET_SORT_DIRECTION', '-')
       isFailInParams = true
     }
     isFerstRender = false
@@ -176,23 +190,32 @@
       if (isFerstRender) {
         setParametersFromURL()
       }
-      await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
+      if (!store.getters['query/CATEGORY_ID']) {
+        await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
+      }
+      // setBreabcrumbs()
       return store.getters['catalog/ITEMS_LIST']
     }, {
       watch: [ChangeParameters]
     }
   )
 
-  onBeforeMount(async () => {
-    setParametersFromURL()
-    await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
-    setViewType(getters['header/DEVICE_VIEW_TYPE'])
-    setBreabcrumbs()
-  })
+  // onBeforeMount(async () => {
+  //   setParametersFromURL()
+  //   if (!store.getters['query/CATEGORY_ID']) {
+  //     await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
+  //   }
+  //   // await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
+  //   setViewType(getters['header/DEVICE_VIEW_TYPE'])
+  //   setBreabcrumbs()
+  // })
 
   onBeforeUpdate(async () => {
     setParametersFromURL()
-    await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
+    if (!store.getters['query/CATEGORY_ID']) {
+      await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
+    }
+    // await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
     setBreabcrumbs()
   })
 

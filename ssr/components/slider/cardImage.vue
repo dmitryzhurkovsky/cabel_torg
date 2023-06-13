@@ -120,6 +120,7 @@
     async mounted(){
       this.swiperImages = this.$props.allImages.split(',');
       this.activeSlider = 0;
+      console.log(this.swiperImages);
     },
 
   }

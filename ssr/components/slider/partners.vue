@@ -7,7 +7,7 @@
           <h3>Наши партнеры</h3>
           <div class="partners__items flex-center">
             <swiper
-                :slides-per-view=quantity
+                :slides-per-view = quantity
                 :space-between="15"
                 :speed="500"
                 :autoplay="{

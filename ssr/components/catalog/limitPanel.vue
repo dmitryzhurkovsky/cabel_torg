@@ -33,7 +33,7 @@
       ...mapMutations("query", ["SET_LIMIT"]),
 
       getCatalogUrl(){
-        let url = "/catalog?";
+        let url = "/catalog";
         url = url + this.getLastPartOfUrl();
         return url;
       },
@@ -42,22 +42,30 @@
         let url = "/category/";
         if (id) {
           const link = this.ALL_CATEGORIES.filter(item => item.id == id)[0].site_link
-          url = url + link + "?";
+          url = url + link;
         }
         url = url + this.getLastPartOfUrl();
         return url;
       },
 
       getLastPartOfUrl(){
-        let url = "offset=" + this.OFFSET + 
-          "&limit=" + this.LIMIT;
-        if (this.MIN_PRICE != 0 || this.MAX_PRICE != 40000) {
-          url = url + "&actual_price_gte=" + this.MIN_PRICE;
-          url = url + "&actual_price_lte=" + this.MAX_PRICE;
+        let url = '?';
+        if (this.OFFSET != 0 || this.LIMIT != 12) {
+          url = url + "offset=" + this.OFFSET + '&'
+          url = url + "limit=" + this.LIMIT + '&'
         }
-        url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
-        url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
-        // url = url + "&q=" + this.CATALOG_SEARCH_STRING;
+        if (this.MIN_PRICE != 0 || this.MAX_PRICE != 40000) {
+          url = url + "actual_price_gte=" + this.MIN_PRICE + '&';
+          url = url + "actual_price_lte=" + this.MAX_PRICE + '&';
+        }
+        if (this.SORT_DIRECTION !== '-' || this.SORT_TYPE !== 'created_at') {
+          url = url + "ordering=" + this.SORT_DIRECTION + this.SORT_TYPE + '&'
+        }
+        if (this.TYPE_OF_PRODUCT !== 'all') {
+          url = url + "type_of_product=" + this.TYPE_OF_PRODUCT + '&'
+        }
+        const lastSymbol = url.slice(-1)
+        if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
         return url;        
       },
 

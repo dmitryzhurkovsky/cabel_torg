@@ -14,11 +14,11 @@
               <div class="dropdown">Покупателям
                 <div :class="[!customerHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
                   <div class="dropdown__content">
-                    <a @click="openPage('/how_to_work', $event)">Как оформить заказ</a>
-                    <a @click="openPage('/shipping', $event)">Оплата и доставка</a>
-                    <a @click="openPage('/wholesale', $event)">Оптовым клиентам</a>
-                    <a @click="openPage('/warranty', $event)">Гарантийное обслуживание</a>
-                    <a @click="openPage('/offer', $event)">Публичная оферта</a>
+                    <a @click.prevent="openPage('/how_to_work', $event)" href = "/how_to_work">Как оформить заказ</a>
+                    <a @click.prevent="openPage('/shipping', $event)" href = "/shipping">Оплата и доставка</a>
+                    <a @click.prevent="openPage('/wholesale', $event)" href = "/wholesale">Оптовым клиентам</a>
+                    <a @click.prevent="openPage('/warranty', $event)" href = "/warranty">Гарантийное обслуживание</a>
+                    <a @click.prevent="openPage('/offer', $event)" href = "/offer">Публичная оферта</a>
                   </div>
                 </div>
               </div>
@@ -30,9 +30,9 @@
               <div class="dropdown">О нас
                 <div :class="[!aboutHover ? 'dropdown__wrapper': 'dropdown__wrapper wrapper__show']">
                   <div class="dropdown__content ">
-                    <a @click="openPage('/about', $event)">О компании</a>
-                    <a @click="openPage('/contacts', $event)">Контактная информация</a>
-                    <a @click="openPage('/news', $event)">Новости</a>
+                    <a @click.prevent="openPage('/about', $event)" href = "/about">О компании</a>
+                    <a @click.prevent="openPage('/contacts', $event)" href = "/contacts">Контактная информация</a>
+                    <a @click.prevent="openPage('/news', $event)" href = "/news">Новости</a>
                   </div>
                 </div>
               </div>

@@ -106,6 +106,7 @@ export default {
         if (rootGetters['query/TYPE_OF_PRODUCT'] !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'];
         const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + queryData);
         commit("SET_CATALOG_ITEMS", response.data);
+        // console.log('GET_CATALOG_ITEMS ', rootGetters['query/OFFSET'], rootGetters['query/LIMIT'])
         commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
       } catch (e) {
         console.log(e);
