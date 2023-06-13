@@ -378,7 +378,7 @@
   // })
 
   onBeforeMount(async () => {
-    console.log('Mount product ' ,id.value, route.params.id);
+    // console.log('Mount product ' ,id.value, route.params.id);
     // if (id.value !== route.params.id) {
       // console.log('Mount id changed');
       id.value = route.params.id

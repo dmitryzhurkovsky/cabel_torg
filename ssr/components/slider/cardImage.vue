@@ -9,6 +9,7 @@
                   nextEl: '.btn-next_',
                   prevEl: '.btn-prev_',
                 }"
+                @swiper="onSwiper"
                 @slideChange="onSlideChange"
             >
 
@@ -86,9 +87,9 @@
       },
 
       onSlideChange(swiper) {
-        console.log('Slider changed', swiper.realIndex);
-        // this.activeSlider = swiper.realIndex
-        // this.$emit('onSliderChanged', this.activeSlider);
+        // console.log('Slider changed', swiper.realIndex);
+        this.activeSlider = swiper.realIndex
+        this.$emit('onSliderChanged', this.activeSlider);
       },
 
       changeSlideByClick(index){
@@ -97,6 +98,10 @@
       },
 
       nextSlide(){
+        if (Math.abs(this.swiper.realIndex - this.activeItem) > 1) this.swiper.slideTo(this.activeItem -1) 
+        if (this.swiper.realIndex + 1 < this.activeItem) this.swiper.slideTo(this.swiper.realIndex + 1) 
+        if (this.activeItem === this.swiperImages.length - 1) this.swiper.slideTo(0)
+
         if (this.activeItem < this.swiperImages.length - 1) {
           this.activeItem++;
           this.$emit('changeSliderTo', this.activeItem);
@@ -107,6 +112,10 @@
       },
 
       prevSlide(){
+        if (Math.abs(this.swiper.realIndex - this.activeItem) > 1) this.swiper.slideTo(this.activeItem -1) 
+        if (this.activeItem === this.swiper.realIndex) this.swiper.slideTo(this.swiper.realIndex - 1) 
+        if (this.activeItem === 0) this.swiper.slideTo(this.swiperImages.length - 1)
+
         if (this.activeItem) {
           this.activeItem--;          
           this.$emit('changeSliderTo', this.activeItem);
@@ -115,12 +124,16 @@
           this.$emit('changeSliderTo', this.activeItem);
         }
       },
+
+      onSwiper(swiper){
+          this.swiper = swiper;
+      },
+
     },
 
     async mounted(){
       this.swiperImages = this.$props.allImages.split(',');
       this.activeSlider = 0;
-      console.log(this.swiperImages);
     },
 
   }
@@ -146,13 +159,13 @@
 }
 
 .btn-next{
-
+  z-index: 10;
   width: 20px;
   height: 20px;
   cursor: pointer;
 }
 .btn-prev{
-
+  z-index: 10;
   width: 20px;
   height: 20px;
   cursor: pointer;
