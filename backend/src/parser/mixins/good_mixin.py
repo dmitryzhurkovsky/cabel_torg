@@ -22,6 +22,8 @@ class GoodsMixin(BaseMixin, ABC):
     # It's initialized in cache_attribute__do_not_upload_to_site function.
     do_not_upload_to_the_site_attribute_name_id = None
 
+    parsed_products_ids = set()  # it's used for identify products were deleted
+
     # Service methods
     @property
     def names_cache(self) -> dict:
@@ -102,6 +104,8 @@ class GoodsMixin(BaseMixin, ABC):
 
             if attributes or is_excluded:
                 await self.db.commit()
+
+            self.parsed_products_ids.add(product_db.id)
 
     async def clean_product(self, element: Element) -> dict:
         """
@@ -292,8 +296,8 @@ class GoodsMixin(BaseMixin, ABC):
 
     async def set_is_visible_attribute(self):
         """Set is_visible attribute after parsing all product's attributes."""
-        await self.db.execute(
-            text(f"""
+        await self.db.execute(text(
+            f"""
             update products
             set is_visible = false
             from (
@@ -305,6 +309,16 @@ class GoodsMixin(BaseMixin, ABC):
                 where attrs_names.id = {self.do_not_upload_to_the_site_attribute_name_id}
             ) is_not_visible_products
             where products.id = is_not_visible_products.id;
+            """)
+        )
+        await self.db.commit()
+
+    async def hiding_old_products(self):
+        await self.db.execute(text(
+            f"""
+            update products p
+            set is_visible = false
+            where p.id not in ({", ".join(str(el) for el in self.parsed_products_ids)})
             """)
         )
         await self.db.commit()

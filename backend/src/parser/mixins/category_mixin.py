@@ -1,6 +1,8 @@
 from _elementtree import Element
 from abc import ABC
 
+from sqlalchemy import text
+
 from src.core import settings
 from src.models.category_model import Category
 from src.parser.mixins.base_mixin import BaseMixin
@@ -11,6 +13,8 @@ from src.parser.utils import get_tag_name
 class CategoryMixin(BaseMixin, ABC):
     EXCLUDED_CATEGORIES = settings.EXCLUDED_CATEGORIES
     DEFAULT_ORDER = settings.DEFAULT_CATEGORIES_ORDER
+
+    parsed_categories_ids = set()  # it's used for identify categories were deleted
 
     @property
     def excluded_categories_cache(self) -> set:
@@ -60,8 +64,10 @@ class CategoryMixin(BaseMixin, ABC):
                 subcategories = self.get_subcategories(category=raw_category)
                 await self.clean_category_and_subcategories(
                     raw_categories=subcategories,
-                    parent_category_id=int(db_category.id)
+                    parent_category_id=db_category.id
                 )
+
+            self.parsed_categories_ids.add(db_category.id)
 
     def clean_category_field(self, raw_field: Element) -> tuple[str, int | str] | tuple[None, None]:
         """A category contains common fields that why we call the clean_common_fields function."""
@@ -100,3 +106,13 @@ class CategoryMixin(BaseMixin, ABC):
         clean_element['is_visible'] = False if clean_element.get('name') in self.EXCLUDED_CATEGORIES else True
 
         return clean_element
+
+    async def hiding_old_categories(self):
+        await self.db.execute(text(
+            f"""
+            update categories c
+            set is_visible = false
+            where c.id not in ({", ".join(str(el) for el in self.parsed_categories_ids)})
+            """)
+        )
+        await self.db.commit()
