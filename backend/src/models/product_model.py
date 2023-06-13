@@ -76,7 +76,7 @@ class Product(Base1CModel):
         Since we calculate price depending on discount in cateogries and products and
         in its case we change only price.
         """
-        if self.price_with_discount_and_tax:
+        if self.price_with_discount_and_tax and self.price_with_tax:
             return round(
                 (self.price_with_tax - self.price_with_discount_and_tax)
                 / self.price_with_tax * 100, 2
