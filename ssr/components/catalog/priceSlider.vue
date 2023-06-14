@@ -207,7 +207,7 @@ export default {
     this.setUpMaxPrice();
   },
 
-  onBeforeUpdate(){
+  beforeUpdate(){
     this.minValuePrice = this.MIN_PRICE;
     this.maxValuePrice = this.MAX_PRICE;
     this.setUpMinPrice();
