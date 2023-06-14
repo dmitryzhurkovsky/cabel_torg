@@ -1,7 +1,7 @@
 from _elementtree import Element
 from abc import ABC
 
-from sqlalchemy import text
+from sqlalchemy import delete
 
 from src.core import settings
 from src.models.category_model import Category
@@ -107,12 +107,10 @@ class CategoryMixin(BaseMixin, ABC):
 
         return clean_element
 
-    async def hiding_old_categories(self):
-        await self.db.execute(text(
-            f"""
-            update categories c
-            set is_visible = false
-            where c.id not in ({", ".join(str(el) for el in self.parsed_categories_ids)})
-            """)
+    async def delete_old_categories(self):
+        await self.db.execute(
+            delete(Category).
+            where(Category.id.in_(self.parsed_categories_ids))
         )
+
         await self.db.commit()

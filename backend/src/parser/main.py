@@ -27,12 +27,12 @@ async def parse_bookkeeping_file():
         price_parser = OffersParser(db=db)
 
         await asyncio.wait([event_loop.create_task(xml_parser.parse_categories())])
-        await asyncio.wait([event_loop.create_task(xml_parser.hiding_old_categories())])
+        await asyncio.wait([event_loop.create_task(xml_parser.delete_old_categories())])
         await asyncio.wait([event_loop.create_task(xml_parser.parse_attributes())])
 
         await event_loop.create_task(xml_parser.parse_products())
         await event_loop.create_task(xml_parser.set_is_visible_attribute())
-        await event_loop.create_task(xml_parser.hiding_old_products())
+        await event_loop.create_task(xml_parser.delete_old_products())
         await event_loop.create_task(price_parser.parse_offers())
 
 
