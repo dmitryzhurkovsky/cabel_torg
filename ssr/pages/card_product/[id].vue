@@ -6,7 +6,8 @@
       </Title>
       <Meta name="discription" :content="data?.name" />
     </Head>
-    <div class="product" v-if="data && id">
+    <!-- <div class="product" v-if="data && id"> -->
+    <div class="product">
       <div class="product__wrapper">
         <div class="product__content _container">
           <div class="product__body">
@@ -113,7 +114,8 @@
         </div>
       </div>
     </div>
-    <div v-if="data && id" class="tab__description _container">
+    <!-- <div v-if="data && id" class="tab__description _container"> -->
+    <div class="tab__description _container">
       <div class="tab ">
           <button :class="[infoBlock === 0 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(0)">Описание</button>
           <button :class="[infoBlock === 1 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(1)">Характеристики</button>
