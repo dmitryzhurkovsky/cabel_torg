@@ -6,7 +6,7 @@
       </Title>
       <Meta name="discription" :content="data?.name" />
     </Head>
-    <div class="product" v-if="data">
+    <div class="product" v-if="data && id">
       <div class="product__wrapper">
         <div class="product__content _container">
           <div class="product__body">
@@ -14,14 +14,14 @@
                 <div class="product__main-img">
                   <div class="product__main-img--container">
                   <UiCardImage 
-                    :images=data.images 
+                    :images=data?.images 
                     :num="imgNumber"
                   />
                   </div>
                   <div class="product__swaper-img">
                     <ClientOnly>
                       <SliderCardImage 
-                        :allImages = data.images
+                        :allImages = data?.images
                         @changeSliderTo = "changeNumber"
                       />
                     </ClientOnly>
@@ -29,12 +29,12 @@
 
                 </div>
                 <div class="product__info">
-                    <div class="desc-product__title"> {{ data.name }}</div>
-                    <div class="desc-product__article  _label">Артикул: <span>{{ data.vendor_code }}</span></div>
-                    <div class="desc-product__status icon-done-color _label" v-if = "data.status === 'A'">В наличии</div>
-                    <div class="desc-product__status icon-on-the-way " v-if = "data.status === 'W'">В пути на склад</div>
-                    <div class="desc-product__status if_status_on_the_way _label" v-if = "data.status === 'W'">Доставим в течение 14 дней</div>
-                    <div class="desc-product__status icon-out-of-stock _label" v-if = "data.status === 'O'">Нет в наличии</div>
+                    <div class="desc-product__title"> {{ data?.name }}</div>
+                    <div class="desc-product__article  _label">Артикул: <span>{{ data?.vendor_code }}</span></div>
+                    <div class="desc-product__status icon-done-color _label" v-if = "data?.status === 'A'">В наличии</div>
+                    <div class="desc-product__status icon-on-the-way " v-if = "data?.status === 'W'">В пути на склад</div>
+                    <div class="desc-product__status if_status_on_the_way _label" v-if = "data?.status === 'W'">Доставим в течение 14 дней</div>
+                    <div class="desc-product__status icon-out-of-stock _label" v-if = "data?.status === 'O'">Нет в наличии</div>
 
                     <div class="desc-product__count">
                         <span class="_label">Количество</span>
@@ -47,25 +47,25 @@
                         <div class="price__left">
                             <div class="_label">Ваша цена:</div>
                             <div class="current_price">
-                            <span v-if="data.price_with_discount_and_tax && data.price_with_tax !== data.price_with_discount_and_tax"
+                            <span v-if="data?.price_with_discount_and_tax && data?.price_with_tax !== data?.price_with_discount_and_tax"
                                   class="old_price"
-                            >{{ data.price_with_tax }}
+                            >{{ data?.price_with_tax }}
                             </span>
-                            <span  :class="[data.price_with_discount_and_tax && data.price_with_discount_and_tax !== data.price_with_tax ? 'price_w_discount' : '']">
-                                {{ data.price_with_discount_and_tax && data.price_with_discount_and_tax !== data.price_with_tax
-                                  ? data.price_with_discount_and_tax
-                                  : data.price_with_tax
+                            <span  :class="[data?.price_with_discount_and_tax && data?.price_with_discount_and_tax !== data?.price_with_tax ? 'price_w_discount' : '']">
+                                {{ data?.price_with_discount_and_tax && data?.price_with_discount_and_tax !== data?.price_with_tax
+                                  ? data?.price_with_discount_and_tax
+                                  : data?.price_with_tax
                                 }}
                             </span>BYN
-                            <span class="current_price_item">/{{ data.base_unit.full_name }}</span>
+                            <span class="current_price_item">/{{ data?.base_unit.full_name }}</span>
                             </div>
                         </div>
                         <div class="price__right">
                             <div class="retail_price">
                               <div>Первоначальная цена: </div>
                               <div>
-                                  <span class="price__value"> {{ data.price_with_tax }}</span>BYN
-                                  <span>/{{ data.base_unit.full_name }}</span>
+                                  <span class="price__value"> {{ data?.price_with_tax }}</span>BYN
+                                  <span>/{{ data?.base_unit.full_name }}</span>
                               </div>
 
                             </div>
@@ -73,12 +73,12 @@
                                 <div>Цена со скидкой: </div>
                                 <div>
                                     <span class="price__value">
-                                      {{ data.price_with_discount_and_tax && data.price_with_discount_and_tax !== data.price_with_tax
-                                        ? data.price_with_discount_and_tax
-                                        : data.price_with_tax
+                                      {{ data?.price_with_discount_and_tax && data?.price_with_discount_and_tax !== data?.price_with_tax
+                                        ? data?.price_with_discount_and_tax
+                                        : data?.price_with_tax
                                       }}
                                     </span>BYN
-                                    <span>/{{ data.base_unit.full_name }}</span>
+                                    <span>/{{ data?.base_unit.full_name }}</span>
                                 </div>
 
                             </div>
@@ -91,8 +91,8 @@
                     <div class="product__label">*Все цены указаны с учетом НДС.</div>
                     <div class="product__button flex-center">
                         <div v-if="quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(data, 'set')">В корзине</div>
-                        <div v-if="quantity === 0 && data.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(data, 'set')">В корзину</div>
-                        <div v-if="quantity === 0 && data.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, data.id)">Узнать о поступлении</div>
+                        <div v-if="quantity === 0 && data?.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(data, 'set')">В корзину</div>
+                        <div v-if="quantity === 0 && data?.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, data?.id)">Узнать о поступлении</div>
 
                         <div
                                 @click.stop="onWishClick()"
@@ -120,11 +120,11 @@
           <button :class="[infoBlock === 2 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(2)">Документация</button>
       </div>
       <div v-if="infoBlock === 0" class="tabcontent">
-          <p v-html = "rebuildText(data.description)"></p>
+          <p v-html = "rebuildText(data?.description)"></p>
       </div>
       <div v-if="infoBlock === 1" class="tabcontent">
           <div class="tabcontent__row table__items"
-            v-for = "option in data.attributes"
+            v-for = "option in data?.attributes"
             :key = option.id
           >
             <div class="table__item" v-if = "option?.name?.payload !== 'Товар под заказ'">
