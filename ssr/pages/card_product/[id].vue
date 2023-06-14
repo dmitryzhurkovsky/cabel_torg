@@ -325,8 +325,9 @@
       level: 'root',
     }
     store.commit('breadcrumb/ADD_BREADCRUMB', mainBreadCrumb)
+    console.log(cartItemData.value.category);
     const chein = []
-    const category = data.value.category
+    const category = cartItemData.value.category
     chein.push(category)
     if (!getters['header/ALL_CATEGORIES'].length) {
       await store.dispatch('header/GET_CATEGORIES')
@@ -366,13 +367,13 @@
   onBeforeUpdate(async () => {
   //   isRenderFinish.value = false
   //   console.log('Update product');
-  //   if (id.value !== route.params.id) {
+    if (id.value !== route.params.id) {
   //     console.log('Update id changed');
-  //     id.value = route.params.id
-  //     await onGetCartData()
-  //     updateShowItems(route.params.id)
+      id.value = route.params.id
+      await onGetCartData()
+      updateShowItems(route.params.id)
       setBreabcrumbs()
-  //   }
+    }
   //   isRenderFinish.value = true
   //   console.log('After update ', isRenderFinish);
   })
@@ -384,7 +385,7 @@
       id.value = route.params.id
       await onGetCartData()
       updateShowItems(route.params.id)
-      // setBreabcrumbs()
+      setBreabcrumbs()
     // }  
     // isRenderFinish.value = true
     // console.log('After mount ', isRenderFinish);
