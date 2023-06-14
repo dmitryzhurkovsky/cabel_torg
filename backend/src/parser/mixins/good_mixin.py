@@ -2,7 +2,7 @@ from _decimal import Decimal
 from _elementtree import Element
 from abc import ABC
 
-from sqlalchemy import text
+from sqlalchemy import text, delete
 from transliterate import translit
 
 from src.models import Manufacturer, BaseUnit, Category, Attribute
@@ -313,12 +313,9 @@ class GoodsMixin(BaseMixin, ABC):
         )
         await self.db.commit()
 
-    async def hiding_old_products(self):
-        await self.db.execute(text(
-            f"""
-            update products p
-            set is_visible = false
-            where p.id not in ({", ".join(str(el) for el in self.parsed_products_ids)})
-            """)
+    async def delete_old_products(self):
+        await self.db.execute(
+            delete(Product).
+            where(Product.id.in_(self.parsed_products_ids))
         )
         await self.db.commit()
