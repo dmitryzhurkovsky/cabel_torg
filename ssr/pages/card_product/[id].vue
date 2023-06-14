@@ -6,7 +6,7 @@
       </Title>
       <Meta name="discription" :content="data?.name" />
     </Head>
-    <div class="product" v-if="data && id">
+    <div class="product">
       <div class="product__wrapper">
         <div class="product__content _container">
           <div class="product__body">
