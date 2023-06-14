@@ -358,7 +358,7 @@
     }
 
     store.commit('breadcrumb/ADD_BREADCRUMB', {
-      name: data.value.name,
+      name: cartItemData.value.name,
       path: router.currentRoute.value.path,
       type: "global",
       class: ""
