@@ -363,7 +363,7 @@
     
   }
 
-  // onBeforeUpdate(async () => {
+  onBeforeUpdate(async () => {
   //   isRenderFinish.value = false
   //   console.log('Update product');
   //   if (id.value !== route.params.id) {
@@ -371,11 +371,11 @@
   //     id.value = route.params.id
   //     await onGetCartData()
   //     updateShowItems(route.params.id)
-  //     setBreabcrumbs()
+      setBreabcrumbs()
   //   }
   //   isRenderFinish.value = true
   //   console.log('After update ', isRenderFinish);
-  // })
+  })
 
   onBeforeMount(async () => {
     // console.log('Mount product ' ,id.value, route.params.id);
@@ -384,7 +384,7 @@
       id.value = route.params.id
       await onGetCartData()
       updateShowItems(route.params.id)
-      setBreabcrumbs()
+      // setBreabcrumbs()
     // }  
     // isRenderFinish.value = true
     // console.log('After mount ', isRenderFinish);
