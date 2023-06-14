@@ -207,12 +207,12 @@ export default {
     this.setUpMaxPrice();
   },
 
-  beforeUpdate(){
-    this.minValuePrice = this.MIN_PRICE;
-    this.maxValuePrice = this.MAX_PRICE;
-    this.setUpMinPrice();
-    this.setUpMaxPrice();
-  }
+  // beforeUpdate(){
+  //   this.minValuePrice = this.MIN_PRICE;
+  //   this.maxValuePrice = this.MAX_PRICE;
+  //   this.setUpMinPrice();
+  //   this.setUpMaxPrice();
+  // }
 }
 </script>
 
