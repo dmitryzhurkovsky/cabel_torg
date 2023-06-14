@@ -373,6 +373,7 @@
   //     console.log('Update id changed');
       id.value = route.params.id
       await onGetCartData()
+      data.value = cartItemData.value
       updateShowItems(route.params.id)
       setBreabcrumbs()
     }
@@ -386,6 +387,7 @@
       // console.log('Mount id changed');
       id.value = route.params.id
       await onGetCartData()
+      data.value = cartItemData.value
       updateShowItems(route.params.id)
       setBreabcrumbs()
     // }  
