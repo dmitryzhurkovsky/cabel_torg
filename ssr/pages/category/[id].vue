@@ -121,7 +121,7 @@
   });
 
   const setViewType = (curr) => {
-    console.log('isMoblile version ', curr);
+    // console.log('isMoblile version ', curr);
       if (curr > 1) {
         isMobileVersion.value = true
       } else {
@@ -138,11 +138,11 @@
   })
 
   const ChangeParameters = computed(() => {
-    console.log('QQQQQ');
     return JSON.stringify(route.query) + JSON.stringify(route.params) + String(getters['query/CATEGORY_ID']) + JSON.stringify(getters['query/TYPE_OF_PRODUCT']) + 
       JSON.stringify(getters['query/SORT_TYPE']) + JSON.stringify(getters['query/SORT_DIRECTION']) + String(getters['query/MIN_PRICE']) + String(getters['query/MAX_PRICE']) +
-      String(getters['query/OFFSET']) + String(getters['query/LIMIT']);
-    //  + JSON.stringify(store.getters['catalog/ITEMS_LIST']);
+      String(getters['query/OFFSET']) + String(getters['query/LIMIT']) + getters['header/SUB_CATEGORIES_ITEM_ACTIVE'] 
+      + getters['catalog/ACTIVE_PAGE'] + getters['catalog/TOTAL_PAGES'];
+      //  + getters['catalog/ITEMS_LIST'];
   })
 
   const clearSearchString= () => {
@@ -150,40 +150,46 @@
     store.commit("catalog/SET_CATALOG_SEARCH_STRING", '')
   }
 
-  // const createHref = (category) => {
-  //   const fullCategoryData = getters['header/ALL_CATEGORIES'].filter(item => item.id == category.id)[0];
-  //   const URL = '/category/' + fullCategoryData.site_link;
-  //   return URL;
-  // }
-
   const getCategoryUrl = (id) => {
     let url = "/category/";
-    if (id) url = url + id + "?";
+    if (id) {
+        const link = getters['header/ALL_CATEGORIES'].filter(item => item.id == id)[0].site_link
+        url = url + link;
+      }
     url = url + getLastPartOfUrl();
     return url;
   }
 
   const getLastPartOfUrl = () => {
-    let url = "offset=" + getters['query/OFFSET'] + 
-      "&limit=" + getters['query/LIMIT'];
+    let url = '?'
+    if (getters['query/OFFSET'] != 0 || getters['query/LIMIT'] != 12) {
+      url = url + "offset=" + getters['query/OFFSET'] + '&'
+      url = url + "limit=" + getters['query/LIMIT'] + '&'
+    }
+    if (getters['query/TYPE_OF_PRODUCT'] !== 'all') {
+      url = url + "type_of_product=" + getters['query/TYPE_OF_PRODUCT'] + '&'
+    }
     if (getters['query/MIN_PRICE'] != 0 || getters['query/MAX_PRICE'] != 40000) {
-      url = url + "&actual_price_gte=" + getters['query/MIN_PRICE'];
-      url = url + "&actual_price_lte=" + getters['query/MAX_PRICE']
-    }  
-    url = url + "&ordering=" + getters['query/SORT_DIRECTION'] + getters['query/SORT_TYPE']
-    url = url + '&type_of_product=' + getters['query/TYPE_OF_PRODUCT']
-    // url = url + "&q=" + getters['catalog/CATALOG_SEARCH_STRING']
+      url = url + "actual_price_gte=" + getters['query/MIN_PRICE'] + '&'
+      url = url + "actual_price_lte=" + getters['query/MAX_PRICE'] + '&'
+    }
+    if (getters['query/SORT_DIRECTION'] !== '-' || getters['query/SORT_TYPE'] !== 'created_at') {
+      url = url + "ordering=" + getters['query/SORT_DIRECTION'] + getters['query/SORT_TYPE'] + '&'
+    }
+    const lastSymbol = url.slice(-1)
+    if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
     return url;        
   }
 
   const setActiveCategory = (category) => {
-    console.log('Active category ', category);
     store.commit('catalog/SET_CATALOG_SEARCH_STRING','')
+    store.commit('query/SET_DEFAULT_PRICES')
+    store.commit('query/SET_TYPE_OF_PRODUCT', 'all')
     store.commit('query/SET_CATEGORY_ID', category.id)
+    store.commit('header/SET_CURRENT_LAST_CATEGORY', category.id)
     store.commit('query/SET_OFFSET', 0)
-    const link = getters['header/ALL_CATEGORIES'].filter(item => item.id == category.id)[0].site_link
-
-    router.push(getCategoryUrl(link));
+    const link = getCategoryUrl(category.id)
+    router.push(link);
   }
 
   let isFirstRender = true;
@@ -192,42 +198,48 @@
     let isFailInParams = false
     const currRoute = useRoute()
     const { query } = currRoute
-    
-    if (!currRoute.params.id) {
-      store.commit('query/SET_CATEGORY_ID', null) 
-    } else {
+    // console.log('SetForm URL ' ,currRoute.params, '   ', query);
+    if (currRoute.params.id) {
+      // console.log('Есть id ', currRoute.params.id);
       const isCategoryByLink = getters['header/ALL_CATEGORIES'].filter(item => item.site_link == currRoute.params.id)
       if (!isCategoryByLink) {
         store.commit('query/SET_CATEGORY_ID', null) 
       } else {
         store.commit('query/SET_CATEGORY_ID', isCategoryByLink[0].id) 
       }
+    } else {
+      // console.log('Нет id ', currRoute.params.id);
+      store.commit('query/SET_CATEGORY_ID', null) 
     }
-    // if (getters['query/CATEGORY_ID'] !== currRoute.params.id) store.commit('query/SET_CATEGORY_ID', currRoute.params.id)
+    // console.log('After SetFromUrl ', getters['query/CATEGORY_ID']);
     if (query.limit) {
       if (getters['query/LIMIT'] !== query.limit) store.commit('query/SET_LIMIT', query.limit)
-    } 
-    else {
+    } else {
+      store.commit('query/SET_LIMIT', 12)
       isFailInParams = true
     }
     if (query.offset) {
       if (getters['query/OFFSET'] !== query.offset) store.commit('query/SET_OFFSET', query.offset)
     } else {
+      store.commit('query/SET_OFFSET', 0)
       isFailInParams = true
     }
     if (query.actual_price_gte) {
-      if (getters['query/MIN_PRICE'] !== query.actual_price_gte) {
-        store.commit('query/SET_MIN_PRICE', query.actual_price_gte)
+      if (getters['query/MIN_PRICE'] != query.actual_price_gte) {
+        store.commit('query/SET_MIN_PRICE', Number(query.actual_price_gte))
       }
     } else {
       isFailInParams = true
       store.commit('query/SET_MIN_PRICE', 0)
     }
     if (query.actual_price_lte) {
-      if (getters['query/MAX_PRICE'] !== query.actual_price_lte) store.commit('query/SET_MAX_PRICE', query.actual_price_lte)
+      if (getters['query/MAX_PRICE'] != query.actual_price_lte) {
+        store.commit('query/SET_MAX_PRICE', Number(query.actual_price_lte))
+      }
     } else {
       isFailInParams = true
-      store.commit('query/SET_MAX_PRICE', 40000)    }
+      store.commit('query/SET_MAX_PRICE', 40000)
+    }
     if (query.q) {
       if (getters['catalog/CATALOG_SEARCH_STRING'] !== query.q) {
         store.commit('catalog/SET_CATALOG_SEARCH_STRING', query.q)
@@ -241,7 +253,7 @@
     if (query.type_of_product) {
       if (getters['query/TYPE_OF_PRODUCT'] !== query.type_of_product) store.commit('query/SET_TYPE_OF_PRODUCT', query.type_of_product)
     } else {
-      // store.commit('query/SET_TYPE_OF_PRODUCT', query.type_of_product)
+      store.commit('query/SET_TYPE_OF_PRODUCT', 'all')
       isFailInParams = true
     }
     if (query.ordering) {
@@ -258,8 +270,8 @@
       if (getters['query/SORT_TYPE'] !== type) store.commit('query/SET_SORT_TYPE', type)
       if (getters['query/SORT_DIRECTION'] !== direction) store.commit('query/SET_SORT_DIRECTION', direction)
     } else {
-      // store.commit('query/SET_SORT_TYPE', getters['query/SORT_TYPE'])
-      // store.commit('query/SET_SORT_DIRECTION', getters['query/SORT_DIRECTION'])
+      store.commit('query/SET_SORT_TYPE', 'created_at')
+      store.commit('query/SET_SORT_DIRECTION', '-')
       isFailInParams = true
     }
     isFirstRender = false
@@ -271,35 +283,37 @@
     let category = null
     if (currRoute.params.id) category = getters['header/ALL_CATEGORIES'].filter(item => item.site_link == currRoute.params.id)[0].id
 
-    categoryStack.push(category)
+    if (category) {
+      categoryStack.push(category)
 
-    let curLevel = getters['header/ALL_CATEGORIES'].filter(item => item.id == category)[0]
-    while (curLevel.parent_category_id) {
-      const parent_category_id = curLevel.parent_category_id
-      categoryStack.push(parent_category_id)
-      curLevel = getters['header/ALL_CATEGORIES'].filter(item => item.id == parent_category_id)[0]
-    }
-    if (categoryStack.length === 3) {
-      store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
-        mainCategory: categoryStack[2],
-        middleCategory: categoryStack[1],
-        lastCategory: categoryStack[0],
-      });
-    };
-    if (categoryStack.length === 2) {
-      store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
-        mainCategory: categoryStack[1],
-        middleCategory: categoryStack[0],
-        lastCategory: null,
-      });
-    };
-    if (categoryStack.length === 1) {
-      store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
-        mainCategory: categoryStack[0],
-        middleCategory: null,
-        lastCategory: null,
-      });
-    }; 
+      let curLevel = getters['header/ALL_CATEGORIES'].filter(item => item.id == category)[0]
+      while (curLevel.parent_category_id) {
+        const parent_category_id = curLevel.parent_category_id
+        categoryStack.push(parent_category_id)
+        curLevel = getters['header/ALL_CATEGORIES'].filter(item => item.id == parent_category_id)[0]
+      }
+      if (categoryStack.length === 3) {
+        store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
+          mainCategory: categoryStack[2],
+          middleCategory: categoryStack[1],
+          lastCategory: categoryStack[0],
+        });
+      };
+      if (categoryStack.length === 2) {
+        store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
+          mainCategory: categoryStack[1],
+          middleCategory: categoryStack[0],
+          lastCategory: null,
+        });
+      };
+      if (categoryStack.length === 1) {
+        store.dispatch('header/SET_ALL_CURRENT_CATEGORIES', {
+          mainCategory: categoryStack[0],
+          middleCategory: null,
+          lastCategory: null,
+        });
+      }; 
+    }  
   }
 
   const { data } = await useAsyncData(
@@ -308,19 +322,24 @@
       if (!store.getters['header/ALL_CATEGORIES'].length) {
         await store.dispatch('header/GET_CATEGORIES')
       }
+      // console.log('id useAsyncData ' + store.getters['query/CATEGORY_ID']);
       if (isFirstRender) {
         setParametersFromURL()
       }
+      // console.log('id useAsyncData after setFromUrl' + store.getters['query/CATEGORY_ID']);
 
-      const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
-      
-      if (Object.keys(categoryData).length) {
-        store.commit('catalog/SET_CATEGORY', categoryData)
-      } else {
-        store.commit('catalog/SET_CATEGORY', {})
+      if (store.getters['query/CATEGORY_ID']) {
+        const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
+        
+        if (Object.keys(categoryData).length) {
+          store.commit('catalog/SET_CATEGORY', categoryData)
+        } else {
+          store.commit('catalog/SET_CATEGORY', {})
+        }
+
+        await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
+        // setBreabcrumbs()
       }
-
-      await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
       
       return {
         catalogData: store.getters['catalog/ITEMS_LIST'],
@@ -331,29 +350,37 @@
     }
   )
 
-  onBeforeUpdate(async () => {
+  onUpdated(async () => {
+    // console.log('id updated ' + store.getters['query/CATEGORY_ID']);
+   
     if (!store.getters['header/ALL_CATEGORIES'].length) {
       await store.dispatch('header/GET_CATEGORIES')
     }
-    setParametersFromURL()
-    const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
-    if (Object.keys(categoryData).length) {
-      store.commit('catalog/SET_CATEGORY', categoryData)
-    } else {
-      store.commit('catalog/SET_CATEGORY', {})
+    if (isFirstRender) {
+      setParametersFromURL()
+      if (store.getters['query/CATEGORY_ID']) {
+        const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
+        if (Object.keys(categoryData).length) {
+          store.commit('catalog/SET_CATEGORY', categoryData)
+        } else {
+          store.commit('catalog/SET_CATEGORY', {})
+        }
+        await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
+      }
     }
     setViewType(getters['header/DEVICE_VIEW_TYPE'])
-    await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
     setBreabcrumbs()
+
   })
 
   onBeforeMount(async () => {
     if (!store.getters['header/ALL_CATEGORIES'].length) {
       await store.dispatch('header/GET_CATEGORIES')
     }
-    if (isFirstRender) {
+    // if (isFirstRender) {
       setParametersFromURL()
-    }
+    // }
+    // console.log('id mounted ' + store.getters['query/CATEGORY_ID']);
     const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
     if (Object.keys(categoryData).length) {
       store.commit('catalog/SET_CATEGORY', categoryData)

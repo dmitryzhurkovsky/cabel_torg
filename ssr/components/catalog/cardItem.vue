@@ -9,7 +9,7 @@
         :class="[isWish === false ? 'item-card__wishlist icon-favorite' : 'item-card__wishlist icon-favorite-choosed']" 
         @click.stop="onWishClick(card)"
     ></div>
-    <a :href="createHref(card.vendor_code)" class="item-card__img" @click.stop="openCardItem(card.vendor_code)">
+    <a :href="createHref(card.vendor_code)" class="item-card__img" @click.stop.prevent="openCardItem(card.vendor_code)">
       <UiCardImage :images=card.images />
     </a>
     <div class="item-card__info">
@@ -40,7 +40,7 @@
           </svg>
         </div>
       </div>
-      <a :href="createHref(card.vendor_code)" class="item-card__title" @click.stop="openCardItem(card.vendor_code)">
+      <a :href="createHref(card.vendor_code)" class="item-card__title" @click.stop.prevent="openCardItem(card.vendor_code)">
         <span>{{ card.name }}</span>
       </a>
       <div class="item-card__uptitle">

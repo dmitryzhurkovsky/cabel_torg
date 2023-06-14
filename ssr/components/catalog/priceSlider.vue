@@ -69,12 +69,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE",  "SORT_DIRECTION", "LIMIT_ITEMS"]),
+    ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_ORDER", "SORT_DIRECTION", "LIMIT_ITEMS"]),
     ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
     ...mapGetters("header", ["ALL_CATEGORIES"]),
 
     ChangeParameters(){
-      return this.MAX_PRICE + this.MIN_PRICE;
+      return String(this.MAX_PRICE) + String(this.MIN_PRICE);
     }
   },
 
@@ -123,7 +123,7 @@ export default {
           this.minValueRange = maxValue - this.priceGap;
         } else {
           minValue = this.minValuePrice;
-          this.minValueRange = this.minValuePrice;
+          this.minValueRange = Number(this.minValuePrice);
           this.maxValueRange = Number(this.minValueRange) + Number(this.priceGap);
         }
         this.minValuePrice = this.minValueRange;
@@ -143,7 +143,7 @@ export default {
     },
 
     getCatalogUrl(min, max){
-      let url = "/catalog?";
+      let url = "/catalog";
       url = url + this.getLastPartOfUrl(min, max);
       return url;
     },
@@ -152,23 +152,30 @@ export default {
       let url = "/category/";
       if (id) {
         const link = this.ALL_CATEGORIES.filter(item => item.id == id)[0].site_link
-        url = url + link + "?";
+        url = url + link;
       }
       url = url + this.getLastPartOfUrl(min, max);
       return url;
     },
 
     getLastPartOfUrl(min, max){
-      let url = "offset=" + this.OFFSET + 
-        "&limit=" + this.LIMIT;
-      if (min != 0 || max != 40000) {
-        url = url + "&actual_price_gte=" + min
-        url = url + "&actual_price_lte=" + max
+      let url = '?';
+      if (this.OFFSET != 0 || this.LIMIT != 12) {
+        url = url + "offset=" + this.OFFSET + '&'
+        url = url + "limit=" + this.LIMIT + '&'
       }
-      url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
-      url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
-      // url = url + "&q=" + this.CATALOG_SEARCH_STRING;
-      console.log(url);
+      if (min != 0 || max != 40000) {
+        url = url + "actual_price_gte=" + min + '&';
+        url = url + "actual_price_lte=" + max + '&';
+      }
+      if (this.SORT_DIRECTION !== '-' || this.SORT_TYPE !== 'created_at') {
+        url = url + "ordering=" + this.SORT_DIRECTION + this.SORT_TYPE + '&'
+      }
+      if (this.TYPE_OF_PRODUCT !== 'all') {
+        url = url + "type_of_product=" + this.TYPE_OF_PRODUCT + '&'
+      }
+      const lastSymbol = url.slice(-1)
+      if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
       return url;        
     },
 
@@ -194,14 +201,17 @@ export default {
   },
 
   beforeMount(){
-    // console.log('прайс слайдер ', this);
     this.minValuePrice = this.MIN_PRICE;
-    // this.RangeMin = this.MIN_PRICE;
     this.maxValuePrice = this.MAX_PRICE;
-    // this.RangeMax = this.MAX_PRICE;
     this.setUpMinPrice();
     this.setUpMaxPrice();
-    // this.updateStore();
+  },
+
+  onBeforeUpdate(){
+    this.minValuePrice = this.MIN_PRICE;
+    this.maxValuePrice = this.MAX_PRICE;
+    this.setUpMinPrice();
+    this.setUpMaxPrice();
   }
 }
 </script>

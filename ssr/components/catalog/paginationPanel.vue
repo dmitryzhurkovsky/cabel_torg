@@ -18,26 +18,15 @@
   const router = useRouter()
 
   const Pages = computed(() => {
-    console.log('Pages');
+    // console.log('Pages ', getters['catalog/ACTIVE_PAGE'], '  ',  getters['catalog/TOTAL_PAGES']);
     let result = []
     const activePage = getters['catalog/ACTIVE_PAGE']
     const totalPages = getters['catalog/TOTAL_PAGES']
     const firstLink = { name: '<', pageNumber: activePage - 1, isAvailable: activePage !== 1 }
 
     result.push(firstLink)
-    // if (activePage !== 1 && totalPages >= 5) {
-    //   const goTopLink = { name: '1', pageNumber: 1, isAvailable: activePage !== 1 }
-    //   result.push(goTopLink)
-    //   const dots = {
-    //       name: '...',
-    //       pageNumber: null,
-    //       isAvailable: false
-    //     }
-    //     result.push(dots)
-    // }
-    console.log('totalPage - ', totalPages);
     if (totalPages > 7) {
-      console.log('totalPage >= 7 - ', totalPages, activePage);
+      console.log('', totalPages, activePage);
       let left = activePage;
       let right = totalPages - activePage;
       
@@ -127,7 +116,6 @@
   const createHref = (item) =>{
     let URL = ''
     const newOffset = (item.pageNumber === 0 ? 0 : (item.pageNumber - 1)) * getters['query/LIMIT']
-    console.log('href', item, newOffset);
     if (getters['query/CATEGORY_ID']) {
       URL = getCategoryUrl(getters['query/CATEGORY_ID'], newOffset)
     } else {
@@ -137,7 +125,7 @@
   }
 
   const getCatalogUrl = (offset) => {
-    let url = "/catalog?"
+    let url = "/catalog"
     url = url + getLastPartOfUrl(offset)
     return url
   }
@@ -146,23 +134,32 @@
     let url = "/category/"
     if (id) {
       const link = getters['header/ALL_CATEGORIES'].filter(item => item.id == id)[0].site_link
-      url = url + link + "?";
+      url = url + link;
     }
     url = url + getLastPartOfUrl(offset)
     return url
   }
 
   const getLastPartOfUrl = (offset) => {
-    let url = "offset=" + offset + 
-      "&limit=" + getters['query/LIMIT']
+    let url = '?';
+    if (offset != 0 || getters['query/LIMIT'] != 12) {
+      url = url + "offset=" + offset + '&'
+      url = url + "limit=" + getters['query/LIMIT'] + '&'
+    }
     if (getters['query/MIN_PRICE'] != 0 || getters['query/MAX_PRICE'] != 40000) {
-      url = url + "&actual_price_gte=" + getters['query/MIN_PRICE'] 
-      url = url + "&actual_price_lte=" + getters['query/MAX_PRICE']
-    }  
-    url = url + "&ordering=" + getters['query/SORT_DIRECTION'] + getters['query/SORT_TYPE']
-    url = url + '&type_of_product=' + getters['query/TYPE_OF_PRODUCT']
-    if (getters['query/SEARCH_STRING']) url = url + "&q=" + getters['query/SEARCH_STRING']
-    return url
+      url = url + "actual_price_gte=" + getters['query/MIN_PRICE'] + '&';
+      url = url + "actual_price_lte=" + getters['query/MAX_PRICE'] + '&';
+    }
+    if (getters['query/SORT_DIRECTION'] !== '-' || getters['query/SORT_TYPE'] !== 'created_at') {
+      url = url + "ordering=" + getters['query/SORT_DIRECTION'] + getters['query/SORT_TYPE'] + '&'
+    }
+    if (getters['query/TYPE_OF_PRODUCT'] !== 'all') {
+      url = url + "type_of_product=" + getters['query/TYPE_OF_PRODUCT'] + '&'
+    }
+    if (getters['query/SEARCH_STRING']) url = url + "q=" + getters['query/SEARCH_STRING']
+    const lastSymbol = url.slice(-1)
+    if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
+    return url;        
   }
 
   const onChangePage = (data) => {
