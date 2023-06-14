@@ -14,14 +14,14 @@
             <div class="product__box flex-center">
                 <div class="product__main-img">
                   <div class="product__main-img--container">
-                  <UiCardImage 
+                  <UiCardImage v-if="data && id"
                     :images=data?.images 
                     :num="imgNumber"
                   />
                   </div>
                   <div class="product__swaper-img">
                     <ClientOnly>
-                      <SliderCardImage 
+                      <SliderCardImage v-if="data && id"
                         :allImages = data?.images
                         @changeSliderTo = "changeNumber"
                       />
