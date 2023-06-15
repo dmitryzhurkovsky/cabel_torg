@@ -200,15 +200,15 @@
     }
   )
 
-  // onBeforeMount(async () => {
-  //   setParametersFromURL()
-  //   if (!store.getters['query/CATEGORY_ID']) {
-  //     await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
-  //   }
+  onBeforeMount(async () => {
+    setParametersFromURL()
+    if (!store.getters['query/CATEGORY_ID']) {
+      await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
+    }
   //   // await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
   //   setViewType(getters['header/DEVICE_VIEW_TYPE'])
-  //   setBreabcrumbs()
-  // })
+    setBreabcrumbs()
+  })
 
   onBeforeUpdate(async () => {
     setParametersFromURL()

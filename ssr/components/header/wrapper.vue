@@ -18,28 +18,36 @@ export default {
 
   watch: {
     IS_CATALOG_OPEN: function(){
+      const wrapper = document.getElementById('app__component');
       if (this.IS_CATALOG_OPEN) {
         window.scrollTo(0, 0);
         if (this.DEVICE_VIEW_TYPE > 1) {
-          document.body.style.overflow = 'hidden';
-          // document.body.style.paddingRight = '16px';
+          wrapper.style.overflowY = 'hidden';
+          wrapper.style.height = '100vh'; 
+          wrapper.style.position = 'relative';
         }
       } else {
-        document.body.style.overflow = '';
-        // document.body.style.paddingRight = '0';
+        wrapper.style.overflowY = '';
+        wrapper.style.height = ''; 
+        wrapper.style.position = '';
       }
     },
 
     IS_MENU_ACTIONS_OPEN: function(){
-      console.log(this.DEVICE_VIEW_TYPE);
+      // console.log(this.DEVICE_VIEW_TYPE);
+      const wrapper = document.getElementById('app__component');
       if (this.IS_MENU_ACTIONS_OPEN) {
         window.scrollTo(0, 0);
-        document.body.style.overflowY = 'hidden';
+        wrapper.style.overflowY = 'hidden';
+        wrapper.style.height = '100vh'; 
+        wrapper.style.position = 'relative';
         if (this.DEVICE_VIEW_TYPE === 1) {
             if (document.body.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
           }
       } else {
-        document.body.style.overflowY = '';
+        wrapper.style.overflowY = '';
+        wrapper.style.height = ''; 
+        wrapper.style.position = '';
         if (this.DEVICE_VIEW_TYPE === 1) document.body.style.paddingRight = '';
       }
     }

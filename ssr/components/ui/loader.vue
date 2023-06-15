@@ -19,12 +19,17 @@ export default {
 
   watch: {
     IS_LOADING: function(){
+      const wrapper = document.getElementById('app__component');
       if (this.IS_LOADING) {
         this.$refs.loader.style.top = window.pageYOffset + 'px';
-        document.body.style.overflowY = 'hidden';
+        wrapper.style.overflowY = 'hidden';
+        wrapper.style.height = '100vh'; 
+        wrapper.style.position = 'relative';
         document.body.style.paddingRight = '16px';
       } else {
-        document.body.style.overflowY = '';
+        wrapper.style.overflowY = '';
+        wrapper.style.height = ''; 
+        wrapper.style.position = '';
         document.body.style.paddingRight = '0';
       }
     }

@@ -47,20 +47,27 @@
     watch: {
       IS_POPUP_OPEN: function(){
         console.log(this.DEVICE_VIEW_TYPE);
+        const wrapper = document.getElementById('app__component');
         if (this.IS_POPUP_OPEN) {
           setTimeout(() => {
-            document.body.style.overflowY = 'hidden';
             this.$refs.popup.style.top = window.pageYOffset + 'px';
+            wrapper.style.overflowY = 'hidden';
+            wrapper.style.height = '100vh'; 
+            wrapper.style.position = 'relative';
             if (this.DEVICE_VIEW_TYPE === 1) {
-              if (document.body.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
+              if (document.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
             }
           }, 200);
-          document.body.style.overflowY = 'hidden';
+          wrapper.style.overflowY = 'hidden';
+          wrapper.style.height = '100vh'; 
+          wrapper.style.position = 'relative';
           if (this.DEVICE_VIEW_TYPE === 1) {
-            if (document.body.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
+            if (document.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
           }
         } else {
-          document.body.style.overflowY = '';
+          wrapper.style.overflowY = '';
+          wrapper.style.height = ''; 
+          wrapper.style.position = '';
           if (this.DEVICE_VIEW_TYPE === 1) {
             document.body.style.paddingRight = '';
           }
