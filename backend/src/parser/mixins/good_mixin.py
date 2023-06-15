@@ -79,7 +79,7 @@ class GoodsMixin(BaseMixin, ABC):
             clean_product = await self.clean_product(element=product)
             attributes = clean_product.pop('attributes', None)
 
-            if not clean_product.get('vendor_code_ru') or clean_product.get('category_id'):
+            if not clean_product.get('vendor_code_ru') or not clean_product.get('category_id'):
                 # Some products don't have `vendor_code`.
                 # It required field that's why we skip a product without this field.
                 # If a `category_id` is None it means that the category was deleted in a new version of
