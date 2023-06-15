@@ -67,7 +67,13 @@ class Product(Base1CModel):
     added_to_carts = relationship('Cart', back_populates='product', lazy='noload')  # m2m
     added_to_watchlist_for = relationship('WatchList', back_populates='product', lazy='noload')
     added_to_orders = relationship('ProductOrder', back_populates='product', lazy='noload')
-    request_calls = relationship('RequestCall', back_populates='product', lazy='noload')
+    request_calls = relationship(
+        'RequestCall',
+        back_populates='product',
+        lazy='noload',
+        cascade="all, delete",
+        passive_deletes=True
+    )
 
     @property
     def actual_discount(self) -> float | int | DECIMAL:

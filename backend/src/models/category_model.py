@@ -36,7 +36,7 @@ class Category(Base1CModel):
         'Product',
         back_populates='category',
         lazy='noload',
-        cascade="all, delete-orphan",
+        cascade="all, delete",
         passive_deletes=True,
     )
     parent_category_id = Column(Integer, ForeignKey('categories.id', ondelete='CASCADE'))
@@ -44,7 +44,7 @@ class Category(Base1CModel):
         'Category',
         backref=backref('parent_category', remote_side=[id]),
         viewonly=True,
-        cascade="all, delete-orphan",
+        cascade="all, delete"
     )
 
     __tableargs__ = (
