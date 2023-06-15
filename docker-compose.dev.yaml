@@ -42,7 +42,7 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - /data:/data
+      - ./data:/data
       - ./backend:/backend
 
 #  redis:

@@ -29,7 +29,7 @@ class RequestCall(BaseModel):
     phone_number = Column(String(50))
     type = Column('type', Enum(*RequestCallType.values(), name='request_call_status'), default=RequestCallType.UNSET)
 
-    product_id = Column(Integer, ForeignKey('products.id'))
+    product_id = Column(Integer, ForeignKey('products.id', ondelete='SET NULL'), nullable=True)
     product = relationship('Product', back_populates='request_calls', lazy='selectin')
 
 
