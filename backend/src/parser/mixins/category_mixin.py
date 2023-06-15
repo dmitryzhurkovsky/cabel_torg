@@ -1,7 +1,7 @@
 from _elementtree import Element
 from abc import ABC
 
-from sqlalchemy import delete
+from sqlalchemy import delete, not_
 
 from src.core import settings
 from src.models.category_model import Category
@@ -110,7 +110,7 @@ class CategoryMixin(BaseMixin, ABC):
     async def delete_old_categories(self):
         await self.db.execute(
             delete(Category).
-            where(Category.id.in_(self.parsed_categories_ids))
+            where(not_(Category.id.in_(self.parsed_categories_ids)))
         )
 
         await self.db.commit()

@@ -60,7 +60,7 @@ class Product(Base1CModel):
     )  # m2m
     base_unit_id = Column(Integer, ForeignKey('base_units.id'))  # o2m
     base_unit = relationship('BaseUnit', back_populates='products', lazy='joined')
-    category_id = Column(Integer, ForeignKey('categories.id'))  # o2m
+    category_id = Column(Integer, ForeignKey('categories.id', ondelete='CASCADE'))  # o2m
     category = relationship('Category', back_populates='products', lazy='joined')
     manufacturer_id = Column(Integer, ForeignKey('manufacturers.id'))  # o2m
     manufacturer = relationship('Manufacturer', back_populates='products', lazy='joined')

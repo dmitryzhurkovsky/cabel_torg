@@ -63,5 +63,5 @@ class EmailService:
             )
         except OSError:
             smtp_logger.info(
-                "Backend can't connect to SMTO server"
+                "Backend can't connect to SMTP server"
             )

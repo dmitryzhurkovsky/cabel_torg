@@ -2,7 +2,7 @@ from _decimal import Decimal
 from _elementtree import Element
 from abc import ABC
 
-from sqlalchemy import text, delete
+from sqlalchemy import text, delete, not_
 from transliterate import translit
 
 from src.models import Manufacturer, BaseUnit, Category, Attribute
@@ -79,9 +79,11 @@ class GoodsMixin(BaseMixin, ABC):
             clean_product = await self.clean_product(element=product)
             attributes = clean_product.pop('attributes', None)
 
-            if not clean_product.get('vendor_code_ru'):
-                # Some products don't have vendor_code.
+            if not clean_product.get('vendor_code_ru') or clean_product.get('category_id'):
+                # Some products don't have `vendor_code`.
                 # It required field that's why we skip a product without this field.
+                # If a `category_id` is None it means that the category was deleted in a new version of
+                # the bookkeeping file, and we shouldn't save this product.
                 continue
 
             product_db, _ = await database_service.update_or_create_object(
@@ -128,7 +130,7 @@ class GoodsMixin(BaseMixin, ABC):
                 else:
                     product[field_name] = field_value
 
-        product['images'] = ",".join(image for image in product_images)
+            product['images'] = ",".join(image for image in product_images)
 
         return product
 
@@ -220,6 +222,8 @@ class GoodsMixin(BaseMixin, ABC):
 
         if category:
             return 'category_id', category.id
+        else:
+            return 'category_id', None
 
     async def clean_product_attributes(self, raw_field: Element) -> tuple[str, list]:
         """
@@ -316,6 +320,6 @@ class GoodsMixin(BaseMixin, ABC):
     async def delete_old_products(self):
         await self.db.execute(
             delete(Product).
-            where(Product.id.in_(self.parsed_products_ids))
+            where(not_(Product.id.in_(self.parsed_products_ids)))
         )
         await self.db.commit()

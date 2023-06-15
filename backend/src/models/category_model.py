@@ -32,12 +32,19 @@ class Category(Base1CModel):
     # an oder attribute of subcategories' subcategories is 1101, 1102, 1103
 
     # Relationship fields
-    products = relationship('Product', back_populates='category', lazy='noload')
-    parent_category_id = Column(Integer, ForeignKey('categories.id'))
+    products = relationship(
+        'Product',
+        back_populates='category',
+        lazy='noload',
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+    parent_category_id = Column(Integer, ForeignKey('categories.id', ondelete='CASCADE'))
     subcategories = relationship(
         'Category',
         backref=backref('parent_category', remote_side=[id]),
         viewonly=True,
+        cascade="all, delete-orphan",
     )
 
     __tableargs__ = (
