@@ -34,7 +34,7 @@ export default {
     },
 
     IS_MENU_ACTIONS_OPEN: function(){
-      // console.log(this.DEVICE_VIEW_TYPE);
+      console.log('Wrapper ', this.DEVICE_VIEW_TYPE);
       const wrapper = document.getElementById('app__component');
       if (this.IS_MENU_ACTIONS_OPEN) {
         window.scrollTo(0, 0);
@@ -42,7 +42,7 @@ export default {
         wrapper.style.height = '100vh'; 
         wrapper.style.position = 'relative';
         if (this.DEVICE_VIEW_TYPE === 1) {
-            if (document.body.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
+            if (wrapper.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
           }
       } else {
         wrapper.style.overflowY = '';

@@ -81,7 +81,7 @@
         return response.data;
       } catch (e) {
           console.log(e);
-          store.commit('notification/ADD_MESSAGE',{name: "Не возможно загрузить новость ", icon: "error", id: '1'})
+          // store.commit('notification/ADD_MESSAGE',{name: "Не возможно загрузить новость ", icon: "error", id: '1'})
           store.commit('notification/SET_IS_LOADING', false)
           return null
       }
