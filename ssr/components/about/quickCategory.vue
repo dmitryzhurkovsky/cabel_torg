@@ -9,8 +9,9 @@
               <ul class="quick-category__list">Сетевое оборудование
                 <li class="quick-category__link"><a href = "/category/kommutatory">Коммутаторы </a> </li>
                 <li class="quick-category__link"><a href = "/category/marshrutizatory">Маршрутизаторы</a></li>
-                <li class="quick-category__link"><a href = "/category/marshrutizatory">Медиаконвекторы</a></li>
                 <li class="quick-category__link"><a href = "/category/oborudovanie-RF-signala">Оборудование RF сигнала</a></li>
+                <li class="quick-category__link"><a href = "/category/konnektora-razyomy-soediniteli">Коннектора, разъёмы, соединители</a></li>
+
               </ul>
               <a href="/category/setevoe-oborudovanie" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
             </div>
