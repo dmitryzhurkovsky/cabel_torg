@@ -55,14 +55,14 @@
             wrapper.style.height = '100vh'; 
             wrapper.style.position = 'relative';
             if (this.DEVICE_VIEW_TYPE === 1) {
-              if (document.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
+              if (wrapper.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
             }
           }, 200);
           wrapper.style.overflowY = 'hidden';
           wrapper.style.height = '100vh'; 
           wrapper.style.position = 'relative';
           if (this.DEVICE_VIEW_TYPE === 1) {
-            if (document.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
+            if (wrapper.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
           }
         } else {
           wrapper.style.overflowY = '';

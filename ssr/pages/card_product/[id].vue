@@ -442,6 +442,9 @@
     display: flex;
     flex-direction: column;
     height: 480px;
+    @media (max-width: $md2+px) {
+      max-width: 100%;
+    }
     &--container{
       flex:1;
       display: flex;
