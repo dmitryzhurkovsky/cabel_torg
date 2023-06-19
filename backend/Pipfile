@@ -22,6 +22,7 @@ aiofiles = "*"
 python-dateutil = "*"
 redis = "*"
 transliterate = "*"
+jinja2 = "*"
 
 [dev-packages]
 pytest = "*"
