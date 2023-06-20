@@ -46,7 +46,7 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - /data/site_media:/site_media
+      - /data:/data
       - ./backend:/backend
 
 #  redis:
