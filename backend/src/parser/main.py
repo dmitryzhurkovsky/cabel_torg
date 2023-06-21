@@ -2,17 +2,13 @@ import asyncio
 import os
 import time
 
-from sqlalchemy.ext.asyncio.session import AsyncSession
-from sqlalchemy.orm import sessionmaker
-
 from src.core import settings
-from src.core.db.db import engine
+from src.core.db.db import async_session
 from src.log import create_logger
 from src.parser.utils import set_permissions_recursive
 from src.parser.xml_bookkeeping_parser import XMLParser, OffersParser
 from src.services.email_service import EmailService
 
-parser_async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 parser_logger = create_logger(log_file_name='parser')
 
 bookkeeping_last_modified_time = None
@@ -22,7 +18,7 @@ offers_last_modified_time = None
 async def parse_bookkeeping_file():
     event_loop = asyncio.get_running_loop()
 
-    async with parser_async_session() as db:
+    async with async_session() as db:
         xml_parser = XMLParser(db=db)
         price_parser = OffersParser(db=db)
 
