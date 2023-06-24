@@ -15,15 +15,15 @@
               </ul>
               <a href="/category/setevoe-oborudovanie" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
             </div>
-            <div class="quick-category__item quick-category__big-row">
+            <div class="quick-category__item quick-category__big-row" @click.stop = "openPage('/category/kabel-provod')">
               <div class="quick-category__list">Кабели и провода</div>
               <a href="/category/kabel-provod" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
             </div>
-            <div class="quick-category__item">
+            <div class="quick-category__item" @click.stop = "openPage('/category/oborudovanie-dlya-opticheskih-setej')">
               <div class="quick-category__list">Оптическое оборудование</div>
               <a href="/category/oborudovanie-dlya-opticheskih-setej" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
             </div>
-            <div class="quick-category__item">
+            <div class="quick-category__item" @click.stop = "openPage('/category/oborudovanie-dlya-televideniya')">
               <div class="quick-category__list">Оборудование для ТВ</div>
               <a href="/category/oborudovanie-dlya-televideniya" class="quick-category__more">Смотреть все <span>&#8594;</span></a>
 
@@ -37,17 +37,28 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
 
   export default {
     name: 'Quick_category',
+
+    computed: {
+      ...mapGetters("header", ["DEVICE_VIEW_TYPE"]),
+    },
 
     methods: {
       getPath: function(item){
         console.log(item);
         let path = useRuntimeConfig().public.NUXT_APP_API_URL + '/category/' + item;
-        console.log(path);
+        // console.log(path);
         return path;
       },
+
+      openPage: function (link){
+        if (this.DEVICE_VIEW_TYPE === 3) {
+          this.$router.push(link);
+        }
+      }
 
     }
   }
@@ -97,7 +108,11 @@ h3{
   &:nth-child(4){
     background-image: url("@/assets/category/cat4.png");
   }
-
+  &:hover{
+    @media (max-width: $md3+px) {
+      cursor: pointer;
+    }
+  }
 }
 .quick-category__big{
   grid-row: span 2;

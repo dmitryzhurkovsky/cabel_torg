@@ -2,20 +2,22 @@
   <div class="_container">
     <Head>
       <Title>
-        КабельТорг | {{ oneNewData?.title }}
+        КабельТорг | {{ data?.title }}
       </Title>
-      <Meta name="discription" :content="oneNewData?.title" />
+      <Meta name="discription" :content="data?.title" />
     </Head>
 
-    <div class="one-news__block app__content" v-if="oneNewData">
+    <div class="one-news__block app__content" v-if="data">
       <a class="one-news__item">
           <div class="one-news__img">
-              <UiCardImage :images = "oneNewData.image" />
+              <UiCardImage :images = "data.image" />
           </div>
 
-          <div class="one-news__title ">{{ oneNewData.title }}</div>
+          <div class="one-news__title ">{{ data.title }}</div>
           <div class="one-news__content">
-              <div v-html = "oneNewData.content"></div>
+            <ClientOnly>
+              <div v-html = "data.content"></div>
+            </ClientOnly>
           </div>
       </a>
 
@@ -44,6 +46,7 @@
 
   const route = useRoute()
   const router = useRouter()
+  const oneNewData = ref(null);
 
   const ChangeParameters = computed(() => {
     return JSON.stringify(route.query) + JSON.stringify(route.params);
@@ -71,30 +74,41 @@
     });
   }
 
-  const { data: oneNewData } = await useAsyncData(
+  const oneGetData = async () => {
+    // store.commit('notification/SET_IS_LOADING', true)
+    try {
+      const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'service_entities/articles/' + route.params.id);
+      // store.commit('notification/SET_IS_LOADING', false)
+      oneNewData.value = response.data;
+    } catch (e) {
+        console.log(e);
+        // store.commit('notification/ADD_MESSAGE',{name: "Не возможно загрузить новость ", icon: "error", id: '1'})
+        // store.commit('notification/SET_IS_LOADING', false)
+        navigateTo('/404');
+        // return null
+    }
+  } 
+
+  const { data } = await useAsyncData(
     'oneNewData', 
     async () => {
-      store.commit('notification/SET_IS_LOADING', true)
-      try {
-        const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'service_entities/articles/' + route.params.id);
-        store.commit('notification/SET_IS_LOADING', false)
-        return response.data;
-      } catch (e) {
-          console.log(e);
-          // store.commit('notification/ADD_MESSAGE',{name: "Не возможно загрузить новость ", icon: "error", id: '1'})
-          store.commit('notification/SET_IS_LOADING', false)
-          return null
-      }
+      await oneGetData()
+      return oneNewData.value
+
     }, {
       watch: [ChangeParameters]
     }
   )
 
-  onMounted(async () => {
+  onBeforeMount(async () => {
+    await oneGetData()
+    data.value = oneNewData.value
     onSetBreadCrumbs()
   })
 
-  onUpdated(() => {
+  onBeforeUpdate(async () => {
+    await oneGetData()
+    data.value = oneNewData.value
     onSetBreadCrumbs()
   })
 
@@ -137,16 +151,5 @@
     }
   }
 
-}
-</style>
-
-<style lang="scss">
-.one-news__img img{
-  width: 100%;
-
-
-}
-.one-news__block .news__content{
-  padding: 0 0;
 }
 </style>
