@@ -108,7 +108,7 @@
     margin: 20px 0;
     img{
       width: 100%;
-      max-width: 200px;
+      object-fit: cover;
     }
   }
   &__title{
@@ -143,6 +143,8 @@
 <style lang="scss">
 .one-news__img img{
   width: 100%;
+
+
 }
 .one-news__block .news__content{
   padding: 0 0;
