@@ -203,7 +203,6 @@ export default {
   padding: 20px 20px 30px 20px;
   @media (max-width: $md3+px){
     padding: 5px 15px 10px 15px;
-
   }
 
   &__img {
@@ -286,6 +285,10 @@ export default {
       background: #4275D8;
       border-radius: 6px;
       color: #fff;
+      @media (max-width: $md2 + px) {
+        background: none;
+        color:#000;
+      }
     }
 
 

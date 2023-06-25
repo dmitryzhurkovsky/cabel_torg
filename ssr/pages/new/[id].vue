@@ -1,5 +1,5 @@
 <template>
-  <div class="_container">
+  <div class="">
     <Head>
       <Title>
         КабельТорг | {{ data?.title }}
@@ -7,7 +7,7 @@
       <Meta name="discription" :content="data?.title" />
     </Head>
 
-    <div class="one-news__block app__content" v-if="data">
+    <div class="one-news__block app__content _container" v-if="data">
       <a class="one-news__item">
           <div class="one-news__img">
               <UiCardImage :images = "data.image" />
@@ -20,14 +20,11 @@
             </ClientOnly>
           </div>
       </a>
-
       <div class="one-news__btns">
         <div class="btn empty" @click.stop="onMoveToAllNews">Все новости</div>
       </div>
-
-      <SliderNews />
     </div>
-
+    <SliderNews />
   </div>
 </template>
 
