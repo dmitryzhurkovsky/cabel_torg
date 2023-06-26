@@ -5,6 +5,7 @@ from abc import ABC
 from sqlalchemy import text, delete, not_
 from transliterate import translit
 
+from src.core import settings
 from src.models import Manufacturer, BaseUnit, Category, Attribute
 from src.models.attribute_model import AttributeName, AttributeValue
 from src.models.product_model import Product, ProductStatus
@@ -136,7 +137,7 @@ class GoodsMixin(BaseMixin, ABC):
 
     async def clean_product_field(
             self, raw_field: Element
-    ) -> tuple[str, int | list | Decimal | None] | tuple[None, None]:
+    ) -> tuple[str, int | list | Decimal | str | None] | tuple[None, None]:
         """
         Convert raw fields that are called by Russian language to an English alternative and
         if it's required make a query to a database to get id of a nested model.
@@ -175,8 +176,8 @@ class GoodsMixin(BaseMixin, ABC):
                 return 'description', raw_field.text
             case 'Картинка':
                 return 'image_path', raw_field.text[12:]
-            case 'Ссылка на документацию':
-                return 'document_url', raw_field.text
+            case 'ОписаниеСтраницы':
+                return 'document_url', f'{settings.DOCUMENT_PATH}/{raw_field.text}'
             case _:
                 return None, None
 
