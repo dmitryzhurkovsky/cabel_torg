@@ -177,7 +177,7 @@ class GoodsMixin(BaseMixin, ABC):
             case 'Картинка':
                 return 'image_path', raw_field.text[12:]
             case 'ОписаниеСтраницы':
-                return 'document_url', f'{settings.DOCUMENT_PATH}/{raw_field.text}'
+                return 'document_url', f'{settings.DOCUMENT_PATH}/{raw_field.text}' if raw_field.text else None
             case _:
                 return None, None
 
