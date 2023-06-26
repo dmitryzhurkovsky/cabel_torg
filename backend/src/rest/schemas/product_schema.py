@@ -27,6 +27,7 @@ class ProductSchema(BaseSchema):
     tax: int | None
     description: str | None
     status: ProductStatus | None
+    document_url: str | None
 
     is_new: bool | None
     is_popular: bool | None

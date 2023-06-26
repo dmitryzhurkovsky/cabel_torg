@@ -38,6 +38,7 @@ class Product(Base1CModel):
     count = Column(DECIMAL, default=0)
     weight = Column(DECIMAL, default=0)
     is_new = Column(Boolean, default=False)
+    document_url = Column(String)
 
     # Price fields
     price = Column(DECIMAL)
