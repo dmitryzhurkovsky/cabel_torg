@@ -167,7 +167,7 @@ class GoodsMixin(BaseMixin, ABC):
             case 'ЗаголовокСтраницы':
                 return 'site_page_title', raw_field.text
             case 'ОписаниеСтраницы':
-                return 'document_url', f'{settings.DOCUMENT_PATH}/{raw_field.text}' if raw_field.text else None
+                return 'document_url', f'{settings.DOCUMENTS_URL}/{raw_field.text}' if raw_field.text else None
             case 'Новинка':
                 return 'is_new', True if raw_field.text == 'true' else False
             case 'Артикул':
