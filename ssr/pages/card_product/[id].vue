@@ -117,7 +117,7 @@
       <div class="tab ">
           <button :class="[infoBlock === 0 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(0)">Описание</button>
           <button :class="[infoBlock === 1 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(1)">Характеристики</button>
-          <button :class="[infoBlock === 2 ? 'tablinks active' : 'tablinks']" @click="onOpenDocumentation()">Документация</button>
+          <button :class="[infoBlock === 2 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(2)">Документация</button>
       </div>
       <div v-if="infoBlock === 0" class="tabcontent">
           <p v-html = "rebuildText(data.description)"></p>
@@ -134,7 +134,7 @@
           </div>
       </div>
       <div v-if="infoBlock === 2" class="tabcontent">
-          <h3>Документация</h3>
+          <a v-if="data.document_url" class="table__link" @click="onOpenDocumentation">Документ</a>
       </div>
     </div>
 
@@ -275,13 +275,14 @@
 
   const onChangeInfoBlock = (num) => {
     infoBlock.value = num
+    console.log(data.value.document_url);
   }
 
   const onOpenDocumentation = () => {
-    console.log(data.value.document_url)
+    // console.log(data.value.document_url)
     if (data.value.document_url) {
       const _url = useRuntimeConfig().public.NUXT_APP_DOCUMENTS + data.value.document_url
-      console.log(useRuntimeConfig().public, _url);
+      // console.log(useRuntimeConfig().public, _url);
       window.open(_url, '_blank');
     } 
   }
@@ -800,6 +801,9 @@
     min-height: 200px;
     @media (max-width: $md3+px) {
       font-size: 12px;
+    }
+    .table__link{
+      cursor: pointer;
     }
     &__row{
       border: 1px solid #eee;
