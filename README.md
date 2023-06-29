@@ -11,7 +11,7 @@ The web application is hosted on the following domain - https://cabel-torg.by.
 
 ## Team
 * Backend, parser, devops - dmitryzhurkovsky@gmail.com(https://github.com/dmitryzhurkovsky).
-* Frontend - kiselmen@rambler.ru(https://github.com/kiselmen), luter195@gmail.com(https://github.com/ronald13).
+* Frontend - kiselmen@rambler.ru/1813390@gmail.com(https://github.com/kiselmen), luter195@gmail.com(https://github.com/ronald13).
 * Product owner, stakeholder, ba, qa - luter195@gmail.com(https://github.com/ronald13).
 
 ## Main components and technical overview
@@ -108,3 +108,21 @@ https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted
 There are 2 actions:
 * deploy - is used after each merge in main.
 * rebuild-without-cache - can be launched manually and build containers without a cache
+
+### Docker configuration
+To optimise space usage and reduce size of logs:
+```shell
+vim /etc/docker/daemon.json
+```
+Set up max size of logs for each containers and count of files.
+```json
+{
+  "log-driver": "json-file",
+  "log-opts": {"max-size": "500m", "max-file": "3"}
+}
+```
+
+To clean up logs use the following command:
+```shell
+sudo sh -c 'truncate -s 0 /var/lib/docker/containers/*/*-json.log
+'```
