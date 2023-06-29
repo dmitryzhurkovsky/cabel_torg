@@ -117,7 +117,7 @@
       <div class="tab ">
           <button :class="[infoBlock === 0 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(0)">Описание</button>
           <button :class="[infoBlock === 1 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(1)">Характеристики</button>
-          <button :class="[infoBlock === 2 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(2)">Документация</button>
+          <button :class="[infoBlock === 2 ? 'tablinks active' : 'tablinks']" @click="onOpenDocumentation()">Документация</button>
       </div>
       <div v-if="infoBlock === 0" class="tabcontent">
           <p v-html = "rebuildText(data.description)"></p>
@@ -275,6 +275,15 @@
 
   const onChangeInfoBlock = (num) => {
     infoBlock.value = num
+  }
+
+  const onOpenDocumentation = () => {
+    console.log(data.value.document_url)
+    if (data.value.document_url) {
+      const _url = useRuntimeConfig().public.NUXT_APP_DOCUMENTS + data.value.document_url
+      console.log(useRuntimeConfig().public, _url);
+      window.open(_url, '_blank');
+    } 
   }
 
   const updateShowItems = (id) => {
