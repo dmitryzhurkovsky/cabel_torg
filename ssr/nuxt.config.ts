@@ -21,6 +21,20 @@ export default defineNuxtConfig({
   build: {
     transpile: ['swiper'],
   },
+  modules: [
+    [
+      'yandex-metrika-module-nuxt3',
+      {
+        id: '94113822',
+        webvisor: true,
+        // clickmap: true,
+        // useCDN: false,
+        // trackLinks: true,
+        // accurateTrackBounce: true,
+      }
+    ]
+  ]
+
   // pages: true
 
   
