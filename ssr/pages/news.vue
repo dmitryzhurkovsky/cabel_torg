@@ -1,5 +1,5 @@
 <template>
-  <div class="news">
+  <div class="news app__content">
     <div class="news__wrapper">
       <div class="news__content _container">
         <div class="news__body">

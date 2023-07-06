@@ -18,6 +18,7 @@
   "dependencies": {
     "axios": "^0.26.1",
     "vue-gtag": "^2.0.1",
-    "vuex": "^4.1.0"
+    "vuex": "^4.1.0",
+    "yandex-metrika-module-nuxt3": "^1.5.3"
   }
 }
