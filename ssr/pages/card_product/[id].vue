@@ -134,7 +134,10 @@
           </div>
       </div>
       <div v-if="infoBlock === 2" class="tabcontent">
-          <a v-if="data.document_url" class="table__link" @click="onOpenDocumentation">Документ</a>
+
+          <a v-if="data.document_url" class="table__link" @click="onOpenDocumentation">
+            <img src="@/assets/dok-ikon.png" alt="document">
+            Документ</a>
       </div>
     </div>
 
@@ -804,6 +807,10 @@
     }
     .table__link{
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
     }
     &__row{
       border: 1px solid #eee;
