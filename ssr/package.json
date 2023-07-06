@@ -9,6 +9,7 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@nuxtjs/google-analytics": "^2.4.0",
     "@types/node": "^18",
     "nuxt": "^3.4.2",
     "sass": "^1.62.0",
@@ -16,6 +17,7 @@
   },
   "dependencies": {
     "axios": "^0.26.1",
+    "vue-gtag": "^2.0.1",
     "vuex": "^4.1.0"
   }
 }
