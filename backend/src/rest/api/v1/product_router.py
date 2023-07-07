@@ -2,9 +2,11 @@ from decimal import Decimal
 
 from fastapi import APIRouter, Depends, Query, Request
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette.responses import JSONResponse
 
 from src.core.db.db import get_session
 from src.core.enums import ProductTypeFilterEnum, ProductOrderFilterEnum
+from src.core.utils import round_price
 from src.rest.managers.product_manager import ProductManager
 from src.rest.permissions import is_admin_permission
 from src.rest.schemas.product_schema import (
@@ -61,6 +63,13 @@ async def get_products(
         offset=offset,
         total=count_of_products
     )  # todo it better
+
+
+@product_router.get('/max_price')
+async def get_product_witn_max_price(session: AsyncSession = Depends(get_session)):
+    max_price = await ProductManager.get_max_price_of_products(session=session)
+    rounded_max_price = round_price(price=max_price)
+    return JSONResponse(content=rounded_max_price)
 
 
 @product_router.get(

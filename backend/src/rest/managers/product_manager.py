@@ -221,3 +221,14 @@ class ProductManager(CRUDManager):
         for product in products:
             product.price_with_discount = calculate_price_with_discount(product=product, discount=discount)
         # we don't do commit here because we should also update a category
+
+    @classmethod
+    async def get_max_price_of_products(cls, session: AsyncSession):
+        """Get a maximum price of the product with the highest price in a database."""
+        query_result = await session.execute(
+            select(Product).
+            order_by(Product.price.desc())
+        )
+        product: Product = query_result.scalar()
+
+        return product.price_with_tax

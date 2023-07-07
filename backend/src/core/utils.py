@@ -28,3 +28,10 @@ def hash_password(password: str) -> str:
 def calculate_price_with_discount(product: Product, discount: int) -> Decimal:
     """Calculate a price based on a discount"""
     return Decimal(product.price - (product.price * discount / 100))
+
+
+def round_price(price: Decimal) -> int:
+    """It's used to modify numbers 365 -> 400, from 51231 -> 60000."""
+    first_digit = int(str(int(price))[0]) + 1
+    rounded_price = first_digit * 10 ** (len(str(price)) - 1)
+    return rounded_price
