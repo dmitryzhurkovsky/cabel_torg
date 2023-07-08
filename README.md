@@ -53,6 +53,13 @@ Nginx is used as a reverse proxy to redirect requests to the frontend applicatio
 the admin dashboard and the backend API. Additionally, Nginx is used as a tool for sharing static files and images and 
 for setting up an HTTPS connection in conjugation with Certbot.
 
+### Delivery agent
+Postfix is used for sending notifications. 
+To ensure legitimate email authenticates properly SPF, DKIM and DMARK were used. 
+
+To check why messages aren't sent `mxtoolbox.com/emailhealth` was used.
+
+
 ### Certbot
 To generate an SSL certificate for a new domain, follow these steps:
 
