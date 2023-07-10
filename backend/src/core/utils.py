@@ -33,5 +33,5 @@ def calculate_price_with_discount(product: Product, discount: int) -> Decimal:
 def round_price(price: Decimal) -> int:
     """It's used to modify numbers 365 -> 400, from 51231 -> 60000."""
     first_digit = int(str(int(price))[0]) + 1
-    rounded_price = first_digit * 10 ** (len(str(price)) - 1)
+    rounded_price = first_digit * 10 ** (len(str(int(price))) - 1)
     return rounded_price
