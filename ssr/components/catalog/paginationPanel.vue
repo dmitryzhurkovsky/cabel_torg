@@ -146,7 +146,7 @@
       url = url + "offset=" + offset + '&'
       url = url + "limit=" + getters['query/LIMIT'] + '&'
     }
-    if (getters['query/MIN_PRICE'] != 0 || getters['query/MAX_PRICE'] != 40000) {
+    if (getters['query/MIN_PRICE'] != 0 || getters['query/MAX_PRICE'] != getters['query/MAX_PRICE_FROM_DB']) {
       url = url + "actual_price_gte=" + getters['query/MIN_PRICE'] + '&';
       url = url + "actual_price_lte=" + getters['query/MAX_PRICE'] + '&';
     }

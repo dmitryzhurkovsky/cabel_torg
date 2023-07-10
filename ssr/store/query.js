@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const min = 0
-const max = 40000
+// const max = 40000
 
 export default {
   namespaced: true,
@@ -14,8 +14,9 @@ export default {
     sort: 'created_at',
     direction: '-',
     view: 'table',
+    maxPriceFromDB: 40000,
     minPrice: min,
-    maxPrice: max,
+    maxPrice: 40000,
     searchString: '',
     findedElements: [],
     allTypesOfProduct: [
@@ -59,6 +60,9 @@ export default {
       },
       MAX_PRICE(state){
         return state.maxPrice;
+      },
+      MAX_PRICE_FROM_DB(state){
+        return state.maxPriceFromDB;
       },
       SEARCH_STRING(state){
         return state.searchString;
@@ -119,9 +123,14 @@ export default {
         state.maxPrice = price;
       },
 
+      SET_MAX_PRICE_FROM_DB(state, price) {
+        state.maxPrice = price;
+        state.maxPriceFromDB = price;
+      },
+
       SET_DEFAULT_PRICES(state){
         state.minPrice = min;
-        state.maxPrice = max;
+        state.maxPrice = state.maxPriceFromDB;
         state.typeOfProduct = 'all';
       },
 
@@ -150,5 +159,16 @@ export default {
             // commit("notification/ADD_MESSAGE", {name: "Не возможно загрузить искомые товары ", icon: "error", id: '1'}, {root: true})
         }
       },
+
+      async GET_MAX_PRICE_FROM_DB({ commit, getters }) {
+        try {
+          const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'products/max_price');
+          console.log('SET max price');
+          commit("SET_MAX_PRICE_FROM_DB", response.data);
+        } catch (e) {
+          console.log(e);
+          // commit("notification/ADD_MESSAGE", {name: "Не возможно обновить каталог товаров", icon: "error", id: '1'}, {root: true})
+        }
+      }
     }
   };

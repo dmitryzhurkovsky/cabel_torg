@@ -52,8 +52,8 @@ export default {
       RangeMin: 0,
       RangeMax: 40000,
       priceGap: 1000,
-      Left: '25%',
-      Right: '75%',
+      Left: '0%',
+      Right: '100%',
     }
   },
 
@@ -69,7 +69,9 @@ export default {
   },
 
   computed: {
-    ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_ORDER", "SORT_DIRECTION", "LIMIT_ITEMS"]),
+    ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION", "LIMIT_ITEMS", 
+      "MAX_PRICE_FROM_DB"
+    ]),
     ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
     ...mapGetters("header", ["ALL_CATEGORIES"]),
 
@@ -164,7 +166,7 @@ export default {
         url = url + "offset=" + this.OFFSET + '&'
         url = url + "limit=" + this.LIMIT + '&'
       }
-      if (min != 0 || max != 40000) {
+      if (min != 0 || max != this.MAX_PRICE_FROM_DB) {
         url = url + "actual_price_gte=" + min + '&';
         url = url + "actual_price_lte=" + max + '&';
       }
@@ -203,8 +205,11 @@ export default {
   beforeMount(){
     this.minValuePrice = this.MIN_PRICE;
     this.maxValuePrice = this.MAX_PRICE;
+    this.RangeMax = this.MAX_PRICE_FROM_DB;
+
     this.setUpMinPrice();
     this.setUpMaxPrice();
+    console.log('Price slider');
   },
 
   // beforeUpdate(){

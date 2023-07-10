@@ -73,15 +73,6 @@ export default {
           this.SET_CATEGORY_ID(null);
         }
         this.SET_DEFAULT_PRICES();
-        // url = url + "?offset=" + this.OFFSET + 
-        // "&limit=" + this.LIMIT;
-        // if (this.MIN_PRICE != 0 || this.MAX_PRICE != 40000) {
-        //   url = url + "&actual_price_gte=" + this.MIN_PRICE; 
-        //   url = url + "&actual_price_lte=" + this.MAX_PRICE;
-        // }
-        // url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
-        // url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
-        // url = url + "&q=" + this.CATALOG_SEARCH_STRING;
         this.SET_SEARCH_STRING('');
         this.MOVE_TO_SELECT_PATH(item.index);
         // console.log('Url   ', item.path + url, this);
@@ -99,24 +90,6 @@ export default {
       let url = ''
       if (item.path.includes('category') || item.path.includes('catalog')) {
         url = url = item.path
-        //  + "?";
-
-        // if (this.OFFSET != 0 || this.LIMIT != 12) {
-        //   url = url + "offset=" + this.OFFSET + '&'
-        //   url = url + "limit=" + this.LIMIT + '&'
-        // }
-        // if (this.MIN_PRICE != 0 || this.MAX_PRICE != 40000) {
-        //   url = url + "actual_price_gte=" + this.MIN_PRICE + '&';
-        //   url = url + "actual_price_lte=" + this.MAX_PRICE + '&';
-        // }
-        // if (this.SORT_DIRECTION !== '-' || this.SORT_TYPE !== 'created_at') {
-        //   url = url + "ordering=" + this.SORT_DIRECTION + this.SORT_TYPE + '&'
-        // }
-        // if (this.TYPE_OF_PRODUCT !== 'all') {
-        //   url = url + "type_of_product=" + this.TYPE_OF_PRODUCT + '&'
-        // }
-        // const lastSymbol = url.slice(-1)
-        // if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
       } else {
         url = url + item.path;
       }

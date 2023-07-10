@@ -136,7 +136,7 @@
       }
     } else {
       isFailInParams = true
-      store.commit('query/SET_MAX_PRICE', 40000)
+      store.commit('query/SET_MAX_PRICE', getters['query/MAX_PRICE_FROM_DB'])
     }
     if (query.q) {
       if (getters['catalog/CATALOG_SEARCH_STRING'] !== query.q) {
