@@ -46,11 +46,11 @@ export default {
   data(){
     return {
       minValueRange: 0,
-      maxValueRange: 40000,
+      maxValueRange: this.MAX_PRICE_FROM_DB,
       minValuePrice: 0,
-      maxValuePrice: 40000,
+      maxValuePrice: this.MAX_PRICE_FROM_DB,
       RangeMin: 0,
-      RangeMax: 40000,
+      RangeMax: this.MAX_PRICE_FROM_DB,
       priceGap: 1000,
       Left: '0%',
       Right: '100%',
@@ -99,6 +99,7 @@ export default {
       if (this.maxValuePrice <= this.minValuePrice + this.priceGap) this.maxValuePrice = Number(this.minValuePrice) + Number(this.priceGap);
       const minPrice = this.minValuePrice;
       const maxPrice = this.maxValuePrice;
+      console.log(maxPrice, minPrice, this.priceGap, this.maxValueRange);
       if ((maxPrice - minPrice >= this.priceGap)) {
         this.maxValueRange = maxPrice;
         this.Right = 100 - ((maxPrice / this.RangeMax) * 100) + '%';
@@ -205,19 +206,22 @@ export default {
   beforeMount(){
     this.minValuePrice = this.MIN_PRICE;
     this.maxValuePrice = this.MAX_PRICE;
+    this.maxValueRange = this.MAX_PRICE;
     this.RangeMax = this.MAX_PRICE_FROM_DB;
 
     this.setUpMinPrice();
     this.setUpMaxPrice();
-    console.log('Price slider');
+    // console.log('Price slider');
   },
 
-  // beforeUpdate(){
-  //   this.minValuePrice = this.MIN_PRICE;
-  //   this.maxValuePrice = this.MAX_PRICE;
-  //   this.setUpMinPrice();
-  //   this.setUpMaxPrice();
-  // }
+  beforeUpdate(){
+    // this.minValuePrice = this.MIN_PRICE;
+    // this.maxValuePrice = this.MAX_PRICE;
+    // this.RangeMax = this.MAX_PRICE_FROM_DB;
+ 
+    // this.setUpMinPrice();
+    // this.setUpMaxPrice();
+  }
 }
 </script>
 
