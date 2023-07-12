@@ -1,2 +1,6 @@
 User-agent: *
-Disallow: admin.cabel-torg.by
+Disallow: /card_product/string
+Disallow: /category/string
+Disallow: /string
+Disallow: /site_media/images/
+Disallow: /site_media/
