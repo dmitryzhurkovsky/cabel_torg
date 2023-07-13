@@ -38,7 +38,7 @@
 
 <script>
 
-import {mapMutations, mapGetters} from 'vuex'
+import {mapMutations, mapGetters, mapActions} from 'vuex'
 
 export default {
   name: 'PriceSlider',
@@ -46,11 +46,11 @@ export default {
   data(){
     return {
       minValueRange: 0,
-      maxValueRange: 40000,
+      maxValueRange: this.MAX_PRICE_FROM_DB,
       minValuePrice: 0,
-      maxValuePrice: 40000,
+      maxValuePrice: this.MAX_PRICE_FROM_DB,
       RangeMin: 0,
-      RangeMax: 40000,
+      RangeMax: 400000,
       priceGap: 1000,
       Left: '0%',
       Right: '100%',
@@ -62,7 +62,9 @@ export default {
       this.minValuePrice = this.MIN_PRICE;
       this.minValueRange = this.MIN_PRICE;
       this.maxValuePrice = this.MAX_PRICE;
+      // console.log('2 ', this.MAX_PRICE);
       this.maxValueRange = this.MAX_PRICE;
+      this.RangeMax = this.MAX_PRICE_FROM_DB
       this.Left = ((this.MIN_PRICE / this.RangeMax) * 100) + '%';
       this.Right = 100 - ((this.MAX_PRICE / this.RangeMax) * 100) + '%';
     }  
@@ -76,22 +78,30 @@ export default {
     ...mapGetters("header", ["ALL_CATEGORIES"]),
 
     ChangeParameters(){
-      return String(this.MAX_PRICE) + String(this.MIN_PRICE);
+      return String(this.MAX_PRICE) + String(this.MIN_PRICE)
+      //  + String(this.MAX_PRICE_FROM_DB);
     }
   },
 
   methods: {
     ...mapMutations("query", ["SET_MIN_PRICE", "SET_MAX_PRICE", "SET_OFFSET"]),
+    ...mapActions("query", ["GET_MAX_PRICE_FROM_DB"]),
 
     setUpMinPrice(){
+      if (this.maxValuePrice === 0) {
+        this.maxValuePrice = this.RangeMax;
+        // console.log('3 ', this.RangeMax);
+        this.maxValueRange = this.RangeMax;
+      }
       if (this.minValuePrice <= this.RangeMin) this.minValuePrice = this.RangeMin;
       if (this.minValuePrice >= this.maxValuePrice - this.priceGap) this.minValuePrice = this.maxValuePrice - this.priceGap;
       const minPrice = this.minValuePrice;
       const maxPrice = this.maxValuePrice;
       if ((maxPrice - minPrice >= this.priceGap) && (maxPrice <= this.maxValueRange)) {
         this.minValueRange = minPrice;
-        this.Left = ((minPrice / this.RangeMax) * 100) + '%';
       }
+      this.minValueRange = String(this.minValuePrice);
+      this.Left = ((this.minValuePrice / this.RangeMax) * 100) + '%';
     },
 
     setUpMaxPrice(){
@@ -101,8 +111,12 @@ export default {
       const maxPrice = this.maxValuePrice;
       if ((maxPrice - minPrice >= this.priceGap)) {
         this.maxValueRange = maxPrice;
-        this.Right = 100 - ((maxPrice / this.RangeMax) * 100) + '%';
       }
+      // console.log('before setUp ', this.RangeMax, this.maxValuePrice);
+      this.maxValueRange = this.maxValuePrice;
+      // this.maxValueRange = this.RangeMax;
+      this.Right = 100 - ((this.maxValuePrice / this.RangeMax) * 100) + '%';
+      // console.log('after setUp ', this.maxValueRange, this.MAX_PRICE);
     },
 
     onChangeMinPrice(){
@@ -125,7 +139,8 @@ export default {
           this.minValueRange = maxValue - this.priceGap;
         } else {
           minValue = this.minValuePrice;
-          this.minValueRange = Number(this.minValuePrice);
+          this.minValueRange = this.minValuePrice;
+          // console.log('1 ', Number(this.minValueRange) + Number(this.priceGap));
           this.maxValueRange = Number(this.minValueRange) + Number(this.priceGap);
         }
         this.minValuePrice = this.minValueRange;
@@ -185,6 +200,7 @@ export default {
       this.SET_OFFSET(0);
       if (this.MIN_PRICE !== this.minValuePrice) {
         this.SET_MIN_PRICE(this.minValuePrice);
+        // console.log('CATEGOTY_ID: ', this.CATEGORY_ID);
         if (this.CATEGORY_ID) {
           this.$router.push(this.getCategoryUrl(this.CATEGORY_ID, this.minValuePrice, this.MAX_PRICE));
         } else {
@@ -202,14 +218,19 @@ export default {
     }
   },
 
-  beforeMount(){
+  async beforeMount(){
+    await this.GET_MAX_PRICE_FROM_DB();
+
+    // console.log('Before mount slider ', this.MAX_PRICE, this.MAX_PRICE_FROM_DB);
     this.minValuePrice = this.MIN_PRICE;
     this.maxValuePrice = this.MAX_PRICE;
+    // this.maxValueRange = this.MAX_PRICE;
     this.RangeMax = this.MAX_PRICE_FROM_DB;
 
     this.setUpMinPrice();
     this.setUpMaxPrice();
-    console.log('Price slider');
+    // this.updateStore();
+    // console.log('Price slider');
   },
 
   // beforeUpdate(){
