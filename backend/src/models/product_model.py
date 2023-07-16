@@ -33,7 +33,7 @@ class Product(Base1CModel):
     vendor_code_ru = Column(String)
     name = Column(String)
     images = Column(String)  # pictures paths in the following format: picture_1,picture_2,picture_3...
-    tax = Column(Integer)  # todo change it, because tax is always 20
+    tax = Column(Integer)  # todo delete or change it, because tax is always 20
     description = Column(String)
     count = Column(DECIMAL, default=0)
     weight = Column(DECIMAL, default=0)
@@ -44,9 +44,10 @@ class Product(Base1CModel):
     price = Column(DECIMAL)  # The attribute got from 1C bookkeeping.
     price_with_discount = Column(DECIMAL)  # This attribute is auto-calculated if we change the discount.
     discount = Column(Integer, default=0)
+    is_price_on_request = Column(Boolean, default=False)
 
     # Service fields
-    is_visible = Column(Boolean, default=True)
+    is_visible = Column(Boolean, default=True, nullable=False)
     site_link = Column(String)
     site_page_title = Column(String)
     site_page_description = Column(String)
