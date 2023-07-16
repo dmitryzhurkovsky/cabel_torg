@@ -41,7 +41,7 @@ class Product(Base1CModel):
     document_url = Column(String)
 
     # Price fields
-    price = Column(DECIMAL)
+    price = Column(DECIMAL)  # The attribute got from 1C bookkeeping.
     price_with_discount = Column(DECIMAL)  # This attribute is auto-calculated if we change the discount.
     discount = Column(Integer, default=0)
 
@@ -76,12 +76,18 @@ class Product(Base1CModel):
         passive_deletes=True
     )
 
+# -------------------------------------- Admin panel's prices ----------------------------------------------------------
     @property
     def actual_discount(self) -> float | int | DECIMAL:
         """
-        It's an actulal dsicount. It's used for admin panel.
-        Since we calculate price depending on discount in cateogries and products and
-        in its case we change only price.
+        We have the following hierarchy of discounts:
+        Product's discount -> Subcategory's discount -> Category discount.
+        To set up a discount and support the hierarchy, we change the price only when calculating a discount
+        for categories, and we change the discount field only when setting up the product's discount implicitly.
+
+        It's used for:
+        1. In the admin panel;
+        2. calculating actual discount with tax.
         """
         if self.price_with_discount_and_tax and self.price_with_tax:
             return round(
@@ -90,45 +96,90 @@ class Product(Base1CModel):
             )
         return 0
 
+# -------------------------------------- Response model's prices -------------------------------------------------------
     @property
     def price_with_tax(self) -> float:
+        """
+        It's used for:
+        1. As a field of the response schema;
+        """
         if self.price:
             return round(self.price + (self.price * tax / 100), 2)
 
     @property
     def price_with_discount_and_tax(self) -> float | None:
+        """
+        It's used for:
+        1. As a field of the response schema;
+        """
         if self.price_with_discount:
             return round(self.price_with_discount + (self.price_with_discount * tax / 100), 2)
 
     @property
+    def is_popular(self) -> bool:
+        """
+        It's used when we receive products in the following format:
+        (Product_1, is_popular_1),
+        (Product_2, is_popular_2),
+        where Product is an instance of the product and is_popular is a value calculated as a subquery.
+        We then set up the is_popular attribute for each product.
+        """
+        return self._is_popular
+
+    @is_popular.setter
+    def is_popular(self, value):
+        """
+        Check the documentation for the is_popular property.
+        """
+        self._is_popular = value
+
+# -------------------------------------- Invoice generator's prices ----------------------------------------------------
+    @property
     def tax_sum(self) -> float:
-        """For generating an invoice."""
+        """
+        It's used for:
+        1. Generating an invoice;
+        2. Calculating actual discount with the tax.
+        """
         return self.actual_price * tax / 100
 
+    def actual_price_with_tax(self) -> float:
+        """
+        It's used for:
+        1. generating an invoice;
+        2. calculating the actual discount.
+        """
+        return self.tax_sum + self.actual_price
+
+# -------------------------------------- Service prices ----------------------------------------------------------------
     @hybrid_property
     def actual_price(self) -> float:
-        """For generating an invoice, ordering and sorting."""
+        """
+        This field is needed because we can have prices where a tax isn't set, but we still want to show users products
+        with both a discount and without a discount.
+        For example, we should show products with a price ranging from 10 to 20.
+        If we filter only by the usual price, we may encounter a situation
+        where a product has a price of 23 with a discount of 15,
+        but it isn't shown because we are filtering only by the usual price.
+
+        This field doesn't return back to the frontend. It is a service field.
+
+        It's used for:
+        1. Calculating the actual price with tax;
+        2. Generating an invoice;
+        3. Ordering and sorting on the backend.
+        """
         return self.price_with_discount if self.price_with_discount else self.price
 
     @actual_price.expression
     def actual_price(cls):
-        """For generating an invoice, ordering and sorting."""
+        """It's expression for actual price."""
         return case(
             (Product.price_with_discount > 0, Product.price_with_discount),
             else_=Product.price
         )
 
-    def actual_price_with_tax(self) -> float:
-        """For generating an invoice."""
-        return self.tax_sum + self.actual_price
-
-    @property
-    def is_popular(self) -> bool:
-        return self._is_popular
-
-    @is_popular.setter
-    def is_popular(self, value):
-        self._is_popular = value
+# ----------------------------------------------------------------------------------------------------------------------
 
     __tableargs__ = (
         CheckConstraint(discount < 100, name='check_discount_lt_100'),
