@@ -32,6 +32,7 @@ class ProductSchema(BaseSchema):
     is_new: bool | None
     is_popular: bool | None
 
+
     # price: Decimal | None  # without a tax. Don't use this field. Use price_with_tax instead.
     # price_with_discount: Decimal | None  # without a tax. Don't use this field. Use price_with_discount_and_tax
 
@@ -39,6 +40,7 @@ class ProductSchema(BaseSchema):
     price_with_discount_and_tax: Decimal | None  # with a tax
     discount: int | None
     actual_discount: Decimal | None
+    is_price_on_request: bool | None
 
     count: int | None
     weight: Decimal | None
