@@ -124,8 +124,8 @@ export default {
       },
 
       SET_MAX_PRICE_FROM_DB(state, price) {
-        state.maxPrice = price;
-        state.maxPriceFromDB = price;
+        // state.maxPrice = price;
+        state.maxPriceFromDB = Number(price);
       },
 
       SET_DEFAULT_PRICES(state){
