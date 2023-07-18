@@ -13,6 +13,7 @@ ORIGINS = os.environ.get('ORIGINS', '').split(',')
 REDIS_URL = os.getenv('REDIS_URL')  # deprecated
 DATA_PATH = os.getenv('DATA_PATH')
 IMAGES_PATH = f'{DATA_PATH}/site_media/images'  # it's used for uploading images.
+DOCUMENTS_PATH = f'{DATA_PATH}/site_media/documents'  # it's used for uploading documents.
 LOGS_PATH = f'{DATA_PATH}/logs'  # it's used as a folder for logs.
 DOCUMENTS_URL = os.getenv('DOCUMENTS_URL', '/site_media/documents')  # It's used for generating
 STATIC_URL = os.getenv('STATIC_URL', '/static')  # It's used for generating templates and populate statics files.
