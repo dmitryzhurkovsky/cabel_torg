@@ -55,10 +55,13 @@
 
 <script setup>
 
-  import store from '@/store'
+  // import store from '@/store'
+  import { useStore } from 'vuex'
+
 
   const router = useRouter()
   const route = useRoute()
+  const store = useStore()
   const { getters } = store
   const isFilterPanelOpen = ref(false)
   const isMobileVersion = ref(false)
@@ -90,9 +93,9 @@
   }
 
   const ChangeParameters = computed(() => {
-    return JSON.stringify(route.query)  + JSON.stringify(getters['query/TYPE_OF_PRODUCT']) + 
-      JSON.stringify(getters['query/SORT_TYPE']) + JSON.stringify(getters['query/SORT_DIRECTION']) + String(getters['query/MIN_PRICE']) + String(getters['query/MAX_PRICE']) +
-      String(getters['query/OFFSET']) + String(getters['query/LIMIT']) + getters['catalog/ACTIVE_PAGE'] + getters['catalog/TOTAL_PAGES'];
+    return JSON.stringify(route.query)  + JSON.stringify(store.getters['query/TYPE_OF_PRODUCT']) + 
+      JSON.stringify(store.getters['query/SORT_TYPE']) + JSON.stringify(store.getters['query/SORT_DIRECTION']) + String(store.getters['query/MIN_PRICE']) + String(store.getters['query/MAX_PRICE']) +
+      String(store.getters['query/OFFSET']) + String(store.getters['query/LIMIT']) + store.getters['catalog/ACTIVE_PAGE'] + store.getters['catalog/TOTAL_PAGES'];
       // + JSON.stringify(store.getters['catalog/ITEMS_LIST'])
   })
 
@@ -105,7 +108,7 @@
 
   const setParametersFromURL = () => {
     let isFailInParams = false
-    const currRoute = useRoute()
+    const currRoute = route
     const { query } = currRoute
 
     store.commit('query/SET_CATEGORY_ID', null) 
@@ -188,12 +191,13 @@
     'posts', 
     async () => {
       if (isFerstRender) {
+        await store.dispatch('query/GET_MAX_PRICE_FROM_DB')
         setParametersFromURL()
       }
       if (!store.getters['query/CATEGORY_ID']) {
         await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
       }
-      // setBreabcrumbs()
+      setBreabcrumbs()
       return store.getters['catalog/ITEMS_LIST']
     }, {
       watch: [ChangeParameters]
@@ -201,21 +205,23 @@
   )
 
   onBeforeMount(async () => {
+    await store.dispatch('query/GET_MAX_PRICE_FROM_DB')
     setParametersFromURL()
     if (!store.getters['query/CATEGORY_ID']) {
       await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
     }
-  //   // await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
+    await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
     setViewType(getters['header/DEVICE_VIEW_TYPE'])
     setBreabcrumbs()
   })
 
   onBeforeUpdate(async () => {
+    await store.dispatch('query/GET_MAX_PRICE_FROM_DB')
     setParametersFromURL()
     if (!store.getters['query/CATEGORY_ID']) {
       await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
     }
-    // await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
+    await store.dispatch('catalog/GET_ALL_CATALOG_ITEMS')
     setViewType(getters['header/DEVICE_VIEW_TYPE'])
     setBreabcrumbs()
   })

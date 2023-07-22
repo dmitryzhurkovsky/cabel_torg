@@ -13,7 +13,10 @@
 </template>
 
 <script setup>
-  import store from '@/store'
+  import { useStore } from 'vuex'
+
+  // import store from '@/store'
+  const store = useStore()
   const { getters } = store
   const router = useRouter()
 

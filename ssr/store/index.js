@@ -11,6 +11,8 @@ import favorite from './favorite';
 import main from './main';
 import axios from 'axios';
 
+// const axios = useNuxtApp.$axios
+
 axios.interceptors.response.use(
   response => {
     // const d = new Date()
