@@ -166,7 +166,9 @@
 
 <script setup>
   import axios from 'axios';
-  import store from '@/store'
+  import { useStore } from 'vuex'
+  // import store from '@/store'
+  const store = useStore()
   const route = useRoute()
   const router = useRouter()
   const { getters } = store

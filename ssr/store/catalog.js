@@ -1,4 +1,5 @@
 import axios from "axios";
+const BASE_URL = 'http://cabel-torg.by:8000/api/v1/';
 
 export default {
   namespaced: true,
@@ -102,9 +103,11 @@ export default {
         '&actual_price_lte=' + rootGetters['query/MAX_PRICE'] +
         '&ordering=' + rootGetters['query/SORT_DIRECTION'] + rootGetters['query/SORT_TYPE'] +
         '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING'];
-
         if (rootGetters['query/TYPE_OF_PRODUCT'] !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'];
-        const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + queryData);
+        console.log('Before RooGetters');
+        // const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + queryData);
+        const response = await axios.get(BASE_URL + queryData);
+        console.log('After RooGetters');
         commit("SET_CATALOG_ITEMS", response.data);
         // console.log('GET_CATALOG_ITEMS ', rootGetters['query/OFFSET'], rootGetters['query/LIMIT'])
         commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});
@@ -125,7 +128,9 @@ export default {
         '&ordering=' + rootGetters['query/SORT_DIRECTION'] + rootGetters['query/SORT_TYPE'] +
         '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING'];
         if (rootGetters['query/TYPE_OF_PRODUCT'] !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT']
-        const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + queryData);
+        // const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + queryData);
+        const response = await axios.get(BASE_URL + queryData);
+        
         commit("SET_CATALOG_ITEMS", response.data);
         // console.log('GET_ALL_CATALOG_ITEMS ', rootGetters['query/OFFSET'], rootGetters['query/LIMIT'])
         commit("SET_PAGE_STATE", { back: response.data, offset: rootGetters['query/OFFSET'], limit: rootGetters['query/LIMIT']});

@@ -7,8 +7,8 @@
           <div class="quick-category__grid">
             <div class="quick-category__item quick-category__big">
               <ul class="quick-category__list">Сетевое оборудование
-                <li class="quick-category__link"><a href = "/category/kommutatory">Коммутаторы </a> </li>
-                <li class="quick-category__link"><a href = "/category/marshrutizatory">Маршрутизаторы</a></li>
+                <li class="quick-category__link"><a href = "/category/opticheskie-komponenty">Оптические компоненты</a> </li>
+                <li class="quick-category__link"><a href = "/category/oborudovanie-dlya-televideniya">Оборудование для телевидения</a></li>
                 <li class="quick-category__link"><a href = "/category/oborudovanie-RF-signala">Оборудование RF сигнала</a></li>
                 <li class="quick-category__link"><a href = "/category/konnektora-razyomy-soediniteli">Коннектора, разъёмы, соединители</a></li>
 
