@@ -68,17 +68,33 @@ async def update_or_create_object(
         db: AsyncSession,
         model,
         fields: dict,
-        prefetch_fields: tuple = None,
+        prefetch_fields: tuple | None = None,
         update: bool = False,
-        refresh: bool = True
+        refresh: bool = True,
+        bookkeeping_field: str = 'bookkeeping_id'
 ):
     """
     Get the instance from the database and update all fields except id and accounting id and return the instance
     as the first argument and a boolean of whether the instance was created in the second argument.
+
+    Bookkep
+
+    Args:
+        db: an async session of db.
+        model: is used to tell parser what model is used to create/update instances.
+        fields: fields are used to create or update the instance.
+        prefetch_fields: fields that should be preloaded to prevent await IO error when we try to get an attribute
+         of related model.
+        update: is used to tell parser whether we should update the instance or only create or get it.
+        refresh: is used to tell SqlAlchemy whether we should update session.
+         For example if we need to get id of instances.
+        bookkeeping_field: is used to connect instance in db with instance in 1C bookkeeping.
+
+    Returns: A tuple where the first argument is instance and the second one is bool whether it was created.
     """
     # Get filter fields
-    bookkeeping_id = fields.get('bookkeeping_id')
-    filter_by_fields = {'bookkeeping_id': bookkeeping_id} if bookkeeping_id else fields
+    value_of_bookkeeping_field = fields.get(bookkeeping_field)
+    filter_by_fields = {bookkeeping_field: value_of_bookkeeping_field} if value_of_bookkeeping_field else fields
 
     # Hit a database to get an instance
     instance = await get_object(db=db, model=model, fields=filter_by_fields, prefetch_fields=prefetch_fields)

@@ -29,7 +29,7 @@ class Product(Base1CModel):
     __tablename__ = 'products'
 
     status = Column('status', Enum(*ProductStatus.values(), name='product_status'))
-    vendor_code = Column(String, nullable=False)  # It's a slug field.
+    vendor_code = Column(String, nullable=False, unique=True)  # It's a slug field.
     vendor_code_ru = Column(String)
     name = Column(String)
     images = Column(String)  # pictures paths in the following format: picture_1,picture_2,picture_3...
