@@ -18,12 +18,11 @@
 
 <script setup>
 
-  // import store from '@/store'
-  import { useStore } from 'vuex'
+  import store from '@/store'
   const interval = ref(null)
 
   const route = useRoute()
-  const store = useStore()
+
   const setViewParametrs = () => {
     // console.log('Set innerWidth', window.innerWidth);
     store.commit('header/UPDATE_VIEW_PARAMETERS', window.innerWidth)
@@ -70,7 +69,7 @@
   await useAsyncData(
     'categories', 
     async () => {
-      console.log('useAsyncData App ');
+      // console.log('useAsyncData App ');
       store.commit('notification/SET_IS_LOADING', true)
       // await store.dispatch('header/GET_CATEGORIES')
       await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')

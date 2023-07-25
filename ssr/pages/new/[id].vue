@@ -29,9 +29,8 @@
 </template>
 
 <script setup>
-  // import axios from 'axios';
-  import { useStore } from 'vuex'
-  // import store from '@/store'
+  import axios from 'axios';
+  import store from '@/store'
 
   // useHead({
   //   title: 'Кабельторг | ' + oneNewData.value.name,
@@ -42,7 +41,6 @@
   //   }]
   // })
 
-  const store = useStore()
   const route = useRoute()
   const router = useRouter()
   const oneNewData = ref(null);

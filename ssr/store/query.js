@@ -1,5 +1,8 @@
 import axios from "axios";
 
+const min = 0
+// const max = 40000
+
 export default {
   namespaced: true,
 
@@ -12,7 +15,7 @@ export default {
     direction: '-',
     view: 'table',
     maxPriceFromDB: 0,
-    minPrice: 0,
+    minPrice: min,
     maxPrice: 0,
     searchString: '',
     findedElements: [],
@@ -126,7 +129,7 @@ export default {
       },
 
       SET_DEFAULT_PRICES(state){
-        state.minPrice = 0;
+        state.minPrice = min;
         state.maxPrice = state.maxPriceFromDB;
         state.typeOfProduct = 'all';
       },
