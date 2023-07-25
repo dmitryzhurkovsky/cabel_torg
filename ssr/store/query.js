@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const min = 0
-const max = 40000
+const max = 80000
 
 export default {
   namespaced: true,
