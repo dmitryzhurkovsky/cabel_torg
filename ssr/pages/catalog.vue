@@ -93,7 +93,7 @@
   }
 
   const ChangeParameters = computed(() => {
-    return JSON.stringify(route.query)  + JSON.stringify(store.getters['query/TYPE_OF_PRODUCT']) + String(store.getters['query/CATEGORY_ID']) +
+    return JSON.stringify(route.query)  + JSON.stringify(store.getters['query/TYPE_OF_PRODUCT']) + 
       JSON.stringify(store.getters['query/SORT_TYPE']) + JSON.stringify(store.getters['query/SORT_DIRECTION']) + String(store.getters['query/MIN_PRICE']) + String(store.getters['query/MAX_PRICE']) +
       String(store.getters['query/OFFSET']) + String(store.getters['query/LIMIT']) + store.getters['catalog/ACTIVE_PAGE'] + store.getters['catalog/TOTAL_PAGES'];
       // + JSON.stringify(store.getters['catalog/ITEMS_LIST'])
