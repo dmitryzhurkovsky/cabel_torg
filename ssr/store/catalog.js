@@ -105,8 +105,8 @@ export default {
         '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING'];
         if (rootGetters['query/TYPE_OF_PRODUCT'] !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT'];
         console.log('Before RooGetters');
-        const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + queryData);
-        // const response = await axios.get(BASE_URL + queryData);
+        // const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + queryData);
+        const response = await axios.get(BASE_URL + queryData);
         console.log('After RooGetters');
         commit("SET_CATALOG_ITEMS", response.data);
         // console.log('GET_CATALOG_ITEMS ', rootGetters['query/OFFSET'], rootGetters['query/LIMIT'])
@@ -128,8 +128,8 @@ export default {
         '&ordering=' + rootGetters['query/SORT_DIRECTION'] + rootGetters['query/SORT_TYPE'] +
         '&q=' + rootGetters['catalog/CATALOG_SEARCH_STRING'];
         if (rootGetters['query/TYPE_OF_PRODUCT'] !== 'all') queryData = queryData + '&type_of_product=' + rootGetters['query/TYPE_OF_PRODUCT']
-        const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + queryData);
-        // const response = await axios.get(BASE_URL + queryData);
+        // const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + queryData);
+        const response = await axios.get(BASE_URL + queryData);
         
         commit("SET_CATALOG_ITEMS", response.data);
         // console.log('GET_ALL_CATALOG_ITEMS ', rootGetters['query/OFFSET'], rootGetters['query/LIMIT'])
