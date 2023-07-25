@@ -46,12 +46,12 @@ export default {
   data(){
     return {
       minValueRange: 0,
-      maxValueRange: 40000,
+      maxValueRange: 80000,
       minValuePrice: 0,
-      maxValuePrice: 40000,
+      maxValuePrice: 80000,
       RangeMin: 0,
-      RangeMax: 40000,
-      priceGap: 1000,
+      RangeMax: 80000,
+      priceGap: 100,
       Left: '25%',
       Right: '75%',
     }
@@ -164,7 +164,7 @@ export default {
         url = url + "offset=" + this.OFFSET + '&'
         url = url + "limit=" + this.LIMIT + '&'
       }
-      if (min != 0 || max != 40000) {
+      if (min != 0 || max != 80000) {
         url = url + "actual_price_gte=" + min + '&';
         url = url + "actual_price_lte=" + max + '&';
       }

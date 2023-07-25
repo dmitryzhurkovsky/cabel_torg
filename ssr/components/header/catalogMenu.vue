@@ -91,7 +91,7 @@ export default {
         url = url + "offset=" + this.OFFSET + '&'
         url = url + "limit=" + this.LIMIT + '&'
       }
-      if (this.MIN_PRICE != 0 || this.MAX_PRICE != 40000) {
+      if (this.MIN_PRICE != 0 || this.MAX_PRICE != 80000) {
         url = url + "actual_price_gte=" + this.MIN_PRICE + '&';
         url = url + "actual_price_lte=" + this.MAX_PRICE + '&';
       }
