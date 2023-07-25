@@ -14,9 +14,9 @@ export default {
     sort: 'created_at',
     direction: '-',
     view: 'table',
-    maxPriceFromDB: 0,
+    maxPriceFromDB: 40000,
     minPrice: min,
-    maxPrice: 0,
+    maxPrice: 40000,
     searchString: '',
     findedElements: [],
     allTypesOfProduct: [
