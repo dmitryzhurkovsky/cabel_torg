@@ -24,5 +24,16 @@ export default {
       state.screen = newstate;
     },
 
+    // DELETE_BREADCRUMB(state, newstate) {
+    //   state.stack.splice(state.stack.length - 1, 1);
+    // }
+  },
+
+  actions: {
+    // CHANGE_BREADCRUMB({ commit, getters }, id) {
+    //   while (getters.STACK.length > id+1){
+    //     commit("DELETE_BREADCRUMB");
+    //   }
+    // }
   },
 }

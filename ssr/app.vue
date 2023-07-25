@@ -54,7 +54,6 @@
     const nullData = []
     if (!localStorage.getItem("carts")) localStorage.setItem("carts", JSON.stringify(nullData))
     if (!localStorage.getItem("favorites")) localStorage.setItem("favorites", JSON.stringify(nullData))
-    await store.dispatch('query/GET_MAX_PRICE_FROM_DB')
     await store.dispatch('header/GET_CATEGORIES')
     await store.dispatch('favorite/GET_USER_FAVORITE')
     await store.dispatch('order/GET_USER_ORDER')
@@ -72,7 +71,6 @@
       // console.log('useAsyncData App ');
       store.commit('notification/SET_IS_LOADING', true)
       // await store.dispatch('header/GET_CATEGORIES')
-      // await store.dispatch('query/GET_MAX_PRICE_FROM_DB')
       await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')
       // await store.dispatch('main/GET_SETTINGS')
       store.commit('notification/SET_IS_LOADING', false)

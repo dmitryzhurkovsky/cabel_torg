@@ -59,9 +59,7 @@
     name: 'SortPanel',
 
     computed: {
-      ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION", "ALL_SORT_OF_PRODUCTS",
-        "MAX_PRICE_FROM_DB"
-      ]),
+      ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION", "ALL_SORT_OF_PRODUCTS"]),
       ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
       ...mapGetters("header", ["ALL_CATEGORIES"]),
     },
@@ -91,7 +89,7 @@
           url = url + "offset=" + this.OFFSET + '&'
           url = url + "limit=" + this.LIMIT + '&'
         }
-        if (this.MIN_PRICE != 0 || this.MAX_PRICE != this.MAX_PRICE_FROM_DB) {
+        if (this.MIN_PRICE != 0 || this.MAX_PRICE != 40000) {
           url = url + "actual_price_gte=" + this.MIN_PRICE + '&';
           url = url + "actual_price_lte=" + this.MAX_PRICE + '&';
         }

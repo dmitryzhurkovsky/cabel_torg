@@ -169,7 +169,7 @@
     if (getters['query/TYPE_OF_PRODUCT'] !== 'all') {
       url = url + "type_of_product=" + getters['query/TYPE_OF_PRODUCT'] + '&'
     }
-    if (getters['query/MIN_PRICE'] != 0 || getters['query/MAX_PRICE'] != getters['query/MAX_PRICE_FROM_DB']) {
+    if (getters['query/MIN_PRICE'] != 0 || getters['query/MAX_PRICE'] != 40000) {
       url = url + "actual_price_gte=" + getters['query/MIN_PRICE'] + '&'
       url = url + "actual_price_lte=" + getters['query/MAX_PRICE'] + '&'
     }
@@ -238,7 +238,7 @@
       }
     } else {
       isFailInParams = true
-      store.commit('query/SET_MAX_PRICE', getters['query/MAX_PRICE_FROM_DB'])
+      store.commit('query/SET_MAX_PRICE', 40000)
     }
     if (query.q) {
       if (getters['catalog/CATALOG_SEARCH_STRING'] !== query.q) {
