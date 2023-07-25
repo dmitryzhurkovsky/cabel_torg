@@ -26,7 +26,7 @@
 
     result.push(firstLink)
     if (totalPages > 7) {
-      // console.log('', totalPages, activePage);
+      console.log('', totalPages, activePage);
       let left = activePage;
       let right = totalPages - activePage;
       

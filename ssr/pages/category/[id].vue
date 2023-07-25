@@ -324,7 +324,6 @@
       }
       // console.log('id useAsyncData ' + store.getters['query/CATEGORY_ID']);
       if (isFirstRender) {
-        await store.dispatch('query/GET_MAX_PRICE_FROM_DB')
         setParametersFromURL()
       }
       // console.log('id useAsyncData after setFromUrl' + store.getters['query/CATEGORY_ID']);
@@ -358,7 +357,6 @@
       await store.dispatch('header/GET_CATEGORIES')
     }
     if (isFirstRender) {
-      // await store.dispatch('query/GET_MAX_PRICE_FROM_DB')
       setParametersFromURL()
       if (store.getters['query/CATEGORY_ID']) {
         const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
@@ -380,7 +378,6 @@
       await store.dispatch('header/GET_CATEGORIES')
     }
     // if (isFirstRender) {
-      await store.dispatch('query/GET_MAX_PRICE_FROM_DB')
       setParametersFromURL()
     // }
     // console.log('id mounted ' + store.getters['query/CATEGORY_ID']);
