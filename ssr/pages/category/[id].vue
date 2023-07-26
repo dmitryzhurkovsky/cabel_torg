@@ -356,20 +356,16 @@
     if (!store.getters['header/ALL_CATEGORIES'].length) {
       await store.dispatch('header/GET_CATEGORIES')
     }
-    if (isFirstRender) {
-      setParametersFromURL()
-      if (store.getters['query/CATEGORY_ID']) {
+    if (store.getters['query/CATEGORY_ID']) {
+      if (isFirstRender) {
+        setParametersFromURL()
         const isCategoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])
-        if (isCategoryData.length) {
-          store.commit('catalog/SET_CATEGORY', isCategoryData[0])
-        } else {
-          store.commit('catalog/SET_CATEGORY', {})
-        }
+        store.commit('catalog/SET_CATEGORY', isCategoryData[0])
         await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
       }
-    }
-    setViewType(getters['header/DEVICE_VIEW_TYPE'])
-    setBreabcrumbs()
+      setViewType(getters['header/DEVICE_VIEW_TYPE'])
+      setBreabcrumbs()
+    }  
     // console.log('mount category');
   })
 
