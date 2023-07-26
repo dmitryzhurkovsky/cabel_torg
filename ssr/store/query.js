@@ -123,6 +123,8 @@ export default {
         state.minPrice = min;
         state.maxPrice = max;
         state.typeOfProduct = 'all';
+        state.offset = 0;
+        state.limit = 12;
       },
 
       SET_SEARCH_STRING(state, query) {

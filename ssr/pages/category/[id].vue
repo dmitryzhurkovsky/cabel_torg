@@ -329,10 +329,10 @@
       // console.log('id useAsyncData after setFromUrl' + store.getters['query/CATEGORY_ID']);
 
       if (store.getters['query/CATEGORY_ID']) {
-        const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
+        const isCategoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])
         
-        if (Object.keys(categoryData).length) {
-          store.commit('catalog/SET_CATEGORY', categoryData)
+        if (isCategoryData.length) {
+          store.commit('catalog/SET_CATEGORY', isCategoryData[0])
         } else {
           store.commit('catalog/SET_CATEGORY', {})
         }
@@ -359,9 +359,9 @@
     if (isFirstRender) {
       setParametersFromURL()
       if (store.getters['query/CATEGORY_ID']) {
-        const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
-        if (Object.keys(categoryData).length) {
-          store.commit('catalog/SET_CATEGORY', categoryData)
+        const isCategoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])
+        if (isCategoryData.length) {
+          store.commit('catalog/SET_CATEGORY', isCategoryData[0])
         } else {
           store.commit('catalog/SET_CATEGORY', {})
         }
@@ -370,26 +370,25 @@
     }
     setViewType(getters['header/DEVICE_VIEW_TYPE'])
     setBreabcrumbs()
-
+    // console.log('mount category');
   })
 
   onBeforeMount(async () => {
     if (!store.getters['header/ALL_CATEGORIES'].length) {
       await store.dispatch('header/GET_CATEGORIES')
     }
-    // if (isFirstRender) {
-      setParametersFromURL()
-    // }
-    // console.log('id mounted ' + store.getters['query/CATEGORY_ID']);
-    const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
-    if (Object.keys(categoryData).length) {
-      store.commit('catalog/SET_CATEGORY', categoryData)
+    setParametersFromURL()
+    const isCategoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])
+    console.log('categoryData', isCategoryData);
+    if (isCategoryData.length) {
+      store.commit('catalog/SET_CATEGORY', isCategoryData[0])
     } else {
       store.commit('catalog/SET_CATEGORY', {})
     }
     setViewType(getters['header/DEVICE_VIEW_TYPE'])
     await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
     setBreabcrumbs()
+    // console.log('update category');
   })
 
 </script>
