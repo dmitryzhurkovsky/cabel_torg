@@ -2,5 +2,6 @@ User-agent: *
 Disallow: /card_product/string
 Disallow: /category/string
 Disallow: /string
-Disallow: /site_media/images
-Disallow: /site_media
+Disallow: /site_media/images/
+Disallow: /site_media/
+Allow: /site_media/images/*.jpg
