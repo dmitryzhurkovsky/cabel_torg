@@ -80,13 +80,13 @@ class ProductManager(CRUDManager):
                 filter_expressions.append(Product.id.in_(popular_products_ids))
             elif type_of_product == ProductTypeFilterEnum.NEW:
                 filter_expressions.append(Product.is_new.is_(True))
+            elif type_of_product == ProductTypeFilterEnum.WITH_PRICE_ON_REQUEST:
+                filter_expressions.append(Product.is_price_on_request.is_(True))
 
         if search_letters := filter_fields.get('q'):
             category_ids_query = await session.execute(
                 select(Category.id).
-                where(
-                    Category.name.ilike(f'%{search_letters}')
-                )
+                where(Category.name.ilike(f'%{search_letters}'))
             )
             category_ids = category_ids_query.scalars().all()
 
