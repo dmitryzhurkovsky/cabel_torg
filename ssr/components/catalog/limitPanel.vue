@@ -24,7 +24,7 @@
     name: 'LimitPanel',
 
     computed: {
-      ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE",  "SORT_DIRECTION", "LIMIT_ITEMS", "MAX_PRICE_FROM_DB"]),
+      ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE",  "SORT_DIRECTION", "LIMIT_ITEMS"]),
       ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
       ...mapGetters("header", ["ALL_CATEGORIES"]),
     },
@@ -54,7 +54,7 @@
           url = url + "offset=" + this.OFFSET + '&'
           url = url + "limit=" + this.LIMIT + '&'
         }
-        if (this.MIN_PRICE != 0 || this.MAX_PRICE != this.MAX_PRICE_FROM_DB) {
+        if (this.MIN_PRICE != 0 || this.MAX_PRICE != 80000) {
           url = url + "actual_price_gte=" + this.MIN_PRICE + '&';
           url = url + "actual_price_lte=" + this.MAX_PRICE + '&';
         }

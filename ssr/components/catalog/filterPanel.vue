@@ -106,7 +106,7 @@ export default {
   computed: {
     ...mapGetters("header", ["ALL_CATEGORIES", "CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "DEVICE_VIEW_TYPE"]),
     ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", 
-      "SORT_DIRECTION", "ALL_TYPE_OF_PRODUCTS", "MAX_PRICE_FROM_DB",
+      "SORT_DIRECTION", "SORT_ORDER", "ALL_TYPE_OF_PRODUCTS"
     ]),
   },
 
@@ -157,7 +157,7 @@ export default {
         url = url + "offset=" + this.OFFSET + '&'
         url = url + "limit=" + this.LIMIT + '&'
       }
-      if (this.MIN_PRICE != 0 || this.MAX_PRICE != this.MAX_PRICE_FROM_DB) {
+      if (this.MIN_PRICE != 0 || this.MAX_PRICE != 80000) {
         url = url + "actual_price_gte=" + this.MIN_PRICE + '&';
         url = url + "actual_price_lte=" + this.MAX_PRICE + '&';
       }

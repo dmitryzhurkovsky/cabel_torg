@@ -75,7 +75,7 @@ if __name__ == '__main__':
                 bookkeeping_last_modified_time = os.path.getmtime(filename=settings.BOOKKEEPING_FILE_PATH)
                 offers_last_modified_time = os.path.getmtime(filename=settings.FILE_WITH_PRICES_PATH)
                 set_permissions_recursive(path=settings.IMAGES_PATH, mode=0o777)
-                set_permissions_recursive(path=settings.DOCUMENT_PATH, mode=0o777)
+                set_permissions_recursive(path=settings.DOCUMENTS_PATH, mode=0o777)
 
         else:
             time.sleep(settings.LAUNCH_PARSER_EACH_N_MINUTES)

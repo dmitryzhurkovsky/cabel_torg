@@ -169,7 +169,7 @@
     if (getters['query/TYPE_OF_PRODUCT'] !== 'all') {
       url = url + "type_of_product=" + getters['query/TYPE_OF_PRODUCT'] + '&'
     }
-    if (getters['query/MIN_PRICE'] != 0 || getters['query/MAX_PRICE'] != getters['query/MAX_PRICE_FROM_DB']) {
+    if (getters['query/MIN_PRICE'] != 0 || getters['query/MAX_PRICE'] != 80000) {
       url = url + "actual_price_gte=" + getters['query/MIN_PRICE'] + '&'
       url = url + "actual_price_lte=" + getters['query/MAX_PRICE'] + '&'
     }
@@ -238,7 +238,7 @@
       }
     } else {
       isFailInParams = true
-      store.commit('query/SET_MAX_PRICE', getters['query/MAX_PRICE_FROM_DB'])
+      store.commit('query/SET_MAX_PRICE', 80000)
     }
     if (query.q) {
       if (getters['catalog/CATALOG_SEARCH_STRING'] !== query.q) {
@@ -324,16 +324,15 @@
       }
       // console.log('id useAsyncData ' + store.getters['query/CATEGORY_ID']);
       if (isFirstRender) {
-        await store.dispatch('query/GET_MAX_PRICE_FROM_DB')
         setParametersFromURL()
       }
       // console.log('id useAsyncData after setFromUrl' + store.getters['query/CATEGORY_ID']);
 
       if (store.getters['query/CATEGORY_ID']) {
-        const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
+        const isCategoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])
         
-        if (Object.keys(categoryData).length) {
-          store.commit('catalog/SET_CATEGORY', categoryData)
+        if (isCategoryData.length) {
+          store.commit('catalog/SET_CATEGORY', isCategoryData[0])
         } else {
           store.commit('catalog/SET_CATEGORY', {})
         }
@@ -357,42 +356,35 @@
     if (!store.getters['header/ALL_CATEGORIES'].length) {
       await store.dispatch('header/GET_CATEGORIES')
     }
-    if (isFirstRender) {
-      // await store.dispatch('query/GET_MAX_PRICE_FROM_DB')
-      setParametersFromURL()
-      if (store.getters['query/CATEGORY_ID']) {
-        const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
-        if (Object.keys(categoryData).length) {
-          store.commit('catalog/SET_CATEGORY', categoryData)
-        } else {
-          store.commit('catalog/SET_CATEGORY', {})
-        }
+    if (store.getters['query/CATEGORY_ID']) {
+      if (isFirstRender) {
+        setParametersFromURL()
+        const isCategoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])
+        store.commit('catalog/SET_CATEGORY', isCategoryData[0])
         await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
       }
-    }
-    setViewType(getters['header/DEVICE_VIEW_TYPE'])
-    setBreabcrumbs()
-
+      setViewType(getters['header/DEVICE_VIEW_TYPE'])
+      setBreabcrumbs()
+    }  
+    // console.log('mount category');
   })
 
   onBeforeMount(async () => {
     if (!store.getters['header/ALL_CATEGORIES'].length) {
       await store.dispatch('header/GET_CATEGORIES')
     }
-    // if (isFirstRender) {
-      await store.dispatch('query/GET_MAX_PRICE_FROM_DB')
-      setParametersFromURL()
-    // }
-    // console.log('id mounted ' + store.getters['query/CATEGORY_ID']);
-    const categoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])[0]
-    if (Object.keys(categoryData).length) {
-      store.commit('catalog/SET_CATEGORY', categoryData)
+    setParametersFromURL()
+    const isCategoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])
+    console.log('categoryData', isCategoryData);
+    if (isCategoryData.length) {
+      store.commit('catalog/SET_CATEGORY', isCategoryData[0])
     } else {
       store.commit('catalog/SET_CATEGORY', {})
     }
     setViewType(getters['header/DEVICE_VIEW_TYPE'])
     await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
     setBreabcrumbs()
+    // console.log('update category');
   })
 
 </script>

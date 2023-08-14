@@ -26,7 +26,7 @@
 
     result.push(firstLink)
     if (totalPages > 7) {
-      // console.log('', totalPages, activePage);
+      console.log('', totalPages, activePage);
       let left = activePage;
       let right = totalPages - activePage;
       
@@ -146,7 +146,7 @@
       url = url + "offset=" + offset + '&'
       url = url + "limit=" + getters['query/LIMIT'] + '&'
     }
-    if (getters['query/MIN_PRICE'] != 0 || getters['query/MAX_PRICE'] != getters['query/MAX_PRICE_FROM_DB']) {
+    if (getters['query/MIN_PRICE'] != 0 || getters['query/MAX_PRICE'] != 80000) {
       url = url + "actual_price_gte=" + getters['query/MIN_PRICE'] + '&';
       url = url + "actual_price_lte=" + getters['query/MAX_PRICE'] + '&';
     }

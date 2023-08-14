@@ -68,7 +68,7 @@ export default {
     ...mapMutations("query", ["SET_SEARCH_STRING", "SET_FINDED_ELEMENTS", "SET_CATEGORY_ID"]),
     ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING"]),
     ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY", "UPDATE_IS_CATALOG_OPEN"]),
-    ...mapActions("query", ["FIND_ELEMENTS", "MAX_PRICE_FROM_DB"]),
+    ...mapActions("query", ["FIND_ELEMENTS"]),
 
     onInput(){
       this.SET_SEARCH_STRING(this.queryString);
@@ -98,7 +98,7 @@ export default {
       this.SET_CATALOG_SEARCH_STRING(this.SEARCH_STRING);
       this.UPDATE_IS_CATALOG_OPEN(false);
       let url = "/catalog?";
-      url = url + "offset=0&limit=12&actual_price_gte=0&actual_price_lte=" + this.MAX_PRICE_FROM_DB;
+      url = url + "offset=0&limit=12&actual_price_gte=0&actual_price_lte=80000";
       url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
       url = url + '&type_of_product=all';
       url = url + "&q=" + this.CATALOG_SEARCH_STRING;

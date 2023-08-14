@@ -38,7 +38,7 @@
 
 <script>
 
-import {mapMutations, mapGetters, mapActions} from 'vuex'
+import {mapMutations, mapGetters} from 'vuex'
 
 export default {
   name: 'PriceSlider',
@@ -46,14 +46,14 @@ export default {
   data(){
     return {
       minValueRange: 0,
-      maxValueRange: this.MAX_PRICE_FROM_DB,
+      maxValueRange: 80000,
       minValuePrice: 0,
-      maxValuePrice: this.MAX_PRICE_FROM_DB,
+      maxValuePrice: 80000,
       RangeMin: 0,
-      RangeMax: 400000,
-      priceGap: 1000,
-      Left: '0%',
-      Right: '100%',
+      RangeMax: 80000,
+      priceGap: 100,
+      Left: '25%',
+      Right: '75%',
     }
   },
 
@@ -62,46 +62,34 @@ export default {
       this.minValuePrice = this.MIN_PRICE;
       this.minValueRange = this.MIN_PRICE;
       this.maxValuePrice = this.MAX_PRICE;
-      // console.log('2 ', this.MAX_PRICE);
       this.maxValueRange = this.MAX_PRICE;
-      this.RangeMax = this.MAX_PRICE_FROM_DB
       this.Left = ((this.MIN_PRICE / this.RangeMax) * 100) + '%';
       this.Right = 100 - ((this.MAX_PRICE / this.RangeMax) * 100) + '%';
     }  
   },
 
   computed: {
-    ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION", "LIMIT_ITEMS", 
-      "MAX_PRICE_FROM_DB"
-    ]),
+    ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_ORDER", "SORT_DIRECTION", "LIMIT_ITEMS"]),
     ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
     ...mapGetters("header", ["ALL_CATEGORIES"]),
 
     ChangeParameters(){
-      return String(this.MAX_PRICE) + String(this.MIN_PRICE)
-      //  + String(this.MAX_PRICE_FROM_DB);
+      return String(this.MAX_PRICE) + String(this.MIN_PRICE);
     }
   },
 
   methods: {
     ...mapMutations("query", ["SET_MIN_PRICE", "SET_MAX_PRICE", "SET_OFFSET"]),
-    ...mapActions("query", ["GET_MAX_PRICE_FROM_DB"]),
 
     setUpMinPrice(){
-      if (this.maxValuePrice === 0) {
-        this.maxValuePrice = this.RangeMax;
-        // console.log('3 ', this.RangeMax);
-        this.maxValueRange = this.RangeMax;
-      }
       if (this.minValuePrice <= this.RangeMin) this.minValuePrice = this.RangeMin;
       if (this.minValuePrice >= this.maxValuePrice - this.priceGap) this.minValuePrice = this.maxValuePrice - this.priceGap;
       const minPrice = this.minValuePrice;
       const maxPrice = this.maxValuePrice;
       if ((maxPrice - minPrice >= this.priceGap) && (maxPrice <= this.maxValueRange)) {
         this.minValueRange = minPrice;
+        this.Left = ((minPrice / this.RangeMax) * 100) + '%';
       }
-      this.minValueRange = String(this.minValuePrice);
-      this.Left = ((this.minValuePrice / this.RangeMax) * 100) + '%';
     },
 
     setUpMaxPrice(){
@@ -111,12 +99,8 @@ export default {
       const maxPrice = this.maxValuePrice;
       if ((maxPrice - minPrice >= this.priceGap)) {
         this.maxValueRange = maxPrice;
+        this.Right = 100 - ((maxPrice / this.RangeMax) * 100) + '%';
       }
-      // console.log('before setUp ', this.RangeMax, this.maxValuePrice);
-      this.maxValueRange = this.maxValuePrice;
-      // this.maxValueRange = this.RangeMax;
-      this.Right = 100 - ((this.maxValuePrice / this.RangeMax) * 100) + '%';
-      // console.log('after setUp ', this.maxValueRange, this.MAX_PRICE);
     },
 
     onChangeMinPrice(){
@@ -139,8 +123,7 @@ export default {
           this.minValueRange = maxValue - this.priceGap;
         } else {
           minValue = this.minValuePrice;
-          this.minValueRange = this.minValuePrice;
-          // console.log('1 ', Number(this.minValueRange) + Number(this.priceGap));
+          this.minValueRange = Number(this.minValuePrice);
           this.maxValueRange = Number(this.minValueRange) + Number(this.priceGap);
         }
         this.minValuePrice = this.minValueRange;
@@ -181,7 +164,7 @@ export default {
         url = url + "offset=" + this.OFFSET + '&'
         url = url + "limit=" + this.LIMIT + '&'
       }
-      if (min != 0 || max != this.MAX_PRICE_FROM_DB) {
+      if (min != 0 || max != 80000) {
         url = url + "actual_price_gte=" + min + '&';
         url = url + "actual_price_lte=" + max + '&';
       }
@@ -200,7 +183,6 @@ export default {
       this.SET_OFFSET(0);
       if (this.MIN_PRICE !== this.minValuePrice) {
         this.SET_MIN_PRICE(this.minValuePrice);
-        // console.log('CATEGOTY_ID: ', this.CATEGORY_ID);
         if (this.CATEGORY_ID) {
           this.$router.push(this.getCategoryUrl(this.CATEGORY_ID, this.minValuePrice, this.MAX_PRICE));
         } else {
@@ -218,19 +200,11 @@ export default {
     }
   },
 
-  async beforeMount(){
-    await this.GET_MAX_PRICE_FROM_DB();
-
-    // console.log('Before mount slider ', this.MAX_PRICE, this.MAX_PRICE_FROM_DB);
+  beforeMount(){
     this.minValuePrice = this.MIN_PRICE;
     this.maxValuePrice = this.MAX_PRICE;
-    // this.maxValueRange = this.MAX_PRICE;
-    this.RangeMax = this.MAX_PRICE_FROM_DB;
-
     this.setUpMinPrice();
     this.setUpMaxPrice();
-    // this.updateStore();
-    // console.log('Price slider');
   },
 
   // beforeUpdate(){
