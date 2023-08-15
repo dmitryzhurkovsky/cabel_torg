@@ -23,6 +23,7 @@ class ProductTypeFilterEnum(str, BaseEnum):
     AVAILABLE = 'available'
     POPULAR = 'popular'
     NEW = 'new'
+    WITH_PRICE_ON_REQUEST = 'with_price_on_request'
 
 
 class CategoryTypeFilterEnum(str, BaseEnum):

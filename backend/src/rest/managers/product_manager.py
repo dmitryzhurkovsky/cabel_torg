@@ -24,7 +24,7 @@ class ProductManager(CRUDManager):
     preloaded_fields = (
         joinedload(Product.manufacturer),
         joinedload(Product.category),
-        selectinload(Product.attributes)  # todo change it and use joinedload instead of this one
+        selectinload(Product.attributes)
     )
 
     @staticmethod
@@ -40,25 +40,14 @@ class ProductManager(CRUDManager):
 
         filter_expressions = []
 
-        price_gte = filter_fields.get('actual_price_gte')
-        if price_gte and price_gte != '0':
-            filter_expressions.append(
-                Product.actual_price >= Decimal(float(price_gte) / (1 + settings.DEFAULT_TAX / 100))
-            )
-        else:
-            filter_expressions.append(Product.price > Decimal(0))
-
-        if price_lte := filter_fields.get('actual_price_lte'):
-            filter_expressions.append(
-                Product.actual_price <= Decimal(float(price_lte) / (1 + settings.DEFAULT_TAX / 100))
-            )
-
+        # Category block
         if category_id := filter_fields.get('category_id'):
             categories_ids = await CategoryManager.get_categories_ids(
                 session=session, parent_category_ids=[int(category_id)]
             )
             filter_expressions.append(Product.category_id.in_(categories_ids))
 
+        # Type of product block
         if type_of_product := filter_fields.get('type_of_product'):
             if type_of_product in (
                     ProductTypeFilterEnum.WITH_DISCOUNT,
@@ -72,7 +61,7 @@ class ProductManager(CRUDManager):
 
             if type_of_product == ProductTypeFilterEnum.WITH_DISCOUNT:
                 filter_expressions.append(and_(
-                    Product.price_with_discount.is_not(None),
+                    Product.price_with_discount.is_not(None),  # noqa
                     Product.price > Product.price_with_discount,  # noqa
                 ))
             elif type_of_product == ProductTypeFilterEnum.POPULAR:
@@ -80,13 +69,32 @@ class ProductManager(CRUDManager):
                 filter_expressions.append(Product.id.in_(popular_products_ids))
             elif type_of_product == ProductTypeFilterEnum.NEW:
                 filter_expressions.append(Product.is_new.is_(True))
+            elif type_of_product == ProductTypeFilterEnum.WITH_PRICE_ON_REQUEST:
+                filter_expressions.append(Product.is_price_on_request.is_(True))
 
+        # Price block
+        price_gte = filter_fields.get('actual_price_gte')
+        if price_gte and price_gte != '0':
+            filter_expressions.append(
+                Product.actual_price >= Decimal(float(price_gte) / (1 + settings.DEFAULT_TAX / 100))
+            )
+        if price_lte := filter_fields.get('actual_price_lte'):
+            filter_expressions.append(
+                Product.actual_price <= Decimal(float(price_lte) / (1 + settings.DEFAULT_TAX / 100))
+            )
+
+        if (price_gte and price_lte) or (price_gte and not price_lte):
+            filter_expressions.append(Product.is_price_on_request.is_(False))
+        elif (price_lte and not price_gte) or type_of_product == ProductTypeFilterEnum.WITH_DISCOUNT:
+            filter_expressions.append(and_(Product.price > Decimal(0), Product.is_price_on_request.is_(False)))
+        else:
+            filter_expressions.append(or_(Product.price > Decimal(0), Product.is_price_on_request.is_(True)))
+
+        # Search block
         if search_letters := filter_fields.get('q'):
             category_ids_query = await session.execute(
                 select(Category.id).
-                where(
-                    Category.name.ilike(f'%{search_letters}')
-                )
+                where(Category.name.ilike(f'%{search_letters}'))
             )
             category_ids = category_ids_query.scalars().all()
 
