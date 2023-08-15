@@ -23,6 +23,7 @@ export default {
       {name : 'Акции', type: 'with_discount'}, 
       {name : 'В наличии', type: 'available'},
       {name : 'Топ продаж', type: 'popular'},
+      {name : 'Цена по запросу', type: 'with_price_on_request'},
     ],
     allSortsOfProduct: [
       {name: 'По дате добавления', type: 'created_at'},

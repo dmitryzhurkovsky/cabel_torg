@@ -47,52 +47,55 @@
                         <div class="price__left">
                             <div class="_label">Ваша цена:</div>
                             <div class="current_price">
-                            <span v-if="data.price_with_discount_and_tax && data.price_with_tax !== data.price_with_discount_and_tax"
-                                  class="old_price"
-                            >{{ data.price_with_tax }}
-                            </span>
-                            <span  :class="[data.price_with_discount_and_tax && data.price_with_discount_and_tax !== data.price_with_tax ? 'price_w_discount' : '']">
-                                {{ data.price_with_discount_and_tax && data.price_with_discount_and_tax !== data.price_with_tax
-                                  ? data.price_with_discount_and_tax
-                                  : data.price_with_tax
-                                }}
-                            </span>BYN
-                            <span class="current_price_item">/{{ data.base_unit.full_name }}</span>
+                              <span v-if="!data.is_price_on_request && data.price_with_discount_and_tax && data.price_with_tax !== data.price_with_discount_and_tax"
+                                    class="old_price"
+                              >{{ data.price_with_tax }}
+                              </span>
+                              <span v-if="!data.is_price_on_request"
+                                  :class="[data.price_with_discount_and_tax && data.price_with_discount_and_tax !== data.price_with_tax ? 'price_w_discount' : '']">
+                                  {{ data.price_with_discount_and_tax && data.price_with_discount_and_tax !== data.price_with_tax
+                                    ? data.price_with_discount_and_tax
+                                    : data.price_with_tax
+                                  }}
+                              </span>
+                              <span v-if="data.is_price_on_request">Цена по запросу</span>
+                              <span class="current_price_item" v-if="!data.is_price_on_request">BYN/{{ data.base_unit.full_name }}</span>
                             </div>
                         </div>
                         <div class="price__right">
                             <div class="retail_price">
                               <div>Первоначальная цена: </div>
-                              <div>
-                                  <span class="price__value"> {{ data.price_with_tax }}</span>BYN
-                                  <span>/{{ data.base_unit.full_name }}</span>
+                              <div v-if="!data.is_price_on_request">
+                                  <span class="price__value"> {{ data.price_with_tax }}</span>
+                                  <span>BYN/{{ data.base_unit.full_name }}</span>
                               </div>
-
+                              <div v-if="data.is_price_on_request">
+                                  <span class="price__value"> Цена по запросу</span>
+                              </div>
                             </div>
                             <div class="opt_price">
                                 <div>Цена со скидкой: </div>
-                                <div>
+                                <div v-if="!data.is_price_on_request">
                                     <span class="price__value">
                                       {{ data.price_with_discount_and_tax && data.price_with_discount_and_tax !== data.price_with_tax
                                         ? data.price_with_discount_and_tax
                                         : data.price_with_tax
                                       }}
-                                    </span>BYN
-                                    <span>/{{ data.base_unit.full_name }}</span>
+                                    </span>
+                                    <span>BYN/{{ data.base_unit.full_name }}</span>
                                 </div>
-
+                                <div v-if="data.is_price_on_request">
+                                    <span class="price__value">Цена по запросу</span>
+                                </div>
                             </div>
                         </div>
-
-
-
-
                     </div>
                     <div class="product__label">*Все цены указаны с учетом НДС.</div>
                     <div class="product__button flex-center">
-                        <div v-if="quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(data, 'set')">В корзине</div>
-                        <div v-if="quantity === 0 && data.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(data, 'set')">В корзину</div>
-                        <div v-if="quantity === 0 && data.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, data.id)">Узнать о поступлении</div>
+                        <div v-if="!data.is_price_on_request && quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(data, 'set')">В корзине</div>
+                        <div v-if="!data.is_price_on_request && quantity === 0 && data.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(data, 'set')">В корзину</div>
+                        <div v-if="!data.is_price_on_request && quantity === 0 && data.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, data.id)">Узнать о поступлении</div>
+                        <div v-if="data.is_price_on_request" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, data.id)">Узнать о поступлении</div>
 
                         <div
                                 @click.stop="onWishClick()"
