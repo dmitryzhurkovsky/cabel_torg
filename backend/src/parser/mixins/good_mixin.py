@@ -177,6 +177,8 @@ class GoodsMixin(BaseMixin, ABC):
                 return 'description', raw_field.text
             case 'Картинка':
                 return 'image_path', raw_field.text[12:]
+            case 'ВыгрузкаБезЦены':
+                return 'is_price_on_request', True if raw_field.text == 'true' else False
             case _:
                 return None, None
 

@@ -375,7 +375,6 @@
     }
     setParametersFromURL()
     const isCategoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])
-    console.log('categoryData', isCategoryData);
     if (isCategoryData.length) {
       store.commit('catalog/SET_CATEGORY', isCategoryData[0])
     } else {

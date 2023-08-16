@@ -39,20 +39,22 @@
                 </div >
 
               <div>
-                <span>{{ cardPriceWithDiscount }}</span> BYN
-                <span> / {{ card.base_unit.full_name }}</span>
+                <span v-if="!card.is_price_on_request">{{ cardPriceWithDiscount}}</span>
+                <span v-if="card.is_price_on_request">{{ 'Цена по запросу' }}</span>
+                <span v-if="!card.is_price_on_request"> BYN / {{ card.base_unit.full_name }}</span>
               </div>
 
             </div>
-            <div class="notice">* Цена указана с учетом НДС.</div>
+            <div class="notice" v-if="!card.is_price_on_request">* Цена указана с учетом НДС.</div>
             <div class="product__btn flex-center">
                 <div 
                     :class="[isWish === false ? 'product__wishlist icon-favorite' : 'product__wishlist icon-favorite-choosed']"
                     @click.stop="onWishClick(card)"
                   ></div>
-                <div v-if = "quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(card, 'set')">В корзине {{ quantity }}</div>
-                <div v-if = "quantity === 0 && card.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(card, 'set')">В корзину</div>
-                <div v-if = "quantity === 0 && card.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, card.id)">Узнать о поступлении</div>
+                <div v-if = "!card.is_price_on_request&&quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(card, 'set')">В корзине {{ quantity }}</div>
+                <div v-if = "!card.is_price_on_request&&quantity === 0 && card.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(card, 'set')">В корзину</div>
+                <div v-if = "!card.is_price_on_request&&quantity === 0 && card.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, card.id)">Узнать о поступлении</div>
+                <div v-if = "card.is_price_on_request" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, card.id)">Узнать о поступлении</div>
             </div>
         </div>
     </div>

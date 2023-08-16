@@ -14,25 +14,35 @@
     </a>
     <div class="item-card__info">
       <div class="item-card__row old_price__row flex-center">
-        <div class="old_price" v-if="card.price_with_tax !== cardPriceWithDiscount">{{ card.price_with_tax }}
+        <div class="old_price" v-if="card.price_with_tax !== cardPriceWithDiscount">{{ card.price_with_tax }} 
           <span>BYN/{{ card.base_unit.full_name }}</span>
         </div>
-        <div class="notice">* Цена указана с учетом НДС.</div>
+        <div class="notice" v-if="!card.is_price_on_request">* Цена указана с учетом НДС.</div>
       </div>
 
       <div class="item-card__row current_price__row flex-center">
-        <div class="current_price">{{ cardPriceWithDiscount }}
+        <div class="current_price" v-if="!card.is_price_on_request">{{ cardPriceWithDiscount }}
           <span>BYN/{{ card.base_unit.full_name }}</span>
         </div>
-        <div v-if = "quantity !== 0" @click.stop="onOperationWithCartItem(card)"
+        <div class="current_price" v-if="card.is_price_on_request">{{  'Цена по запросу' }}
+          <!-- <span>BYN/{{ card.base_unit.full_name }}</span> -->
+        </div>
+        <div v-if = "!card.is_price_on_request && quantity !== 0" @click.stop="onOperationWithCartItem(card)"
           class = "item-card__buy flex-center icon-cart-chosen"
         >
         </div>
-        <div v-if = "quantity === 0 && card.status !== 'O'" @click.stop="onOperationWithCartItem(card)"
+        <div v-if = "!card.is_price_on_request && quantity === 0 && card.status !== 'O'" @click.stop="onOperationWithCartItem(card)"
           class="item-card__buy flex-center icon-cart"
         >
         </div>
-        <div v-if = "quantity === 0 && card.status === 'O'" @click.stop="onCreatePopUp(true, card.id)"
+        <div v-if = "!card.is_price_on_request && quantity === 0 && card.status === 'O'" @click.stop="onCreatePopUp(true, card.id)"
+          class="item-card__buy flex-center icon-ring"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C13.105 22 14 21.105 14 20H10C10 21.105 10.895 22 12 22ZM18 16.5V11C18 7.925 16.365 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.635 5.36 6 7.925 6 11V16.5L4 18V18.5H20V18L18 16.5ZM16.5 17H7.5V11C7.5 8.515 9.515 6 12 6C14.485 6 16.5 8.515 16.5 11V17Z" fill="#423E48"/>
+          </svg>
+        </div>
+        <div v-if = "card.is_price_on_request" @click.stop="onCreatePopUp(true, card.id)"
           class="item-card__buy flex-center icon-ring"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -15,11 +15,17 @@ from src.models.abstract_model import BaseModel
 class RequestCallType(str, BaseEnum):
     UNSET = 'U'
     GOODS_RECEIPT = 'GR'
+    PRICE_CLARIFICATION = 'PC'
+
 
     @classmethod
     def description(cls) -> str:
-        return 'U - Unset. It\' used for all request calls.' \
-               'GD - Good Receipt. It\'s used for notify about the receipt of goods in the warehouse.'
+        return (
+            'U - Unset. It\' used for all request calls.'
+            'GD - Goods Receipt. It\'s used for notify about the receipt of goods in the warehouse.'
+            'PC - Price clarification. It\'used for notify about a user wants to clarify a price for products with '
+            'is_price_on_request.'
+        )
 
 
 class RequestCall(BaseModel):
