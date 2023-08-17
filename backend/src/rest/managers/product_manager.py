@@ -74,12 +74,12 @@ class ProductManager(CRUDManager):
 
         # Price block
         price_gte = filter_fields.get('actual_price_gte')
-        if price_gte and price_gte != '0':
+        price_gte = None if price_gte== '0' else price_gte
+
+        if price_gte:
             filter_expressions.append(
                 Product.actual_price >= Decimal(float(price_gte) / (1 + settings.DEFAULT_TAX / 100))
             )
-        else:
-            filter_expressions.append(Product.price > Decimal(0))
 
         if price_lte := filter_fields.get('actual_price_lte'):
             filter_expressions.append(
