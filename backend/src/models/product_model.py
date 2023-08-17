@@ -106,6 +106,8 @@ class Product(Base1CModel):
         """
         if self.price:
             return round(self.price + (self.price * tax / 100), 2)
+        else:
+            return 0
 
     @property
     def price_with_discount_and_tax(self) -> float | None:
@@ -115,6 +117,8 @@ class Product(Base1CModel):
         """
         if self.price_with_discount:
             return round(self.price_with_discount + (self.price_with_discount * tax / 100), 2)
+        else:
+            return 0
 
     @property
     def is_popular(self) -> bool:

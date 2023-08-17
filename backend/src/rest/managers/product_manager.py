@@ -78,6 +78,9 @@ class ProductManager(CRUDManager):
             filter_expressions.append(
                 Product.actual_price >= Decimal(float(price_gte) / (1 + settings.DEFAULT_TAX / 100))
             )
+        else:
+            filter_expressions.append(Product.price > Decimal(0))
+
         if price_lte := filter_fields.get('actual_price_lte'):
             filter_expressions.append(
                 Product.actual_price <= Decimal(float(price_lte) / (1 + settings.DEFAULT_TAX / 100))
