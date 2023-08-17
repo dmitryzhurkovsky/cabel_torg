@@ -16,6 +16,8 @@ export default {
     view: 'table',
     minPrice: min,
     maxPrice: max,
+    minLimit: min,
+    maxLimit: max,
     searchString: '',
     findedElements: [],
     allTypesOfProduct: [
@@ -59,6 +61,12 @@ export default {
         return state.minPrice;
       },
       MAX_PRICE(state){
+        return state.maxLimit;
+      },
+      MIN_LIMIT(state){
+        return state.minLimit;
+      },
+      MAX_LIMIT(state){
         return state.maxPrice;
       },
       SEARCH_STRING(state){
