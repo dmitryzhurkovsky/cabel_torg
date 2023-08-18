@@ -54,7 +54,7 @@
                 <div v-if = "!card.is_price_on_request&&quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(card, 'set')">В корзине {{ quantity }}</div>
                 <div v-if = "!card.is_price_on_request&&quantity === 0 && card.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(card, 'set')">В корзину</div>
                 <div v-if = "!card.is_price_on_request&&quantity === 0 && card.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, card.id)">Узнать о поступлении</div>
-                <div v-if = "card.is_price_on_request" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, card.id)">Узнать о поступлении</div>
+                <div v-if = "card.is_price_on_request" class="btn empty_black popup-btn" @click.stop="onCreatePopUpRequestPrice(true, card.id)">Запросить цену</div>
             </div>
         </div>
     </div>
@@ -126,6 +126,13 @@ export default {
       onCreatePopUp(status, cardID) {
         this.SET_IS_POPUP_OPEN(status);
         this.SET_POPUP_ACTION('RequestCall');
+        this.SET_REQUEST_CALL_TYPE('GR');
+        this.SET_POPUP_ADDITIONAL_DATA({cardID});
+      },
+
+      onCreatePopUpRequestPrice(status, cardID) {
+        this.SET_IS_POPUP_OPEN(status);
+        this.SET_POPUP_ACTION('RequestPrice');
         this.SET_REQUEST_CALL_TYPE('GR');
         this.SET_POPUP_ADDITIONAL_DATA({cardID});
       },

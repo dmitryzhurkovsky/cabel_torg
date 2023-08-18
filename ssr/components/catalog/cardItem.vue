@@ -42,7 +42,7 @@
             <path d="M12 22C13.105 22 14 21.105 14 20H10C10 21.105 10.895 22 12 22ZM18 16.5V11C18 7.925 16.365 5.36 13.5 4.68V4C13.5 3.17 12.83 2.5 12 2.5C11.17 2.5 10.5 3.17 10.5 4V4.68C7.635 5.36 6 7.925 6 11V16.5L4 18V18.5H20V18L18 16.5ZM16.5 17H7.5V11C7.5 8.515 9.515 6 12 6C14.485 6 16.5 8.515 16.5 11V17Z" fill="#423E48"/>
           </svg>
         </div>
-        <div v-if = "card.is_price_on_request" @click.stop="onCreatePopUp(true, card.id)"
+        <div v-if = "card.is_price_on_request" @click.stop="onCreatePopUpRequestPrice(true, card.id)"
           class="item-card__buy flex-center icon-ring"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -124,11 +124,18 @@ export default {
     ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA", "SET_REQUEST_CALL_TYPE"]),
 
     onCreatePopUp(status, cardID) {
-        this.SET_IS_POPUP_OPEN(status);
-        this.SET_POPUP_ACTION('RequestCall');
-        this.SET_REQUEST_CALL_TYPE('GR');
-        this.SET_POPUP_ADDITIONAL_DATA({cardID});
-      },
+      this.SET_IS_POPUP_OPEN(status);
+      this.SET_POPUP_ACTION('RequestCall');
+      this.SET_REQUEST_CALL_TYPE('GR');
+      this.SET_POPUP_ADDITIONAL_DATA({cardID});
+    },
+
+    onCreatePopUpRequestPrice(status, cardID) {
+      this.SET_IS_POPUP_OPEN(status);
+      this.SET_POPUP_ACTION('RequestPrice');
+      this.SET_REQUEST_CALL_TYPE('GR');
+      this.SET_POPUP_ADDITIONAL_DATA({cardID});
+    },
 
     openCardItem(id) {
       const URL = '/card_product/' + id;

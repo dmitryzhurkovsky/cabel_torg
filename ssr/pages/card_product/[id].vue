@@ -95,7 +95,7 @@
                         <div v-if="!data.is_price_on_request && quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(data, 'set')">В корзине</div>
                         <div v-if="!data.is_price_on_request && quantity === 0 && data.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(data, 'set')">В корзину</div>
                         <div v-if="!data.is_price_on_request && quantity === 0 && data.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, data.id)">Узнать о поступлении</div>
-                        <div v-if="data.is_price_on_request" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, data.id)">Узнать о поступлении</div>
+                        <div v-if="data.is_price_on_request" class="btn empty_black popup-btn" @click.stop="onCreatePopUpRequestPrice(true, data.id)">Запросить цену</div>
 
                         <div
                                 @click.stop="onWishClick()"
@@ -243,6 +243,13 @@
   const onCreatePopUp = (status, cardID) => {
     store.commit('header/SET_IS_POPUP_OPEN', status)
     store.commit('header/SET_POPUP_ACTION', 'RequestCall')
+    store.commit('header/SET_REQUEST_CALL_TYPE', 'GR')
+    store.commit('header/SET_POPUP_ADDITIONAL_DATA', {cardID})
+  }
+
+  const onCreatePopUpRequestPrice = (status, cardID) => {
+    store.commit('header/SET_IS_POPUP_OPEN', status)
+    store.commit('header/SET_POPUP_ACTION', 'RequestPrice')
     store.commit('header/SET_REQUEST_CALL_TYPE', 'GR')
     store.commit('header/SET_POPUP_ADDITIONAL_DATA', {cardID})
   }
