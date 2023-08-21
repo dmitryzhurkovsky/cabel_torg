@@ -13,6 +13,7 @@
             <div class="popup__content" >
               <NotificationMsg v-if = "POPUP_ACTION === 'ShowCompleteMsg'" />
               <NotificationRequestCall v-if = "POPUP_ACTION === 'RequestCall'"/>
+              <NotificationRequestPrice v-if = "POPUP_ACTION === 'RequestPrice'"/>
               <NotificationUserLogin v-if = "POPUP_ACTION === 'UserLogin'"/>
               <NotificationChangePass v-if = "POPUP_ACTION === 'ChangePassword'"/>
             </div>
@@ -29,6 +30,7 @@
             <div class="popup__content" >
               <NotificationMsg v-if = "POPUP_ACTION === 'ShowCompleteMsg'" />
               <NotificationRequestCall v-if = "POPUP_ACTION === 'RequestCall'"/>
+              <NotificationRequestPrice v-if = "POPUP_ACTION === 'RequestPrice'"/>
               <NotificationUserLogin v-if = "POPUP_ACTION === 'UserLogin'"/>
               <NotificationChangePass v-if = "POPUP_ACTION === 'ChangePassword'"/>
             </div>
