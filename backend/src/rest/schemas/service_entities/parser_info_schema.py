@@ -8,7 +8,7 @@ class ParserInfoSchema(BaseModel):
     finished_at: datetime | None
     files_were_updated_at: datetime | None
     is_failed: bool
-    exceptions: str | None
+    exception: str | None
 
     class Config:
         orm_mode = True
