@@ -18,4 +18,4 @@ class ParserInfo(Base):
 
     is_failed = Column(Boolean, default=False)
 
-    exceptions = Column(Text)
+    exception = Column(Text)
