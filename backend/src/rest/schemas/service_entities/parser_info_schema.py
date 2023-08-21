@@ -9,3 +9,6 @@ class ParserInfoSchema(BaseModel):
     files_were_updated_at: datetime | None
     is_failed: bool
     exceptions: str | None
+
+    class Config:
+        orm_mode = True

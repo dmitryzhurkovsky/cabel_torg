@@ -31,8 +31,8 @@ class BookkeepingContextManager:
         }
 
         if bookkeeping_last_modified_time and offers_last_modified_time:
-            last_modified_time = max(bookkeeping_last_modified_time, offers_last_modified_time)
-            fields['file_were_updated'] = last_modified_time
+            last_modified_time = max(bookkeeping_last_modified_time, offers_last_modified_time)  # noqa
+            fields['file_were_updated'] = datetime.fromtimestamp(last_modified_time)
 
         await database_service.update_or_create_object(
             model=ParserInfo,
@@ -45,16 +45,18 @@ class BookkeepingContextManager:
     async def __aexit__(self, exc_type, exc_value, traceback):
         fields = {
             'id': 1,
-            'finished_at': datetime.now(),
+            'finished_at': None
         }
 
         if exc_type is not None:
             fields['is_failed'] = True
             fields['exception'] = str(exc_value)
+        else:
+            fields['finished_at'] = datetime.now()
 
         if bookkeeping_last_modified_time and offers_last_modified_time:
-            last_modified_time = max(bookkeeping_last_modified_time, offers_last_modified_time)
-            fields['file_were_updated'] = last_modified_time
+            last_modified_time = max(bookkeeping_last_modified_time, offers_last_modified_time)  # noqa
+            fields['file_were_updated'] = datetime.fromtimestamp(last_modified_time)
 
         await database_service.update_or_create_object(
             model=ParserInfo,
