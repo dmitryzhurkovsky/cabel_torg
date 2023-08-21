@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core.db.db import get_session
-from src.core.exception.base_exception import BadRequestError
+from src.core.exception.base_exception import BadRequestError, ObjectNotFoundError
 from src.rest.managers.services_managers import VendorInfoManager, AddressManager
 from src.rest.permissions import is_admin_permission
 from src.rest.schemas.service_entities.vendor_info_schema import (
@@ -18,12 +18,12 @@ vendor_info_router = APIRouter(tags=['vendor_info'], prefix='/vendor_info')
 @vendor_info_router.get('/1', response_model=VendorInfoSchema)
 async def get_vendor_info(
         session: AsyncSession = Depends(get_session)
-) -> VendorInfoSchema | list:
+) -> VendorInfoSchema:
     vendor = await VendorInfoManager.list(session=session)
     if vendor and vendor[0]:
         return vendor[0]
 
-    return []
+    raise ObjectNotFoundError()
 
 
 @vendor_info_router.post(
