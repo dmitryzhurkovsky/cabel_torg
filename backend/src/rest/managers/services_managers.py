@@ -26,6 +26,18 @@ class AddressManager(CRUDManager):
     table = Address
 
 
+class FeedbackManager(CRUDManager):
+    table = Feedback
+
+
+class BannerManager(CRUDManager, FileMixin):
+    table = Banner
+
+
+class ParserInfoManager(CRUDManager):
+    table = ParserInfo
+
+
 class VendorInfoManager(CRUDManager, FileMixin):
     table = VendorInfo
 
@@ -68,11 +80,3 @@ class RequestCallManager(CRUDManager):
             offset=offset,
             limit=limit
         )
-
-
-class FeedbackManager(CRUDManager):
-    table = Feedback
-
-
-class BannerManager(CRUDManager, FileMixin):
-    table = Banner

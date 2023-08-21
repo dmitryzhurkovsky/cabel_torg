@@ -5,3 +5,4 @@ from src.models.service_entities.partner_model import Partner  # noqa
 from src.models.service_entities.request_call_model import RequestCall, RequestCallType  # noqa
 from src.models.service_entities.vender_info_model import VendorInfo, Address  # noqa
 from src.models.service_entities.banner_model import Banner  # noqa
+from src.models.service_entities.parser_info_model import ParserInfo  # noqa
