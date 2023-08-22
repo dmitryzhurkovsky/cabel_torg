@@ -9,7 +9,10 @@
 
       </div>
       <div class="popup-cart__action">
-          <div class="popup-cart__price">
+          <div class="popup-cart__price" v-if="item.is_price_on_request">
+            <span>{{ 'Цена по запросу' }}</span>
+          </div>
+          <div class="popup-cart__price" v-else>
             {{ 
               item.price_with_discount_and_tax && item.price_with_discount_and_tax !== item.price_with_tax 
                 ? item.price_with_discount_and_tax 
@@ -17,7 +20,6 @@
             }} 
             <span>BYN</span>
           </div>
-          <!-- item.price -->
       </div>
   </div>
 </template>
