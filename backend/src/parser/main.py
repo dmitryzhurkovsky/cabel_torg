@@ -32,7 +32,7 @@ class BookkeepingContextManager:
 
         if bookkeeping_last_modified_time and offers_last_modified_time:
             last_modified_time = max(bookkeeping_last_modified_time, offers_last_modified_time)  # noqa
-            fields['files_were_updated'] = datetime.fromtimestamp(last_modified_time)
+            fields['files_were_updated_at'] = datetime.fromtimestamp(last_modified_time)
 
         await database_service.update_or_create_object(
             model=ParserInfo,
@@ -56,7 +56,7 @@ class BookkeepingContextManager:
 
         if bookkeeping_last_modified_time and offers_last_modified_time:
             last_modified_time = max(bookkeeping_last_modified_time, offers_last_modified_time)  # noqa
-            fields['files_were_updated'] = datetime.fromtimestamp(last_modified_time)
+            fields['files_were_updated_at'] = datetime.fromtimestamp(last_modified_time)
 
         await database_service.update_or_create_object(
             model=ParserInfo,
