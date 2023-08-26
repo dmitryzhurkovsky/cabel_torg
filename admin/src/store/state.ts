@@ -28,7 +28,8 @@ const state = {
   activePage: 1,
   totalPages: 1,
   itemsInPage: 10,
-  users: [] as Array<IDeliveryType>
+  users: [] as Array<IDeliveryType>,
+  parser: {} as IDeliveryType, 
 }
 
 export type State = typeof state

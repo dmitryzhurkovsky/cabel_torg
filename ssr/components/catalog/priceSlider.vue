@@ -74,6 +74,7 @@ export default {
     ...mapGetters("header", ["ALL_CATEGORIES"]),
 
     ChangeParameters(){
+      // console.log('Watch in price slider ', String(this.MAX_PRICE) + String(this.MIN_PRICE));
       return String(this.MAX_PRICE) + String(this.MIN_PRICE);
     }
   },
@@ -201,6 +202,7 @@ export default {
   },
 
   beforeMount(){
+    // console.log('Mount price slider ', this.MIN_PRICE, '  ', this.MAX_PRICE);
     this.minValuePrice = this.MIN_PRICE;
     this.maxValuePrice = this.MAX_PRICE;
     this.setUpMinPrice();

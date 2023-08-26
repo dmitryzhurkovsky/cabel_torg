@@ -61,13 +61,13 @@ export default {
         return state.minPrice;
       },
       MAX_PRICE(state){
-        return state.maxLimit;
+        return state.maxPrice;
       },
       MIN_LIMIT(state){
         return state.minLimit;
       },
       MAX_LIMIT(state){
-        return state.maxPrice;
+        return state.maxLimit;
       },
       SEARCH_STRING(state){
         return state.searchString;
@@ -121,14 +121,17 @@ export default {
       },
 
       SET_MIN_PRICE(state, price) {
+        // console.log('SET min ', price);
         state.minPrice = price;
       },
 
       SET_MAX_PRICE(state, price) {
+        // console.log('SET max ', price);
         state.maxPrice = price;
       },
 
       SET_DEFAULT_PRICES(state){
+        // console.log('SET default');
         state.minPrice = min;
         state.maxPrice = max;
         state.typeOfProduct = 'all';

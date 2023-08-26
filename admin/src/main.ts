@@ -15,14 +15,15 @@ import { request } from 'http';
 library.add([faHeart, faHand, faAddressBook, faTrashCan, faPenToSquare, faFile, faSquareCaretDown, faSquareCaretUp] as any)
 
 axios.interceptors.request.use(
-  (config: any) => {
+  async (config: any) => {
     if (localStorage.getItem("authToken")) {
       config.headers = {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          Accept: "application/json"
+          Accept: "application/json",
+          'Content-Type': 'application/json'
       };
     }
-
+  
     return config;
   }
 );
@@ -31,7 +32,7 @@ axios.interceptors.response.use(
   response => response,
   
   async error => {
-    // console.log(error.response);
+    // console.log('SSSSS', error.response);
     if (typeof error.response === 'undefined') {
         store.commit(MutationTypes.SET_USER, null);
         store.commit(MutationTypes.SET_IS_LOADING, false)
@@ -41,41 +42,50 @@ axios.interceptors.response.use(
       store.commit(MutationTypes.SET_USER, null);
       store.commit(MutationTypes.SET_IS_LOADING, false)
       return Promise.reject(error);
+    // } else if (error.response.status === 401) {
+    //   const errors = error.response.data.detail;
+    //   store.commit(MutationTypes.SET_USER, null);
+    //   localStorage.removeItem("authToken");
+    //   localStorage.removeItem("refreshToken");
+    //   store.commit(MutationTypes.SET_IS_LOADING, false)
+    //   return Promise.reject(error);
     } else if (error.response.status === 401) {
+      // console.log('Start getting refresh token process... ');
+      
       const originalConfig = error.config;
       originalConfig._retry = true;
 
       let isRefresh = false;
-      await axios.post(import.meta.env.VITE_APP_API_URL + "refresh", {refresh_token: localStorage.getItem("refreshToken")}).then((refresh) => {
-        console.log('QQQQQ ', refresh);
-      
-        if (refresh.status === 201) {
-          console.log('201', refresh.data);
-          
-          localStorage.setItem("authToken", refresh.data.access_token);
-          localStorage.setItem("refreshToken", refresh.data.refresh_token);
-          originalConfig.headers = {
-            Authorization: `Bearer ${refresh.data.access_token}`,
-            Accept: "application/json"
-          }
-          isRefresh = true;
-        } else {
-          store.commit(MutationTypes.SET_USER, null);
-          localStorage.removeItem("authToken");
-          localStorage.removeItem("refreshToken");
-          store.commit(MutationTypes.SET_IS_LOADING, false)
-          return Promise.reject(error);
-        }
-      }).catch((e) => {
-        console.log(e);
-      
+
+      const responseRefresh = await fetch(import.meta.env.VITE_APP_API_URL + "refresh", {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({refresh_token: localStorage.getItem("refreshToken")})
+      });
+      // console.log('responseRefresh ', responseRefresh);
+            
+      if (responseRefresh.status !== 201) {
         store.commit(MutationTypes.SET_USER, null);
         localStorage.removeItem("authToken");
         localStorage.removeItem("refreshToken");
         store.commit(MutationTypes.SET_IS_LOADING, false)
         return Promise.reject(error);
-      });
-
+      } else {
+        const result = await responseRefresh.json();
+        // console.log('Result: ', result);
+        localStorage.setItem("authToken", result.access_token);
+        localStorage.setItem("refreshToken", result.refresh_token);
+        originalConfig.headers = {
+          Authorization: `Bearer ${result.access_token}`,
+          Accept: "application/json",
+          'Content-Type': 'application/json'
+        }
+        isRefresh = true;
+      }
+     
       if (isRefresh) return axios(originalConfig);
 
     } else {

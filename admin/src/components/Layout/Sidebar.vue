@@ -1,7 +1,8 @@
 <script setup lang='ts'>
-import { ref } from "vue";
+import { ref, watch, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from '../../store';
 import { MutationTypes } from '../../store/mutation-types'
+import { ActionTypes } from '../../store/action-types';
 import { router } from '../../router'
 
 const props = defineProps({
@@ -12,10 +13,35 @@ const props = defineProps({
 })
 
 const store = useStore()
+const intervalID = ref()
+const isFailedParsing = ref(false)
+const lastParsingStarted = ref('')
+const lastParsingFinished = ref('')
 const emit = defineEmits(['onToggleMenu']);
+
+watch(() => store.getters.parserStatus,
+  (curr, prev) => {
+      isFailedParsing.value = curr.is_failed
+      lastParsingStarted.value = new Date(curr.started_at).toLocaleString() 
+      lastParsingFinished.value = new Date(curr.finished_at).toLocaleString()
+  }
+)
+
+onMounted(() => {
+  store.dispatch(ActionTypes.GET_PARSER_STATUS, null)
+  intervalID.value = setInterval(updateStatus, 50000)
+})
+
+onBeforeUnmount(() => {
+  clearInterval(intervalID.value)
+}) 
 
 const toggleMenu = (): void => {
   emit('onToggleMenu');
+}
+
+const updateStatus = (): void => {
+  store.dispatch(ActionTypes.GET_PARSER_STATUS, null)
 }
 
 const exitFromAdmin = () => {
@@ -53,6 +79,18 @@ const links = ref([
     </router-link
     >
     <div class="sidebar__link link__hover" @click="exitFromAdmin">Выход</div>
+    <div class="sidebar__status">
+      <div class="parser">
+        <div class="">Парсер статус: </div>
+        <div :class="['parser-status', {parser__good: !isFailedParsing}, {parser__bad: isFailedParsing}]"></div>
+      </div>
+      <div>
+        {{ 'Start: ' + lastParsingStarted }}
+      </div>
+      <div>
+        {{ 'Finish: ' + lastParsingFinished }}
+      </div>
+    </div>
   </div>
   <div v-if = "!openSidebar" class="sidebar-marker" @click="toggleMenu">&#5125;</div>
   <div v-else class="sidebar-marker sidebar-marker_isopen" @click="toggleMenu">&#5130;</div>
@@ -65,6 +103,23 @@ const links = ref([
 }
 .link__hover:hover{
   cursor: pointer;  
+}
+.parser {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &-status{
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+  &__good{
+    background-color: green;
+  }
+  &__bad{
+    background-color: red;
+  }
 }
 .sidebar {
   left: 0;
@@ -90,6 +145,14 @@ const links = ref([
     &:hover {
       color: var(--primary);
     }
+  }
+  &__status {
+    border-radius: 12px;
+    border: 2px solid #fff;
+    transition: 0.2s;
+    font-weight: bold;
+    font-size: 14px;
+    margin-top: 50px;
   }
   &-marker {
     position: fixed;
