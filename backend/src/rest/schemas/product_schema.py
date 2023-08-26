@@ -17,7 +17,7 @@ class ProductRequestCallSchema(BaseSchema):
     name: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ProductSchema(BaseSchema):
@@ -57,7 +57,7 @@ class ProductSchema(BaseSchema):
     attributes: List['AttributeSchema'] | list
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ProductUpdateSchema(BaseModel):
