@@ -23,6 +23,7 @@ python-dateutil = "*"
 redis = "*"
 transliterate = "*"
 jinja2 = "*"
+greenlet = "*"
 
 [dev-packages]
 pytest = "*"

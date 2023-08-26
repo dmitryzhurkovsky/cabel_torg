@@ -16,4 +16,4 @@ class ArticleSchema(ArticleInputSchema, BaseSchema):
     created_at: datetime | None
 
     class Config:
-        orm_mode = True
+        from_attributes = True

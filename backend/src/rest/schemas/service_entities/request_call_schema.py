@@ -23,4 +23,4 @@ class RequestCallSchema(RequestCallInputSchema, BaseSchema):
     product: ProductRequestCallSchema | None
 
     class Config:
-        orm_mode = True
+        from_attributes = True

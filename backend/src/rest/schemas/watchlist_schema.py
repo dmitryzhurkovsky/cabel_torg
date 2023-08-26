@@ -12,11 +12,11 @@ class WatchListSchema(BaseModel):
     product_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class WatchListWithProductSchema(BaseModel):
     product: ProductSchema
 
     class Config:
-        orm_mode = True
+        from_attributes = True
