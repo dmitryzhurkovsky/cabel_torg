@@ -37,7 +37,7 @@ class ProductOrderSchema(BaseModel):
     amount: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class OrderSchema(OrderBaseSchema, BaseSchema):
@@ -50,7 +50,7 @@ class OrderSchema(OrderBaseSchema, BaseSchema):
     total_price: Decimal
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ProductOrderInputSchema(BaseModel):

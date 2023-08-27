@@ -3,6 +3,7 @@ import os
 import time
 from datetime import datetime
 
+from sqlalchemy.exc import PendingRollbackError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.core import settings
@@ -20,43 +21,47 @@ bookkeeping_last_modified_time = None
 offers_last_modified_time = None
 
 
-class BookkeepingContextManager:
+class BookkeepingLoggerContextManager:
     def __init__(self, db: AsyncSession):
         self.db = db
 
     async def __aenter__(self):
-        fields = {
-            'id': 1,
-            'started_at': datetime.now(),
-        }
+        global bookkeeping_last_modified_time, offers_last_modified_time
 
-        if bookkeeping_last_modified_time and offers_last_modified_time:
-            last_modified_time = max(bookkeeping_last_modified_time, offers_last_modified_time)  # noqa
-            fields['files_were_updated_at'] = datetime.fromtimestamp(last_modified_time)
+        bookkeeping_last_modified_time = os.path.getmtime(filename=settings.BOOKKEEPING_FILE_PATH)
+        offers_last_modified_time = os.path.getmtime(filename=settings.FILE_WITH_PRICES_PATH)
+        files_were_updated_at = datetime.fromtimestamp(max(bookkeeping_last_modified_time, offers_last_modified_time))
 
         await database_service.update_or_create_object(
             model=ParserInfo,
-            fields=fields,
+            fields={
+                'id': 1,
+                'started_at': datetime.now(),
+                'files_were_updated_at': files_were_updated_at
+            },
             pk_field='id',
             db=self.db,
             update=True
         )
 
     async def __aexit__(self, exc_type, exc_value, traceback):
-        fields = {
-            'id': 1,
-            'finished_at': None
-        }
+        global bookkeeping_last_modified_time, offers_last_modified_time
 
-        if exc_type is not None:
+        fields = {'id': 1}
+
+        if exc_type:
+            fields['finished_at'] = None  # noqa
             fields['is_failed'] = True
             fields['exception'] = str(exc_value)
+
+            parser_logger.info(f'Exception has happened:\n{exc_value}\n')
+            EmailService.send_email(
+                message=f'Exception is {exc_value}.',
+                subject='SITE: cabel-trog.by. ERROR: Parsing has failed.',
+                send_to_service=True
+            )
         else:
             fields['finished_at'] = datetime.now()
-
-        if bookkeeping_last_modified_time and offers_last_modified_time:
-            last_modified_time = max(bookkeeping_last_modified_time, offers_last_modified_time)  # noqa
-            fields['files_were_updated_at'] = datetime.fromtimestamp(last_modified_time)
 
         await database_service.update_or_create_object(
             model=ParserInfo,
@@ -65,6 +70,17 @@ class BookkeepingContextManager:
             db=self.db,
             update=True
         )
+
+        if exc_type is PendingRollbackError:
+            # PendingRollbackError is raised some time and to fix it's enough to restart parser or wait a little.
+            # We also need to reset modification time variables to force the parser to start parssing again.
+            time.sleep(60 * 10)
+            bookkeeping_last_modified_time = None
+            offers_last_modified_time = None
+        elif exc_type:
+            # If there is a critical bug, we will sent messages to service staff rather than restart and
+            # make a pause in parsing rather than start it each 3 minutes.
+            time.sleep(60 * 60 * 24)
 
 
 def parsing_files_are_changed() -> bool:
@@ -85,35 +101,22 @@ def parsing_files_are_changed() -> bool:
 
 
 async def parse_bookkeeping_file():
-    global bookkeeping_last_modified_time, offers_last_modified_time
-
     async with async_session() as db:
-        async with BookkeepingContextManager(db=db):
-            try:
-                xml_parser = XMLParser(db=db)
-                price_parser = OffersParser(db=db)
+        async with BookkeepingLoggerContextManager(db=db):
+            xml_parser = XMLParser(db=db)
+            price_parser = OffersParser(db=db)
 
-                await asyncio.wait([event_loop.create_task(xml_parser.parse_categories())])
-                await asyncio.wait([event_loop.create_task(xml_parser.delete_old_categories())])
-                await asyncio.wait([event_loop.create_task(xml_parser.parse_attributes())])
+            await asyncio.wait([event_loop.create_task(xml_parser.parse_categories())])
+            await asyncio.wait([event_loop.create_task(xml_parser.delete_old_categories())])
+            await asyncio.wait([event_loop.create_task(xml_parser.parse_attributes())])
 
-                await event_loop.create_task(xml_parser.parse_products())
-                await event_loop.create_task(xml_parser.set_is_visible_attribute())
-                await event_loop.create_task(xml_parser.delete_old_products())
-                await event_loop.create_task(price_parser.parse_offers())
-            except Exception as e:
-                parser_logger.info(f'Exception has happened:\n{e}\n')
-                EmailService.send_email(
-                    message=f'Exception is {e}.',
-                    subject='SITE: cabel-trog.by. ERROR: Parsing has failed.',
-                    send_to_service=True
-                )
-                time.sleep(60 * 60 * 24)  # notify service personal each 24 hours about errors.
-            else:
-                bookkeeping_last_modified_time = os.path.getmtime(filename=settings.BOOKKEEPING_FILE_PATH)
-                offers_last_modified_time = os.path.getmtime(filename=settings.FILE_WITH_PRICES_PATH)
-                set_permissions_recursive(path=settings.IMAGES_PATH, mode=0o777)
-                set_permissions_recursive(path=settings.DOCUMENTS_PATH, mode=0o777)
+            await event_loop.create_task(xml_parser.parse_products())
+            await event_loop.create_task(xml_parser.set_is_visible_attribute())
+            await event_loop.create_task(xml_parser.delete_old_products())
+            await event_loop.create_task(price_parser.parse_offers())
+
+            set_permissions_recursive(path=settings.IMAGES_PATH, mode=0o777)
+            set_permissions_recursive(path=settings.DOCUMENTS_PATH, mode=0o777)
 
 
 if __name__ == '__main__':

@@ -18,7 +18,7 @@ class CartSchema(BaseModel):
     amount: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class CartWithProductSchema(BaseModel):
@@ -26,4 +26,4 @@ class CartWithProductSchema(BaseModel):
     product: ProductSchema
 
     class Config:
-        orm_mode = True
+        from_attributes = True

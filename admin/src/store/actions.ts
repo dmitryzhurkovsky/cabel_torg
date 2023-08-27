@@ -174,7 +174,10 @@ export interface Actions {
     { commit }: AugmentedActionContext,
     payload: any
   ): Promise<Array<IDeliveryType>>,
-
+  [ActionTypes.GET_PARSER_STATUS](
+    { commit }: AugmentedActionContext,
+    payload: null
+  ): Promise<Array<IDeliveryType>>,
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -204,10 +207,10 @@ export const actions: ActionTree<State, State> & Actions = {
         // console.log('Actions ', response.data);
         
         if (response?.data?.is_admin) {
-          console.log('Это админ');
+          // console.log('Это админ');
           commit(MutationTypes.SET_USER, response.data)
         } else {
-          console.log('Это НЕ админ');
+          // console.log('Это НЕ админ');
           commit(MutationTypes.SET_USER, null)
           localStorage.removeItem("authToken")
           localStorage.removeItem("refreshToken")
@@ -605,4 +608,14 @@ export const actions: ActionTree<State, State> & Actions = {
     })
   },
 
+  [ActionTypes.GET_PARSER_STATUS]({ commit }, payload) {
+    return new Promise((resolve) => {
+      axios.get(import.meta.env.VITE_APP_API_URL + "service_entities/parser_info/1").
+      then((response) => {
+        commit(MutationTypes.SET_PARSER_STATUS, response.data)
+        resolve(response.data);
+      })
+    })
+  },
+  
 }

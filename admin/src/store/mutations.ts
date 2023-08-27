@@ -46,6 +46,7 @@ export type Mutations<S = State> = {
   [MutationTypes.UPDATE_USER](state: S, payload: IDeliveryType): void,
   [MutationTypes.ADD_TO_USERS](state: S, payload: IDeliveryType): void,
   [MutationTypes.DELETE_FROM_USERS](state: S, payload: number): void,
+  [MutationTypes.SET_PARSER_STATUS](state: S, payload: IDeliveryType): void,
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -186,4 +187,8 @@ export const mutations: MutationTree<State> & Mutations = {
   [MutationTypes.DELETE_FROM_USERS](state, payload: number) {
     state.users = state.users.filter(item => item.id !== payload)
   },
+  [MutationTypes.SET_PARSER_STATUS](state, payload: IDeliveryType) {
+    state.parser = payload
+  },
+  
 }

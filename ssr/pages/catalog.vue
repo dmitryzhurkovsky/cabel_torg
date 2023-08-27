@@ -108,6 +108,8 @@
     const currRoute = useRoute()
     const { query } = currRoute
 
+    // console.log('Catalog get from URL');
+
     store.commit('query/SET_CATEGORY_ID', null) 
 
     if (query.limit) {
@@ -132,10 +134,13 @@
     }
     if (query.actual_price_lte) {
       if (getters['query/MAX_PRICE'] != query.actual_price_lte) {
+        // console.log('Before set MAX from URL ', Number(query.actual_price_lte));
         store.commit('query/SET_MAX_PRICE', Number(query.actual_price_lte))
+        // console.log('Max is not equal, set it', getters['query/MAX_PRICE']);
       }
     } else {
       isFailInParams = true
+      // console.log('QQQQQQQQQ');
       store.commit('query/SET_MAX_PRICE', 80000)
     }
     if (query.q) {

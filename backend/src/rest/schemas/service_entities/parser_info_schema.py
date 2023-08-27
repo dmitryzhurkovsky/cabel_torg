@@ -11,4 +11,4 @@ class ParserInfoSchema(BaseModel):
     exception: str | None
 
     class Config:
-        orm_mode = True
+        from_attributes = True

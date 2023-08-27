@@ -141,6 +141,7 @@
   }
 
   const getLastPartOfUrl = (offset) => {
+    // console.log(getters['query/MIN_PRICE'], '   ', getters['query/MAX_PRICE']);
     let url = '?';
     if (offset != 0 || getters['query/LIMIT'] != 12) {
       url = url + "offset=" + offset + '&'

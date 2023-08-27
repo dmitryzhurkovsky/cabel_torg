@@ -15,7 +15,7 @@ class AddressInputSchema(BaseModel):
 
 class AddressSchema(AddressInputSchema, BaseSchema):
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class VendorInfoInputSchema(BaseModel):
@@ -50,4 +50,4 @@ class VendorInfoSchema(VendorInfoInputSchema, BaseSchema):
     addresses: list['AddressSchema'] | None
 
     class Config:
-        orm_mode = True
+        from_attributes = True

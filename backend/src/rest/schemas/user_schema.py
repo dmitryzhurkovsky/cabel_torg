@@ -41,7 +41,7 @@ class UserUpdateSchema(UserBaseSchema):
 
 class UserSchema(UserBaseSchema, BaseSchema):
     class Config:
-        orm_mode = True
+        from_attributes = True
 
         fields = {'password': {'exclude': True}}
 

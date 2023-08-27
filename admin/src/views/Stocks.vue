@@ -46,8 +46,6 @@
 
   watch(() => store.getters.stocks,
     (curr, prev) => {
-      console.log('Watch ', curr);
-      
       tableData.value = [...curr];
       store.commit(MutationTypes.SET_IS_LOADING, false)
   });

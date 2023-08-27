@@ -5,7 +5,7 @@ class AttributeValueSchema(BaseSchema):
     payload: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
         fields = {
             'id': {'exclude': True},
@@ -17,7 +17,7 @@ class AttributeNameSchema(BaseSchema):
     payload: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
         fields = {
             'id': {'exclude': True},
@@ -30,6 +30,6 @@ class AttributeSchema(BaseSchema):
     name: AttributeNameSchema
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
         fields = {'id': {'exclude': True}}

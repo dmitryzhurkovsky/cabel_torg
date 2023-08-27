@@ -123,7 +123,7 @@ export default {
         let queryData = 'products?' + 
         'offset=' + rootGetters['query/OFFSET'] + 
         '&limit=' + rootGetters['query/LIMIT']
-        console.log(rootGetters['query/MIN_LIMIT'], '   ', rootGetters['query/MIN_PRICE']);
+        // console.log(rootGetters['query/MIN_PRICE'], '   ', rootGetters['query/MAX_PRICE']);
         if (rootGetters['query/MIN_LIMIT'] != rootGetters['query/MIN_PRICE'] || rootGetters['query/MAX_LIMIT'] != rootGetters['query/MAX_PRICE']) {
           queryData = queryData + '&actual_price_gte=' + rootGetters['query/MIN_PRICE']
           queryData = queryData + '&actual_price_lte=' + rootGetters['query/MAX_PRICE']

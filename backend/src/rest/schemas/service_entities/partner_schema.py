@@ -9,4 +9,4 @@ class PartnerInputSchema(BaseModel):
 
 class PartnerSchema(PartnerInputSchema, BaseSchema):
     class Config:
-        orm_mode = True
+        from_attributes = True
