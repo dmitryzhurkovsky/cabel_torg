@@ -29,4 +29,4 @@ class CategorySchema(BaseSchema):
     site_page_description: str | None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
