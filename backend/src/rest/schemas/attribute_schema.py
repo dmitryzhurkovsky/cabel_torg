@@ -26,8 +26,8 @@ class AttributeNameSchema(BaseSchema):
 
 
 class AttributeSchema(BaseSchema):
-    value: AttributeValueSchema
     name: AttributeNameSchema
+    value: AttributeValueSchema | None
 
     class Config:
         from_attributes = True
