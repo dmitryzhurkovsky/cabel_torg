@@ -36,14 +36,14 @@ class ProductSchema(BaseSchema):
     # price: Decimal | None  # without a tax. Don't use this field. Use price_with_tax instead.
     # price_with_discount: Decimal | None  # without a tax. Don't use this field. Use price_with_discount_and_tax
 
-    price_with_tax: Decimal | None  # with a tax
-    price_with_discount_and_tax: Decimal | None  # with a tax
-    discount: int | None
-    actual_discount: Decimal | None
+    price_with_tax: Decimal | float | int | None  # with a tax
+    price_with_discount_and_tax: Decimal | float | int | None  # with a tax
+    discount: Decimal | float | int | None
+    actual_discount: Decimal | float | int | None
     is_price_on_request: bool | None
 
-    count: int | None
-    weight: Decimal | None
+    count: Decimal | float | int | None
+    weight: Decimal | float | int | None
 
     site_link: str | None
     site_page_title: str | None
