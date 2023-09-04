@@ -29,8 +29,8 @@ class ProductSchema(BaseSchema):
     status: ProductStatus | None
     document_url: str | None
 
-    is_new: bool | None
-    is_popular: bool | None
+    is_new: bool | None = False
+    is_popular: bool | None = False
 
 
     # price: Decimal | None  # without a tax. Don't use this field. Use price_with_tax instead.
