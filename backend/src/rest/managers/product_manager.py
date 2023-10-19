@@ -74,7 +74,7 @@ class ProductManager(CRUDManager):
 
         # Price block
         price_gte = filter_fields.get('actual_price_gte')
-        price_gte = None if price_gte== '0' else price_gte
+        price_gte = None if price_gte == '0' else price_gte
 
         if price_gte:
             filter_expressions.append(

@@ -20,13 +20,13 @@ class CategoryUpdateSchema(BaseModel):
 
 class CategorySchema(BaseSchema):
     name: str
-    parent_category_id: int | None
-    order: int | None
-    discount: int | None
+    parent_category_id: int | None = None
+    order: int | None = None
+    discount: int | None = None
 
-    site_link: str | None
-    site_page_title: str | None
-    site_page_description: str | None
+    site_link: str | None = None
+    site_page_title: str | None = None
+    site_page_description: str | None = None
 
     class Config:
         from_attributes = True

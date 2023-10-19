@@ -2,9 +2,9 @@ from src.rest.schemas.base_schema import BaseSchema
 
 
 class BaseUnitSchema(BaseSchema):
-    code: str | None
-    full_name: str | None
-    international_abbreviated: str | None
+    code: str | None = None
+    full_name: str | None = None
+    international_abbreviated: str | None = None
 
     class Config:
         from_attributes = True

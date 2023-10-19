@@ -13,7 +13,7 @@ class ArticleInputSchema(BaseModel):
 
 class ArticleSchema(ArticleInputSchema, BaseSchema):
     image: str | None
-    created_at: datetime | None
+    created_at: datetime | None = None
 
     class Config:
         from_attributes = True

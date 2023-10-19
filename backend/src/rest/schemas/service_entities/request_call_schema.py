@@ -8,8 +8,8 @@ from src.rest.schemas.product_schema import ProductRequestCallSchema
 class RequestCallInputSchema(BaseModel):
     fullname: str
     phone_number: str
-    product_id: int | None
-    type: RequestCallType | None
+    product_id: int | None = None
+    type: RequestCallType | None = None
 
     @validator('product_id')
     def product_id_is_required_for_goods_receipt(cls, v):
@@ -20,7 +20,7 @@ class RequestCallInputSchema(BaseModel):
 
 
 class RequestCallSchema(RequestCallInputSchema, BaseSchema):
-    product: ProductRequestCallSchema | None
+    product: ProductRequestCallSchema | None = None
 
     class Config:
         from_attributes = True
