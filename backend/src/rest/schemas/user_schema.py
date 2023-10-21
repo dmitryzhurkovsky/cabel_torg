@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, validator
+from pydantic import BaseModel, EmailStr, validator, Field
 
 from src.rest.schemas.base_schema import BaseSchema
 
@@ -40,10 +40,10 @@ class UserUpdateSchema(UserBaseSchema):
 
 
 class UserSchema(UserBaseSchema, BaseSchema):
+    password: str = Field(exclude=True)
+
     class Config:
         from_attributes = True
-
-        fields = {'password': {'exclude': True}}
 
 
 class RecoveryPasswordSchema(BaseModel):
