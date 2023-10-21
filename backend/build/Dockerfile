@@ -10,7 +10,7 @@ ENV LC_ALL ru_RU.UTF-8
 WORKDIR /backend
 
 RUN apt-get update && apt-get install -y  \
-    netcat \
+    netcat-traditional \
     locales \
     locales-all \
     wkhtmltopdf
