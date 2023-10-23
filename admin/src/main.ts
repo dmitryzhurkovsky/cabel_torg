@@ -20,7 +20,7 @@ axios.interceptors.request.use(
       config.headers = {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           Accept: "application/json",
-          'Content-Type': 'application/json'
+          // 'Content-Type': 'application/json'
       };
     }
   
