@@ -195,9 +195,9 @@ export const actions: ActionTree<State, State> & Actions = {
       }).catch((err) => {
         console.log('action SEND_USER_REQUEST ', err);
         resolve(err);
-        
+
       });
-    }) 
+    })
   },
 
   [ActionTypes.GET_USER_DATA]({ commit }) {
@@ -205,7 +205,7 @@ export const actions: ActionTree<State, State> & Actions = {
       axios.get(import.meta.env.VITE_APP_API_URL + "users/mine").
       then((response) => {
         // console.log('Actions ', response.data);
-        
+
         if (response?.data?.is_admin) {
           // console.log('Это админ');
           commit(MutationTypes.SET_USER, response.data)
@@ -303,7 +303,14 @@ export const actions: ActionTree<State, State> & Actions = {
 
   [ActionTypes.UPLOAD_ARTICLE_PHOTO]({ commit }, payload) {
     return new Promise((resolve) => {
-      axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/articles/" + payload.id + '/images', payload.data).
+      axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/articles/" + payload.id + '/images',
+        payload.data,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      ).
       then((response) => {
         commit(MutationTypes.UPDATE_ARTICLE, response.data)
         resolve(response.data);
@@ -434,7 +441,7 @@ export const actions: ActionTree<State, State> & Actions = {
       })
     })
   },
-  
+
   [ActionTypes.EDIT_SETTINGS_DATA]({ commit }, data) {
     return new Promise((resolve) => {
       axios.patch(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1", data).
@@ -454,7 +461,7 @@ export const actions: ActionTree<State, State> & Actions = {
       })
     })
   },
-  
+
   [ActionTypes.DELETE_STOCK]({ commit }, payload) {
     return new Promise((resolve) => {
       axios.delete(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/addresses/" + String(payload)).
@@ -527,7 +534,14 @@ export const actions: ActionTree<State, State> & Actions = {
 
   [ActionTypes.UPLOAD_BANNER_PHOTO]({ commit }, payload) {
     return new Promise((resolve) => {
-      axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/banners/" + payload.id + '/images', payload.data).
+      axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/banners/" + payload.id + '/images',
+        payload.data,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      ).
       then((response) => {
         commit(MutationTypes.UPDATE_BANNER, response.data)
         resolve(response.data);
@@ -537,8 +551,8 @@ export const actions: ActionTree<State, State> & Actions = {
 
   [ActionTypes.GET_PRODUCTS_DATA]({ commit, getters }, params) {
     return new Promise((resolve) => {
-      axios.get(import.meta.env.VITE_APP_API_URL + "products?category_id=" + 
-        params.id + 
+      axios.get(import.meta.env.VITE_APP_API_URL + "products?category_id=" +
+        params.id +
         "&offset=" + getters.goodsOfset +
         "&limit=" + getters.itemsInPage
       ).then((response) => {
@@ -568,7 +582,7 @@ export const actions: ActionTree<State, State> & Actions = {
       })
     })
   },
-  
+
   [ActionTypes.EDIT_USER]({ commit }, data) {
     return new Promise((resolve) => {
       axios.patch(import.meta.env.VITE_APP_API_URL + "users/" + String(data.id), data).
@@ -601,7 +615,14 @@ export const actions: ActionTree<State, State> & Actions = {
 
   [ActionTypes.UPLOAD_PRICE]({ commit } ,payload) {
     return new Promise((resolve) => {
-      axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/price_documents", payload).
+      axios.post(import.meta.env.VITE_APP_API_URL + "service_entities/vendor_info/1/price_documents",
+        payload,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      ).
       then((response) => {
         resolve(response.data);
       })
@@ -617,5 +638,5 @@ export const actions: ActionTree<State, State> & Actions = {
       })
     })
   },
-  
+
 }
