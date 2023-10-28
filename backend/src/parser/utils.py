@@ -30,6 +30,21 @@ def clean_fields(fields: dict) -> dict:
     return prepared_fields
 
 
+def fields_were_updated(fields: dict, instance) -> bool:
+    """
+    Check if fields were really updated in bookkeeping files and not to hit database with update statement.
+    """
+    for field_name, after_value in fields.items():
+        before_value = getattr(instance, field_name)
+        if field_name == 'name':
+            after_value = clean_string_from_spaces_and_redundant_symbols(dirty_string=after_value)
+
+        if before_value != after_value:
+            return True
+
+    return False
+
+
 def set_permissions_recursive(path: str, mode: int):
     """
     Set permissions recursively for a folder and its subfolders and files.

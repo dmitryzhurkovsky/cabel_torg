@@ -295,7 +295,7 @@ class GoodsMixin(BaseMixin, ABC):
             payload = value[1].text
 
             db_attribute_value, _ = await database_service.update_or_create_object(
-                db=self.db, model=AttributeValue, fields={
+                db=self.db, model=AttributeValue, update=True, fields={
                     'bookkeeping_id': bookkeeping_id,
                     'payload': payload
                 })
