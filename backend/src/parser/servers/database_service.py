@@ -2,6 +2,8 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from src.core.db.mixins.base_mixin import BaseMixin
+from src.parser.main import parser_logger
+from src.parser.utils import fields_were_updated
 
 
 async def get_object(
@@ -39,7 +41,7 @@ async def create_object(
         return instance, True
     except Exception as e:
         # Rollback if there is any problem
-        print(f'During adding of record to database exception happened: {e}')  # todo add it to a logger
+        parser_logger.info(f'An exception happened during adding of record to database: {e}\n')
         await db.rollback()
 
         return None, False
@@ -91,14 +93,15 @@ async def update_or_create_object(
     Returns: A tuple where the first argument is instance and the second one is bool whether it was created.
     """
     # Get filter fields
-    value_of_pk_field = fields.get(pk_field)
+    value_of_pk_field = fields.pop(pk_field, None)
     filter_by_fields = {pk_field: value_of_pk_field} if value_of_pk_field else fields
 
     # Hit a database to get an instance
     instance = await get_object(db=db, model=model, fields=filter_by_fields, prefetch_fields=prefetch_fields)
     if instance:
-        if update:
+        if update and fields_were_updated(fields=fields, instance=instance):
             await update_object(db=db, model=model, instance=instance, fields=fields)
+
         return instance, False
 
     # The instance doesn't exist, try to create it
@@ -108,7 +111,7 @@ async def update_or_create_object(
 
     # The instance is already created, try to get the object from the database and update fields again.
     instance = await get_object(db=db, model=model, fields=filter_by_fields, prefetch_fields=prefetch_fields)
-    if update:
+    if update and fields_were_updated(fields=fields, instance=instance):
         await update_object(db=db, model=model, instance=instance, fields=fields)
 
     return instance, False

@@ -52,7 +52,7 @@ class BookkeepingLoggerContextManager:
         if exc_type:
             fields['finished_at'] = None  # noqa
             fields['is_failed'] = True
-            fields['exception'] = str(exc_value)
+            fields['exception'] = exc_value
 
             parser_logger.info(f'Exception has happened:\n{exc_value}\n')
             EmailService.send_email(
