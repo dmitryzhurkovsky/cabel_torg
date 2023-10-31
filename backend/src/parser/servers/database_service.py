@@ -2,6 +2,7 @@ from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from src.core.db.mixins.base_mixin import BaseMixin
+from src.models.abstract_model import BaseModel
 from src.parser.main import parser_logger
 from src.parser.utils import fields_were_updated
 
@@ -11,7 +12,7 @@ async def get_object(
         model,
         fields: dict,
         prefetch_fields: tuple = None,
-):
+) -> BaseModel | None:
     """Get an object from a database."""
     options = BaseMixin.init_preloaded_fields(preloaded_fields=prefetch_fields)
 
@@ -28,7 +29,7 @@ async def create_object(
         model,
         fields: dict,
         refresh: bool = True
-):
+) -> tuple[BaseModel | None, bool]:
     """Create an object in a database."""
     try:
         # Try to create an instance
@@ -74,7 +75,7 @@ async def update_or_create_object(
         update: bool = False,
         refresh: bool = True,
         pk_field: str = 'bookkeeping_id'
-):
+) -> tuple[BaseModel, bool]:
     """
     Get the instance from the database and update all fields except id and accounting id and return the instance
     as the first argument and a boolean of whether the instance was created in the second argument.
@@ -93,7 +94,7 @@ async def update_or_create_object(
     Returns: A tuple where the first argument is instance and the second one is bool whether it was created.
     """
     # Get filter fields
-    value_of_pk_field = fields.pop(pk_field, None)
+    value_of_pk_field = fields.get(pk_field)
     filter_by_fields = {pk_field: value_of_pk_field} if value_of_pk_field else fields
 
     # Hit a database to get an instance
