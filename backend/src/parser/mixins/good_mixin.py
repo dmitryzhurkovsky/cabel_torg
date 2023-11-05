@@ -249,10 +249,18 @@ class GoodsMixin(BaseMixin, ABC):
                     'value_id': value_id_db,
                 })
 
-            attributes.append(db_attribute)
-
             if name_id_db == self.under_the_order_attribute_id:
                 self.under_the_order_attribute_cache.add(db_attribute.id)
+
+            if (
+                self.do_not_upload_to_the_site_attribute_name_id == name_id_db and
+                (not value_bookkeeping_id or not value_bookkeeping_id == 'Да')
+            ):
+                # don't add attribute "Не выгружать на сайт" to list of attributes if we have it with a blank or any
+                # values except of Да
+                continue
+
+            attributes.append(db_attribute)
 
         return 'attributes', attributes
 
