@@ -11,10 +11,11 @@ class BaseMixin:
     NAMESPACES = {'urn': 'urn:1C.ru:commerceml_2'}
     CACHE = dict()  # todo use a cache library here
 
-    __slots__ = ('db',)
+    __slots__ = ('db', 'parsed_categories_ids')
 
     def __init__(self, db: AsyncSession):
         self.db = db
+        self.parsed_categories_ids = set()
         self.CACHE['attributes'] = dict()
         self.CACHE['attributes']['under_the_order'] = set()
         self.CACHE['values'] = dict()
