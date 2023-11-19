@@ -14,8 +14,6 @@ class CategoryMixin(BaseMixin, ABC):
     EXCLUDED_CATEGORIES = settings.EXCLUDED_CATEGORIES
     DEFAULT_ORDER = settings.DEFAULT_CATEGORIES_ORDER
 
-    parsed_categories_ids = set()  # it's used for identify categories were deleted
-
     @property
     def excluded_categories_cache(self) -> set:
         if not self.CACHE.get('categories'):
