@@ -93,7 +93,6 @@ class GoodsMixin(BaseMixin, ABC):
                 update=True,
                 fields=clean_product,
                 prefetch_fields=(Product.attributes,),
-                pk_field='vendor_code'
             )
             if attributes:
                 for attribute in attributes:
