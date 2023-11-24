@@ -2,7 +2,7 @@ from _decimal import Decimal
 from _elementtree import Element
 from abc import ABC
 
-from sqlalchemy import text, delete, not_
+from sqlalchemy import text, delete, not_, or_
 from transliterate import translit
 
 from src.core import settings
@@ -93,6 +93,10 @@ class GoodsMixin(BaseMixin, ABC):
                 update=True,
                 fields=clean_product,
                 prefetch_fields=(Product.attributes,),
+                custom_filters=(or_(
+                    Product.bookkeeping_id == clean_product['bookkeeping_id'],
+                    Product.vendor_code == clean_product['vendor_code']
+                ))
             )
             if attributes:
                 for attribute in attributes:

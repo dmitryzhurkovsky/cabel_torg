@@ -1,4 +1,4 @@
-from sqlalchemy import select, update
+from sqlalchemy import select, update, BooleanClauseList
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from src.core.db.mixins.base_mixin import BaseMixin
@@ -10,17 +10,19 @@ from src.parser.utils import fields_were_updated
 async def get_object(
         db: AsyncSession,
         model,
-        fields: dict,
+        fields: dict | BooleanClauseList,
         prefetch_fields: tuple = None,
 ) -> BaseModel | None:
     """Get an object from a database."""
     options = BaseMixin.init_preloaded_fields(preloaded_fields=prefetch_fields)
 
-    query_result = await db.execute(
-        select(model).
-        filter_by(**fields).
-        options(*options)
-    )
+    query = select(model).options(*options)
+    if isinstance(fields, dict):
+        query = query.filter_by(**fields)
+    elif isinstance(fields, BooleanClauseList):
+        query = query.filter(fields)
+
+    query_result = await db.execute(query)
     return query_result.scalar_one_or_none()
 
 
@@ -74,7 +76,8 @@ async def update_or_create_object(
         prefetch_fields: tuple | None = None,
         update: bool = False,
         refresh: bool = True,
-        pk_field: str = 'bookkeeping_id'
+        pk_field: str = 'bookkeeping_id',
+        custom_filters: tuple = None
 ) -> tuple[BaseModel, bool]:
     """
     Get the instance from the database and update all fields except id and accounting id and return the instance
@@ -90,12 +93,16 @@ async def update_or_create_object(
         refresh: is used to tell SqlAlchemy whether we should update session.
          For example if we need to get id of instances.
         pk_field: is used to connect instance in db with instance in 1C bookkeeping.
+        custom_filters: is used to filter by custom fields. For example: we want to have a few OR conditions and so on.
 
     Returns: A tuple where the first argument is instance and the second one is bool whether it was created.
     """
     # Get filter fields
-    value_of_pk_field = fields.get(pk_field)
-    filter_by_fields = {pk_field: value_of_pk_field} if value_of_pk_field else fields
+    if custom_filters is not None:
+        filter_by_fields = custom_filters
+    else:
+        value_of_pk_field = fields.get(pk_field)
+        filter_by_fields = {pk_field: value_of_pk_field} if value_of_pk_field else fields
 
     # Hit a database to get an instance
     instance = await get_object(db=db, model=model, fields=filter_by_fields, prefetch_fields=prefetch_fields)
