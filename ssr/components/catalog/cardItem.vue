@@ -20,7 +20,7 @@
         <div class="product__status icon-out-of-stock _label mb-20" v-if = "card.status === 'O'">Нет в наличии</div>
       </div>
       <div class="item-card__row old_price__row flex-center">
-        <div class="old_price" v-if="card.price_with_tax !== cardPriceWithDiscount">{{ card.price_with_tax }} 
+        <div class="old_price" v-if="!card.is_price_on_request && card.price_with_tax !== cardPriceWithDiscount">{{ card.price_with_tax }} 
           <span>BYN/{{ card.base_unit.full_name }}</span>
         </div>
         <div class="notice" v-if="!card.is_price_on_request">* Цена указана с учетом НДС.</div>
