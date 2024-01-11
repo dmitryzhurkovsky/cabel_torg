@@ -114,7 +114,7 @@ class ProductManager(CRUDManager):
     @classmethod
     def get_order_expressions(cls, filter_fields: QueryParams) -> list[ColumnOperators | None]:
         """Convert ordering values to SQLALCHEMY filter expressions."""
-        order_expressions = []
+        order_expressions = [case((Product.status == ProductStatus.AVAILABLE, 0), else_=1)]
         if order_attribute := filter_fields.get('ordering'):
             if order_attribute in (
                     ProductOrderFilterEnum.CREATED_DATE_ASCENDING,
