@@ -13,13 +13,18 @@
       <UiCardImage :images=card.images />
     </a>
     <div class="item-card__info">
+      <div class="item-card__row flex-center">
+        <div class="item-card__status icon-done-color _label" v-if = "card.status === 'A'">В наличии</div>
+        <div class="item-card__status icon-on-the-way _label" v-if = "card.status === 'W'">В пути на склад</div>
+<!--        <div class="item-card__status _label if_status_on_the_way" v-if = "card.status === 'W'">Доставим в течение 14 дней</div>-->
+        <div class="item-card__status icon-out-of-stock _label" v-if = "card.status === 'O'">Нет в наличии</div>
+      </div>
       <div class="item-card__row old_price__row flex-center">
-        <div class="old_price" v-if="card.price_with_tax !== cardPriceWithDiscount">{{ card.price_with_tax }} 
+        <div class="old_price" v-if="!card.is_price_on_request && card.price_with_tax !== cardPriceWithDiscount">{{ card.price_with_tax }} 
           <span>BYN/{{ card.base_unit.full_name }}</span>
         </div>
         <div class="notice" v-if="!card.is_price_on_request">* Цена указана с учетом НДС.</div>
       </div>
-
       <div class="item-card__row current_price__row flex-center">
         <div class="current_price" v-if="!card.is_price_on_request">{{ cardPriceWithDiscount }}
           <span>BYN/{{ card.base_unit.full_name }}</span>
@@ -278,6 +283,13 @@ export default {
     cursor: pointer;
     fill: none;
   }
+  &__status{
+    font-size: 12px;
+    margin: 5px 0;
+    &:before{
+      margin-right: 10px;
+    }
+  }
 
   &__row {
   justify-content: space-between;
@@ -285,7 +297,7 @@ export default {
       margin-bottom: 3px;
     }
     &:nth-child(2){
-      margin-bottom: 15px;
+      //margin-bottom: 15px;
     }
   }
 
@@ -320,7 +332,7 @@ export default {
 
   .old_price__row{
     min-height: 34px;
-    flex-direction: column-reverse;
+    //flex-direction: column-reverse;
     align-items: flex-start;
   }
   .current_price__row{
