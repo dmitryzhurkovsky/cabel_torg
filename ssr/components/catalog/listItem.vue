@@ -231,9 +231,13 @@ export default {
     border-radius: 8px;
     padding: 20px 22px 20px 22px;
 
+
   ._label{
     font-size: 12px;
     line-height: 20px;
+  }
+   &__status{
+    font-size: 14px!Important;
   }
 
   &__img {

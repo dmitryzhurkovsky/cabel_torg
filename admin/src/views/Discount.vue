@@ -630,6 +630,9 @@
   &__discount{
 
   }
+  &__status{
+    font-size: 14px;
+  }
 
   .discount_price{
     color: red;
