@@ -284,7 +284,7 @@ export default {
     fill: none;
   }
   &__status{
-    font-size: 12px;
+    font-size: 14px;
     margin: 5px 0;
     &:before{
       margin-right: 10px;
