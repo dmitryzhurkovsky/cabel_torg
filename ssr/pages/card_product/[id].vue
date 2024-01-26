@@ -19,12 +19,12 @@
                   />
                   </div>
                   <div class="product__swaper-img">
-                    <ClientOnly>
+                    <!-- <ClientOnly> -->
                       <SliderCardImage 
                         :allImages = data.images
                         @changeSliderTo = "changeNumber"
                       />
-                    </ClientOnly>
+                    <!-- </ClientOnly> -->
                   </div>
 
                 </div>
