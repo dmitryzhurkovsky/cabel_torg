@@ -19,6 +19,7 @@ class RetrieveMixin(BaseMixin):
         If use_or_conditions attribute is True, then it will combine filters by or_ operand.
         """
         filtered_fields = cls.init_filtered_fields(filter_fields=kwargs)
+        filtered_fields = {*cls.base_filters, *filtered_fields} - {None}
 
         query = await session.execute(
             select(cls.table).

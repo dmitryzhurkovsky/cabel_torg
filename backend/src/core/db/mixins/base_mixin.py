@@ -14,9 +14,14 @@ UpdateBaseSchema = TypeVar('UpdateBaseSchema', bound=BaseModel)
 
 
 class BaseMixin:
-    """Base async database mixin"""
+    """
+    Base async database mixin.
+    preloaded_fields are fields that should be fetched with query not to get I/O error.
+    base_filters are filters that should be forced to apply to each get query.
+    """
     table: TableType = None
     preloaded_fields: tuple = ()
+    base_filters: tuple = ()
 
     create_scheme: CreateBaseSchema | None = None
     update_scheme: UpdateBaseSchema | None = None

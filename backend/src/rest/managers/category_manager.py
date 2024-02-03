@@ -13,10 +13,11 @@ from src.rest.schemas.category_schema import CategoryUpdateSchema
 
 class CategoryManager(CRUDManager):
     table = Category
+    base_filters = (Category.is_visible.is_not(False),)
 
-    @staticmethod
-    def get_filter_expressions(filter_fields: QueryParams) -> list[ColumnOperators]:
-        filter_expressions = [Category.is_visible.is_not(False)]
+    @classmethod
+    def get_filter_expressions(cls, filter_fields: QueryParams) -> list[ColumnOperators]:
+        filter_expressions = [*cls.base_filters]
 
         if type_of_category := filter_fields.get('type_of_category'):
             if type_of_category == CategoryTypeFilterEnum.WITH_DISCOUNT:

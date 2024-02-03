@@ -20,6 +20,7 @@ from src.rest.schemas.product_schema import ProductUpdateSchema
 
 class ProductManager(CRUDManager):
     table = Product
+    base_filters = (Product.is_visible.is_not(False),)
 
     preloaded_fields = (
         joinedload(Product.manufacturer),
@@ -38,7 +39,7 @@ class ProductManager(CRUDManager):
         """Convert filter values to SQLALCHEMY filter expressions."""
         from src.rest.managers.category_manager import CategoryManager
 
-        filter_expressions = []
+        filter_expressions = [*cls.base_filters]
 
         # Category block
         if category_id := filter_fields.get('category_id'):
@@ -141,7 +142,6 @@ class ProductManager(CRUDManager):
     ) -> list | Generator:
         """Get filtered list of objects with pagination."""
         filter_expressions = await cls.get_filter_expressions(filters, session=session)
-        filter_expressions.append(Product.is_visible.is_not(False))
 
         order_by = cls.get_order_expressions(filters)
 
@@ -187,7 +187,6 @@ class ProductManager(CRUDManager):
             session: AsyncSession,
     ) -> int:
         filter_expressions = await cls.get_filter_expressions(filters, session=session)
-        filter_expressions.append(Product.is_visible.is_not(False))
 
         result = await session.execute(
             select(count()).
