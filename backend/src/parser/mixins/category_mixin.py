@@ -44,8 +44,7 @@ class CategoryMixin(BaseMixin, ABC):
             clean_category = self.clean_category_element(element=raw_category)
 
             # If there is a parent_category_id it means that we parse a subcategory.
-            if parent_category_id:
-                clean_category |= {'parent_category_id': parent_category_id}
+            clean_category |= {'parent_category_id': parent_category_id}
 
             db_category, _ = await database_service.update_or_create_object(
                 db=self.db, refresh=True, update=True, model=Category, fields=clean_category
