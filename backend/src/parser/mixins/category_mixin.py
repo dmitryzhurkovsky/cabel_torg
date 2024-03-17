@@ -1,7 +1,7 @@
 from _elementtree import Element
 from abc import ABC
 
-from sqlalchemy import delete, not_
+from sqlalchemy import delete, not_, update
 
 from src.core import settings
 from src.models.category_model import Category
@@ -44,8 +44,7 @@ class CategoryMixin(BaseMixin, ABC):
             clean_category = self.clean_category_element(element=raw_category)
 
             # If there is a parent_category_id it means that we parse a subcategory.
-            if parent_category_id:
-                clean_category |= {'parent_category_id': parent_category_id}
+            clean_category |= {'parent_category_id': parent_category_id}
 
             db_category, _ = await database_service.update_or_create_object(
                 db=self.db, refresh=True, update=True, model=Category, fields=clean_category
@@ -109,6 +108,15 @@ class CategoryMixin(BaseMixin, ABC):
         await self.db.execute(
             delete(Category).
             where(not_(Category.id.in_(self.parsed_categories_ids)))
+        )
+
+        await self.db.commit()
+
+    async def set_category_order_to_null(self):
+        await self.db.execute(
+            update(Category).
+            where(Category.order.is_not(None)).
+            values(order=None)
         )
 
         await self.db.commit()

@@ -106,14 +106,14 @@ async def parse_bookkeeping_file():
             xml_parser = XMLParser(db=db)
             price_parser = OffersParser(db=db)
 
-            await asyncio.wait([event_loop.create_task(xml_parser.parse_categories())])
-            await asyncio.wait([event_loop.create_task(xml_parser.delete_old_categories())])
-            await asyncio.wait([event_loop.create_task(xml_parser.parse_attributes())])
-
-            await event_loop.create_task(xml_parser.parse_products())
-            await event_loop.create_task(xml_parser.set_is_visible_attribute())
-            await event_loop.create_task(xml_parser.delete_old_products())
-            await event_loop.create_task(price_parser.parse_offers())
+            await xml_parser.set_category_order_to_null()
+            await xml_parser.parse_categories()
+            await xml_parser.parse_attributes()
+            await xml_parser.parse_products()
+            await xml_parser.set_is_visible_attribute()
+            await price_parser.parse_offers()
+            await xml_parser.delete_old_categories()
+            await xml_parser.delete_old_products()
 
             set_permissions_recursive(path=settings.IMAGES_PATH, mode=0o777)
             set_permissions_recursive(path=settings.DOCUMENTS_PATH, mode=0o777)
