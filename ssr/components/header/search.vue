@@ -10,12 +10,12 @@
 
     </div>
     
-    <div class="dropdown__box" v-if = "FINDED_ELEMENTS.length && SEARCH_STRING !== CATALOG_SEARCH_STRING">
+    <div class="dropdown__box" v-if = "SEARCH_STRING !== CATALOG_SEARCH_STRING">
       <div class="dropdown__wrapper">
         <div class="dropdown__content popup-cart">
             <h3 class="">Найденые товары</h3>
 
-              <div class="popup-cart__list">
+              <div v-if="queryString && FINDED_ELEMENTS.length" class="popup-cart__list">
                 <HeaderSearchItem 
                     class="row" 
                     v-for = "item in FINDED_ELEMENTS"
@@ -27,7 +27,9 @@
                   Показать все
                 </div>
               </div>
-
+              <div v-if="queryString && FINDED_ELEMENTS.length === 0" class="popup-cart__list">
+                не найдено / измените свой запрос.
+              </div>
           </div>
       </div>
     </div>
