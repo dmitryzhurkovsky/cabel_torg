@@ -28,7 +28,9 @@
                 </div>
               </div>
               <div v-if="queryString && FINDED_ELEMENTS.length === 0" class="popup-cart__list">
-                не найдено / измените свой запрос.
+                <div class="row">
+                  не найдено / измените свой запрос.
+                </div>
               </div>
           </div>
       </div>
