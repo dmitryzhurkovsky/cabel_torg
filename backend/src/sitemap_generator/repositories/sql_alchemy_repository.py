@@ -14,12 +14,15 @@ class SQLAlchemyRepository(AbstractRepository):
 
     async def get_all_records(self):
         filter_expression = self.query_context.filter_expressions or tuple()
-        select_fields = self.query_context.select_fields or self.table
+        select_fields = self.query_context.select_fields or [self.table]
 
         query_result = await self.db.execute(
             select(*select_fields).
             where(*filter_expression)
         )
+        if self.query_context.select_fields:
+            return query_result.all()
+
         return query_result.scalars().all()
 
     @property

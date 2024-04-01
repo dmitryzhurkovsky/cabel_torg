@@ -2,3 +2,5 @@ User-agent: *
 Disallow: /card_product/string
 Disallow: /category/string
 Disallow: /string
+
+Sitemap: https://cabel-torg.by/site_media/sitemap.xml

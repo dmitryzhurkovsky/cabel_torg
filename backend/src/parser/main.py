@@ -14,6 +14,7 @@ from src.parser.servers import database_service
 from src.parser.utils import set_permissions_recursive
 from src.parser.xml_bookkeeping_parser import XMLParser, OffersParser
 from src.services.email_service import EmailService
+from src.sitemap_generator.main import create_sitemap
 
 parser_logger = create_logger(log_file_name='parser')
 
@@ -114,6 +115,8 @@ async def parse_bookkeeping_file():
             await price_parser.parse_offers()
             await xml_parser.delete_old_categories()
             await xml_parser.delete_old_products()
+
+            await create_sitemap(db=db)
 
             set_permissions_recursive(path=settings.IMAGES_PATH, mode=0o777)
             set_permissions_recursive(path=settings.DOCUMENTS_PATH, mode=0o777)

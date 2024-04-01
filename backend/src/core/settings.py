@@ -73,3 +73,20 @@ DEFAULT_CATEGORIES_ORDER = {
     'Материалы для монтажа кабеля': 3,
     'Оборудование RF сигнала': 4
 }
+
+# Sitemap generator
+STATIC_ROUTERS = os.getenv(
+    "STATIC_ROUTERS",
+    (
+        "how_to_work",
+        "shipping",
+        "wholesale",
+        "warranty",
+        "offer",
+        "about",
+        "contacts",
+        "new"
+    )
+)
+SITE_URL = os.getenv("SITE_URL", "https://cabel-torg.by")
+SITEMAP_PATH = os.getenv("SITEMAP_PATH", f"{DATA_PATH}/site_media/sitemap.xml")
