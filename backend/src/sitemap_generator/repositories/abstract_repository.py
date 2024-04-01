@@ -4,7 +4,7 @@ from typing import TypeVar
 
 class AbstractRepository(ABC):
     @abstractmethod
-    def get_all_records(self) -> list:
+    def get_all_records(self):
         raise NotImplementedError
 
 

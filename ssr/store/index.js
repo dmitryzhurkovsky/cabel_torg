@@ -20,7 +20,7 @@ axios.interceptors.response.use(
   error => {
     if (typeof window !== 'undefined') {
       if (typeof error.response === 'undefined') {
-        store.commit("notification/ADD_MESSAGE", {id: 'Err500', icon: 'error', name: 'Ошибка авторизации. Сервер не отвечает'});
+        // store.commit("notification/ADD_MESSAGE", {id: 'Err500', icon: 'error', name: 'Ошибка авторизации. Сервер не отвечает'});
         store.commit("auth/SET_USER_DATA", null);
         localStorage.removeItem("authToken");
         localStorage.removeItem("refreshToken");
