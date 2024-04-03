@@ -39,7 +39,7 @@ async def create_sitemap(db: AsyncSession):  # noqa
     sitemap_generator = SitemapGenerator(
         site_name=settings.SITE_URL,
         absolute_path=settings.SITEMAP_PATH,
-        static_routers=settings.STATIC_ROUTERS,
+        static_routers=settings.SITEMAP_STATIC_ROUTERS,
         dynamic_routers=dynamic_routers
     )
 
