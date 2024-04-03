@@ -28,7 +28,7 @@ class SitemapGenerator:
             absolute_path: str = "sitemap.xml",
             static_routers: Iterable = None,
             dynamic_routers: Iterable[DynamicRoute] = None,
-            schema_version: str = "0.9",
+            schema_version: str = settings.SITEMAP_SCHEMA_VERSION,
     ):
         self.site_name = site_name if site_name.startswith("https://") else f"https://{site_name}"
         self.static_routes = static_routers or []

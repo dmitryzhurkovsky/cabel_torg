@@ -75,8 +75,8 @@ DEFAULT_CATEGORIES_ORDER = {
 }
 
 # Sitemap generator
-STATIC_ROUTERS = os.getenv(
-    "STATIC_ROUTERS",
+SITEMAP_STATIC_ROUTERS = os.getenv(
+    "SITEMAP_STATIC_ROUTERS",
     (
         "how_to_work",
         "shipping",
@@ -90,3 +90,4 @@ STATIC_ROUTERS = os.getenv(
 )
 SITE_URL = os.getenv("SITE_URL", "https://cabel-torg.by")
 SITEMAP_PATH = os.getenv("SITEMAP_PATH", f"{DATA_PATH}/site_media/sitemap.xml")
+SITEMAP_SCHEMA_VERSION = os.getenv("SITEMAP_SCHEMA_VERSION", "1.1")
