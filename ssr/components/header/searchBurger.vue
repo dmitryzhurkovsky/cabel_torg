@@ -10,12 +10,12 @@
 
     </div>
     
-    <div class="dropdown__box" v-if = "FINDED_ELEMENTS.length && SEARCH_STRING !== CATALOG_SEARCH_STRING">
+    <div class="dropdown__box" v-if = "SEARCH_STRING !== CATALOG_SEARCH_STRING">
       <div class="dropdown__wrapper">
         <div class="dropdown__content popup-cart">
             <h3 class="">Найденые товары</h3>
 
-              <div class="popup-cart__list">
+              <div v-if = "queryString && FINDED_ELEMENTS.length" class="popup-cart__list">
                 <HeaderSearchItem 
                     class="row" 
                     v-for = "item in FINDED_ELEMENTS"
@@ -27,7 +27,12 @@
                   Показать все
                 </div>
               </div>
-
+              <div v-if = "queryString && !FINDED_ELEMENTS.length" class="popup-cart__list">
+              <!-- <div class="popup-cart__list"> -->
+                <div class="row">
+                  По Вашему запросу ничего не найдено. Проверьте правильность написания или упростите запрос.
+                </div>
+              </div>
           </div>
       </div>
     </div>
@@ -61,6 +66,7 @@ export default {
       } else {
         this.SET_FINDED_ELEMENTS({data: []});
       }
+      console.log(Boolean(this.queryString && this.FINDED_ELEMENTS.length === 0 && this.SEARCH_STRING !== this.CATALOG_SEARCH_STRING));
     }
   },
 
@@ -86,12 +92,12 @@ export default {
       this.SET_SEARCH_STRING('');
       this.SET_CATALOG_SEARCH_STRING('');
       this.UPDATE_IS_CATALOG_OPEN(false);
-      let url = "/catalog?";
-      if (this.CATALOG_SEARCH_STRING) url = url + "offset=0&limit=12";
-      url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
-      url = url + '&type_of_product=all';
-      if (this.CATALOG_SEARCH_STRING) url = url + "&q=" + this.CATALOG_SEARCH_STRING;
-      this.$router.push(url);
+      // let url = "/catalog?";
+      // if (this.CATALOG_SEARCH_STRING) url = url + "offset=0&limit=12";
+      // url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+      // url = url + '&type_of_product=all';
+      // if (this.CATALOG_SEARCH_STRING) url = url + "&q=" + this.CATALOG_SEARCH_STRING;
+      // this.$router.push(url);
     },
 
     openFindedElementsInCatalg(){
