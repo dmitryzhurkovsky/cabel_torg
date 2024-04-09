@@ -88,10 +88,10 @@ export default {
       this.queryString = '';
       this.SET_SEARCH_STRING('');
       this.SET_CATALOG_SEARCH_STRING('');
-      let url = "/catalog?";
-      url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
-      url = url + '&type_of_product=all';
-      this.$router.push(url);
+      // let url = "/catalog?";
+      // url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
+      // url = url + '&type_of_product=all';
+      // this.$router.push(url);
     },
 
     openFindedElementsInCatalg(){

@@ -357,14 +357,14 @@
       await store.dispatch('header/GET_CATEGORIES')
     }
     if (store.getters['query/CATEGORY_ID']) {
-      if (isFirstRender) {
+      // if (isFirstRender) {
         setParametersFromURL()
         const isCategoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])
         store.commit('catalog/SET_CATEGORY', isCategoryData[0])
         await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
-      } else {
-        setParametersFromURL()
-      }
+      // } else {
+      //   setParametersFromURL()
+      // }
       setViewType(getters['header/DEVICE_VIEW_TYPE'])
       setBreabcrumbs()
     }  
