@@ -364,6 +364,9 @@
         await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
       } else {
         setParametersFromURL()
+        const isCategoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])
+        store.commit('catalog/SET_CATEGORY', isCategoryData[0])
+        await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
       }
       setViewType(getters['header/DEVICE_VIEW_TYPE'])
       setBreabcrumbs()
