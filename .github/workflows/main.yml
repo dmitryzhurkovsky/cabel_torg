@@ -24,6 +24,13 @@ jobs:
       - name: Rebuilding and restarting containers.
         run: docker-compose up --build -d
 
+      - name: Waiting until docker-compose up if finished ...
+        run: sleep 100s
+        shell: bash
+
+      - name: Clean unsed data.
+        run: docker system prune -f
+
   rebuild-without-cache:
     runs-on: self-hosted
     if: github.event_name == 'workflow_dispatch'
@@ -43,3 +50,10 @@ jobs:
 
       - name: Restarting containers.
         run: docker-compose up -d
+
+      - name: Waiting until docker-compose up if finished ...
+        run: sleep 100s
+        shell: bash
+
+      - name: Clean unsed data.
+        run: docker system prune -f
