@@ -17,7 +17,7 @@
 
               <swiper-slide v-for="partner in PARTNERS" :key = "partner.id">
                 <div class="parnters__item">
-                  <UiCardImage :images = "partner.image" />
+                  <UiCardImage :images = "'/' + partner.image" />
                 </div>
               </swiper-slide>
 
