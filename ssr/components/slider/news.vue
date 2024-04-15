@@ -26,7 +26,7 @@
               <swiper-slide v-for="oneNew in filteredNews" :key="oneNew.id">
                 <a class="news__item" @click="onOpenNew(oneNew.id)">
                   <div class="news__item__box">
-                    <UiCardImage :images = "oneNew.image" />
+                    <UiCardImage :images = "'/' + oneNew.image" />
                   </div>
                   <div class="news__title long-text">{{ oneNew.title }}</div>
                   <div class="news__desc">

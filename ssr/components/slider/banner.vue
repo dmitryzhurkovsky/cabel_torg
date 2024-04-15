@@ -74,7 +74,7 @@
       ...mapActions("main", ["GET_BANNERS"]),
 
       getPath: function(item){
-        let path = useRuntimeConfig().public.NUXT_APP_IMAGES + item;
+        let path = useRuntimeConfig().public.NUXT_APP_IMAGES + '/' + item;
         return path;
       },
 
