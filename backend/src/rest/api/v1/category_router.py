@@ -19,7 +19,7 @@ async def get_categories(
         request: Request,
         session: AsyncSession = Depends(get_session),
         type_of_category: CategoryTypeFilterEnum | None = Query(default=None),
-        offset: int = 0, limit: int = Query(default=150, lte=150)
+        offset: int = 0, limit: int = Query(default=500, lte=500)
         # todo add norm pagonation
 ) -> list[CategorySchema]:
     return await CategoryManager.filter_list(
