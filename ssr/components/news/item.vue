@@ -1,7 +1,7 @@
 <template>
   <a class="news__item" v-if = "data">
     <div class="_block">
-      <UiCardImage :images = "data.image"/>
+      <UiCardImage :images = "'/' + data.image"/>
     </div>
     <div class="_block">
       <div class="news__date">{{ data.created_at.slice(0,10) }}</div>
