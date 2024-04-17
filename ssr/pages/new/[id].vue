@@ -10,7 +10,7 @@
     <div class="one-news__block app__content _container" v-if="data">
       <a class="one-news__item">
           <div class="one-news__img">
-              <UiCardImage :images = "data.image" />
+              <UiCardImage :images = "'/' + data.image" />
           </div>
 
           <div class="one-news__title ">{{ data.title }}</div>
