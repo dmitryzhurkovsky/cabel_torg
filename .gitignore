@@ -34,3 +34,5 @@ front/*.ntvs*
 front/*.njsproj
 front/*.sln
 front/*.sw?
+
+.codegpt
