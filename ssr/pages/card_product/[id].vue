@@ -348,7 +348,7 @@
       level: 'root',
     }
     store.commit('breadcrumb/ADD_BREADCRUMB', mainBreadCrumb)
-    console.log(cartItemData.value.category);
+    // console.log(cartItemData.value.category);
     const chein = []
     const category = cartItemData.value.category
     chein.push(category)

@@ -33,11 +33,11 @@ export default defineNuxtConfig({
         // accurateTrackBounce: true,
       }
     ]
-  ]
+  ],
 
   // pages: true
 
-  
+  ssr: true,
 });
 
 
