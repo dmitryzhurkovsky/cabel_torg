@@ -21,7 +21,7 @@ class Category(Base1CModel):
 
     # Service fields
     order = Column(Integer, unique=True)
-    quick_order = Column(Integer, unique=True)  # It's a special attribute that defines categories on the main page.
+    quick_order = Column(Integer, unique=True, index=True)  # It's a special attribute that defines categories on the main page.
     site_link = Column(String)  # It's a slug field.
     site_page_title = Column(String)
     site_page_description = Column(String)

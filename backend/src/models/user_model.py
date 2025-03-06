@@ -7,7 +7,7 @@ from src.models.abstract_model import BaseModel
 class User(BaseModel):
     __tablename__ = 'users'
 
-    email = Column(String(128), unique=True, nullable=False)
+    email = Column(String(128), unique=True, nullable=False, index=True)
     password = Column(String(128), nullable=False)
     full_name = Column(String(50), nullable=False)
     phone_number = Column(String(50), unique=True, nullable=False)

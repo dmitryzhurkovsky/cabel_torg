@@ -216,9 +216,9 @@ class ProductManager(CRUDManager):
 
     @classmethod
     async def bulk_update_discounts(
-            cls, session: AsyncSession,
-            categories_ids: tuple[int] | list[int],
-            discount: int
+        cls, session: AsyncSession,
+        categories_ids: tuple[int] | list[int],
+        discount: int
     ):
         products = await cls.list(
             session=session,
@@ -237,7 +237,8 @@ class ProductManager(CRUDManager):
         """Get a maximum price of the product with the highest price in a database."""
         query_result = await session.execute(
             select(Product).
-            order_by(Product.price.desc())
+            order_by(Product.price.desc()).
+            limit(1)
         )
         product: Product = query_result.scalar()
 
