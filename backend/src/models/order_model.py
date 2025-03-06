@@ -54,7 +54,7 @@ class Order(BaseModel):
     # relations
     products = relationship('ProductOrder', back_populates='order', lazy='joined')
 
-    user_id = Column(ForeignKey('users.id', ondelete='CASCADE'))
+    user_id = Column(ForeignKey('users.id', ondelete='CASCADE'), index=True)
     user = relationship('User', back_populates='orders')
 
     @property

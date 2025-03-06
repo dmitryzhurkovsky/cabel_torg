@@ -77,12 +77,12 @@ async def get_product_witn_max_price(session: AsyncSession = Depends(get_session
     response_model=ProductSchema,
 )
 async def get_product(product_id: int | str, session: AsyncSession = Depends(get_session)):
-    return await ProductManager.retrieve(
-        id=product_id,
-        vendor_code=product_id,
-        use_or_condition=True,
-        session=session,
-    )
+    if product_id.isnumeric():
+        retrieve_args = {"id": int(product_id)}
+    else:
+        retrieve_args = {"vendor_code": product_id}
+
+    return await ProductManager.retrieve(**retrieve_args, session=session)
 
 
 @product_router.patch(

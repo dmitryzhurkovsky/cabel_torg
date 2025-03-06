@@ -17,10 +17,10 @@ class Attribute(Base):
 
     id = Column(Integer, index=True, primary_key=True)
 
-    value_id = Column(Integer, ForeignKey('attribute_values.id', ondelete='CASCADE'))
+    value_id = Column(Integer, ForeignKey('attribute_values.id', ondelete='CASCADE'), index=True)
     value = relationship('AttributeValue', back_populates='attribute', lazy='joined')
 
-    name_id = Column(Integer, ForeignKey('attribute_names.id', ondelete='CASCADE'))
+    name_id = Column(Integer, ForeignKey('attribute_names.id', ondelete='CASCADE'), index=True)
     name = relationship('AttributeName', back_populates='attribute', lazy='joined')
 
     products = relationship('Product', secondary='product_attribute', back_populates='attributes', lazy='noload')
