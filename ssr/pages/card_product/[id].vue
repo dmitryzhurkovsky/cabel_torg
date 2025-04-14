@@ -16,12 +16,14 @@
                   <UiCardImage 
                     :images=data.images 
                     :num="imgNumber"
+                    :alt="data.name + ' №' + Number(imgNumber + 1) + ' - cabel-torg'"
                   />
                   </div>
                   <div class="product__swaper-img">
                     <!-- <ClientOnly> -->
                       <SliderCardImage 
                         :allImages = data.images
+                        :altName = data.name
                         @changeSliderTo = "changeNumber"
                       />
                     <!-- </ClientOnly> -->
@@ -29,7 +31,7 @@
 
                 </div>
                 <div class="product__info">
-                    <div class="desc-product__title"> {{ data.name }}</div>
+                    <h1 class="desc-product__title"> {{ data.name }}</h1>
                     <div class="desc-product__article  _label">Артикул: <span>{{ data.vendor_code }}</span></div>
                     <div class="desc-product__status icon-done-color _label" v-if = "data.status === 'A'">В наличии</div>
                     <div class="desc-product__status icon-on-the-way " v-if = "data.status === 'W'">В пути на склад</div>

@@ -2,7 +2,7 @@
     <img v-if = "images" 
       :class="[active === true ? 'active' : '']"
       :src=getImagePath(images) 
-      alt=""
+      :alt="alt"
     >
     <img v-else class="" src="@/assets/no_image.png" alt="">
 </template>
@@ -16,6 +16,7 @@ export default {
     images:  null,
     num: 0,
     active: false,
+    alt: "",
   },
 
   methods:{

@@ -2,7 +2,10 @@
     <div v-if="cartItemData && quantity !==0">
       <div class="product__wrapper">
         <a class="product__img" :href="createHref(cartItemData.vendor_code)" @click.stop.prevent="openCardItem(cartItemData.vendor_code)">
-            <UiCardImage :images=cartItemData.images />
+            <UiCardImage 
+              :images=cartItemData.images 
+              :alt = "cartItemData.name + ' №1 - cabel-torg'"
+            />
         </a>
         <div class="product__info">
             <div class="product__article  _label mb-20">Артикул: <span>{{ cartItemData.vendor_code }}</span></div>

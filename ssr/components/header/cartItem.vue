@@ -1,7 +1,10 @@
 <template>
   <div class="popup-cart__item" v-if="cartItemData">
     <div class="popup-cart__img">
-        <UiCardImage :images=cartItemData.images />
+        <UiCardImage 
+          :images=cartItemData.images
+          :alt = "cartItemData.name + ' №1 - cabel-torg'"
+        />
     </div>
     <div class="popup-cart__description">
       <div class="popup-cart__title long_text">{{ cartItemData.name }}</div>

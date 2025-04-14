@@ -8,9 +8,7 @@
       <NotificationPopUp/>
     </ClientOnly>
     <MyHeader />
-    <ClientOnly fallback-tag="div">
-      <Breadcrumb/>
-    </ClientOnly>
+    <Breadcrumb/>
     <NuxtPage />
     <MyFooter />
   </div>

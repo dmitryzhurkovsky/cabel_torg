@@ -10,7 +10,10 @@
         @click.stop="onWishClick(card)"
     ></div>
     <a :href="createHref(card.vendor_code)" class="item-card__img" @click.stop.prevent="openCardItem(card.vendor_code)">
-      <UiCardImage :images=card.images />
+      <UiCardImage 
+        :images=card.images
+        :alt = "card.name + ' №1 - cabel-torg'"
+      />
     </a>
     <div class="item-card__info">
       <div class="item-card__row flex-center">

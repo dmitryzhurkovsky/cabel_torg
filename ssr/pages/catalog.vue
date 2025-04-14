@@ -1,5 +1,13 @@
 <template>
   <div class="catalog app__content" @click.stop = "clearSearchString()">
+    <Head>
+      <Title>
+        КабельТорг | Каталог
+      </Title>
+      <Meta name="discription" content="Каталог товаров" />
+      <link v-if="prevLink" rel="prev" :href="prevLink" />
+      <link v-if="nextLink" rel="next" :href="nextLink" />
+    </Head>
     <div class="catalog__wrapper">
       <div class="catalog__content _container">
         <div class="catalog__body">
@@ -57,20 +65,21 @@
 
   import store from '@/store'
 
-  const router = useRouter()
+  // const router = useRouter()
   const route = useRoute()
   const { getters } = store
   const isFilterPanelOpen = ref(false)
   const isMobileVersion = ref(false)
 
-  useHead({
-    title: 'Каталог',
-    name: 'Каталог',
-    meta: [{
-      name: 'Каталог',
-      content: 'Каталог товаров'
-    }]
-  })
+  // useHead({
+  //   title: 'Каталог',
+  //   name: 'Каталог',
+  //   meta: [{
+  //     name: 'Каталог',
+  //     content: 'Каталог товаров'
+  //   }]
+    
+  // })
 
   const setIsFilterPanelOpen = (data) => {
     isFilterPanelOpen.value = data
@@ -89,12 +98,59 @@
       }
   }
 
+  const prevLink = computed(() => {
+    let href = null
+    if (getters['catalog/ACTIVE_PAGE'] > 1) {
+      const newOffset = (getters['catalog/ACTIVE_PAGE'] - 1) * getters['query/LIMIT']
+      href = getCatalogUrl(newOffset)
+    }
+    return href
+  })
+
+  const nextLink = computed(() => {
+    let href = null
+    if (getters['catalog/ACTIVE_PAGE'] < getters['catalog/TOTAL_PAGES']) {
+      const newOffset = (getters['catalog/ACTIVE_PAGE'] + 1) * getters['query/LIMIT']
+      href = getCatalogUrl(newOffset)
+    }
+    return href
+  })
+
   const ChangeParameters = computed(() => {
     return JSON.stringify(route.query)  + JSON.stringify(getters['query/TYPE_OF_PRODUCT']) + 
       JSON.stringify(getters['query/SORT_TYPE']) + JSON.stringify(getters['query/SORT_DIRECTION']) + String(getters['query/MIN_PRICE']) + String(getters['query/MAX_PRICE']) +
       String(getters['query/OFFSET']) + String(getters['query/LIMIT']) + getters['catalog/ACTIVE_PAGE'] + getters['catalog/TOTAL_PAGES'];
       // + JSON.stringify(store.getters['catalog/ITEMS_LIST'])
   })
+
+  const getCatalogUrl = (offset) => {
+    let url = "/catalog"
+    url = url + getLastPartOfUrl(offset)
+    return url
+  }
+
+  const getLastPartOfUrl = (offset) => {
+    // console.log(getters['query/MIN_PRICE'], '   ', getters['query/MAX_PRICE']);
+    let url = '?';
+    if (offset != 0 || getters['query/LIMIT'] != 12) {
+      url = url + "offset=" + offset + '&'
+      url = url + "limit=" + getters['query/LIMIT'] + '&'
+    }
+    if (getters['query/MIN_PRICE'] != 0 || getters['query/MAX_PRICE'] != 80000) {
+      url = url + "actual_price_gte=" + getters['query/MIN_PRICE'] + '&';
+      url = url + "actual_price_lte=" + getters['query/MAX_PRICE'] + '&';
+    }
+    if (getters['query/SORT_DIRECTION'] !== '-' || getters['query/SORT_TYPE'] !== 'created_at') {
+      url = url + "ordering=" + getters['query/SORT_DIRECTION'] + getters['query/SORT_TYPE'] + '&'
+    }
+    if (getters['query/TYPE_OF_PRODUCT'] !== 'all') {
+      url = url + "type_of_product=" + getters['query/TYPE_OF_PRODUCT'] + '&'
+    }
+    if (getters['query/SEARCH_STRING']) url = url + "q=" + getters['query/SEARCH_STRING']
+    const lastSymbol = url.slice(-1)
+    if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
+    return url;        
+  }
 
   const clearSearchString= () => {
     store.commit("query/SET_SEARCH_STRING", '')

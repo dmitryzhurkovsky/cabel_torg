@@ -9,7 +9,7 @@ export default {
     activePage: 0,
     recomendedList: [],
     searchString: '',
-    recomendationType: 'all',
+    recomendationType: 'new',
     recomendationOrder: '',
     recomendationQuantity: 10,
     shownItemslist: [],
@@ -94,7 +94,11 @@ export default {
 
   actions: {
     async GET_CATALOG_ITEMS({ commit, rootGetters }, data) {
+     
       try {
+        if (data === null) {
+          return;
+        }
         let queryData = 'products?category_id=' + data + 
         '&offset=' + rootGetters['query/OFFSET'] + 
         '&limit=' + rootGetters['query/LIMIT']

@@ -5,6 +5,8 @@
         КабельТорг | {{ data?.category?.site_page_title }}
       </Title>
       <Meta name="discription" :content="data?.category?.site_page_description" />
+      <link v-if="prevLink" rel="prev" :href="prevLink" />
+      <link v-if="nextLink" rel="next" :href="nextLink" />
     </Head>
     <div class="catalog__wrapper">
       <div class="catalog__content _container">
@@ -16,6 +18,7 @@
               <CatalogFilterPanel />
             </div>
             <div class="content-block slider_subcategory__block">
+              <h1> {{ categoryName }} </h1>
               <div class="content-block__subcategory recomendation__nav" v-if = "LastCategory?.length && !isMobileVersion">
                   <div class="slider_subcategory__row"
                     :class="[quickCategory.id == store.getters['query/CATEGORY_ID'] ? 'recomendation__nav__item active' : 'recomendation__nav__item']"
@@ -145,6 +148,29 @@
       //  + getters['catalog/ITEMS_LIST'];
   })
 
+  const categoryName = computed(() => {
+    const category = getters['header/ALL_CATEGORIES'].filter(item => item.id == getters['query/CATEGORY_ID'])[0];
+    return category ? category.name: '';
+  })
+
+  const prevLink = computed(() => {
+    let href = null
+    if (getters['catalog/ACTIVE_PAGE'] > 1) {
+      const newOffset = (getters['catalog/ACTIVE_PAGE'] - 1) * getters['query/LIMIT']
+      href = getCategoryUrl(getters['query/CATEGORY_ID'], newOffset)
+    }
+    return href
+  })
+
+  const nextLink = computed(() => {
+    let href = null
+    if (getters['catalog/ACTIVE_PAGE'] < getters['catalog/TOTAL_PAGES']) {
+      const newOffset = (getters['catalog/ACTIVE_PAGE'] + 1) * getters['query/LIMIT']
+      href = getCategoryUrl(getters['query/CATEGORY_ID'], newOffset)
+    }
+    return href
+  })
+
   const clearSearchString= () => {
     store.commit("query/SET_SEARCH_STRING", '')
     store.commit("catalog/SET_CATALOG_SEARCH_STRING", '')
@@ -202,14 +228,22 @@
     if (currRoute.params.id) {
       // console.log('Есть id ', currRoute.params.id);
       const isCategoryByLink = getters['header/ALL_CATEGORIES'].filter(item => item.site_link == currRoute.params.id)
-      if (!isCategoryByLink) {
-        store.commit('query/SET_CATEGORY_ID', null) 
+      // console.log('isCategoryByLink ', isCategoryByLink);
+      
+      if (!isCategoryByLink.length) {
+        store.commit('query/SET_CATEGORY_ID', null)
+        setTimeout(() =>{
+          router.push('/404') 
+        }, 0)
       } else {
         store.commit('query/SET_CATEGORY_ID', isCategoryByLink[0].id) 
       }
     } else {
       // console.log('Нет id ', currRoute.params.id);
       store.commit('query/SET_CATEGORY_ID', null) 
+      setTimeout(() =>{
+        router.push('/404') 
+      }, 0)
     }
     // console.log('After SetFromUrl ', getters['query/CATEGORY_ID']);
     if (query.limit) {
@@ -278,6 +312,11 @@
   }
 
   const setBreabcrumbs = () => {
+
+    if (store.getters['query/CATEGORY_ID'] === null) {
+      return;
+    }
+
     const categoryStack = []
     const currRoute = useRoute()
     let category = null
@@ -357,17 +396,17 @@
       await store.dispatch('header/GET_CATEGORIES')
     }
     if (store.getters['query/CATEGORY_ID']) {
-      if (isFirstRender) {
+      // if (isFirstRender) {
         setParametersFromURL()
         const isCategoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])
         store.commit('catalog/SET_CATEGORY', isCategoryData[0])
         await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
-      } else {
-        setParametersFromURL()
-        const isCategoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])
-        store.commit('catalog/SET_CATEGORY', isCategoryData[0])
-        await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
-      }
+      // } else {
+      //   setParametersFromURL()
+      //   const isCategoryData = store.getters['header/ALL_CATEGORIES'].filter(item => item.id == store.getters['query/CATEGORY_ID'])
+      //   store.commit('catalog/SET_CATEGORY', isCategoryData[0])
+      //   await store.dispatch('catalog/GET_CATALOG_ITEMS', getters['query/CATEGORY_ID'])
+      // }
       setViewType(getters['header/DEVICE_VIEW_TYPE'])
       setBreabcrumbs()
     }  

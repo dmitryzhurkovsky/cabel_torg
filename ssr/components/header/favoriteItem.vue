@@ -1,7 +1,10 @@
 <template>
   <div class="popup-cart__item row">
       <div class="popup-cart__img">
-          <UiCardImage :images=favoriteItemData.images />
+          <UiCardImage 
+            :images=favoriteItemData.images 
+            :alt = "favoriteItemData.name + ' №1 - cabel-torg'"
+          />
       </div>
       <div class="popup-cart__description">
           <div class="popup-cart__title long_text">{{ favoriteItemData.name }}</div>

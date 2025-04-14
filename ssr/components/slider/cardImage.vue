@@ -19,6 +19,7 @@
                     :images = "allImages" 
                     :num = "index"
                     :active = "index == activeItem"
+                    :alt="altName + ' №' + Number(index + 1) + ' - cabel-torg'"
                     @click="changeSlideByClick(index)"
                   />
                 </div>
@@ -56,6 +57,7 @@
 
     props: {
       allImages: '',
+      altName: '',
     },
   
     data(){

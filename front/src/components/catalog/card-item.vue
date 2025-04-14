@@ -10,7 +10,10 @@
         @click.stop="onWishClick(card)"
     ></div>
     <a class="item-card__img" @click.stop="openCardItem(card.id)">
-      <CardImage :images=card.images />
+      <CardImage 
+        :images = card.images
+        :alt="card.name + ' №1 - cabel-torg'"
+      />
     </a>
     <div class="item-card__info">
       <div class="item-card__row old_price__row flex-center">

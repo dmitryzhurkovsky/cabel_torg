@@ -102,7 +102,7 @@
     data: function(){
       return{
         slidersInFrame : 4.5,
-        activePiont: 0,
+        activePiont: 1,
       }
     },
 
@@ -188,6 +188,7 @@
 
     async mounted(){
       await this.GET_RECOMENDED_ITEMS();
+
       this.setNewQuantity();
       this.setSlidersInFrame();
       setTimeout(() => window.scrollTo(0, 0), 0);
@@ -256,13 +257,6 @@
 
   h3{
     margin-bottom: 20px;
-  }
-
-  &__wrapper{
-
-  }
-  &__content{
-
   }
 
   &__link{
@@ -344,11 +338,6 @@
       right: 0;
       bottom: 0;
     }
-  }
-
-
-  &__item{
-
   }
 
 }

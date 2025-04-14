@@ -8,7 +8,10 @@
         <div v-if = "InfoCardBlock === 'New'" class="product__tagnew">{{ InfoCardBlock }}</div>
 
         <a :href="createHref(card.vendor_code)" class="product__img" @click.stop.prevent="openCardItem(card.vendor_code)">
-            <UiCardImage :images=card.images />
+            <UiCardImage 
+              :images=card.images 
+              :alt = "card.name + ' №1 - cabel-torg'"
+            />
         </a>
         <div class="product__info">
             <div class="product__status icon-done-color _label mb-20" v-if = "card.status === 'A'">В наличии</div>
