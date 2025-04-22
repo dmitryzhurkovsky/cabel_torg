@@ -9,7 +9,6 @@ from src.core import settings
 from src.models import Manufacturer, BaseUnit, Category, Attribute
 from src.models.attribute_model import AttributeName, AttributeValue
 from src.models.product_model import Product, ProductStatus
-from src.parser.main import parser_logger
 from src.parser.mixins.base_mixin import BaseMixin
 from src.parser.servers import database_service
 from src.parser.utils import clean_fields, get_tag_name
@@ -74,6 +73,8 @@ class GoodsMixin(BaseMixin, ABC):
 
     # Products methods
     async def parse_products(self):
+        from src.parser.main import parser_logger
+
         """Parse "Товары" node and then write them to a database."""
         goods = self.root_element[1][4]  # noqa
 
