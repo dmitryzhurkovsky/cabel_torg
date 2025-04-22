@@ -9,6 +9,7 @@ from src.core import settings
 from src.models import Manufacturer, BaseUnit, Category, Attribute
 from src.models.attribute_model import AttributeName, AttributeValue
 from src.models.product_model import Product, ProductStatus
+from src.parser.main import parser_logger
 from src.parser.mixins.base_mixin import BaseMixin
 from src.parser.servers import database_service
 from src.parser.utils import clean_fields, get_tag_name
@@ -76,43 +77,48 @@ class GoodsMixin(BaseMixin, ABC):
         """Parse "Товары" node and then write them to a database."""
         goods = self.root_element[1][4]  # noqa
 
-        for product in goods:
-            clean_product = await self.clean_product(element=product)
-            attributes = clean_product.pop('attributes', None)
+        clean_product = None
+        try:
+            for product in goods:
+                clean_product = await self.clean_product(element=product)
+                attributes = clean_product.pop('attributes', None)
 
-            if not clean_product.get('vendor_code_ru') or not clean_product.get('category_id'):
-                # Some products don't have `vendor_code`.
-                # It required field that's why we skip a product without this field.
-                # If a `category_id` is None it means that the category was deleted in a new version of
-                # the bookkeeping file, and we shouldn't save this product.
-                continue
+                if not clean_product.get('vendor_code_ru') or not clean_product.get('category_id'):
+                    # Some products don't have `vendor_code`.
+                    # It required field that's why we skip a product without this field.
+                    # If a `category_id` is None it means that the category was deleted in a new version of
+                    # the bookkeeping file, and we shouldn't save this product.
+                    continue
 
-            product_db, _ = await database_service.update_or_create_object(
-                db=self.db,
-                model=Product,
-                update=True,
-                fields=clean_product,
-                prefetch_fields=(Product.attributes,),
-                custom_filters=(or_(
-                    Product.bookkeeping_id == clean_product['bookkeeping_id'],
-                    Product.vendor_code == clean_product['vendor_code']
-                ))
-            )
-            if attributes:
-                for attribute in attributes:
-                    await self.db.refresh(attribute)
+                product_db, _ = await database_service.update_or_create_object(
+                    db=self.db,
+                    model=Product,
+                    update=True,
+                    fields=clean_product,
+                    prefetch_fields=(Product.attributes,),
+                    custom_filters=(or_(
+                        Product.bookkeeping_id == clean_product['bookkeeping_id'],
+                        Product.vendor_code == clean_product['vendor_code']
+                    ))
+                )
+                if attributes:
+                    for attribute in attributes:
+                        await self.db.refresh(attribute)
 
-                product_db.attributes = attributes
-                if self.is_on_the_way_to_the_warehouse(attributes):
-                    product_db.status = ProductStatus.ON_THE_WAY_TO_THE_WAREHOUSE
+                    product_db.attributes = attributes
+                    if self.is_on_the_way_to_the_warehouse(attributes):
+                        product_db.status = ProductStatus.ON_THE_WAY_TO_THE_WAREHOUSE
 
-            if is_excluded := clean_product.get('category_id') in self.excluded_categories_cache:  # noqa
-                product_db.is_visible = False
+                if is_excluded := clean_product.get('category_id') in self.excluded_categories_cache:  # noqa
+                    product_db.is_visible = False
 
-            if attributes or is_excluded:
-                await self.db.commit()
+                if attributes or is_excluded:
+                    await self.db.commit()
 
-            self.parsed_products_ids.add(product_db.id)
+                self.parsed_products_ids.add(product_db.id)
+        except Exception as e:
+            parser_logger.info(f'Exception has for data: {clean_product}\n')
+            raise e
 
     async def clean_product(self, element: Element) -> dict:
         """
