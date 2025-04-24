@@ -90,4 +90,4 @@ SITEMAP_STATIC_ROUTERS = os.getenv(
 )
 SITE_URL = os.getenv("SITE_URL", "https://cabel-torg.by")
 SITEMAP_PATH = os.getenv("SITEMAP_PATH", f"{DATA_PATH}/site_media/sitemap.xml")
-SITEMAP_SCHEMA_VERSION = os.getenv("SITEMAP_SCHEMA_VERSION", "1.1")
+SITEMAP_SCHEMA_VERSION = os.getenv("SITEMAP_SCHEMA_VERSION", "0.9")

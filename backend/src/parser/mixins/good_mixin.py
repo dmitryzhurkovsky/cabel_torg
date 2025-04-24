@@ -1,6 +1,7 @@
 from _decimal import Decimal
 from _elementtree import Element
 from abc import ABC
+from operator import and_
 
 from sqlalchemy import text, delete, not_, or_
 from transliterate import translit
@@ -99,7 +100,10 @@ class GoodsMixin(BaseMixin, ABC):
                     prefetch_fields=(Product.attributes,),
                     custom_filters=(or_(
                         Product.bookkeeping_id == clean_product['bookkeeping_id'],
-                        Product.vendor_code == clean_product['vendor_code']
+                        and_(
+                            Product.vendor_code == clean_product['vendor_code'],
+                            Product.is_visible == True
+                        )
                     ))
                 )
                 if attributes:
