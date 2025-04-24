@@ -98,14 +98,11 @@ class GoodsMixin(BaseMixin, ABC):
                     update=True,
                     fields=clean_product,
                     prefetch_fields=(Product.attributes,),
-                    custom_filters=(or_(
+                    custom_filters=(
                         Product.bookkeeping_id == clean_product['bookkeeping_id'],
-                        and_(
-                            Product.vendor_code == clean_product['vendor_code'],
-                            Product.is_visible == True
-                        )
-                    ))
+                    )
                 )
+
                 if attributes:
                     for attribute in attributes:
                         await self.db.refresh(attribute)
