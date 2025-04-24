@@ -98,9 +98,6 @@ class GoodsMixin(BaseMixin, ABC):
                     update=True,
                     fields=clean_product,
                     prefetch_fields=(Product.attributes,),
-                    custom_filters=(
-                        Product.bookkeeping_id == clean_product['bookkeeping_id'],
-                    )
                 )
 
                 if attributes:
