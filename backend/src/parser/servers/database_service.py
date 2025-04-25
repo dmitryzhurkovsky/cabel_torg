@@ -104,7 +104,6 @@ async def update_or_create_object(
         value_of_pk_field = fields.get(pk_field)
         filter_by_fields = {pk_field: value_of_pk_field} if value_of_pk_field else fields
 
-    print(fields.get('vendor_code'))
     # Hit a database to get an instance
     instance = await get_object(db=db, model=model, fields=filter_by_fields, prefetch_fields=prefetch_fields)
     if instance:
