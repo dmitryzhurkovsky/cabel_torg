@@ -1,10 +1,10 @@
-from sqlalchemy import select, update, BooleanClauseList
+from sqlalchemy import select, update, BooleanClauseList, BinaryExpression
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from src.core.db.mixins.base_mixin import BaseMixin
 from src.models.abstract_model import BaseModel
 from src.parser.main import parser_logger
-from src.parser.utils import fields_were_updated
+from src.parser.utils import    fields_were_updated
 
 
 async def get_object(
@@ -19,7 +19,7 @@ async def get_object(
     query = select(model).options(*options)
     if isinstance(fields, dict):
         query = query.filter_by(**fields)
-    elif isinstance(fields, BooleanClauseList):
+    elif isinstance(fields, (BooleanClauseList, BinaryExpression)):
         query = query.filter(fields)
 
     query_result = await db.execute(query)
@@ -104,6 +104,7 @@ async def update_or_create_object(
         value_of_pk_field = fields.get(pk_field)
         filter_by_fields = {pk_field: value_of_pk_field} if value_of_pk_field else fields
 
+    print(fields.get('vendor_code'))
     # Hit a database to get an instance
     instance = await get_object(db=db, model=model, fields=filter_by_fields, prefetch_fields=prefetch_fields)
     if instance:
