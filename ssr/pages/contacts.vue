@@ -1,4 +1,5 @@
 <template>
+  <Breadcrumb/>
   <div class="contacts app__content">
     <div class="contacts__wrapper">
       <div class="contacts__content _container">
@@ -11,17 +12,17 @@
             <div class="contacts__block__item">
                 <div class="block__item flex-center">
                   <img  class="_icon" src="@/assets/svg/phone.svg" alt="Phone">
-                  <a class="_title"  :href="'tel:' + String(SETTINGS.phone).replace(/ /g,'')">{{ SETTINGS.phone }}</a>
+                  <a class="_title"  :href="'tel:' + String(settings.phone).replace(/ /g,'')">{{ settings.phone }}</a>
                 </div>
                 <div class="block__item flex-center">
                   <img class="_icon" src="@/assets/svg/round-place.svg" alt="Address">
                   <div>
                     <div class="_title">Наш адрес:</div>
-                    <div>{{ SETTINGS.legal_address }}</div>
+                    <div>{{ settings.legal_address }}</div>
                   </div>
                 </div>
                 <div class="block__item flex-center" 
-                  v-for = "address in SETTINGS.addresses" 
+                  v-for = "address in settings.addresses" 
                   :key ="address.id"
                 >
                   <img class="_icon" src="@/assets/svg/round-place.svg" alt="Address">
@@ -36,22 +37,22 @@
                 <div class="form-contacts__title mb-20 ">Напишите нам</div>
                 <div class="group">
                     <input type="text" class="input mb-20" placeholder="ФИО" v-model="fullname">
-                    <div class="error-message" v-if="ERRORS.fullname"> {{ ERRORS.fullname }} </div>
+                    <div class="error-message" v-if="authErrors.fullname"> {{ authErrors.fullname }} </div>
                 </div>
                 <!-- <input type="text" class="input mb-20" placeholder="ФИО" v-model="fullname"> -->
                 <div class="form-contacts__row flex-center mb-20">
                   <div class="group">
                     <input type="text" class="input" placeholder="Email" v-model="email">
-                    <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>
+                    <div class="error-message" v-if="authErrors.email"> {{ authErrors.email }} </div>
                   </div>
                   <div class="group">
                     <input type="text" class="input" placeholder="Телефон" v-model="phone_number">
-                    <div class="error-message" v-if="ERRORS.phone_number"> {{ ERRORS.phone_number }} </div>
+                    <div class="error-message" v-if="authErrors.phone_number"> {{ authErrors.phone_number }} </div>
                   </div>
                 </div>
                 <div class="group mb-20">
                   <textarea class="textarea " placeholder="Сообщение" v-model="message"></textarea>
-                  <div class="error-message" v-if="ERRORS.message"> {{ ERRORS.message }} </div>
+                  <div class="error-message" v-if="authErrors.message"> {{ authErrors.message }} </div>
                 </div>
                 <button class="btn" @click.prevent = "sendRequest($event)">Отправить</button>
               </form>
@@ -63,99 +64,87 @@
   </div>
 </template>
 
-<script>
-  import { mapActions, mapGetters, mapMutations } from "vuex";
+<script setup>
+  import { ref, onMounted } from 'vue';
+  import { useHead } from 'nuxt/app';
   import { isValidEmail } from "@/common/validation";
+  import { useMainStore } from '@/stores/main';
+  import { useAuthStore } from '@/stores/auth';
+  import { useHeaderStore } from '@/stores/header';
+  import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
-  definePageMeta({
-    // middleware: ["auth"],
-    name: 'Контакты',
+  const router = useRouter();
+
+  const mainStore = useMainStore();
+  const authStore = useAuthStore();
+  const headerStore = useHeaderStore();
+  const breadCrumbStore = useBreadCrumbStore();
+
+  const { settings } = storeToRefs(mainStore);
+  const { authErrors } = storeToRefs(authStore);
+
+  const fullname = ref('');
+  const phone_number = ref('');
+  const email = ref('');
+  const message = ref('');
+  const isLoading = ref(false);
+
+  useHead({
+    title: 'Кабельторг | Контакты',
+    meta: [{
+      name: 'Контакты',
+      content: 'Страница Контакты'
+    }]
   });
 
-  export default defineNuxtComponent({
-    name: 'Contacts',
+  onMounted(() => {
+    breadCrumbStore.changeBreadCrumb(0);
+    breadCrumbStore.addBreadCrumb({
+      name: router.currentRoute.value.meta.name,
+      path: router.currentRoute.value.path,
+      type: "global",
+      class: ""
+    });
+  });
 
-    head () {
-      return {
-        title: 'Кабельторг | Контакты',
-        meta: [{
-          name: 'Контакты',
-          content: 'Страница Контакты'
-        }]
-      }
-    },
+  const sendRequest = async (event) => {
+    event.preventDefault();
+    if (isLoading.value) return;
 
-    data: function() {
-      return {
-          fullname: '',
-          phone_number: '',
-          email: '',
-          message: '',
-          isLoading: false,
-      }
-    },
-
-    computed: {
-      ...mapGetters("auth",["ERRORS"]),
-      ...mapGetters("main", ["SETTINGS"]),
-    },
-
-    mounted(){
-      this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
-      this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
-        name: this.$router.currentRoute.value.meta.name,
-        path: this.$router.currentRoute.value.path,
-        type: "global",
-        class: ""
-      });
-    },
-
-    methods: {
-      ...mapMutations("auth", ["SET_ERRORS",]),
-      ...mapActions("header", ["SEND_REQUEST_FEEDBACK",]),
-
-      async sendRequest(event){
-        event.preventDefault();
-        if (this.isLoading) return;
-
-        this.isLoading = true;
-        const errorsInData = {};
-        this.SET_ERRORS(errorsInData);
-
-        if (!this.fullname) {
-          errorsInData.fullname = 'Укажите валидное имя'
-        }
-        if (!this.phone_number) {
-          errorsInData.phone_number = 'Укажите номер телефона'
-        }
-        if (!isValidEmail(this.email)) {
-          errorsInData.email = 'Укажите email'
-        }
-        if (!this.message) {
-          errorsInData.message = 'Укажите текст сообщения'
-        }
-        if (Object.keys(errorsInData).length) {
-          this.SET_ERRORS(errorsInData);
-        } else {
-          const data = {
-              fullname: this.fullname,
-              phone_number: this.phone_number,
-              email: this.email,
-              message: this.message,
-          };
-          // Тут посылаем на бэк запрос и ждем ответа, по результатам фомируем окно с ответом
-          await this.SEND_REQUEST_FEEDBACK(data);
-          this.fullname = '';
-          this.phone_number = '';
-          this.fullnaemailme = '';
-          this.email = '';
-          this.message = '';
-        }
-        this.isLoading = false;
-      }
+    isLoading.value = true;
+    const errorsInData = {};
+    authStore.setErrors(errorsInData);
+    if (!fullname.value) {
+      errorsInData.fullname = 'Укажите валидное имя'
     }
-
-  })
+    if (!phone_number.value) {
+      errorsInData.phone_number = 'Укажите номер телефона'
+    }
+    if (!isValidEmail(email.value)) {
+      errorsInData.email = 'Укажите email'
+    }
+    if (!message.value) {
+      errorsInData.message = 'Укажите текст сообщения'
+    }
+    if (Object.keys(errorsInData).length) {
+      authStore.setErrors(errorsInData);
+    } else {
+      const data = {
+          fullname: fullname.value,
+          phone_number: phone_number.value,
+          email: email.value,
+          message: message.value,
+      };
+      // Тут посылаем на бэк запрос и ждем ответа, по результатам фомируем окно с ответом
+      await headerStore.sendRequestFeedback(data);
+      fullname.value = '';
+      phone_number.value = '';
+      fullnaemailme.value = '';
+      email.value = '';
+      message.value = '';
+    }
+    isLoading.value = false;
+  }
 </script>
 
 <style scoped lang="scss">

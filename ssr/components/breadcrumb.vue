@@ -1,5 +1,5 @@
 <template>
-  <div class="breadcrumb__wrapper _container" v-if = "ELEMENTS.length">
+  <div class="breadcrumb__wrapper _container">
     <ul class="breadcrumb">
       <li
           v-for=" (element, index) in ELEMENTS"
@@ -19,111 +19,100 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import { computed } from 'vue';
+  import { useQueryStore } from '@/stores/query';
+  import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
-import { mapActions, mapMutations, mapGetters } from "vuex";
+  const router = useRouter();
+  const config = useRuntimeConfig();
 
-export default {
-  name: "breadcrumb",
+  const queryStore = useQueryStore();
+  const breadCrumbStore = useBreadCrumbStore();
 
-  computed: {
-    ...mapGetters("breadcrumb", ["STACK"]),
-    ...mapGetters("query", ["LIMIT", "OFFSET", "TYPE_OF_PRODUCT", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE",  "SORT_DIRECTION", "LIMIT_ITEMS"]),
-    ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
+  const { breadCrumbStack } = storeToRefs(breadCrumbStore);
 
-    // watch: {
-    //   STACK: function() {
-    //     console.log('watch');
-    //     this.ELEMENTS()
-    //   },
-    // },
-
-    ELEMENTS(){
-      if (this.STACK.length > 1){
-        let result = [];
-        this.STACK.forEach((item, i) => {
-          let menuItem = {};
-          menuItem.name = item.name;
-          menuItem.path = item.path;
-          menuItem.type = item.type;
-          menuItem.class = item.class;
-          menuItem.index = i;
-          result.push(menuItem);
-          if (i !== this.STACK.length - 1){
-            result.push({name: '', type: 'service', class: 'breadcrumb__separater icon-arrow-l'})
-          }
-        });
-        return result;
-      } else {
-        return [];
-      }
-    },
-  },
-
-  methods: {
-    ...mapActions("breadcrumb", ["MOVE_TO_SELECT_PATH"]),
-    ...mapMutations("query", ["SET_SEARCH_STRING", "SET_CATEGORY_ID", "SET_DEFAULT_PRICES"]),
-    
-    changePage(item){
-      // console.log('BreadCrumb-   ', item);
-      let url = '';
-      if (item.path.includes('category') || item.path.includes('catalog')) {
-        // console.log('breadcrumb ', item);
-        if (item.path.includes('catalog')) {
-          this.SET_CATEGORY_ID(null);
+  const ELEMENTS = computed(() => {
+    if (breadCrumbStack.value.length > 1){
+      let result = [];
+      breadCrumbStack.value.forEach((item, i) => {
+        let menuItem = {};
+        menuItem.name = item.name;
+        menuItem.path = item.path;
+        menuItem.type = item.type;
+        menuItem.class = item.class;
+        menuItem.index = i;
+        result.push(menuItem);
+        if (i !== breadCrumbStack.value.length - 1){
+          result.push({name: '', type: 'service', class: 'breadcrumb__separater icon-arrow-l'})
         }
-        this.SET_DEFAULT_PRICES();
-        // url = url + "?offset=" + this.OFFSET + 
-        // "&limit=" + this.LIMIT;
-        // if (this.MIN_PRICE != 0 || this.MAX_PRICE != 80000) {
-        //   url = url + "&actual_price_gte=" + this.MIN_PRICE; 
-        //   url = url + "&actual_price_lte=" + this.MAX_PRICE;
-        // }
-        // url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
-        // url = url + '&type_of_product=' + this.TYPE_OF_PRODUCT;
-        // url = url + "&q=" + this.CATALOG_SEARCH_STRING;
-        this.SET_SEARCH_STRING('');
-        this.MOVE_TO_SELECT_PATH(item.index);
-        // console.log('Url   ', item.path + url, this);
-        this.$router.push(item.path + url);
-      } else {
-        this.SET_SEARCH_STRING('');
-        this.MOVE_TO_SELECT_PATH(item.index);
-        this.$router.push(item.path);
-      }
-      // this.MOVE_TO_SELECT_PATH(item.index);
-      // this.$router.push(item.path);
-    },
+      });
+      return result;
+    } else {
+      return [];
+    }
+  });
 
-    createHref(item){
-      let url = ''
-      if (item.path.includes('category') || item.path.includes('catalog')) {
-        url = url = item.path
-        //  + "?";
-
-        // if (this.OFFSET != 0 || this.LIMIT != 12) {
-        //   url = url + "offset=" + this.OFFSET + '&'
-        //   url = url + "limit=" + this.LIMIT + '&'
-        // }
-        // if (this.MIN_PRICE != 0 || this.MAX_PRICE != 80000) {
-        //   url = url + "actual_price_gte=" + this.MIN_PRICE + '&';
-        //   url = url + "actual_price_lte=" + this.MAX_PRICE + '&';
-        // }
-        // if (this.SORT_DIRECTION !== '-' || this.SORT_TYPE !== 'created_at') {
-        //   url = url + "ordering=" + this.SORT_DIRECTION + this.SORT_TYPE + '&'
-        // }
-        // if (this.TYPE_OF_PRODUCT !== 'all') {
-        //   url = url + "type_of_product=" + this.TYPE_OF_PRODUCT + '&'
-        // }
-        // const lastSymbol = url.slice(-1)
-        // if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
-      } else {
-        url = url + item.path;
+  const breadcrumbList = computed(() => {
+    let list = [];
+    let position = 1;
+    ELEMENTS.value.forEach(item => {
+      if (item.type === 'global'){
+        const breadcrumbItem = {};
+        breadcrumbItem["@type"] = "ListItem"
+        breadcrumbItem["position"] = position;
+        const itemData = {};
+        itemData["@id"] = config.public.NUXT_APP_DOCUMENTS.slice(0, -1) + item.path;
+        itemData["name"] = item.name;
+        breadcrumbItem["item"] = itemData;
+        position++;
+        list.push(breadcrumbItem);
       }
-      return url;
-    },
-  },
-}
+    });
+    const data = {};
+    data["@context"] = "http://schema.org";
+    data["@type"] = "BreadcrumbList";
+    data["itemListElement"] = list;
+    // console.log('ELEMENTS ', ELEMENTS.value);
+    return data;
+  });
+
+  const changePage = (item) => {
+    // console.log('BreadCrumb-   ', item);
+    let url = '';
+    if (item.path.includes('category') || item.path.includes('catalog')) {
+      // console.log('breadcrumb ', item);
+      if (item.path.includes('catalog')) {
+        queryStore.setCategoryID(null);
+      }
+      queryStore.setDefaultPrices();
+      queryStore.setSearchString('');
+      breadCrumbStore.moveToSelectPath(item.index);
+      // console.log('Url   ', item.path + url, this);
+      router.push(item.path + url);
+    } else {
+      queryStore.setSearchString('');
+      breadCrumbStore.moveToSelectPath(item.index);
+      router.push(item.path);
+    }
+  };
+
+  const createHref = (item) => {
+    let url = '';
+    if (item.path.includes('category') || item.path.includes('catalog')) {
+      url = url = item.path
+    } else {
+      url = url + item.path;
+    }
+    return url;
+  };
+
+  useHead({
+    script: [{
+      type: 'application/ld+json',
+      children: JSON.stringify(breadcrumbList.value)
+    }]
+  }); 
 </script>
 
 <style lang="scss" scoped>

@@ -13,22 +13,21 @@
                         </div>
                     </div>
                     <div class="content-block__list">
-                        <div class="content-block__item product-row" v-if = "FULL_FAVORITES.length !== 0 && VIEW_TYPE === 'row'">
+                        <div class="content-block__item product-row" v-if = "fullFavorites.length !== 0 && view === 'row'">
                             <CatalogListItem 
-                            v-for   = "item in FULL_FAVORITES"
+                            v-for   = "item in fullFavorites"
                             :key    = "item.id"
                             :card   = item
                             />
                         </div>  
-                        <div class="content-block__item product-table" v-if = "FULL_FAVORITES.length !== 0 && VIEW_TYPE === 'table'">
+                        <div class="content-block__item product-table" v-if = "fullFavorites.length !== 0 && view === 'table'">
                             <CatalogCardItem 
-                            v-for   = "item in FULL_FAVORITES"
+                            v-for   = "item in fullFavorites"
                             :key    = "item.id"
                             :card   = item
                             />
                         </div>  
                     </div>
-                    <!-- <PaginationPanel class="content-block__pagination" /> -->
                 </div>
             </div>
         </div>
@@ -38,93 +37,66 @@
 
 </template>
 
-<script>
+<script setup>
 
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+  import { computed, onMounted, onBeforeMount, watch } from 'vue';
+  import { useNotificationsStore } from '@/stores/notifications';
+  import { useQueryStore } from '@/stores/query';
+  import { useFavoritesStore } from '@/stores/favorites';
 
-// import PaginationPanel from '@/components/catalog/pagination-panel.vue';
+  const notificationsStore = useNotificationsStore();
+  const queryStore = useQueryStore();
+  const favoritesStore = useFavoritesStore();
 
-export default {
-    name: 'FavoriteList',
+  const { view } = storeToRefs(queryStore);
+  const { favorites, fullFavorites } = storeToRefs(favoritesStore);
 
-    computed: {
-        ...mapGetters("favorite", ["FULL_FAVORITES", "FAVORITES"]),
-        ...mapGetters("query", ["VIEW_TYPE"]),
+  const ChangeParameters = computed(() => {
+    return JSON.stringify(favorites.value);
+  });
 
-        ChangeParameters(){
-          return JSON.stringify(this.FAVORITES);
-        }
-    },
+  const getData = async () => {
+    notificationsStore.setIsLoading(true);
+    favoritesStore.clearFullFavorites();
+    await favoritesStore.getUserFullFavorite();
+    notificationsStore.setIsLoading(false);
+  };
 
-    methods: {
-        ...mapMutations("favorite", ["CLEAR_FULL_FAVORITES"]),
-        ...mapActions("favorite", ["GET_USER_FULL_FAVORITES"]),
-        ...mapMutations("notification", ["SET_IS_LOADING"]),
+  watch(ChangeParameters, async () => {
+    await getData();
+  });
 
-        async getData() {
-            this.SET_IS_LOADING(true);
-            this.CLEAR_FULL_FAVORITES();
-            await this.GET_USER_FULL_FAVORITES();
-            this.SET_IS_LOADING(false);
-       }
-    },
+  onMounted(async () => {
+      await getData();
+  });
 
-    watch: {
-      ChangeParameters: async function() {
-        await this.getData();
-      },
-    },
-
-    async mounted() {
-        await this.getData();
-    },
-
-    beforeUnmount() {
-        this.CLEAR_FULL_FAVORITES();
-    }
-}
+  onBeforeMount(() => {
+    favoritesStore.clearFullFavorites();
+  });
 </script>
 
 <style lang="scss" scoped>
 .catalog {
 
-&__wrapper{
-
-}
-&__content{
-
-}
-
-&__body{
-}
-
-
-
-&__item{
-
-
-}
-&__block{
-  display: flex;
-  align-items: flex-start;
-
-}
-&__sidebar{
-  min-width: 260px;
-  width: 272px;
-  padding-right: 10px;
-}
-
+  &__block{
+    display: flex;
+    align-items: flex-start;
+  }
+  &__sidebar{
+    min-width: 260px;
+    width: 272px;
+    padding-right: 10px;
+  }
 }
 
 .content-block{
 
-&__subcategory{
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(3, minmax(0, 300px));
-  text-align: center;
-  //padding: 24px 20px 20px 0;
+  &__subcategory{
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(3, minmax(0, 300px));
+    text-align: center;
+    //padding: 24px 20px 20px 0;
 
   .recomendation__nav__item{
     background: #FFFFFF;
@@ -144,36 +116,35 @@ export default {
 
 
     cursor: pointer;
-    &:hover{
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
-      color:#4275D8;
-      font-weight: 500;
-      opacity: 1;
+      &:hover{
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.08);
+        color:#4275D8;
+        font-weight: 500;
+        opacity: 1;
+      }
     }
+
+  }
+  &__pagination{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px 0;
+  }
+  &__item{
+    display: flex;
+    flex-direction: column;
+    gap:16px;
   }
 
-}
-&__pagination{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 20px 0;
-}
-&__item{
-  display: flex;
-  flex-direction: column;
-  gap:16px;
-}
-
-&__topfilter{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-  font-size: 12px;
-}
-
+  &__topfilter{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 12px;
+  }
 }
 
 .product-table{
@@ -184,9 +155,6 @@ export default {
   gap: 10px;
   @media (max-width: 1089px) {
     grid-template-columns: repeat(2, minmax(142px, 272px));
-  }
-  .item-card{
-    //min-width: 270px;
   }
 }
 </style>

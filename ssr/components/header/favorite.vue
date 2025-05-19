@@ -25,48 +25,43 @@
 
 </template>
 
-<script>
+<script setup>
+  import { computed } from 'vue';
+  import { useAuthStore } from '@/stores/auth';
+  import { useFavoritesStore } from '@/stores/favorites';
+  import { useProfileStore } from '@/stores/profile';
 
-import { mapGetters, mapMutations } from 'vuex'
+  const router = useRouter();
+  const authStore = useAuthStore();
+  const favoritesStore = useFavoritesStore();
+  const profileStore = useProfileStore();
 
-export default {
-  name: "HeaderFavorite",
+  const { userData } = storeToRefs(authStore);
+  const { favorites } = storeToRefs(favoritesStore);
 
-  computed: {
-    ...mapGetters("favorite", ["FAVORITES"]),
-    ...mapGetters("auth", ["USER"]),
-
-    ItemsForShow(){
-      let result = [];
-      if (this.FAVORITES.length > 5) {
-        result = this.FAVORITES.slice(this.FAVORITES.length - 4);
-      } else {
-        result = [...this.FAVORITES];
-      }
-      return result;
-    },
-  },
-
-  methods: {
-    ...mapMutations("auth", ["SET_DESTINATION"]),
-    ...mapMutations("profile", ["CHANGE_SCREEN"]),
-
-    onOpenFavoritePage() {
-      this.CHANGE_SCREEN(1);
-      if (this.USER) {
-            this.SET_DESTINATION('');
-            if (this.$router.path != '/user_profile') {
-              this.$router.push('/user_profile');
-            }
-            this.CHANGE_SCREEN(1);              
-        } else {
-            this.SET_DESTINATION('/user_profile');
-            this.$router.push('/login');
-        }
+  const ItemsForShow = computed(() => {
+    let result = [];
+    if (favorites.value.length > 5) {
+      result = favorites.value.slice(favorites.value.length - 4);
+    } else {
+      result = [...favorites.value];
     }
-  }
-  
-}
+    return result;
+  });
+
+  const onOpenFavoritePage = () => {
+    profileStore.changeScreen(1);
+    if (userData.value) {
+      authStore.setDestination('');
+        if (router.path != '/user_profile') {
+          router.push('/user_profile');
+        }
+        profileStore.changeScreen(1);
+    } else {
+      authStore.setDestination('/user_profile');
+      router.push('/login');
+    }
+  };
 </script>
 
 <style lang="scss" scoped>

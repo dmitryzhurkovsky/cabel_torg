@@ -1,38 +1,38 @@
 <template>
     <transition-group>
-      <div v-if="DEVICE_VIEW_TYPE === 1"
+      <div v-if="viewType === 1"
         @click.stop="closePopUp(false)"
         ref="popup" 
         class="popup__wrapper"
-        :class="{ 'disabled' : !IS_POPUP_OPEN }"
+        :class="{ 'disabled' : !isPopUpOpen }"
         :key="1"
       >
-        <!-- :class="[IS_POPUP_OPEN === true ? 'popup__wrapper popup__desktop': 'popup__wrapper popup__desktop disabled']" -->
+        <!-- :class="[isPopUpOpen === true ? 'popup__wrapper popup__desktop': 'popup__wrapper popup__desktop disabled']" -->
         <div class="popup__body" @click.stop="">
             <div class="icon-close popup__close" @click.stop="closePopUp(false)"></div>
             <div class="popup__content" >
-              <NotificationMsg v-if = "POPUP_ACTION === 'ShowCompleteMsg'" />
-              <NotificationRequestCall v-if = "POPUP_ACTION === 'RequestCall'"/>
-              <NotificationRequestPrice v-if = "POPUP_ACTION === 'RequestPrice'"/>
-              <NotificationUserLogin v-if = "POPUP_ACTION === 'UserLogin'"/>
-              <NotificationChangePass v-if = "POPUP_ACTION === 'ChangePassword'"/>
+              <NotificationMsg v-if = "popUpAction === 'ShowCompleteMsg'" />
+              <NotificationRequestCall v-if = "popUpAction === 'RequestCall'"/>
+              <NotificationRequestPrice v-if = "popUpAction === 'RequestPrice'"/>
+              <NotificationUserLogin v-if = "popUpAction === 'UserLogin'"/>
+              <NotificationChangePass v-if = "popUpAction === 'ChangePassword'"/>
             </div>
         </div>
       </div>
       <div v-else
         @click.stop="closePopUp(false)"
         ref="popup" 
-        :class="[IS_POPUP_OPEN === true ? 'popup__wrapper': 'popup__wrapper disabled']"
+        :class="[isPopUpOpen === true ? 'popup__wrapper': 'popup__wrapper disabled']"
         :key="2"
       >
         <div class="popup__body" @click.stop="">
             <div class="icon-close popup__close" @click.stop="closePopUp(false)"></div>
             <div class="popup__content" >
-              <NotificationMsg v-if = "POPUP_ACTION === 'ShowCompleteMsg'" />
-              <NotificationRequestCall v-if = "POPUP_ACTION === 'RequestCall'"/>
-              <NotificationRequestPrice v-if = "POPUP_ACTION === 'RequestPrice'"/>
-              <NotificationUserLogin v-if = "POPUP_ACTION === 'UserLogin'"/>
-              <NotificationChangePass v-if = "POPUP_ACTION === 'ChangePassword'"/>
+              <NotificationMsg v-if = "popUpAction === 'ShowCompleteMsg'" />
+              <NotificationRequestCall v-if = "popUpAction === 'RequestCall'"/>
+              <NotificationRequestPrice v-if = "popUpAction === 'RequestPrice'"/>
+              <NotificationUserLogin v-if = "popUpAction === 'UserLogin'"/>
+              <NotificationChangePass v-if = "popUpAction === 'ChangePassword'"/>
             </div>
         </div>
       </div>
@@ -40,64 +40,58 @@
     
 </template>
 
-<script>
-  import { mapGetters, mapMutations } from "vuex";
+<script setup>
+  import { ref, watch } from 'vue';
+  import { useAuthStore } from '@/stores/auth';
+  import { useHeaderStore } from '@/stores/header';
 
-  export default {
-    name: "PopUp",
+  const router = useRouter();
+  const authStore = useAuthStore();
+  const headerStore = useHeaderStore();
 
-    watch: {
-      IS_POPUP_OPEN: function(){
-        console.log(this.DEVICE_VIEW_TYPE);
-        const wrapper = document.getElementById('app__component');
-        if (this.IS_POPUP_OPEN) {
-          setTimeout(() => {
-            this.$refs.popup.style.top = window.pageYOffset + 'px';
-            wrapper.style.overflowY = 'hidden';
-            wrapper.style.height = '100vh'; 
-            wrapper.style.position = 'relative';
-            if (this.DEVICE_VIEW_TYPE === 1) {
-              if (wrapper.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
-            }
-          }, 200);
-          wrapper.style.overflowY = 'hidden';
-          wrapper.style.height = '100vh'; 
-          wrapper.style.position = 'relative';
-          if (this.DEVICE_VIEW_TYPE === 1) {
-            if (wrapper.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
-          }
-        } else {
-          wrapper.style.overflowY = '';
-          wrapper.style.height = ''; 
-          wrapper.style.position = '';
-          if (this.DEVICE_VIEW_TYPE === 1) {
-            document.body.style.paddingRight = '';
-          }
+  const popup = ref(null);
+  const { redirectAfterLogin } = storeToRefs(authStore);
+  const { viewType, popUpAction, isPopUpOpen } = storeToRefs(headerStore);
+
+  watch(isPopUpOpen, () => {
+    // console.log(viewType.value);
+    const wrapper = document.getElementById('app__component');
+    if (isPopUpOpen.value) {
+      setTimeout(() => {
+        popup.value.style.top = window.pageYOffset + 'px';
+        wrapper.style.overflowY = 'hidden';
+        wrapper.style.height = '100vh'; 
+        wrapper.style.position = 'relative';
+        if (viewType.value === 1) {
+          if (wrapper.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
         }
+      }, 200);
+      wrapper.style.overflowY = 'hidden';
+      wrapper.style.height = '100vh'; 
+      wrapper.style.position = 'relative';
+      if (viewType.value === 1) {
+        if (wrapper.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
       }
-    },
-
-    computed: {
-      ...mapGetters("header", ["IS_POPUP_OPEN", "POPUP_ACTION", "DEVICE_VIEW_TYPE"]),
-      ...mapGetters("auth", ["REDIRECT_AFTER_LOGIN"])
-    },
-
-    methods: {
-      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ADDITIONAL_DATA"]),
-      ...mapMutations("auth", ["SET_DESTINATION"]),
-
-      closePopUp(status) {
-        this.SET_IS_POPUP_OPEN(status);
-        this.SET_POPUP_ADDITIONAL_DATA({});
-        if (this.REDIRECT_AFTER_LOGIN) {
-          const path = this.REDIRECT_AFTER_LOGIN;
-          this.SET_DESTINATION('');
-          this.$router.push(path);
-        }
+    } else {
+      wrapper.style.overflowY = '';
+      wrapper.style.height = ''; 
+      wrapper.style.position = '';
+      if (viewType.value === 1) {
+        document.body.style.paddingRight = '';
       }
     }
+  });
 
-  }
+  const closePopUp = (status) => {
+    headerStore.setIsPopUpOpen(status);
+    headerStore.setPopUpAdditionalData({});
+    if (redirectAfterLogin.value) {
+      const path = redirectAfterLogin.value;
+      authStore.setDestination('');
+      router.push(path);
+    }
+  };
+
 </script>  
 
 <style lang="scss" scoped>

@@ -1,10 +1,10 @@
 <template>
-    <div class="filter__block" v-if="CATALOG.length">
+    <div class="filter__block" v-if="catalog.length">
         <div
-          v-if    = "!isMobileVersion"
+          v-if  = "viewType == 1"
         >
           <div class="filter__box" 
-              v-for   = "mainItem in CATALOG"
+              v-for   = "mainItem in catalog"
               :key    = "mainItem.id"
           >
               <div class="sidebar_menu__title">
@@ -49,7 +49,7 @@
                               @click.stop.prevent = "openCategory(lastItem)"
                           >
                               <div class="">
-                                <a :class = "{'active' : LAST_CATEGORIES_ITEM_ACTIVE === lastItem.id}"
+                                <a :class = "{'active' : lastCategoriesItemActive === lastItem.id}"
                                   :href="createHref(lastItem.site_link)"
                                 >
                                   {{lastItem.name}}
@@ -70,12 +70,12 @@
             <div class="filter__checkbox__list">
 
               <label class="checkbox__container"
-                v-for = "category in ALL_TYPE_OF_PRODUCTS"
-                :key = "category"
+                v-for = "currentTypeOfProduct in allTypesOfProduct"
+                :key = "currentTypeOfProduct"
               >
-                {{ category.name }}
-                <input type="checkbox" v-if = "category.type === TYPE_OF_PRODUCT" checked>
-                <input type="checkbox" v-if = "category.type !== TYPE_OF_PRODUCT" @click.prevent = toggleFilterCategory(category.type)>
+                {{ currentTypeOfProduct.name }}
+                <input type="checkbox" v-if = "currentTypeOfProduct.type === typeOfProduct" checked>
+                <input type="checkbox" v-if = "currentTypeOfProduct.type !== typeOfProduct" @click.prevent = toggleFilterCategory(currentTypeOfProduct.type)>
                 <span class="checkmark"></span>
               </label>
 
@@ -84,132 +84,64 @@
 
         </div>
   
-        <CatalogPriceSlider v-if = "!isMobileVersion" class="filter__box" />
+        <CatalogPriceSlider v-if = "viewType == 1" class="filter__box" 
+            @onPriceChanged="onPriceChanged"
+        />
 
     </div>
 
 </template>
 
-<script>
+<script setup>
+  // import { defineEmits } from 'vue';
+  import { useHeaderStore } from '@/stores/header';
+  import { useQueryStore } from '@/stores/query';
 
-import {mapMutations, mapGetters, mapActions} from 'vuex'
+  const router = useRouter();
+  const headerStore = useHeaderStore();
+  const queryStore = useQueryStore();
 
-export default {
-  name: 'FilterPanel',
+  const emit = defineEmits(['onFilterChanged', 'onCategoryChanged']);  
 
-  data(){
-    return {
-      isMobileVersion: false,
-    }
-  },
-
-  computed: {
-    ...mapGetters("header", ["ALL_CATEGORIES", "CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "DEVICE_VIEW_TYPE"]),
-    ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", 
-      "SORT_DIRECTION", "SORT_ORDER", "ALL_TYPE_OF_PRODUCTS"
-    ]),
-  },
-
-  watch: {
-    DEVICE_VIEW_TYPE: async function() {
-      setViewType(this.DEVICE_VIEW_TYPE);
-    }  
-  },
-
-  methods:{
-    ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_CATEGORY_ID", "SET_OFFSET", "SET_DEFAULT_PRICES"]),
-    ...mapActions("header",["SET_ALL_CURRENT_CATEGORIES"]),
+  const { viewType, catalog, lastCategoriesItemActive } = storeToRefs(headerStore);
+  const { typeOfProduct, allTypesOfProduct } = storeToRefs(queryStore);
 
 
-    setViewType(curr) {
-        if (curr > 1) {
-          this.isMobileVersion = true
-        } else {
-          this.isMobileVersion = false
-        }
-    },
+  const createHref = (category) => {
+    const URL = '/category/' + category;
+    return URL;
+  };
 
-    getCatalogUrl(){
-      let url = "/catalog";
-      url = url + this.getLastPartOfUrl();
-      return url;
-    },
+  const toggleCategory = (item) => {
+    item.filterPanel = !item.filterPanel;
+  };
 
-    createHref(category) {
-      const URL = '/category/' + category;
-      return URL;
-    },
+  const onPriceChanged = () => {
+    emit('onFilterChanged');
+  };
 
-    getCategoryUrl(id){
-      let url = "/category/";
-      if (id) {
-        const link = this.ALL_CATEGORIES.filter(item => item.id == id)[0].site_link
-        url = url + link;
-      }
-      url = url + this.getLastPartOfUrl();
-      // console.log('filterPanel ', url);
-      return url;
-    },
+  const openCategory = (category) => {
+    queryStore.setCategoryID(category.id);
+    queryStore.setOffset(0);
+    queryStore.setDefaultPrices();
+    queryStore.setTypeOfProduct('all');
+    const url = queryStore.createUrl();
+    router.push(url);
+    emit('onCategoryChanged');
+  };
 
-    getLastPartOfUrl(){
-      let url = '?';
-      if (this.OFFSET != 0 || this.LIMIT != 12) {
-        url = url + "offset=" + this.OFFSET + '&'
-        url = url + "limit=" + this.LIMIT + '&'
-      }
-      if (this.MIN_PRICE != 0 || this.MAX_PRICE != 80000) {
-        url = url + "actual_price_gte=" + this.MIN_PRICE + '&';
-        url = url + "actual_price_lte=" + this.MAX_PRICE + '&';
-      }
-      if (this.SORT_DIRECTION !== '-' || this.SORT_TYPE !== 'created_at') {
-        url = url + "ordering=" + this.SORT_DIRECTION + this.SORT_TYPE + '&'
-      }
-      if (this.TYPE_OF_PRODUCT !== 'all') {
-        url = url + "type_of_product=" + this.TYPE_OF_PRODUCT + '&'
-      }
-      const lastSymbol = url.slice(-1)
-      if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
-      return url;        
-    },
+  const toggleFilterCategory = (type) => {
+    queryStore.setTypeOfProduct(type);
+    const url = queryStore.createUrl();
+    router.push(url);
+    emit('onFilterChanged');
+  };
 
-    toggleCategory(item) {
-      item.filterPanel = !item.filterPanel;
-    },
-
-    openCategory(category){
-      this.SET_CATEGORY_ID(category.id);
-      this.SET_OFFSET(0);
-      this.SET_DEFAULT_PRICES();
-      this.SET_TYPE_OF_PRODUCT('all');
-      // console.log('category.id', category.id);
-      let url = this.getCategoryUrl(category.id);
-      this.$router.push(url);
-    },
-
-    toggleFilterCategory(category){
-      this.SET_TYPE_OF_PRODUCT(category);
-      let url = "";
-      if (this.CATEGORY_ID) {
-        url = this.getCategoryUrl(this.CATEGORY_ID);
-      } else {
-        url = this.getCatalogUrl();
-      }
-      this.$router.push(url);
-    },
-
-  },
-
-  beforeMount(){
-    this.setViewType(this.DEVICE_VIEW_TYPE);
-  },
-
-}
 </script>
 
 <style scoped lang="scss">
 .filter{
 
-    &__block{}
     &__checkbox{
 
     &__item{
@@ -257,8 +189,6 @@ export default {
       font-size: 13px;
       padding: 5px 0 5px 20px;
       cursor: pointer;
-      &-child{
-      }
     }
     &__field{
       flex-direction: column;

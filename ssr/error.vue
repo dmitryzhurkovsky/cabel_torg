@@ -15,13 +15,13 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { onMounted } from 'vue'
 
-  export default defineNuxtComponent({
-    name: '404',
+onMounted(() => {
+  console.log("HHHHHHHH");
+});
 
-    
-  })
 </script>
 
 <style scoped lang="scss">
@@ -38,7 +38,7 @@
   }
 
   &__body{
-    background-image: url("../assets/404.png");
+    background-image: url("@/assets/404.png");
     background-position: top center;
     background-repeat: no-repeat;
     min-height: 500px;

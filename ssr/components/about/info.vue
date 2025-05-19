@@ -17,11 +17,8 @@
   </div>
 </template>
 
-<script>
+<script setup>
 
-  export default {
-    name: 'About',
-  }
 </script>
 
 <style scoped lang="scss">
@@ -32,10 +29,6 @@
     padding: 20px 0;
 
   }
-  &__content{
-
-  }
-
   &__body{
     background: #FFFFFF;
     border: 2px solid #EEEEEE;

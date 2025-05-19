@@ -4,13 +4,13 @@
         <div class="">
             <div class="group">
                 <label class="label">E-mail</label>
-                <input v-if = "POPUP_ADDITONAL_DATA"  type="text" class="input" :class="{ 'is-invalid': ERRORS.email }" v-model="POPUP_ADDITONAL_DATA.email" disabled>
-                <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>
+                <input v-if = "popUpAdditionalData"  type="text" class="input" :class="{ 'is-invalid': authErrors.email }" v-model="popUpAdditionalData.email" disabled>
+                <div class="error-message" v-if="authErrors.email"> {{ authErrors.email }} </div>
             </div>
             <div class="group">
                 <label class="label">Пароль</label>
-                <input type="password" class="input" :class="{ 'is-invalid': ERRORS.password }" v-model="password" autocomplete=off>
-                <div class="error-message" v-if="ERRORS.password"> {{ ERRORS.password }} </div>
+                <input type="password" class="input" :class="{ 'is-invalid': authErrors.password }" v-model="password" autocomplete=off>
+                <div class="error-message" v-if="authErrors.password"> {{ authErrors.password }} </div>
             </div>
 
             <div class="group__row flex-center mt-20">
@@ -27,63 +27,50 @@
     </div>
 </template>
 
-<script>
+<script setup>
+  import { ref, onBeforeUnmount } from 'vue';
+  import { useAuthStore } from '@/stores/auth';
+  import { useHeaderStore } from '@/stores/header';
 
-  import { mapActions, mapGetters, mapMutations } from "vuex";
+  const authStore = useAuthStore();
+  const headerStore = useHeaderStore();
 
-  export default {
-    name: "RequestCall",
+  const password = ref('');
+  const isLoading = ref(false);
 
-    data: function() {
-      return {
-          password  : '',
-          isLoading: false,
-      }
-    },
+  const { userData, authErrors } = storeToRefs(authStore);
+  const { popUpAdditionalData } = storeToRefs(headerStore);
 
-    computed: {
-      ...mapGetters("auth",["ERRORS", "USER"]),
-      ...mapGetters("header",["REQUEST_CALL_TYPE", "POPUP_ADDITONAL_DATA"]),
+  const cancelRequest = () => {
+    headerStore.setIsPopUpOpen(false);
+    headerStore.setPopUpAction('');
+    headerStore.setPopUpAdditionalData({});
+  };
 
-    },
+  const sendLoginRequest = async () => {
+    if (isLoading.value) return;
 
-    async beforeUnmount() {
-      this.SET_ERRORS({});
-    },
+    isLoading.value = true;
+    const data = new FormData();
+    data.append('username', popUpAdditionalData.value.email);
+    data.append('password', password.value);
+    authStore.sendLoginRequest(data);
 
-    methods: {
-      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_MESSAGE", "SET_POPUP_ADDITIONAL_DATA"]),
-      ...mapMutations("auth", ["SET_ERRORS",]),
-      ...mapActions("auth", ["SEND_LOGIN_REQUEST",]),
-
-      cancelRequest(){
-        this.SET_IS_POPUP_OPEN(false);
-        this.SET_POPUP_ACTION('');
-        this.SET_POPUP_ADDITIONAL_DATA({});
-      },
-
-      async sendLoginRequest(){
-        if (this.isLoading) return;
-
-        this.isLoading = true;
-        const data = new FormData();
-        data.append('username', this.POPUP_ADDITONAL_DATA.email);
-        data.append('password', this.password);
-        await this.SEND_LOGIN_REQUEST(data);
-
-        if (this.USER) {
-          this.SET_IS_POPUP_OPEN(true);
-          this.SET_POPUP_ACTION('ShowCompleteMsg');
-          const msg ={};
-              msg.main = 'Авторизация прошла успешно';
-              msg.bolt = 'Обращаем Ваше внимание, что реквизиты заказа синхронизированы с учетной записью.';
-              msg.sub = 'Подтведите оформление заказа'
-          this.SET_POPUP_MESSAGE(msg);
-        }
-        this.isLoading = false;
-      }
+    if (userData.value) {
+      headerStore.setIsPopUpOpen(true);
+      headerStore.setPopUpAction('ShowCompleteMsg');
+      const msg ={};
+          msg.main = 'Авторизация прошла успешно';
+          msg.bolt = 'Обращаем Ваше внимание, что реквизиты заказа синхронизированы с учетной записью.';
+          msg.sub = 'Подтведите оформление заказа'
+      headerStore.setPopUpMessage(msg);
     }
-  }
+    isLoading.value = false;
+  };
+
+  onBeforeUnmount( async () => {
+    authStore.setErrors({});
+  });
 </script>
 
 <style lang="scss" scoped>

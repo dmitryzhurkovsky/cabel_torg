@@ -1,4 +1,5 @@
 <template>
+  <Breadcrumb/>
   <div class="news app__content">
     <div class="news__wrapper">
       <div class="news__content _container">
@@ -11,7 +12,7 @@
             />
           </div>
         </div>
-        <div v-if = "NEWS.length > itemsInPage" class="news__pagination">
+        <div v-if = "paginatedNews.length > itemsInPage" class="news__pagination">
           <a 
               :class="[pageNumber > 1 ? 'news__link active' : 'news__link']"
               @click="onChangePage(pageNumber - 1)"
@@ -27,71 +28,62 @@
   </div>
 </template>
 
-<script>
-  import { mapGetters, mapActions } from 'vuex';
+<script setup>
+  import { useHead } from 'nuxt/app';
+  import { ref, computed } from 'vue';
+  import { useMainStore } from '@/stores/main';
+  import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
-  definePageMeta({
-    // middleware: ["auth"],
-    name: 'Новости',
+  const router = useRouter();
+
+  const mainStore = useMainStore();
+  const breadCrumbStore = useBreadCrumbStore();
+
+  const { news } = storeToRefs(mainStore);
+
+  const pageNumber = ref(1);
+  const totalPages = ref(1);
+  const itemsInPage = ref(20);
+
+  useHead({
+    title: 'Кабельторг | Новости',
+    meta: [{
+      name: 'Новости',
+      content: 'Страница Новости'
+    }]
+  });
+    
+  const paginatedNews = computed(() => {
+    const startPosition = (pageNumber.value - 1) * itemsInPage.value;
+    return news.value.slice(startPosition, startPosition + itemsInPage.value);
   });
 
-  export default defineNuxtComponent({
-    name: 'News',
+  const setPages = () => {
+    totalPages.value = Math.ceil(news.value.length / itemsInPage.value);
+  };
 
-    head () {
-      return {
-        title: 'Кабельторг | Новости',
-        meta: [{
-          name: 'Новости',
-          content: 'Страница Новости'
-        }]
-      }
-    },
-    
-    data: function(){
-      return{
-        pageNumber : 1,
-        totalPages: 1,
-        itemsInPage: 20,
-      }
-    },
+  const onChangePage = (page) => {
+    if (page < 1) return
+    if (page > totalPages.value) return
+    pageNumber.value = page;
+    setTimeout(() => window.scrollTo(0, 0), 0);
+  };
 
-    computed: {
-      ...mapGetters("main", ["NEWS"]),
-
-      paginatedNews() {
-        const startPosition = (this.pageNumber - 1) * this.itemsInPage;
-        return this.NEWS.slice(startPosition, startPosition + this.itemsInPage);
-      }
-    },
-
-    methods: {
-      ...mapActions("main", ["GET_NEWS"]),
-
-      setPages(){
-        this.totalPages = Math.ceil(this.NEWS.length / this.itemsInPage);
-      },
-
-      onChangePage(page) {
-        if (page < 1) return
-        if (page > this.totalPages) return
-        this.pageNumber = page;
-        setTimeout(() => window.scrollTo(0, 0), 0);
-      }
-    },
-
-    async mounted(){
-      this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
-      this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
-        name: this.$router.currentRoute.value.meta.name,
-        path: this.$router.currentRoute.value.path,
+  await useAsyncData(
+    async () => {
+      breadCrumbStore.changeBreadCrumb(0);
+      breadCrumbStore.addBreadCrumb({
+        name: 'Новости',
+        path: router.currentRoute.value.path,
         type: "global",
         class: ""
       });
-      await this.GET_NEWS();
-      this.setPages();
+
+      await mainStore.getNews();
+      setPages();
+      return news;
     }
-  })
+  )
 </script>
 
 <style scoped lang="scss">

@@ -5,35 +5,35 @@
       <div class="group">
         <label for="user" class="label">Имя</label>
         <div class="input__box">
-          <input id="name" type="text" class="input" :class="{ 'is-invalid': ERRORS.userName }" v-model="userName" autocomplete=off>
+          <input id="name" type="text" class="input" :class="{ 'is-invalid': authErrors.userName }" v-model="userName" autocomplete=off>
           <i class="icon-pen input__icon"></i>
-          <div class="error-message" v-if="ERRORS.userName"> {{ ERRORS.userName }} </div>
+          <div class="error-message" v-if="authErrors.userName"> {{ authErrors.userName }} </div>
         </div>
       </div>
       <div class="group__row flex-center">
         <div class="group">
           <label for="email" class="label">Электронная почта</label>
           <div class="input__box">
-            <input id="email" type="email" class="input" :class="{ 'is-invalid': ERRORS.userEmail }" v-model="userEmail" autocomplete=off>
+            <input id="email" type="email" class="input" :class="{ 'is-invalid': authErrors.userEmail }" v-model="userEmail" autocomplete=off>
             <i class="icon-pen input__icon"></i>
-            <div class="error-message" v-if="ERRORS.userEmail"> {{ ERRORS.userEmail }} </div>
+            <div class="error-message" v-if="authErrors.userEmail"> {{ authErrors.userEmail }} </div>
           </div>
         </div>
         <div class="group">
           <label for="phone" class="label">Номер телефона</label>
           <div class="input__box">
-            <input id="phone" type="phone" class="input" :class="{ 'is-invalid': ERRORS.userPhone }" v-model="userPhone" autocomplete=off>
+            <input id="phone" type="phone" class="input" :class="{ 'is-invalid': authErrors.userPhone }" v-model="userPhone" autocomplete=off>
             <i class="icon-pen input__icon"></i>
-            <div class="error-message" v-if="ERRORS.userPhone"> {{ ERRORS.userPhone }} </div>
+            <div class="error-message" v-if="authErrors.userPhone"> {{ authErrors.userPhone }} </div>
           </div>
         </div>
       </div>
       <div class="group">
         <label for="deliveryAddress" class="label">Адрес для доставки заказа</label>
         <div class="input__box">
-          <input id="deliveryAddress" type="text" class="input" :class="{ 'is-invalid': ERRORS.userDeliveryAdress }" v-model = "userDeliveryAdress" autocomplete=off>
+          <input id="deliveryAddress" type="text" class="input" :class="{ 'is-invalid': authErrors.userDeliveryAdress }" v-model = "userDeliveryAdress" autocomplete=off>
           <i class="icon-pen input__icon"></i>
-          <div class="error-message" v-if="ERRORS.userDeliveryAdress"> {{ ERRORS.userDeliveryAdress }} </div>
+          <div class="error-message" v-if="authErrors.userDeliveryAdress"> {{ authErrors.userDeliveryAdress }} </div>
         </div>
       </div>
 
@@ -51,57 +51,57 @@
       <div class="group">
         <label for="user" class="label">Название компании</label>
         <div class="input__box">
-          <input id="companyName" type="text" class="input"  :class="{ 'is-invalid': ERRORS.userCompanyName }" v-model="userCompanyName" autocomplete=off>
+          <input id="companyName" type="text" class="input"  :class="{ 'is-invalid': authErrors.userCompanyName }" v-model="userCompanyName" autocomplete=off>
           <i class="icon-pen input__icon"></i>
-          <div class="error-message" v-if="ERRORS.userCompanyName"> {{ ERRORS.userCompanyName }} </div>
+          <div class="error-message" v-if="authErrors.userCompanyName"> {{ authErrors.userCompanyName }} </div>
         </div>
       </div>
 
       <div class="group">
         <label for="user" class="label">УНП</label>
         <div class="input__box">
-          <input id="UNP" type="text" class="input"  :class="{ 'is-invalid': ERRORS.userUNP }" v-model = "userUNP" autocomplete=off>
+          <input id="UNP" type="text" class="input"  :class="{ 'is-invalid': authErrors.userUNP }" v-model = "userUNP" autocomplete=off>
           <i class="icon-pen input__icon"></i>
-          <div class="error-message" v-if="ERRORS.userUNP"> {{ ERRORS.userUNP }} </div>
+          <div class="error-message" v-if="authErrors.userUNP"> {{ authErrors.userUNP }} </div>
         </div>
       </div>
 
       <div class="group">
         <label for="user" class="label">Расчетный счет IBAN</label>
         <div class="input__box">
-          <input id="IBAN" type="text" class="input"  :class="{ 'is-invalid': ERRORS.userIBAN }" v-model = "userIBAN" autocomplete=off>
+          <input id="IBAN" type="text" class="input"  :class="{ 'is-invalid': authErrors.userIBAN }" v-model = "userIBAN" autocomplete=off>
           <div id="anim" class="icon_info input__icon">
               <div class="tooltip flex-center" data-tooltip="Новые счета IBAN записываются в таком формате: ААВВ СССС DDDD ЕЕЕЕ ЕЕЕЕ ЕЕЕЕ ЕЕЕЕ.">!</div>
           </div>
 
-          <div class="error-message" v-if="ERRORS.userIBAN"> {{ ERRORS.userIBAN }} </div>
+          <div class="error-message" v-if="authErrors.userIBAN"> {{ authErrors.userIBAN }} </div>
         </div>
       </div>
 
       <div class="group">
         <label for="user" class="label">Юридический адрес</label>
         <div class="input__box">
-          <input id="companyAdress" type="text" class="input" :class="{ 'is-invalid': ERRORS.userCompanyAdress }" v-model = "userCompanyAdress" autocomplete=off>
+          <input id="companyAdress" type="text" class="input" :class="{ 'is-invalid': authErrors.userCompanyAdress }" v-model = "userCompanyAdress" autocomplete=off>
           <i class="icon-pen input__icon"></i>
-          <div class="error-message" v-if="ERRORS.userCompanyAdress"> {{ ERRORS.userCompanyAdress }} </div>
+          <div class="error-message" v-if="authErrors.userCompanyAdress"> {{ authErrors.userCompanyAdress }} </div>
         </div>
       </div>
 
       <div class="group">
         <label for="user" class="label">БИК</label>
         <div class="input__box">
-          <input id="BIC" type="text" class="input" :class="{ 'is-invalid': ERRORS.userBIC }" v-model = "userBIC" autocomplete=off>
+          <input id="BIC" type="text" class="input" :class="{ 'is-invalid': authErrors.userBIC }" v-model = "userBIC" autocomplete=off>
           <i class="icon-pen input__icon"></i>
-          <div class="error-message" v-if="ERRORS.userBIC"> {{ ERRORS.userBIC }} </div>
+          <div class="error-message" v-if="authErrors.userBIC"> {{ authErrors.userBIC }} </div>
         </div>
       </div>
 
       <div class="group">
         <label for="user" class="label">Обслуживающий банк</label>
         <div class="input__box">
-          <input id="bank" type="text" class="input" :class="{ 'is-invalid': ERRORS.userBank }" v-model = "userBank"  autocomplete=off>
+          <input id="bank" type="text" class="input" :class="{ 'is-invalid': authErrors.userBank }" v-model = "userBank"  autocomplete=off>
           <i class="icon-pen input__icon"></i>
-          <div class="error-message" v-if="ERRORS.userBank"> {{ ERRORS.userBank }} </div>
+          <div class="error-message" v-if="authErrors.userBank"> {{ authErrors.userBank }} </div>
         </div>
       </div>
 
@@ -113,131 +113,115 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import { ref, onMounted } from 'vue';
+  import { useAuthStore } from '@/stores/auth';
+  import { useHeaderStore } from '@/stores/header';
 
-import { mapGetters, mapActions, mapMutations } from "vuex";
+  const authStore = useAuthStore();
+  const headerStore = useHeaderStore();
 
-export default {
-  name: "profile",
+  const { userData, authErrors } = storeToRefs(authStore);
 
-  data: function() {
-    return {
-      userName: null,
-      userEmail: null,
-      userPhone: null,
-      userCompanyName: null,
-      userUNP: null,
-      userIBAN: null,
-      userCompanyAdress: null,
-      userDeliveryAdress: null,
-      userBIC: null,
-      userBank: null,
-      isLoading: false,
+  const userName = ref(null);
+  const userEmail = ref(null);
+  const userPhone = ref(null);
+  const userCompanyName = ref(null);
+  const userUNP = ref(null);
+  const userIBAN = ref(null);
+  const userCompanyAdress = ref(null);
+  const userDeliveryAdress = ref(null);
+  const userBIC = ref(null);
+  const userBank = ref(null);
+  const isLoading = ref(false);
+
+  onMounted(async () => {
+    userName.value = userData.full_name;
+    userEmail.value = userData.email;
+    userPhone.value = userData.phone_number;
+    userCompanyName.value = userData.company_name;
+    userUNP.value = userData.unp;
+    userIBAN.value = userData.IBAN;
+    userCompanyAdress.value = userData.legal_address;
+    userDeliveryAdress.value = userData.delivery_address;
+    userBIC.value = userData.BIC;
+    userBank.value = userData.serving_bank;
+  });
+
+  const onPasswordChange = () => {
+    headerStore.setIsPopUpOpen(true);
+    headerStore.setPopUpAction('ChangePassword');
+  };
+
+  const updateUser = async () => {
+    if (isLoading.value) return;
+
+    isLoading.value = true;
+    const errorsInData = {};
+    if (!userEmail.value || !isValidEmail(userEmail.value)) {
+      errorsInData.userEmail = 'Укажите валидный адрес эл. почты';
     }
-  },
+    // if (!this.password || this.password.length < 8) {
+    //   errorsInData.password = 'Пароль должен быть больше 8 символов'
+    // }
+    // if (this.password !== this.confirm) {
+    //   errorsInData.confirm = 'Пароли не совпадают'
+    // }
+    if (!userName.value) {
+      errorsInData.userName = 'Укажите имя';
+    }
+    if (!userPhone.value) {
+      errorsInData.userPhone = 'Укажите телефон';
+    }
+    if (!userBank.value) {
+      errorsInData.userBank = 'Укажите название банка';
+    }
+    if (!userCompanyName.value) {
+      errorsInData.userCompanyName = 'Укажите наименование компании';
+    }
+    if (!userUNP.value || userUNP.value.toString().length !== 9) {
+      errorsInData.userUNP = 'Укажите валидное УНП';
+    }
+    if (!userIBAN.value || userIBAN.value.toString().length !== 28) {
+      errorsInData.userIBAN = 'Укажите валидный IBAN счет';
+    }
+    if (!userBIC.value || userBIC.value.toString().length < 6) {
+      errorsInData.userBIC = 'Укажите валидный BIC банка';
+    }
+    if (!userCompanyAdress.value) {
+      errorsInData.userCompanyAdress = 'Укажите юридический адрес';
+    }
+    if (!userDeliveryAdress.value) {
+      errorsInData.userDeliveryAdress = 'Укажите адрес доставки';
+    }
+    
+    // console.log(errorsInData, Object.keys(errorsInData).length, Boolean(errorsInData));
+    if (Object.keys(errorsInData).length) {
+      authStore.setErrors(errorsInData)
+    } else {
+      const data = {
+        email: userEmail.value,
+        full_name: userName.value,
+        phone_number: userPhone.value,
+        company_name: userCompanyName.value,
+        unp: userUNP.value,
+        legal_address: userCompanyAdress.value,
+        delivery_address: userDeliveryAdress.value,
+        IBAN: userIBAN.value,
+        BIC: userBIC.value,
+        serving_bank: userBank.value,
+      };
+      await authStore.updateUserRequest(data);
+      isLoading.value = false;
+      // this.$router.push({name: "user-cab"});
+    }
+    isLoading.value = false;
+  };
 
-  computed: {
-    ...mapGetters("auth",["ERRORS", "USER"]),
-  },
-
-  async mounted() {
-    this.userName = this.USER.full_name;
-    this.userEmail = this.USER.email;
-    this.userPhone = this.USER.phone_number;
-    this.userCompanyName = this.USER.company_name;
-    this.userUNP = this.USER.unp;
-    this.userIBAN = this.USER.IBAN;
-    this.userCompanyAdress = this.USER.legal_address;
-    this.userDeliveryAdress = this.USER.delivery_address;
-    this.userBIC = this.USER.BIC;
-    this.userBank = this.USER.serving_bank;
-  },
-
-  methods: {
-    ...mapMutations("auth", ["SET_ERRORS"]),
-    // ...mapMutations("notification", ["ADD_MESSAGE"]),
-    ...mapActions("auth", ["UPDATE_USER_REQUEST"]),
-    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
-
-    onPasswordChange() {
-      this.SET_IS_POPUP_OPEN(true);
-      this.SET_POPUP_ACTION('ChangePassword');
-    },
-
-    async updateUser() {
-      if (this.isLoading) return;
-
-      this.isLoading = true;
-      const errorsInData = {};
-      if (!this.userEmail || !this.isValidEmail(this.userEmail)) {
-        errorsInData.userEmail = 'Укажите валидный адрес эл. почты'
-      }
-      // if (!this.password || this.password.length < 8) {
-      //   errorsInData.password = 'Пароль должен быть больше 8 символов'
-      // }
-      // if (this.password !== this.confirm) {
-      //   errorsInData.confirm = 'Пароли не совпадают'
-      // }
-      if (!this.userName) {
-        errorsInData.userName = 'Укажите имя';
-      }
-      if (!this.userPhone) {
-        errorsInData.userPhone = 'Укажите телефон';
-      }
-      if (!this.userBank) {
-        errorsInData.userBank = 'Укажите название банка';
-      }
-      if (!this.userCompanyName) {
-        errorsInData.userCompanyName = 'Укажите наименование компании';
-      }
-      if (!this.userUNP || this.userUNP.toString().length !== 9) {
-        errorsInData.userUNP = 'Укажите валидное УНП';
-      }
-      if (!this.userIBAN || this.userIBAN.toString().length !== 28) {
-        errorsInData.userIBAN = 'Укажите валидный IBAN счет';
-      }
-      if (!this.userBIC || this.userBIC.toString().length < 6) {
-        errorsInData.userBIC = 'Укажите валидный BIC банка';
-      }
-      if (!this.userCompanyAdress) {
-        errorsInData.userCompanyAdress = 'Укажите юридический адрес';
-      }
-      if (!this.userDeliveryAdress) {
-        errorsInData.userDeliveryAdress = 'Укажите адрес доставки';
-      }
-      
-      // console.log(errorsInData, Object.keys(errorsInData).length, Boolean(errorsInData));
-      if (Object.keys(errorsInData).length) {
-        this.SET_ERRORS(errorsInData);
-      } else {
-        const data = {
-          email: this.userEmail,
-          full_name: this.userName,
-          phone_number: this.userPhone,
-          company_name: this.userCompanyName,
-          unp: this.userUNP,
-          legal_address: this.userCompanyAdress,
-          delivery_address: this.userDeliveryAdress,
-          IBAN: this.userIBAN,
-          BIC: this.userBIC,
-          serving_bank: this.userBank,
-        };
-        await this.UPDATE_USER_REQUEST(data);
-        this.isLoading = false;
-        // this.$router.push({name: "user-cab"});
-      }
-      this.isLoading = false;
-
-    },
-
-    isValidEmail: function (email) {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
-    },
-
-  }
-
-}
+  const isValidEmail = (email) => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  };
 </script>
 
 <style lang="scss" scoped>

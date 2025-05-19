@@ -36,32 +36,19 @@
   </div>
 </template>
 
-<script>
-  import { mapGetters } from 'vuex';
+<script setup>
+  import { useHeaderStore } from '@/stores/header';
 
-  export default {
-    name: 'Quick_category',
+  const router = useRouter();
 
-    computed: {
-      ...mapGetters("header", ["DEVICE_VIEW_TYPE"]),
-    },
+  const headerStore = useHeaderStore();
+  const { viewType } = storeToRefs(headerStore);
 
-    methods: {
-      getPath: function(item){
-        console.log(item);
-        let path = useRuntimeConfig().public.NUXT_APP_API_URL + '/category/' + item;
-        // console.log(path);
-        return path;
-      },
-
-      openPage: function (link){
-        if (this.DEVICE_VIEW_TYPE === 3) {
-          this.$router.push(link);
-        }
-      }
-
+  const openPage = (link) => {
+    if (viewType.value === 3) {
+      router.push(link);
     }
-  }
+  };
 </script>
 
 <style scoped lang="scss">

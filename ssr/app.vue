@@ -2,81 +2,98 @@
   <div id="app__component">
     <HeaderWrapper />
     <NotificationMain />
-    <UiLoader />
-    <!-- <NuxtLoadingIndicator /> -->
+    <!-- <UiLoader /> -->
+    <NuxtLoadingIndicator :color="'#FF9549'" />
     <ClientOnly fallback-tag="div">
       <NotificationPopUp/>
     </ClientOnly>
     <MyHeader />
-    <Breadcrumb/>
+    <!-- <Breadcrumb/> -->
     <NuxtPage />
     <MyFooter />
   </div>
 </template>
 
 <script setup>
+  import { watch } from 'vue';
+  import { useNotificationsStore } from '@/stores/notifications';
+  import { useMainStore } from '@/stores/main';
+  import { useOrdersStore } from '@/stores/orders';
+  import { useAuthStore } from '@/stores/auth';
+  import { useHeaderStore } from '@/stores/header';
+  import { useFavoritesStore } from '@/stores/favorites';
 
-  import store from '@/store'
-  const interval = ref(null)
+  const route = useRoute();
+  const notificationsStore = useNotificationsStore();
+  const mainStore = useMainStore();
+  const oredersStore = useOrdersStore();
+  const authStore = useAuthStore();
+  const headerStore = useHeaderStore();
+  const favoritesStore = useFavoritesStore();
 
-  const route = useRoute()
+  const organizationData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "ООО «КабельЭлектроТорг»",
+    "url": "https://cabel-torg.by/",
+    "logo": "https://cabel-torg.by/_nuxt/logo.3b81b796.svg",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "ул. ГОБК, 7, оф. 128",
+      "addressLocality": "Брест",
+      "postalCode": "224005",
+      "addressCountry": "Belarus"
+    },
+    "sameAs": [
+      "https://www.facebook.com/kabeltorg",
+      "https://twitter.com/kabeltorg",
+      "https://www.instagram.com/kabeltorg"
+    ]
+  }
+
+  const interval = ref(null);
 
   const setViewParametrs = () => {
     // console.log('Set innerWidth', window.innerWidth);
-    store.commit('header/UPDATE_VIEW_PARAMETERS', window.innerWidth)
-  }
+    headerStore.updateViewParameters(window.innerWidth);
+  };
 
-  watch(() => route.path,
-    (curr, prev) => {
-      setViewParametrs()
-    });
-
-  store.commit('notification/SET_IS_LOADING', true)
-  // console.log('Setup App ');
-
-  // onBeforeUpdate( () => {
-  //   // store.commit('notification/SET_IS_LOADING', true)
-  //   // console.log('BeforeUpdate App ');
-  // })
-
-  onBeforeUnmount( ()=> clearInterval(interval.value))
-
-  onBeforeMount(async () => {
-    // console.log('Mounted App ');
-    // store.commit('notification/SET_IS_LOADING', true)
-    // window.addEventListener('resize', setViewParametrs)
-    interval.value = setInterval(()=> {
-      setViewParametrs()
-    }, 300)
+  watch(route, () => {
     setViewParametrs();
-    const nullData = []
-    if (!localStorage.getItem("carts")) localStorage.setItem("carts", JSON.stringify(nullData))
-    if (!localStorage.getItem("favorites")) localStorage.setItem("favorites", JSON.stringify(nullData))
-    await store.dispatch('header/GET_CATEGORIES')
-    await store.dispatch('favorite/GET_USER_FAVORITE')
-    await store.dispatch('order/GET_USER_ORDER')
-    if (localStorage.getItem("authToken")) {
-        await store.dispatch('auth/GET_USER_DATA')
-    }
-    await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')
-    await store.dispatch('main/GET_SETTINGS')
-    // store.commit('notification/SET_IS_LOADING', false)
   });
 
-  await useAsyncData(
-    'categories', 
-    async () => {
-      // console.log('useAsyncData App ');
-      store.commit('notification/SET_IS_LOADING', true)
-      // await store.dispatch('header/GET_CATEGORIES')
-      await store.dispatch('order/GET_ORDER_DELIVERY_TYPES')
-      // await store.dispatch('main/GET_SETTINGS')
-      store.commit('notification/SET_IS_LOADING', false)
-      // return store.getters['header/ALL_CATEGORIES']
-    }, {
-      watch: []
+  onBeforeUnmount( ()=> clearInterval(interval.value));
+
+  onBeforeMount(async () => {
+    interval.value = setInterval(()=> {
+      setViewParametrs();
+    }, 300)
+    setViewParametrs();
+    const nullData = [];
+    if (!localStorage.getItem("carts")) localStorage.setItem("carts", JSON.stringify(nullData));
+    if (!localStorage.getItem("favorites")) localStorage.setItem("favorites", JSON.stringify(nullData));
+    await favoritesStore.getUserFavorite();
+    await oredersStore.getUserOrder();
+    if (localStorage.getItem("authToken")) {
+        await authStore.getUserData();
     }
-  )
+  });
+
+  await useAsyncData(async () => {
+    notificationsStore.setIsLoading(true);
+    await headerStore.getCategories();
+    await oredersStore.getOrderDeliveryTypes();
+    await mainStore.getSettings();
+    notificationsStore.setIsLoading(false);
+    return true;
+  });
+
+  useHead({
+    script: [{
+      type: 'application/ld+json',
+      children: JSON.stringify(organizationData)
+    }]
+  }); 
 </script>
 
 <style lang="scss">
@@ -91,14 +108,6 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-}
-:focus, 
-:active {
-    // outline: none;
-}
-a:focus,
-a:active {
-    // outline: none;
 }
 aside,
 nav,
@@ -229,8 +238,6 @@ body {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    &._loaded {
-    }
 }
 //</ОБОЛОЧКА>===========================================================================================================
 
@@ -516,12 +523,6 @@ input{
     &__body{
         @media (max-width: $md3+px) {
         }
-
-    }
-    &__item{}
-    &__label{
-
-        // @include adaptiv-value( 'line-height', 50, 30, 1);
     }
     &__input{
       border:0;
@@ -529,15 +530,7 @@ input{
         &:focus{
           outline: none!important;
         }
-        ._error{
-
-        }
     }
-    &__button{
-    }
-    &__errormsg{
-    }
-
 }
 
 // Templates for structure

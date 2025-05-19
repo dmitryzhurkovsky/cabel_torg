@@ -1,4 +1,5 @@
 <template>
+  <Breadcrumb/>
   <div class="puboffer">
     <div class="puboffer__wrapper">
       <div class="puboffer__content _container">
@@ -65,17 +66,17 @@
           </ul>
           <ul class="text_paragraph"><span>7. Реквизиты Продавца.</span>
             <li class="text_paragraph__item">ООО «КабельЭлектроТорг»</li>
-            <li class="text_paragraph__item">УНП {{ SETTINGS.unp }}</li>
-            <li class="text_paragraph__item">ОКПО {{ SETTINGS.OKPO }}</li>
+            <li class="text_paragraph__item">УНП {{ settings.unp }}</li>
+            <li class="text_paragraph__item">ОКПО {{ settings.OKPO }}</li>
           </ul>
           <br>
-          <p class="text_paragraph__item"><b>Юр. адрес:</b> {{ SETTINGS.legal_address }}</p>
-          <p class="text_paragraph__item"><b>Почтовый адрес:</b> {{ SETTINGS.postal_address }}</p>
-          <p class="text_paragraph__item"><b>Тел/факс:</b> {{ SETTINGS.phone_and_fax }}</p>
+          <p class="text_paragraph__item"><b>Юр. адрес:</b> {{ settings.legal_address }}</p>
+          <p class="text_paragraph__item"><b>Почтовый адрес:</b> {{ settings.postal_address }}</p>
+          <p class="text_paragraph__item"><b>Тел/факс:</b> {{ settings.phone_and_fax }}</p>
           <br>
-          <p class="text_paragraph__item"><b>Банк:</b> {{ SETTINGS.serving_bank }}</p>
-          <p class="text_paragraph__item"><b>р/с в формате IBAN:</b> {{ SETTINGS.IBAN }}</p>
-          <p class="text_paragraph__item">{{ SETTINGS.serving_bank_short }}</p>
+          <p class="text_paragraph__item"><b>Банк:</b> {{ settings.serving_bank }}</p>
+          <p class="text_paragraph__item"><b>р/с в формате IBAN:</b> {{ settings.IBAN }}</p>
+          <p class="text_paragraph__item">{{ settings.serving_bank_short }}</p>
           <br>
 
         </div>
@@ -84,53 +85,41 @@
   </div>
 </template>
 
-<script>
-  import { mapGetters } from 'vuex';
+<script setup>
+  import { useHead } from 'nuxt/app';
+  import { onMounted } from 'vue';
+  import { useMainStore } from '@/stores/main';
+  import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
-  definePageMeta({
-    // middleware: ["auth"],
-    name: 'Публичная оферта',
+  const router = useRouter();
+
+  const mainStore = useMainStore();
+  const breadCrumbStore = useBreadCrumbStore();
+
+  const { settings } = storeToRefs(mainStore);
+
+  useHead({
+      title: 'Кабельторг | Публичная оферта',
+      meta: [{
+        name: 'Публичная оферта',
+        content: 'Страница Публичная оферта'
+      }]
   });
 
-  export default defineNuxtComponent({
-    name: 'Offer',
-
-    head () {
-      return {
-        title: 'Кабельторг | Публичная оферта',
-        meta: [{
-          name: 'Публичная оферта',
-          content: 'Страница Публичная оферта'
-        }]
-      }
-    },
-
-    computed:{
-      ...mapGetters("main", ["SETTINGS"]),
-    },
-
-    mounted(){
-      this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
-      this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
-        name: this.$router.currentRoute.value.meta.name,
-        path: this.$router.currentRoute.value.path,
-        type: "global",
-        class: ""
-      });
-    }
+  onMounted(() => {
+    breadCrumbStore.changeBreadCrumb(0);
+    breadCrumbStore.addBreadCrumb({
+      name: router.currentRoute.value.meta.name,
+      path: router.currentRoute.value.path,
+      type: "global",
+      class: ""
+    });
   })
 </script>
 
 <style scoped lang="scss">
 
 .puboffer {
-
-  &__wrapper{
-
-  }
-  &__content{
-
-  }
 
   &__body{
     padding: 20px 0 40px 0;
@@ -143,15 +132,6 @@
     }
 
   }
-
-
-  &__item{
-
-  }
-  &__link{
-
-}
-
 }
 
 .text_paragraph{
@@ -160,7 +140,6 @@
   span{
     font-weight: bold;
   }
-
 
   &__item{
     padding: 2px 0;
@@ -171,9 +150,7 @@
     &:nth-child(2){
       margin-top: 15px;
     }
-
   }
-
 }
 
 </style>

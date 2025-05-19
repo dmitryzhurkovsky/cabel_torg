@@ -5,7 +5,7 @@
     >
       <div
           class="v-notification__body"
-          v-for="message in MESSAGES"
+          v-for="message in messages"
           :key="message.id"
           :class="message.icon"
       >
@@ -23,47 +23,36 @@
   </div>
 </template>
 
-<script>
+<script setup>
 
-  import { mapGetters, mapMutations } from "vuex";
+  import { useNotificationsStore } from '@/stores/notifications';
 
-  export default {
-    name: "v-notification",
-    props: {
-      // messages:     { type: Array,   default: () => {return []}},
-      rightButton:  { type: String,  default: ''},
-      leftButton:   { type: String,  default: ''},
-      timeout:      { type: Number,  default: 3000}
-    },
+  const notificationsStore = useNotificationsStore();
 
-    computed: {
-      ...mapGetters("notification", ["MESSAGES", "LENGTH"]),
-    },
+  const { messages } = storeToRefs(notificationsStore);
 
-    methods: {
-      ...mapMutations("notification", ["DELETE_MESSAGE"]),
+  const props = defineProps({
+    rightButton:  { type: String,  default: ''},
+    leftButton:   { type: String,  default: ''},
+    timeout:      { type: Number,  default: 3000}
+  });
 
-      hideNotification() {
-        let vm = this;
-        if (this.LENGTH) {
-          setTimeout(() => {
-            vm.DELETE_MESSAGE();
-          }, vm.timeout)
-        }
-      },
+  const hideNotification = () => {
+  if (messages.value.length) {
+      setTimeout(function () {
+        notificationsStore.deleteMessage();
+      }, props.timeout)
+    }
+  };
 
-      closeNotification(){
-          this.DELETE_MESSAGE();
-      },
-    },
+  const closeNotification = () => {
+    notificationsStore.deleteMessage();
+  };
 
-    watch: {
-      LENGTH() {
-        this.hideNotification();
-      }
-    },
+  watch(messages, () => {
+    hideNotification();
+  }, { deep: true });
 
-  }
 </script>
 
 <style lang='scss' scoped>

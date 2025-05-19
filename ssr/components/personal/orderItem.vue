@@ -26,9 +26,10 @@
             <div class="details-order__price"><b>
               {{ (orderProduct.amount * orderProduct.product.price_with_discount_and_tax && orderProduct.product.price_with_discount_and_tax !== orderProduct.product.price_with_tax 
                 ? orderProduct.product.price_with_discount_and_tax 
-                : orderProduct.product.price_with_tax).toFixed(2) 
+                : orderProduct.product.price_with_tax) 
               }}</b> BYN
                 </div>
+                <!-- : orderProduct.product.price_with_tax).toFixed(2)  -->
             <!-- orderProduct.product.price -->
           </div>
         </div>
@@ -36,100 +37,95 @@
   </div>
 </template>
 
-<script>
-import { mapGetters, mapMutations } from 'vuex';
-export default {
-  name: 'OrderItem',
+<script setup>
+  import { ref, computed } from 'vue';
+  import { useOrdersStore } from '@/stores/orders';
+  import { useNotificationsStore } from '@/stores/notifications';
 
-  props: {
-    card:  null,
-  },
+  const ordersStore = useOrdersStore();
+  const notificationsStore = useNotificationsStore();
 
-  data() {
-    return {
-      isOpen  : false,
+  const { deliveryTypes } = storeToRefs(ordersStore);
+
+  const props = defineProps({
+    card:  { type: Object,  default: null},
+  });
+
+  const isOpen = ref(false);
+
+  const order_price = computed(() => {
+    let totalPrice = 0;
+    props.card.products.forEach(item => {
+      totalPrice = totalPrice + Number((item.amount * item.product.price_with_discount_and_tax && item.product.price_with_discount_and_tax !== item.product.price_with_tax 
+                ? item.product.price_with_discount_and_tax 
+                : item.product.price_with_tax));
+    });
+    return totalPrice.toFixed(2);
+  });
+
+  const order_status = computed(() => {
+    if (props.card.status === 'P') return 'В обработке';
+    if (props.card.status === 'S') return 'Отправлен';
+    if (props.card.status === 'c') return 'Отменен';
+    if (props.card.status === 'C') return 'Выполнен';
+  });
+
+  const order_color = computed(() => {
+    if (props.card.status === 'P') return 'progress';
+    if (props.card.status === 'S') return 'send';
+    if (props.card.status === 'c') return 'cancel';
+    if (props.card.status === 'C') return 'complete';
+  });
+
+  const order_date = computed(() => {
+    const dirtyDate = props.card.created_at.slice(0, 10);
+    const year = dirtyDate.slice(0, 4);
+    const month = dirtyDate.slice(5, 7);
+    const date = dirtyDate.slice(8);
+    return date + '.' + month + '.' + year;
+  });
+
+  const delivery_type = computed(() => {
+    const type = deliveryTypes.value.filter(item => item.id === props.card.delivery_type_id);
+    return type.length ? type[0].payload : 'unknown';
+  });
+
+  // const productPrice = (item) => {
+  //   // console.log(item);
+  //   return (item.amount * item.product.price).toFixed(2)
+  // };
+
+  const toggleOrder = () => {
+    isOpen.value = !isOpen.value;
+  };
+
+  const dowwnloadInvoice = () => {
+    notificationsStore.setIsLoading(true);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+    myHeaders.append("Authorization", "Bearer " + localStorage.getItem("authToken"));
+    const urlencoded = new URLSearchParams();
+    const requestOptions = {
+        method  : 'POST',
+        headers : myHeaders,
     };
-  },
-
-  computed:{
-    ...mapGetters("order", ["ORDER_DELIVERY_TYPES"]),
-
-    order_price(){
-      let totalPrice = 0;
-      this.card.products.forEach(item => {
-        totalPrice = totalPrice + Number((item.amount * item.product.price).toFixed(2));
-      });
-      return Number(totalPrice.toFixed(2));
-    },
-
-    order_status(){
-      if (this.card.status === 'P') return 'В обработке';
-      if (this.card.status === 'S') return 'Отправлен';
-      if (this.card.status === 'c') return 'Отменен';
-      if (this.card.status === 'C') return 'Выполнен';
-    },
-
-    order_color(){
-      if (this.card.status === 'P') return 'progress';
-      if (this.card.status === 'S') return 'send';
-      if (this.card.status === 'c') return 'cancel';
-      if (this.card.status === 'C') return 'complete';
-    },
-
-    order_date(){
-      const dirtyDate = this.card.created_at.slice(0, 10);
-      const year = dirtyDate.slice(0, 4);
-      const month = dirtyDate.slice(5, 7);
-      const date = dirtyDate.slice(8);
-      return date + '.' + month + '.' + year;
-    },
-
-    delivery_type(){
-      const type = this.ORDER_DELIVERY_TYPES.filter(item => item.id === this.card.delivery_type_id);
-      return type.length ? type[0].payload : 'unknown';
-    },
-
-    productPrice(item){
-      console.log(item);
-      return (item.amount * item.product.price).toFixed(2)
-    }
-  },
-
-  methods:{
-    ...mapMutations("notification", ["SET_IS_LOADING"]),
-
-    toggleOrder(){
-      this.isOpen = !this.isOpen;
-    },
-
-    dowwnloadInvoice(){
-      this.SET_IS_LOADING(true);
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
-      myHeaders.append("Authorization", "Bearer " + localStorage.getItem("authToken"));
-      const urlencoded = new URLSearchParams();
-      const requestOptions = {
-          method  : 'POST',
-          headers : myHeaders,
-      };
-      fetch(useRuntimeConfig().public.NUXT_APP_API_URL + "orders/" + this.card.id + '/invoices', requestOptions)
-      .then((response) => response.blob())
-      .then((blob) => {
-          const _url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = _url;
-          link.download = 'invoise' + this.card.id;
-          link.click();
-          // URL.revokeObjectURL(link.href);
-          // window.open(_url, '_blank');
-          this.SET_IS_LOADING(false);
-      }).catch((err) => {
-          console.log(err);
-          this.SET_IS_LOADING(false);
-      });
-    },
-  }
-}
+    fetch(useRuntimeConfig().public.NUXT_APP_API_URL + "orders/" + props.card.id + '/invoices', requestOptions)
+    .then((response) => response.blob())
+    .then((blob) => {
+        const _url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = _url;
+        link.download = 'invoise' + props.card.id;
+        link.click();
+        // URL.revokeObjectURL(link.href);
+        // window.open(_url, '_blank');
+        notificationsStore.setIsLoading(false);
+    }).catch((err) => {
+        console.log(err);
+        notificationsStore.setIsLoading(false);
+    });
+  };
+  // }
 </script>
 
 <style lang="scss" scoped>

@@ -36,186 +36,164 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import { ref, computed, watch } from 'vue';
+  // import { defineEmits } from 'vue';
+  import { useQueryStore } from '@/stores/query';
 
-import {mapMutations, mapGetters} from 'vuex'
+  const router = useRouter();
+  const queryStore = useQueryStore();
 
-export default {
-  name: 'PriceSlider',
+  const emit = defineEmits(['onPriceChanged']);  
 
-  data(){
-    return {
-      minValueRange: 0,
-      maxValueRange: 80000,
-      minValuePrice: 0,
-      maxValuePrice: 80000,
-      RangeMin: 0,
-      RangeMax: 80000,
-      priceGap: 100,
-      Left: '25%',
-      Right: '75%',
+  const { minPrice, maxPrice } = storeToRefs(queryStore);
+
+  const minValueRange = ref(0);
+  const maxValueRange = ref(80000);
+  const minValuePrice = ref(0);
+  const maxValuePrice = ref(80000);
+  const RangeMin = ref(0);
+  const RangeMax = ref(80000);
+  const priceGap = ref(100);
+  const Left = ref('25%');
+  const Right = ref('75%');
+
+  const ChangeParameters = computed(() => {
+    // console.log('Watch in price slider ', String(maxPrice.value) + String(minPrice.value));
+    return String(maxPrice.value) + String(minPrice.value);
+  });
+
+  watch(ChangeParameters, async () => {
+    minValuePrice.value = minPrice.value;
+    minValueRange.value = minPrice.value;
+    maxValuePrice.value = maxPrice.value;
+    maxValueRange.value = maxPrice.value;
+    Left.value = ((minPrice.value / RangeMax.value) * 100) + '%';
+    Right.value = 100 - ((maxPrice.value /RangeMax.value) * 100) + '%';
+  });
+
+  const setUpMinPrice = () => {
+    if (minValuePrice.value <= RangeMin.value) minValuePrice.value = RangeMin.value;
+    if (minValuePrice.value >= maxValuePrice.value - priceGap.value) minValuePrice.value = maxValuePrice.value - priceGap.value;
+    const minPrice = minValuePrice.value;
+    const maxPrice = maxValuePrice.value;
+    if ((maxPrice - minPrice >= priceGap.value) && (maxPrice <= maxValueRange.value)) {
+      minValueRange.value = minPrice;
+      Left.value = ((minPrice / RangeMax.value) * 100) + '%';
     }
-  },
+  };
 
-  watch: {
-    ChangeParameters: async function() {
-      this.minValuePrice = this.MIN_PRICE;
-      this.minValueRange = this.MIN_PRICE;
-      this.maxValuePrice = this.MAX_PRICE;
-      this.maxValueRange = this.MAX_PRICE;
-      this.Left = ((this.MIN_PRICE / this.RangeMax) * 100) + '%';
-      this.Right = 100 - ((this.MAX_PRICE / this.RangeMax) * 100) + '%';
-    }  
-  },
-
-  computed: {
-    ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_ORDER", "SORT_DIRECTION", "LIMIT_ITEMS"]),
-    ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
-    ...mapGetters("header", ["ALL_CATEGORIES"]),
-
-    ChangeParameters(){
-      // console.log('Watch in price slider ', String(this.MAX_PRICE) + String(this.MIN_PRICE));
-      return String(this.MAX_PRICE) + String(this.MIN_PRICE);
+  const setUpMaxPrice = () => {
+    if (maxValuePrice.value >= RangeMax.value) maxValuePrice.value = RangeMax.value;
+    if (maxValuePrice.value <= minValuePrice.value + priceGap.value) maxValuePrice.value = Number(minValuePrice.value) + Number(priceGap.value);
+    const minPrice = minValuePrice.value;
+    const maxPrice = maxValuePrice.value;
+    if ((maxPrice - minPrice >= priceGap.value)) {
+      maxValueRange.value = maxPrice;
+      Right.value = 100 - ((maxPrice / RangeMax.value) * 100) + '%';
     }
-  },
+  };
 
-  methods: {
-    ...mapMutations("query", ["SET_MIN_PRICE", "SET_MAX_PRICE", "SET_OFFSET"]),
+  const onChangeMinPrice = () => {
+    if (String(minValuePrice.value).length === 0) minValuePrice.value = minValueRange.value;
+    setUpMinPrice();
+    updateStore();
+  };
 
-    setUpMinPrice(){
-      if (this.minValuePrice <= this.RangeMin) this.minValuePrice = this.RangeMin;
-      if (this.minValuePrice >= this.maxValuePrice - this.priceGap) this.minValuePrice = this.maxValuePrice - this.priceGap;
-      const minPrice = this.minValuePrice;
-      const maxPrice = this.maxValuePrice;
-      if ((maxPrice - minPrice >= this.priceGap) && (maxPrice <= this.maxValueRange)) {
-        this.minValueRange = minPrice;
-        this.Left = ((minPrice / this.RangeMax) * 100) + '%';
-      }
-    },
+  const onChangeMaxPrice = () => {
+    if (String(maxValuePrice.value).length === 0) maxValuePrice.value = maxValueRange.value;
+    setUpMaxPrice();
+    updateStore();
+  };
 
-    setUpMaxPrice(){
-      if (this.maxValuePrice >= this.RangeMax) this.maxValuePrice = this.RangeMax;
-      if (this.maxValuePrice <= this.minValuePrice + this.priceGap) this.maxValuePrice = Number(this.minValuePrice) + Number(this.priceGap);
-      const minPrice = this.minValuePrice;
-      const maxPrice = this.maxValuePrice;
-      if ((maxPrice - minPrice >= this.priceGap)) {
-        this.maxValueRange = maxPrice;
-        this.Right = 100 - ((maxPrice / this.RangeMax) * 100) + '%';
-      }
-    },
-
-    onChangeMinPrice(){
-      if (String(this.minValuePrice).length === 0) this.minValuePrice = this.minValueRange;
-      this.setUpMinPrice();
-      this.updateStore();
-    },
-
-    onChangeMaxPrice() {
-      if (String(this.maxValuePrice).length === 0) this.maxValuePrice = this.maxValueRange;
-      this.setUpMaxPrice();
-      this.updateStore();
-    },
-
-    onChangeRange(type) {
-      let minValue = this.minValueRange;
-      const maxValue = this.maxValueRange;
-      if (((maxValue - minValue) < this.priceGap)) {
-        if (type === 'min') {
-          this.minValueRange = maxValue - this.priceGap;
-        } else {
-          minValue = this.minValuePrice;
-          this.minValueRange = Number(this.minValuePrice);
-          this.maxValueRange = Number(this.minValueRange) + Number(this.priceGap);
-        }
-        this.minValuePrice = this.minValueRange;
-        this.maxValuePrice = this.maxValueRange;
-        this.Left = ((this.minValueRange / this.RangeMax) * 100) + '%';
-        this.Right = 100 - ((this.maxValueRange / this.RangeMax) * 100) + '%';
+  const onChangeRange = (type) => {
+    let minValue = minValueRange.value;
+    const maxValue = maxValueRange.value;
+    if (((maxValue - minValue) < priceGap.value)) {
+      if (type === 'min') {
+        minValueRange.value = maxValue - priceGap.value;
       } else {
-        this.minValuePrice = minValue;
-        this.maxValuePrice = maxValue;
-        this.Left = ((minValue / this.RangeMax) * 100) + '%';
-        this.Right = 100 - ((maxValue / this.RangeMax) * 100) + '%';
+        minValue = minValuePrice.value;
+        minValueRange.value = Number(minValuePrice.value);
+        maxValueRange.value = Number(minValueRange.value) + Number(priceGap);
       }
-    },
-
-    onSetChangeRange(){
-      this.updateStore();
-    },
-
-    getCatalogUrl(min, max){
-      let url = "/catalog";
-      url = url + this.getLastPartOfUrl(min, max);
-      return url;
-    },
-
-    getCategoryUrl(id, min, max){
-      let url = "/category/";
-      if (id) {
-        const link = this.ALL_CATEGORIES.filter(item => item.id == id)[0].site_link
-        url = url + link;
-      }
-      url = url + this.getLastPartOfUrl(min, max);
-      return url;
-    },
-
-    getLastPartOfUrl(min, max){
-      let url = '?';
-      if (this.OFFSET != 0 || this.LIMIT != 12) {
-        url = url + "offset=" + this.OFFSET + '&'
-        url = url + "limit=" + this.LIMIT + '&'
-      }
-      if (min != 0 || max != 80000) {
-        url = url + "actual_price_gte=" + min + '&';
-        url = url + "actual_price_lte=" + max + '&';
-      }
-      if (this.SORT_DIRECTION !== '-' || this.SORT_TYPE !== 'created_at') {
-        url = url + "ordering=" + this.SORT_DIRECTION + this.SORT_TYPE + '&'
-      }
-      if (this.TYPE_OF_PRODUCT !== 'all') {
-        url = url + "type_of_product=" + this.TYPE_OF_PRODUCT + '&'
-      }
-      const lastSymbol = url.slice(-1)
-      if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
-      return url;        
-    },
-
-    updateStore(){
-      this.SET_OFFSET(0);
-      if (this.MIN_PRICE !== this.minValuePrice) {
-        this.SET_MIN_PRICE(this.minValuePrice);
-        if (this.CATEGORY_ID) {
-          this.$router.push(this.getCategoryUrl(this.CATEGORY_ID, this.minValuePrice, this.MAX_PRICE));
-        } else {
-          this.$router.push(this.getCatalogUrl(this.minValuePrice, this.MAX_PRICE));
-        }
-      } 
-      if (this.MAX_PRICE !== this.maxValuePrice) {
-        this.SET_MAX_PRICE(this.maxValuePrice);
-        if (this.CATEGORY_ID) {
-          this.$router.push(this.getCategoryUrl(this.CATEGORY_ID, this.MIN_PRICE, this.maxValuePrice));
-        } else {
-          this.$router.push(this.getCatalogUrl(this.MIN_PRICE, this.maxValuePrice));
-        }
-      }
+      minValuePrice.value = minValueRange.value;
+      maxValuePrice.value = maxValueRange.value;
+      Left.value = ((minValueRange.value / RangeMax.value) * 100) + '%';
+      Right.value = 100 - ((maxValueRange.value / RangeMax.value) * 100) + '%';
+    } else {
+      minValuePrice.value = minValue;
+      maxValuePrice.value = maxValue;
+      Left.value = ((minValue / RangeMax.value) * 100) + '%';
+      Right.value = 100 - ((maxValue / RangeMax.value) * 100) + '%';
     }
-  },
+  };
 
-  beforeMount(){
-    // console.log('Mount price slider ', this.MIN_PRICE, '  ', this.MAX_PRICE);
-    this.minValuePrice = this.MIN_PRICE;
-    this.maxValuePrice = this.MAX_PRICE;
-    this.setUpMinPrice();
-    this.setUpMaxPrice();
-  },
+  const onSetChangeRange = () => {
+    updateStore();
+  };
 
-  // beforeUpdate(){
-  //   this.minValuePrice = this.MIN_PRICE;
-  //   this.maxValuePrice = this.MAX_PRICE;
-  //   this.setUpMinPrice();
-  //   this.setUpMaxPrice();
-  // }
-}
+  // const getCatalogUrl = (min, max) => {
+  //   let url = "/catalog";
+  //   url = url + getLastPartOfUrl(min, max);
+  //   return url;
+  // };
+
+  // const getCategoryUrl = (id, min, max) => {
+  //   let url = "/category/";
+  //   if (id) {
+  //     const link = categories.value.filter(item => item.id == id)[0].site_link
+  //     url = url + link;
+  //   }
+  //   url = url + getLastPartOfUrl(min, max);
+  //   return url;
+  // };
+
+  // const getLastPartOfUrl = (min, max) => {
+  //   let url = '?';
+  //   if (offset.value != 0 || limit.value != 12) {
+  //     url = url + "offset=" + offset.value + '&'
+  //     url = url + "limit=" + limit.value + '&'
+  //   }
+  //   if (min != 0 || max != 80000) {
+  //     url = url + "actual_price_gte=" + min + '&';
+  //     url = url + "actual_price_lte=" + max + '&';
+  //   }
+  //   if (sortDirection.value !== '-' || sortType.value !== 'created_at') {
+  //     url = url + "ordering=" + sortDirection.value + sortType.value + '&'
+  //   }
+  //   if (typeOfProduct.value !== 'all') {
+  //     url = url + "type_of_product=" + typeOfProduct.value + '&'
+  //   }
+  //   const lastSymbol = url.slice(-1)
+  //   if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
+  //   return url;        
+  // };
+
+  const updateStore = () => {
+    queryStore.setOffset(0);
+    if (minPrice.value !== minValuePrice.value) {
+      queryStore.setMinPrice(minValuePrice.value);
+      const url = queryStore.createUrl();
+      router.push(url);
+    } 
+    if (maxPrice.value !== maxValuePrice.value) {
+      queryStore.setMaxPrice(maxValuePrice.value);
+      const url = queryStore.createUrl();
+      router.push(url);
+    }
+    console.log('updsteStore priceSlider');
+    emit('onPriceChanged');
+  }
+
+  onBeforeMount(() => {
+    // console.log('Mount price slider ', minPrice.value, '  ', maxPrice.value);
+    minValuePrice.value = minPrice.value;
+    maxValuePrice.value = maxPrice.value;
+    setUpMinPrice();
+    setUpMaxPrice();
+  });
+
 </script>
 
 <style lang="scss" scoped>

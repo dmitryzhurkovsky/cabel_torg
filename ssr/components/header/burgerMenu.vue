@@ -10,9 +10,9 @@
         </div>
         <HeaderSearchBurger/>
       </div>
-    <ul class="burger__menu_list animated" v-if="CATALOG.length">
+    <ul class="burger__menu_list animated" v-if="catalog.length">
       <li 
-        v-for   = "mainItem in CATALOG"
+        v-for   = "mainItem in catalog"
         :key    = "mainItem.id"
       >
         <div class="burger__menu_item flex-center">
@@ -120,90 +120,72 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import { ref } from 'vue';
+  import { useQueryStore } from '@/stores/query';
+  import { useHeaderStore } from '@/stores/header';
 
-import {mapGetters, mapMutations, mapActions} from 'vuex'
+  const route = useRoute();
+  const router = useRouter();
+  const queryStore = useQueryStore();
+  const headerStore = useHeaderStore();
 
-export default {
-  name: "BurgerMenu",
+  const activeMenuItem = ref(null);
 
-  data(){
-    return {
-      activeMenuItem : null,
+  const { typeOfProduct, offset, limit, sortType, sortDirection, minPrice, maxPrice } = storeToRefs(queryStore);
+  const { isCatalogOpen, categories, catalog } = storeToRefs(headerStore);
 
+  const toggleCategory = (item) => {
+    item.mobileMenu = !item.mobileMenu;
+  };
+  
+  const getCategoryUrl = (id) => {
+    let url = "/category/";
+    if (id) {
+      const link = categories.value.filter(item => item.id == id)[0].site_link
+      url = url + link;
     }
-  },
+    url = url + getLastPartOfUrl();
+    return url;
+  };
 
-  computed: {
-    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE", "CATALOG", "IS_CATALOG_OPEN", "ALL_CATEGORIES"]),
-    ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION"]),
-  },
-
-  methods:{
-    ...mapMutations("query", ["SET_CATEGORY_ID", "SET_DEFAULT_PRICES"]),
-    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
-    ...mapActions("header", ["SET_ALL_CURRENT_CATEGORIES"]),
-    ...mapActions("catalog", ["GET_CATALOG_ITEMS"]),
-
-    toggleCategory(item) {
-      item.mobileMenu = !item.mobileMenu;
-    },
-    
-    getCatalogUrl(){
-      let url = "/catalog";
-      url = url + this.getLastPartOfUrl();
-      return url;
-    },
-
-    getCategoryUrl(id){
-      let url = "/category/";
-      if (id) {
-        const link = this.ALL_CATEGORIES.filter(item => item.id == id)[0].site_link
-        url = url + link;
-      }
-      url = url + this.getLastPartOfUrl();
-      return url;
-    },
-
-    getLastPartOfUrl(){
-      let url = '?';
-      if (this.OFFSET != 0 || this.LIMIT != 12) {
-        url = url + "offset=" + this.OFFSET + '&'
-        url = url + "limit=" + this.LIMIT + '&'
-      }
-      if (this.MIN_PRICE != 0 || this.MAX_PRICE != 80000) {
-        url = url + "actual_price_gte=" + this.MIN_PRICE + '&';
-        url = url + "actual_price_lte=" + this.MAX_PRICE + '&';
-      }
-      if (this.SORT_DIRECTION !== '-' || this.SORT_TYPE !== 'created_at') {
-        url = url + "ordering=" + this.SORT_DIRECTION + this.SORT_TYPE + '&'
-      }
-      if (this.TYPE_OF_PRODUCT !== 'all') {
-        url = url + "type_of_product=" + this.TYPE_OF_PRODUCT + '&'
-      }
-      const lastSymbol = url.slice(-1)
-      if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
-      return url;        
-    },
-
-    changeCategory(id){
-      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      this.SET_DEFAULT_PRICES();
-      this.$router.push(this.getCategoryUrl(id));
-    },
-
-    openPage(page) {
-      this.UPDATE_IS_CATALOG_OPEN(false);
-      if (this.$route.path != page) {
-        this.$router.push(page);
-      }
-    },
-
-    closeMenu() {
-      this.UPDATE_IS_CATALOG_OPEN(false);
+  const getLastPartOfUrl = () => {
+    let url = '?';
+    if (offset.value != 0 || limit.value != 12) {
+      url = url + "offset=" + offset.value + '&'
+      url = url + "limit=" + limit.value + '&'
     }
-  }
-}
+    if (minPrice.value != 0 || maxPrice.value != 80000) {
+      url = url + "actual_price_gte=" + minPrice.value + '&';
+      url = url + "actual_price_lte=" + maxPrice.value + '&';
+    }
+    if (sortDirection.value !== '-' || sortType.value !== 'created_at') {
+      url = url + "ordering=" + sortDirection.value + sortType.value + '&'
+    }
+    if (typeOfProduct.value !== 'all') {
+      url = url + "type_of_product=" + typeOfProduct.value + '&'
+    }
+    const lastSymbol = url.slice(-1)
+    if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
+    return url;        
+  };
+
+  const changeCategory = (id) => {
+    headerStore.updateIsCatalogOpen(!isCatalogOpen.value);
+    queryStore.setDefaultPrices();
+    router.push(getCategoryUrl(id));
+  };
+
+  const openPage = (page) => {
+    headerStore.updateIsCatalogOpen(false);
+    if (route.path != page) {
+      router.push(page);
+    }
+  };
+
+  const closeMenu = () => {
+    headerStore.updateIsCatalogOpen(false);
+  };
 </script>
 
 <style lang="scss" scoped>

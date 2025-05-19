@@ -6,9 +6,10 @@ export default defineNuxtConfig({
     public:{
       NUXT_APP_API_URL: process.env.NUXT_APP_API_URL,
       NUXT_APP_IMAGES: process.env.NUXT_APP_IMAGES,
-      NUXT_APP_DOCUMENTS: process.env.NUXT_APP_DOCUMENTS
+      NUXT_APP_DOCUMENTS: process.env.NUXT_APP_DOCUMENTS,
     }
   },
+
   vite: {
     css: {
       preprocessorOptions: {
@@ -18,10 +19,13 @@ export default defineNuxtConfig({
       }
     }
   },
+
   build: {
     transpile: ['swiper'],
   },
+
   modules: [
+    '@pinia/nuxt',
     [
       'yandex-metrika-module-nuxt3',
       {
@@ -38,6 +42,6 @@ export default defineNuxtConfig({
   // pages: true
 
   ssr: true,
+
+  compatibilityDate: '2025-04-22',
 });
-
-

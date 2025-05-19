@@ -1,41 +1,38 @@
 <template>
   <div 
     ref="loader"
-    :class="[IS_LOADING === false ? 'lds_wrapper': 'lds_wrapper show_wrapper']"
+    :class="[isLoading === false ? 'lds_wrapper': 'lds_wrapper show_wrapper']"
   >
       <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
   </div>
 </template>
 
 
-<script>
-import { mapGetters } from 'vuex'
-export default {
-  name: 'Loader',
+<script setup>
+  import { watch, ref } from 'vue';
+  import { useNotificationsStore } from '@/stores/notifications';
 
-  computed:{
-    ...mapGetters("notification", ["IS_LOADING"]),
-  },
+  const notificationsStore = useNotificationsStore();
+  const { isLoading } = storeToRefs(notificationsStore);
 
-  watch: {
-    IS_LOADING: function(){
-      const wrapper = document.getElementById('app__component');
-      if (this.IS_LOADING) {
-        this.$refs.loader.style.top = window.pageYOffset + 'px';
-        wrapper.style.overflowY = 'hidden';
-        wrapper.style.height = '100vh'; 
-        wrapper.style.position = 'relative';
-        document.body.style.paddingRight = '16px';
-      } else {
-        wrapper.style.overflowY = '';
-        wrapper.style.height = ''; 
-        wrapper.style.position = '';
-        document.body.style.paddingRight = '0';
-      }
+  const loader = ref(null);
+
+  watch(isLoading, () => {
+    const wrapper = document.getElementById('app__component');
+    if (isLoading.value) {
+      loader.style.top = window.pageYOffset + 'px';
+      wrapper.style.overflowY = 'hidden';
+      wrapper.style.height = '100vh'; 
+      wrapper.style.position = 'relative';
+      document.body.style.paddingRight = '16px';
+    } else {
+      wrapper.style.overflowY = '';
+      wrapper.style.height = ''; 
+      wrapper.style.position = '';
+      document.body.style.paddingRight = '0';
     }
-  },
+  });
 
-}
 </script>
 
 <style lang="css">

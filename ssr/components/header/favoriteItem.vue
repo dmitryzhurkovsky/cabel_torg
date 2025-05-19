@@ -18,52 +18,39 @@
   </div>
 </template>
 
-<script>
+<script setup>
 
-import axios from "axios";
-import {mapMutations, mapActions } from 'vuex'
+  import axios from "axios";
+  import { ref, computed, onMounted } from 'vue';
+  import { useFavoritesStore } from "@/stores/favorites";
 
-export default {
-  name: 'HeaderFavoriteItem',
+  const favoritesStore = useFavoritesStore();
 
-  props: {
-    favoriteItem: null,
-  },
+  const props = defineProps({
+    favoriteItem:  { type: Object,  default: null},
+  });
 
-  data(){
-    return {
-        favoriteItemData: {},
-    }
-  },
+  const favoriteItemData = ref({});
 
-  computed: {
-    cardPriceWithDiscount(){
-        return this.favoriteItemData.price_with_discount_and_tax && this.favoriteItemData.price_with_discount_and_tax !== this.favoriteItemData.price_with_tax 
-          ? this.favoriteItemData.price_with_discount_and_tax 
-          : this.favoriteItemData.price_with_tax;
-    },
-  },
+  const cardPriceWithDiscount =computed(() => {
+      return favoriteItemData.value.price_with_discount_and_tax && favoriteItemData.value.price_with_discount_and_tax !== favoriteItemData.value.price_with_tax 
+        ? favoriteItemData.value.price_with_discount_and_tax 
+        : favoriteItemData.value.price_with_tax;
+  });
 
-  async mounted(){
+  onMounted( async () => {
     try {
-        const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'products/' + this.favoriteItem.product.id);
-        this.favoriteItemData = response.data;
+        const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'products/' + props.favoriteItem.product.id);
+        favoriteItemData.value = response.data;
     } catch (e) {
         console.log(e);
-        // this.ADD_MESSAGE({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
     }
-  },
+  })
 
-  methods:{
-    ...mapMutations("notification", ["ADD_MESSAGE"]),
-    ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
+  const onRemoveItemFromFavorite = async (itemData) => {
+    await favoritesStore.updateIsWishInCart({ itemData, type: 'remove' });
+  };
 
-    async onRemoveItemFromFavorite(itemData){
-        await this.UPDATE_IS_WISH_IN_CART({ itemData, type: 'remove' });
-    }
-  }
-
-}
 </script>
 
 <style lang="scss" scoped>

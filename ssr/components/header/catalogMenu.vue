@@ -7,8 +7,8 @@
             <ul class="menu__mass">
               <li 
                   class="menu__item" 
-                  :class = "{'active' : item.id === TOP_CATEGORIES_ITEM_ACTIVE}"
-                  v-for   = "item in TOP_CATEGORIES"
+                  :class = "{ 'active' : item.id === topCategoriesItemActive }"
+                  v-for   = "item in topCategories"
                   :key    = "item.id"
                   @click.stop.prevent  = "changeCategory(item)"
               >
@@ -25,7 +25,7 @@
           <div class="menusub row">
             <div class="menusub__box">
               <div class="menusub__item"
-                v-for   = "sub in SUB_CATEGORIES"
+                v-for   = "sub in subCategories"
                 :key    = "sub.id"
                 @click.stop.prevent  = "subCategoryClick(sub)"
               >
@@ -50,77 +50,62 @@
 
 </template>
 
-<script>
+<script setup>
+  import { useQueryStore } from '@/stores/query';
+  import { useHeaderStore } from '@/stores/header';
 
-import {mapGetters, mapMutations, mapActions} from 'vuex'
+  const router = useRouter();
+  const queryStore = useQueryStore();
+  const headerStore = useHeaderStore();
 
-export default {
-  name: "CatalogMenu",
+  const { typeOfProduct, offset, limit, sortType, sortDirection, minPrice, maxPrice } = storeToRefs(queryStore);
+  const { isCatalogOpen, categories, topCategoriesItemActive, topCategories, subCategories } = storeToRefs(headerStore);
 
-  computed: {
-    ...mapGetters("header", ["CATALOG", "TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "ALL_CATEGORIES", "TOP_CATEGORIES", "SUB_CATEGORIES", "IS_CATALOG_OPEN", "ALL_CATEGORIES"]),
-    ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION"]),
-  },
+  const getCategoryUrl = (id) => {
+    let url = "/category/";
+    if (id) url = url + id;
+    url = url + getLastPartOfUrl();
+    return url;
+  };
 
-  methods:{
-    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
-    ...mapMutations("query", ["SET_CATEGORY_ID", "SET_DEFAULT_PRICES"]),
+  const createHref = (category) => {
+    const fullCategoryData = categories.value.filter(item => item.id == category.id)[0];
+    const URL = '/category/' + fullCategoryData.site_link;
+    return URL;
+  };
 
-    getCatalogUrl(){
-      let url = "/catalog";
-      url = url + this.getLastPartOfUrl();
-      return url;
-    },
+  const getLastPartOfUrl = () => {
+    let url = '?';
+    if (offset.value != 0 || limit.value != 12) {
+      url = url + "offset=" + offset.value + '&'
+      url = url + "limit=" + limit.value + '&'
+    }
+    if (minPrice.value != 0 || maxPrice.value != 80000) {
+      url = url + "actual_price_gte=" + minPrice.value + '&';
+      url = url + "actual_price_lte=" + maxPrice.value + '&';
+    }
+    if (sortDirection.value !== '-' || sortType.value !== 'created_at') {
+      url = url + "ordering=" + sortDirection.value + sortType.value + '&'
+    }
+    if (typeOfProduct.value !== 'all') {
+      url = url + "type_of_product=" + typeOfProduct.value + '&'
+    }
+    const lastSymbol = url.slice(-1)
+    if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
+    return url;        
+  };
 
-    getCategoryUrl(id){
-      let url = "/category/";
-      if (id) url = url + id;
-      url = url + this.getLastPartOfUrl();
-      return url;
-    },
+  const changeCategory = (category) => {
+    queryStore.setDefaultPrices();
+    router.push(getCategoryUrl(category.site_link));
+  };
 
-    createHref(category) {
-      const fullCategoryData = this.ALL_CATEGORIES.filter(item => item.id == category.id)[0];
-      const URL = '/category/' + fullCategoryData.site_link;
-      return URL;
-    },
-
-    getLastPartOfUrl(){
-      let url = '?';
-      if (this.OFFSET != 0 || this.LIMIT != 12) {
-        url = url + "offset=" + this.OFFSET + '&'
-        url = url + "limit=" + this.LIMIT + '&'
-      }
-      if (this.MIN_PRICE != 0 || this.MAX_PRICE != 80000) {
-        url = url + "actual_price_gte=" + this.MIN_PRICE + '&';
-        url = url + "actual_price_lte=" + this.MAX_PRICE + '&';
-      }
-      if (this.SORT_DIRECTION !== '-' || this.SORT_TYPE !== 'created_at') {
-        url = url + "ordering=" + this.SORT_DIRECTION + this.SORT_TYPE + '&'
-      }
-      if (this.TYPE_OF_PRODUCT !== 'all') {
-        url = url + "type_of_product=" + this.TYPE_OF_PRODUCT + '&'
-      }
-      const lastSymbol = url.slice(-1)
-      if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
-      return url;        
-    },
-
-    changeCategory(category){
-      this.SET_DEFAULT_PRICES();
-      this.$router.push(this.getCategoryUrl(category.site_link));
-    },
-
-    subCategoryClick(category){
-      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      this.SET_DEFAULT_PRICES();
-      const menuItem = this.ALL_CATEGORIES.filter(item => item.id == category.id)[0];
-      this.$router.push(this.getCategoryUrl(menuItem.site_link));
-    },
-
-  },
-
-}
+  const subCategoryClick = (category) => {
+    headerStore.updateIsCatalogOpen(!isCatalogOpen.value);
+    queryStore.setDefaultPrices();
+    const menuItem = categories.value.filter(item => item.id == category.id)[0];
+    router.push(getCategoryUrl(menuItem.site_link));
+  };
 </script>
 
 <style scoped lang="scss">

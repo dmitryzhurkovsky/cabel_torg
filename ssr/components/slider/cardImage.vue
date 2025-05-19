@@ -44,7 +44,6 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions } from 'vuex';
   import { Swiper } from "swiper/vue";
   import { SwiperSlide } from "swiper/vue";
   import SwiperCore, { Pagination, Navigation } from "swiper";
@@ -71,22 +70,7 @@
       Swiper, SwiperSlide,
     },
 
-    computed: {
-      ...mapGetters("main", ["BANNERS"]),
-
-      filteredBanners() {
-        return this.BANNERS.filter(item => item.is_active);
-      }
-    },
-
     methods: {
-      ...mapActions("main", ["GET_BANNERS"]),
-
-      getPath: function(item){
-        console.log('getPath ', item);
-        let path = useRuntimeConfig().public.NUXT_APP_IMAGES + item;
-        return path;
-      },
 
       onSlideChange(swiper) {
         // console.log('Slider changed', swiper.realIndex);

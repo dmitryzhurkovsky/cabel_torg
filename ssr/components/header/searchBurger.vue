@@ -10,15 +10,15 @@
 
     </div>
     
-    <div class="dropdown__box" v-if = "SEARCH_STRING !== CATALOG_SEARCH_STRING">
+    <div class="dropdown__box" v-if = "searchString !== catalogSearchString">
       <div class="dropdown__wrapper">
         <div class="dropdown__content popup-cart">
             <h3 class="">Найденые товары</h3>
 
-              <div v-if = "queryString && FINDED_ELEMENTS.length" class="popup-cart__list">
+              <div v-if = "queryString && findedElements.length" class="popup-cart__list">
                 <HeaderSearchItem 
                     class="row" 
-                    v-for = "item in FINDED_ELEMENTS"
+                    v-for = "item in findedElements"
                     :key = "item.id"
                     :item = item
                     @click.stop = "openCardItem(item.vendor_code)"
@@ -27,7 +27,7 @@
                   Показать все
                 </div>
               </div>
-              <div v-if = "queryString && !FINDED_ELEMENTS.length" class="popup-cart__list">
+              <div v-if = "queryString && !findedElements.length" class="popup-cart__list">
               <!-- <div class="popup-cart__list"> -->
                 <div class="row">
                   По Вашему запросу ничего не найдено. Проверьте правильность написания или упростите запрос.
@@ -40,84 +40,70 @@
   </div>
 </template>
 
-<script>
-import { mapActions, mapGetters, mapMutations } from 'vuex';
+<script setup>
+  import { ref, watch, onBeforeMount } from 'vue';
+  import { useQueryStore } from '@/stores/query';
+  import { useCatalogStore } from '@/stores/catalog';
+  import { useHeaderStore  } from '@/stores/header';
 
-export default {
-  name: "HeaderSearch",
+  const router = useRouter();
+  const queryStore = useQueryStore();
+  const catalogStore = useCatalogStore();
+  const headerStore = useHeaderStore();
 
-  data: function() {
-    return {
-        queryString : '',
-      }
-  },
+  const { sortType, sortDirection, searchString, findedElements } = storeToRefs(queryStore);
+  const { catalogSearchString } = storeToRefs(catalogStore);
 
-  computed:{
-    ...mapGetters("query", ["SEARCH_STRING", "FINDED_ELEMENTS", "SORT_DIRECTION", "SORT_TYPE"]),
-    ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
-    ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
-  },
+  const queryString = ref('');
 
-  watch: {
-    SEARCH_STRING: async function(){
-      this.queryString = this.SEARCH_STRING;
-      if (this.SEARCH_STRING) {
-        await this.FIND_ELEMENTS();
-      } else {
-        this.SET_FINDED_ELEMENTS({data: []});
-      }
-      console.log(Boolean(this.queryString && this.FINDED_ELEMENTS.length === 0 && this.SEARCH_STRING !== this.CATALOG_SEARCH_STRING));
+  watch(searchString, async () => {
+    queryString.value = searchString.value;
+    if (searchString.value) {
+      await queryStore.findElements();
+    } else {
+      queryStore.setFindedElements({data: []});
     }
-  },
+    // console.log(Boolean(queryString.value && findedElements.value.length === 0 && searchString.value !== catalogSearchString.value));
+  });
 
-  methods: {
-    ...mapMutations("query", ["SET_SEARCH_STRING", "SET_FINDED_ELEMENTS", "SET_CATEGORY_ID"]),
-    ...mapMutations("catalog", ["SET_CATALOG_SEARCH_STRING"]),
-    ...mapMutations("header", ["SET_CURRENT_TOP_CATEGORY", "SET_CURRENT_SUB_CATEGORY", "SET_CURRENT_LAST_CATEGORY", "UPDATE_IS_CATALOG_OPEN"]),
-    ...mapActions("query", ["FIND_ELEMENTS"]),
+  const onInput = () => {
+    queryStore.setSearchString(queryString.value);
+  };
 
-    onInput(){
-      this.SET_SEARCH_STRING(this.queryString);
-    },
+  const openCardItem = (id) => {
+    clearString();
+    headerStore.updateIsCatalogOpen(false);
+    const URL = '/card_product/' + id;
+    router.push(URL);
+  };
 
-    openCardItem(id) {
-      this.clearString();
-      this.UPDATE_IS_CATALOG_OPEN(false);
-      const URL = '/card_product/' + id;
-      this.$router.push(URL);
-    },
+  const clearString = () => {
+    queryString.value = '';
+    queryStore.setSearchString('');
+    catalogStore.setCatalogSearchString('');
+    headerStore.updateIsCatalogOpen(false);
+    // let url = "/catalog?";
+    // if (catalogSearchString.value) url = url + "offset=0&limit=12";
+    // url = url + "&ordering=" + sortDirection.value + sortType.value;
+    // url = url + '&type_of_product=all';
+    // if (catalogSearchString.value) url = url + "&q=" + catalogSearchString.value;
+    // router.push(url);
+  };
 
-    clearString(){
-      this.queryString = '';
-      this.SET_SEARCH_STRING('');
-      this.SET_CATALOG_SEARCH_STRING('');
-      this.UPDATE_IS_CATALOG_OPEN(false);
-      // let url = "/catalog?";
-      // if (this.CATALOG_SEARCH_STRING) url = url + "offset=0&limit=12";
-      // url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
-      // url = url + '&type_of_product=all';
-      // if (this.CATALOG_SEARCH_STRING) url = url + "&q=" + this.CATALOG_SEARCH_STRING;
-      // this.$router.push(url);
-    },
+  const openFindedElementsInCatalg = () => {
+    catalogStore.setCatalogSearchString(searchString.value);
+    headerStore.updateIsCatalogOpen(false);
+    let url = "/catalog?";
+    url = url + "offset=0&limit=12&actual_price_gte=0&actual_price_lte=80000";
+    url = url + "&ordering=" + sortDirection.value + sortType.value;
+    url = url + '&type_of_product=all';
+    url = url + "&q=" + catalogSearchString.value;
+    router.push(url);
+  };
 
-    openFindedElementsInCatalg(){
-      this.SET_CATALOG_SEARCH_STRING(this.SEARCH_STRING);
-      this.UPDATE_IS_CATALOG_OPEN(false);
-      let url = "/catalog?";
-      url = url + "offset=0&limit=12&actual_price_gte=0&actual_price_lte=80000";
-      url = url + "&ordering=" + this.SORT_DIRECTION + this.SORT_TYPE;
-      url = url + '&type_of_product=all';
-      url = url + "&q=" + this.CATALOG_SEARCH_STRING;
-      this.$router.push(url);
-    }
-
-  },
-
-  beforeMount(){
-    this.queryString = this.CATALOG_SEARCH_STRING;
-  },
-
-}
+  onBeforeMount(() => {
+    queryString.value = catalogSearchString.value;
+  });
 </script>
 
 <style lang="scss" scoped>

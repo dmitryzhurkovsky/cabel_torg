@@ -27,15 +27,12 @@
   </div>
 </template>
 
-<script>
+<script setup>
 
-export default {
+  const props = defineProps({
+    item:  { type: Object,  default: null},
+  }); 
 
-  props: {
-    item: null,
-  },
-
-}
 </script>
 
 <style lang="scss" scoped>

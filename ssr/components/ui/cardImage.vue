@@ -7,31 +7,25 @@
     <img v-else class="" src="@/assets/no_image.png" alt="">
 </template>
 
-<script>
+<script setup>
 
-export default {
-  name: "CardImage",
+  const props = defineProps({
+    images:  { type: String,  default: null},
+    num:  { type: Number,  default: 0},
+    active:  { type: Boolean,  default: false},
+    alt:  { type: String,  default: ""},
+  }); 
 
-  props: {
-    images:  null,
-    num: 0,
-    active: false,
-    alt: "",
-  },
-
-  methods:{
-    getImagePath(item) {
-      let itemNumber = 0;
-      if (this.$props.num) itemNumber = this.$props.num;
-      let path = null;
-      if (item) {
-        const allPath = item.split(',');
-        path = useRuntimeConfig().public.NUXT_APP_IMAGES + allPath[itemNumber];
-      }
-      return path;
-    },
-  },
-}
+  const getImagePath = (item) => {
+    let itemNumber = 0;
+    if (props.num) itemNumber = props.num;
+    let path = null;
+    if (item) {
+      const allPath = item.split(',');
+      path = useRuntimeConfig().public.NUXT_APP_IMAGES + allPath[itemNumber];
+    }
+    return path;
+  };
 </script>
 
 <style lang="scss" scoped>

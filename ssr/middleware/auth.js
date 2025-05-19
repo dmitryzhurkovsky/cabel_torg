@@ -1,8 +1,11 @@
-import store from '@/store'
-
 export default defineNuxtRouteMiddleware((to, from) => {
-  const isLogin = Boolean(store.getters['auth/USER'])
-  if (!isLogin) {
+  const token = useCookie('authToken');
+  
+  if (!token.value && to.path !== '/login') {
     return navigateTo('/login');
   }
+  if (token.value && to.path === '/login') {
+    return navigateTo('/user_profile');
+  }
+  return true;
 });

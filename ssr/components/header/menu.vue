@@ -5,7 +5,7 @@
           <div class="topmenu__left flex-center">
             <div class="topmenu__item" @click="toggleMenu()">
               <div class="dropdown icon-burger catalog__btn">Каталог товаров</div>
-              <HeaderCatalogMenu v-if = "IS_CATALOG_OPEN"/>
+              <HeaderCatalogMenu v-if = "isCatalogOpen"/>
             </div>
             <div class="topmenu__item" 
                 @mouseenter="onCustomerIconEnter()"
@@ -38,71 +38,65 @@
               </div>
             </div>
           </div>
-          <HeaderActions />
+          <ClientOnly>
+            <HeaderActions />
+          </ClientOnly>
         </div>
     </div>
   </div>
 </template>
 
-<script>
+<script setup>
+  import { ref } from 'vue';
+  import { useQueryStore } from '@/stores/query';
+  import { useHeaderStore } from '@/stores/header';
 
-import {mapMutations, mapGetters} from 'vuex'
-
-export default {
-  name: 'HeaderTopMenu',
-
-  data: function(){
-    return {
-      customerHover: false,
-      aboutHover: false,
-    }
-  },
-
-  computed: {
-    ...mapGetters("header", ["IS_CATALOG_OPEN", "TOP_CATEGORIES"]),
-  },
-
-  methods:{
-    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
-    ...mapMutations("query", ["SET_SEARCH_STRING"]),
-
-    toggleMenu() {
-      this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      this.SET_SEARCH_STRING('');
-      // console.log(this.IS_CATALOG_OPEN);
-    },
-    openPage(page, event) {
-      event.stopImmediatePropagation();
-      event.preventDefault();
-      this.customerHover = false;
-      this.aboutHover = false;
-      if (this.$router.path != page) {
-          this.$router.push(page);
-          this.clearSearchString();
-      }
-    },
-    
-    clearSearchString(){
-      this.SET_SEARCH_STRING('');
-    },
-
-    onCustomerIconEnter() {
-      this.SET_SEARCH_STRING('');
-      this.customerHover = true;
-    },
-
-    onAboutIconEnter() {
-      this.SET_SEARCH_STRING('');
-      this.aboutHover = true;
-    },
-
-    onIconLeave() {
-      this.customerHover = false;
-      this.aboutHover = false;
-    },
+  const router = useRouter();
   
-  }
-}
+  const queryStore = useQueryStore();
+  const headerStore = useHeaderStore();
+
+  const { isCatalogOpen } = storeToRefs(headerStore);
+
+  const customerHover = ref(false);
+  const aboutHover = ref(false);
+
+
+  const toggleMenu = () => {
+    headerStore.updateIsCatalogOpen(!isCatalogOpen.value);
+    queryStore.setSearchString('');
+    // console.log(isCatalogOpen.value);
+  };
+
+  const openPage = (page, event) => {
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    customerHover.value = false;
+    aboutHover.value = false;
+    if (router.path != page) {
+      router.push(page);
+      clearSearchString();
+    }
+  };
+  
+  const clearSearchString = () => {
+    queryStore.setSearchString('');
+  };
+
+  const onCustomerIconEnter = () => {
+    queryStore.setSearchString('');
+    customerHover.value = true;
+  };
+
+  const onAboutIconEnter = () => {
+    queryStore.setSearchString('');
+    aboutHover.value = true;
+  };
+
+  const onIconLeave = () => {
+    customerHover.value = false;
+    aboutHover.value = false;
+  };
 </script>
 
 <style scoped lang="scss">

@@ -69,144 +69,130 @@
 
 </template>
 
-<script>
-import { mapActions, mapMutations, mapGetters } from 'vuex'
+<script setup>
+  import { ref, computed, watch, onMounted } from 'vue';
+  import { useHeaderStore } from '@/stores/header';
+  import { useFavoritesStore } from '@/stores/favorites';
+  import { useOrdersStore } from '@/stores/orders';
 
-export default {
-  name: "CardItem",
+  const props = defineProps({
+    card:  { type: Object,  default: null},
+  });
 
-  props: {
-    card:  null,
-  },
+  const router = useRouter();
+  const headerStore = useHeaderStore();
+  const favoritesStore = useFavoritesStore();
+  const oredersStore = useOrdersStore();
 
-  data(){
-    return {
-      quantity: 0,
-      isWish: false,
+  const quantity = ref(0);
+  const isWish = ref(false);
+
+  const { favorites } = storeToRefs(favoritesStore);
+  const { orders } = storeToRefs(oredersStore);
+
+  const ChangeParameters = computed(() => {
+    return JSON.stringify(orders.value) + JSON.stringify(favorites.value);
+  });
+
+  const cardPriceWithDiscount = computed(() => {
+    return props.card.price_with_discount_and_tax && props.card.price_with_discount_and_tax !== props.card.price_with_tax 
+      ? props.card.price_with_discount_and_tax 
+      : props.card.price_with_tax;
+  });
+
+  const InfoCardBlock = computed(() => {
+    if (props.card.price_with_discount_and_tax && props.card.price_with_discount_and_tax !== props.card.price_with_tax) return '%';
+    // let info = '';
+    if (props.card.is_new) return 'New'
+    if (props.card.is_popular) return 'Хит'
+    // info = props.card.vendor_code === 'УТ-00000037' ? 'New' : info;
+    // info = props.card.vendor_code === 'УТ-00000015' ? 'Хит' : info;
+    // info = props.card.price_with_discount_and_tax ? '%' : info;
+    return '';
+  });
+
+  watch(ChangeParameters, async () => {
+      countQuantity();
+      checkIsWish();
+    },
+  );
+
+  onMounted(() => {
+    countQuantity();
+    checkIsWish();
+  });
+
+
+  const onCreatePopUp = (status, cardID) => {
+    headerStore.setIsPopUpOpen(status);
+    headerStore.setPopUpAction('RequestCall');
+    headerStore.setRequestCallType('GR');
+    headerStore.setPopUpAdditionalData({cardID});
+  };
+
+  const onCreatePopUpRequestPrice = (status, cardID) => {
+    headerStore.setIsPopUpOpen(status);
+    headerStore.setPopUpAction('RequestPrice');
+    headerStore.setRequestCallType('GR');
+    headerStore.setPopUpAdditionalData({cardID});
+  };
+
+  const openCardItem = (id) => {
+    const URL = '/card_product/' + id;
+    router.push(URL);
+  };
+
+  const createHref = (card) => {
+    const URL = '/card_product/' + card;
+    return URL;
+  };
+
+  const onOperationWithCartItem = async (card) => {
+    const itemData = {
+      amount: 1,
+      product: {
+        id: card.id,
+        vendor_code: card.vendor_code,
+        name: card.name,
+        discont: card.discont,
+        price_with_discount_and_tax: card.price_with_discount_and_tax,
+        price_with_tax: card.price_with_tax,
+      },
     }
-  },
+    const type = quantity.value === 0 ? 'increase' : 'remove';
+    quantity.value = quantity.value !==0 ? 0 : 1;
+    await oredersStore.updateItemsInCart({ itemData, type });
+  };
 
-  computed: {
-    ...mapGetters("order", ["ORDERS"]),
-    ...mapGetters("favorite", ["FAVORITES"]),
+  const onWishClick = async (card) => {
+    const itemData = {
+      product: {
+        id: card.id,
+        vendor_code: card.vendor_code,
+        name: card.name,
+      },
+    }  
+    const type = isWish.value === false ? 'set' : 'remove';
+    await favoritesStore.updateIsWishInCart({ itemData, type });
+  };
 
-    ChangeParameters(){
-      return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES);
-    },
+  const countQuantity = () => {
+    if (orders.value.length) {
+      const filtered = orders.value.filter(item => item.product.id === props.card.id);
+      quantity.value =  filtered.length ? filtered[0].amount : 0;
+    } else {
+      quantity.value = 0;
+    }
+  };
 
-    cardPriceWithDiscount(){
-      return this.card.price_with_discount_and_tax && this.card.price_with_discount_and_tax !== this.card.price_with_tax 
-        ? this.card.price_with_discount_and_tax 
-        : this.card.price_with_tax;
-    },
-
-    InfoCardBlock() {
-      if (this.card.price_with_discount_and_tax && this.card.price_with_discount_and_tax !== this.card.price_with_tax) return '%';
-      // let info = '';
-      if (this.card.is_new) return 'New'
-      if (this.card.is_popular) return 'Хит'
-      // info = this.card.vendor_code === 'УТ-00000037' ? 'New' : info;
-      // info = this.card.vendor_code === 'УТ-00000015' ? 'Хит' : info;
-      // info = this.card.price_with_discount_and_tax ? '%' : info;
-      return '';
-    },
-
-  },
-
-  watch: {
-    ChangeParameters: async function() {
-      this.countQuantity();
-      this.checkIsWish();
-    },
-  },
-
-  mounted(){
-    this.countQuantity();
-    this.checkIsWish();
-  },
-
-
-  methods: {
-    ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
-    ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA", "SET_REQUEST_CALL_TYPE"]),
-
-    onCreatePopUp(status, cardID) {
-      this.SET_IS_POPUP_OPEN(status);
-      this.SET_POPUP_ACTION('RequestCall');
-      this.SET_REQUEST_CALL_TYPE('GR');
-      this.SET_POPUP_ADDITIONAL_DATA({cardID});
-    },
-
-    onCreatePopUpRequestPrice(status, cardID) {
-      this.SET_IS_POPUP_OPEN(status);
-      this.SET_POPUP_ACTION('RequestPrice');
-      this.SET_REQUEST_CALL_TYPE('GR');
-      this.SET_POPUP_ADDITIONAL_DATA({cardID});
-    },
-
-    openCardItem(id) {
-      const URL = '/card_product/' + id;
-      this.$router.push(URL);
-    },
-
-    createHref(card) {
-      const URL = '/card_product/' + card;
-      return URL;
-    },
-
-    async onOperationWithCartItem(card) {
-      const itemData = {
-        amount: 1,
-        product: {
-          id: card.id,
-          vendor_code: card.vendor_code,
-          name: card.name,
-          discont: card.discont,
-          price_with_discount_and_tax: card.price_with_discount_and_tax,
-          price_with_tax: card.price_with_tax,
-        },
-      }
-      const type = this.quantity === 0 ? 'increase' : 'remove';
-      this.quantity = this.quantity !==0 ? 0 : 1;
-      await this.UPDATE_ITEMS_IN_CART({itemData, type});
-    },
-
-    async onWishClick(card) {
-      const itemData = {
-        product: {
-          id: card.id,
-          vendor_code: card.vendor_code,
-          name: card.name,
-        },
-      }  
-      const type = this.isWish === false ? 'set' : 'remove';
-      await this.UPDATE_IS_WISH_IN_CART({ itemData, type });
-    },
-
-    countQuantity() {
-      if (this.ORDERS.length) {
-        const filtered = this.ORDERS.filter(item => item.product.id === this.card.id);
-        this.quantity =  filtered.length ? filtered[0].amount : 0;
-      } else {
-        this.quantity = 0;
-      }
-    },
-
-    checkIsWish() {
-      if (this.FAVORITES.length) {
-        const filtered = this.FAVORITES.filter(item => item.product.id === this.card.id);
-        this.isWish =  filtered.length ? true : false;
-      } else {
-        this.isWish = false;
-      }
-    },
-
-  },
-
-}
-
-
+  const checkIsWish = () => {
+    if (favorites.value.length) {
+      const filtered = favorites.value.filter(item => item.product.id === props.card.id);
+      isWish.value =  filtered.length ? true : false;
+    } else {
+      isWish.value = false;
+    }
+  };
 </script>
 
 <style lang="scss" scoped>

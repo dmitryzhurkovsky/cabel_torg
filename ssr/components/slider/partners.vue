@@ -1,5 +1,5 @@
 <template>
-  <div class="partners" v-if="PARTNERS">
+  <div class="partners" v-if="partners">
     <div class="partners__wrapper">
       <div class="partners__content _container">
         <div class="partners__body">
@@ -15,7 +15,7 @@
                 }"
             >
 
-              <swiper-slide v-for="partner in PARTNERS" :key = "partner.id">
+              <swiper-slide v-for="partner in partners" :key = "partner.id">
                 <div class="parnters__item">
                   <UiCardImage :images = "'/' + partner.image" />
                 </div>
@@ -32,57 +32,52 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import { ref, watch } from 'vue';
+  import { useMainStore } from '@/stores/main';
+  import { useHeaderStore } from '@/stores/header';
+
   import { Swiper } from "swiper/vue";
   import { SwiperSlide } from "swiper/vue";
   import SwiperCore, { Pagination, Navigation } from "swiper";
   import "swiper/swiper.min.css";
   import "swiper/components/pagination/pagination.min.css"
-  import { mapGetters, mapActions } from 'vuex';
+  
+  const mainStore = useMainStore();
+  const headerStore = useHeaderStore();
+
+  const { partners } = storeToRefs(mainStore);
+  const { viewType } = storeToRefs(headerStore);
+
   SwiperCore.use([Navigation, Pagination]);
 
-  export default {
-    name: 'Partners',
+  const quantity = ref(5.5);
 
-    data: function(){
-      return {
-        quantity: 5.5,
-      }
-    },
+  watch(viewType, () => {
+    setQuantity();
+  });
   
-    components: {
-      Swiper, SwiperSlide
-    },
+  await useAsyncData(
+    async () => {
+      await mainStore.getPartners();
+      setQuantity();
+      return true;
+    }
+  );
+  
+  // async mounted(){
+  //   await mainStore.getPartners();
+  //   this.setQuantity();
+  // },
 
-    computed: {
-      ...mapGetters("header", ["DEVICE_VIEW_TYPE"]),
-      ...mapGetters("main", ["PARTNERS"]),
-    },
+  const setQuantity = () => {
+    let newQuantity = 0;
+    if (viewType.value === 1) newQuantity = 5.5
+    if (viewType.value === 2) newQuantity = 4.5
+    if (viewType.value ===3 ) newQuantity = 3.5
+    quantity.value = Math.min(partners.length, newQuantity);
+  }
 
-    watch: {
-      DEVICE_VIEW_TYPE: function() {
-        this.setQuantity();
-      },  
-    },
-
-    async mounted(){
-      await this.GET_PARTNERS();
-      this.setQuantity();
-    },
-
-    methods:{
-      ...mapActions('main', ["GET_PARTNERS"]),
-
-      setQuantity() {
-        let quantity = 0;
-        if (this.DEVICE_VIEW_TYPE===1) quantity = 5.5
-        if (this.DEVICE_VIEW_TYPE===2) quantity = 4.5
-        if (this.DEVICE_VIEW_TYPE===3) quantity = 3.5
-        this.quantity = Math.min(this.PARTNERS.length, quantity);
-      }
-
-    },
-}
 </script>
 
 <style scoped lang="scss">

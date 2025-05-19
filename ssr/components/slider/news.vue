@@ -5,7 +5,7 @@
         <div class="news__body">
 
           <h3>Новости CabelTorg</h3>
-          <!-- <div class="news__block" v-if="NEWS"> -->
+          <!-- <div class="news__block" v-if="news"> -->
 
             <swiper
                 :slides-per-view="slidersInFrame"
@@ -49,71 +49,61 @@
   </div>
 </template>
 
-<script>
-  import { mapGetters, mapActions } from 'vuex';
+<script setup>
+  import { ref, computed } from 'vue';
+  import { useMainStore } from '@/stores/main';
+  import { useHeaderStore } from '@/stores/header';
 
   import { Swiper } from "swiper/vue";
   import { SwiperSlide } from "swiper/vue";
   import SwiperCore, { Pagination, Navigation } from "swiper";
   import "swiper/swiper.min.css";
-  import "swiper/components/pagination/pagination.min.css"
+  import "swiper/components/pagination/pagination.min.css";
+
+  const router = useRouter();
+  
+  const mainStore = useMainStore();
+  const headerStore = useHeaderStore();
+
+  const { news } = storeToRefs(mainStore);
+  const { windowWidth } = storeToRefs(headerStore);
+
   SwiperCore.use([Navigation, Pagination]);
 
-  export default {
-    name: 'News',
+  const slidersInFrame = ref(4.5);
 
-    components: {
-      Swiper, SwiperSlide,
-    },
+  const filteredNews = computed(() => {
+    return news.value.slice(-10);
+  });
 
-    data: function(){
-      return{
-        slidersInFrame : 4.5,
-      }
-    },
+  watch(windowWidth, () => {
+    setQuantityInSlider();
+  });
 
-    computed: {
-      ...mapGetters("main", ["NEWS"]),
-      ...mapGetters("header", ["WINDOW_WIDTH"]),
+  const onOpenNew = (id) => {
+    setTimeout(() => window.scrollTo(0, 0), 0);
+    router.push('/new/' + id);
+  };
 
-      filteredNews() {
-        return this.NEWS.slice(-10);
-      }
-    },
+  const setQuantityInSlider = () => {
+    if (windowWidth.value > 768.5) {
+      slidersInFrame.value = 4.5;
+    } else if (windowWidth.value > 540.5) {
+      slidersInFrame.value = 3.5;
+    } else if (windowWidth.value > 480.5) {
+      slidersInFrame.value = 2.5;
+    } else {
+      slidersInFrame.value = 1.5;
+    }
+  };
 
-    watch: {
-      WINDOW_WIDTH: function() {
-        this.setQuantityInSlider();
-      },
-    },
-
-    methods: {
-      ...mapActions("main", ["GET_NEWS"]),
-
-      onOpenNew(id) {
-        setTimeout(() => window.scrollTo(0, 0), 0);
-        this.$router.push('/new/' + id);
-      },
-
-      setQuantityInSlider() {
-        if (this.WINDOW_WIDTH > 768.5) {
-          this.slidersInFrame = 4.5;
-        } else if (this.WINDOW_WIDTH > 540.5) {
-          this.slidersInFrame = 3.5;
-        } else if (this.WINDOW_WIDTH > 480.5) {
-          this.slidersInFrame = 2.5;
-        } else {
-          this.slidersInFrame = 1.5;
-        }
-      }
-    },
-
-    async mounted(){
-      await this.GET_NEWS();
-      this.setQuantityInSlider();
-    },
-
-  }
+  await useAsyncData(
+    async () => {
+      await mainStore.getNews();
+      setQuantityInSlider();
+      return true;
+    }
+  );
 
 </script>
 

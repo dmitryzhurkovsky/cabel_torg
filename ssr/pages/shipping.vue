@@ -1,4 +1,5 @@
 <template>
+  <Breadcrumb/>
   <div class="structure app__content">
     <div class="structure__wrapper">
       <div class="structure__content _container">
@@ -8,7 +9,7 @@
             <p class="structure__text">Для оптовых покупателей из РБ мы предлагаем несколько различных способов получения заказа:</p>
             <li 
               class="structure__list__item" 
-              v-for = "delivery in ORDER_DELIVERY_TYPES" 
+              v-for = "delivery in deliveryTypes" 
               :key = delivery.id 
             >
               {{ delivery.payload }}
@@ -22,71 +23,47 @@
   </div>
 </template>
 
-<script>
-  import { mapGetters } from 'vuex';
+<script setup>
+  import { useHead } from 'nuxt/app';
+  import { onMounted } from 'vue';
+  import { useOrdersStore } from '@/stores/orders';
+  import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
-  definePageMeta({
-    // middleware: ["auth"],
-    name: 'Оплата и доставка',
+  const router = useRouter();
+
+  const oredersStore = useOrdersStore();
+  const breadCrumbStore = useBreadCrumbStore();
+
+  const { deliveryTypes } = storeToRefs(oredersStore);
+
+  useHead({
+    title: 'Кабельторг | Оплата и доставка',
+    meta: [{
+      name: 'Оплата и доставка',
+      content: 'Страница Оплата и доставка'
+    }]
   });
 
-  export default defineNuxtComponent({
-    name: 'Shipping',
-
-    head () {
-      return {
-        title: 'Кабельторг | Оплата и доставка',
-        meta: [{
-          name: 'Оплата и доставка',
-          content: 'Страница Оплата и доставка'
-        }]
-      }
-    },
-
-    computed: {
-      ...mapGetters("order", ["ORDER_DELIVERY_TYPES"]),
-    },
-
-    mounted(){
-      this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
-        name: this.$router.currentRoute.value.meta.name,
-        path: this.$router.currentRoute.value.path,
-        type: "global",
-        class: ""
-      });
-    }
-  })
+  onMounted(() => {
+    breadCrumbStore.addBreadCrumb({
+      name: router.currentRoute.value.meta.name,
+      path: router.currentRoute.value.path,
+      type: "global",
+      class: ""
+    });
+  });
 </script>
 
 <style lang="scss">
 
 .structure {
 
-  &__wrapper{
-
-
-  }
-  &__content{
-
-  }
-
-  &__body{
-
-
-  }
   &__title{
    margin: 30px 0;
 
   }
   &__block{
     padding: 0px 0 60px 0;
-    h3{
-
-
-    }
-
-
-
   }
 
   &__list{
@@ -95,9 +72,7 @@
       &:last-child{
         margin-bottom: 30px;
       }
-
     }
-
   }
 
   &__text{
@@ -108,8 +83,6 @@
     margin-bottom: 20px;
 
   }
-
-
 }
 
 

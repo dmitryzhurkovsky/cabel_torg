@@ -9,19 +9,23 @@
             <div 
               :class="[activePiont === 0 ? 'recomendation__nav__item active' : 'recomendation__nav__item']" 
               @click="setTypeAndOrder({ type: 'popular', order: 'discount', typeRecomendation : 0 }, '-')"
-            >Топ продаж</div>
+            >
+              Топ продаж
+            </div>
             <div 
-            :class="[activePiont === 1 ? 'recomendation__nav__item active' : 'recomendation__nav__item']" 
+              :class="[activePiont === 1 ? 'recomendation__nav__item active' : 'recomendation__nav__item']" 
               @click="setTypeAndOrder({ type: 'new', order: 'created_at', typeRecomendation : 1 }, '-')"
-            >Новинки</div>
+            >
+              Новинки
+            </div>
             <div 
-            :class="[activePiont === 2 ? 'recomendation__nav__item active' : 'recomendation__nav__item']" 
+              :class="[activePiont === 2 ? 'recomendation__nav__item active' : 'recomendation__nav__item']" 
               @click="setTypeAndOrder({ type: 'with_discount', order: 'discount', typeRecomendation : 2 }, '')"
-            >Скидки</div>
+            >
+              Скидки
+            </div>
           </div>
-          <!-- :navigation= "true" -->
-          <!-- <div class="recomendation__block" v-if = "DEVICE_VIEW_TYPE === 1 || DEVICE_VIEW_TYPE === 2"> -->
-          <div class="recomendation__block">
+          <div class="recomendation__block" v-if="recomendedList?.length">
               <swiper
                   :slides-per-view="slidersInFrame"
                   :space-between="15"
@@ -36,11 +40,9 @@
                     bulletClass: 'swiper-pagination-bullet',
                     bulletElement: 'span'
                   }"
-                  @swiper="onSwiper"
-                  @slideChange="onSlideChange"
               >
 
-                <swiper-slide v-for="item in RECOMENDED_ITEMS" :key="item.id">
+                <swiper-slide v-for="item in recomendedList" :key="item.id">
                   <CatalogCardItem
                       :card = "item"
                   />
@@ -65,135 +67,108 @@
   </div>
 </template>
 
-<script>
-  import { mapGetters, mapActions, mapMutations } from 'vuex'
-  // import CardItem from '@/components/catalog/card-item.vue'8
+<script setup>
+  import { ref, computed, watch, onBeforeMount } from 'vue';
+
+  import { useHeaderStore } from '@/stores/header';
+  import { useQueryStore } from '@/stores/query';
+  import { useCatalogStore } from '@/stores/catalog';
 
   import { Swiper } from "swiper/vue";
   import { SwiperSlide } from "swiper/vue";
   import SwiperCore, { Pagination, Navigation } from "swiper";
   import "swiper/swiper.min.css";
   import "swiper/components/pagination/pagination.min.css"
+
   SwiperCore.use([Navigation, Pagination]);
 
-  export default {
-    name: 'Recomendation',
+  const props = defineProps({
+    isShowFilter:  { type: Boolean,  default: true},
+    isShowFollow:  { type: Boolean,  default: true},
+  });
 
-    props: {
-      isShowFilter: true,
-      isShowFollow: true,
-    },
+  const router = useRouter();
+  const headerStore = useHeaderStore();
+  const queryStore = useQueryStore();
+  const catalogStore = useCatalogStore();
 
-    components:
-    {
-      Swiper, SwiperSlide,
-    },
+  const slidersInFrame = ref(4.5);
+  const activePiont = ref(1);
 
-    computed: {
-      ...mapGetters("header", ["WINDOW_WIDTH"]),
-      ...mapGetters("catalog", ["RECOMENDED_ITEMS", "RECOMENDATION_QUANTITY", "RECOMENDATION_TYPE", "RECOMENDATION_ORDER"]),
-      ...mapGetters("query", ["SORT_TYPE", "TYPE_OF_PRODUCT", "SORT_DIRECTION"]),
+  const { windowWidth } = storeToRefs(headerStore);
+  const { typeOfProduct, sortType, sortDirection } = storeToRefs(queryStore);
+  const { recomendedList, recomendationType, recomendationOrder } = storeToRefs(catalogStore);
 
-      ChangeParameters(){
-        return String(this.RECOMENDATION_TYPE) + String(this.RECOMENDATION_ORDER);
-      },
-    },
+  const ChangeParameters = computed(() => {
+    return String(recomendationType.value) + String(recomendationOrder.value);
+  });
 
-    data: function(){
-      return{
-        slidersInFrame : 4.5,
-        activePiont: 1,
-      }
-    },
+  watch(windowWidth, () => {
+    setSlidersInFrame();
+  });
 
-    watch: {
-      WINDOW_WIDTH: function() {
-        this.setSlidersInFrame();
-      },
+  watch(slidersInFrame, async () => {
+    await catalogStore.getRecomendedItems();
+    setNewQuantity();
+    if (router.currentRoute._value.path !== '/') setTimeout(() => window.scrollTo(0, 0), 0);
+  });
 
-      slidersInFrame: async function() {
-        await this.GET_RECOMENDED_ITEMS();
-        this.setNewQuantity();
-        if (this.$router.currentRoute._value.path !== '/') setTimeout(() => window.scrollTo(0, 0), 0);
-      },
+  watch(ChangeParameters, async () => {
+    catalogStore.setRecomendationQuantity(10);
+    await catalogStore.getRecomendedItems();
+    setNewQuantity();
+    if (router.currentRoute._value.path !== '/') setTimeout(() => window.scrollTo(0, 0), 0);
+  });
 
-      ChangeParameters: async function() {
-        this.SET_RECOMENDATION_QUANTITY(10);
-        await this.GET_RECOMENDED_ITEMS();
-        this.setNewQuantity();
-        if (this.$router.currentRoute._value.path !== '/') setTimeout(() => window.scrollTo(0, 0), 0);
-      }
-    },
+  const setNewQuantity = () => {
+    const newQuantity = recomendedList.value.length > 9 ? 10 : recomendedList.value.length;
+    catalogStore.setRecomendationQuantity(newQuantity);
+  };
 
-    methods:{
-      ...mapActions("catalog", ["GET_RECOMENDED_ITEMS"]),
-      ...mapMutations("catalog", ["SET_RECOMENDATION_TYPE", "SET_RECOMENDATION_QUANTITY", "SET_RECOMENDATION_ORDER"]),
-      ...mapMutations("query", ["SET_TYPE_OF_PRODUCT", "SET_SORT_DIRECTION", "SET_SORT_TYPE"]),
-
-      setNewQuantity(){
-        const newQuantity = this.RECOMENDED_ITEMS.length > 9 ? 10 : this.RECOMENDED_ITEMS.length;
-        this.SET_RECOMENDATION_QUANTITY(newQuantity);
-      },
-
-      setSlidersInFrame(){
-        if (this.WINDOW_WIDTH > 768.5) {
-          this.slidersInFrame = 4.5;
-        } else if (this.WINDOW_WIDTH > 540.5) {
-          this.slidersInFrame = 3.5;
-        } else if (this.WINDOW_WIDTH > 480.5) {
-          this.slidersInFrame = 2.5;
-        } else {
-          this.slidersInFrame = 1.5;
-        }
-      },
-
-      setTypeAndOrder(params, sort){
-        this.SET_SORT_DIRECTION(sort);
-        this.SET_RECOMENDATION_ORDER(params.order);
-        this.SET_RECOMENDATION_TYPE(params.type);
-        this.activePiont = params.typeRecomendation;
-      },
-
-      onOpenCatalog(){
-        // console.log(this.RECOMENDATION_TYPE);
-        let name = 'Все товары';
-        if (this.RECOMENDATION_TYPE === 'with_discount') name = 'Акции';
-        if (this.RECOMENDATION_TYPE === 'available') {
-          this.SET_SORT_TYPE('created_at');
-          this.SET_SORT_DIRECTION('-');
-          name = 'В наличии';
-        }
-        if (this.RECOMENDATION_TYPE === 'popular') {
-          this.SET_SORT_TYPE('discount');
-          this.SET_SORT_DIRECTION('-');
-          name = 'Топ продаж';
-        }
-        this.SET_TYPE_OF_PRODUCT(this.RECOMENDATION_TYPE);
-        this.$router.push('/catalog?offset=0&limit=12&type_of_product=' + this.TYPE_OF_PRODUCT + '&ordering=' + this.SORT_DIRECTION + this.SORT_TYPE);
-      },
-
-      onSlideChange() {
-        //  console.log('slide change');
-      },
-      nextSlide(){
-          this.swiper.slideNext();
-      },
-      prevSlide(){
-          this.swiper.slidePrev();
-      },
-      onSwiper(swiper){
-          this.swiper = swiper;
-      },
-    },
-
-    async mounted(){
-      await this.GET_RECOMENDED_ITEMS();
-
-      this.setNewQuantity();
-      this.setSlidersInFrame();
-      setTimeout(() => window.scrollTo(0, 0), 0);
+  const setSlidersInFrame = () => {
+    if (windowWidth.value > 768.5) {
+      slidersInFrame.value = 4.5;
+    } else if (windowWidth.value > 540.5) {
+      slidersInFrame.value = 3.5;
+    } else if (windowWidth.value > 480.5) {
+      slidersInFrame.value = 2.5;
+    } else {
+      slidersInFrame.value = 1.5;
     }
-  }
+  };
+
+  const setTypeAndOrder = (params, sort) => {
+    console.log(' setTypeAndOrder ', params, '  ', sort);
+    queryStore.setSortDirection(sort);
+    catalogStore.setRecomendationOrder(params.order);
+    catalogStore.setRecomendationType(params.type);
+    activePiont.value = params.typeRecomendation;
+  };
+
+  const onOpenCatalog = () => {
+    let name = 'Все товары';
+    if (recomendationType.value === 'with_discount') name = 'Акции';
+    if (recomendationType.value === 'available') {
+      queryStore.setSortType('created_at');
+      queryStore.setSortDirection('-');
+      name = 'В наличии';
+    }
+    if (recomendationType.value === 'popular') {
+      queryStore.setSortType('discount');
+      queryStore.setSortDirection('-');
+      name = 'Топ продаж';
+    }
+    queryStore.setTypeOfProduct(recomendationType.value);
+    router.push('/catalog?offset=0&limit=12&type_of_product=' + typeOfProduct.value + '&ordering=' + sortDirection.value + sortType.value);
+  };
+
+
+  onBeforeMount( async () => {
+    await catalogStore.getRecomendedItems();
+    setNewQuantity();
+    setSlidersInFrame();
+    setTimeout(() => window.scrollTo(0, 0), 0);
+  });
 </script>
 
 <style scoped lang="scss">

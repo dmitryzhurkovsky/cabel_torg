@@ -1,5 +1,5 @@
 <template>
-  <div class="banner">
+  <div class="banner" v-if="banners">
     <swiper
       :slides-per-view = 1
       :space-between="15"
@@ -46,49 +46,47 @@
   </div>
 </template>
 
-<script>
-  import { mapGetters, mapActions } from 'vuex';
+<script setup>
+  import { computed } from 'vue';
+  import { useMainStore } from '@/stores/main';
+
   import { Swiper } from "swiper/vue";
   import { SwiperSlide } from "swiper/vue";
   import SwiperCore, { Pagination } from "swiper";
   import "swiper/swiper.min.css";
-  import "swiper/components/pagination/pagination.min.css"
+  import "swiper/components/pagination/pagination.min.css";
+
+  const router = useRouter();
+  const mainStore = useMainStore();
+
+  const { banners } = storeToRefs(mainStore);
+
   SwiperCore.use([Pagination]);
 
-  export default {
-    name: 'Banner',
-  
-    components: {
-      Swiper, SwiperSlide,
-    },
+  const filteredBanners = computed(() => {
+    return banners.value.filter(item => item.is_active);
+  });
 
-    computed: {
-      ...mapGetters("main", ["BANNERS"]),
+  const getPath = (item) => {
+    let path = useRuntimeConfig().public.NUXT_APP_IMAGES + '/' + item;
+    return path;
+  };
 
-      filteredBanners() {
-        return this.BANNERS.filter(item => item.is_active);
-      }
-    },
+  const onButtonClick = (link) => {
+    router.push(link);
+  };
 
-    methods: {
-      ...mapActions("main", ["GET_BANNERS"]),
+  await useAsyncData(
+    async () => {
+      await mainStore.getBanners();
+      return true;
+    }
+  );
 
-      getPath: function(item){
-        let path = useRuntimeConfig().public.NUXT_APP_IMAGES + '/' + item;
-        return path;
-      },
+  // async mounted(){
+  //   await mainStore.getBanners();
+  // };
 
-      onButtonClick(link) {
-        this.$router.push(link);
-      },
-
-    },
-
-    async mounted(){
-      await this.GET_BANNERS();
-    },
-
-  }
 </script>
 
 <style scoped lang="scss">

@@ -1,67 +1,58 @@
 <template>
-  <div v-if = "IS_CATALOG_OPEN || IS_MENU_ACTIONS_OPEN" id="WRAPPER"
-      :class="[IS_MENU_ACTIONS_OPEN && DEVICE_VIEW_TYPE > 1 ? 'menu-wrapper actions-wrapper' : 'menu-wrapper']" 
+  <div v-if = "isCatalogOpen || isMenuActionsOpen" id="WRAPPER"
+      :class="[isMenuActionsOpen && viewType > 1 ? 'menu-wrapper actions-wrapper' : 'menu-wrapper']" 
       @click.capture.self="closeMenu"
   >
   </div>
 </template>
 
-<script>
-import { mapGetters, mapMutations } from "vuex";
+<script setup>
+  import { watch } from 'vue';
+  import { useHeaderStore } from '@/stores/header';
 
-export default {
-  name: "MenuWrapper",
+  const headerStore = useHeaderStore();
 
-  computed: {
-    ...mapGetters("header", ["IS_CATALOG_OPEN", "IS_MENU_ACTIONS_OPEN", "DEVICE_VIEW_TYPE"]),
-  },
-
-  watch: {
-    IS_CATALOG_OPEN: function(){
-      const wrapper = document.getElementById('app__component');
-      if (this.IS_CATALOG_OPEN) {
-        window.scrollTo(0, 0);
-        if (this.DEVICE_VIEW_TYPE > 1) {
-          wrapper.style.overflowY = 'hidden';
-          wrapper.style.height = '100vh'; 
-          wrapper.style.position = 'relative';
-        }
-      } else {
-        wrapper.style.overflowY = '';
-        wrapper.style.height = ''; 
-        wrapper.style.position = '';
-      }
-    },
-
-    IS_MENU_ACTIONS_OPEN: function(){
-      console.log('Wrapper ', this.DEVICE_VIEW_TYPE);
-      const wrapper = document.getElementById('app__component');
-      if (this.IS_MENU_ACTIONS_OPEN) {
-        window.scrollTo(0, 0);
+  const { isCatalogOpen, isMenuActionsOpen, viewType } = storeToRefs(headerStore);
+  
+  watch(isCatalogOpen, () => {
+    const wrapper = document.getElementById('app__component');
+    if (isCatalogOpen.value) {
+      window.scrollTo(0, 0);
+      if (viewType.value > 1) {
         wrapper.style.overflowY = 'hidden';
         wrapper.style.height = '100vh'; 
         wrapper.style.position = 'relative';
-        if (this.DEVICE_VIEW_TYPE === 1) {
-            if (wrapper.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
-          }
-      } else {
-        wrapper.style.overflowY = '';
-        wrapper.style.height = ''; 
-        wrapper.style.position = '';
-        if (this.DEVICE_VIEW_TYPE === 1) document.body.style.paddingRight = '';
       }
+    } else {
+      wrapper.style.overflowY = '';
+      wrapper.style.height = ''; 
+      wrapper.style.position = '';
     }
-  },
+  });
 
-  methods: {
-    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN", "UPDATE_IS_MENU_ACTIONS_OPEN"]),
-
-    closeMenu() {
-      this.UPDATE_IS_CATALOG_OPEN(false);
-      this.UPDATE_IS_MENU_ACTIONS_OPEN(false);
+  watch(isMenuActionsOpen, () => {
+    // console.log('Wrapper ', viewType.value);
+    const wrapper = document.getElementById('app__component');
+    if (isMenuActionsOpen.value) {
+      window.scrollTo(0, 0);
+      wrapper.style.overflowY = 'hidden';
+      wrapper.style.height = '100vh'; 
+      wrapper.style.position = 'relative';
+      if (viewType.value === 1) {
+          if (wrapper.scrollHeight !== window.innerHeight) document.body.style.paddingRight = '16px';              
+        }
+    } else {
+      wrapper.style.overflowY = '';
+      wrapper.style.height = ''; 
+      wrapper.style.position = '';
+      if (viewType.value === 1) document.body.style.paddingRight = '';
     }
-  }
-}
+  });
+
+  const closeMenu = () => {
+    headerStore.updateIsCatalogOpen(false);
+    headerStore.updateIsMenuActionsOpen(false);
+  };
 </script>
 
 <style lang='scss' scoped>
