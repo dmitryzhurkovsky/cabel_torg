@@ -21,11 +21,11 @@
                         <a :href = settings.vk_url class="social__item icon-vk" target="_blank"></a>
                         <a :href = settings.facebook_url class="social__item icon-facebook" target="_blank"></a> -->
 
-                        <a :href = settings.instagram_url class="social__item icon-telegram" target="_blank">
-<!--                          <img src="@/assets/svg/telegram.svg" alt="Telegram">-->
+                        <a :href = settings.instagram_url class="social__item" target="_blank">
+                         <img src="@/assets/svg/telegram.svg" alt="Telegram">
                         </a>
-                        <a :href = settings.vk_url class="social__item icon-viber" target="_blank">
-<!--                          <img src="@/assets/svg/viber.svg" alt="Viber">-->
+                        <a :href = settings.vk_url class="social__item" target="_blank">
+                         <img src="@/assets/svg/viber.svg" alt="Viber">
                         </a>
                       </div>
                     </div>

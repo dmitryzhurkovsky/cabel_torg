@@ -1,14 +1,6 @@
 <template>
   <Breadcrumb/>
   <div class="catalog app__content" @click.stop = "clearSearchString()">
-    <!-- <Head>
-      <Title>
-        КабельТорг | Каталог
-      </Title>
-      <Meta name="description" content="Каталог товаров" />
-      <link v-if="prevLink" rel="prev" :href="prevLink" />
-      <link v-if="nextLink" rel="next" :href="nextLink" />
-    </Head> -->
     <div class="catalog__wrapper">
       <div class="catalog__content _container">
         <div class="catalog__body">
@@ -228,7 +220,7 @@
   );
 
   useHead({
-    title: `Каталог`,
+    title: 'Каталог',
     meta: [
       { name: 'description', content: 'Каталог товаров' },
     ],

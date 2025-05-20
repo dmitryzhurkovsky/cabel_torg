@@ -1,12 +1,6 @@
 <template>
   <Breadcrumb/>
   <div class="app__content">
-    <Head>
-      <Title>
-        {{ cartItemData?.name }} купить в Минске, цена {{ cartItemData?.price_with_discount_and_tax }}
-      </Title>
-      <Meta name="description" :content="'Предлагаем купить ' + cartItemData?.name + ' в Минске по доступным ценам. Доставка по РБ, большой выбор.'"/>
-    </Head>
     <div class="product" v-if="cartItemData && cartItemId">
       <div class="product__wrapper">
         <div class="product__content _container">
@@ -412,6 +406,12 @@
     }
   );
 
+  useHead({
+    title: cartItemData?.value?.name + ' купить в Минске, цена ' + cartItemData?.value?.price_with_discount_and_tax,
+    meta: [
+      { name: 'description', content: 'Предлагаем купить ' + cartItemData?.value?.name + ' в Минске по доступным ценам. Доставка по РБ, большой выбор.' },
+    ],
+  });
 </script>
 
 <style scoped lang="scss">

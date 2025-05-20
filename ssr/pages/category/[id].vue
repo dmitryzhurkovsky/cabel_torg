@@ -1,15 +1,6 @@
 <template>
   <Breadcrumb/>
   <div class="catalog app__content" @click.stop = "clearSearchString()">
-    <!-- <Head>
-      <Title>
-        КабельТорг | {{ categoryData?.site_page_title }}
-      </Title>
-      <Meta name="description" :content="categoryData?.site_page_description" />
-      <link v-if="prevLink" rel="prev" :href="prevLink" />
-      <link v-if="nextLink" rel="next" :href="nextLink" />
-      <link rel="canonical" :href="createCanonicalLink">
-    </Head> -->
     <div class="catalog__wrapper">
       <div class="catalog__content _container">
         <div class="catalog__body">
@@ -22,7 +13,7 @@
               />
             </div>
             <div class="content-block slider_subcategory__block">
-              <h1> {{ categoryData.name }} </h1>
+              <h1 class="content-block__title"> {{ categoryData.name }} </h1>
               <div class="content-block__subcategory recomendation__nav" v-if = "LastCategory?.length && viewType == 1">
                   <div class="slider_subcategory__row"
                     :class="[quickCategory.id == categoryId ? 'recomendation__nav__item active' : 'recomendation__nav__item']"
@@ -100,7 +91,7 @@
                   />
                 </div>  
               </div>
-              <div class="content-block__list" v-if = "itemsList.length">
+              <div class="content-block__list" v-if = "!itemsList">
                 <div class="empty_catalog">По вашему запросу ничего не найдено</div>
               </div>
               <div class="content-block__pagination">
@@ -419,6 +410,10 @@
 }
 .content-block{
   width: 100%;
+
+  &__title{
+    font-size: 30px;
+  }
 
   &__subcategory{
     display: grid;
