@@ -21,7 +21,7 @@
                         <a :href = settings.vk_url class="social__item icon-vk" target="_blank"></a>
                         <a :href = settings.facebook_url class="social__item icon-facebook" target="_blank"></a> -->
 
-                        <a :href = settings.instagram_url class="social__item" target="_blank">
+                        <a :href = settings.telegram_url class="social__item" target="_blank">
                          <img src="@/assets/svg/telegram.svg" alt="Telegram">
                         </a>
                         <a :href = settings.vk_url class="social__item" target="_blank">
