@@ -8,11 +8,7 @@
 
 </template>
 
-<script>
-  export default {
-    name: "HeaderTop",
-
-  }
+<script setup>
 </script>
 
 <style lang="scss" scoped>

@@ -1,4 +1,5 @@
 <template>
+  <Breadcrumb/>
   <div class="user-acc">
     <div class="user-acc__wrapper">
       <div class="user-acc__content _container">
@@ -24,9 +25,9 @@
             </div>
 <!--        # CONTENT-->
             <div class="user-acc__content-block content-block" >
-                <PersonalOrderList v-if = "SCREEN === 0"/>
-                <PersonalFavoriteList v-if = "SCREEN === 1"/>
-                <PersonalProfile v-if = "SCREEN === 2"/>
+                <PersonalOrderList v-if = "profileScreen === 0"/>
+                <PersonalFavoriteList v-if = "profileScreen === 1"/>
+                <PersonalProfile v-if = "profileScreen === 2"/>
             </div>
 
           </div>
@@ -37,88 +38,60 @@
   </div>
 </template>
 
-<script>
-
-  import { mapGetters, mapActions, mapMutations } from "vuex";
+<script setup>
+  import { onBeforeMount, onBeforeUpdate, onMounted } from 'vue';
+  import { useAuthStore } from '@/stores/auth';
+  import { useBreadCrumbStore } from '@/stores/breadcrumb';
+  import { useProfileStore } from '@/stores/profile';
 
   definePageMeta({
-    // middleware: ["auth"],
-    name: 'Профиль',
+    middleware: 'auth',
   });
 
-  export default defineNuxtComponent({
-    name: "personal",
+  const router = useRouter();
+  const authStore = useAuthStore();
+  const breadCrumbStore = useBreadCrumbStore();
+  const profileStore = useProfileStore();
 
-    computed: {
-      ...mapGetters("profile", ["SCREEN", "BREADCRUMB"]),
-      ...mapGetters("auth", ["USER"]),
-    },
+  const { breadcrumb, profileScreen } = storeToRefs(profileStore);
 
-    data() {
-      return {
-        screen: 0,
-      };
-    },
+  const changeScreen = (screenId) => {
+    profileStore.changeScreen(screenId)
+    breadCrumbStore.renameLastBreadCrumb(breadcrumb.value[screenId]);
+  };
 
-    methods: {
-      ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
-      ...mapMutations("auth", ["SET_USER_DATA"]),
-      ...mapMutations("profile", ["CHANGE_SCREEN"]),
-      ...mapMutations("breadcrumb", ["RENAME_LAST_BREADCRUMB", "ADD_BREADCRUMB"]),
+  const userLogout = () =>{
+    authStore.clearUserData();
+    router.push("/");
+  };
 
-      changeScreen(screenId){
-        this.CHANGE_SCREEN(screenId);
-        this.RENAME_LAST_BREADCRUMB(this.BREADCRUMB[screenId]);
-      },
+  // onBeforeUpdate(()=> {
+  //   if (!localStorage.getItem("authToken")) {
+  //     navigateTo('/login');      
+  //   }
+  // });
 
-      userLogout(){
-        this.SET_USER_DATA(null);
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("refreshToken");
-        this.$router.push("/");
-      }
-    },
-
-    beforeUpdate(){
-      if (!localStorage.getItem("authToken")) this.$router.push('/login');
-    },
-
-    mounted(){
-      if (!localStorage.getItem("authToken")) this.$router.push('/login');
-      this.screen = this.SCREEN;
-      this.CHANGE_BREADCRUMB(0);
-      this.ADD_BREADCRUMB({
-        name: this.$router.currentRoute.value.meta.name,
-        path: this.$router.currentRoute.value.path,
-        type: "local",
-        class: ""
-      });
-      this.ADD_BREADCRUMB({
-        name: this.$router.currentRoute.value.meta.name,
-        path: this.$router.currentRoute.value.path,
-        type: "global",
-        class: ""
-      });
-      this.RENAME_LAST_BREADCRUMB(this.BREADCRUMB[this.SCREEN]);
-    }
-  })
+  onMounted(() => {
+    if (!localStorage.getItem("authToken")) router.push('/login');
+    breadCrumbStore.changeBreadCrumb(0);
+    breadCrumbStore.addBreadCrumb({
+      name: router.currentRoute.value.meta.name,
+      path: router.currentRoute.value.path,
+      type: "local",
+      class: ""
+    });
+    breadCrumbStore.renameLastBreadCrumb(breadcrumb.value[profileScreen.value]);
+  });
 </script>
 
 <style scoped lang="scss">
 
 .user-acc {
 
-  &__wrapper{
-
-  }
-
-  &__body{
-  }
   &__block{
     display: flex;
     align-items: flex-start;
     min-height: 350px;
-
   }
   &__sidebar{
     width: 270px;
@@ -126,8 +99,6 @@
       display: none;
     }
   }
-
-
   &__content-block{
     width: 100%;
     padding-left: 20px;
@@ -141,17 +112,9 @@
 }
 .filter{
 
-  &__block{
-
-  }
-
   &__box{
     font-weight: 400;
     position: relative;
-
-  }
-  &__list{
-
   }
   .hr{
     height:2px;
@@ -196,10 +159,6 @@
       font-size: 14px;
       color: #423E48;
     }
-
   }
-
 }
-
-
 </style>

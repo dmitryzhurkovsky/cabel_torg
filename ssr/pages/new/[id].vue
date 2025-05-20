@@ -1,10 +1,11 @@
 <template>
+  <Breadcrumb/>
   <div class="">
     <Head>
       <Title>
         КабельТорг | {{ data?.title }}
       </Title>
-      <Meta name="discription" :content="data?.title" />
+      <Meta name="description" :content="data?.title" />
     </Head>
 
     <div class="one-news__block app__content _container" v-if="data">
@@ -24,13 +25,22 @@
         <div class="btn empty" @click.stop="onMoveToAllNews">Все новости</div>
       </div>
     </div>
-    <SliderNews />
+    <!-- <SliderNews /> -->
   </div>
 </template>
 
 <script setup>
-  import axios from 'axios';
-  import store from '@/store'
+  import axios from '@/utils/api';
+  import { useNotificationsStore } from '@/stores/notifications';
+  import { useBreadCrumbStore } from '@/stores/breadcrumb';
+
+  const route = useRoute();
+  const router = useRouter();
+
+  const notificationsStore = useNotificationsStore();
+  const breadCrumbStore = useBreadCrumbStore();
+
+  const oneNewData = ref(null);
 
   // useHead({
   //   title: 'Кабельторг | ' + oneNewData.value.name,
@@ -41,73 +51,66 @@
   //   }]
   // })
 
-  const route = useRoute()
-  const router = useRouter()
-  const oneNewData = ref(null);
-
   const ChangeParameters = computed(() => {
     return JSON.stringify(route.query) + JSON.stringify(route.params);
-  })
+  });
 
   const onMoveToAllNews = () => {
     router.push('/news');
-  }
+  };
 
-  const onSetBreadCrumbs = () => {
-    store.dispatch('breadcrumb/CHANGE_BREADCRUMB', 0);
+  const setBreadCrumbs = () => {
+    breadCrumbStore.changeBreadCrumb(0);
     const mainBreadCrumb = {
       name: 'Новости',
       path: '/news',
       type: 'global',
       class: '',
     }
-    store.commit('breadcrumb/ADD_BREADCRUMB', mainBreadCrumb);
+    breadCrumbStore.addBreadCrumb(mainBreadCrumb);
 
-    store.commit('breadcrumb/ADD_BREADCRUMB', {
+    breadCrumbStore.addBreadCrumb({
       name: oneNewData.value.title,
       path: route.path,
       type: "global",
       class: ""
     });
-  }
+  };
 
   const oneGetData = async () => {
-    // store.commit('notification/SET_IS_LOADING', true)
+    notificationsStore.setIsLoading(true);
     try {
       const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'service_entities/articles/' + route.params.id);
-      // store.commit('notification/SET_IS_LOADING', false)
       oneNewData.value = response.data;
+      notificationsStore.setIsLoading(false);
     } catch (e) {
         console.log(e);
-        // store.commit('notification/ADD_MESSAGE',{name: "Не возможно загрузить новость ", icon: "error", id: '1'})
-        // store.commit('notification/SET_IS_LOADING', false)
+        notificationsStore.setIsLoading(false);
         navigateTo('/404');
-        // return null
     }
   } 
 
   const { data } = await useAsyncData(
-    'oneNewData', 
     async () => {
-      await oneGetData()
+      await oneGetData();
+      setBreadCrumbs();
       return oneNewData.value
-
     }, {
       watch: [ChangeParameters]
     }
   )
 
-  onBeforeMount(async () => {
-    await oneGetData()
-    data.value = oneNewData.value
-    onSetBreadCrumbs()
-  })
+  // onBeforeMount(async () => {
+  //   await oneGetData()
+  //   data.value = oneNewData.value
+  //   onSetBreadCrumbs()
+  // })
 
-  onBeforeUpdate(async () => {
-    await oneGetData()
-    data.value = oneNewData.value
-    onSetBreadCrumbs()
-  })
+  // onBeforeUpdate(async () => {
+  //   await oneGetData()
+  //   data.value = oneNewData.value
+  //   onSetBreadCrumbs()
+  // })
 
 </script>
 

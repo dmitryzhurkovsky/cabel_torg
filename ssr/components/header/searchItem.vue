@@ -1,7 +1,10 @@
 <template>
   <div class="popup-cart__item row" v-if = "item">
       <div class="popup-cart__img">
-          <UiCardImage :images = item.images />
+          <UiCardImage 
+            :images = item.images 
+            :alt = "item.name + ' №1 - cabel-torg'"
+          />
       </div>
       <div class="popup-cart__description">
           <div class="popup-cart__title">{{ item.name }}</div>
@@ -24,15 +27,12 @@
   </div>
 </template>
 
-<script>
+<script setup>
 
-export default {
+  const props = defineProps({
+    item:  { type: Object,  default: null},
+  }); 
 
-  props: {
-    item: null,
-  },
-
-}
 </script>
 
 <style lang="scss" scoped>

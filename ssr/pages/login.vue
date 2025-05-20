@@ -1,302 +1,296 @@
 <template>
-    <div class="app__content">
-      <div class="_container">
-        <div v-if = "AUTH_TYPE === 1" class="popup__reg full-open">
-          <h3>Вход</h3>
-          <div class="sign-in-htm">
-            <div class="group">
-              <label for="user" class="label">Электронная почта</label>
-              <input type="email" class="input" :class="{ 'is-invalid': ERRORS.email }" id="email" v-model="email">
-              <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>
-            </div>
-            <div class="group">
-              <label for="pass" class="label">Пароль</label>
-              <input type="password" class="input" :class="{ 'is-invalid': ERRORS.password }" id="password" v-model="password">
-              <div class="error-message" v-if="ERRORS.password"> {{ ERRORS.password }} </div>
-            </div>
+  <Breadcrumb/>
+  <div class="app__content">
+    <div class="_container">
+      <div v-if = "authType === 1" class="popup__reg full-open">
+        <h3>Вход</h3>
+        <div class="sign-in-htm">
+          <div class="group">
+            <label for="user" class="label">Электронная почта</label>
+            <input type="email" class="input" :class="{ 'is-invalid': authErrors.email }" id="email" v-model="email">
+            <div class="error-message" v-if="authErrors.email"> {{ authErrors.email }} </div>
+          </div>
+          <div class="group">
+            <label for="pass" class="label">Пароль</label>
+            <input type="password" class="input" :class="{ 'is-invalid': authErrors.password }" id="password" v-model="password">
+            <div class="error-message" v-if="authErrors.password"> {{ authErrors.password }} </div>
+          </div>
 
-            <div class="center-text">
-              <button @click = "userLogin()" type="submit" class="btn black">Войти</button>
-            </div>
+          <div class="center-text">
+            <button @click = "userLogin()" type="submit" class="btn black">Войти</button>
+          </div>
 
-            <div @click = "changeScreen(2)" class="foot-lnk mt-20">Не помню пароль</div>
-            <div @click = "changeScreen(3)" class="bottom-link mt-20">Зарегистрироваться</div>
+          <div @click = "changeScreen(2)" class="foot-lnk mt-20">Не помню пароль</div>
+          <div @click = "changeScreen(3)" class="bottom-link mt-20">Зарегистрироваться</div>
+        </div>
+      </div>
+      <div v-if = "authType === 2" class="popup__reg full-open">
+        <h3>Восстановление пароля</h3>
+        <div class="reset-pass">
+          <div class="group">
+            <label for="user" class="label">Электронная почта</label>
+            <input type="email" class="input" :class="{ 'is-invalid': authErrors.email }" id="email" v-model="email">
+            <div class="error-message" v-if="authErrors.email"> {{ authErrors.email }} </div>
+          </div>
+          <div class="center-text">
+            <button @click = "restorePassword()" type="submit" class="btn black">Восстановить</button>
+          </div>
+          <div @click = "changeScreen(1)" class="foot-lnk mt-20">
+            Войти
+          </div>
+          <div @click = "changeScreen(3)" class="bottom-link mt-20">
+            Зарегистрироваться
           </div>
         </div>
-        <div v-if = "AUTH_TYPE === 2" class="popup__reg full-open">
-          <h3>Восстановление пароля</h3>
-          <div class="reset-pass">
-            <div class="group">
-              <label for="user" class="label">Электронная почта</label>
-              <input type="email" class="input" :class="{ 'is-invalid': ERRORS.email }" id="email" v-model="email">
-              <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>
-            </div>
-            <div class="center-text">
-              <button @click = "restorePassword()" type="submit" class="btn black">Восстановить</button>
-            </div>
-            <div @click = "changeScreen(1)" class="foot-lnk mt-20">
-              Войти
-            </div>
-            <div @click = "changeScreen(3)" class="bottom-link mt-20">
-              Зарегистрироваться
-            </div>
+      </div>
+      <div v-if = "authType === 3" class="popup__reg full-open">
+        <h3>Регистрация для юрлица</h3>
+        <div class="register">
+          <div class="group">
+            <label for="email" class="label">Электронная почта</label>
+            <input id="email" type="email" class="input" :class="{ 'is-invalid': authErrors.email }" v-model="email" autocomplete=off>
+            <div class="error-message" v-if="authErrors.email"> {{ authErrors.email }} </div>
           </div>
-        </div>
-        <div v-if = "AUTH_TYPE === 3" class="popup__reg full-open">
-          <h3>Регистрация для юрлица</h3>
-          <div class="register">
-            <div class="group">
-              <label for="email" class="label">Электронная почта</label>
-              <input id="email" type="email" class="input" :class="{ 'is-invalid': ERRORS.email }" v-model="email" autocomplete=off>
-              <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>
-            </div>
-            <div class="group">
-              <label for="password" class="label">Пароль</label>
-              <input id="password" type="password" class="input" :class="{ 'is-invalid': ERRORS.password }" v-model="password" autocomplete=off>
-              <div class="error-message" v-if="ERRORS.password"> {{ ERRORS.password }} </div>
-            </div>
-            <div class="group">
-              <label for="confirm" class="label">Подтверждение пароля</label>
-              <input id="confirm" type="password" class="input" :class="{ 'is-invalid': ERRORS.confirm }" v-model="confirm" autocomplete=off>
-              <div class="error-message" v-if="ERRORS.confirm"> {{ ERRORS.confirm }} </div>
-            </div>
-            <div class="group">
-              <label for="username" class="label">Имя</label>
-              <input id="username" type="text" class="input" :class="{ 'is-invalid': ERRORS.username }" v-model="username" autocomplete=off>
-              <div class="error-message" v-if="ERRORS.username"> {{ ERRORS.username }} </div>
-            </div>
-            <div class="group">
-              <label for="phone" class="label">Телефон</label>
-              <input id="phone" type="tel" class="input" :class="{ 'is-invalid': ERRORS.phone }" v-model="phone" autocomplete=off>
-              <div class="error-message" v-if="ERRORS.phone"> {{ ERRORS.phone }} </div>
-            </div>
-            <div class="group">
-              <label for="company" class="label">Компания</label>
-              <input id="company" type="text" class="input" :class="{ 'is-invalid': ERRORS.company }" v-model="company" autocomplete=off>
-              <div class="error-message" v-if="ERRORS.company"> {{ ERRORS.company }} </div>
-            </div>
-            <div class="group">
-              <label for="unp" class="label">УНП</label>
-              <input id="unp" type="text" class="input" :class="{ 'is-invalid': ERRORS.unp }" v-model="unp" autocomplete=off>
-              <div class="error-message" v-if="ERRORS.unp"> {{ ERRORS.unp }} </div>
-            </div>
-            <div class="">
-              <button @click = "userRegister" type="submit" class="btn black">Регистрация</button>
-            </div>
-            <div @click = "changeScreen(1)" class="foot-lnk mb-20 mt-20">Войти</div>
+          <div class="group">
+            <label for="password" class="label">Пароль</label>
+            <input id="password" type="password" class="input" :class="{ 'is-invalid': authErrors.password }" v-model="password" autocomplete=off>
+            <div class="error-message" v-if="authErrors.password"> {{ authErrors.password }} </div>
+          </div>
+          <div class="group">
+            <label for="confirm" class="label">Подтверждение пароля</label>
+            <input id="confirm" type="password" class="input" :class="{ 'is-invalid': authErrors.confirm }" v-model="confirm" autocomplete=off>
+            <div class="error-message" v-if="authErrors.confirm"> {{ authErrors.confirm }} </div>
+          </div>
+          <div class="group">
+            <label for="username" class="label">Имя</label>
+            <input id="username" type="text" class="input" :class="{ 'is-invalid': authErrors.username }" v-model="username" autocomplete=off>
+            <div class="error-message" v-if="authErrors.username"> {{ authErrors.username }} </div>
+          </div>
+          <div class="group">
+            <label for="phone" class="label">Телефон</label>
+            <input id="phone" type="tel" class="input" :class="{ 'is-invalid': authErrors.phone }" v-model="phone" autocomplete=off>
+            <div class="error-message" v-if="authErrors.phone"> {{ authErrors.phone }} </div>
+          </div>
+          <div class="group">
+            <label for="company" class="label">Компания</label>
+            <input id="company" type="text" class="input" :class="{ 'is-invalid': authErrors.company }" v-model="company" autocomplete=off>
+            <div class="error-message" v-if="authErrors.company"> {{ authErrors.company }} </div>
+          </div>
+          <div class="group">
+            <label for="unp" class="label">УНП</label>
+            <input id="unp" type="text" class="input" :class="{ 'is-invalid': authErrors.unp }" v-model="unp" autocomplete=off>
+            <div class="error-message" v-if="authErrors.unp"> {{ authErrors.unp }} </div>
+          </div>
+          <div class="">
+            <button @click = "userRegister" type="submit" class="btn black">Регистрация</button>
+          </div>
+          <div @click = "changeScreen(1)" class="foot-lnk mb-20 mt-20">Войти</div>
 <!--            <div @click = "changeScreen(2)" class="foot-lnk mt-20">Не помню пароль</div>-->
-          </div>
         </div>
-        <div v-if = "AUTH_TYPE === 4" class="popup__reg full-open">
-          <h3>Проверьте ваш email</h3>
-          <div class="reset-pass">
-            <div class="group">
-              <p>Мы отправили ссылку для <b>восстановления пароля</b> к вашей учетной записи.</p>
-            </div>
-            <div class="">
-              <button @click = "changeScreen(1)" type="submit" class="btn empty">Вернуться на сайт</button>
-            </div>
+      </div>
+      <div v-if = "authType === 4" class="popup__reg full-open">
+        <h3>Проверьте ваш email</h3>
+        <div class="reset-pass">
+          <div class="group">
+            <p>Мы отправили ссылку для <b>восстановления пароля</b> к вашей учетной записи.</p>
+          </div>
+          <div class="">
+            <button @click = "changeScreen(1)" type="submit" class="btn empty">Вернуться на сайт</button>
           </div>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
-<script>
-import { mapGetters, mapActions, mapMutations } from "vuex";
-import { isValidEmail } from "@/common/validation";
+<script setup>
+  import { isValidEmail } from "@/common/validation";
+  import { useHead } from 'nuxt/app';
+  import { ref, onMounted } from 'vue';
+  import { useNotificationsStore } from '@/stores/notifications';
+  import { useAuthStore } from '@/stores/auth';
+  import { useHeaderStore } from "@/stores/header";
+  import { useBreadCrumbStore } from '@/stores/breadcrumb';
+  import { useProfileStore } from '@/stores/profile';
 
-definePageMeta({
-  // middleware: ["auth"],
-  name: 'Авторизация',
-});
+  definePageMeta({
+    middleware: 'auth',
+  });
 
-export default defineNuxtComponent({
-  name: "UserActions",
+  const router = useRouter();
+  const notificationsStore = useNotificationsStore();
+  const authStore = useAuthStore();
+  const headerStore = useHeaderStore();
+  const breadCrumbStore = useBreadCrumbStore();
+  const profileStore = useProfileStore();
 
-  head () {
-    return {
-      title: 'Авторизация',
-      meta: [{
-        name: 'Авторизация',
-        content: 'Страница Авторизация'
-      }]
-    }
-  },
+  const { userData, authErrors, authType, redirectAfterLogin } = storeToRefs(authStore);
 
-  data: function() {
-    return {
-      email     : '',
-      password  : '',
-      confirm   : '',
-      username  : '',
-      phone     : '',
-      company   : '',
-      unp       : null,
-      isLoading : false,
-    }
-  },
+  const email = ref('');
+  const password = ref('');
+  const confirm = ref('');
+  const username = ref('');
+  const phone = ref('');
+  const company = ref('');
+  const unp = ref('');
+  const isLoading = ref(false);
 
-  computed: {
-     ...mapGetters("auth",["ERRORS", "AUTH_TYPE", "IS_OPEN_MAIN_LOGIN", "USER", "REDIRECT_AFTER_LOGIN"]),
-  },
+  useHead({
+    title: 'Авторизация',
+    meta: [{
+      name: 'Авторизация',
+      content: 'Страница Авторизация'
+    }]
+  });
 
-  async mounted() {
-    this.SET_IS_OPEN_MAIN_LOGIN(false);
-    this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
-    this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
-      name: this.$router.currentRoute.value.meta.name,
-      path: this.$router.currentRoute.value.path,
+  onMounted( async () => {
+    breadCrumbStore.changeBreadCrumb(0);
+    breadCrumbStore.addBreadCrumb({
+      name: router.currentRoute.value.meta.name,
+      path: router.currentRoute.value.path,
       type: "global",
       class: ""
     });
-  },
+  });
 
-  async beforeUnmount() {
-    this.SET_ERRORS({});
-    this.SET_IS_OPEN_MAIN_LOGIN(true);
-  },
+  onBeforeUnmount( async () => {
+    authStore.setErrors({});
+  });
 
-  methods: {
-    ...mapActions("auth", ["SEND_LOGIN_REQUEST", "SEND_REGISTER_REQUEST", "SEND_LOGOUT_REQUEST", "SEND_RESTORE_PASSWORD_REQUEST"]),
-    ...mapMutations("auth", ["SET_ERRORS", "SET_TYPE", "SET_IS_OPEN_MAIN_LOGIN"]),
-    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_MESSAGE"]),
-    ...mapMutations("profile", ["CHANGE_SCREEN"]),
-    ...mapMutations("notification", ["SET_IS_LOADING"]),
+  // useAsyncData(() => {
+  //   console.log('authToken: ', localStorage.getItem("authToken"));
+    
+  //   if (localStorage.getItem("authToken")) {
+  //     navigateTo('/user_profile');      
+  //   }
+  // });
 
-    changeScreen(auth_type) {
-      this.SET_TYPE(auth_type);
-      const errorsInData = {};
-      this.SET_ERRORS(errorsInData);
-    },
+  const changeScreen = (auth_type) => {
+    authStore.setAuthType(auth_type);
+    const errorsInData = {};
+    authStore.setErrors(errorsInData);
+  };
 
-    async userLogin() {
-      if (this.isLoading) return;
+  const userLogin = async () => {
+    if (isLoading.value) return;
 
-      this.SET_IS_LOADING(true);
-      this.isLoading = true;
-      const errorsInData = {};
-      this.SET_ERRORS(errorsInData);
+    notificationsStore.setIsLoading(true);
+    isLoading.value = true;
+    const errorsInData = {};
+    authStore.setErrors(errorsInData);
 
-      if (!isValidEmail(this.email)) {
+    if (!isValidEmail(email.value)) {
+      errorsInData.email = 'Укажите валидный адрес эл. почты'
+    }
+    if (!password.value || password.value.length < 8) {
+      errorsInData.password = 'Пароль должен быть больше 8 символов'
+    }
+    if (Object.keys(errorsInData).length) {
+      authStore.setErrors(errorsInData);
+      notificationsStore.setIsLoading(false);
+    } else {
+      const loginData = new FormData();
+      loginData.append('username', email.value);
+      loginData.append('password', password.value);
+      await authStore.sendLoginRequest(loginData);
+      notificationsStore.setIsLoading(false);
+
+      if (userData.value) {
+        if (redirectAfterLogin.value) {
+          router.push(redirectAfterLogin.value);
+        } else {
+          router.push("/user_profile");
+        }
+      }
+    }  
+    isLoading.value = false;
+  };
+
+  const userRegister = async () => {
+    if (isLoading.value) return;
+
+    notificationsStore.setIsLoading(true);
+    isLoading.value = true;
+    const errorsInData = {};
+    authStore.setErrors(errorsInData);
+
+    if (!isValidEmail(email.value)) {
+      errorsInData.email = 'Укажите валидный адрес эл. почты'
+    }
+    if (!password.value || password.value.length < 8) {
+      errorsInData.password = 'Пароль должен быть больше 8 символов'
+    }
+    if (password.value !== confirm.value) {
+      errorsInData.confirm = 'Пароли не совпадают'
+    }
+    if (!username.value) { 
+      errorsInData.username = 'Укажите имя'
+    }
+    if (!phone.value) {
+      errorsInData.phone = 'Укажите номер телефона'
+    }
+    if (!company.value) {
+      errorsInData.company = 'Укажите название компании'
+    }
+    if (!unp.value || unp.value.toString().length !== 9) {
+      errorsInData.unp = 'Укажите валидное УНП'
+    }
+    if (Object.keys(errorsInData).length) {
+      authStore.setErrors(errorsInData);
+      notificationsStore.setIsLoading(false);
+    } else {
+      const data = {
+        email: email.value,
+        full_name: username.value,
+        phone_number: phone.value,
+        company_name: company.value,
+        unp: unp.value,
+        password: password.value
+      };
+      await authStore.sendRegisterRequest(data)
+      notificationsStore.setIsLoading(false);
+      if (Object.keys(authErrors.value).length === 0) {
+        if (typeof window !== 'undefined') window.scrollTo(0, 0);
+        profileStore.changeScreen(2);
+        headerStore.setIsPopUpOpen(true);
+        headerStore.setPopUpAction('ShowCompleteMsg');
+        const msg ={};
+          msg.main = 'Спасибо за регистрацию на CabelTorg.';
+          msg.bolt = '';
+          msg.sub = 'Желаем Вам приятных покупок!'
+        headerStore.setPopUpMessage(msg);
+        router.push("/user_profile");
+      }
+    }
+    isLoading.value = false;
+  };
+
+  const restorePassword = async () => {
+    if (isLoading.value) return;
+
+    notificationsStore.setIsLoading(true);
+    isLoading.value = true;
+    const errorsInData = {};
+    authStore.setErrors(errorsInData);
+
+    if (!isValidEmail(email.value)) {
         errorsInData.email = 'Укажите валидный адрес эл. почты'
+    }
+    if (Object.keys(errorsInData).length) {
+      notificationsStore.setIsLoading(false);
+      authStore.setErrors(errorsInData);
+    } else {
+      const data = {
+        email: email.value,
+      };
+      await authStore.sendRestorePasswordRequest(data);
+      notificationsStore.setIsLoading(false);
+      if (Object.keys(authErrors.value).length === 0) {
+        changeScreen(4);
       }
-      if (!this.password || this.password.length < 8) {
-        errorsInData.password = 'Пароль должен быть больше 8 символов'
-      }
-      if (Object.keys(errorsInData).length) {
-        this.SET_ERRORS(errorsInData);
-        this.SET_IS_LOADING(false);
-      } else {
-        const loginData = new FormData();
-        loginData.append('username', this.email);
-        loginData.append('password', this.password);
-        await this.SEND_LOGIN_REQUEST(loginData);
-        this.SET_IS_LOADING(false);
-
-        if (this.USER) {
-          if (this.REDIRECT_AFTER_LOGIN) {
-            this.$router.push(this.REDIRECT_AFTER_LOGIN);
-          } else {
-            this.$router.push("/user_profile");
-          }
-        }
-      }  
-      this.isLoading = false;
-    },
-
-    async userRegister() {
-      if (this.isLoading) return;
-
-      this.SET_IS_LOADING(true);
-      this.isLoading = true;
-      const errorsInData = {};
-      this.SET_ERRORS(errorsInData)
-
-      if (!isValidEmail(this.email)) {
-        errorsInData.email = 'Укажите валидный адрес эл. почты'
-      }
-      if (!this.password || this.password.length < 8) {
-        errorsInData.password = 'Пароль должен быть больше 8 символов'
-      }
-      if (this.password !== this.confirm) {
-        errorsInData.confirm = 'Пароли не совпадают'
-      }
-      if (!this.username) { 
-        errorsInData.username = 'Укажите имя'
-      }
-      if (!this.phone) {
-        errorsInData.phone = 'Укажите номер телефона'
-      }
-      if (!this.company) {
-        errorsInData.company = 'Укажите название компании'
-      }
-      if (!this.unp || this.unp.toString().length !== 9) {
-        errorsInData.unp = 'Укажите валидное УНП'
-      }
-      if (Object.keys(errorsInData).length) {
-        this.SET_ERRORS(errorsInData);
-        this.SET_IS_LOADING(false);
-      } else {
-        const data = {
-          email: this.email,
-          full_name: this.username,
-          phone_number: this.phone,
-          company_name: this.company,
-          unp: this.unp,
-          password: this.password
-        };
-        await this.SEND_REGISTER_REQUEST(data)
-        this.SET_IS_LOADING(false);
-        if (Object.keys(this.ERRORS).length === 0) {
-          if (typeof window !== 'undefined') window.scrollTo(0, 0)
-          this.CHANGE_SCREEN(2);
-          this.SET_IS_POPUP_OPEN(true);
-          this.SET_POPUP_ACTION('ShowCompleteMsg');
-          const msg ={};
-            msg.main = 'Спасибо за регистрацию на CabelTorg.';
-            msg.bolt = '';
-            msg.sub = 'Желаем Вам приятных покупок!'
-          this.SET_POPUP_MESSAGE(msg);
-          this.$router.push("/user_profile");
-        }
-      }
-      this.isLoading = false;
-    },
-
-    async restorePassword() {
-      if (this.isLoading) return;
-
-      this.SET_IS_LOADING(true);
-      this.isLoading = true;
-      const errorsInData = {};
-      this.SET_ERRORS(errorsInData);
-
-      if (!isValidEmail(this.email)) {
-          errorsInData.email = 'Укажите валидный адрес эл. почты'
-      }
-      if (Object.keys(errorsInData).length) {
-        this.SET_IS_LOADING(false);
-        this.SET_ERRORS(errorsInData);
-      } else {
-        const data = {
-          email: this.email,
-        };
-        await this.SEND_RESTORE_PASSWORD_REQUEST(data);
-        this.SET_IS_LOADING(false);
-        if (Object.keys(this.ERRORS).length === 0) {
-          this.changeScreen(4);
-          // if (this.REDIRECT_AFTER_LOGIN) {
-          //     this.$router.push(this.REDIRECT_AFTER_LOGIN);
-          // } else {
-          //     this.$router.push({name: "user-cab"});
-          // }
-        }
-      }  
-      this.isLoading = false;
-    },
-  }
-})
+    }  
+    isLoading.value = false;
+  };
 </script>
 
 <style lang="scss" scoped>

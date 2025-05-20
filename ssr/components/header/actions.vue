@@ -19,9 +19,9 @@
         @mouseleave="onIconLeave()"
     >
       <div class="dropdown" 
-          :class="[!USER ? 'icon-user' : 'icon-user-login']"
+          :class="[!userData ? 'icon-user' : 'icon-user-login']"
       >
-        <div v-if = "userHover && !USER" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
+        <div v-if = "userHover && !userData" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
             <div class="dropdown__inner">
                 <div class="dropdown__content popup-cart">
                     <div class="avatar__box">
@@ -44,7 +44,7 @@
 
           <!-- <UserActions/> -->
         </div>
-        <div v-if = "userHover && USER" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
+        <div v-if = "userHover && userData" :class="[!userHover ? 'dropdown__wrapper' : 'dropdown__wrapper wrapper__show']">
 
           <div class="dropdown__content popup-cart user-login">
             <div class="dropdown__list">
@@ -82,7 +82,7 @@
         </div>
       </div>
       <CatalogIconQuantity 
-        :quantity = ORDERS.length 
+        :quantity = orders.length 
         :left = '10'
         :top = '10'
       />
@@ -90,117 +90,108 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import { ref } from 'vue';
+  import { useAuthStore } from '@/stores/auth';
+  import { useQueryStore } from '@/stores/query';
+  import { useHeaderStore } from '@/stores/header';
+  import { useOrdersStore } from '@/stores/orders';
+  import { useProfileStore } from '@/stores/profile';
 
-import {mapActions, mapGetters, mapMutations} from 'vuex'
+  const route = useRoute();
+  const router = useRouter();
 
-export default {
-  name: 'TopMenuActions',
+  const authStore = useAuthStore();
+  const queryStore = useQueryStore();
+  const headerStore = useHeaderStore();
+  const oredersStore = useOrdersStore();
+  const profileStore = useProfileStore();
 
-  data: function() {
-      return {
-          isLoading: false,
-          userHover: false,
-          cartHover: false,
-          favoriteHover: false,
-      }
-  },
+  const isLoading = ref(false);
+  const userHover = ref(false);
+  const cartHover = ref(false);
+  const favoriteHover = ref(false);
 
-  computed: {
-      ...mapGetters("auth", ["AUTH_TYPE", "IS_OPEN_MAIN_LOGIN", "USER"]),
-      ...mapGetters("order", ["ORDERS"]),
-  },
+  const { userData } = storeToRefs(authStore);
+  // const { searchString } = storeToRefs(queryStore);
+  const { orders } = storeToRefs(oredersStore);
 
-  methods: {
-    ...mapMutations("auth", ["SET_TYPE"]),
-    ...mapActions("auth", ["SEND_LOGOUT_REQUEST"]),
-    ...mapMutations("query", ["SET_SEARCH_STRING"]),
-    ...mapMutations("profile", ["CHANGE_SCREEN"]),
-    ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN", "UPDATE_IS_MENU_ACTIONS_OPEN"]),
-    
-    handleClick (URL, screen_type) {
-      const vm = this;
-      setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
-      setTimeout(() => vm.UPDATE_IS_MENU_ACTIONS_OPEN(false), 0);
-      // this.SET_IS_OPEN_MAIN_LOGIN(false);
-      this.cartHover = false;
-      this.userHover = false;
-      this.favoriteHover = false;
-      if (this.$route.path != URL) {
-        if (URL === '/login') {
-          this.SET_TYPE(screen_type);
-        } else {
-          this.CHANGE_SCREEN(screen_type)
-        }
-        this.$router.push(URL);
+  const handleClick = (URL, screen_type) => {
+    setTimeout(() => headerStore.updateIsCatalogOpen(false), 0);
+    setTimeout(() => headerStore.updateIsMenuActionsOpen(false), 0);
+    cartHover.value = false;
+    userHover.value = false;
+    favoriteHover.value = false;
+    if (route.path != URL) {
+      if (URL === '/login') {
+        authStore.setAuthType(screen_type);
       } else {
-        if (URL === '/login') {
-          this.SET_TYPE(screen_type);
-        } else {
-          this.CHANGE_SCREEN(screen_type)
-        }
+        profileStore.changeScreen(screen_type);
       }
-    },
+      router.push(URL);
+    } else {
+      if (URL === '/login') {
+        authStore.setAuthType(screen_type);
+      } else {
+        profileStore.changeScreen(screen_type);
+      }
+    }
+  };
 
-    async userLogout() {
-      if (this.isLoading) return;
-      this.userHover = false;
-      const vm = this;
-      setTimeout(() => vm.UPDATE_IS_CATALOG_OPEN(false), 0);
-      setTimeout(() => vm.UPDATE_IS_MENU_ACTIONS_OPEN(false), 0);
-      this.isLoading = true;
-      await this.SEND_LOGOUT_REQUEST();
-      this.isLoading = false;
-      this.$router.push('/');
-    },
+  const userLogout = async () => {
+    if (isLoading.value) return;
+    userHover.value = false;
+    setTimeout(() => headerStore.updateIsCatalogOpen(false), 0);
+    setTimeout(() => headerStore.updateIsMenuActionsOpen(false), 0);
+    isLoading.value = true;
+    authStore.sendLogoutRequest();
+    isLoading.value = false;
+    router.push('/');
+  };
 
-    clearSearchString(){
-      this.SET_SEARCH_STRING('');
-    },
+  // const clearSearchString = () => {
+  //   queryStore.setSearchString('');
+  // };
 
-    onUserIconEnter(){
-      this.SET_SEARCH_STRING('');
-      this.UPDATE_IS_MENU_ACTIONS_OPEN(true);
-      // this.SET_IS_OPEN_MAIN_LOGIN(true)
-      this.favoriteHover = false;
-      this.cartHover = false;
-      this.userHover = true;
-    },
+  const onUserIconEnter = () => {
+    queryStore.setSearchString('');
+    headerStore.updateIsMenuActionsOpen(true);
+    favoriteHover.value = false;
+    cartHover.value = false;
+    userHover.value = true;
+  };
 
-    onCartIconEnter(){
-      this.SET_SEARCH_STRING('');
-      this.UPDATE_IS_MENU_ACTIONS_OPEN(true);
-      this.favoriteHover = false;
-      this.cartHover = true;
-      this.userHover = false;
-    },
+  const onCartIconEnter = () => {
+    queryStore.setSearchString('');
+    headerStore.updateIsMenuActionsOpen(true);
+    favoriteHover.value = false;
+    cartHover.value = true;
+    userHover.value = false;
+  };
 
-    onFavoriteIconEnter() {
-      this.SET_SEARCH_STRING('');
-      this.UPDATE_IS_MENU_ACTIONS_OPEN(true);
-      this.favoriteHover = true;
-      this.cartHover = false;
-      this.userHover = false;
-    },
+  const onFavoriteIconEnter = () => {
+    queryStore.setSearchString('');
+    headerStore.updateIsMenuActionsOpen(true);
+    favoriteHover.value = true;
+    cartHover.value = false;
+    userHover.value = false;
+  };
 
-    onIconLeave() {
-      this.userHover = false;
-      this.cartHover = false;
-      this.favoriteHover = false;
-      this.UPDATE_IS_MENU_ACTIONS_OPEN(false);
-    },
+  const onIconLeave = () => {
+    userHover.value = false;
+    cartHover.value = false;
+    favoriteHover.value = false;
+    headerStore.updateIsMenuActionsOpen(false);
+  };
 
-    onIconLeaveClick() {
-      this.userHover = false;
-      this.cartHover = false;
-      this.favoriteHover = false;
-      // const vm = this;
-      setTimeout(() => this.UPDATE_IS_CATALOG_OPEN(false), 0);
-      setTimeout(() => this.UPDATE_IS_MENU_ACTIONS_OPEN(false), 0);
-    },
-  },
+  const onIconLeaveClick = () => {
+    userHover.value = false;
+    cartHover.value = false;
+    favoriteHover.value = false;
+    setTimeout(() => headerStore.updateIsCatalogOpen(false), 0);
+    setTimeout(() => headerStore.updateIsMenuActionsOpen(false), 0);
+  };
 
-}
 </script>
 
 <style lang="scss" scoped>

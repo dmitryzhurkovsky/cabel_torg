@@ -1,7 +1,10 @@
 <template>
   <div class="popup-cart__item" v-if="cartItemData">
     <div class="popup-cart__img">
-        <UiCardImage :images=cartItemData.images />
+        <UiCardImage 
+          :images=cartItemData.images
+          :alt = "cartItemData.name + ' №1 - cabel-torg'"
+        />
     </div>
     <div class="popup-cart__description">
       <div class="popup-cart__title long_text">{{ cartItemData.name }}</div>
@@ -9,59 +12,44 @@
 
     </div>
     <div class="popup-cart__action">
-      <div class="popup-cart__price">{{ cartItem.amount + '  X  ' + cardPriceWithDiscount }} <span>BYN</span></div>
+      <div class="popup-cart__price">{{ props.cartItem.amount + '  X  ' + cardPriceWithDiscount }} <span>BYN</span></div>
       <button class="icon-delete" @click.stop="onRemoveItemFromCart(cartItem)"></button>
     </div>
     <!-- {{ cartItemData }} -->
   </div>
 </template>
 
-<script>
+<script setup>
+  import axios from "@/utils/api";
+  import { ref, computed, onBeforeMount } from 'vue';
+  import { useOrdersStore } from "@/stores/orders";
 
-  import axios from "axios";
-  import {mapMutations, mapActions } from 'vuex'
+  const props = defineProps({
+    cartItem:  { type: Object,  default: null},
+  });
 
-export default {
-  name: 'HeaderCartItem',
+  const oredersStore = useOrdersStore();
 
-  props: {
-    cartItem: null,
-  },
+  const cartItemData = ref({});
 
-  data(){
-    return {
-        cartItemData: {},
-    }
-  },
+  const cardPriceWithDiscount = computed(() => {
+      return cartItemData.value.price_with_discount_and_tax && cartItemData.value.price_with_discount_and_tax !== cartItemData.value.price_with_tax 
+        ? cartItemData.value.price_with_discount_and_tax 
+        : cartItemData.value.price_with_tax;
+  });
 
-  computed: {
-    cardPriceWithDiscount(){
-        return this.cartItemData.price_with_discount_and_tax && this.cartItemData.price_with_discount_and_tax !== this.cartItemData.price_with_tax 
-          ? this.cartItemData.price_with_discount_and_tax 
-          : this.cartItemData.price_with_tax;
-    },
-  },
-
-  async mounted(){
+  onBeforeMount(async () => {
     try {
-        const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'products/' + this.cartItem.product.id);
-        this.cartItemData = response.data;
+        const response = await axios.get('products/' + props.cartItem.product.id);
+        cartItemData.value = response.data;
     } catch (e) {
         console.log(e);
-        // this.ADD_MESSAGE({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
     }
-  },
+  });
 
-  methods:{
-    ...mapMutations("notification", ["ADD_MESSAGE"]),
-    ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
-
-    onRemoveItemFromCart(itemData){
-      this.UPDATE_ITEMS_IN_CART({ itemData, type: 'remove' });
-    }
-  }
-
-}
+  const onRemoveItemFromCart = async (itemData) => {
+    await oredersStore.updateItemsInCart({ itemData, type: 'remove' });
+  };
 </script>
 
 <style lang="scss" scoped>

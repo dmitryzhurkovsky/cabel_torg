@@ -1,10 +1,12 @@
 <template>
-  <div class="main" @click.stop = "SET_SEARCH_STRING('')">
+  <div class="main" @click.stop = "queryStore.setSearchString('')">
     <SliderBanner />
-    <SliderRecomendation 
-      :isShowFilter = true
-      :isShowFollow = true
-    />
+    <!-- <ClientOnly> -->
+      <SliderRecomendation 
+        :isShowFilter = true
+        :isShowFollow = true
+      />
+    <!-- </ClientOnly> -->
     <AboutQuickCategory />
     <SliderNews />
     <SliderPartners />
@@ -12,34 +14,24 @@
   </div>
 </template>
 
-<script>
-import { mapActions, mapMutations } from 'vuex'
+<script setup>
+  import { useHead } from 'nuxt/app';
+  import { onMounted } from 'vue';
+  import { useQueryStore } from '@/stores/query';
+  import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
-definePageMeta({
-  // middleware: ["auth"],
-  name: 'Главная',
-});
+  const queryStore = useQueryStore();
+  const breadCrumbStore = useBreadCrumbStore();
 
-export default defineNuxtComponent({
-  name: 'Main',
-
-  head () {
-    return {
+  useHead({
       title: 'Кабельторг | Купить электротехническое оборудование в Беларуси',
       meta: [{
         name: 'CabelTorg',
         content: 'Интернет магазин КабельТорг'
       }]
-    }
-  },
+  });
 
-  methods:{
-    ...mapMutations("query", ["SET_SEARCH_STRING"]),
-    ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
-  },
-
-  mounted(){
-    this.CHANGE_BREADCRUMB(0);
-  }
-})
+  onMounted(() => {
+    breadCrumbStore.changeBreadCrumb(0);
+  });
 </script>

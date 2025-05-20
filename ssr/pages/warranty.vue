@@ -1,4 +1,5 @@
 <template>
+  <Breadcrumb/>
   <div class="structure app__content">
     <div class="structure__wrapper">
       <div class="structure__content _container">
@@ -20,35 +21,31 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import { useHead } from 'nuxt/app';
+  import { onMounted } from 'vue';
+  import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
-  definePageMeta({
-    // middleware: ["auth"],
-    name: 'Гарантия',
+  const router = useRouter();
+
+  const breadCrumbStore = useBreadCrumbStore();
+
+  useHead({
+    title: 'Кабельторг | Гарантия',
+    meta: [{
+      name: 'Гарантия',
+      content: 'Страница Гарантия'
+    }]
   });
 
-  export default defineNuxtComponent({
-    name: 'warranty',
-
-    head () {
-      return {
-        title: 'Кабельторг | Гарантия',
-        meta: [{
-          name: 'Гарантия',
-          content: 'Страница Гарантия'
-        }]
-      }
-    },
-
-    mounted(){
-      this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
-      this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
-        name: this.$router.currentRoute.value.meta.name,
-        path: this.$router.currentRoute.value.path,
-        type: "global",
-        class: ""
-      });
-    }
+  onMounted(() => {
+    breadCrumbStore.changeBreadCrumb(0);
+    breadCrumbStore.addBreadCrumb({
+      name: router.currentRoute.value.meta.name,
+      path: router.currentRoute.value.path,
+      type: "global",
+      class: ""
+    });
   })
 </script>
 

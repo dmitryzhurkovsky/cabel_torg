@@ -1,17 +1,17 @@
 <template>
     <div class="content__popup">
-        <h3 v-if = "POPUP_ADDITONAL_DATA?.cardID" class="mb-20">Запросить цену</h3>
+        <h3 v-if = "popUpAdditionalData?.cardID" class="mb-20">Запросить цену</h3>
         <h3 v-else class="mb-20">Заказать звонок</h3>
         <div class="">
             <div class="group">
                 <label class="label">Ваше имя</label>
-                <input type="text" class="input" :class="{ 'is-invalid': ERRORS.name }" v-model="name">
-                <div class="error-message" v-if="ERRORS.name"> {{ ERRORS.name }} </div>
+                <input type="text" class="input" :class="{ 'is-invalid': authErrors.name }" v-model="name">
+                <div class="error-message" v-if="authErrors.name"> {{ authErrors.name }} </div>
             </div>
             <div class="group">
                 <label class="label">Контактный телефон</label>
-                <input type="text" class="input" :class="{ 'is-invalid': ERRORS.phone }" v-model="phone">
-                <div class="error-message" v-if="ERRORS.phone"> {{ ERRORS.phone }} </div>
+                <input type="text" class="input" :class="{ 'is-invalid': authErrors.phone }" v-model="phone">
+                <div class="error-message" v-if="authErrors.phone"> {{ authErrors.phone }} </div>
             </div>
 
             <div class="group__row flex-center mt-20">
@@ -28,73 +28,62 @@
     </div>
 </template>
 
-<script>
+<script setup>
+  import { ref, onBeforeUnmount } from 'vue';
+  import { useAuthStore } from '@/stores/auth';
+  import { useHeaderStore  } from '@/stores/header';
 
-  import { mapActions, mapGetters, mapMutations } from "vuex";
+  const authStore = useAuthStore();
+  const headerStore = useHeaderStore();
 
-  export default {
-    name: "RequestCall",
+  const name = ref('');
+  const phone = ref('');
+  const isLoading = ref(false);
 
-    data: function() {
-      return {
-          name     : '',
-          phone: '',
-          isLoading: false,
-      }
-    },
+  const { authErrors } = storeToRefs(authStore);
+  const { requestCallType, popUpAdditionalData } = storeToRefs(headerStore);
 
-    computed: {
-      ...mapGetters("auth",["ERRORS"]),
-      ...mapGetters("header",["REQUEST_CALL_TYPE", "POPUP_ADDITONAL_DATA"]),
-    },
+  const cancelRequest = () => {
+    headerStore.setIsPopUpOpen(false)
+    headerStore.setPopUpAction('');
+    headerStore.setPopUpAdditionalData({});
+  };
 
-    async beforeUnmount() {
-      this.SET_ERRORS({});
-    },
+  const sendRequest = async () => {
+    ym(94113822, 'reachGoal', 'zapros-cena');
+    if (isLoading.value) return;
 
+    isLoading.value = true;
+    const errorsInData = {};
+    authStore.setErrors(errorsInData);
 
-    methods: {
-      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_MESSAGE", "SET_POPUP_ADDITIONAL_DATA"]),
-      ...mapActions("header", ["SEND_REQUEST_CALL",]),
-      ...mapMutations("auth", ["SET_ERRORS",]),
-
-      cancelRequest(){
-        this.SET_IS_POPUP_OPEN(false);
-        this.SET_POPUP_ACTION('');
-        this.SET_POPUP_ADDITIONAL_DATA({});
-      },
-
-      async sendRequest(){
-        if (this.isLoading) return;
-
-        this.isLoading = true;
-        const errorsInData = {};
-        this.SET_ERRORS(errorsInData);
-
-        if (!this.name) {
-          errorsInData.name = 'Укажите валидное имя'
-        }
-        if (!this.phone) {
-          errorsInData.phone = 'Укажите номер телефона'
-        }
-        if (Object.keys(errorsInData).length) {
-          this.SET_ERRORS(errorsInData);
-        } else {
-          const data = {
-              fullname: this.name,
-              phone_number: this.phone,
-              type: this.REQUEST_CALL_TYPE,
-              product_id: Number(this.POPUP_ADDITONAL_DATA.cardID),
-          };
-          // Тут посылаем на бэк запрос и ждем ответа, по результатам фомируем окно с ответом
-          await this.SEND_REQUEST_CALL(data);
-          this.SET_POPUP_ADDITIONAL_DATA({});
-          this.SET_REQUEST_CALL_TYPE('');
-        }
-        this.isLoading = false;
-      }
+    if (!name.value) {
+      errorsInData.name = 'Укажите валидное имя'
     }
+    if (!phone.value) {
+      errorsInData.phone = 'Укажите номер телефона'
+    }
+    if (Object.keys(errorsInData).length) {
+      authStore.setErrors(errorsInData);
+    } else {
+      const data = {
+          fullname: name.value,
+          phone_number: phone.value,
+          type: requestCallType.value,
+          product_id: Number(popUpAdditionalData.value.cardID),
+      };
+      // Тут посылаем на бэк запрос и ждем ответа, по результатам фомируем окно с ответом
+      await headerStore.sendRequestCall(data);
+      headerStore.setPopUpAdditionalData({});
+      headerStore.setRequestCallType('');
+    }
+    isLoading.value = false;
   }
+
+  onBeforeUnmount( async () => {
+    authStore.setErrors({});
+  });
+
 </script>
 
 <style lang="scss" scoped>

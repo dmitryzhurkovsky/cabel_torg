@@ -1,12 +1,12 @@
 <template>
-  <footer class="footer" v-if = "SETTINGS">
+  <footer class="footer" v-if = "settings">
       <div class="footer__wrapper">
           <div class="footer__content _container">
               <div class="footer__body">
                   <div class="footer__row flex-center">
                       <div class="footer__item">
                         <h3>Остались вопросы?</h3>
-                        <p>Напишите нам на почту <a class="_link" :href = "'mailto:' + SETTINGS.email">{{ SETTINGS.email }}</a>  или оставьте свой номер телефона и наш специалист вскоре свяжется с вами!</p>
+                        <p>Напишите нам на почту <a class="_link" :href = "'mailto:' + settings.email">{{ settings.email }}</a>  или оставьте свой номер телефона и наш специалист вскоре свяжется с вами!</p>
                       </div>
                       <button class="btn" @click.stop = "onMadeCall(true)">Заказать звонок</button>
                   </div>
@@ -17,18 +17,25 @@
                         <img src="@/assets/logo.svg" alt="CabelTorg">
                       </div>
                       <div class="footer__social social">
-                        <a :href = SETTINGS.instagram_url class="social__item icon-instagram" target="_blank"></a>
-                        <a :href = SETTINGS.vk_url class="social__item icon-vk" target="_blank"></a>
-                        <a :href = SETTINGS.facebook_url class="social__item icon-facebook" target="_blank"></a>
+                        <!-- <a :href = settings.instagram_url class="social__item icon-instagram" target="_blank"></a>
+                        <a :href = settings.vk_url class="social__item icon-vk" target="_blank"></a>
+                        <a :href = settings.facebook_url class="social__item icon-facebook" target="_blank"></a> -->
+
+                        <a :href = settings.telegram_url class="social__item" target="_blank">
+                         <img src="@/assets/svg/telegram.svg" alt="Telegram">
+                        </a>
+                        <a :href = settings.vk_url class="social__item" target="_blank">
+                         <img src="@/assets/svg/viber.svg" alt="Viber">
+                        </a>
                       </div>
                     </div>
                     <div class="footer__subrow">
                       <div class="footer__col">
                         <div class="footer__item flex-center icon-phone">
-                          <a class="_title" :href="'tel:' + String(SETTINGS.phone).replace(/ /g,'')">{{ SETTINGS.phone }}</a>
+                          <a class="_title" :href="'tel:' + String(settings.phone).replace(/ /g,'')">{{ settings.phone }}</a>
                         </div>
                         <div class="footer__item flex-center icon-place" 
-                          v-for = "address in SETTINGS.addresses" 
+                          v-for = "address in settings.addresses" 
                           :key ="address.id"
                         >
                           <div>
@@ -69,42 +76,42 @@
   </footer>
 </template>
 
-<script>
-import { mapGetters, mapMutations } from 'vuex';
+<script setup>
+  import { useNotificationsStore } from '@/stores/notifications';
+  import { useMainStore } from '@/stores/main';
+  import { useHeaderStore } from '@/stores/header';
+  import { useBreadCrumbStore } from '@/stores/breadcrumb';
+  
+  const route = useRoute();
+  const router = useRouter();
 
-export default {
-  name: "myFooter",
+  const notificationsStore = useNotificationsStore();
+  const mainStore = useMainStore();
+  const headerStore = useHeaderStore();
+  const breadCrumbStore = useBreadCrumbStore();
 
-  computed: {
-    ...mapGetters("main", ["SETTINGS"]),
-  },
+  const { settings } = storeToRefs(mainStore);
 
-  methods: {
-    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_REQUEST_CALL_TYPE"]),
-    ...mapMutations("notification", ["SET_IS_LOADING"]),
-
-    linkClick(URL, name){
-      if (this.$route.path != URL) {
-          this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
-          this.$store.commit('breadcrumb/ADD_BREADCRUMB', {name: name, path: URL, type: "global", class: ""});
-          this.$router.push(URL);
-      }
-    },
-
-    downLoadPrice(){
-      this.SET_IS_LOADING(true);
-      const _url = useRuntimeConfig().public.NUXT_APP_IMAGES + this.SETTINGS.price_document;
-      window.open(_url, '_blank');
-      this.SET_IS_LOADING(false);
-    },
-
-    onMadeCall(status){
-      this.SET_IS_POPUP_OPEN(status);
-      this.SET_REQUEST_CALL_TYPE('U');
-      this.SET_POPUP_ACTION('RequestCall');
+  const linkClick = (URL, name) => {
+    if (route.path != URL) {
+        breadCrumbStore.changeBreadCrumb(0);
+        breadCrumbStore.addBreadCrumb({name: name, path: URL, type: "global", class: ""});
+        router.push(URL);
     }
-  }
-}
+  };
+
+  const downLoadPrice = () => {
+    notificationsStore.setIsLoading(true);
+    const _url = useRuntimeConfig().public.NUXT_APP_IMAGES + settings.price_document;
+    window.open(_url, '_blank');
+    notificationsStore.setIsLoading(false);
+  };
+
+  const onMadeCall = (status) => {
+    headerStore.setIsPopUpOpen(status)
+    headerStore.setRequestCallType('U');
+    headerStore.setPopUpAction('RequestCall');
+  };
 </script>
 
 <style lang="scss">
@@ -300,7 +307,8 @@ export default {
 }
 &__social{
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap:20px;
   padding: 20px 0 20px 0;
   @media (max-width: $md2+px) {
     gap:10px;
@@ -318,11 +326,10 @@ export default {
 &__item{
 font-size: 30px;
 color: #423E48;
-opacity: 0.3;
+//opacity: 0.3;
 transition: all 0.3s ease;
 &:hover{
-  color: #4275D8;
-  opacity: 1;
+  opacity: 0.4;
 }
 //margin: 0 5px;
 &:last-child{

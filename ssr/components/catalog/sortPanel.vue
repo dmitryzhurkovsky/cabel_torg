@@ -6,7 +6,7 @@
           <circle cx="16.6619" cy="16.911" r="3.08088" fill="white" stroke="#423E48" stroke-width="1.25"/>
           <circle cx="8.33806" cy="7.70623" r="3.08088" transform="rotate(-180 8.33806 7.70623)" fill="white" stroke="#423E48" stroke-width="1.25"/>
         </svg>
-        <div class= "tools-sort__direction" v-if = "!SORT_DIRECTION" @click.prevent="changeDirection('-')">
+        <div class= "tools-sort__direction" v-if = "!sortDirection" @click.prevent="changeDirection('-')">
             <svg height="18px" width="24px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                  viewBox="0 0 512 512" xml:space="preserve">
                 <path style="fill:#423E48;" d="M214.275,97.913l18.454-18.452v409.272c0,12.853,10.42,23.273,23.273,23.273
@@ -24,7 +24,7 @@
                   C190.45,107.002,205.187,107.002,214.275,97.913z"/>
             </svg>
         </div>
-        <div class= "tools-sort__direction" v-if = "SORT_DIRECTION"  @click.prevent="changeDirection('')">
+        <div class= "tools-sort__direction" v-if = "sortDirection"  @click.prevent="changeDirection('')">
             <svg height="18px" width="24px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                  viewBox="0 0 512.003 512.003" xml:space="preserve">
                 <path style="fill:#3D6DEB;" d="M239.542,505.18c0.545,0.543,1.117,1.058,1.713,1.547c0.264,0.219,0.546,0.408,0.818,0.613
@@ -42,8 +42,8 @@
                 </svg>
         </div>
         <li 
-            :class="[item.type === SORT_TYPE ? 'tools-sort__item active' : 'tools-sort__item']"
-            v-for = "item in ALL_SORT_OF_PRODUCTS"
+            :class="[item.type === sortType ? 'tools-sort__item active' : 'tools-sort__item']"
+            v-for = "item in allSortsOfProduct"
             :key = "item.type"
         >
             <a href="" class="tools-sort_link" @click.prevent="changeSort(item.type)">{{ item.name }}</a>
@@ -51,80 +51,30 @@
     </ul>
 </template>
 
-<script>
+<script setup>
+  // import { defineEmits } from 'vue';
+  import { useQueryStore } from '@/stores/query';
 
-  import {mapGetters, mapMutations} from 'vuex'
+  const router = useRouter();
+  const queryStore = useQueryStore();
 
-  export default {
-    name: 'SortPanel',
+  const emit = defineEmits(['onSortChanged']);  
 
-    computed: {
-      ...mapGetters("query", ["LIMIT", "OFFSET", "VIEW_TYPE", "TYPE_OF_PRODUCT", "CATEGORY_ID", "MIN_PRICE", "MAX_PRICE", "SORT_TYPE", "SORT_DIRECTION", "ALL_SORT_OF_PRODUCTS"]),
-      ...mapGetters("catalog", ["CATALOG_SEARCH_STRING"]),
-      ...mapGetters("header", ["ALL_CATEGORIES"]),
-    },
+  const { sortType, sortDirection, allSortsOfProduct } = storeToRefs(queryStore);
 
-    methods: {
-      ...mapMutations("query", ["SET_SORT_TYPE", "SET_SORT_DIRECTION"]),
+  const changeSort = (type) => {
+    queryStore.setSortType(type);
+    const url = queryStore.createUrl();
+    router.push(url);
+    emit('onSortChanged');
+  };
 
-      getCatalogUrl(){
-        let url = "/catalog";
-        url = url + this.getLastPartOfUrl();
-        return url;
-      },
-
-      getCategoryUrl(id){
-        let url = "/category/";
-        if (id) {
-          const link = this.ALL_CATEGORIES.filter(item => item.id == id)[0].site_link
-          url = url + link;
-        }
-        url = url + this.getLastPartOfUrl();
-        return url;
-      },
-
-      getLastPartOfUrl(){
-        let url = '?';
-        if (this.OFFSET != 0 || this.LIMIT != 12) {
-          url = url + "offset=" + this.OFFSET + '&'
-          url = url + "limit=" + this.LIMIT + '&'
-        }
-        if (this.MIN_PRICE != 0 || this.MAX_PRICE != 80000) {
-          url = url + "actual_price_gte=" + this.MIN_PRICE + '&';
-          url = url + "actual_price_lte=" + this.MAX_PRICE + '&';
-        }
-        if (this.SORT_DIRECTION !== '-' || this.SORT_TYPE !== 'created_at') {
-          url = url + "ordering=" + this.SORT_DIRECTION + this.SORT_TYPE + '&'
-        }
-        if (this.TYPE_OF_PRODUCT !== 'all') {
-          url = url + "type_of_product=" + this.TYPE_OF_PRODUCT + '&'
-        }
-        console.log('url', url);
-        const lastSymbol = url.slice(-1)
-        if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
-        console.log('url', url);
-        return url;        
-      },
-
-      changeSort(type) {
-        this.SET_SORT_TYPE(type);
-        if (this.CATEGORY_ID) {
-          this.$router.push(this.getCategoryUrl(this.CATEGORY_ID));
-        } else {
-          this.$router.push(this.getCatalogUrl());
-        }
-      },
-
-      changeDirection(direction) {
-        this.SET_SORT_DIRECTION(direction);
-        if (this.CATEGORY_ID) {
-          this.$router.push(this.getCategoryUrl(this.CATEGORY_ID));
-        } else {
-          this.$router.push(this.getCatalogUrl());
-        }
-      },
-    },
-  }
+  const changeDirection = (direction) => {
+    queryStore.setSortDirection(direction);
+    const url = queryStore.createUrl();
+    router.push(url);
+    emit('onSortChanged');
+  };
 </script>
 
 

@@ -9,7 +9,7 @@
               <p>Организация СabelTorg занимается реализацией кабельной продукции на всей территории Республики Беларусь.</p>
               <p>Наличие складов в Минске и Бресте позволяет оперативно осуществлять доставку в любую точку страны. А при покупке от 300 бел. рублей, доставка будет для Вас бесплатной!</p>
               <p>Мы являемся первыми импортерами в РБ. Продукция почти всегда в наличии на складе или может быть пополнена за короткий промежуток времени.</p>
-              <a class="btn wholesale__btn" :href="'tel:' + String(SETTINGS.phone).replace(/ /g,'')">Позвонить</a>
+              <a class="btn wholesale__btn" :href="'tel:' + String(settings.phone).replace(/ /g,'')">Позвонить</a>
             </div>
 
             <div class="wholesale__item _block">
@@ -22,40 +22,35 @@
   </div>
 </template>
 
-<script>
-  import { mapGetters } from 'vuex';
+<script setup>
+  import { useHead } from 'nuxt/app';
+  import { onMounted } from 'vue';
+  import { useMainStore } from '@/stores/main';
+  import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
-  definePageMeta({
-    // middleware: ["auth"],
-    name: 'Оптовым клиентам',
+  const router = useRouter();
+
+  const mainStore = useMainStore();
+  const breadCrumbStore = useBreadCrumbStore();
+
+  const { settings } = storeToRefs(mainStore);
+
+  useHead({
+    title: 'Кабельторг | Оптовым клиентам',
+    meta: [{
+      name: 'Оптовым клиентам',
+      content: 'Страница Оптовым клиентам'
+    }]
   });
 
-  export default defineNuxtComponent({
-    name: 'Wholesale',
-
-    head () {
-      return {
-        title: 'Кабельторг | Оптовым клиентам',
-        meta: [{
-          name: 'Оптовым клиентам',
-          content: 'Страница Оптовым клиентам'
-        }]
-      }
-    },
-
-    computed: {
-      ...mapGetters("main", ["SETTINGS"]),
-    },
-
-    mounted(){
-      this.$store.dispatch("breadcrumb/CHANGE_BREADCRUMB", 0);
-      this.$store.commit('breadcrumb/ADD_BREADCRUMB', {
-        name: this.$router.currentRoute.value.meta.name,
-        path: this.$router.currentRoute.value.path,
-        type: "global",
-        class: ""
-      });
-    }
+  onMounted(() => {
+    breadCrumbStore.changeBreadCrumb(0);
+    breadCrumbStore.addBreadCrumb({
+      name: router.currentRoute.value.meta.name,
+      path: router.currentRoute.value.path,
+      type: "global",
+      class: ""
+    });
   })
 </script>
 
@@ -63,22 +58,6 @@
 
 .wholesale {
 
-  &__wrapper{
-
-
-  }
-  &__content{
-
-  }
-
-  &__body{
-
-
-  }
-  &__header{
-
-
-  }
   &__block{
     align-items: flex-start;
     padding: 20px 0 30px 0;
@@ -101,9 +80,6 @@
     button{
       margin-top: 40px;
     }
-
-
-
   }
   &__item{
     flex-basis: 50%;
@@ -123,12 +99,6 @@
     display: block;
     width: 200px;
   }
-
-
-
-
-
-
 }
 
 

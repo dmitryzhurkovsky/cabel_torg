@@ -1,6 +1,6 @@
 <template>
   <div class="header__wrapper">
-    <HeaderBurgerMenu v-if = "IS_CATALOG_OPEN && DEVICE_VIEW_TYPE > 1"/>
+    <HeaderBurgerMenu v-if = "isCatalogOpen && viewType > 1"/>
     <div v-else class="header__content _container">
         <div class="header__body ">
             <div  @click="toggleMenu()" class="burger-menu burger-menu--closed">
@@ -15,10 +15,10 @@
             <HeaderSearch/>
             <div class="header__info info-header flex-center">
                   <div class="info-header__item">
-                    <a :href="'tel:' + String(SETTINGS.phone).replace(/ /g,'')">{{ SETTINGS.phone }}</a>
+                    <a :href="'tel:' + String(settings.phone).replace(/ /g,'')">{{ settings.phone }}</a>
                   </div>
                   <div class="info-header__item">
-                    <a :href="'mailto:' + SETTINGS.email">{{ SETTINGS.email }}</a>
+                    <a :href="'mailto:' + settings.email">{{ settings.email }}</a>
                   </div>
             </div>
             <HeaderActions />
@@ -29,37 +29,33 @@
 
 </template>
 
-<script>
-  import {mapMutations, mapGetters} from 'vuex'
+<script setup>
+  import { useMainStore } from '@/stores/main';
+  import { useHeaderStore } from '@/stores/header';
+  import { useQueryStore } from '@/stores/query';
 
-  export default {
-    name: "HeaderBody",
+  const route = useRoute();
+  const router = useRouter();
+  const mainStore = useMainStore();
+  const headerStore = useHeaderStore();
+  const queryStore = useQueryStore();
 
-    computed: {
-      ...mapGetters("header", ["IS_CATALOG_OPEN", "TOP_CATEGORIES", "DEVICE_VIEW_TYPE"]),
-      ...mapGetters("main", ["SETTINGS"]),
-    },
+  const { settings } = storeToRefs(mainStore);
+  const { viewType, isCatalogOpen } = storeToRefs(headerStore);
 
-    methods:{
-      ...mapMutations("header", ["UPDATE_IS_CATALOG_OPEN"]),
-      ...mapMutations("query", ["SET_SEARCH_STRING"]),
+  const toggleMenu = () => {
+    headerStore.updateIsCatalogOpen(!isCatalogOpen.value);
+  };
 
-      toggleMenu() {
-        this.UPDATE_IS_CATALOG_OPEN(!this.IS_CATALOG_OPEN);
-      },
-
-      onOpenLink(link, event) {
-        event.stopImmediatePropagation();
-        event.preventDefault();
-        this.SET_SEARCH_STRING('');
-        if (this.$router.path != link) {
-            this.$router.push(link);
-        }
-      },
-      
+  const onOpenLink = (link, event) => {
+    event.stopImmediatePropagation();
+    event.preventDefault();
+    queryStore.setSearchString('');
+    if (route.path != link) {
+        router.push(link);
     }
-
-  }
+  };
+      
 </script>
 
 <style lang="scss" scoped>

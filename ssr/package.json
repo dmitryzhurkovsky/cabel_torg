@@ -11,14 +11,15 @@
   "devDependencies": {
     "@nuxtjs/google-analytics": "^2.4.0",
     "@types/node": "^18",
-    "nuxt": "^3.4.2",
+    "nuxt": "^3.16.2",
     "sass": "^1.62.0",
     "swiper": "^6.8.4"
   },
   "dependencies": {
+    "@pinia/nuxt": "^0.11.0",
     "axios": "^0.26.1",
+    "pinia": "^3.0.2",
     "vue-gtag": "^2.0.1",
-    "vuex": "^4.1.0",
     "yandex-metrika-module-nuxt3": "^1.5.3"
   }
 }

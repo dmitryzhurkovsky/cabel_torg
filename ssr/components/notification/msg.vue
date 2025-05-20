@@ -10,8 +10,8 @@
       </defs>
     </svg>
     <h3>Готово!</h3>
-    <p v-if = "POPUP_MESSAGE.main"> {{ POPUP_MESSAGE.main }}</p>
-    <p class="mt-20" v-if = "POPUP_MESSAGE.sub"><b v-if = "POPUP_MESSAGE.bolt">{{ POPUP_MESSAGE.bolt }} </b> {{ POPUP_MESSAGE.sub }}</p>
+    <p v-if = "popUpMessage.main"> {{ popUpMessage.main }}</p>
+    <p class="mt-20" v-if = "popUpMessage.sub"><b v-if = "popUpMessage.bolt">{{ popUpMessage.bolt }} </b> {{ popUpMessage.sub }}</p>
     <div class="group__row flex-center mt-20">
       <div class="center-text">
         <button @click = "returnToApp()" type="submit" class="btn black">Вернуться на сайт</button>
@@ -20,34 +20,27 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import { useAuthStore } from '@/stores/auth';
+  import { useHeaderStore } from '@/stores/header';
 
-  import { mapGetters, mapMutations } from "vuex";
+  const router = useRouter();
+  const authStore = useAuthStore();
+  const headerStore = useHeaderStore();
 
-  export default {
-    name: "PopUpMsg",
+  const { redirectAfterLogin } = storeToRefs(authStore);
+  const { popUpMessage } = headerStore;
 
-    computed: {
-      ...mapGetters("header", ["POPUP_MESSAGE"]),
-      ...mapGetters("auth", ["REDIRECT_AFTER_LOGIN"])
-    },
-
-    methods:{
-      ...mapMutations("header", ["SET_POPUP_MESSAGE", "SET_IS_POPUP_OPEN", "SET_POPUP_ACTION"]),
-      ...mapMutations("auth", ["SET_DESTINATION"]),
-
-      returnToApp(){
-        this.SET_POPUP_MESSAGE({});
-        this.SET_IS_POPUP_OPEN(false);
-        this.SET_POPUP_ACTION('');
-        if (this.REDIRECT_AFTER_LOGIN) {
-          const path = this.REDIRECT_AFTER_LOGIN;
-          this.SET_DESTINATION('');
-          this.$router.push(path);
-        }
-      }
-    },
-  }
+  const returnToApp = () => {
+    headerStore.setPopUpMessage({});
+    headerStore.setIsPopUpOpen(false);
+    headerStore.setPopUpAction('');
+    if (redirectAfterLogin.value) {
+      const path = redirectAfterLogin.value;
+      authStore.setDestination('');
+      router.push(path);
+    }
+  };
 </script>
 
 <style lang="scss" scoped>

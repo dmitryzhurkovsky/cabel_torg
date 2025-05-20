@@ -7,18 +7,14 @@
   </div>
 </template>
 
-<script>
+<script setup>
 
-export default {
-  name: 'IconQuantity',
+  const props = defineProps({
+    quantity:  { type: Number,  default: 0},
+    top:  { type: Number,  default: 10},
+    left:  { type: Number,  default: 10},
+  });
 
-  props: {
-    quantity:  0,
-    top: 10,
-    left: 10,
-  },
-
-}
 </script>
 
 <style lang="scss" scoped>

@@ -2,7 +2,10 @@
     <div v-if="cartItemData && quantity !==0">
       <div class="product__wrapper">
         <a class="product__img" :href="createHref(cartItemData.vendor_code)" @click.stop.prevent="openCardItem(cartItemData.vendor_code)">
-            <UiCardImage :images=cartItemData.images />
+            <UiCardImage 
+              :images=cartItemData.images 
+              :alt = "cartItemData.name + ' №1 - cabel-torg'"
+            />
         </a>
         <div class="product__info">
             <div class="product__article  _label mb-20">Артикул: <span>{{ cartItemData.vendor_code }}</span></div>
@@ -43,149 +46,141 @@
     </div>
 </template>
 
-<script>
-  import axios from "axios";
-  import {mapGetters, mapActions, mapMutations} from 'vuex'
+<script setup>
+  import axios from "@/utils/api";
+  import { ref, computed, watch, onMounted } from 'vue';
+  import { useNotificationsStore } from '@/stores/notifications';
+  import { useHeaderStore } from '@/stores/header';
+  import { useFavoritesStore } from '@/stores/favorites';
+  import { useOrdersStore } from "@/stores/orders";
 
-  export default {
-    name: 'CartItem',
-  
-    props: {
-      cartItem: null,
-      type: false,
-    },
+  const notificationsStore = useNotificationsStore();
+  const headerStore = useHeaderStore();
+  const favoritesStore = useFavoritesStore();
+  const oredersStore = useOrdersStore();
 
-    data(){
-      return {
-        cartItemData: {},
-        quantity: 0,
-        lastQuantity: 0,
-        isWish: false,
-      }
-    },
+  const router = useRouter()
 
-    async mounted(){
-      this.SET_IS_LOADING(true);
-      try {
-        const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'products/' + this.cartItem.product.id);
-        this.cartItemData = response.data;
-        this.quantity = this.cartItem.amount;
-        this.lastQuantity = this.cartItem.amount;
-      } catch (e) {
-        console.log(e);
-        this.ADD_MESSAGE({name: "Не возможно загрузить товары", icon: "error", id: '1'})
-      }
-      this.checkIsWish();
-      this.SET_IS_LOADING(false);
-    },
+  const props = defineProps({
+    cartItem  : { type: String,  default: null},
+    type      : { type: Boolean, default: false},
+  });
 
-    computed: {
-      ...mapGetters("favorite", ["FAVORITES"]),
-      ...mapGetters("header", ["DEVICE_VIEW_TYPE"]),
+  const cartItemData = ref({});
+  const quantity =ref(0);
+  const lastQuantity = ref(0);
+  const isWish = ref(false);
 
-      ChangeParameters(){
-        return JSON.stringify(this.FAVORITES);
-      },
+  const { viewType } = storeToRefs(headerStore);
+  const { favorites } = storeToRefs(favoritesStore);
 
-      cardPriceWithDiscount(){
-        return this.cartItemData.price_with_discount_and_tax && this.cartItemData.price_with_discount_and_tax !== this.cartItemData.price_with_tax 
-          ? this.cartItemData.price_with_discount_and_tax 
-          : this.cartItemData.price_with_tax;
-      },
-
-      isMobileVersion(){
-        if (this.DEVICE_VIEW_TYPE===1) return false
-        if (this.DEVICE_VIEW_TYPE===2) return true
-        if (this.DEVICE_VIEW_TYPE===3) return true
-      }
-    },
-
-    watch: {
-      ChangeParameters: async function() {
-        this.checkIsWish();
-      },
-    },
-
-    methods:{
-      ...mapMutations("notification", ["ADD_MESSAGE"]),
-      ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
-      ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-      ...mapMutations("notification", ["SET_IS_LOADING"]),
-
-      async onOperationWithCartItem(card, type) {
-        if (!this.quantity ) {
-            this.quantity = this.lastQuantity;
-        } else {
-          if (type === 'decrease' && this.quantity === 1) {
-            return;
-          };
-          if (this.quantity < 1) {
-            this.quantity = this.lastQuantity;
-          };
-          if (this.quantity >99) {
-            this.quantity = this.lastQuantity;
-            return;
-          };
-          const itemData = {
-            amount: 0,
-            product: {
-              id: card.id,
-              vendor_code: card.vendor_code,
-              name: card.name,
-              discont: card.discont,
-              price_with_discount_and_tax: card.price_with_discount_and_tax,
-              price_with_tax: card.price_with_tax,
-            },
-          };
-          if (type === 'set') {
-            itemData.amount = Number(this.quantity);
-          }
-          
-          await this.UPDATE_ITEMS_IN_CART({itemData, type});
-          if (type === 'increase') {
-            if (this.quantity < 99) {
-              this.quantity++;
-            }
-          } else if (type === 'decrease') {
-            this.quantity--;
-          };
-          this.lastQuantity = this.quantity; 
-        }
-      },
-
-      async onWishClick(card) {
-        const itemData = {
-          product: {
-            id: card.id,
-            vendor_code: card.vendor_code,
-            name: card.name,
-          },
-        }  
-        const type = this.isWish === false ? 'set' : 'remove';
-        await this.UPDATE_IS_WISH_IN_CART({ itemData, type });
-      },
-
-      checkIsWish() {
-        if (this.FAVORITES.length) {
-          const filtered = this.FAVORITES.filter(item => item.product.id === this.cartItemData.id);
-          this.isWish =  filtered.length ? true : false;
-        } else {
-          this.isWish = false;
-        }
-      },
-
-      openCardItem(id) {
-        console.log(id);
-        const URL = '/card_product/' + id;
-        this.$router.push(URL);
-      },
-
-      createHref(card) {
-        const URL = '/card_product/' + card;
-        return URL;
-      },
+  onMounted( async () => {
+    notificationsStore.setIsLoading(true);
+    try {
+      const response = await axios.get('products/' + props.cartItem.product.id);
+      cartItemData.value = response.data;
+      quantity.value = props.cartItem.amount;
+      lastQuantity.value = props.cartItem.amount;
+    } catch (e) {
+      console.log(e);
+      // notificationsStore.addMessage({ name: "Не возможно загрузить товары", icon: "error", id: '1' });
     }
-  }
+    checkIsWish();
+    notificationsStore.setIsLoading(false);
+  });
+
+  const ChangeParameters = computed(() => {
+    return JSON.stringify(favorites.value);
+  });
+
+  const cardPriceWithDiscount = computed(() => {
+    return cartItemData.value.price_with_discount_and_tax && cartItemData.value.price_with_discount_and_tax !== cartItemData.value.price_with_tax 
+      ? cartItemData.value.price_with_discount_and_tax 
+      : cartItemData.value.price_with_tax;
+  });
+
+  const isMobileVersion = computed(() => {
+    if (viewType.value === 1) return false
+    if (viewType.value === 2) return true
+    if (viewType.value === 3) return true
+  });
+
+  watch(ChangeParameters, () => {
+    checkIsWish();
+  });
+
+  const onOperationWithCartItem = async (card, type) => {
+    if (!quantity.value) {
+        quantity.value = lastQuantity.value;
+    } else {
+      if (type === 'decrease' && quantity.value === 1) {
+        return;
+      };
+      if (quantity.value < 1) {
+        quantity.value = lastQuantity.value;
+      };
+      if (quantity.value >99) {
+        quantity.value = lastQuantity.value;
+        return;
+      };
+      const itemData = {
+        amount: 0,
+        product: {
+          id: card.id,
+          vendor_code: card.vendor_code,
+          name: card.name,
+          discont: card.discont,
+          price_with_discount_and_tax: card.price_with_discount_and_tax,
+          price_with_tax: card.price_with_tax,
+        },
+      };
+      if (type === 'set') {
+        itemData.amount = Number(quantity.value);
+      }
+      
+      await oredersStore.updateItemsInCart({ itemData, type });
+      if (type === 'increase') {
+        if (quantity.value < 99) {
+          quantity.value++;
+        }
+      } else if (type === 'decrease') {
+        quantity.value--;
+      };
+      lastQuantity.value = quantity.value; 
+    }
+  };
+
+  const onWishClick = async (card) => {
+    const itemData = {
+      product: {
+        id: card.id,
+        vendor_code: card.vendor_code,
+        name: card.name,
+      },
+    }  
+    const type = isWish.value === false ? 'set' : 'remove';
+    await favoritesStore.updateIsWishInCart({ itemData, type });
+  };
+
+  const checkIsWish = () => {
+    if (favorites.value.length) {
+      const filtered = favorites.value.filter(item => item.product.id === cartItemData.value.id);
+      isWish.value =  filtered.length ? true : false;
+    } else {
+      isWish.value = false;
+    }
+  };
+
+  const openCardItem = (id) => {
+    // console.log(id);
+    const URL = '/card_product/' + id;
+    router.push(URL);
+  };
+
+  const createHref = (card) => {
+    const URL = '/card_product/' + card;
+    return URL;
+  };
 </script>
 
 <style scoped lang="scss">
@@ -242,17 +237,11 @@
       }
     }
 
-    &__article{
-
-    }
     &__title{
         font-size: 14px;
         line-height: 24px;
         text-decoration-line: underline;
         color: #423E48;
-    }
-    &__status{
-
     }
 
     &__wrapper{
@@ -305,10 +294,6 @@
             opacity: 0.4;
             margin-bottom: 5px;
             min-height: 20px;
-          &__row{
-
-
-            }
 
         }
         .current_price{

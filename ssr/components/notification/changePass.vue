@@ -4,13 +4,13 @@
       <div class="">
           <div class="group">
               <label class="label">Новый пароль</label>
-              <input type="password" class="input" :class="{ 'is-invalid': ERRORS.password }" v-model="password" autocomplete=off>
-              <div class="error-message" v-if="ERRORS.password"> {{ ERRORS.password }} </div>
+              <input type="password" class="input" :class="{ 'is-invalid': authErrors.password }" v-model="password" autocomplete=off>
+              <div class="error-message" v-if="authErrors.password"> {{ authErrors.password }} </div>
           </div>
           <div class="group">
               <label class="label">Введите новый пароль еще раз</label>
-              <input type="password" class="input" :class="{ 'is-invalid': ERRORS.confirm }" v-model="confirm" autocomplete=off>
-              <div class="error-message" v-if="ERRORS.password"> {{ ERRORS.confirm }} </div>
+              <input type="password" class="input" :class="{ 'is-invalid': authErrors.confirm }" v-model="confirm" autocomplete=off>
+              <div class="error-message" v-if="authErrors.password"> {{ authErrors.confirm }} </div>
           </div>
 
           <div class="group__row flex-center mt-20">
@@ -27,78 +27,64 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import { ref, onBeforeUnmount } from 'vue';
+  import { useAuthStore } from '@/stores/auth';
+  import { useHeaderStore } from '@/stores/header';
 
-import { mapActions, mapGetters, mapMutations } from "vuex";
+  const authStore = useAuthStore();
+  const headerStore = useHeaderStore();
 
-export default {
-  name: "ChangePass",
+  const password = ref(null);
+  const confirm = ref(null);
+  const isLoading = ref(false);
 
-  data: function() {
-    return {
-        password  : null,
-        confirm  : null,
-        isLoading: false,
+  const { authErrors } = storeToRefs(authStore);
+
+  const cancelRequest = () => {
+    headerStore.setIsPopUpOpen(false);
+    headerStore.setPopUpAction('');
+    headerStore.setPopUpAdditionalData({});
+  };
+
+  const sendRequest = async () => {
+    if (isLoading.value) return;
+
+    isLoading.value = true;
+    const errorsInData = {};
+    if (!password.value || password.value.length < 8) {
+      errorsInData.password = 'Пароль должен быть больше 8 символов'
     }
-  },
-
-  computed: {
-    ...mapGetters("auth",["ERRORS", "USER"]),
-    ...mapGetters("header",["REQUEST_CALL_TYPE", "POPUP_ADDITONAL_DATA"]),
-
-  },
-
-  async beforeUnmount() {
-    this.SET_ERRORS({});
-  },
-
-  methods: {
-    ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_MESSAGE", "SET_POPUP_ADDITIONAL_DATA"]),
-    ...mapMutations("auth", ["SET_ERRORS",]),
-    ...mapActions("auth", ["UPDATE_USER_REQUEST",]),
-
-    cancelRequest(){
-      this.SET_IS_POPUP_OPEN(false);
-      this.SET_POPUP_ACTION('');
-      this.SET_POPUP_ADDITIONAL_DATA({});
-    },
-
-    async sendRequest(){
-      if (this.isLoading) return;
-
-      this.isLoading = true;
-      const errorsInData = {};
-      if (!this.password || this.password.length < 8) {
-        errorsInData.password = 'Пароль должен быть больше 8 символов'
-      }
-      if (this.password !== this.confirm) {
-        errorsInData.confirm = 'Пароли не совпадают'
-      }
-      
-      if (Object.keys(errorsInData).length) {
-        this.SET_ERRORS(errorsInData);
-      } else {
-        const data = {
-          password: this.password,
-        };
-        await this.UPDATE_USER_REQUEST(data);
-        this.isLoading = false;
-      }
-      this.isLoading = false;
-
-      if (!Object.keys(errorsInData).length) {
-        this.SET_IS_POPUP_OPEN(true);
-        this.SET_POPUP_ACTION('ShowCompleteMsg');
-        const msg ={};
-            msg.main = 'Пароль изменен';
-            msg.bolt = '';
-            msg.sub = ''
-        this.SET_POPUP_MESSAGE(msg);
-      }
-      this.isLoading = false;
+    if (password.value !== confirm.value) {
+      errorsInData.confirm = 'Пароли не совпадают'
     }
+    
+    if (Object.keys(errorsInData).length) {
+      authStore.setErrors(errorsInData);
+    } else {
+      const data = {
+        password: password.value,
+      };
+      await authStore.updateUserRequest(data);
+      isLoading.value = false;
+    }
+    isLoading.value = false;
+
+    if (!Object.keys(errorsInData).length) {
+      headerStore.setIsPopUpOpen(true);
+      headerStore.setPopUpAction('ShowCompleteMsg');
+      const msg = {};
+          msg.main = 'Пароль изменен';
+          msg.bolt = '';
+          msg.sub = ''
+      headerStore.setPopUpMessage(msg);
+    }
+    isLoading.value = false;
   }
-}
+
+  onBeforeUnmount( async () => {
+    authStore.setErrors({});
+  });
 </script>
 
 <style lang="scss" scoped>

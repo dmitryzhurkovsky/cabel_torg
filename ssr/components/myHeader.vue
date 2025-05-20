@@ -7,31 +7,10 @@
 
 </template>
 
-<script>
-
-  export default {
-    name: "Header",
-  }
-
+<script setup>
 </script>
 
 <style lang="scss">
-.header {
-
-    &__wrapper {
-      //padding: 24px 0;
-      //background: #F8FAFF;
-
-    }
-
-    &__container {
-    }
-
-    &__main {
-    }
-
-}
-
 .topmenu{
 
   &__item{

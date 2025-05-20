@@ -1,5 +1,5 @@
 <template>
-  <a class="news__item" v-if = "data">
+  <a class="news__item">
     <div class="_block">
       <UiCardImage :images = "'/' + data.image"/>
     </div>
@@ -7,11 +7,11 @@
       <div class="news__date">{{ data.created_at.slice(0,10) }}</div>
       <div class="news__title"  >{{ data.title }}</div>
       <div class="news__description" v-html="data.preview_text"></div>
-      <a class="news__link _link" @click.prevent="onOpenOneNew(data.id)">Читать
+      <div class="news__link _link" @click.prevent="onOpenOneNew(data.id)">Читать
         <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M0.5 3.99935H15.0833M15.0833 3.99935L11.75 0.666016M15.0833 3.99935L11.75 7.33268" stroke="#4275D8"></path>
         </svg>
-      </a>
+      </div>
 
     </div>
   </a>

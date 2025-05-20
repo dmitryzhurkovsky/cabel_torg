@@ -2,8 +2,8 @@
   <div class="dropdown__content popup-cart">
     <h3 class="">Корзина</h3>
     <div class="popup-cart__summary">
-      <div class="div">Товары в корзине: <span>{{ TOTAL_ORDER_QUANTITY }}</span></div>
-      <div>на сумму <span>{{ TOTAL_ORDER_COST }}</span><span> BYN</span></div>
+      <div class="div">Товары в корзине: <span>{{ totalOrderQuantity }}</span></div>
+      <div>на сумму <span>{{ totalOrderCost }}</span><span> BYN</span></div>
     </div>
     <div class="popup-cart__list" v-if = "ItemsForShow.length">
       <HeaderCartItem 
@@ -26,47 +26,40 @@
 
 </template>
 
-<script>
+<script setup>
+  import { computed } from 'vue';
+  import { useOrdersStore } from '@/stores/orders';
+  import { useAuthStore } from '@/stores/auth';
 
-import { mapGetters, mapMutations } from 'vuex'
+  const router = useRouter();
+  const oredersStore = useOrdersStore();
+  const authStore = useAuthStore();
 
-export default {
-  name: "HeaderCart",
+  const { orders, totalOrderCost, totalOrderQuantity } = storeToRefs(oredersStore);
 
-  computed: {
-    ...mapGetters("order", ["ORDERS", "TOTAL_ORDER_COST", "TOTAL_ORDER_QUANTITY", "IS_APPLICATION_OPEN"]),
-    ...mapGetters("auth", ["USER", "REDIRECT_AFTER_LOGIN"]),
-
-    ItemsForShow(){
-      let result = [];
-      if (this.ORDERS.length > 5) {
-        result = this.ORDERS.slice(this.ORDERS.length - 4);
-      } else {
-        result = [...this.ORDERS];
-      }
-      return result;
-    },
-  },
-
-  methods: {
-    ...mapMutations("auth", ["SET_DESTINATION"]),
-    ...mapMutations("order", ["SET_IS_APPLICATION_OPEN"]),
-
-    onOpenCart() {
-      if (this.$router.path != '/cart') {
-          this.$router.push('/cart');
-      }
-    },
-
-    onPutApplication() {
-      this.SET_DESTINATION('');
-      this.SET_IS_APPLICATION_OPEN(true);
-      if (this.$router.path != '/cart') {
-          this.$router.push('/cart');
-      }
+  const ItemsForShow = computed(() => {
+    let result = [];
+    if (orders.value.length > 5) {
+      result = orders.value.slice(orders.value.length - 4);
+    } else {
+      result = [...orders.value];
     }
-  }
-}
+    return result;
+  });
+
+  const onOpenCart = () => {
+    if (router.path != '/cart') {
+      router.push('/cart');
+    }
+  };
+
+  const onPutApplication = () => {
+    authStore.setDestination('');
+    oredersStore.setIsApplicationOpen(true);
+    if (router.path != '/cart') {
+      router.push('/cart');
+    }
+  };
 </script>
 
 <style lang="scss">

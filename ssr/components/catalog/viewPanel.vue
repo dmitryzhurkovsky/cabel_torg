@@ -3,38 +3,29 @@
     <!-- list, grid -->
     <li class="tools-view__item">
       <a href="" 
-        :class="['table' === VIEW_TYPE ? 'tools-view__link icon-catalog-table active' : 'tools-view__link icon-catalog-table']"
+        :class="['table' === catalogViewType ? 'tools-view__link icon-catalog-table active' : 'tools-view__link icon-catalog-table']"
         @click.prevent="changeView('table')"
       ></a>
     </li>
     <li class="tools-view__item">
       <a href="" 
-        :class="['row' === VIEW_TYPE ? 'tools-view__link icon-catalog-row active' : 'tools-view__link icon-catalog-row']"
+        :class="['row' === catalogViewType ? 'tools-view__link icon-catalog-row active' : 'tools-view__link icon-catalog-row']"
         @click.prevent="changeView('row')"
       ></a>
     </li>
   </ul>
 </template>
 
-<script>
+<script setup>
+  import { useQueryStore } from '@/stores/query';
 
-  import {mapGetters, mapMutations} from 'vuex'
+  const queryStore = useQueryStore();
 
-  export default {
-    name: 'ViewPanel',
+  const { catalogViewType } = storeToRefs(queryStore);
 
-    computed: {
-      ...mapGetters("query", ["VIEW_TYPE"]),
-    },
-
-    methods: {
-      ...mapMutations("query", ["SET_VIEW_TYPE"]),
-
-      changeView(type) {
-        this.SET_VIEW_TYPE(type);
-      }
-    }
-}
+  const changeView = (type) => {
+    queryStore.setViewType(type);
+  }
 </script>
 
 <style lang="scss" scoped>

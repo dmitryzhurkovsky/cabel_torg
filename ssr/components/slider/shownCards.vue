@@ -5,7 +5,7 @@
         <div class="recomendation__body">
 
           <h3>Просмотренные товары</h3>
-          <div class="recomendation__block">
+          <div class="recomendation__block" v-if="ItemsForSlider.length">
               <swiper
                   :slides-per-view="slidersInFrame"
                   :space-between="15"
@@ -20,9 +20,9 @@
                     bulletClass: 'swiper-pagination-bullet',
                     bulletElement: 'span'
                   }"
-                  @swiper="onSwiper"
-                  @slideChange="onSlideChange"
               >
+                <!-- @swiper="onSwiper"
+                @slideChange="onSlideChange" -->
 
                 <swiper-slide v-for="item in ItemsForSlider" :key="item.id">
                   <CatalogCardItem
@@ -47,117 +47,105 @@
   </div>
 </template>
 
-<script>
-  import { mapGetters } from 'vuex'
+<script setup>
   import axios from 'axios';
+  import { ref, computed, watch, onBeforeMount, onMounted } from 'vue';
+  import { useNotificationsStore } from '@/stores/notifications';
+  import { useHeaderStore } from '@/stores/header';
+  import { useCatalogStore } from '@/stores/catalog';
 
-  import { Swiper } from "swiper/vue";
-  import { SwiperSlide } from "swiper/vue";
+  import { Swiper, SwiperSlide } from "swiper/vue";
   import SwiperCore, { Pagination, Navigation } from "swiper";
   import "swiper/swiper.min.css";
-  import "swiper/components/pagination/pagination.min.css"
+  import "swiper/components/pagination/pagination.min.css";
+
   SwiperCore.use([Navigation, Pagination]);
 
-  export default {
-    name: 'ShownCards',
+  const notificationsStore = useNotificationsStore();
+  const headreStore = useHeaderStore();
+  const catalogStore = useCatalogStore();
 
-    components:
-    {
-      Swiper, SwiperSlide,
-    },
+  const slidersInFrame = ref(4.5);
+  const sliderItems = ref([]);
+  const quantity = ref(0);
 
-    computed: {
-      ...mapGetters("header", ["WINDOW_WIDTH"]),
-      ...mapGetters("catalog", ["SHOWN_ITEMS_LIST"]),
+  const ChangeParameters = computed(() => {
+    return JSON.stringify(sliderItems.value) + String(slidersInFrame.value) + String(quantity.value);
+  });
 
-      ChangeParameters(){
-        return JSON.stringify(this.SHOWN_ITEMS_LIST) + String(this.slidersInFrame) + String(this.quantity);
-      },
+  const ItemsForSlider = computed(() => {
+    const sliders = sliderItems.value.slice(0, 10);
+    return sliders;
+  });
 
-      ItemsForSlider(){
-        const sliders = this.sliderItems.slice(0, 10);
-        return sliders;
+
+  watch(() => headreStore.windowWidth, () => {
+    setSlidersInFrame();
+  });
+
+  watch(() => ChangeParameters, async () => {
+    getShownItems();
+    setNewQuantity();
+  });
+
+  const setNewQuantity = () => {
+    const newQuantity = sliderItems.value.length > 9 ? 10 : sliderItems.value.length;
+    quantity.value = newQuantity;
+  };
+
+  const setSlidersInFrame = () => {
+    if (headreStore.windowWidth > 768.5) {
+      slidersInFrame.value = 4.5;
+    } else if (headreStore.windowWidth > 540.5) {
+      slidersInFrame.value = 3.5;
+    } else if (headreStore.windowWidth > 480.5) {
+      slidersInFrame.value = 2.5;
+    } else {
+      slidersInFrame.value = 1.5;
+    }
+  };
+
+  // const onOpenCatalog = () => {
+  //   router.push('/catalog');
+  // };
+
+  const getShownItems = async () => {
+    const fetchedItems = [];
+    catalogStore.shownItemslist.forEach(async item => {
+      try {
+        const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'products/' + item.id);
+        fetchedItems.push(response.data);
+        sliderItems.value = [...fetchedItems];
+      } catch (e) {
+        console.log(e);
+        notificationsStore.addMessage({ name: "Не возможно загрузить данные товара " + item.id, icon: "error", id: item.id });
       }
-    },
+    });
+    // setTimeout(() => window.scrollTo(0, 0), 0);
+  };
 
-    data: function(){
-      return{
-        slidersInFrame : 4.5,
-        sliderItems: [],
-        quantity: 0,
-      }
-    },
+  // const onSlideChange = () => {
+  //    console.log('slide change');
+  // };
+  // const nextSlide = () => {
+  //   swiper.slideNext();
+  // };
+  // const prevSlide = () => {
+  //   swiper.slidePrev();
+  // };
 
-    watch: {
-      WINDOW_WIDTH: function() {
-        this.setSlidersInFrame();
-      },
+  // const onSwiper = (swiper) => {
+  //   // swiper.value = swiper;
+  //   console.log('swiper:  ', swiper);
+  //   // console.log('swp:  ', swp);
+  // };
 
-      ChangeParameters: async function() {
-        this.getShownItems();
-        this.setNewQuantity();
-      },
-    },
+  onBeforeMount(async () => {
+    await getShownItems();
+    setNewQuantity();
+    setSlidersInFrame();
+  });
 
-    methods:{
-
-      setNewQuantity(){
-        const newQuantity = this.sliderItems.length > 9 ? 10 : this.sliderItems.length;
-        this.quantity = newQuantity;
-      },
-
-      setSlidersInFrame(){
-        if (this.WINDOW_WIDTH > 768.5) {
-          this.slidersInFrame = 4.5;
-        } else if (this.WINDOW_WIDTH > 540.5) {
-          this.slidersInFrame = 3.5;
-        } else if (this.WINDOW_WIDTH > 480.5) {
-          this.slidersInFrame = 2.5;
-        } else {
-          this.slidersInFrame = 1.5;
-        }
-      },
-
-      onOpenCatalog(){
-        this.$router.push('/catalog');
-      },
-
-      async getShownItems(){
-        const fetchedItems = [];
-        this.SHOWN_ITEMS_LIST.forEach(async item => {
-          try {
-            const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'products/' + item.id);
-            fetchedItems.push(response.data);
-            this.sliderItems = [...fetchedItems]
-          } catch (e) {
-            console.log(e);
-            this.ADD_MESSAGE({name: "Не возможно загрузить данные товара " + item.id, icon: "error", id: item.id})
-          }
-        });
-        // setTimeout(() => window.scrollTo(0, 0), 0);
-      },
-
-      onSlideChange() {
-        //  console.log('slide change');
-      },
-      nextSlide(){
-        this.swiper.slideNext();
-      },
-      prevSlide(){
-        this.swiper.slidePrev();
-      },
-      onSwiper(swiper){
-        this.swiper = swiper;
-      },
-    },
-
-    async beforeMount(){
-      await this.getShownItems();
-      this.setNewQuantity();
-      this.setSlidersInFrame();
-    },
-
-  }
 </script>
 
 <style scoped lang="scss">
@@ -216,13 +204,6 @@
 
   h3{
     margin-bottom: 20px;
-  }
-
-  &__wrapper{
-
-  }
-  &__content{
-
   }
 
   &__link{
@@ -292,12 +273,6 @@
       bottom: 0;
     }
   }
-
-
-  &__item{
-
-  }
-
 }
 
 </style>

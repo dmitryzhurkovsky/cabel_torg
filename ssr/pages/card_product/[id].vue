@@ -1,12 +1,7 @@
 <template>
+  <Breadcrumb/>
   <div class="app__content">
-    <Head>
-      <Title>
-        {{data?.name }} купить в Беларуси
-      </Title>
-      <Meta name="discription" :content="data?.name" />
-    </Head>
-    <div class="product" v-if="data && id">
+    <div class="product" v-if="cartItemData && cartItemId">
       <div class="product__wrapper">
         <div class="product__content _container">
           <div class="product__body">
@@ -14,14 +9,16 @@
                 <div class="product__main-img">
                   <div class="product__main-img--container">
                   <UiCardImage 
-                    :images=data.images 
+                    :images=cartItemData.images 
                     :num="imgNumber"
+                    :alt="cartItemData.name + ' №' + Number(imgNumber + 1) + ' - cabel-torg'"
                   />
                   </div>
                   <div class="product__swaper-img">
                     <!-- <ClientOnly> -->
                       <SliderCardImage 
-                        :allImages = data.images
+                        :allImages = cartItemData.images
+                        :altName = cartItemData.name
                         @changeSliderTo = "changeNumber"
                       />
                     <!-- </ClientOnly> -->
@@ -29,12 +26,12 @@
 
                 </div>
                 <div class="product__info">
-                    <div class="desc-product__title"> {{ data.name }}</div>
-                    <div class="desc-product__article  _label">Артикул: <span>{{ data.vendor_code }}</span></div>
-                    <div class="desc-product__status icon-done-color _label" v-if = "data.status === 'A'">В наличии</div>
-                    <div class="desc-product__status icon-on-the-way " v-if = "data.status === 'W'">В пути на склад</div>
-                    <div class="desc-product__status if_status_on_the_way _label" v-if = "data.status === 'W'">Доставим в течение 14 дней</div>
-                    <div class="desc-product__status icon-out-of-stock _label" v-if = "data.status === 'O'">Нет в наличии</div>
+                    <h1 class="desc-product__title"> {{ cartItemData.name }}</h1>
+                    <div class="desc-product__article  _label">Артикул: <span>{{ cartItemData.vendor_code }}</span></div>
+                    <div class="desc-product__status icon-done-color _label" v-if = "cartItemData.status === 'A'">В наличии</div>
+                    <div class="desc-product__status icon-on-the-way " v-if = "cartItemData.status === 'W'">В пути на склад</div>
+                    <div class="desc-product__status if_status_on_the_way _label" v-if = "cartItemData.status === 'W'">Доставим в течение 14 дней</div>
+                    <div class="desc-product__status icon-out-of-stock _label" v-if = "cartItemData.status === 'O'">Нет в наличии</div>
 
                     <div class="desc-product__count">
                         <span class="_label">Количество</span>
@@ -47,44 +44,44 @@
                         <div class="price__left">
                             <div class="_label">Ваша цена:</div>
                             <div class="current_price">
-                              <span v-if="!data.is_price_on_request && data.price_with_discount_and_tax && data.price_with_tax !== data.price_with_discount_and_tax"
+                              <span v-if="!cartItemData.is_price_on_request && cartItemData.price_with_discount_and_tax && cartItemData.price_with_tax !== cartItemData.price_with_discount_and_tax"
                                     class="old_price"
-                              >{{ data.price_with_tax }}
+                              >{{ cartItemData.price_with_tax }}
                               </span>
-                              <span v-if="!data.is_price_on_request"
-                                  :class="[data.price_with_discount_and_tax && data.price_with_discount_and_tax !== data.price_with_tax ? 'price_w_discount' : '']">
-                                  {{ data.price_with_discount_and_tax && data.price_with_discount_and_tax !== data.price_with_tax
-                                    ? data.price_with_discount_and_tax
-                                    : data.price_with_tax
+                              <span v-if="!cartItemData.is_price_on_request"
+                                  :class="[cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax ? 'price_w_discount' : '']">
+                                  {{ cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax
+                                    ? cartItemData.price_with_discount_and_tax
+                                    : cartItemData.price_with_tax
                                   }}
                               </span>
-                              <span v-if="data.is_price_on_request">Цена по запросу</span>
-                              <span class="current_price_item" v-if="!data.is_price_on_request">BYN/{{ data.base_unit.full_name }}</span>
+                              <span v-if="cartItemData.is_price_on_request">Цена по запросу</span>
+                              <span class="current_price_item" v-if="!cartItemData.is_price_on_request">BYN/{{ cartItemData.base_unit.full_name }}</span>
                             </div>
                         </div>
                         <div class="price__right">
                             <div class="retail_price">
                               <div>Первоначальная цена: </div>
-                              <div v-if="!data.is_price_on_request">
-                                  <span class="price__value"> {{ data.price_with_tax }}</span>
-                                  <span>BYN/{{ data.base_unit.full_name }}</span>
+                              <div v-if="!cartItemData.is_price_on_request">
+                                  <span class="price__value"> {{ cartItemData.price_with_tax }}</span>
+                                  <span>BYN/{{ cartItemData.base_unit.full_name }}</span>
                               </div>
-                              <div v-if="data.is_price_on_request">
+                              <div v-if="cartItemData.is_price_on_request">
                                   <span class="price__value"> Цена по запросу</span>
                               </div>
                             </div>
                             <div class="opt_price">
                                 <div>Цена со скидкой: </div>
-                                <div v-if="!data.is_price_on_request">
+                                <div v-if="!cartItemData.is_price_on_request">
                                     <span class="price__value">
-                                      {{ data.price_with_discount_and_tax && data.price_with_discount_and_tax !== data.price_with_tax
-                                        ? data.price_with_discount_and_tax
-                                        : data.price_with_tax
+                                      {{ cartItemData.price_with_discount_and_tax && cartItemData.price_with_discount_and_tax !== cartItemData.price_with_tax
+                                        ? cartItemData.price_with_discount_and_tax
+                                        : cartItemData.price_with_tax
                                       }}
                                     </span>
-                                    <span>BYN/{{ data.base_unit.full_name }}</span>
+                                    <span>BYN/{{ cartItemData.base_unit.full_name }}</span>
                                 </div>
-                                <div v-if="data.is_price_on_request">
+                                <div v-if="cartItemData.is_price_on_request">
                                     <span class="price__value">Цена по запросу</span>
                                 </div>
                             </div>
@@ -92,10 +89,10 @@
                     </div>
                     <div class="product__label">*Все цены указаны с учетом НДС.</div>
                     <div class="product__button flex-center">
-                        <div v-if="!data.is_price_on_request && quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(data, 'set')">В корзине</div>
-                        <div v-if="!data.is_price_on_request && quantity === 0 && data.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(data, 'set')">В корзину</div>
-                        <div v-if="!data.is_price_on_request && quantity === 0 && data.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, data.id)">Узнать о поступлении</div>
-                        <div v-if="data.is_price_on_request" class="btn empty_black popup-btn" @click.stop="onCreatePopUpRequestPrice(true, data.id)">Запросить цену</div>
+                        <div v-if="!cartItemData.is_price_on_request && quantity !== 0" class="btn empty_black" @click.stop="onOperationWithCartItem(cartItemData, 'set')">В корзине</div>
+                        <div v-if="!cartItemData.is_price_on_request && quantity === 0 && cartItemData.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(cartItemData, 'set')">В корзину</div>
+                        <div v-if="!cartItemData.is_price_on_request && quantity === 0 && cartItemData.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, cartItemData.id)">Узнать о поступлении</div>
+                        <div v-if="cartItemData.is_price_on_request" class="btn empty_black popup-btn" @click.stop="onCreatePopUpRequestPrice(true, cartItemData.id)">Запросить цену</div>
 
                         <div
                                 @click.stop="onWishClick()"
@@ -116,18 +113,18 @@
         </div>
       </div>
     </div>
-    <div v-if="data && id" class="tab__description _container">
+    <div v-if="cartItemData && cartItemId" class="tab__description _container">
       <div class="tab ">
           <button :class="[infoBlock === 0 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(0)">Описание</button>
           <button :class="[infoBlock === 1 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(1)">Характеристики</button>
           <button :class="[infoBlock === 2 ? 'tablinks active' : 'tablinks']" @click="onChangeInfoBlock(2)">Документация</button>
       </div>
       <div v-if="infoBlock === 0" class="tabcontent">
-          <p v-html = "rebuildText(data.description)"></p>
+          <p v-html = "rebuildText(cartItemData.description)"></p>
       </div>
       <div v-if="infoBlock === 1" class="tabcontent">
           <div class="tabcontent__row table__items"
-            v-for = "option in data.attributes"
+            v-for = "option in cartItemData.attributes"
             :key = option.id
           >
             <div class="table__item" v-if = "option?.name?.payload !== 'Товар под заказ'">
@@ -138,7 +135,7 @@
       </div>
       <div v-if="infoBlock === 2" class="tabcontent">
 
-          <a v-if="data.document_url" class="table__link" @click="onOpenDocumentation">
+          <a v-if="cartItemData.document_url" class="table__link" @click="onOpenDocumentation">
             <img src="@/assets/dok-ikon.png" alt="document">
             Документ</a>
       </div>
@@ -156,7 +153,6 @@
 
 
     </div>
-
     <SliderRecomendation
       :isShowFilter = false
       :isShowFollow = false
@@ -168,30 +164,45 @@
 </template>
 
 <script setup>
-  import axios from 'axios';
-  import store from '@/store'
-  const route = useRoute()
-  const router = useRouter()
-  const { getters } = store
-  const cartItemData = ref(null)
-  const isWish = ref(false)
-  const quantity = ref(0)
-  const quantityLocal = ref(1)
-  const infoBlock = ref(0)
-  const id = ref(null)
-  const imgNumber = ref(0)
+  import { useCatalogStore } from '@/stores/catalog';
+  import { useNotificationsStore } from '@/stores/notifications';
+  import { useQueryStore } from '@/stores/query';
+  import { useHeaderStore } from '@/stores/header';
+  import { useBreadCrumbStore } from '@/stores/breadcrumb';
+  import { useFavoritesStore } from '@/stores/favorites';
+  import { useOrdersStore } from '@/stores/orders';
 
-  watch (() => JSON.stringify(getters['order/ORDERS']), 
-  () => {
+  const route = useRoute();
+  const router = useRouter();
+
+  const catalogStore = useCatalogStore();
+  const notificationsStore = useNotificationsStore();
+  const queryStore = useQueryStore();
+  const headerStore = useHeaderStore();
+  const breadCrumbStore = useBreadCrumbStore();
+  const favoritesStore = useFavoritesStore();
+  const oredersStore = useOrdersStore();
+
+  const { cartItemId, cartItemData } = storeToRefs(catalogStore);
+  const { categories } = storeToRefs(headerStore);
+  const { favorites } = storeToRefs(favoritesStore);
+  const { orders } = storeToRefs(oredersStore);
+
+  const isWish = ref(false);
+  const quantity = ref(0);
+  const quantityLocal = ref(1);
+  const infoBlock = ref(0);
+  const imgNumber = ref(0);
+
+  watch (orders, () => {
     countQuantity();
     checkIsWish();
-  })
+  });
 
-  watch (() => JSON.stringify(getters['favorite/FAVORITES']), 
-  () => {
+  watch (favorites, () => {
     countQuantity();
     checkIsWish();
-  })
+  });
 
   const rebuildText = (text) => {
     let newText = ''
@@ -236,40 +247,41 @@
       itemData.amount = Number(quantityLocal.value);
     }
 
-    await store.dispatch('order/UPDATE_ITEMS_IN_CART', {itemData, type})
+    await oredersStore.updateItemsInCart({ itemData, type });
     if (quantityLocal.value === 0) quantityLocal.value = 1
   }
 
   const onCreatePopUp = (status, cardID) => {
-    store.commit('header/SET_IS_POPUP_OPEN', status)
-    store.commit('header/SET_POPUP_ACTION', 'RequestCall')
-    store.commit('header/SET_REQUEST_CALL_TYPE', 'GR')
-    store.commit('header/SET_POPUP_ADDITIONAL_DATA', {cardID})
+    headerStore.setIsPopUpOpen(status);
+    headerStore.setPopUpAction('RequestCall');
+    headerStore.setRequestCallType('GR');
+    headerStore.setPopUpAdditionalData({cardID});
   }
 
   const onCreatePopUpRequestPrice = (status, cardID) => {
-    store.commit('header/SET_IS_POPUP_OPEN', status)
-    store.commit('header/SET_POPUP_ACTION', 'RequestPrice')
-    store.commit('header/SET_REQUEST_CALL_TYPE', 'GR')
-    store.commit('header/SET_POPUP_ADDITIONAL_DATA', {cardID})
+    headerStore.setIsPopUpOpen(status);
+    headerStore.setPopUpAction('RequestPrice');
+    headerStore.setRequestCallType('GR');
+    headerStore.setPopUpAdditionalData({cardID});
   }
 
   const onWishClick = async () => {
     const itemData = {
       product: {
-        id: data.value.id,
-        vendor_code: data.value.vendor_code,
-        name: data.value.name,
+        id: cartItemData.value.id,
+        vendor_code: cartItemData.value.vendor_code,
+        name: cartItemData.value.name,
       },
     }  
-    const type = isWish.value === false ? 'set' : 'remove'
-    await store.dispatch('favorite/UPDATE_IS_WISH_IN_CART',{ itemData, type })
+    const type = isWish.value === false ? 'set' : 'remove';
+
+    await favoritesStore.updateIsWishInCart({ itemData, type });
     checkIsWish()
   }
 
   const countQuantity = () => {
-    if (getters['order/ORDERS'].length) {
-      const filtered = getters['order/ORDERS'].filter(item => String(item.product.vendor_code) === String(id.value))
+    if (orders.value.length) {
+      const filtered = orders.value.filter(item => String(item.product.vendor_code) === String(cartItemId.value))
       quantity.value =  filtered.length ? filtered[0].amount : 0
     } else {
       quantity.value = 0
@@ -278,8 +290,8 @@
   }
 
   const checkIsWish = () => {
-    if (getters['favorite/FAVORITES'].length) {
-      const filtered = getters['favorite/FAVORITES'].filter(item => String(item.product.vendor_code) === String(id.value))
+    if (favorites.value.length) {
+      const filtered = favorites.value.filter(item => String(item.product.vendor_code) === String(cartItemId.value))
       isWish.value =  filtered.length ? true : false
     } else {
       isWish.value = false
@@ -288,20 +300,20 @@
 
   const onChangeInfoBlock = (num) => {
     infoBlock.value = num
-    console.log(data.value.document_url);
+    // console.log(cartItemData.value.document_url);
   }
 
   const onOpenDocumentation = () => {
-    // console.log(data.value.document_url)
-    if (data.value.document_url) {
-      const _url = useRuntimeConfig().public.NUXT_APP_DOCUMENTS + data.value.document_url
+    // console.log(cartItemData.value.document_url)
+    if (cartItemData.value.document_url) {
+      const _url = useRuntimeConfig().public.NUXT_APP_DOCUMENTS + cartItemData.value.document_url
       // console.log(useRuntimeConfig().public, _url);
       window.open(_url, '_blank');
     } 
   }
 
   const updateShowItems = (id) => {
-    if (!id && data.value) return
+    if (!id && cartItemData.value) return
     let itemsInLocalStorage = []
     const isItemsFromLocalStore = localStorage.getItem('shownCards')
     if (isItemsFromLocalStore) itemsInLocalStorage = JSON.parse(isItemsFromLocalStore)
@@ -314,31 +326,23 @@
       itemsInLocalStorage = [...sorted]
     }
     localStorage.setItem("shownCards", JSON.stringify(itemsInLocalStorage))
-    store.commit('catalog/SET_SHOWN_ITEMS_LIST', itemsInLocalStorage)
+    catalogStore.setShownItemsList(itemsInLocalStorage)
   }
 
   const onGetCartData = async () => {
-    store.commit('query/SET_SEARCH_STRING', '')
-    try {
-      const url = useRuntimeConfig().public.NUXT_APP_API_URL + 'products/' + id.value
-      const goodUrl = encodeURI(url);  
-      const response = await axios.get(goodUrl)
-      cartItemData.value = response.data
-    } catch (e) {
-      console.log( e)
-      navigateTo('/404');
-      // store.commit('notification/ADD_MESSAGE', {name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'})
-    }
+    queryStore.setSearchString('');
+    await catalogStore.getCartItemData(cartItemId.value);
     if (cartItemData.value) {
-      if (typeof window !== 'undefined') updateShowItems(id.value)
+      if (typeof window !== 'undefined') updateShowItems(cartItemId.value)
       countQuantity()
       checkIsWish()
-      // store.dispatch('breadcrumb/CHANGE_BREADCRUMB', 0)
+      breadCrumbStore.changeBreadCrumb(0);
+      setBreabcrumbs();
     }
   }
 
   const setBreabcrumbs = async () => {
-      store.dispatch('breadcrumb/CHANGE_BREADCRUMB', 0)
+      breadCrumbStore.changeBreadCrumb(0);
       const mainBreadCrumb = {
       name: 'Каталог',
       path: '/catalog',
@@ -347,19 +351,19 @@
       category: 1,
       level: 'root',
     }
-    store.commit('breadcrumb/ADD_BREADCRUMB', mainBreadCrumb)
+    breadCrumbStore.addBreadCrumb(mainBreadCrumb)
     // console.log(cartItemData.value.category);
     const chein = []
     const category = cartItemData.value.category
     chein.push(category)
-    if (!getters['header/ALL_CATEGORIES'].length) {
-      await store.dispatch('header/GET_CATEGORIES')
+    if (!categories.value.length) {
+      await headerStore.getCategories();
     }
     if (category.parent_category_id) {
-      const category1 = getters['header/ALL_CATEGORIES'].filter(item => item.id === category.parent_category_id)[0]
+      const category1 = categories.value.filter(item => item.id === category.parent_category_id)[0]
       chein.push(category1)
       if (category1.parent_category_id) {
-        const category2 = getters['header/ALL_CATEGORIES'].filter(item => item.id === category1.parent_category_id )[0]
+        const category2 = categories.value.filter(item => item.id === category1.parent_category_id )[0]
         chein.push(category2)
       }
     }
@@ -375,10 +379,10 @@
         category: chein[chein.length - 1 - i].id,
         level: level[chein.length - 1 - i],
       }
-      store.commit('breadcrumb/ADD_BREADCRUMB', currBreadCrumb)
+      breadCrumbStore.addBreadCrumb(currBreadCrumb)
     }
 
-    store.commit('breadcrumb/ADD_BREADCRUMB', {
+    breadCrumbStore.addBreadCrumb({
       name: cartItemData.value.name,
       path: router.currentRoute.value.path,
       type: "global",
@@ -387,55 +391,32 @@
     
   }
 
-  // onBeforeUpdate(async () => {
-  // //   isRenderFinish.value = false
-  // //   console.log('Update product');
-  //   if (id.value !== route.params.id) {
-  // //     console.log('Update id changed');
-  //     id.value = route.params.id
-  //     await onGetCartData()
-  //     data.value = cartItemData.value
-  //     updateShowItems(route.params.id)
-  //     setBreabcrumbs()
-  //   }
-  // //   isRenderFinish.value = true
-  // //   console.log('After update ', isRenderFinish);
-  // })
-
-  onBeforeMount(async () => {
-    // console.log('Mount product ' ,id.value, route.params.id);
-    // if (id.value !== route.params.id) {
-      // console.log('Mount id changed');
-      id.value = route.params.id
-      await onGetCartData()
-      data.value = cartItemData.value
-      updateShowItems(route.params.id)
-      setBreabcrumbs()
-    // }  
-    // isRenderFinish.value = true
-    // console.log('After mount ', isRenderFinish);
-  })
-
-  const { data } = await useAsyncData(
-    'cartData', 
+  await useAsyncData(
     async () => {
-      id.value = route.params.id
-      await onGetCartData()
-      return cartItemData.value
-      
+      catalogStore.setCartItemId(route.params.id);
+      if (cartItemId.value) {
+        await onGetCartData();
+        if (!cartItemData.value) router.push('/404');
+      } else {
+        router.push('/404');
+      }
+      return cartItemData.value;
     }, {
       watch: [route]
     }
-  )
+  );
 
+  useHead({
+    title: cartItemData?.value?.name + ' купить в Минске, цена ' + cartItemData?.value?.price_with_discount_and_tax,
+    meta: [
+      { name: 'description', content: 'Предлагаем купить ' + cartItemData?.value?.name + ' в Минске по доступным ценам. Доставка по РБ, большой выбор.' },
+    ],
+  });
 </script>
 
 <style scoped lang="scss">
 
 .product {
-
-  &__wrapper{}
-  &__content{}
 
   &__body{
     .if_status_on_the_way{

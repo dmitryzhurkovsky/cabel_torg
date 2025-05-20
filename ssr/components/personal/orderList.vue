@@ -2,10 +2,10 @@
   <div>
     <div class="content-block__title">История покупок</div>
     <div class="order__list"
-        v-if = "ORDER_DOCUMENTS.length"
+        v-if = "orderDocuments.length"
     >
       <PersonalOrderItem
-          v-for   = "item in ORDER_DOCUMENTS"
+          v-for   = "item in orderDocuments"
           :key    = "item.id"
           :card   = item
       />
@@ -13,39 +13,30 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import { onMounted, onBeforeUnmount } from 'vue';
+  import { useNotificationsStore } from '@/stores/notifications';
+  import { useOrdersStore } from '@/stores/orders';
 
-import { mapGetters, mapActions, mapMutations } from 'vuex';
+  const notificationsStore = useNotificationsStore();
+  const oredersStore = useOrdersStore();
 
-export default {
-  name: 'OrderList',
+  const { orderDocuments } = storeToRefs(oredersStore);
+  
+  const getData = async () => {
+    notificationsStore.setIsLoading(true);
+    await oredersStore.getOrdersDocuments();
+    notificationsStore.setIsLoading(false);
+  };
 
-  computed:{
-    ...mapGetters("order", ["ORDER_DOCUMENTS", "ORDER_DELIVERY_TYPES"]),
+  onMounted( async () =>{
+    await getData();
+  });
 
-  },
+  onBeforeUnmount(() => {
+    oredersStore.clearOrderDocuments();
+  });
 
-  methods:{
-    ...mapMutations("order", ["CLEAR_ORDER_DOCUMENTS"]),
-    ...mapActions("order", ["GET_ORDER_DOCUMENTS"]),
-    ...mapMutations("notification", ["SET_IS_LOADING"]),
-
-    async getData(){
-      this.SET_IS_LOADING(true);
-      this.GET_ORDER_DOCUMENTS();
-      this.SET_IS_LOADING(false);
-    }
-  },
-
-  async mounted() {
-    await this.getData();
-  },
-
-  beforeUnmount() {
-    this.CLEAR_ORDER_DOCUMENTS();
-  }
-
-}
 </script>
 
 <style lang="scss" scoped>

@@ -1,7 +1,7 @@
 <template>
-    <div v-if = "Pages" class="content-block__pagination">
+    <div v-if = "Pages.length" class="content-block__pagination">
       <a 
-          :class="[item.pageNumber === getters['catalog/ACTIVE_PAGE'] ? 'pagination_link active' : 'pagination_link']"
+          :class="[item.pageNumber === activePage ? 'pagination_link active' : 'pagination_link']"
           v-for = "item in Pages"
           :key = "item.name"
           @click.prevent="onChangePage(item)"
@@ -13,29 +13,38 @@
 </template>
 
 <script setup>
-  import store from '@/store'
-  const { getters } = store
-  const router = useRouter()
+  import { computed } from 'vue';
+  import { useCatalogStore } from '@/stores/catalog';
+  import { useQueryStore } from '@/stores/query';
+  import { useHeaderStore } from '@/stores/header';
+
+  const router = useRouter();
+
+  const queryStore = useQueryStore();
+  const catalogStore = useCatalogStore();
+  const headerSore = useHeaderStore();
+
+  const { categoryId, typeOfProduct, limit, sortType, sortDirection, minPrice, maxPrice, searchString } = storeToRefs(queryStore);
+  const { activePage, totalPages } = storeToRefs(catalogStore);
+  const { categories } = storeToRefs(headerSore);
 
   const Pages = computed(() => {
-    // console.log('Pages ', getters['catalog/ACTIVE_PAGE'], '  ',  getters['catalog/TOTAL_PAGES']);
+    // console.log('Pages ', activePage.value, '  ',  totalPages.value);
     let result = []
-    const activePage = getters['catalog/ACTIVE_PAGE']
-    const totalPages = getters['catalog/TOTAL_PAGES']
-    const firstLink = { name: '<', pageNumber: activePage - 1, isAvailable: activePage !== 1 }
+    const firstLink = { name: '<', pageNumber: activePage.value - 1, isAvailable: activePage.value !== 1 }
 
     result.push(firstLink)
-    if (totalPages > 7) {
+    if (totalPages.value > 7) {
       // console.log('', totalPages, activePage);
-      let left = activePage;
-      let right = totalPages - activePage;
+      let left = activePage.value;
+      let right = totalPages.value - activePage.value;
       
       if (left < 4) {
         for (let i = 1; i < left; i++){
           const curLink = {
             name: i,
             pageNumber: i,
-            isAvailable: activePage !== i
+            isAvailable: activePage.value !== i
           }
           result.push(curLink)
         }
@@ -43,26 +52,26 @@
         const firstLink = {
           name: 1,
           pageNumber: 1,
-          isAvailable: activePage !== 1
+          isAvailable: activePage.value !== 1
         }
         result.push(firstLink)
         const dots = {
           name: '...',
-          pageNumber: activePage - 2,
+          pageNumber: activePage.value - 2,
           isAvailable: true
         }
         result.push(dots)
         const curLink = {
-          name: activePage - 1,
-          pageNumber: activePage - 1,
+          name: activePage.value - 1,
+          pageNumber: activePage.value - 1,
           isAvailable: true
         }
         result.push(curLink)
       }
 
       const center = {
-        name: activePage,
-        pageNumber: activePage,
+        name: activePage.value,
+        pageNumber: activePage.value,
         isAvailable: false
       }
       result.push(center)
@@ -70,54 +79,54 @@
 
       if (right > 4) {
         const firstLink = {
-          name: activePage + 1,
-          pageNumber: activePage + 1,
+          name: activePage.value + 1,
+          pageNumber: activePage.value + 1,
           isAvailable: true
         }
         result.push(firstLink)
         const dots = {
           name: '...',
-          pageNumber: activePage + 2,
+          pageNumber: activePage.value + 2,
           isAvailable: true
         }
         result.push(dots)
         const curLink = {
-          name: totalPages,
-          pageNumber: totalPages,
+          name: totalPages.value,
+          pageNumber: totalPages.value,
           isAvailable: true
         }
         result.push(curLink)
       } else {
-        for (let i = activePage + 1; i <= right ; i++){
+        for (let i = activePage.value + 1; i <= right ; i++){
           const curLink = {
             name: i,
             pageNumber: i,
-            isAvailable: activePage !== i
+            isAvailable: activePage.value !== i
           }
           result.push(curLink)
         }
       }
 
     } else {
-      for (let i = 1; i <= totalPages; i++) {
+      for (let i = 1; i <= totalPages.value; i++) {
         const curLink = {
           name: i,
           pageNumber: i,
-          isAvailable: activePage !== i
+          isAvailable: activePage.value !== i
         }
         result.push(curLink)
       }
     }
-    const lastLink = { name: '>', pageNumber: activePage + 1, isAvailable: activePage < totalPages }
+    const lastLink = { name: '>', pageNumber: activePage.value + 1, isAvailable: activePage.value < totalPages.value }
     result.push(lastLink)
     return result
   })
 
   const createHref = (item) =>{
     let URL = ''
-    const newOffset = (item.pageNumber === 0 ? 0 : (item.pageNumber - 1)) * getters['query/LIMIT']
-    if (getters['query/CATEGORY_ID']) {
-      URL = getCategoryUrl(getters['query/CATEGORY_ID'], newOffset)
+    const newOffset = (item.pageNumber === 0 ? 0 : (item.pageNumber - 1)) * limit.value
+    if (categoryId.value) {
+      URL = getCategoryUrl(categoryId.value, newOffset)
     } else {
       URL = getCatalogUrl(newOffset)
     }
@@ -133,7 +142,7 @@
   const getCategoryUrl = (id, offset) => {
     let url = "/category/"
     if (id) {
-      const link = getters['header/ALL_CATEGORIES'].filter(item => item.id == id)[0].site_link
+      const link = categories.value.filter(item => item.id == id)[0].site_link
       url = url + link;
     }
     url = url + getLastPartOfUrl(offset)
@@ -141,23 +150,23 @@
   }
 
   const getLastPartOfUrl = (offset) => {
-    // console.log(getters['query/MIN_PRICE'], '   ', getters['query/MAX_PRICE']);
+    // console.log(minPrice.value, '   ', maxPrice.value);
     let url = '?';
-    if (offset != 0 || getters['query/LIMIT'] != 12) {
+    if (offset != 0 || limit.value != 12) {
       url = url + "offset=" + offset + '&'
-      url = url + "limit=" + getters['query/LIMIT'] + '&'
+      url = url + "limit=" + limit.value + '&'
     }
-    if (getters['query/MIN_PRICE'] != 0 || getters['query/MAX_PRICE'] != 80000) {
-      url = url + "actual_price_gte=" + getters['query/MIN_PRICE'] + '&';
-      url = url + "actual_price_lte=" + getters['query/MAX_PRICE'] + '&';
+    if (minPrice.value != 0 || maxPrice.value != 80000) {
+      url = url + "actual_price_gte=" + minPrice.value + '&';
+      url = url + "actual_price_lte=" + maxPrice.value + '&';
     }
-    if (getters['query/SORT_DIRECTION'] !== '-' || getters['query/SORT_TYPE'] !== 'created_at') {
-      url = url + "ordering=" + getters['query/SORT_DIRECTION'] + getters['query/SORT_TYPE'] + '&'
+    if (sortDirection.value !== '-' || sortType.value !== 'created_at') {
+      url = url + "ordering=" + sortDirection.value + sortType.value + '&'
     }
-    if (getters['query/TYPE_OF_PRODUCT'] !== 'all') {
-      url = url + "type_of_product=" + getters['query/TYPE_OF_PRODUCT'] + '&'
+    if (typeOfProduct.value !== 'all') {
+      url = url + "type_of_product=" + typeOfProduct.value + '&'
     }
-    if (getters['query/SEARCH_STRING']) url = url + "q=" + getters['query/SEARCH_STRING']
+    if (searchString.value) url = url + "q=" + searchString.value;
     const lastSymbol = url.slice(-1)
     if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1)
     return url;        
@@ -165,11 +174,11 @@
 
   const onChangePage = (data) => {
     if (data.pageNumber && data.isAvailable) {
-      const newOffset = (data.pageNumber - 1) * getters['query/LIMIT']
-      if (window) setTimeout(() => window.scrollTo(0, 0), 0)
-      store.commit('query/SET_OFFSET', newOffset)
-      if (getters['query/CATEGORY_ID']) {
-        router.push(getCategoryUrl(getters['query/CATEGORY_ID'], newOffset))
+      const newOffset = (data.pageNumber - 1) * limit.value
+      if (window) setTimeout(() => window.scrollTo(0, 0), 0);
+      queryStore.setOffset(newOffset);
+      if (categoryId.value) {
+        router.push(getCategoryUrl(categoryId.value, newOffset))
       } else {
         router.push(getCatalogUrl(newOffset));
       }

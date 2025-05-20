@@ -8,7 +8,10 @@
         <div v-if = "InfoCardBlock === 'New'" class="product__tagnew">{{ InfoCardBlock }}</div>
 
         <a :href="createHref(card.vendor_code)" class="product__img" @click.stop.prevent="openCardItem(card.vendor_code)">
-            <UiCardImage :images=card.images />
+            <UiCardImage 
+              :images=card.images 
+              :alt = "card.name + ' №1 - cabel-torg'"
+            />
         </a>
         <div class="product__info">
             <div class="product__status icon-done-color _label mb-20" v-if = "card.status === 'A'">В наличии</div>
@@ -61,163 +64,151 @@
 </template>
 
 
-<script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+<script setup>
+  import { ref, computed, watch, onMounted } from 'vue';
+  import { useHeaderStore } from '@/stores/header';
+  import { useFavoritesStore } from '@/stores/favorites';
+  import { useOrdersStore } from '@/stores/orders';
 
-export default {
-    name: 'ListItem',
-    props: {
-        card:  null,
-    },
+  const props = defineProps({
+    card:  { type: Object,  default: null},
+  });
 
-    data(){
-      return {
-          quantity: 0,
-          quantityLocal: 1,
-          isWish: false,
-      }
-    },
+  const router = useRouter();
+  const headerStore = useHeaderStore();
+  const favoritesStore = useFavoritesStore();
+  const oredersStore = useOrdersStore();
 
-    computed: {
-      ...mapGetters("order", ["ORDERS"]),
-      ...mapGetters("favorite", ["FAVORITES"]),
+  const quantity = ref(0);
+  const quantityLocal = ref(1);
+  const isWish = ref(false);
 
-      ChangeParameters(){
-        return JSON.stringify(this.ORDERS) + JSON.stringify(this.FAVORITES);
-      },
+  const { favorites } = storeToRefs(favoritesStore);
+  const { orders } = storeToRefs(oredersStore);
 
-      cardPriceWithDiscount(){
-        return this.card.price_with_discount_and_tax && this.card.price_with_discount_and_tax !== this.card.price_with_tax 
-          ? this.card.price_with_discount_and_tax 
-          : this.card.price_with_tax;
-      },
+  const ChangeParameters = computed(() => {
+    return JSON.stringify(orders.value) + JSON.stringify(favorites.value);
+  });
 
-      InfoCardBlock() {
-        if (this.card.price_with_discount_and_tax && this.card.price_with_discount_and_tax !== this.card.price_with_tax) return '%';
-        // let info = '';
-        if (this.card.is_new) return 'New'
-        if (this.card.is_popular) return 'Хит'
-        // info = this.card.vendor_code === 'УТ-00000037' ? 'New' : info;
-        // info = this.card.vendor_code === 'УТ-00000015' ? 'Хит' : info;
-        // info = this.card.price_with_discount_and_tax ? '%' : info;
-        return "";
-      },
+  const cardPriceWithDiscount = computed(() => {
+    return props.card.price_with_discount_and_tax && props.card.price_with_discount_and_tax !== props.card.price_with_tax 
+      ? props.card.price_with_discount_and_tax 
+      : props.card.price_with_tax;
+  });
 
-    },
+  const InfoCardBlock = computed(() => {
+    if (props.card.price_with_discount_and_tax && props.card.price_with_discount_and_tax !== props.card.price_with_tax) return '%';
+    // let info = '';
+    if (props.card.is_new) return 'New'
+    if (props.card.is_popular) return 'Хит'
+    // info = props.card.vendor_code === 'УТ-00000037' ? 'New' : info;
+    // info = props.card.vendor_code === 'УТ-00000015' ? 'Хит' : info;
+    // info = props.card.price_with_discount_and_tax ? '%' : info;
+    return "";
+  });
 
-    watch: {
-      ChangeParameters: async function() {
-        this.countQuantity();
-        this.checkIsWish();
-      },
-    },
+  watch(ChangeParameters, async function() {
+    countQuantity();
+    checkIsWish();
+  });
+    
 
-    mounted(){
-      this.countQuantity();
-      this.checkIsWish();
-    },
+  onMounted(() => {
+    countQuantity();
+    checkIsWish();
+  });
 
     
-    methods: {
-      ...mapActions("order", ["UPDATE_ITEMS_IN_CART"]),
-      ...mapActions("favorite", ["UPDATE_IS_WISH_IN_CART"]),
-      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA", "SET_REQUEST_CALL_TYPE"]),
+  const onCreatePopUp = (status, cardID) => {
+    headerStore.setIsPopUpOpen(status);
+    headerStore.setPopUpAction('RequestCall');
+    headerStore.setRequestCallType('GR');
+    headerStore.setPopUpAdditionalData({cardID});
+  };
 
-      onCreatePopUp(status, cardID) {
-        this.SET_IS_POPUP_OPEN(status);
-        this.SET_POPUP_ACTION('RequestCall');
-        this.SET_REQUEST_CALL_TYPE('GR');
-        this.SET_POPUP_ADDITIONAL_DATA({cardID});
-      },
+  const onCreatePopUpRequestPrice = (status, cardID) => {
+    headerStore.setIsPopUpOpen(status);
+    headerStore.setPopUpAction('RequestPrice');
+    headerStore.setRequestCallType('GR');
+    headerStore.setPopUpAdditionalData({cardID});
+  };
 
-      onCreatePopUpRequestPrice(status, cardID) {
-        this.SET_IS_POPUP_OPEN(status);
-        this.SET_POPUP_ACTION('RequestPrice');
-        this.SET_REQUEST_CALL_TYPE('GR');
-        this.SET_POPUP_ADDITIONAL_DATA({cardID});
-      },
+  const openCardItem = (id) => {
+    const URL = '/card_product/' + id;
+    router.push(URL);
+  };
 
-      openCardItem(id) {
-        const URL = '/card_product/' + id;
-        this.$router.push(URL);
-      },
-
-      checkQuantityLocal() {
-        if (this.quantityLocal < 1) {
-          this.quantityLocal = 1;
-        };
-        if (this.quantityLocal > 99) {
-          this.quantityLocal = 99;
-        }
-      },
-
-      minusQuantityLocal() {
-        this.quantityLocal = this.quantityLocal > 1 ? this.quantityLocal - 1 : 1;
-      },
-
-      plusQuantityLocal() {
-        this.quantityLocal = this.quantityLocal < 99 ? this.quantityLocal + 1 : 99;
-      },
-
-      createHref(card) {
-        const URL = '/card_product/' + card;
-        return URL;
-      },
-
-      async onOperationWithCartItem(card, type) {
-        const itemData = {
-          amount: 0,
-          product: {
-            id: card.id,
-            vendor_code: card.vendor_code,
-            name: card.name,
-            discont: card.discont,
-            price_with_discount_and_tax: card.price_with_discount_and_tax,
-            price_with_tax: card.price_with_tax,
-          },
-        };
-        if (type === 'set') {
-          itemData.amount = Number(this.quantityLocal);
-        }
-        
-        await this.UPDATE_ITEMS_IN_CART({itemData, type});
-        if (this.quantityLocal === 0) this.quantityLocal = 1;
-      },
-
-      async onWishClick(card) {
-        const itemData = {
-          product: {
-            id: card.id,
-            vendor_code: card.vendor_code,
-            name: card.name,
-          },
-        }  
-        const type = this.isWish === false ? 'set' : 'remove';
-        await this.UPDATE_IS_WISH_IN_CART({ itemData, type });
-      },
-
-      countQuantity() {
-        if (this.ORDERS.length) {
-          const filtered = this.ORDERS.filter(item => item.product.id === this.card.id);
-          this.quantity =  filtered.length ? filtered[0].amount : 0;
-        } else {
-          this.quantity = 0;
-        }
-        this.quantityLocal = this.quantity ? this.quantity : this.quantityLocal;
-      },
-
-      checkIsWish() {
-        if (this.FAVORITES.length) {
-          const filtered = this.FAVORITES.filter(item => item.product.id === this.card.id);
-          this.isWish =  filtered.length ? true : false;
-        } else {
-          this.isWish = false;
-        }
-      },
-
+  const checkQuantityLocal = () => {
+    if (quantityLocal.value < 1) {
+      quantityLocal.value = 1;
+    };
+    if (quantityLocal.value > 99) {
+      quantityLocal.value = 99;
     }
+  };
 
-}
+  const minusQuantityLocal = () => {
+    quantityLocal.value = quantityLocal.value > 1 ? quantityLocal.value - 1 : 1;
+  };
+
+  const plusQuantityLocal = () => {
+    quantityLocal.value = quantityLocal.value < 99 ? quantityLocal.value + 1 : 99;
+  };
+
+  const createHref = (card) => {
+    const URL = '/card_product/' + card;
+    return URL;
+  };
+
+  const onOperationWithCartItem = async (card, type) => {
+    const itemData = {
+      amount: 0,
+      product: {
+        id: card.id,
+        vendor_code: card.vendor_code,
+        name: card.name,
+        discont: card.discont,
+        price_with_discount_and_tax: card.price_with_discount_and_tax,
+        price_with_tax: card.price_with_tax,
+      },
+    };
+    if (type === 'set') {
+      itemData.amount = Number(quantityLocal.value);
+    }
+    await oredersStore.updateItemsInCart({ itemData, type });
+    if (quantityLocal.value === 0) quantityLocal.value = 1;
+  };
+
+  const onWishClick = async (card) => {
+    const itemData = {
+      product: {
+        id: card.id,
+        vendor_code: card.vendor_code,
+        name: card.name,
+      },
+    }  
+    const type = isWish.value === false ? 'set' : 'remove';
+    await favoritesStore.updateIsWishInCart({ itemData, type });
+  };
+
+  const countQuantity = () => {
+    if (orders.value.length) {
+      const filtered = orders.value.filter(item => item.product.id === props.card.id);
+      quantity.value =  filtered.length ? filtered[0].amount : 0;
+    } else {
+      quantity.value = 0;
+    }
+    quantityLocal.value = quantity.value ? quantity.value : quantityLocal.value;
+  };
+
+  const checkIsWish = () => {
+    if (favorites.value.length) {
+      const filtered = favorites.value.filter(item => item.product.id === props.card.id);
+      isWish.value =  filtered.length ? true : false;
+    } else {
+      isWish.value = false;
+    }
+  };  
 </script>
 
 <style scoped lang="scss">

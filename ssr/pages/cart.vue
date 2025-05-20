@@ -1,4 +1,5 @@
 <template>
+  <Breadcrumb/>
   <div class="cart app__content">
     <div class="cart__wrapper">
       <div class="cart__content _container">
@@ -6,9 +7,9 @@
 
 
           <div class="cart__block">
-            <h3>Товары в корзине: <span>{{ TOTAL_ORDER_QUANTITY }}</span></h3>
+            <h3>Товары в корзине: <span>{{ totalOrderQuantity }}</span></h3>
 
-            <div v-if = "ORDERS.length === 0" class="cart__list">
+            <div v-if = "orders.length === 0" class="cart__list">
               <div class="cart__empty__item">Ваша корзина пуста</div>
               <a class="_link" @click.prevent = "openPage('/catalog')">
                 <svg width="16" height="8" viewBox="0 0 16 8" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,16 +19,16 @@
               </a>
             </div>
 
-            <div v-if = "ORDERS.length !== 0" class="cart__list">
+            <div v-if = "orders.length !== 0" class="cart__list">
               <PersonalCartItem  
                 class="cart__item"
-                v-for = "cartItem in ORDERS"
+                v-for = "cartItem in orders"
                 :key = "cartItem.product.id"
                 :cartItem = cartItem
                 :type = true
               />
             </div>
-            <div v-if = "ORDERS.length !== 0" class="cart__footer flex-center">
+            <div v-if = "orders.length !== 0" class="cart__footer flex-center">
               <div class="group cart__promo">
                 <label for="promo" class="label">Промокод</label>
                 <div class="input__box">
@@ -39,7 +40,7 @@
                 <div class="_footnote">* Сумма указана с учетом НДС</div>
                 <div class="label flex-center ">
                   Общая стоимость:
-                  <span>{{ TOTAL_ORDER_COST }}</span>
+                  <span>{{ totalOrderCost }}</span>
                    BYN
                 </div>
                 <div class="">
@@ -51,7 +52,7 @@
 
           <!-- Появляется если есть товар в корзине  и человек наживаем кнопку оформить заказ -->
 
-          <div v-if = "IS_APPLICATION_OPEN === true && ORDERS.length !== 0" class="cart__order">
+          <div v-if = "isApplicationOpen === true && orders.length !== 0" class="cart__order">
             <h3>Оформление заказа </h3>
             <div class="about__paragraph">
               <div class="about__paragraph__title">
@@ -60,11 +61,11 @@
               <div class="about__paragraph__box flex-center">
                 <div :class="[checkPickUp() ? 'group table3x disabled' : 'group table3x']">
                   <label for="city" class="label">Город / населенный пункт</label>
-                  <input id="city" type="text" :class="{ 'is-invalid': ERRORS.city }" v-model="city" autocomplete=off :disabled="checkPickUp()">
-                  <div class="error-message" v-if="ERRORS.city"> {{ ERRORS.city }} </div>
+                  <input id="city" type="text" :class="{ 'is-invalid': authErrors.city }" v-model="city" autocomplete=off :disabled="checkPickUp()">
+                  <div class="error-message" v-if="authErrors.city"> {{ authErrors.city }} </div>
                 </div>
                 <div class="radio__list table3x">
-                  <div class="radio" v-for = "delivery in ORDER_DELIVERY_TYPES" :key = delivery.id>
+                  <div class="radio" v-for = "delivery in oredersStore.deliveryTypes" :key = delivery.id>
                     <input :id = delivery.id name="radio" type="radio" :value = delivery.id v-model = "delivery_type_id" @click=onChangeDeliveryType(delivery.is_pickup)>
                     <label :for = delivery.id class="radio-label">{{ delivery.payload }}</label>
                   </div>
@@ -73,14 +74,14 @@
                 <div :class="[checkPickUp() ? 'table3x disabled' : 'table3x']">
                   <div class="group mb-20">
                     <label for="address" class="label">Улица</label>
-                    <input id="address" type="text" :class="{ 'is-invalid': ERRORS.address }" v-model="address" autocomplete=off :disabled="checkPickUp()">
-                    <div class="error-message" v-if="ERRORS.address"> {{ ERRORS.address }} </div>
+                    <input id="address" type="text" :class="{ 'is-invalid': authErrors.address }" v-model="address" autocomplete=off :disabled="checkPickUp()">
+                    <div class="error-message" v-if="authErrors.address"> {{ authErrors.address }} </div>
                   </div>
                   <div class="group__row flex-center">
                     <div class="group">
                       <label for="" class="label">Дом</label>
-                      <input id="house" type="text" :class="{ 'is-invalid': ERRORS.house }" v-model="house" autocomplete=off :disabled="checkPickUp()">
-                      <div class="error-message" v-if="ERRORS.house"> {{ ERRORS.house }} </div>
+                      <input id="house" type="text" :class="{ 'is-invalid': authErrors.house }" v-model="house" autocomplete=off :disabled="checkPickUp()">
+                      <div class="error-message" v-if="authErrors.house"> {{ authErrors.house }} </div>
                     </div>
                     <div class="group">
                       <label for="address" class="label">Квартира</label>
@@ -98,18 +99,18 @@
               <div class="about__paragraph__box flex-center group__row">
                 <div class="group ">
                   <label for="full_name" class="label">ФИО</label>
-                  <input id="full_name" type="text" :class="{ 'is-invalid': ERRORS.full_name }" v-model="full_name" autocomplete=off>
-                  <div class="error-message" v-if="ERRORS.full_name"> {{ ERRORS.full_name }} </div>
+                  <input id="full_name" type="text" :class="{ 'is-invalid': authErrors.full_name }" v-model="full_name" autocomplete=off>
+                  <div class="error-message" v-if="authErrors.full_name"> {{ authErrors.full_name }} </div>
                 </div>
                 <div class="group ">
                   <label for="phone_number" class="label">Номер телефона</label>
-                  <input id="phone_number" type="text" :class="{ 'is-invalid': ERRORS.phone_number }" v-model="phone_number" autocomplete=off>
-                  <div class="error-message" v-if="ERRORS.phone_number"> {{ ERRORS.phone_number }} </div>
+                  <input id="phone_number" type="text" :class="{ 'is-invalid': authErrors.phone_number }" v-model="phone_number" autocomplete=off>
+                  <div class="error-message" v-if="authErrors.phone_number"> {{ authErrors.phone_number }} </div>
                 </div>
                 <div class="group ">
                   <label for="email" class="label">Email</label>
-                  <input id="email" type="text" :class="{ 'is-invalid': ERRORS.email }" v-model="email" autocomplete=off>
-                  <div class="error-message" v-if="ERRORS.email"> {{ ERRORS.email }} </div>
+                  <input id="email" type="text" :class="{ 'is-invalid': authErrors.email }" v-model="email" autocomplete=off>
+                  <div class="error-message" v-if="authErrors.email"> {{ authErrors.email }} </div>
                 </div>
 
 
@@ -124,41 +125,41 @@
                   <div class="group__row flex-center">
                     <div class="group">
                       <label for="company_name" class="label">Наименование компании</label>
-                      <input id="company_name" type="text" :class="{ 'is-invalid': ERRORS.company_name }" v-model="company_name" autocomplete=off>
-                      <div class="error-message" v-if="ERRORS.company_name"> {{ ERRORS.company_name }} </div>
+                      <input id="company_name" type="text" :class="{ 'is-invalid': -authErrors.company_name }" v-model="company_name" autocomplete=off>
+                      <div class="error-message" v-if="authErrors.company_name"> {{ authErrors.company_name }} </div>
                     </div>
                     <div class="group">
                       <label for="IBAN" class="label">Расчетный счет IBAN</label>
-                      <input id="IBAN" type="text" :class="{ 'is-invalid': ERRORS.IBAN }" v-model="IBAN" autocomplete=off>
+                      <input id="IBAN" type="text" :class="{ 'is-invalid': authErrors.IBAN }" v-model="IBAN" autocomplete=off>
                       <div id="anim" class="icon_info input__icon">
                           <div class="tooltip flex-center" data-tooltip="Новые счета IBAN записываются в таком формате: ААВВ ССС DDDD ЕЕЕЕ ЕЕЕЕ ЕЕЕЕ ЕЕЕЕ.">!</div>
                       </div>
-                      <div class="error-message" v-if="ERRORS.IBAN"> {{ ERRORS.IBAN }} </div>
+                      <div class="error-message" v-if="authErrors.IBAN"> {{ authErrors.IBAN }} </div>
                     </div>
                   </div>
 
                 <div class="group__row flex-center">
                   <div class="group">
                     <label for="unp" class="label">УНП</label>
-                    <input id="unp" type="text" :class="{ 'is-invalid': ERRORS.unp }" v-model="unp" autocomplete=off>
-                    <div class="error-message" v-if="ERRORS.unp"> {{ ERRORS.unp }} </div>
+                    <input id="unp" type="text" :class="{ 'is-invalid': authErrors.unp }" v-model="unp" autocomplete=off>
+                    <div class="error-message" v-if="authErrors.unp"> {{ authErrors.unp }} </div>
                   </div>
                   <div class="group">
                     <label for="BIC" class="label">БИК</label>
-                    <input id="BIC" type="text" :class="{ 'is-invalid': ERRORS.BIC }" v-model="BIC" autocomplete=off>
-                    <div class="error-message" v-if="ERRORS.BIC"> {{ ERRORS.BIC }} </div>
+                    <input id="BIC" type="text" :class="{ 'is-invalid': authErrors.BIC }" v-model="BIC" autocomplete=off>
+                    <div class="error-message" v-if="authErrors.BIC"> {{ authErrors.BIC }} </div>
                   </div>
                 </div>
                 <div class="group__row flex-center">
                   <div class="group">
                     <label for="legal_address" class="label">Юридический адрес</label>
-                    <input id="legal_address" type="text" :class="{ 'is-invalid': ERRORS.legal_address }" v-model="legal_address" autocomplete=off>
-                    <div class="error-message" v-if="ERRORS.legal_address"> {{ ERRORS.legal_address }} </div>
+                    <input id="legal_address" type="text" :class="{ 'is-invalid': authErrors.legal_address }" v-model="legal_address" autocomplete=off>
+                    <div class="error-message" v-if="authErrors.legal_address"> {{ authErrors.legal_address }} </div>
                   </div>
                   <div class="group">
                     <label for="serving_bank" class="label">Обслуживающий банк</label>
-                    <input id="serving_bank" type="text" :class="{ 'is-invalid': ERRORS.serving_bank }" v-model="serving_bank" autocomplete=off>
-                    <div class="error-message" v-if="ERRORS.serving_bank"> {{ ERRORS.serving_bank }} </div>
+                    <input id="serving_bank" type="text" :class="{ 'is-invalid': authErrors.serving_bank }" v-model="serving_bank" autocomplete=off>
+                    <div class="error-message" v-if="authErrors.serving_bank"> {{ authErrors.serving_bank }} </div>
                   </div>
                 </div>
 
@@ -179,10 +180,10 @@
                     специалист свяжется с вами для подтверждения заказа.</p>
                 </div>
                 <div class="cart__summary">
-                  <div class="summary__item">Стоимость товаров: <span>{{ TOTAL_ORDER_COST }}</span>BYN</div>
+                  <div class="summary__item">Стоимость товаров: <span>{{ totalOrderCost }}</span>BYN</div>
                   <div class="summary__item">Стоимость доставки: <span>0.0</span>BYN</div>
                   <div class="summary__item">Скидка по промокоду: <span>{{ promo_price }}</span></div>
-                  <div class="summary__item">Итоговая стоимость: <span><b>{{ (TOTAL_ORDER_COST - promo_price).toFixed(2) }}</b></span>BYN</div>
+                  <div class="summary__item">Итоговая стоимость: <span><b>{{ (totalOrderCost - promo_price).toFixed(2) }}</b></span>BYN</div>
                   <div class="_footnote">* Сумма указана с учетом НДС</div>
                   <button class="btn" @click="checkRequestData()">Оформить заказ</button>
 
@@ -200,278 +201,259 @@
   </div>
 </template>
 
-<script>
-  import axios from "axios";
-  import {mapActions, mapGetters, mapMutations} from 'vuex'
+<script setup>
+  import axios from "@/utils/api";
   import { isValidEmail } from "@/common/validation";
+  import { useHead } from 'nuxt/app';
+  import { ref, computed, onMounted } from 'vue';
+  import { useNotificationsStore } from '@/stores/notifications';
+  import { useOrdersStore } from '@/stores/orders';
+  import { useAuthStore } from '@/stores/auth';
+  import { useHeaderStore } from "@/stores/header";
+  import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
-  definePageMeta({
-    // middleware: ["auth"],
-    name: 'Корзина',
+  const router = useRouter();
+
+  const notificationsStore = useNotificationsStore();
+  const oredersStore = useOrdersStore();
+  const authStore = useAuthStore();
+  const headerStore = useHeaderStore();
+  const breadCrumbStore = useBreadCrumbStore();
+
+  const { isApplicationOpen } = storeToRefs(oredersStore);
+  const { userData, authErrors } = storeToRefs(authStore);
+  const { orders, totalOrderCost, totalOrderQuantity } = storeToRefs(oredersStore);
+
+  const promo_code = ref("");
+  const company_name = ref("");
+  const unp = ref("");
+  const legal_address = ref("");
+  const IBAN = ref("");
+  const BIC = ref("");
+  const serving_bank = ref("");
+  const full_name = ref("");
+  const phone_number = ref("");
+  const email = ref("");
+  const city = ref("");
+  const address = ref("");
+  const house = ref("");
+  const flat = ref("-");
+  const delivery_type_id = ref(1);
+  const promo_price = ref(0);
+  const isLoading = ref(false);
+  const isEnablePickup = ref(false);
+
+  const secondPartElement = ref(null);
+
+  useHead({
+    title: 'Корзина',
+    meta: [{
+      name: 'Корзина',
+      content: 'Страница Корзина'
+    }]
   });
 
-  export default defineNuxtComponent({
-    name: 'cart',
-  
-    head () {
-      return {
-        title: 'Корзина',
-        meta: [{
-          name: 'Корзина',
-          content: 'Страница Корзина'
-        }]
+  const changeParameters = computed(() => {
+    return JSON.stringify(userData.value)
+  });
+
+  watch(changeParameters, () => {
+    company_name.value = userData.value?.company_name;
+    unp.value = userData.value?.unp;
+    legal_address.value = userData.value?.legal_address;
+    IBAN.value = userData.value?.IBAN;
+    BIC.value = userData.value?.BIC;
+    serving_bank.value = userData.value?.serving_bank;
+    full_name.value = userData.value?.full_name;
+    phone_number.value = userData.value?.phone_number;
+    email.value = userData.value?.email;
+  });
+
+  const openPage = (page) => {
+    if (router.path != page) {
+        router.push(page);
+    }
+  };
+
+  const checkPromoCod = () => {
+    console.log('Is ' + promo_code.value + ': promo cod available');
+  };
+
+  const checkPickUp = () => {
+    return !isEnablePickup.value;
+  };
+
+  const openOrderRequest = () => {
+    oredersStore.setIsApplicationOpen(true);
+    const scrollY = secondPartElement.value.getBoundingClientRect().bottom + window.pageYOffset;
+    setTimeout(() => window.scrollTo(0, scrollY), 200);
+  };
+
+  const onChangeDeliveryType = (type) => {
+    isEnablePickup.value = Boolean(type)
+  };
+
+  const checkRequestData = async () => {
+    console.log('Start send order ');
+    const orderProducts = [];
+    orders.value.forEach(item => orderProducts.push({amount: item.amount, id: item.product.id}));
+    console.log('isLoading.value ', isLoading.value);
+    
+    if (isLoading.value) return;
+
+    isLoading.value = true;
+    const errorsInData = {};
+    authStore.setErrors(errorsInData);
+    if (!company_name.value) {
+        errorsInData.company_name = 'Укажите название организации'
+    }
+    if (!unp.value || unp.value.toString().length !== 9) {
+        errorsInData.unp = 'Укажите валидный УНП'
+    }
+    if (!legal_address.value) {
+        errorsInData.legal_address = 'Укажите адрес организации'
+    }
+    if (!IBAN.value || IBAN.value.toString().length !== 28) {
+        errorsInData.IBAN = 'Укажите валидный IBAN счет'
+    }
+    if (!BIC.value || BIC.value.toString().length < 6) {
+        errorsInData.BIC = 'Укажите валидный BIC банка'
+    }
+    if (!serving_bank.value) {
+        errorsInData.serving_bank = 'Укажите название банка'
+    }
+    if (!full_name.value) {
+        errorsInData.full_name = 'Укажите ФИО'
+    }
+    if (!phone_number.value) {
+        errorsInData.phone_number = 'Укажите номер телефона'
+    }
+    if (!city.value) {
+      if (!checkPickUp()) {
+        errorsInData.city = 'Укажите название города'
       }
-    },
-
-    data: function(){
-      return{
-        promo_code: "",
-        company_name: "",
-        unp: "",
-        legal_address: "",
-        IBAN: "",
-        BIC: "",
-        serving_bank: "",
-        full_name: "",
-        phone_number: "",
-        email: "",
-        city: "",
-        address: "",
-        house: "",
-        flat: "-",
-        delivery_type_id: 1,
-        promo_price: 0,
-        isLoading: false,
-        isEnablePickup: false,
+    }
+    if (!address.value) {
+      if (!checkPickUp()) {
+        errorsInData.address = 'Укажите название улицы'
       }
-    },
-
-    watch:{
-      changeParameters: function() {
-        this.company_name = this.USER?.company_name;
-        this.unp = this.USER?.unp;
-        this.legal_address = this.USER?.legal_address;
-        this.IBAN = this.USER?.IBAN;
-        this.BIC = this.USER?.BIC;
-        this.serving_bank = this.USER?.serving_bank;
-        this.full_name = this.USER?.full_name;
-        this.phone_number = this.USER?.phone_number;
-        this.email = this.USER?.email;
+    }
+    if (!house.value) {
+      if (!checkPickUp()) {
+        errorsInData.house = 'Укажите номер дома'
       }
-    },
+    }
+    if (!isValidEmail(email.value)) {
+        errorsInData.email = 'Укажите валидный адрес эл. почты'
+    }
+    if (Object.keys(errorsInData).length) {
+      authStore.setErrors(errorsInData);
+      isLoading.value = false;
+      const scrollY = secondPartElement.value.getBoundingClientRect().bottom + window.pageYOffset;
+      // window.scrollTo(0, scrollY);
+      setTimeout(() => window.scrollTo(0, scrollY), 200);
+    } else {
+      notificationsStore.setIsLoading(true);
+      const orderData = {
+        promo_code: promo_code.value, 
+        company_name: company_name.value,
+        unp: unp.value,
+        legal_address: legal_address.value,
+        IBAN: IBAN.value,
+        BIC: BIC.value,
+        serving_bank: serving_bank.value,
+        full_name: full_name.value,
+        phone_number: phone_number.value,
+        email: email.value,
+        city: city.value,
+        address: address.value,
+        house: house.value,
+        flat: flat.value,
+        delivery_type_id: delivery_type_id.value,
+        products: orderProducts
+      };
 
-    computed: {
-      ...mapGetters("order", ["ORDERS", "TOTAL_ORDER_QUANTITY", "TOTAL_ORDER_COST", "IS_APPLICATION_OPEN", "ORDER_DELIVERY_TYPES"]),
-      ...mapGetters("auth",["ERRORS", "USER"]),
-      ...mapGetters("header", ["TOP_CATEGORIES_ITEM_ACTIVE", "SUB_CATEGORIES_ITEM_ACTIVE", "LAST_CATEGORIES_ITEM_ACTIVE"]),
-
-      changeParameters(){
-        return JSON.stringify(this.USER)
-      }
-    },
-
-    methods: {
-      ...mapActions("order", ["GET_USER_ORDER", "SEND_ORDER_REQUEST"]),
-      ...mapActions("breadcrumb", ["CHANGE_BREADCRUMB"]),
-      ...mapActions("auth", ["SEND_REGISTER_REQUEST"]),
-      ...mapMutations("order", ["SET_IS_APPLICATION_OPEN"]),
-      ...mapMutations("breadcrumb", ["ADD_BREADCRUMB"]),
-      ...mapMutations("auth", ["SET_ERRORS", "SET_DESTINATION"]),
-      ...mapMutations("header", ["SET_IS_POPUP_OPEN", "SET_POPUP_ACTION", "SET_POPUP_ADDITIONAL_DATA"]),
-      ...mapMutations("notification", ["SET_IS_LOADING"]),
-
-      openPage(page) {
-        if (this.$router.path != page) {
-            this.$router.push(page);
-        }
-      },
-
-      checkPromoCod(){
-        console.log('Is ' + this.promo_code + ': promo cod available');
-      },
-
-      checkPickUp(){
-        return !this.isEnablePickup;
-      },
-
-      openOrderRequest(){
-        this.SET_IS_APPLICATION_OPEN(true);
-        const scrollY = this.$refs.secondPartElement.getBoundingClientRect().bottom + window.pageYOffset;
-        setTimeout(() => window.scrollTo(0, scrollY), 200);
-      },
-
-      onChangeDeliveryType(type){
-        this.isEnablePickup = Boolean(type)
-      },
-
-      async checkRequestData(){
-        console.log('Start send order ');
-        const orderProducts = [];
-        this.ORDERS.forEach(item => orderProducts.push({amount: item.amount, id: item.product.id}));
-
-        if (this.isLoading) return;
-
-        this.isLoading = true;
-        const errorsInData = {};
-        this.SET_ERRORS(errorsInData);
-
-        if (!this.company_name) {
-            errorsInData.company_name = 'Укажите название организации'
-        }
-        if (!this.unp || this.unp.toString().length !== 9) {
-            errorsInData.unp = 'Укажите валидный УНП'
-        }
-        if (!this.legal_address) {
-            errorsInData.legal_address = 'Укажите адрес организации'
-        }
-        if (!this.IBAN || this.IBAN.toString().length !== 28) {
-            errorsInData.IBAN = 'Укажите валидный IBAN счет'
-        }
-        if (!this.BIC || this.BIC.toString().length < 6) {
-            errorsInData.BIC = 'Укажите валидный BIC банка'
-        }
-        if (!this.serving_bank) {
-            errorsInData.serving_bank = 'Укажите название банка'
-        }
-        if (!this.full_name) {
-            errorsInData.full_name = 'Укажите ФИО'
-        }
-        if (!this.phone_number) {
-            errorsInData.phone_number = 'Укажите номер телефона'
-        }
-        if (!this.city) {
-          if (!this.checkPickUp()) {
-            errorsInData.city = 'Укажите название города'
-          }
-        }
-        if (!this.address) {
-          if (!this.checkPickUp()) {
-            errorsInData.address = 'Укажите название улицы'
-          }
-        }
-        if (!this.house) {
-          if (!this.checkPickUp()) {
-            errorsInData.house = 'Укажите номер дома'
-          }
-        }
-        if (!isValidEmail(this.email)) {
-            errorsInData.email = 'Укажите валидный адрес эл. почты'
-        }
-        if (Object.keys(errorsInData).length) {
-          this.SET_ERRORS(errorsInData);
-          this.isLoading = false;
-          const scrollY = this.$refs.secondPartElement.getBoundingClientRect().bottom + window.pageYOffset;
-          // window.scrollTo(0, scrollY);
-          setTimeout(() => window.scrollTo(0, scrollY), 200);
-        } else {
-          this.SET_IS_LOADING(true);
-          const orderData = {
-            promo_code: this.promo_code, 
-            company_name: this.company_name,
-            unp: this.unp,
-            legal_address: this.legal_address,
-            IBAN: this.IBAN,
-            BIC: this.BIC,
-            serving_bank: this.serving_bank,
-            full_name: this.full_name,
-            phone_number: this.phone_number,
-            email: this.email,
-            city: this.city,
-            address: this.address,
-            house: this.house,
-            flat: this.flat,
-            delivery_type_id: this.delivery_type_id,
-            // user_id: this.USER.id,
-            products: orderProducts
-          };
-
-          if (localStorage.getItem("authToken")) {
-            this.SET_DESTINATION('/user_profile');
-            // this.$router.push('/login');
-            orderData.user = this.USER.id;
-            await this.SEND_ORDER_REQUEST(orderData);
-            this.isLoading = false;
-            // this.SET_IS_LOADING(true);
-            // this.$router.push('/user_profile');
-          } else {
-            try {
-              const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + "users/check_email/<email>?email=" + this.email);
-              // console.log(response);
-              // console.log(response.data.message === 'True');
-              if (response.data.message === 'True') {
-                this.SET_IS_LOADING(false);
-                this.SET_IS_POPUP_OPEN(true);
-                this.SET_POPUP_ACTION('UserLogin');
-                this.SET_POPUP_ADDITIONAL_DATA({email: orderData.email});
-              } else if (response.data.message === 'False') {
-                let password = '';
-                for (let i = 0; i < 8; i++){
-                  let rand = Math.random() * 10 - 0.5;
-                  password = password + String(Math.round(rand))
-                }
-                const userData = {
-                  email: this.email,
-                  full_name: this.full_name,
-                  phone_number: this.phone_number,
-                  company_name: this.company_name,
-                  unp: this.unp,
-                  password: password,
-                  legal_address: this.legal_address,
-                  IBAN: this.IBAN,
-                  BIC: this.BIC,
-                  serving_bank: this.serving_bank,
-                  isGenerated: true,
-                };
-
-                await this.SEND_REGISTER_REQUEST(userData);
-                orderData.user = this.USER.id;
-                await this.SEND_ORDER_REQUEST(orderData);
-                this.isLoading = false;
-                this.SET_IS_LOADING(false);
-                this.$router.push('/user_profile');
-              }
+      if (localStorage.getItem("authToken")) {
+        authStore.setDestination('/user_profile');
+        // router.push('/login');
+        orderData.user = userData.value.id;
+        await oredersStore.sendOrderRequest(orderData);
+        ym(94113822, 'reachGoal', 'oform-zakaz');
+        isLoading.value = false;
+        // notificationsStore.setIsLoading(true);
+        // router.push('/user_profile');
+      } else {
+        try {
+          const response = await axios.get("users/check_email/<email>?email=" + email.value);
+          if (response.data.message === 'True') {
+            notificationsStore.setIsLoading(false);
+            headerStore.setIsPopUpOpen(true);
+            headerStore.setPopUpAction('UserLogin');
+            headerStore.setPopUpAdditionalData({email: orderData.email});
+          } else if (response.data.message === 'False') {
+            let password = '';
+            for (let i = 0; i < 8; i++){
+              let rand = Math.random() * 10 - 0.5;
+              password = password + String(Math.round(rand))
             }
-            catch (e) {
-              console.log(e);
-              this.SET_IS_LOADING(false);
+            const userDataForRegister = {
+              email: email.value,
+              full_name: full_name.value,
+              phone_number: phone_number.value,
+              company_name: company_name.value,
+              unp: unp.value,
+              password: password,
+              legal_address: legal_address.value,
+              IBAN: IBAN.value,
+              BIC: BIC.value,
+              serving_bank: serving_bank.value,
+              isGenerated: true,
             };
+
+            await authStore.sendRegisterRequest(userDataForRegister);
+            orderData.user = userData.value.id;
+            await oredersStore.sendOrderRequest(orderData);
+            ym(94113822, 'reachGoal', 'oform-zakaz');
+            isLoading.value = false;
+            notificationsStore.setIsLoading(false);
+            router.push('/user_profile');
           }
-          this.isLoading = false;
-          this.SET_IS_LOADING(false);
         }
-      },
-    },
-
-    async checkIsUserLogin() {
-      // await 
-    },
-
-    mounted() {
-      this.SET_IS_APPLICATION_OPEN(false);
-      this.CHANGE_BREADCRUMB(0);
-      this.ADD_BREADCRUMB({
-        name: this.$router.currentRoute.value.meta.name,
-        path: this.$router.currentRoute.value.path,
-        type: "global",
-        class: ""
-      });
-      if (this.USER) {
-        this.company_name = this.USER.company_name;
-        this.unp = this.USER.unp;
-        this.legal_address = this.USER.legal_address;
-        this.IBAN = this.USER.IBAN;
-        this.BIC = this.USER.BIC;
-        this.serving_bank = this.USER.serving_bank;
-        this.full_name = this.USER.full_name;
-        this.phone_number = this.USER.phone_number;
-        this.email = this.USER.email;
-        this.city = this.USER.delivery_adress;
-        this.address = this.USER.address;
-        this.house = this.USER.house;
-        this.flat = this.USER.flat;
+        catch (e) {
+          console.log(e);
+          notificationsStore.setIsLoading(false);
+        };
       }
-    },
-  })
+      isLoading.value = false;
+      notificationsStore.setIsLoading(false);
+    }
+  };
+
+  onMounted(() => {
+    oredersStore.setIsApplicationOpen(false);
+    breadCrumbStore.changeBreadCrumb(0);
+    breadCrumbStore.addBreadCrumb({
+      name: router.currentRoute.value.meta.name,
+      path: router.currentRoute.value.path,
+      type: "global",
+      class: ""
+    });
+    if (userData.value) {
+      company_name.value = userData.value.company_name;
+      unp.value = userData.value.unp;
+      legal_address.value = userData.value.legal_address;
+      IBAN.value = userData.value.IBAN;
+      BIC.value = userData.value.BIC;
+      serving_bank.value = userData.value.serving_bank;
+      full_name.value = userData.value.full_name;
+      phone_number.value = userData.value.phone_number;
+      email.value = userData.value.email;
+      city.value = userData.value.delivery_adress;
+      address.value = userData.value.address;
+      house.value = userData.value.house;
+      flat.value = userData.value.flat;
+    }
+  });
 </script>
 
 <style scoped lang="scss">
@@ -486,7 +468,6 @@
     padding: 0 16px;
   }
 
-  &__block{ }
   &__empty__item{
     margin-bottom: 20px;
     font-size: 14px;
@@ -651,9 +632,6 @@
     @media (max-width: $md2+px) {
       flex-direction: column;
 
-      .group__row{
-        //flex-direction: column;
-      }
     }
     .table3x{
       @media (max-width: $md2+px) {
