@@ -31,7 +31,8 @@
   const headerStore = useHeaderStore();
   const favoritesStore = useFavoritesStore();
 
-  const organizationData = {
+
+  const organizationData =  {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "ООО «КабельЭлектроТорг»",
@@ -44,12 +45,7 @@
       "postalCode": "224005",
       "addressCountry": "Belarus"
     },
-    "sameAs": [
-      "https://www.facebook.com/kabeltorg",
-      "https://twitter.com/kabeltorg",
-      "https://www.instagram.com/kabeltorg"
-    ]
-  }
+  };
 
   const interval = ref(null);
 
@@ -88,12 +84,12 @@
     return true;
   });
 
-  useHead({
+  useHead(route.path === '/' ? {
     script: [{
       type: 'application/ld+json',
       children: JSON.stringify(organizationData)
     }]
-  }); 
+  }: {}); 
 </script>
 
 <style lang="scss">

@@ -19,7 +19,7 @@
 import { onMounted } from 'vue'
 
 onMounted(() => {
-  console.log("HHHHHHHH");
+  console.log("Что-то пошло не так");
 });
 
 </script>
