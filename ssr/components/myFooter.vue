@@ -307,7 +307,8 @@
 }
 &__social{
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap:20px;
   padding: 20px 0 20px 0;
   @media (max-width: $md2+px) {
     gap:10px;
@@ -325,11 +326,10 @@
 &__item{
 font-size: 30px;
 color: #423E48;
-opacity: 0.3;
+//opacity: 0.3;
 transition: all 0.3s ease;
 &:hover{
-  color: #4275D8;
-  opacity: 1;
+  opacity: 0.4;
 }
 //margin: 0 5px;
 &:last-child{
