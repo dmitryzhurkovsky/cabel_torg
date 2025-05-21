@@ -3,10 +3,11 @@ import { useNotificationsStore } from '@/stores/notifications';
 import { useAuthStore } from '@/stores/auth';
 
 const api = axios.create({
-    baseURL: process.server
-        ? process.env.NUXT_APP_API_URL
-        // : useRuntimeConfig().public.NUXT_APP_API_URL
-        : 'https://cabel-torg.by/api/v1/'
+       baseURL: 'https://cabel-torg.by/api/v1/'
+    // baseURL: process.server
+    //     ? process.env.NUXT_APP_API_URL
+    //     // : useRuntimeConfig().public.NUXT_APP_API_URL
+    //     : 'https://cabel-torg.by/api/v1/'
 })
 
 api.interceptors.response.use(
