@@ -29,11 +29,13 @@ class SitemapGenerator:
             static_routers: Iterable = None,
             dynamic_routers: Iterable[DynamicRoute] = None,
             schema_version: str = settings.SITEMAP_SCHEMA_VERSION,
+            image_schema_versions: str = settings.SITEMAP_SCHEMA_VERSION,
     ):
         self.site_name = site_name if site_name.startswith("https://") else f"https://{site_name}"
         self.static_routes = static_routers or []
         self.dynamic_routes = dynamic_routers or []
         self.schema_version = schema_version
+        self.image_schema_version = image_schema_versions
 
         self.output: FileManager = TextFileManager(filename=absolute_path)
 
@@ -41,7 +43,7 @@ class SitemapGenerator:
         root_element = ET.Element("urlset")
         root_element.set("xmlns", f"https://www.sitemaps.org/schemas/sitemap/{self.schema_version}")
         root_element.set(
-            "xmlns:image", f"http://www.google.com/schemas/sitemap-image/{self.schema_version}"
+            "xmlns:image", f"http://www.google.com/schemas/sitemap-image/{self.image_schema_version}"
         )
         return root_element
 
