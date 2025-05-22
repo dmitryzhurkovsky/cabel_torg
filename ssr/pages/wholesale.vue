@@ -1,4 +1,5 @@
 <template>
+  <Breadcrumb/>
   <div class="wholesale app__content">
     <div class="wholesale__wrapper">
       <div class="wholesale__content _container">
@@ -46,7 +47,7 @@
   onMounted(() => {
     breadCrumbStore.changeBreadCrumb(0);
     breadCrumbStore.addBreadCrumb({
-      name: router.currentRoute.value.meta.name,
+      name: "Оптовым клиентам",
       path: router.currentRoute.value.path,
       type: "global",
       class: ""

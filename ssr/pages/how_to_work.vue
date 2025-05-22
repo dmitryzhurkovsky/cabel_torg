@@ -45,7 +45,7 @@
   onMounted(() => {
     breadCrumbStore.changeBreadCrumb(0);
     breadCrumbStore.addBreadCrumb({
-      name: router.currentRoute.value.meta.name,
+      name: "Оформление заказа",
       path: router.currentRoute.value.path,
       type: "global",
       class: ""

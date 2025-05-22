@@ -45,8 +45,9 @@
   });
 
   onMounted(() => {
+    breadCrumbStore.changeBreadCrumb(0);
     breadCrumbStore.addBreadCrumb({
-      name: router.currentRoute.value.meta.name,
+      name: "Оплата и доставка",
       path: router.currentRoute.value.path,
       type: "global",
       class: ""
