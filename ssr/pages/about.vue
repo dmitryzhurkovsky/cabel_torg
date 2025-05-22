@@ -111,10 +111,8 @@
 
   onMounted(() => {
     breadCrumbStore.changeBreadCrumb(0);
-    // console.log('router ', router);
-    
     breadCrumbStore.addBreadCrumb({
-      name: router.currentRoute.value.meta.name,
+      name: "О Компании",
       path: router.currentRoute.value.path,
       type: "global",
       class: ""
