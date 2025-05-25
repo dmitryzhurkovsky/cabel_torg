@@ -9,7 +9,7 @@
       </linearGradient>
       </defs>
     </svg>
-    <h3>Готово!</h3>
+    <div>Готово!</div>
     <p v-if = "popUpMessage.main"> {{ popUpMessage.main }}</p>
     <p class="mt-20" v-if = "popUpMessage.sub"><b v-if = "popUpMessage.bolt">{{ popUpMessage.bolt }} </b> {{ popUpMessage.sub }}</p>
     <div class="group__row flex-center mt-20">

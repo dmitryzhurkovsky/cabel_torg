@@ -1,6 +1,6 @@
 <template>
   <div class="dropdown__content popup-cart">
-    <h3 class="">Избранные товары</h3>
+    <div class="">Избранные товары</div>
 
     <div class="popup-cart__list">
 

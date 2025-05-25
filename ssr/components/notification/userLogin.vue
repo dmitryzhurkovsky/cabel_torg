@@ -1,6 +1,6 @@
 <template>
     <div class="content__popup">
-        <h3>Вход</h3>
+        <div>Вход</div>
         <div class="">
             <div class="group">
                 <label class="label">E-mail</label>

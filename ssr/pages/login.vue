@@ -3,7 +3,7 @@
   <div class="app__content">
     <div class="_container">
       <div v-if = "authType === 1" class="popup__reg full-open">
-        <h3>Вход</h3>
+        <div>Вход</div>
         <div class="sign-in-htm">
           <div class="group">
             <label for="user" class="label">Электронная почта</label>
@@ -25,7 +25,7 @@
         </div>
       </div>
       <div v-if = "authType === 2" class="popup__reg full-open">
-        <h3>Восстановление пароля</h3>
+        <div>Восстановление пароля</div>
         <div class="reset-pass">
           <div class="group">
             <label for="user" class="label">Электронная почта</label>
@@ -44,7 +44,7 @@
         </div>
       </div>
       <div v-if = "authType === 3" class="popup__reg full-open">
-        <h3>Регистрация для юрлица</h3>
+        <div>Регистрация для юрлица</div>
         <div class="register">
           <div class="group">
             <label for="email" class="label">Электронная почта</label>
@@ -89,7 +89,7 @@
         </div>
       </div>
       <div v-if = "authType === 4" class="popup__reg full-open">
-        <h3>Проверьте ваш email</h3>
+        <div>Проверьте ваш email</div>
         <div class="reset-pass">
           <div class="group">
             <p>Мы отправили ссылку для <b>восстановления пароля</b> к вашей учетной записи.</p>

@@ -93,22 +93,15 @@
                         <div v-if="!cartItemData.is_price_on_request && quantity === 0 && cartItemData.status !== 'O'" class="btn black" @click.stop="onOperationWithCartItem(cartItemData, 'set')">В корзину</div>
                         <div v-if="!cartItemData.is_price_on_request && quantity === 0 && cartItemData.status === 'O'" class="btn empty_black popup-btn" @click.stop="onCreatePopUp(true, cartItemData.id)">Узнать о поступлении</div>
                         <div v-if="cartItemData.is_price_on_request" class="btn empty_black popup-btn" @click.stop="onCreatePopUpRequestPrice(true, cartItemData.id)">Запросить цену</div>
-
                         <div
                                 @click.stop="onWishClick()"
                                 :class="[isWish === false ? 'product__favorite icon-favorite' : 'product__favorite icon-favorite-choosed']"
-
                         >
                         </div>
                     </div>
                     <a class="product__link _link" href="/how_to_work">Как оформить заказ ></a>
-
-
-
               </div> <!-- product__info -->
             </div>  <!-- product__box -->
-
-
           </div>
         </div>
       </div>
@@ -407,7 +400,9 @@
   );
 
   useHead({
-    title: cartItemData?.value?.name + ' купить в Минске, цена ' + cartItemData?.value?.price_with_discount_and_tax,
+    // title: cartItemData?.value?.name + ' купить в Минске, цена ' + cartItemData?.value?.price_with_discount_and_tax && cartItemData?.value?.price_with_discount_and_tax !== cartItemData?.value?.price_with_tax ? cartItemData?.value?.price_with_discount_and_tax: cartItemData?.value?.price_with_tax,
+    // title: cartItemData?.value?.name + ' купить в Минске, цена ' + cartItemData?.value?.price_with_tax,
+    title: cartItemData?.value?.name + ' купить в Минске, цена',
     meta: [
       { name: 'description', content: 'Предлагаем купить ' + cartItemData?.value?.name + ' в Минске по доступным ценам. Доставка по РБ, большой выбор.' },
     ],

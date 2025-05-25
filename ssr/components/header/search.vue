@@ -13,7 +13,7 @@
     <div class="dropdown__box" v-if = "searchString !== catalogSearchString">
       <div class="dropdown__wrapper">
         <div class="dropdown__content popup-cart">
-            <h3 class="">Найденые товары</h3>
+            <div class="">Найденые товары</div>
 
               <div v-if="queryString && findedElements.length" class="popup-cart__list">
                 <HeaderSearchItem 

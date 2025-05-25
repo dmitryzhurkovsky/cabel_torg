@@ -1,7 +1,7 @@
 <template>
     <div class="content__popup">
-        <h3 v-if = "popUpAdditionalData?.cardID" class="mb-20">Запросить цену</h3>
-        <h3 v-else class="mb-20">Заказать звонок</h3>
+        <div v-if = "popUpAdditionalData?.cardID" class="mb-20">Запросить цену</div>
+        <div v-else class="mb-20">Заказать звонок</div>
         <div class="">
             <div class="group">
                 <label class="label">Ваше имя</label>
@@ -16,11 +16,16 @@
 
             <div class="group__row flex-center mt-20">
                 <div class="center-text">
-                    <button @click = "cancelRequest()" type="submit" class="btn black">Отмена</button>
+                  <button @click = "cancelRequest()" type="submit" class="btn black">Отмена</button>
                 </div>
 
                 <div class="center-text">
-                    <button @click = "sendRequest()" type="submit" class="btn black">Запросить цену</button>
+                  <button
+                    @click = "sendRequest()" type="submit" class="btn black"
+                    onclick="ym(94113822,'reachGoal','zapros-cena'); return true;"
+                  >
+                    Запросить цену
+                  </button>
                 </div>
 
             </div>
@@ -50,7 +55,7 @@
   };
 
   const sendRequest = async () => {
-    ym(94113822, 'reachGoal', 'zapros-cena');
+    // ym(94113822, 'reachGoal', 'zapros-cena');
     if (isLoading.value) return;
 
     isLoading.value = true;

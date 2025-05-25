@@ -3,7 +3,7 @@
     <div class="quick-category__wrapper">
       <div class="quick-category__content _container">
         <div class="quick-category__body">
-          <h3>Каталог товаров</h3>
+          <div>Каталог товаров</div>
           <div class="quick-category__grid">
             <div class="quick-category__item quick-category__big">
               <ul class="quick-category__list">Сетевое оборудование

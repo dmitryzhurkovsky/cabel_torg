@@ -4,7 +4,7 @@
       <div class="recomendation__content _container">
         <div class="recomendation__body">
 
-          <h3>Рекомендации для вас</h3>
+          <div>Рекомендации для вас</div>
           <div class="recomendation__nav" v-if="isShowFilter">
             <div 
               :class="[activePiont === 0 ? 'recomendation__nav__item active' : 'recomendation__nav__item']" 

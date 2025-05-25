@@ -7,7 +7,7 @@
 
 
           <div class="cart__block">
-            <h3>Товары в корзине: <span>{{ totalOrderQuantity }}</span></h3>
+            <div>Товары в корзине: <span>{{ totalOrderQuantity }}</span></div>
 
             <div v-if = "orders.length === 0" class="cart__list">
               <div class="cart__empty__item">Ваша корзина пуста</div>
@@ -53,7 +53,7 @@
           <!-- Появляется если есть товар в корзине  и человек наживаем кнопку оформить заказ -->
 
           <div v-if = "isApplicationOpen === true && orders.length !== 0" class="cart__order">
-            <h3>Оформление заказа </h3>
+            <div>Оформление заказа </div>
             <div class="about__paragraph">
               <div class="about__paragraph__title">
                 <span>Доставка</span>
@@ -185,16 +185,16 @@
                   <div class="summary__item">Скидка по промокоду: <span>{{ promo_price }}</span></div>
                   <div class="summary__item">Итоговая стоимость: <span><b>{{ (totalOrderCost - promo_price).toFixed(2) }}</b></span>BYN</div>
                   <div class="_footnote">* Сумма указана с учетом НДС</div>
-                  <button class="btn" @click="checkRequestData()">Оформить заказ</button>
-
+                  <button class="btn" 
+                    @click="checkRequestData()"
+                    onclick="ym(94113822,'reachGoal','oform-zakaz'); return true;"
+                  >
+                    Оформить заказ
+                  </button>
                 </div>
-
-
               </div>
             </div>
-
           </div>
-
         </div>
       </div>
     </div>
@@ -378,7 +378,7 @@
         // router.push('/login');
         orderData.user = userData.value.id;
         await oredersStore.sendOrderRequest(orderData);
-        ym(94113822, 'reachGoal', 'oform-zakaz');
+        // ym(94113822, 'reachGoal', 'oform-zakaz');
         isLoading.value = false;
         // notificationsStore.setIsLoading(true);
         // router.push('/user_profile');
@@ -413,7 +413,7 @@
             await authStore.sendRegisterRequest(userDataForRegister);
             orderData.user = userData.value.id;
             await oredersStore.sendOrderRequest(orderData);
-            ym(94113822, 'reachGoal', 'oform-zakaz');
+            // ym(94113822, 'reachGoal', 'oform-zakaz');
             isLoading.value = false;
             notificationsStore.setIsLoading(false);
             router.push('/user_profile');

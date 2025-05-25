@@ -4,7 +4,7 @@
       <div class="news__content _container">
         <div class="news__body">
 
-          <h3>Новости CabelTorg</h3>
+          <div>Новости CabelTorg</div>
           <!-- <div class="news__block" v-if="news"> -->
 
             <swiper

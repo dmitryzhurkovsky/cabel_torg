@@ -1,6 +1,6 @@
 <template>
   <div class="dropdown__content popup-cart">
-    <h3 class="">Корзина</h3>
+    <div class="">Корзина</div>
     <div class="popup-cart__summary">
       <div class="div">Товары в корзине: <span>{{ totalOrderQuantity }}</span></div>
       <div>на сумму <span>{{ totalOrderCost }}</span><span> BYN</span></div>

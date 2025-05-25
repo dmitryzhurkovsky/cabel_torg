@@ -4,7 +4,7 @@
       <div class="partners__content _container">
         <div class="partners__body">
 
-          <h3>Наши партнеры</h3>
+          <div>Наши партнеры</div>
           <div class="partners__items flex-center">
             <swiper
                 :slides-per-view = quantity

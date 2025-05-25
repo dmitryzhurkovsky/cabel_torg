@@ -5,7 +5,7 @@
               <div class="footer__body">
                   <div class="footer__row flex-center">
                       <div class="footer__item">
-                        <h3>Остались вопросы?</h3>
+                        <div>Остались вопросы?</div>
                         <p>Напишите нам на почту <a class="_link" :href = "'mailto:' + settings.email">{{ settings.email }}</a>  или оставьте свой номер телефона и наш специалист вскоре свяжется с вами!</p>
                       </div>
                       <button class="btn" @click.stop = "onMadeCall(true)">Заказать звонок</button>

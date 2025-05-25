@@ -31,7 +31,6 @@
   const headerStore = useHeaderStore();
   const favoritesStore = useFavoritesStore();
 
-
   const organizationData =  {
     "@context": "https://schema.org",
     "@type": "Organization",
