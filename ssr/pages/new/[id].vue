@@ -1,13 +1,6 @@
 <template>
   <Breadcrumb/>
   <div class="">
-    <Head>
-      <Title>
-        КабельТорг | {{ data?.title }}
-      </Title>
-      <Meta name="description" :content="data?.title" />
-    </Head>
-
     <div class="one-news__block app__content _container" v-if="data">
       <a class="one-news__item">
           <div class="one-news__img">
@@ -36,23 +29,19 @@
 
   const route = useRoute();
   const router = useRouter();
+  const config = useRuntimeConfig();
 
   const notificationsStore = useNotificationsStore();
   const breadCrumbStore = useBreadCrumbStore();
 
   const oneNewData = ref(null);
 
-  // useHead({
-  //   title: 'Кабельторг | ' + oneNewData.value.name,
-  //   name: oneNewData.value.name,
-  //   meta: [{
-  //     name: oneNewData.value.name,
-  //     content: 'Страница ' + oneNewData.value.name,
-  //   }]
-  // })
-
   const ChangeParameters = computed(() => {
     return JSON.stringify(route.query) + JSON.stringify(route.params);
+  });
+
+  const createCanonicalLink = computed(() => {
+    return config.public.NUXT_APP_DOCUMENTS.slice(0, -1) + '/new/' + route.params.id;
   });
 
   const onMoveToAllNews = () => {
@@ -100,18 +89,15 @@
     }
   )
 
-  // onBeforeMount(async () => {
-  //   await oneGetData()
-  //   data.value = oneNewData.value
-  //   onSetBreadCrumbs()
-  // })
-
-  // onBeforeUpdate(async () => {
-  //   await oneGetData()
-  //   data.value = oneNewData.value
-  //   onSetBreadCrumbs()
-  // })
-
+  useHead({
+    title: ' КабельТорг | ' + data?.value?.title,
+    meta: [
+      { name: 'description', content: data?.value?.title },
+    ],
+    link: [
+      { rel: 'canonical', href: createCanonicalLink.value },
+    ],
+  });
 </script>
 
 <style lang="scss" scoped>

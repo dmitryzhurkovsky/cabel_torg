@@ -27,15 +27,24 @@
   import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
   const router = useRouter();
+  const route = useRoute();
+  const config = useRuntimeConfig();
 
   const breadCrumbStore = useBreadCrumbStore();
+
+  const createCanonicalLink = computed(() => {
+    return config.public.NUXT_APP_DOCUMENTS.slice(0, -1) + route.path;
+  });
 
   useHead({
     title: 'Кабельторг | Гарантия',
     meta: [{
       name: 'Гарантия',
       content: 'Страница Гарантия'
-    }]
+    }],
+    link: [
+      { rel: 'canonical', href: createCanonicalLink.value },
+    ],
   });
 
   onMounted(() => {

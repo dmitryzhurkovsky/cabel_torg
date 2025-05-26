@@ -74,6 +74,8 @@
   import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
   const router = useRouter();
+  const route = useRoute();
+  const config = useRuntimeConfig();
 
   const mainStore = useMainStore();
   const authStore = useAuthStore();
@@ -89,12 +91,19 @@
   const message = ref('');
   const isLoading = ref(false);
 
+  const createCanonicalLink = computed(() => {
+    return config.public.NUXT_APP_DOCUMENTS.slice(0, -1) + route.path;
+  });
+
   useHead({
     title: 'Кабельторг | Контакты',
     meta: [{
       name: 'Контакты',
       content: 'Страница Контакты'
-    }]
+    }],
+    link: [
+      { rel: 'canonical', href: createCanonicalLink.value },
+    ],
   });
 
   onMounted(() => {

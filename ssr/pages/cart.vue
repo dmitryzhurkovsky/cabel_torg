@@ -213,6 +213,8 @@
   import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
   const router = useRouter();
+  const route = useRoute();
+  const config = useRuntimeConfig();
 
   const notificationsStore = useNotificationsStore();
   const oredersStore = useOrdersStore();
@@ -245,16 +247,12 @@
 
   const secondPartElement = ref(null);
 
-  useHead({
-    title: 'Корзина',
-    meta: [{
-      name: 'Корзина',
-      content: 'Страница Корзина'
-    }]
-  });
-
   const changeParameters = computed(() => {
     return JSON.stringify(userData.value)
+  });
+
+  const createCanonicalLink = computed(() => {
+    return config.public.NUXT_APP_DOCUMENTS.slice(0, -1) + route.path;
   });
 
   watch(changeParameters, () => {
@@ -433,9 +431,9 @@
     oredersStore.setIsApplicationOpen(false);
     breadCrumbStore.changeBreadCrumb(0);
     breadCrumbStore.addBreadCrumb({
-      name: router.currentRoute.value.meta.name,
+      name: 'Корзина',
       path: router.currentRoute.value.path,
-      type: "global",
+      type: "local",
       class: ""
     });
     if (userData.value) {
@@ -454,6 +452,19 @@
       flat.value = userData.value.flat;
     }
   });
+
+  useHead({
+    title: 'Корзина',
+    meta: [{
+      name: 'Корзина',
+      content: 'Страница Корзина'
+    }],
+    link: [
+      { rel: 'canonical', href: createCanonicalLink.value },
+    ],
+  });
+
+
 </script>
 
 <style scoped lang="scss">

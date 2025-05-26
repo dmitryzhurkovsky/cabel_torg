@@ -79,9 +79,6 @@
             <li class="rectangle__text__item">гибкая система скидок в зависимости от объема партии, сроков оплаты и условий доставки позволит Вам самостоятельно выбрать для себя оптимальные условия сотрудничества;</li>
             <li class="rectangle__text__item">у нас принципиально высокие требования к качеству поставляемой продукции, наличие сертификатов соответствия, протоколов испытаний, подтверждающих качество предлагаемого товара, и сопроводительных документов, позволяющих установить производителя – все это позволит Вам избежать неприятных последствий.</li>
           </div>
-
-
-
         </div>
       </div>
     </div>
@@ -95,18 +92,27 @@
   import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
   const router = useRouter();
+  const route = useRoute();
+  const config = useRuntimeConfig();
 
   const mainStore = useMainStore();
   const breadCrumbStore = useBreadCrumbStore();
 
   const { settings } = storeToRefs(mainStore);
 
+  const createCanonicalLink = computed(() => {
+    return config.public.NUXT_APP_DOCUMENTS.slice(0, -1) + route.path;
+  });
+
   useHead({
     title: 'Кабельторг | О компании',
     meta: [{
       name: 'О компании',
       content: 'Страница о компании'
-    }]
+    }],
+    link: [
+      { rel: 'canonical', href: createCanonicalLink.value },
+    ],
   });
 
   onMounted(() => {

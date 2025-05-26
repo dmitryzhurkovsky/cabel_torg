@@ -118,6 +118,9 @@
   });
 
   const router = useRouter();
+  const route = useRoute();
+  const config = useRuntimeConfig();
+
   const notificationsStore = useNotificationsStore();
   const authStore = useAuthStore();
   const headerStore = useHeaderStore();
@@ -135,18 +138,33 @@
   const unp = ref('');
   const isLoading = ref(false);
 
+  const loacalRoute = computed(() => {
+    if (authType.value === 1) return "Вход"
+    if (authType.value === 2) return "Восстановление пароля"
+    if (authType.value === 3) return "Регистрация для юрлица"
+    if (authType.value === 4) return "Восстановления пароля"
+    return "";
+  });
+
+  const createCanonicalLink = computed(() => {
+    return config.public.NUXT_APP_DOCUMENTS.slice(0, -1) + route.path;
+  });
+
   useHead({
     title: 'Авторизация',
     meta: [{
       name: 'Авторизация',
       content: 'Страница Авторизация'
-    }]
+    }],
+    link: [
+      { rel: 'canonical', href: createCanonicalLink.value },
+    ],
   });
 
   onMounted( async () => {
     breadCrumbStore.changeBreadCrumb(0);
     breadCrumbStore.addBreadCrumb({
-      name: router.currentRoute.value.meta.name,
+      name: loacalRoute,
       path: router.currentRoute.value.path,
       type: "global",
       class: ""
@@ -156,14 +174,6 @@
   onBeforeUnmount( async () => {
     authStore.setErrors({});
   });
-
-  // useAsyncData(() => {
-  //   console.log('authToken: ', localStorage.getItem("authToken"));
-    
-  //   if (localStorage.getItem("authToken")) {
-  //     navigateTo('/user_profile');      
-  //   }
-  // });
 
   const changeScreen = (auth_type) => {
     authStore.setAuthType(auth_type);

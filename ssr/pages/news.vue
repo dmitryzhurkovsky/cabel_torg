@@ -35,6 +35,8 @@
   import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
   const router = useRouter();
+  const route = useRoute();
+  const config = useRuntimeConfig();
 
   const mainStore = useMainStore();
   const breadCrumbStore = useBreadCrumbStore();
@@ -45,12 +47,19 @@
   const totalPages = ref(1);
   const itemsInPage = ref(20);
 
+  const createCanonicalLink = computed(() => {
+    return config.public.NUXT_APP_DOCUMENTS.slice(0, -1) + route.path;
+  });
+
   useHead({
     title: 'Кабельторг | Новости',
     meta: [{
       name: 'Новости',
       content: 'Страница Новости'
-    }]
+    }],
+    link: [
+      { rel: 'canonical', href: createCanonicalLink.value },
+    ],
   });
     
   const paginatedNews = computed(() => {

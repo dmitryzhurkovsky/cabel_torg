@@ -167,6 +167,7 @@
 
   const route = useRoute();
   const router = useRouter();
+  const config = useRuntimeConfig();
 
   const catalogStore = useCatalogStore();
   const notificationsStore = useNotificationsStore();
@@ -197,6 +198,10 @@
     checkIsWish();
   });
 
+  const createCanonicalLink = computed(() => {
+    return config.public.NUXT_APP_DOCUMENTS.slice(0, -1) + '/card_product/' + route.params.id
+  });
+  
   const rebuildText = (text) => {
     let newText = ''
     if (text) newText = text.replace('<br>', '&nbsp')
@@ -405,6 +410,9 @@
     title: cartItemData?.value?.name + ' купить в Минске, цена',
     meta: [
       { name: 'description', content: 'Предлагаем купить ' + cartItemData?.value?.name + ' в Минске по доступным ценам. Доставка по РБ, большой выбор.' },
+    ],
+    link: [
+      { rel: 'canonical', href: createCanonicalLink.value },
     ],
   });
 </script>

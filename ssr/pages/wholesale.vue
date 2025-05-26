@@ -30,18 +30,27 @@
   import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
   const router = useRouter();
+  const route = useRoute();
+  const config = useRuntimeConfig();
 
   const mainStore = useMainStore();
   const breadCrumbStore = useBreadCrumbStore();
 
   const { settings } = storeToRefs(mainStore);
 
+  const createCanonicalLink = computed(() => {
+    return config.public.NUXT_APP_DOCUMENTS.slice(0, -1) + route.path;
+  });
+
   useHead({
     title: 'Кабельторг | Оптовым клиентам',
     meta: [{
       name: 'Оптовым клиентам',
       content: 'Страница Оптовым клиентам'
-    }]
+    }],
+    link: [
+      { rel: 'canonical', href: createCanonicalLink.value },
+    ],
   });
 
   onMounted(() => {

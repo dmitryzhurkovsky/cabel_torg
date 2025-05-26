@@ -42,7 +42,7 @@
       "streetAddress": "ул. ГОБК, 7, оф. 128",
       "addressLocality": "Брест",
       "postalCode": "224005",
-      "addressCountry": "Belarus"
+      "addressCountry": "BY"
     },
   };
 
