@@ -4,7 +4,7 @@
       <div class="recomendation__content _container">
         <div class="recomendation__body">
 
-          <div>Просмотренные товары</div>
+          <div class="recomendation__section_title section_title">Просмотренные товары</div>
           <div class="recomendation__block" v-if="ItemsForSlider.length">
               <swiper
                   :slides-per-view="slidersInFrame"
@@ -202,7 +202,7 @@
   margin-top: 30px;
   position: relative;
 
-  h3{
+  .section_title{
     margin-bottom: 20px;
   }
 

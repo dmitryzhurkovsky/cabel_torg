@@ -5,7 +5,7 @@
               <div class="footer__body">
                   <div class="footer__row flex-center">
                       <div class="footer__item">
-                        <div>Остались вопросы?</div>
+                        <div class="footer__section_title">Остались вопросы?</div>
                         <p>Напишите нам на почту <a class="_link" :href = "'mailto:' + settings.email">{{ settings.email }}</a>  или оставьте свой номер телефона и наш специалист вскоре свяжется с вами!</p>
                       </div>
                       <button class="btn" @click.stop = "onMadeCall(true)">Заказать звонок</button>
@@ -151,10 +151,13 @@
     align-items: flex-start;
     padding: 24px 0;
   }
-  h3{
+.footer__section_title{
     font-size: 16px;
     margin-bottom: 3px;
     letter-spacing: 0.44px;
+    line-height: 24px;
+    color: #423e48;
+    font-weight: 500;
   }
   p{
     font-weight: 300;

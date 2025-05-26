@@ -4,7 +4,7 @@
       <div class="news__content _container">
         <div class="news__body">
 
-          <div>Новости CabelTorg</div>
+          <div class="news__section_title section_title">Новости CabelTorg</div>
           <!-- <div class="news__block" v-if="news"> -->
 
             <swiper
@@ -147,7 +147,7 @@
   }
 
   &__body{
-    h3{
+    .section_title{
       margin-bottom: 20px;
     }
   }
