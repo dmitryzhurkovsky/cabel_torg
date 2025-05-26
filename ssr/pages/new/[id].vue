@@ -1,6 +1,6 @@
 <template>
   <Breadcrumb/>
-  <div class="">
+  <div class="news-content">
     <div class="one-news__block app__content _container" v-if="data">
       <a class="one-news__item">
           <div class="one-news__img">
@@ -101,6 +101,9 @@
 </script>
 
 <style lang="scss" scoped>
+.news-content{
+  flex-grow: 1;
+}
 .one-news{
   &__img{
     height: 200px;

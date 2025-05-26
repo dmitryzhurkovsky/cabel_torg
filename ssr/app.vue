@@ -280,6 +280,7 @@ body {
 }
 .app__content{
   flex: 1 0 auto;
+  flex-grow: 1;
 }
 .page {
     flex: 1 1 auto;
