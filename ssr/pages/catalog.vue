@@ -414,4 +414,8 @@
   font-weight: 600;
 
 }
+.content-block__title{
+  font-size: 30px;
+}
+
 </style>

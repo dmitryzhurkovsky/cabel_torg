@@ -634,4 +634,12 @@ input{
   }
 }
 
+.section_title{
+  font-size: 20px;
+  letter-spacing: .44px;
+  line-height: 24px;
+  color: #423e48;
+  font-weight: 500;
+}
+
 </style>

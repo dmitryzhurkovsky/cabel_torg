@@ -1,8 +1,8 @@
 <template>
   <div class="dropdown__content popup-cart">
-    <div class="">Корзина</div>
+    <div class="dropdown__content__title">Корзина</div>
     <div class="popup-cart__summary">
-      <div class="div">Товары в корзине: <span>{{ totalOrderQuantity }}</span></div>
+      <div class="">Товары в корзине: <span>{{ totalOrderQuantity }}</span></div>
       <div>на сумму <span>{{ totalOrderCost }}</span><span> BYN</span></div>
     </div>
     <div class="popup-cart__list" v-if = "ItemsForShow.length">
@@ -66,13 +66,7 @@
 .popup-cart{
   text-align: center;
 
-  h3{
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 140%;
-    text-align: center;
-    margin-bottom: 16px;
-  }
+
 
   &__summary{
     display: flex;
@@ -122,4 +116,11 @@
 
 }
 
+.dropdown__content__title{
+  font-size: 20px;
+  line-height: 140%;
+  margin-bottom: 16px;
+  color: #423e48;
+  font-weight: 500;
+}
 </style>

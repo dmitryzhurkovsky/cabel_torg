@@ -3,7 +3,7 @@
   <div class="app__content">
     <div class="_container">
       <div v-if = "authType === 1" class="popup__reg full-open">
-        <div>Вход</div>
+        <div class="popup__reg__title">Вход</div>
         <div class="sign-in-htm">
           <div class="group">
             <label for="user" class="label">Электронная почта</label>
@@ -25,7 +25,7 @@
         </div>
       </div>
       <div v-if = "authType === 2" class="popup__reg full-open">
-        <div>Восстановление пароля</div>
+        <div class="popup__reg__title">Восстановление пароля</div>
         <div class="reset-pass">
           <div class="group">
             <label for="user" class="label">Электронная почта</label>
@@ -44,7 +44,7 @@
         </div>
       </div>
       <div v-if = "authType === 3" class="popup__reg full-open">
-        <div>Регистрация для юрлица</div>
+        <div class="popup__reg__title">Регистрация для юрлица</div>
         <div class="register">
           <div class="group">
             <label for="email" class="label">Электронная почта</label>
@@ -312,8 +312,13 @@
   }
 
 
-  h3{
+  &__title{
     margin-bottom: 24px;
+    font-size: 20px;
+    letter-spacing: .44px;
+    line-height: 24px;
+    color: #423e48;
+    font-weight: 500;
   }
   .group{
     //width: 100%;

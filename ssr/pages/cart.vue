@@ -7,7 +7,7 @@
 
 
           <div class="cart__block">
-            <div>Товары в корзине: <span>{{ totalOrderQuantity }}</span></div>
+            <div class="cart__title"> Товары в корзине: <span>{{ totalOrderQuantity }}</span></div>
 
             <div v-if = "orders.length === 0" class="cart__list">
               <div class="cart__empty__item">Ваша корзина пуста</div>
@@ -471,7 +471,12 @@
 
 .cart {
   min-height: 400px;
-  h3{
+  &__title{
+    font-size: 20px;
+    line-height: 140%;
+    margin-bottom: 16px;
+    color: #423e48;
+    font-weight: 500;
     margin-bottom: 45px;
   }
   &__content-block{
