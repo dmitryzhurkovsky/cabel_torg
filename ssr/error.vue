@@ -1,26 +1,62 @@
 <template>
-  <div class="structure app__content">
-    <div class="structure__wrapper">
-      <div class="structure__content _container">
-        <div class="structure__body">
+  <div id="app__component">
+    <HeaderWrapper />
+    <NotificationMain />
+    <NuxtLoadingIndicator :color="'#FF9549'" />
+    <MyHeader />
+    <div class="structure app__content">
+      <div class="structure__wrapper">
+        <div class="structure__content _container">
+          <div class="structure__body">
+          </div>
+          <div class="structure__block">
+            <div class="structure__title">Что-то пошло не так...</div>
+            <div class="structure__text">Так уж получилось, что из множества страниц нашего сайта Вы оказались как раз на той, которая уже не существует…</div>
+            <button class="btn" @click ="navigateTo('/catalog')">Вернуться на главную</button>
+          </div>
         </div>
-        <div class="structure__block">
-          <h3 class="structure__title">Что-то пошло не так...</h3>
-          <div class="structure__text">Так уж получилось, что из множества страниц нашего сайта Вы оказались как раз на той, которая уже не существует…</div>
-          <button class="btn" @click ="navigateTo('/catalog')">Вернуться на главную</button>
-
-      </div>
       </div>
     </div>
+    <MyFooter />
   </div>
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onBeforeMount } from 'vue'
+import { useNotificationsStore } from '@/stores/notifications';
+import { useMainStore } from '@/stores/main';
+import { useOrdersStore } from '@/stores/orders';
+import { useAuthStore } from '@/stores/auth';
+import { useHeaderStore } from '@/stores/header';
+import { useFavoritesStore } from '@/stores/favorites';
 
-onMounted(() => {
-  console.log("Что-то пошло не так");
+const notificationsStore = useNotificationsStore();
+const mainStore = useMainStore();
+const oredersStore = useOrdersStore();
+const authStore = useAuthStore();
+const headerStore = useHeaderStore();
+const favoritesStore = useFavoritesStore();
+
+onBeforeMount(async () => {
+  const nullData = [];
+  if (!localStorage.getItem("carts")) localStorage.setItem("carts", JSON.stringify(nullData));
+  if (!localStorage.getItem("favorites")) localStorage.setItem("favorites", JSON.stringify(nullData));
+  await favoritesStore.getUserFavorite();
+  await oredersStore.getUserOrder();
+  if (localStorage.getItem("authToken")) {
+      await authStore.getUserData();
+  }
 });
+
+await useAsyncData(async () => {
+  notificationsStore.setIsLoading(true);
+  await headerStore.getCategories();
+  await oredersStore.getOrderDeliveryTypes();
+  await mainStore.getSettings();
+  notificationsStore.setIsLoading(false);
+  return true;
+});
+
 
 </script>
 

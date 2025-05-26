@@ -3,7 +3,7 @@
   <div class="app__content">
     <div class="_container">
       <div v-if = "authType === 1" class="popup__reg full-open">
-        <h3>Вход</h3>
+        <div class="popup__reg__title">Вход</div>
         <div class="sign-in-htm">
           <div class="group">
             <label for="user" class="label">Электронная почта</label>
@@ -25,7 +25,7 @@
         </div>
       </div>
       <div v-if = "authType === 2" class="popup__reg full-open">
-        <h3>Восстановление пароля</h3>
+        <div class="popup__reg__title">Восстановление пароля</div>
         <div class="reset-pass">
           <div class="group">
             <label for="user" class="label">Электронная почта</label>
@@ -44,7 +44,7 @@
         </div>
       </div>
       <div v-if = "authType === 3" class="popup__reg full-open">
-        <h3>Регистрация для юрлица</h3>
+        <div class="popup__reg__title">Регистрация для юрлица</div>
         <div class="register">
           <div class="group">
             <label for="email" class="label">Электронная почта</label>
@@ -89,7 +89,7 @@
         </div>
       </div>
       <div v-if = "authType === 4" class="popup__reg full-open">
-        <h3>Проверьте ваш email</h3>
+        <div>Проверьте ваш email</div>
         <div class="reset-pass">
           <div class="group">
             <p>Мы отправили ссылку для <b>восстановления пароля</b> к вашей учетной записи.</p>
@@ -118,6 +118,9 @@
   });
 
   const router = useRouter();
+  const route = useRoute();
+  const config = useRuntimeConfig();
+
   const notificationsStore = useNotificationsStore();
   const authStore = useAuthStore();
   const headerStore = useHeaderStore();
@@ -135,18 +138,33 @@
   const unp = ref('');
   const isLoading = ref(false);
 
+  const loacalRoute = computed(() => {
+    if (authType.value === 1) return "Вход"
+    if (authType.value === 2) return "Восстановление пароля"
+    if (authType.value === 3) return "Регистрация для юрлица"
+    if (authType.value === 4) return "Восстановления пароля"
+    return "";
+  });
+
+  const createCanonicalLink = computed(() => {
+    return config.public.NUXT_APP_DOCUMENTS.slice(0, -1) + route.path;
+  });
+
   useHead({
     title: 'Авторизация',
     meta: [{
       name: 'Авторизация',
       content: 'Страница Авторизация'
-    }]
+    }],
+    link: [
+      { rel: 'canonical', href: createCanonicalLink.value },
+    ],
   });
 
   onMounted( async () => {
     breadCrumbStore.changeBreadCrumb(0);
     breadCrumbStore.addBreadCrumb({
-      name: router.currentRoute.value.meta.name,
+      name: loacalRoute,
       path: router.currentRoute.value.path,
       type: "global",
       class: ""
@@ -156,14 +174,6 @@
   onBeforeUnmount( async () => {
     authStore.setErrors({});
   });
-
-  // useAsyncData(() => {
-  //   console.log('authToken: ', localStorage.getItem("authToken"));
-    
-  //   if (localStorage.getItem("authToken")) {
-  //     navigateTo('/user_profile');      
-  //   }
-  // });
 
   const changeScreen = (auth_type) => {
     authStore.setAuthType(auth_type);
@@ -302,8 +312,13 @@
   }
 
 
-  h3{
+  &__title{
     margin-bottom: 24px;
+    font-size: 20px;
+    letter-spacing: .44px;
+    line-height: 24px;
+    color: #423e48;
+    font-weight: 500;
   }
   .group{
     //width: 100%;

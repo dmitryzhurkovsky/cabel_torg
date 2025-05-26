@@ -1,6 +1,6 @@
 <template>
   <div class="content__popup">
-      <h3>Смена пароля</h3>
+      <div>Смена пароля</div>
       <div class="">
           <div class="group">
               <label class="label">Новый пароль</label>

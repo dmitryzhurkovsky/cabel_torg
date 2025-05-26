@@ -13,7 +13,7 @@
     <div class="dropdown__box" v-if = "searchString !== catalogSearchString">
       <div class="dropdown__wrapper">
         <div class="dropdown__content popup-cart">
-            <h3 class="">Найденые товары</h3>
+            <div class="dropdown__content__title">Найденые товары</div>
 
               <div v-if="queryString && findedElements.length" class="popup-cart__list">
                 <HeaderSearchItem 
@@ -215,6 +215,14 @@ cursor: pointer;
   background: #6291ED;
 }
 
+}
+.dropdown__content__title{
+
+  font-size: 20px;
+  line-height: 140%;
+  margin-bottom: 16px;
+  color: #423e48;
+  font-weight: 500;
 }
 
 </style>

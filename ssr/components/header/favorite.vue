@@ -1,6 +1,6 @@
 <template>
   <div class="dropdown__content popup-cart">
-    <h3 class="">Избранные товары</h3>
+    <div class="popup-cart__title">Избранные товары</div>
 
     <div class="popup-cart__list">
 
@@ -74,6 +74,13 @@
     line-height: 140%;
     text-align: center;
     margin-bottom: 16px;
+  }
+  &__title{
+    font-size: 20px;
+    line-height: 140%;
+    margin-bottom: 16px;
+    color: #423e48;
+    font-weight: 500;
   }
 
   &__list{

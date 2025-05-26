@@ -339,7 +339,7 @@
   );
 
   useHead({
-    title: `КабельТорг | ${categoryData?.value?.site_page_title}`,
+    title: categoryData?.value?.site_page_title,
     meta: [
       { name: 'description', content: categoryData?.value?.site_page_description },
     ],

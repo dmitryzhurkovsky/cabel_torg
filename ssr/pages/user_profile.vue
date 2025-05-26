@@ -65,12 +65,6 @@
     router.push("/");
   };
 
-  // onBeforeUpdate(()=> {
-  //   if (!localStorage.getItem("authToken")) {
-  //     navigateTo('/login');      
-  //   }
-  // });
-
   onMounted(() => {
     if (!localStorage.getItem("authToken")) router.push('/login');
     breadCrumbStore.changeBreadCrumb(0);

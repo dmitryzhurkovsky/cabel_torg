@@ -31,7 +31,6 @@
   const headerStore = useHeaderStore();
   const favoritesStore = useFavoritesStore();
 
-
   const organizationData =  {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -43,7 +42,7 @@
       "streetAddress": "ул. ГОБК, 7, оф. 128",
       "addressLocality": "Брест",
       "postalCode": "224005",
-      "addressCountry": "Belarus"
+      "addressCountry": "BY"
     },
   };
 
@@ -281,6 +280,7 @@ body {
 }
 .app__content{
   flex: 1 0 auto;
+  flex-grow: 1;
 }
 .page {
     flex: 1 1 auto;
@@ -633,6 +633,14 @@ input{
     transform: translate(-50%, -50%);
 
   }
+}
+
+.section_title{
+  font-size: 20px;
+  letter-spacing: .44px;
+  line-height: 24px;
+  color: #423e48;
+  font-weight: 500;
 }
 
 </style>

@@ -48,9 +48,9 @@
 
           <div class="dropdown__content popup-cart user-login">
             <div class="dropdown__list">
-                <h3>
+                <div>
                   Личный кабинет
-                </h3>
+                </div>
                 <a @click.stop="handleClick('/user_profile', 0)" class="icon-go-cart">
                   Мои заказы
                 </a>

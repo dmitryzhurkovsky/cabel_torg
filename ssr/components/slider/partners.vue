@@ -4,7 +4,7 @@
       <div class="partners__content _container">
         <div class="partners__body">
 
-          <h3>Наши партнеры</h3>
+          <div class="partners__section_title section_title">Наши партнеры</div>
           <div class="partners__items flex-center">
             <swiper
                 :slides-per-view = quantity
@@ -94,7 +94,7 @@
   }
 
   &__body{
-    h3{
+    .section_title{
       text-align: center;
       margin-bottom: 36px;
       @media (max-width: $md2+px) {
