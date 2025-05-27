@@ -8,7 +8,12 @@
                         <div class="footer__section_title">Остались вопросы?</div>
                         <p>Напишите нам на почту <a class="_link" :href = "'mailto:' + settings.email">{{ settings.email }}</a>  или оставьте свой номер телефона и наш специалист вскоре свяжется с вами!</p>
                       </div>
-                      <button class="btn" @click.stop = "onMadeCall(true)">Заказать звонок</button>
+                      <button class="btn" 
+                        @click.stop = "onMadeCall(true)"
+                        onclick="ym(94113822,'reachGoal','zapros-cena'); return true;"
+                      >
+                        Заказать звонок
+                      </button>
                   </div>
                   <div class="footer__row flex-center">
 
