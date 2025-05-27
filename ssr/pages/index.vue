@@ -20,15 +20,25 @@
   import { useQueryStore } from '@/stores/query';
   import { useBreadCrumbStore } from '@/stores/breadcrumb';
 
+  const route = useRoute();
+  const config = useRuntimeConfig();
+
   const queryStore = useQueryStore();
   const breadCrumbStore = useBreadCrumbStore();
 
+  const createCanonicalLink = computed(() => {
+    return config.public.NUXT_APP_DOCUMENTS.slice(0, -1);
+  });
+
   useHead({
-      title: 'Кабельторг | Купить электротехническое оборудование в Беларуси',
-      meta: [{
-        name: 'CabelTorg',
-        content: 'Интернет магазин КабельТорг'
-      }]
+    title: 'Кабельторг | Купить электротехническое оборудование в Беларуси',
+    meta: [{
+      name: 'CabelTorg',
+      content: 'Интернет магазин КабельТорг'
+    }],
+    link: [
+      { rel: 'canonical', href: createCanonicalLink.value },
+    ],
   });
 
   onMounted(() => {
