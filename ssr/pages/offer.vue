@@ -101,6 +101,7 @@
   const { settings } = storeToRefs(mainStore);
 
   const createCanonicalLink = computed(() => {
+    console.log('config ', config);
     return config.public.NUXT_APP_DOCUMENTS.slice(0, -1) + route.path;
   });
 
