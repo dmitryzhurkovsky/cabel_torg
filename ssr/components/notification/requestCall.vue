@@ -1,31 +1,35 @@
 <template>
-    <div class="content__popup">
-        <div v-if = "popUpAdditionalData?.cardID" class="mb-20">Узнать о поступлении</div>
-        <div v-else class="section_title mb-20">Заказать звонок</div>
-        <div class="">
-            <div class="group">
-                <label class="label">Ваше имя</label>
-                <input type="text" class="input" :class="{ 'is-invalid': authErrors.name }" v-model="name">
-                <div class="error-message" v-if="authErrors.name"> {{ authErrors.name }} </div>
-            </div>
-            <div class="group">
-                <label class="label">Контактный телефон</label>
-                <input type="text" class="input" :class="{ 'is-invalid': authErrors.phone }" v-model="phone">
-                <div class="error-message" v-if="authErrors.phone"> {{ authErrors.phone }} </div>
-            </div>
+  <div class="content__popup">
+    <div v-if = "popUpAdditionalData?.cardID" class="mb-20">Узнать о поступлении</div>
+    <div v-else class="section_title mb-20">Заказать звонок</div>
+    <div class="">
+      <div class="group">
+        <label class="label">Ваше имя</label>
+        <input type="text" class="input" :class="{ 'is-invalid': authErrors.name }" v-model="name">
+        <div class="error-message" v-if="authErrors.name"> {{ authErrors.name }} </div>
+      </div>
+      <div class="group">
+        <label class="label">Контактный телефон</label>
+        <input type="text" class="input" :class="{ 'is-invalid': authErrors.phone }" v-model="phone">
+        <div class="error-message" v-if="authErrors.phone"> {{ authErrors.phone }} </div>
+      </div>
 
-            <div class="group__row flex-center mt-20">
-                <div class="center-text">
-                    <button @click = "cancelRequest()" type="submit" class="btn black">Отмена</button>
-                </div>
-
-                <div class="center-text">
-                    <button @click = "sendRequest()" type="submit" class="btn black">Заказать звонок</button>
-                </div>
-
-            </div>
+      <div class="group__row flex-center mt-20">
+        <div class="center-text">
+          <button @click = "cancelRequest()" type="submit" class="btn black">Отмена</button>
         </div>
+
+        <div class="center-text">
+          <button 
+            @click = "sendRequest()" type="submit" class="btn black"
+            onclick="ym(94113822,'reachGoal','zapros-cena'); return true;"
+          >
+            Заказать звонок
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script setup>

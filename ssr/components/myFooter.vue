@@ -10,7 +10,6 @@
                       </div>
                       <button class="btn" 
                         @click.stop = "onMadeCall(true)"
-                        onclick="ym(94113822,'reachGoal','zapros-cena'); return true;"
                       >
                         Заказать звонок
                       </button>
