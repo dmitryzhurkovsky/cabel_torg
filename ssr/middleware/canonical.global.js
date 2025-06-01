@@ -1,27 +1,32 @@
 export default defineNuxtRouteMiddleware((to, from) => {
+  const originalFullPath = to.fullPath;
+  const indexOfQuestionMark = originalFullPath.indexOf('?');
 
-  // console.log('canonical to: ', to.path, ' from: ', from.path);
-  let rebuildedTarget = to.path.toLowerCase();
+  const pathPart = indexOfQuestionMark !== -1
+    ? originalFullPath.substring(0, indexOfQuestionMark)
+    : originalFullPath;
 
-  const originalString = to.fullPath;
-  const indexOfQuestionMark = originalString.indexOf('?');
-  
-  const paramsStr = indexOfQuestionMark !== -1 
-      ? originalString.substring(indexOfQuestionMark) 
-      : '';
+  const queryPart = indexOfQuestionMark !== -1
+    ? originalFullPath.substring(indexOfQuestionMark)
+    : '';
 
-  // console.log('query: ', paramsStr);
-  
-  if (to.path) {
-    if (rebuildedTarget.startsWith('www.')) {
-      rebuildedTarget = rebuildedTarget.slice(4);
-    }
-    rebuildedTarget = rebuildedTarget.replace(/\/{2,}/g, '/');
-    if (rebuildedTarget.endsWith('/')) rebuildedTarget = rebuildedTarget.slice(0, -1)
+  // Normalize path:
+  let normalizedPath = pathPart.toLowerCase();
+  if (normalizedPath.startsWith('www.')) {
+    normalizedPath = normalizedPath.slice(4);
   }
-  if (to.path !== rebuildedTarget) {
-    if (paramsStr.length) rebuildedTarget = rebuildedTarget + paramsStr;
-    // console.log('Redirect is needed to: ', rebuildedTarget);
-    return navigateTo(rebuildedTarget, { redirectCode: 301 });
+
+  // Убираем дублирующиеся слеши
+  normalizedPath = normalizedPath.replace(/\/{2,}/g, '/');
+
+  // Убираем конечный слеш (кроме "/")
+  if (normalizedPath.length > 1 && normalizedPath.endsWith('/')) {
+    normalizedPath = normalizedPath.slice(0, -1);
+  }
+
+  const rebuiltFullPath = normalizedPath + queryPart;
+
+  if (originalFullPath !== rebuiltFullPath) {
+    return navigateTo(rebuiltFullPath, { redirectCode: 301 });
   }
 });
