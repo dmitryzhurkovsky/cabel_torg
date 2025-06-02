@@ -23,10 +23,6 @@
   import { useHeaderStore } from '@/stores/header';
   import { useFavoritesStore } from '@/stores/favorites';
 
-  // definePageMeta({
-  //   middleware: 'auth',
-  // });
-
   const route = useRoute();
   const notificationsStore = useNotificationsStore();
   const mainStore = useMainStore();

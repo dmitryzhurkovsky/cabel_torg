@@ -188,6 +188,17 @@
     router.push(url);
   }
 
+  const redirectToNotFound = () => {
+    console.log('Redirecting...');
+    if (process.server) {
+      console.log('From server');
+      router.push('/404', { redirectCode: 404 });
+    } else {
+      console.log('From client');
+      navigateTo(route.fullPath, { redirectCode: 404 });
+    }
+  }
+
   const setParametersFromURL = () => {
     let isFailInParams = false
     const currRoute = useRoute();
@@ -196,13 +207,13 @@
     if (currRoute.params.id) {
       const isCategoryByLink = categories.value.filter(item => item.site_link == currRoute.params.id)
       if (!isCategoryByLink.length) {
-        router.push('/404') 
+        redirectToNotFound();
       } else {
         queryStore.setCategoryID(isCategoryByLink[0].id) 
       }
     } else {
       queryStore.setCategoryID(null) 
-      router.push('/404') 
+      redirectToNotFound();
     }
     // console.log('After SetFromUrl ', categoryId.value);
     if (query.limit) {
@@ -326,7 +337,7 @@
       if (categoryId.value) {
         await catalogStore.getCatalogItems(categoryId.value);
       } else {
-        router.push('/404');
+        redirectToNotFound();
       }
       setBreabcrumbs();
       return {

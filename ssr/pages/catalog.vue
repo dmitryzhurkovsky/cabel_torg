@@ -205,13 +205,24 @@
     setBreabcrumbs();
   };
 
+  const redirectToNotFound = () => {
+    console.log('Redirecting...');
+    if (process.server) {
+      console.log('From server');
+      router.push('/404', { redirectCode: 404 });
+    } else {
+      console.log('From client');
+      navigateTo(route.fullPath, { redirectCode: 404 });
+    }
+  }
+
   await useAsyncData(
     async () => {
       setParametersFromURL();
       if (!categoryId.value) {
         await catalogStore.getAllCatalogItems();
       } else {
-        router.push('/404');
+        redirectToNotFound();
       }
       setBreabcrumbs();
       return itemsList.value

@@ -10,7 +10,7 @@ const api = axios.create({
     //     : 'https://cabel-torg.by/api/v1/'
 })
 
-api.interceptors.response.use(
+  api.interceptors.response.use(
     response => {
       return response;
     },

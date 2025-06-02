@@ -389,14 +389,28 @@
     
   }
 
+  const redirectToNotFound = () => {
+    console.log('Redirecting...');
+    if (process.server) {
+      console.log('From server');
+      router.push('/404', { redirectCode: 404 });
+    } else {
+      console.log('From client');
+      navigateTo(route.fullPath, { redirectCode: 404 });
+    }
+  }
+  
   await useAsyncData(
     async () => {
+      // console.log('useAsyncData');
       catalogStore.setCartItemId(route.params.id);
       if (cartItemId.value) {
         await onGetCartData();
-        if (!cartItemData.value) router.push('/404');
+        if (!cartItemData.value) {
+          redirectToNotFound();
+        }
       } else {
-        router.push('/404');
+        redirectToNotFound();
       }
       return cartItemData.value;
     }, {
@@ -405,8 +419,6 @@
   );
 
   useHead({
-    // title: cartItemData?.value?.name + ' купить в Минске, цена ' + cartItemData?.value?.price_with_discount_and_tax && cartItemData?.value?.price_with_discount_and_tax !== cartItemData?.value?.price_with_tax ? cartItemData?.value?.price_with_discount_and_tax: cartItemData?.value?.price_with_tax,
-    // title: cartItemData?.value?.name + ' купить в Минске, цена ' + cartItemData?.value?.price_with_tax,
     title: cartItemData?.value?.name + ' купить в Минске, цена',
     meta: [
       { name: 'description', content: 'Предлагаем купить ' + cartItemData?.value?.name + ' в Минске по доступным ценам. Доставка по РБ, большой выбор.' },
