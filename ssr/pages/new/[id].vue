@@ -66,6 +66,17 @@
     });
   };
 
+  const redirectToNotFound = () => {
+    console.log('Redirecting...');
+    if (process.server) {
+      console.log('From server');
+      router.push('/404', { redirectCode: 404 });
+    } else {
+      console.log('From client');
+      navigateTo(route.fullPath, { redirectCode: 404 });
+    }
+  }
+
   const oneGetData = async () => {
     notificationsStore.setIsLoading(true);
     try {
@@ -73,9 +84,9 @@
       oneNewData.value = response.data;
       notificationsStore.setIsLoading(false);
     } catch (e) {
-        console.log(e);
-        notificationsStore.setIsLoading(false);
-        navigateTo('/404');
+      console.log(e);
+      notificationsStore.setIsLoading(false);
+      redirectToNotFound();
     }
   } 
 

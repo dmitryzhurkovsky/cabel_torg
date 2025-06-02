@@ -389,14 +389,28 @@
     
   }
 
+  const redirectToNotFound = () => {
+    console.log('Redirecting...');
+    if (process.server) {
+      console.log('From server');
+      router.push('/404', { redirectCode: 404 });
+    } else {
+      console.log('From client');
+      navigateTo(route.fullPath, { redirectCode: 404 });
+    }
+  }
+  
   await useAsyncData(
     async () => {
+      // console.log('useAsyncData');
       catalogStore.setCartItemId(route.params.id);
       if (cartItemId.value) {
         await onGetCartData();
-        if (!cartItemData.value) router.push('/404');
+        if (!cartItemData.value) {
+          redirectToNotFound();
+        }
       } else {
-        router.push('/404');
+        redirectToNotFound();
       }
       return cartItemData.value;
     }, {

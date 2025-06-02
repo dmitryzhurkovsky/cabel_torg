@@ -78,10 +78,7 @@
                 <input type="checkbox" v-if = "currentTypeOfProduct.type !== typeOfProduct" @click.prevent = toggleFilterCategory(currentTypeOfProduct.type)>
                 <span class="checkmark"></span>
               </label>
-
             </div>
-
-
         </div>
   
         <CatalogPriceSlider v-if = "viewType == 1" class="filter__box" 
