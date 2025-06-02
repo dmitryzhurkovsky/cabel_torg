@@ -405,8 +405,6 @@
   );
 
   useHead({
-    // title: cartItemData?.value?.name + ' купить в Минске, цена ' + cartItemData?.value?.price_with_discount_and_tax && cartItemData?.value?.price_with_discount_and_tax !== cartItemData?.value?.price_with_tax ? cartItemData?.value?.price_with_discount_and_tax: cartItemData?.value?.price_with_tax,
-    // title: cartItemData?.value?.name + ' купить в Минске, цена ' + cartItemData?.value?.price_with_tax,
     title: cartItemData?.value?.name + ' купить в Минске, цена',
     meta: [
       { name: 'description', content: 'Предлагаем купить ' + cartItemData?.value?.name + ' в Минске по доступным ценам. Доставка по РБ, большой выбор.' },
