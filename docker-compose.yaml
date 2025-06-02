@@ -8,8 +8,8 @@ services:
     restart: unless-stopped
     env_file:
       - backend/.env
-    ports:
-      - '5434:5432'
+#    ports:
+#      - '5434:5432'
     volumes:
       - /data/postgres:/var/lib/postgresql/data/
       - /backups/db_dumps:/backups/
@@ -40,8 +40,8 @@ services:
       dockerfile: ./build/Dockerfile
       target: backend
     restart: unless-stopped
-    ports:
-      - '8000:8000'
+#    ports:
+#      - '8000:8000'
     depends_on:
       db:
         condition: service_healthy
@@ -64,8 +64,8 @@ services:
       context: admin
       dockerfile: ./build/Dockerfile
     restart: unless-stopped
-    ports:
-      - '8001:8001'
+#    ports:
+#      - '8001:8001'
 
   frontend:
     container_name: 'prod_frontend'
@@ -73,8 +73,8 @@ services:
       context: ssr
       dockerfile: ./build/Dockerfile
     restart: unless-stopped
-    ports:
-      - '8002:8002'
+#    ports:
+#      - '8002:8002'
 
   reverse_proxy: # Copy static files during building this container
     container_name: 'prod_reverse_proxy'

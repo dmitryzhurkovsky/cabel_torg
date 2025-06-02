@@ -1,14 +1,13 @@
 export default defineNuxtRouteMiddleware((to, from) => {
+  const originalFullPath = to.fullPath;
+  const indexOfQuestionMark = originalFullPath.indexOf('?');
 
   console.log('canonical to: ', to.path, ' from: ', from.path);
   let rebuildedTarget = to.path.toLowerCase();
 
-  const originalString = to.fullPath;
-  const indexOfQuestionMark = originalString.indexOf('?');
-  
-  const paramsStr = indexOfQuestionMark !== -1 
-      ? originalString.substring(indexOfQuestionMark) 
-      : '';
+  const queryPart = indexOfQuestionMark !== -1
+    ? originalFullPath.substring(indexOfQuestionMark)
+    : '';
 
   // console.log('query: ', paramsStr);
   
