@@ -29,7 +29,7 @@ class SitemapGenerator:
             static_routers: Iterable = None,
             dynamic_routers: Iterable[DynamicRoute] = None,
             schema_version: str = settings.SITEMAP_SCHEMA_VERSION,
-            image_schema_versions: str = settings.SITEMAP_SCHEMA_VERSION,
+            image_schema_versions: str = settings.SITEMAP_IMAGE_SCHEMA_VERSION,
     ):
         self.site_name = site_name if site_name.startswith("https://") else f"https://{site_name}"
         self.static_routes = static_routers or []
