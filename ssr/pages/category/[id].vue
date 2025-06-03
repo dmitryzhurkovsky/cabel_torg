@@ -189,7 +189,7 @@
   }
 
   const redirectToNotFound = () => {
-    console.log('Redirecting...');
+    console.log('Redirecting from category... ');
     if (process.server) {
       console.log('From server');
       router.push('/404', { redirectCode: 404 });
@@ -344,8 +344,8 @@
         catalogData: itemsList.value,
         category: category.value,
       }
-    }, {
-      watch: [route]
+    // }, {
+    //   watch: [route]
     }
   );
 

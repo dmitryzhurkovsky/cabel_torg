@@ -392,7 +392,7 @@
   }
 
   const redirectToNotFound = () => {
-    console.log('Redirecting...');
+    console.log('Redirecting from card_product...');
     if (process.server) {
       console.log('From server');
       router.push('/404', { redirectCode: 404 });
