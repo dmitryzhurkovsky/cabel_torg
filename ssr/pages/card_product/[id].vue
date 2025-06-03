@@ -329,6 +329,8 @@
 
   const onGetCartData = async () => {
     queryStore.setSearchString('');
+    console.log('cartItemId: ', cartItemId.value);
+    
     await catalogStore.getCartItemData(cartItemId.value);
     if (cartItemData.value) {
       if (typeof window !== 'undefined') updateShowItems(cartItemId.value)
@@ -402,7 +404,6 @@
   
   await useAsyncData(
     async () => {
-      // console.log('useAsyncData');
       catalogStore.setCartItemId(route.params.id);
       if (cartItemId.value) {
         await onGetCartData();
