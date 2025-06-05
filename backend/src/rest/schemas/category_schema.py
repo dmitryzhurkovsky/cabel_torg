@@ -27,6 +27,7 @@ class CategorySchema(BaseSchema):
     site_link: str | None = None
     site_page_title: str | None = None
     site_page_description: str | None = None
+    site_page_seo_description: str | None = None
 
     class Config:
         from_attributes = True

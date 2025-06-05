@@ -80,6 +80,8 @@ class CategoryMixin(BaseMixin, ABC):
                 return 'site_page_title', raw_field.text
             case 'ОписаниеСтраницыСайта':
                 return 'site_page_description', raw_field.text
+            case 'SeoТекстКатегория':
+                return 'site_page_seo_description', raw_field.text
             case _:
                 return None, None
 

@@ -25,6 +25,7 @@ class Category(Base1CModel):
     site_link = Column(String)  # It's a slug field.
     site_page_title = Column(String)
     site_page_description = Column(String)
+    site_page_seo_description = Column(String)
     is_visible = Column(Boolean, default=True)
     # An idea of ordering is:
     # an oder attribute of parent categories is 1000, 2000, 3000;
