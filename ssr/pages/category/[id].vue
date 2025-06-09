@@ -97,6 +97,9 @@
               <div class="content-block__pagination">
                 <CatalogPaginationPanel />
               </div>
+              <div class="content-block__category_description">
+                  <p v-html = "rebuildText(categoryData.site_page_seo_description)"></p>
+              </div>
 
             </div>
           </div>
@@ -170,6 +173,12 @@
     isFilterPanelOpen.value = data
   };
 
+  const rebuildText = (text) => {
+    let newText = ''
+    if (text) newText = text.replace('<br>', '&nbsp')
+    return newText
+  };
+
   const clearSearchString= () => {
     queryStore.setSearchString('');
     catalogStore.setCatalogSearchString('');
@@ -203,7 +212,6 @@
     let isFailInParams = false
     const currRoute = useRoute();
     const { query } = currRoute
-    // console.log('SetForm URL ' , currRoute, '   ', query, '   category: ', categoryId.value);
     if (currRoute.params.id) {
       const isCategoryByLink = categories.value.filter(item => item.site_link == currRoute.params.id)
       if (!isCategoryByLink.length) {
@@ -344,8 +352,8 @@
         catalogData: itemsList.value,
         category: category.value,
       }
-    // }, {
-    //   watch: [route]
+    }, {
+      watch: [route]
     }
   );
 
@@ -504,6 +512,14 @@
       margin-bottom: 15px;
     }
 
+
+
+
+  }
+  &__category_description{
+    margin-bottom: 20px;
+    font-size: 0.875rem;
+    line-height: 20px;
 
   }
 

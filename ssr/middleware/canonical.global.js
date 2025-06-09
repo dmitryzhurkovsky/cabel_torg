@@ -34,5 +34,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
       console.log('From client');
       router.push(rebuildedTarget, { redirectCode: 301 });
     }
+  } else {
+    console.log('Not needed redirect!!!');
   }
 });

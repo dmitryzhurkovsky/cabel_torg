@@ -76,6 +76,7 @@
   import { useCatalogStore } from '@/stores/catalog';
 
   const route = useRoute();
+  const router = useRouter();
   const config = useRuntimeConfig();
   
   const queryStore = useQueryStore();
