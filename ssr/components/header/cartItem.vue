@@ -43,7 +43,7 @@
         const response = await axios.get('products/' + props.cartItem.product.id);
         cartItemData.value = response.data;
     } catch (e) {
-        console.log(e);
+        // console.log(e);
     }
   });
 

@@ -57,12 +57,12 @@ export const useCatalogStore = defineStore ('catalogStore', () => {
     category.value = category;
   };
 
-  const getCatalogItems = async (data) => {
+  const getCatalogItems = async (category) => {
     try {
-      if (data === null) {
+      if (category === null) {
         return;
       }
-      let queryData = 'products?category_id=' + data + 
+      let queryData = 'products?category_id=' + category + 
       '&offset=' + offset.value + 
       '&limit=' + limit.value;
       if (minLimit.value != minPrice.value || maxLimit.value != maxPrice.value) {
@@ -122,7 +122,9 @@ export const useCatalogStore = defineStore ('catalogStore', () => {
       const goodUrl = encodeURI(url);
       const response = await axios.get(goodUrl)
       cartItemData.value = response.data;
+      console.log('Good request products/' + id);
     } catch (e) {
+      console.log('Bad request products/' + id);
       // console.log(e)
       // notificationsStore.addMessage({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'});
     }

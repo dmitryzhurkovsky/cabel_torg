@@ -97,6 +97,9 @@
               <div class="content-block__pagination">
                 <CatalogPaginationPanel />
               </div>
+              <div class="content-block__category_description">
+                  <p v-html = "rebuildText(categoryData.site_page_seo_description)"></p>
+              </div>
 
             </div>
           </div>
@@ -168,6 +171,12 @@
 
   const setIsFilterPanelOpen = (data) => {
     isFilterPanelOpen.value = data
+  };
+
+  const rebuildText = (text) => {
+    let newText = ''
+    if (text) newText = text.replace('<br>', '&nbsp')
+    return newText
   };
 
   const clearSearchString= () => {
