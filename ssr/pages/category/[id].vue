@@ -514,6 +514,14 @@
     }
 
 
+
+
+  }
+  &__category_description{
+    margin-bottom: 20px;
+    font-size: 0.875rem;
+    line-height: 20px;
+
   }
 
   .empty_catalog{
