@@ -142,6 +142,8 @@ export const useQueryStore = defineStore ('queryStore', () => {
     }
     const lastSymbol = url.slice(-1);
     if (lastSymbol === '&' || lastSymbol === '?') url = url.slice(0, -1);
+    console.log('url: ', url);
+    
     return url;        
   };
 

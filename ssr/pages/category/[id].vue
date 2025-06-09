@@ -212,7 +212,6 @@
     let isFailInParams = false
     const currRoute = useRoute();
     const { query } = currRoute
-    // console.log('SetForm URL ' , currRoute, '   ', query, '   category: ', categoryId.value);
     if (currRoute.params.id) {
       const isCategoryByLink = categories.value.filter(item => item.site_link == currRoute.params.id)
       if (!isCategoryByLink.length) {
@@ -353,8 +352,8 @@
         catalogData: itemsList.value,
         category: category.value,
       }
-    // }, {
-    //   watch: [route]
+    }, {
+      watch: [route]
     }
   );
 
