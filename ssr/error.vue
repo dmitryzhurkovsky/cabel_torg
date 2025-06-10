@@ -49,6 +49,7 @@ onBeforeMount(async () => {
 });
 
 await useAsyncData(async () => {
+  console.log('Error page useAsyncData')
   notificationsStore.setIsLoading(true);
   await headerStore.getCategories();
   await oredersStore.getOrderDeliveryTypes();
