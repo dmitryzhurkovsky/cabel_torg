@@ -126,20 +126,6 @@ export const useCatalogStore = defineStore ('catalogStore', () => {
     } catch (e) {
       console.log('Bad request products/' + id);
       // console.log(e)
-      // if (e.response.status === 404) {
-      //   console.log('Ошибка 404');
-        // const errorData = {
-        //   statusCode: 404,
-        //   statusMessage: 'Page not found',
-        // };
-        // if (process.server) {
-        //   console.log('Create error from getCartItemData');
-        //   throw createError(errorData);
-        // } else {
-        //   console.log('Show error from getCartItemDatas');
-        //   showError(errorData);
-        // }
-      // }
       // notificationsStore.addMessage({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'});
     }
   }

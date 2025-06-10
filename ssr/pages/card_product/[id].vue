@@ -392,15 +392,15 @@
     
   }
 
-  const redirectToNotFound = () => {
+  const redirectToNotFound = async () => {
     console.log('Redirecting from card_product...');
-    // if (process.server) {
-    //   console.log('From server');
-      return router.push('/error', { redirectCode: 404 });
-    // } else {
-    //   console.log('From client');
-      // navigateTo(route.fullPath, { redirectCode: 404 });
-    // }
+    if (process.server) {
+      console.log('From server');
+      await router.push('/404', { redirectCode: 404 });
+    } else {
+      console.log('From client');
+      await navigateTo('/404', { redirectCode: 404 });
+    }
     // const errorData = {
     //   statusCode: 404,
     //   statusMessage: 'Page not found',
@@ -422,10 +422,10 @@
       if (cartItemId.value) {
         await onGetCartData();
         if (!cartItemData.value) {
-          redirectToNotFound();
+          await redirectToNotFound();
         }
       } else {
-        redirectToNotFound();
+        await redirectToNotFound();
       }
       return cartItemData.value;
     }, {
