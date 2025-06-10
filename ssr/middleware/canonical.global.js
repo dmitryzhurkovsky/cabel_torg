@@ -1,4 +1,4 @@
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware((to, from) => {
   const originalFullPath = to.fullPath;
   const indexOfQuestionMark = originalFullPath.indexOf('?');
 
@@ -32,7 +32,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       return navigateTo(rebuildedTarget, { redirectCode: 301 });
     } else {
       console.log('From client');
-      await router.push(rebuildedTarget, { redirectCode: 301 });
+      router.push(rebuildedTarget, { redirectCode: 301 });
     }
   } else {
     console.log('Not needed redirect!!!');
