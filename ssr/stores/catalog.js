@@ -83,7 +83,7 @@ export const useCatalogStore = defineStore ('catalogStore', () => {
       //   {name: "Не возможно загрузить каталог категории " + data, icon: "error", id: '1'}
       // )
     }
-  }; // GET_CATALOG_ITEMS
+  };
 
   const getAllCatalogItems = async() => {
     try {
@@ -109,7 +109,7 @@ export const useCatalogStore = defineStore ('catalogStore', () => {
       //   {name: "Не возможно загрузить весь каталог ", icon: "error", id: '1'}
       // )
     }
-  }; //  GET_ALL_CATALOG_ITEMS
+  };
 
   const setCartItemId = (id) => {
     cartItemId.value = id;
@@ -126,6 +126,20 @@ export const useCatalogStore = defineStore ('catalogStore', () => {
     } catch (e) {
       console.log('Bad request products/' + id);
       // console.log(e)
+      // if (e.response.status === 404) {
+      //   console.log('Ошибка 404');
+        // const errorData = {
+        //   statusCode: 404,
+        //   statusMessage: 'Page not found',
+        // };
+        // if (process.server) {
+        //   console.log('Create error from getCartItemData');
+        //   throw createError(errorData);
+        // } else {
+        //   console.log('Show error from getCartItemDatas');
+        //   showError(errorData);
+        // }
+      // }
       // notificationsStore.addMessage({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'});
     }
   }

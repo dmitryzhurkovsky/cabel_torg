@@ -164,6 +164,7 @@
   import { useBreadCrumbStore } from '@/stores/breadcrumb';
   import { useFavoritesStore } from '@/stores/favorites';
   import { useOrdersStore } from '@/stores/orders';
+  import { createError } from 'h3'
 
   const route = useRoute();
   const router = useRouter();
@@ -393,17 +394,30 @@
 
   const redirectToNotFound = () => {
     console.log('Redirecting from card_product...');
-    if (process.server) {
-      console.log('From server');
-      router.push('/404', { redirectCode: 404 });
-    } else {
-      console.log('From client');
-      navigateTo(route.fullPath, { redirectCode: 404 });
-    }
+    // if (process.server) {
+    //   console.log('From server');
+      return router.push('/error', { redirectCode: 404 });
+    // } else {
+    //   console.log('From client');
+      // navigateTo(route.fullPath, { redirectCode: 404 });
+    // }
+    // const errorData = {
+    //   statusCode: 404,
+    //   statusMessage: 'Page not found',
+    // };
+    // if (process.server) {
+    //   console.log('Create error from card_product');
+    //   throw createError(errorData);
+    // } else {
+    //   console.log('Show error from card_product');
+    //   showError(errorData);
+    // }
   }
   
   await useAsyncData(
     async () => {
+      console.log('Starting get data for: ', route.fullPath);
+      
       catalogStore.setCartItemId(route.params.id);
       if (cartItemId.value) {
         await onGetCartData();
