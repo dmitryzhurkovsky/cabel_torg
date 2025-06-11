@@ -212,8 +212,9 @@
     let isFailInParams = false
     const currRoute = useRoute();
     const { query } = currRoute
+    console.log('currRoute.params.id ', currRoute.params.id);
     if (currRoute.params.id) {
-      const isCategoryByLink = categories.value.filter(item => item.site_link == currRoute.params.id)
+      const isCategoryByLink = categories.value.filter(item => item.site_link?.toLowerCase() == currRoute.params.id)
       if (!isCategoryByLink.length) {
         redirectToNotFound();
       } else {
