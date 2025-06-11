@@ -197,32 +197,31 @@
     router.push(url);
   }
 
-  const redirectToNotFound = () => {
+  const redirectToNotFound = async () => {
     console.log('Redirecting from category... ');
     if (process.server) {
       console.log('From server');
-      router.push('/404', { redirectCode: 404 });
+      await router.push('/404', { redirectCode: 404 });
     } else {
       console.log('From client');
-      navigateTo(route.fullPath, { redirectCode: 404 });
+      await navigateTo(route.fullPath, { redirectCode: 404 });
     }
   }
 
-  const setParametersFromURL = () => {
+  const setParametersFromURL = async () => {
     let isFailInParams = false
     const currRoute = useRoute();
     const { query } = currRoute
-    console.log('currRoute.params.id ', currRoute.params.id);
     if (currRoute.params.id) {
       const isCategoryByLink = categories.value.filter(item => item.site_link?.toLowerCase() == currRoute.params.id)
       if (!isCategoryByLink.length) {
-        redirectToNotFound();
+        await redirectToNotFound();
       } else {
         queryStore.setCategoryID(isCategoryByLink[0].id) 
       }
     } else {
       queryStore.setCategoryID(null) 
-      redirectToNotFound();
+      await redirectToNotFound();
     }
     // console.log('After SetFromUrl ', categoryId.value);
     if (query.limit) {
@@ -342,11 +341,11 @@
 
   await useAsyncData(
     async () => {
-      setParametersFromURL();
+      await setParametersFromURL();
       if (categoryId.value) {
         await catalogStore.getCatalogItems(categoryId.value);
       } else {
-        redirectToNotFound();
+        await redirectToNotFound();
       }
       setBreabcrumbs();
       return {
