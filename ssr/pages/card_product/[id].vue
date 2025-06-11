@@ -401,17 +401,6 @@
       console.log('From client');
       await navigateTo('/404', { redirectCode: 404 });
     }
-    // const errorData = {
-    //   statusCode: 404,
-    //   statusMessage: 'Page not found',
-    // };
-    // if (process.server) {
-    //   console.log('Create error from card_product');
-    //   throw createError(errorData);
-    // } else {
-    //   console.log('Show error from card_product');
-    //   showError(errorData);
-    // }
   }
   
   await useAsyncData(
