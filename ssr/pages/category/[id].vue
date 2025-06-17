@@ -98,7 +98,8 @@
                 <CatalogPaginationPanel />
               </div>
               <div class="content-block__category_description">
-                  <p v-html = "rebuildText(categoryData.site_page_seo_description)"></p>
+                  <!-- <p v-html = "rebuildText(categoryData.site_page_seo_description)"></p> -->
+                  <p v-html = "categoryData.site_page_seo_description?.replace('<br>', '&nbsp')"></p>
               </div>
 
             </div>
@@ -341,6 +342,8 @@
 
   await useAsyncData(
     async () => {
+      console.log('category start useAsyncData');
+      
       await setParametersFromURL();
       if (categoryId.value) {
         await catalogStore.getCatalogItems(categoryId.value);

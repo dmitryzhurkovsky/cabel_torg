@@ -16,11 +16,15 @@ export default defineNuxtRouteMiddleware((to, from) => {
   // console.log('query: ', queryPart);
   
   if (to.path) {
+    // console.log('start: ', rebuildedTarget);
     if (rebuildedTarget.startsWith('www.')) {
       rebuildedTarget = rebuildedTarget.slice(4);
     }
+    // console.log('after www slice: ', rebuildedTarget);
     rebuildedTarget = rebuildedTarget.replace(/\/{2,}/g, '/');
+    // console.log('after /// slice: ', rebuildedTarget);
     if (rebuildedTarget.endsWith('/') && to.path !== '/') rebuildedTarget = rebuildedTarget.slice(0, -1)
+    // console.log('after last / slice: ', rebuildedTarget);
   }
   if (to.path !== rebuildedTarget) {
     if (queryPart.length) rebuildedTarget = rebuildedTarget + queryPart;
@@ -36,5 +40,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
     }
   } else {
     console.log('Not needed redirect!!!');
+    return 
   }
 });
