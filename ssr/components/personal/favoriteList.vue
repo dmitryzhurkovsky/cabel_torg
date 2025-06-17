@@ -13,14 +13,14 @@
                         </div>
                     </div>
                     <div class="content-block__list">
-                        <div class="content-block__item product-row" v-if = "fullFavorites.length !== 0 && view === 'row'">
+                        <div class="content-block__item product-row" v-if = "fullFavorites.length !== 0 && catalogViewType === 'row'">
                             <CatalogListItem 
                             v-for   = "item in fullFavorites"
                             :key    = "item.id"
                             :card   = item
                             />
                         </div>  
-                        <div class="content-block__item product-table" v-if = "fullFavorites.length !== 0 && view === 'table'">
+                        <div class="content-block__item product-table" v-if = "fullFavorites.length !== 0 && catalogViewType === 'table'">
                             <CatalogCardItem 
                             v-for   = "item in fullFavorites"
                             :key    = "item.id"
@@ -48,7 +48,7 @@
   const queryStore = useQueryStore();
   const favoritesStore = useFavoritesStore();
 
-  const { view } = storeToRefs(queryStore);
+  const { catalogViewType } = storeToRefs(queryStore);
   const { favorites, fullFavorites } = storeToRefs(favoritesStore);
 
   const ChangeParameters = computed(() => {

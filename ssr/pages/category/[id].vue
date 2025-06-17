@@ -98,7 +98,8 @@
                 <CatalogPaginationPanel />
               </div>
               <div class="content-block__category_description">
-                  <p v-html = "rebuildText(categoryData.site_page_seo_description)"></p>
+                  <!-- <p v-html = "rebuildText(categoryData.site_page_seo_description)"></p> -->
+                  <p v-html = "categoryData.site_page_seo_description?.replace('<br>', '&nbsp')"></p>
               </div>
 
             </div>
@@ -173,12 +174,6 @@
     isFilterPanelOpen.value = data
   };
 
-  const rebuildText = (text) => {
-    let newText = ''
-    if (text) newText = text.replace('<br>', '&nbsp')
-    return newText
-  };
-
   const clearSearchString= () => {
     queryStore.setSearchString('');
     catalogStore.setCatalogSearchString('');
@@ -198,12 +193,12 @@
   }
 
   const redirectToNotFound = async () => {
-    console.log('Redirecting from category... ');
+    // console.log('Redirecting from category... ');
     if (process.server) {
-      console.log('From server');
+      // console.log('From server');
       await router.push('/404', { redirectCode: 404 });
     } else {
-      console.log('From client');
+      // console.log('From client');
       await navigateTo(route.fullPath, { redirectCode: 404 });
     }
   }
@@ -341,6 +336,8 @@
 
   await useAsyncData(
     async () => {
+      // console.log('category start useAsyncData');
+      
       await setParametersFromURL();
       if (categoryId.value) {
         await catalogStore.getCatalogItems(categoryId.value);
