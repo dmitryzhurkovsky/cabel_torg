@@ -1,4 +1,4 @@
-FROM python:3.11.6-slim-bookworm as base
+FROM python:3.11.6-slim-bookworm AS base
 
 # prevents Python from writing pyc files to disc
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -24,8 +24,8 @@ COPY . /backend/
 
 RUN chmod +x /backend/build/backend_entrypoint.sh
 
-FROM base as backend
+FROM base AS backend
 ENTRYPOINT ["sh", "/backend/build/backend_entrypoint.sh"]
 
-FROM base as parser
+FROM base AS parser
 ENTRYPOINT ["sh", "/backend/build/parser_entrypoint.sh"]
