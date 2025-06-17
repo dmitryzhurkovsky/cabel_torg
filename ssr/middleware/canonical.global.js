@@ -4,8 +4,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   const router = useRouter();
 
-  console.log('canonical to: ', to.path, ' from: ', from.path);
-  // console.log('canonical to', router);
+  // console.log('canonical to: ', to.path, ' from: ', from.path);
   
   let rebuildedTarget = to.path.toLowerCase();
 
@@ -28,18 +27,18 @@ export default defineNuxtRouteMiddleware((to, from) => {
   }
   if (to.path !== rebuildedTarget) {
     if (queryPart.length) rebuildedTarget = rebuildedTarget + queryPart;
-    console.log('Redirect is needed to: ', rebuildedTarget);
+    // console.log('Redirect is needed to: ', rebuildedTarget);
 
-    console.log('Redirecting from middlware...');
+    // console.log('Redirecting from middlware...');
     if (process.server) {
-      console.log('From server');
+      // console.log('From server');
       return navigateTo(rebuildedTarget, { redirectCode: 301 });
     } else {
-      console.log('From client');
+      // console.log('From client');
       router.push(rebuildedTarget, { redirectCode: 301 });
     }
   } else {
-    console.log('Not needed redirect!!!');
+    // console.log('Not needed redirect!!!');
     return 
   }
 });

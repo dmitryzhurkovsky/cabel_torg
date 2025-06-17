@@ -330,7 +330,7 @@
 
   const onGetCartData = async () => {
     queryStore.setSearchString('');
-    console.log('cartItemId: ', cartItemId.value);
+    // console.log('cartItemId: ', cartItemId.value);
     
     await catalogStore.getCartItemData(cartItemId.value);
     if (cartItemData.value) {
@@ -393,19 +393,19 @@
   }
 
   const redirectToNotFound = async () => {
-    console.log('Redirecting from card_product...');
+    // console.log('Redirecting from card_product...');
     if (process.server) {
-      console.log('From server');
+      // console.log('From server');
       await router.push('/404', { redirectCode: 404 });
     } else {
-      console.log('From client');
+      // console.log('From client');
       await navigateTo('/404', { redirectCode: 404 });
     }
   }
   
   await useAsyncData(
     async () => {
-      console.log('Starting get data for: ', route.fullPath);
+      // console.log('Starting get data for: ', route.fullPath);
       
       catalogStore.setCartItemId(route.params.id);
       if (cartItemId.value) {
