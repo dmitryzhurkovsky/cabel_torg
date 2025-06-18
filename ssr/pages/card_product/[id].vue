@@ -164,7 +164,6 @@
   import { useBreadCrumbStore } from '@/stores/breadcrumb';
   import { useFavoritesStore } from '@/stores/favorites';
   import { useOrdersStore } from '@/stores/orders';
-  import { createError } from 'h3'
 
   const route = useRoute();
   const router = useRouter();

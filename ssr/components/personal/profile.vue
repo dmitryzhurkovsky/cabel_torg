@@ -114,7 +114,7 @@
 </template>
 
 <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onBeforeMount } from 'vue';
   import { useAuthStore } from '@/stores/auth';
   import { useHeaderStore } from '@/stores/header';
 
@@ -135,17 +135,17 @@
   const userBank = ref(null);
   const isLoading = ref(false);
 
-  onMounted(async () => {
-    userName.value = userData.full_name;
-    userEmail.value = userData.email;
-    userPhone.value = userData.phone_number;
-    userCompanyName.value = userData.company_name;
-    userUNP.value = userData.unp;
-    userIBAN.value = userData.IBAN;
-    userCompanyAdress.value = userData.legal_address;
-    userDeliveryAdress.value = userData.delivery_address;
-    userBIC.value = userData.BIC;
-    userBank.value = userData.serving_bank;
+  onBeforeMount(() => {
+    userName.value = userData.value.full_name;
+    userEmail.value = userData.value.email;
+    userPhone.value = userData.value.phone_number;
+    userCompanyName.value = userData.value.company_name;
+    userUNP.value = userData.value.unp;
+    userIBAN.value = userData.value.IBAN;
+    userCompanyAdress.value = userData.value.legal_address;
+    userDeliveryAdress.value = userData.value.delivery_address;
+    userBIC.value = userData.value.BIC;
+    userBank.value = userData.value.serving_bank;
   });
 
   const onPasswordChange = () => {
@@ -351,6 +351,4 @@
 #anim:hover {
   animation: shake 500ms ease-in-out forwards;
 }
-
-
 </style>

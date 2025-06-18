@@ -21,7 +21,7 @@ export const useAuthStore = defineStore ('authStore', () => {
   });
 
   const getUserData = async () => {
-  try {
+    try {
         const response = await axios.get("users/mine");
         userData.value = response.data;
     }
