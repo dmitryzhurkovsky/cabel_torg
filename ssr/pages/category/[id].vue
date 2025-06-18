@@ -98,9 +98,8 @@
                 <CatalogPaginationPanel />
               </div>
               <div class="content-block__category_description" v-if = categoryData.site_page_seo_description>
-                  <p v-html = "categoryData.site_page_seo_description"></p>
+                  <p v-safe-html = "categoryData.site_page_seo_description"></p>
               </div>
-
             </div>
           </div>
         </div>
