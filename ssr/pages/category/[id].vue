@@ -97,11 +97,9 @@
               <div class="content-block__pagination">
                 <CatalogPaginationPanel />
               </div>
-              <div class="content-block__category_description">
-                  <!-- <p v-html = "rebuildText(categoryData.site_page_seo_description)"></p> -->
-                  <p v-html = "categoryData.site_page_seo_description?.replace('<br>', '&nbsp')"></p>
+              <div class="content-block__category_description" v-if = categoryData.site_page_seo_description>
+                  <p v-safe-html = "categoryData.site_page_seo_description"></p>
               </div>
-
             </div>
           </div>
         </div>
@@ -131,7 +129,7 @@
 
   const isFilterPanelOpen = ref(false)
 
-  const { catalogViewType, categoryId, typeOfProduct, offset, limit, sortType, sortDirection, minPrice, maxPrice, searchString } = storeToRefs(queryStore);
+  const { catalogViewType, categoryId, typeOfProduct, offset, limit, sortType, sortDirection, minPrice, maxPrice } = storeToRefs(queryStore);
   const { viewType, categories, subCategories, subCategoriesItemActive } = storeToRefs(headerStore);
   const { itemsList, catalogSearchString, activePage, totalPages, category } = storeToRefs(catalogStore);
 
