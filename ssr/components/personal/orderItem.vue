@@ -23,12 +23,11 @@
             <div class="details-order__title long_text">{{ orderProduct.product.name }}</div>
             <div class="details-order__article"><span>{{ orderProduct.product.vendor_code }}</span></div>
             <div class="details-order__count">{{ orderProduct.amount }}<span> {{ orderProduct.product.base_unit.full_name }}</span></div>
-            <div class="details-order__price"><b>
-              {{ (orderProduct.amount * orderProduct.product.price_with_discount_and_tax && orderProduct.product.price_with_discount_and_tax !== orderProduct.product.price_with_tax 
-                ? orderProduct.product.price_with_discount_and_tax 
-                : orderProduct.product.price_with_tax) 
-              }}</b> BYN
-                </div>
+            <div class="details-order__price">
+              <b>
+                {{ Number(orderProduct.amount * (orderProduct.product.price_with_discount_and_tax && orderProduct.product.price_with_discount_and_tax !== orderProduct.product.price_with_tax ? orderProduct.product.price_with_discount_and_tax : orderProduct.product.price_with_tax)).toFixed(2)}}
+              </b> BYN
+            </div>
                 <!-- : orderProduct.product.price_with_tax).toFixed(2)  -->
             <!-- orderProduct.product.price -->
           </div>
@@ -56,9 +55,8 @@
   const order_price = computed(() => {
     let totalPrice = 0;
     props.card.products.forEach(item => {
-      totalPrice = totalPrice + Number((item.amount * item.product.price_with_discount_and_tax && item.product.price_with_discount_and_tax !== item.product.price_with_tax 
-                ? item.product.price_with_discount_and_tax 
-                : item.product.price_with_tax));
+      const price = item.product.price_with_discount_and_tax && item.product.price_with_discount_and_tax !== item.product.price_with_tax ? item.product.price_with_discount_and_tax : item.product.price_with_tax
+      totalPrice = totalPrice + Number((item.amount * price));
     });
     return totalPrice.toFixed(2);
   });
