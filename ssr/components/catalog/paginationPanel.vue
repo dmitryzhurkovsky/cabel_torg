@@ -1,14 +1,21 @@
 <template>
     <div v-if = "Pages.length" class="content-block__pagination">
-      <a 
+      <div v-for = "item in Pages" 
+        :key = "item.name"
+      >
+        <a v-if = "item.isAvailable"
           :class="[item.pageNumber === activePage ? 'pagination_link active' : 'pagination_link']"
-          v-for = "item in Pages"
-          :key = "item.name"
           @click.prevent="onChangePage(item)"
           :href = createHref(item)
-      >
-        {{ item.name }}
-      </a>
+        >
+          {{ item.name }}    
+        </a>  
+        <div v-if = "!item.isAvailable && checkIsNededLink(item)"
+          class = "pagination_link pagination_link__disabled active"
+        >
+          {{ item.name }}    
+      </div>  
+      </div>
     </div>   
 </template>
 
@@ -29,7 +36,7 @@
   const { categories } = storeToRefs(headerSore);
 
   const Pages = computed(() => {
-    // console.log('Pages ', activePage.value, '  ',  totalPages.value);
+    // console.log('Active page: ', activePage.value, ' total pages: ',  totalPages.value);
     let result = []
     const firstLink = { name: '<', pageNumber: activePage.value - 1, isAvailable: activePage.value !== 1 }
 
@@ -122,8 +129,17 @@
     return result
   })
 
-  const createHref = (item) =>{
+  const checkIsNededLink = (item) => {
+    if (activePage.value === 1 && item.name === '<') return false;
+    if (activePage.value === totalPages.value && item.name === '>') return false;
+    return true;
+  }
+
+  const createHref = (item) => {
+    console.log(item);
+    
     let URL = ''
+    if (!item.isAvailable) return URL
     const newOffset = (item.pageNumber === 0 ? 0 : (item.pageNumber - 1)) * limit.value
     if (categoryId.value) {
       URL = getCategoryUrl(categoryId.value, newOffset)
@@ -188,19 +204,26 @@
 </script>
 
 <style scoped lang="scss">
-.pagination_link{
-    width: 40px;
-    height: 40px;
-    background: rgba(66, 62, 72, 0.07);
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #423E48;
-    transition: all 0.3s ease;
-    &:hover{
-      border: 1.2px solid #4275D8;
-      cursor: pointer;
+  .pagination {
+    &_link {
+      width: 40px;
+      height: 40px;
+      background: rgba(66, 62, 72, 0.07);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #423E48;
+      transition: all 0.3s ease;
+      &:hover{
+        border: 1.2px solid #4275D8;
+        cursor: pointer;
+      }
+      &__disabled{
+        &:hover{
+          cursor: default;
+        }
+      }
     }
   }
   .active{
