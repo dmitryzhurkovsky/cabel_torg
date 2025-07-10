@@ -7,7 +7,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(cabel-torg.by www.cabel-torg.by admin.cabel-torg.by)
+domains=(cabel-torg.by admin.cabel-torg.by)
 rsa_key_size=4096
 data_path="/data/certbot"
 email="dmitryzhurkovsky@gmail.com" # Adding a valid address is strongly recommended
