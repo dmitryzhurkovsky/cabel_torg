@@ -66,7 +66,9 @@
     });
   };
 
-  const redirectToNotFound = () => {
+
+
+  const redirectToNotFound = async () => {
     console.log('Redirecting...');
     if (process.server) {
       console.log('From server');
@@ -81,12 +83,14 @@
     notificationsStore.setIsLoading(true);
     try {
       const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'service_entities/articles/' + route.params.id);
+      console.log('response ', response);
+      
       oneNewData.value = response.data;
       notificationsStore.setIsLoading(false);
     } catch (e) {
       console.log(e);
       notificationsStore.setIsLoading(false);
-      redirectToNotFound();
+      await redirectToNotFound();
     }
   } 
 
