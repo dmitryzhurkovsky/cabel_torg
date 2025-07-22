@@ -83,14 +83,17 @@
     notificationsStore.setIsLoading(true);
     try {
       const response = await axios.get(useRuntimeConfig().public.NUXT_APP_API_URL + 'service_entities/articles/' + route.params.id);
-      console.log('response ', response);
-      
       oneNewData.value = response.data;
+      // console.log('oneNewData.value ', oneNewData.value);
+      
       notificationsStore.setIsLoading(false);
     } catch (e) {
       console.log(e);
+      oneNewData.value = null;
       notificationsStore.setIsLoading(false);
-      await redirectToNotFound();
+    }
+    if (!oneNewData.value) {
+    await redirectToNotFound();
     }
   } 
 
