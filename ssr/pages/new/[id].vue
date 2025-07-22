@@ -66,18 +66,17 @@
     });
   };
 
-
-
   const redirectToNotFound = async () => {
-    console.log('Redirecting...');
+    // console.log('Redirecting from category... ');
     if (process.server) {
-      console.log('From server');
-      router.push('/404', { redirectCode: 404 });
+      // console.log('From server');
+      await router.push('/404', { redirectCode: 404 });
     } else {
-      console.log('From client');
-      navigateTo(route.fullPath, { redirectCode: 404 });
+      // console.log('From client');
+      await navigateTo(route.fullPath, { redirectCode: 404 });
     }
   }
+
 
   const oneGetData = async () => {
     notificationsStore.setIsLoading(true);
