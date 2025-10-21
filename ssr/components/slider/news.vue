@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-  import { ref, computed } from 'vue';
+  import { ref, computed, onMounted } from 'vue';
   import { useMainStore } from '@/stores/main';
   import { useHeaderStore } from '@/stores/header';
 
@@ -96,6 +96,10 @@
       slidersInFrame.value = 1.5;
     }
   };
+
+  onMounted(() => {
+    setQuantityInSlider();
+  }),
 
   await useAsyncData(
     async () => {
