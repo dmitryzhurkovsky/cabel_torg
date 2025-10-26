@@ -142,8 +142,8 @@
     if (quantityLocal.value < 1) {
       quantityLocal.value = 1;
     };
-    if (quantityLocal.value > 99) {
-      quantityLocal.value = 99;
+    if (quantityLocal.value > 10000) {
+      quantityLocal.value = 10000;
     }
   };
 
@@ -152,7 +152,7 @@
   };
 
   const plusQuantityLocal = () => {
-    quantityLocal.value = quantityLocal.value < 99 ? quantityLocal.value + 1 : 99;
+    quantityLocal.value = quantityLocal.value < 10000 ? quantityLocal.value + 1 : 10000;
   };
 
   const createHref = (card) => {
@@ -394,7 +394,7 @@
   }
 
   &__input{
-    width: 40px;
+    width: 70px;
     height: 40px;
     padding: 9px 8px;
     background: rgba(66, 62, 72, 0.07);

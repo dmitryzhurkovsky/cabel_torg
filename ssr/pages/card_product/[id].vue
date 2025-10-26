@@ -216,8 +216,8 @@
     if (quantityLocal.value < 1) {
       quantityLocal.value = 1
     };
-    if (quantityLocal.value > 99) {
-      quantityLocal.value = 99
+    if (quantityLocal.value > 10000) {
+      quantityLocal.value = 10000
     }
   }
 
@@ -226,7 +226,7 @@
   }
 
   const plusQuantityLocal = () => {
-    quantityLocal.value = quantityLocal.value < 99 ? quantityLocal.value + 1 : 99
+    quantityLocal.value = quantityLocal.value < 10000 ? quantityLocal.value + 1 : 10000
   }
 
   const onOperationWithCartItem = async (card, type) => {
