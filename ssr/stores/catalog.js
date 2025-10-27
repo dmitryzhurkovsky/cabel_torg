@@ -122,9 +122,9 @@ export const useCatalogStore = defineStore ('catalogStore', () => {
       const goodUrl = encodeURI(url);
       const response = await axios.get(goodUrl)
       cartItemData.value = response.data;
-      console.log('Good request products/' + id);
+      // console.log('Good request products/' + id);
     } catch (e) {
-      console.log('Bad request products/' + id);
+      // console.log('Bad request products/' + id);
       // console.log(e)
       // notificationsStore.addMessage({name: "Не возможно загрузить рекомендованные товары ", icon: "error", id: '1'});
     }

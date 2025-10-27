@@ -67,7 +67,7 @@
   });
 
   const cartItemData = ref({});
-  const quantity =ref(0);
+  const quantity = ref(0);
   const lastQuantity = ref(0);
   const isWish = ref(false);
 
@@ -110,19 +110,10 @@
   });
 
   const onOperationWithCartItem = async (card, type) => {
+    
     if (!quantity.value) {
         quantity.value = lastQuantity.value;
     } else {
-      if (type === 'decrease' && quantity.value === 1) {
-        return;
-      };
-      if (quantity.value < 1) {
-        quantity.value = lastQuantity.value;
-      };
-      if (quantity.value >99) {
-        quantity.value = lastQuantity.value;
-        return;
-      };
       const itemData = {
         amount: 0,
         product: {
@@ -134,17 +125,33 @@
           price_with_tax: card.price_with_tax,
         },
       };
+      if (type === 'decrease' && quantity.value === 1) {
+        itemData.amount = Number(quantity.value);
+        return;
+      };
+      if (quantity.value < 1) {
+        quantity.value = lastQuantity.value;
+        itemData.amount = Number(quantity.value);
+        return
+      };
+      if (quantity.value > 10000) {
+        quantity.value = lastQuantity.value;
+        itemData.amount = Number(quantity.value);
+        return;
+      };
       if (type === 'set') {
         itemData.amount = Number(quantity.value);
+        await oredersStore.updateItemsInCart({ itemData, type });
       }
-      
-      await oredersStore.updateItemsInCart({ itemData, type });
+
       if (type === 'increase') {
-        if (quantity.value < 99) {
+        if (quantity.value < 10000) {
           quantity.value++;
+          await oredersStore.updateItemsInCart({ itemData, type });
         }
       } else if (type === 'decrease') {
         quantity.value--;
+        await oredersStore.updateItemsInCart({ itemData, type });
       };
       lastQuantity.value = quantity.value; 
     }
@@ -266,7 +273,7 @@
         }
     }
     &__input{
-        width: 40px;
+        width: 70px;
         height: 40px;
         padding: 9px 8px;
         background: rgba(66, 62, 72, 0.07);
