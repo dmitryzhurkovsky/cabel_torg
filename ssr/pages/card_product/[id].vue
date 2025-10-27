@@ -661,7 +661,7 @@
   }
 
   &__input{
-    width: 40px;
+    width: 70px;
     height: 40px;
     padding: 9px 8px;
     background: rgba(66, 62, 72, 0.07);
