@@ -110,6 +110,7 @@
   });
 
   const onOperationWithCartItem = async (card, type) => {
+    console.log(type);
     
     if (!quantity.value) {
         quantity.value = lastQuantity.value;
@@ -152,7 +153,9 @@
       } else if (type === 'decrease') {
         quantity.value--;
         await oredersStore.updateItemsInCart({ itemData, type });
-      };
+      } else if (type === 'remove') {
+        await oredersStore.updateItemsInCart({ itemData, type });
+      }
       lastQuantity.value = quantity.value; 
     }
   };
