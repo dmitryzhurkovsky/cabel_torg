@@ -135,7 +135,7 @@
         itemData.amount = Number(quantity.value);
         return
       };
-      if (quantity.value > 10000) {
+      if (quantity.value > 100000) {
         quantity.value = lastQuantity.value;
         itemData.amount = Number(quantity.value);
         return;
@@ -146,7 +146,7 @@
       }
 
       if (type === 'increase') {
-        if (quantity.value < 10000) {
+        if (quantity.value < 100000) {
           quantity.value++;
           await oredersStore.updateItemsInCart({ itemData, type });
         }
@@ -276,7 +276,7 @@
         }
     }
     &__input{
-        width: 70px;
+        width: 87px;
         height: 40px;
         padding: 9px 8px;
         background: rgba(66, 62, 72, 0.07);
