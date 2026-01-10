@@ -113,7 +113,7 @@
     </ul>
     <hr class="burger__menu__hr">
     <ul class="burger__menu_list">
-      <li><a class="_link" href="tel:+375296889854">+375 29 6889854</a></li>
+      <li><a class="_link" href="tel:+375296889454">+375 29 6889454</a></li>
     </ul>
 
 
