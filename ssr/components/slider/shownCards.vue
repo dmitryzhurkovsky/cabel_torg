@@ -118,7 +118,7 @@
         sliderItems.value = [...fetchedItems];
       } catch (e) {
         console.log(e);
-        notificationsStore.addMessage({ name: "Не возможно загрузить данные товара " + item.id, icon: "error", id: item.id });
+        // notificationsStore.addMessage({ name: "Не возможно загрузить данные товара " + item.id, icon: "error", id: item.id });
       }
     });
     // setTimeout(() => window.scrollTo(0, 0), 0);
