@@ -80,6 +80,9 @@ services:
     container_name: 'prod_reverse_proxy'
     image: nginx:stable-alpine
     restart: always
+    # Reload nginx every 6h so it picks up certificates renewed by certbot.
+    command: >-
+      /bin/sh -c "while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\""
     ports:
       - '80:80'
       - '443:443'  # for https
